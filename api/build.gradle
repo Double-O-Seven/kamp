@@ -1,0 +1,7 @@
+dependencies {
+
+    compileOnly(
+            project(':plugin'),
+            'com.google.inject:guice:4.2.0'
+    )
+}

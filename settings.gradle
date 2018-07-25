@@ -1,1 +1,4 @@
+include ':api'
+include ':plugin'
+
 rootProject.name = 'kamp-api'
