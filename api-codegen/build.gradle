@@ -1,0 +1,6 @@
+dependencies {
+
+    compileOnly(
+            'ch.leadrian.samp.cidl:cidl-kotlin:0.0.1'
+    )
+}

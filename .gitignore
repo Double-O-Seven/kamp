@@ -5,5 +5,5 @@ out
 .project
 .classpath
 .idea
-backend.iml
+kamp-api.iml
 **/.settings/*

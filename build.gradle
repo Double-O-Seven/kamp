@@ -2,7 +2,7 @@ version "${version}"
 
 buildscript {
     ext {
-        kotlinVersion = '1.2.50'
+        kotlinVersion = '1.2.51'
         junitVersion = '5.2.0'
     }
 
@@ -14,8 +14,8 @@ buildscript {
             }
         }
 
+        classpath 'org.junit.platform:junit-platform-gradle-plugin:1.0.0'
         classpath(
-                'org.junit.platform:junit-platform-gradle-plugin:1.0.0',
                 "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
                 "org.jetbrains.kotlin:kotlin-allopen:$kotlinVersion",
                 "org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion"
@@ -72,6 +72,7 @@ subprojects {
 dependencies {
     compile(
             project(':api'),
+            project(':api-codegen'),
             project(':plugin')
     )
 }
