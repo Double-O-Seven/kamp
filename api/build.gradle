@@ -5,7 +5,6 @@ configurations {
 dependencies {
 
     compileOnly(
-            project(':plugin'),
             'com.google.inject:guice:4.2.0'
     )
 
@@ -21,6 +20,8 @@ sourceSets {
         }
     }
 }
+
+def apiPackageName = "ch.leadrian.samp.kamp.api"
 
 def idlFilesDir = "${project(':plugin').projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
 
@@ -39,7 +40,7 @@ task generateSAMPConstantsClass(type: JavaExec) {
     classpath configurations.apiCodegen
     args = [
             "-o", generatedSrcDir,
-            "-p", "ch.leadrian.samp.kamp.api",
+            "-p", apiPackageName,
             "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
@@ -54,14 +55,12 @@ task generateSAMPCallbacksClass(type: JavaExec) {
     classpath configurations.apiCodegen
     args = [
             "-o", generatedSrcDir,
-            "-p", "ch.leadrian.samp.kamp.api",
+            "-p", apiPackageName,
             "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
     outputs.file generatedSAMPCallbacksJavaFile
 }
-
-
 
 def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPNativeFunctions.java"
 
@@ -71,7 +70,7 @@ task generateSAMPNativeFunctionsClass(type: JavaExec) {
     classpath configurations.apiCodegen
     args = [
             "-o", generatedSrcDir,
-            "-p", "ch.leadrian.samp.kamp.api",
+            "-p", apiPackageName,
             "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)

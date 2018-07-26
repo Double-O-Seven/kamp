@@ -1,1 +1,42 @@
+configurations {
+    apiCodegen
+}
 
+dependencies {
+
+    apiCodegen project(':api-codegen')
+}
+
+def apiPackageName = "ch.leadrian.samp.kamp.api"
+
+def idlFilesDir = "${projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
+
+def actorIDLFile = "${idlFilesDir}/a_actor.idl"
+def httpIDLFile = "${idlFilesDir}/a_http.idl"
+def objectsIDLFile = "${idlFilesDir}/a_objects.idl"
+def playersIDLFile = "${idlFilesDir}/a_players.idl"
+def sampIDLFile = "${idlFilesDir}/a_samp.idl"
+def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
+
+def generateCppFilesDir = "${projectDir}/src/main/cpp/sampgdk/plugins/kamp"
+
+def generatedSAMPNativeFunctionsHeaderFile = "${generateCppFilesDir}/SAMPNativeFunctions.h"
+
+task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
+    dependsOn ':api-codegen:classes'
+    main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsHeaderCodeGenerator"
+    classpath configurations.apiCodegen
+    args = [
+            "-o", generateCppFilesDir,
+            "-p", apiPackageName,
+            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionsHeaderFile
+}
+
+clean {
+    delete += generatedSAMPNativeFunctionsHeaderFile
+}
+
+build.dependsOn(generateSAMPNativeFunctionsHeaderFile)
