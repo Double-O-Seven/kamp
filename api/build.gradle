@@ -46,4 +46,20 @@ task generateSAMPConstantsClass(type: JavaExec) {
     outputs.file generatedSAMPConstantsJavaFile
 }
 
-compileJava.dependsOn generateSAMPConstantsClass
+def generatedSAMPCallbacksJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPCallbacks.java"
+
+task generateSAMPCallbacksClass(type: JavaExec) {
+    dependsOn ':api-codegen:classes'
+    main "ch.leadrian.samp.kamp.apicodegen.SAMPCallbacksJavaCodeGenerator"
+    classpath configurations.apiCodegen
+    args = [
+            "-o", generatedSrcDir,
+            "-p", "ch.leadrian.samp.kamp.api",
+            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPCallbacksJavaFile
+}
+
+compileKotlin.dependsOn(generateSAMPConstantsClass, generateSAMPCallbacksClass)
+compileJava.dependsOn(generateSAMPConstantsClass, generateSAMPCallbacksClass)
