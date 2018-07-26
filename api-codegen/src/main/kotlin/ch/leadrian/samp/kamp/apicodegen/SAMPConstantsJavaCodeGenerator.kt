@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.apicodegen
 
 import ch.leadrian.samp.cidl.model.Constant
 import ch.leadrian.samp.cidl.parser.InterfaceDefinitionParser
+import java.io.BufferedWriter
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -17,30 +18,40 @@ class SAMPConstantsJavaCodeGenerator {
         Files.createDirectories(packageDirectoryPath)
         val outputFile = packageDirectoryPath.resolve("$className.java")
         Files.newBufferedWriter(outputFile, CREATE, WRITE).use { writer ->
-            writer.write("""
-                |package $packageName;
-                |
-                |import javax.annotation.Generated;
-                |
-                |@Generated(
-                |    value = "${this::class.java.name}",
-                |    date = "${LocalDateTime.now()}"
-                |)
-                |public final class $className {
-                |
-                |    private $className () {}
-                |
-                |
-            """.trimMargin("|"))
-
-            constants.forEach {
-                val javaType = getJavaType(it.type)
-                writer.write("    public static final $javaType ${it.name} = ${it.value.data};\n\n")
-            }
-
-            writer.write("}\n")
-            writer.close()
+            writeHeader(writer, packageName, className)
+            writeConstants(constants, writer)
+            writeFooter(writer)
         }
+    }
+
+    private fun writeHeader(writer: BufferedWriter, packageName: String, className: String) {
+        writer.write("""
+                    |package $packageName;
+                    |
+                    |import javax.annotation.Generated;
+                    |
+                    |@Generated(
+                    |    value = "${this::class.java.name}",
+                    |    date = "${LocalDateTime.now()}"
+                    |)
+                    |public final class $className {
+                    |
+                    |    private $className () {}
+                    |
+                    |
+                """.trimMargin("|"))
+    }
+
+    private fun writeConstants(constants: List<Constant>, writer: BufferedWriter) {
+        constants.forEach {
+            val javaType = getJavaType(it.type)
+            writer.write("    public static final $javaType ${it.name} = ${it.value.data};\n\n")
+        }
+    }
+
+    private fun writeFooter(writer: BufferedWriter) {
+        writer.write("}\n")
+        writer.close()
     }
 
     companion object {

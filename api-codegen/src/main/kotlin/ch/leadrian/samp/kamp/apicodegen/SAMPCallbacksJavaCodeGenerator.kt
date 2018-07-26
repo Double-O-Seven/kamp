@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.apicodegen
 
 import ch.leadrian.samp.cidl.model.Function
 import ch.leadrian.samp.cidl.parser.InterfaceDefinitionParser
+import java.io.BufferedWriter
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
@@ -16,47 +17,57 @@ class SAMPCallbacksJavaCodeGenerator {
         val outputFile = packageDirectoryPath.resolve("$className.java")
 
         Files.newBufferedWriter(outputFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE).use { writer ->
-            writer.write("""
-                |package $packageName;
-                |
-                |import javax.annotation.Generated;
-                |import org.jetbrains.annotations.NotNull;
-                |
-                |@Generated(
-                |    value = "${this::class.java.name}",
-                |    date = "${LocalDateTime.now()}"
-                |)
-                |public interface $className {
-                |
-                |    void onProcessTick ();
-                |
-                |
-            """.trimMargin("|"))
-
-            functions
-                    .filter { it.hasAttribute("callback") }
-                    .forEach {
-                        val returnJavaType = getJavaType(it.type)
-                        if (!isPrimitiveJavaType(returnJavaType)) {
-                            writer.write("    @NotNull\n")
-                        }
-                        val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
-                        writer.write("    $returnJavaType $camelCaseName (")
-                        val parameters = it.parameters.joinToString(separator = ", ") {
-                            val parameterJavaType = getJavaType(it.type)
-                            val notNullAnnotation = when {
-                                isPrimitiveJavaType(parameterJavaType) -> ""
-                                else -> "@NotNull "
-                            }
-                            "$notNullAnnotation$parameterJavaType ${it.name}"
-                        }
-                        writer.write(parameters)
-                        writer.write(");\n\n")
-                    }
-
-            writer.write("}\n")
-            writer.close()
+            writeHeader(writer, packageName, className)
+            writeFunctions(functions, writer)
+            writeFooter(writer)
         }
+    }
+
+    private fun writeHeader(writer: BufferedWriter, packageName: String, className: String) {
+        writer.write("""
+                    |package $packageName;
+                    |
+                    |import javax.annotation.Generated;
+                    |import org.jetbrains.annotations.NotNull;
+                    |
+                    |@Generated(
+                    |    value = "${this::class.java.name}",
+                    |    date = "${LocalDateTime.now()}"
+                    |)
+                    |public interface $className {
+                    |
+                    |
+                """.trimMargin("|"))
+    }
+
+    private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
+        writer.write("    void onProcessTick ();\n\n")
+
+        functions
+                .filter { it.hasAttribute("callback") }
+                .forEach {
+                    val returnJavaType = getJavaType(it.type)
+                    if (!isPrimitiveJavaType(returnJavaType)) {
+                        writer.write("    @NotNull\n")
+                    }
+                    val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
+                    writer.write("    $returnJavaType $camelCaseName (")
+                    val parameters = it.parameters.joinToString(separator = ", ") {
+                        val parameterJavaType = getJavaType(it.type)
+                        val notNullAnnotation = when {
+                            isPrimitiveJavaType(parameterJavaType) -> ""
+                            else -> "@NotNull "
+                        }
+                        "$notNullAnnotation$parameterJavaType ${it.name}"
+                    }
+                    writer.write(parameters)
+                    writer.write(");\n\n")
+                }
+    }
+
+    private fun writeFooter(writer: BufferedWriter) {
+        writer.write("}\n")
+        writer.close()
     }
 
     companion object {
