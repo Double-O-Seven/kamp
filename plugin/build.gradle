@@ -51,7 +51,7 @@ task makePlugin {
         exec {
             workingDir sampgdkBuildDir
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                commandLine 'cmd', '/c', "cmake .. -DSAMP_SDK_ROOT=${sampPluginSdkDir}"
+                commandLine 'cmd', '/c', "cmake .. -DSAMP_SDK_ROOT=${sampPluginSdkDir} -DSAMPGDK_STATIC=ON -DSAMPGDK_BUILD_PLUGINS=ON"
             } else {
                 commandLine "cmake .. -DSAMP_SDK_ROOT=${sampgdkBuildDir}"
             }
