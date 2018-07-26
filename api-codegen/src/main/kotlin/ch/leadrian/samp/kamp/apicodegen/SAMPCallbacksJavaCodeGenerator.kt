@@ -25,19 +25,19 @@ class SAMPCallbacksJavaCodeGenerator {
 
     private fun writeHeader(writer: BufferedWriter, packageName: String, className: String) {
         writer.write("""
-                    |package $packageName;
-                    |
-                    |import javax.annotation.Generated;
-                    |import org.jetbrains.annotations.NotNull;
-                    |
-                    |@Generated(
-                    |    value = "${this::class.java.name}",
-                    |    date = "${LocalDateTime.now()}"
-                    |)
-                    |public interface $className {
-                    |
-                    |
-                """.trimMargin("|"))
+            |
+            |package $packageName;
+            |
+            |import javax.annotation.Generated;
+            |import org.jetbrains.annotations.NotNull;
+            |
+            |@Generated(
+            |    value = "${this::class.java.name}",
+            |    date = "${LocalDateTime.now()}"
+            |)
+            |public interface $className {
+            |
+            |""".trimMargin("|"))
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {

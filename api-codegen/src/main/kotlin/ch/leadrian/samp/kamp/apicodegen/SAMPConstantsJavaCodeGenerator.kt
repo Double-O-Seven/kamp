@@ -26,20 +26,20 @@ class SAMPConstantsJavaCodeGenerator {
 
     private fun writeHeader(writer: BufferedWriter, packageName: String, className: String) {
         writer.write("""
-                    |package $packageName;
-                    |
-                    |import javax.annotation.Generated;
-                    |
-                    |@Generated(
-                    |    value = "${this::class.java.name}",
-                    |    date = "${LocalDateTime.now()}"
-                    |)
-                    |public final class $className {
-                    |
-                    |    private $className () {}
-                    |
-                    |
-                """.trimMargin("|"))
+            |
+            |package $packageName;
+            |
+            |import javax.annotation.Generated;
+            |
+            |@Generated(
+            |    value = "${this::class.java.name}",
+            |    date = "${LocalDateTime.now()}"
+            |)
+            |public final class $className {
+            |
+            |    private $className () {}
+            |
+            |""".trimMargin("|"))
     }
 
     private fun writeConstants(constants: List<Constant>, writer: BufferedWriter) {

@@ -25,21 +25,21 @@ class SAMPNativeFunctionsJavaCodeGenerator {
 
     private fun writeHeader(writer: BufferedWriter, packageName: String, className: String) {
         writer.write("""
-                    |package $packageName;
-                    |
-                    |import javax.annotation.Generated;
-                    |import org.jetbrains.annotations.NotNull;
-                    |
-                    |@Generated(
-                    |    value = "${this::class.java.name}",
-                    |    date = "${LocalDateTime.now()}"
-                    |)
-                    |public final class $className {
-                    |
-                    |    private $className() {}
-                    |
-                    |
-                """.trimMargin("|"))
+            |
+            |package $packageName;
+            |
+            |import javax.annotation.Generated;
+            |import org.jetbrains.annotations.NotNull;
+            |
+            |@Generated(
+            |    value = "${this::class.java.name}",
+            |    date = "${LocalDateTime.now()}"
+            |)
+            |public final class $className {
+            |
+            |    private $className() {}
+            |
+            |""".trimMargin("|"))
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
