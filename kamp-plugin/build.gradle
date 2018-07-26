@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    apiCodegen project(':api-codegen')
+    apiCodegen project(':kamp-api-codegen')
 }
 
 def apiPackageName = "ch.leadrian.samp.kamp.api"
@@ -28,7 +28,7 @@ def sampPluginSdkDir = "${projectDir}/src/main/cpp/samp-plugin-sdk-original"
 def sampgdkBuildDir = "${sampgdkDir}/build"
 
 task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
-    dependsOn ':api-codegen:classes'
+    dependsOn ':kamp-api-codegen:classes'
     main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsHeaderCodeGenerator"
     classpath configurations.apiCodegen
     args = [

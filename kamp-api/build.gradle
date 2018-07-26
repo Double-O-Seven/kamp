@@ -1,3 +1,5 @@
+apply plugin: 'maven'
+
 configurations {
     apiCodegen
 }
@@ -8,7 +10,7 @@ dependencies {
             'com.google.inject:guice:4.2.0'
     )
 
-    apiCodegen project(':api-codegen')
+    apiCodegen project(':kamp-api-codegen')
 }
 
 def generatedSrcDir = "${buildDir}/generated-src/main/java"
@@ -23,7 +25,7 @@ sourceSets {
 
 def apiPackageName = "ch.leadrian.samp.kamp.api"
 
-def idlFilesDir = "${project(':plugin').projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
+def idlFilesDir = "${project(':kamp-plugin').projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
 
 def actorIDLFile = "${idlFilesDir}/a_actor.idl"
 def httpIDLFile = "${idlFilesDir}/a_http.idl"
@@ -35,7 +37,7 @@ def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPConstants.java"
 
 task generateSAMPConstantsClass(type: JavaExec) {
-    dependsOn ':api-codegen:classes'
+    dependsOn ':kamp-api-codegen:classes'
     main "ch.leadrian.samp.kamp.apicodegen.SAMPConstantsJavaCodeGenerator"
     classpath configurations.apiCodegen
     args = [
@@ -50,7 +52,7 @@ task generateSAMPConstantsClass(type: JavaExec) {
 def generatedSAMPCallbacksJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPCallbacks.java"
 
 task generateSAMPCallbacksClass(type: JavaExec) {
-    dependsOn ':api-codegen:classes'
+    dependsOn ':kamp-api-codegen:classes'
     main "ch.leadrian.samp.kamp.apicodegen.SAMPCallbacksJavaCodeGenerator"
     classpath configurations.apiCodegen
     args = [
@@ -65,7 +67,7 @@ task generateSAMPCallbacksClass(type: JavaExec) {
 def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPNativeFunctions.java"
 
 task generateSAMPNativeFunctionsClass(type: JavaExec) {
-    dependsOn ':api-codegen:classes'
+    dependsOn ':kamp-api-codegen:classes'
     main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsJavaCodeGenerator"
     classpath configurations.apiCodegen
     args = [

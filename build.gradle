@@ -71,6 +71,6 @@ subprojects {
 
 dependencies {
     compile(
-            project(':api')
+            project(':kamp-api')
     )
 }
