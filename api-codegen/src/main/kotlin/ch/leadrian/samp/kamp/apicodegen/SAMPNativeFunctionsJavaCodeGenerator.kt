@@ -8,9 +8,9 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 
-class SAMPCallbacksJavaCodeGenerator {
+class SAMPNativeFunctionsJavaCodeGenerator {
 
-    fun generate(outputDirectory: Path, functions: List<Function>, packageName: String, className: String = "SAMPCallbacks") {
+    fun generate(outputDirectory: Path, functions: List<Function>, packageName: String, className: String = "SAMPNativeFunctions") {
         val packageDirectoryPath = outputDirectory.resolve(packageName.replace('.', File.separatorChar))
         Files.createDirectories(packageDirectoryPath)
         val outputFile = packageDirectoryPath.resolve("$className.java")
@@ -26,24 +26,27 @@ class SAMPCallbacksJavaCodeGenerator {
                 |    value = "${this::class.java.name}",
                 |    date = "${LocalDateTime.now()}"
                 |)
-                |public interface $className {
+                |public final class $className {
                 |
-                |    void onProcessTick ();
+                |    private $className() {}
                 |
                 |
             """.trimMargin("|"))
 
             functions
-                    .filter { it.hasAttribute("callback") }
+                    .filter { it.hasAttribute("native") && !it.hasAttribute("noimpl") }
                     .forEach {
                         val returnJavaType = getJavaType(it.type)
                         if (!isPrimitiveJavaType(returnJavaType)) {
                             writer.write("    @NotNull\n")
                         }
                         val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
-                        writer.write("    $returnJavaType $camelCaseName (")
+                        writer.write("    public static native $returnJavaType $camelCaseName (")
                         val parameters = it.parameters.joinToString(separator = ", ") {
-                            val parameterJavaType = getJavaType(it.type)
+                            val parameterJavaType = when {
+                                it.hasAttribute("out") -> getJavaOutType(it.type)
+                                else -> getJavaType(it.type)
+                            }
                             val notNullAnnotation = when {
                                 isPrimitiveJavaType(parameterJavaType) -> ""
                                 else -> "@NotNull "
@@ -66,7 +69,7 @@ class SAMPCallbacksJavaCodeGenerator {
             val codeGeneratorArguments = CodeGeneratorArguments.parse(args)
             val interfaceDefinitionParser = InterfaceDefinitionParser()
             val functions = interfaceDefinitionParser.parse(*codeGeneratorArguments.interfaceDefinitionSources).functions
-            SAMPCallbacksJavaCodeGenerator().generate(
+            SAMPNativeFunctionsJavaCodeGenerator().generate(
                     outputDirectory = codeGeneratorArguments.outputDirectoryPath,
                     functions = functions,
                     packageName = codeGeneratorArguments.packageName

@@ -28,7 +28,7 @@ class SAMPConstantsJavaCodeGenerator {
                 |)
                 |public final class $className {
                 |
-                |    private $className() {}
+                |    private $className () {}
                 |
                 |
             """.trimMargin("|"))
