@@ -21,4 +21,4 @@ add_samp_plugin(kamp
 
 include_directories(${JNI_INCLUDE_DIRS})
 
-target_link_libraries(kamp sampgdk jvm)
+target_link_libraries(kamp sampgdk ${JNI_LIBRARIES})

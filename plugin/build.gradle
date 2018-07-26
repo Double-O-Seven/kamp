@@ -57,7 +57,6 @@ task makePlugin {
             }
         }
 
-        /*
         exec {
             workingDir sampgdkBuildDir
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
@@ -66,16 +65,6 @@ task makePlugin {
                 commandLine 'cmake --build . --config Release'
             }
         }
-
-        exec {
-            workingDir sampgdkBuildDir
-            if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                commandLine 'cmd', '/c', 'cmake --build . --config Release --target install'
-            } else {
-                commandLine 'cmake --build . --config Release --target install'
-            }
-        }
-        */
     }
 
     inputs.dir kampSrcDir
