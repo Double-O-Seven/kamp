@@ -23,7 +23,12 @@ public:
 
 	~Kamp();
 
+	void launch();
+
+	void shutdown();
+
 private:
+	bool launched = false;
 	JavaVM *javaVM;
 	JNIEnv *jniEnv;
 	jclass kampLauncherClass = nullptr;
