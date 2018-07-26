@@ -6,9 +6,6 @@ if(MSVC)
 endif()
 
 add_samp_plugin(kamp
-  SAMPNativeFunctions.cpp
-  SAMPCallbacks.cpp
-  SAMPCallbacks.def
   ${SAMPSDK_DIR}/amxplugin.cpp
 )
 
