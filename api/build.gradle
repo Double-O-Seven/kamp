@@ -1,7 +1,49 @@
+configurations {
+    apiCodegen
+}
+
 dependencies {
 
     compileOnly(
             project(':plugin'),
             'com.google.inject:guice:4.2.0'
     )
+
+    apiCodegen project(':api-codegen')
 }
+
+def generatedSrcDir = "${buildDir}/generated-src/main/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSrcDir
+        }
+    }
+}
+
+def idlFilesDir = "${project(':plugin').projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
+
+def actorIDLFile = "${idlFilesDir}/a_actor.idl"
+def httpIDLFile = "${idlFilesDir}/a_http.idl"
+def objectsIDLFile = "${idlFilesDir}/a_objects.idl"
+def playersIDLFile = "${idlFilesDir}/a_players.idl"
+def sampIDLFile = "${idlFilesDir}/a_samp.idl"
+def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
+
+def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/api/SAMPConstants.java"
+
+task generateSAMPConstantsClass(type: JavaExec) {
+    dependsOn ':api-codegen:classes'
+    main "ch.leadrian.samp.kamp.apicodegen.SAMPConstantsJavaCodeGenerator"
+    classpath configurations.apiCodegen
+    args = [
+            "-o", generatedSrcDir,
+            "-p", "ch.leadrian.samp.kamp.api",
+            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPConstantsJavaFile
+}
+
+compileJava.dependsOn generateSAMPConstantsClass

@@ -13,16 +13,14 @@ import java.time.LocalDateTime
 class SAMPConstantsJavaCodeGenerator {
 
     fun generate(outputDirectory: Path, constants: List<Constant>, packageName: String, className: String = "SAMPConstants") {
-        val packageDirectoryPath = outputDirectory.resolve(packageName.replace('.', File.pathSeparatorChar))
+        val packageDirectoryPath = outputDirectory.resolve(packageName.replace('.', File.separatorChar))
         Files.createDirectories(packageDirectoryPath)
         val outputFile = packageDirectoryPath.resolve("$className.java")
         Files.newBufferedWriter(outputFile, CREATE, WRITE).use { writer ->
-            writer.write("""hi
+            writer.write("""
                 |package $packageName;
                 |
                 |import javax.annotation.Generated;
-                |
-                |import org.jetbrains.annotations.NotNull;
                 |
                 |@Generated(
                 |    value = "${this::class.java.name}",
@@ -32,11 +30,11 @@ class SAMPConstantsJavaCodeGenerator {
                 |
                 |    private $className() {}
                 |
+                |
             """.trimMargin("|"))
 
             constants.forEach {
                 val javaType = getJavaType(it.type)
-                writer.write("    @NotNull")
                 writer.write("    public static final $javaType ${it.name} = ${it.value.data};\n\n")
             }
 

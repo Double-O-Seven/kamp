@@ -34,10 +34,10 @@ internal class CodeGeneratorArguments(
 
             val commandLineParser = DefaultParser()
             val commandLine = commandLineParser.parse(options, args)
-            val outputDirectoryPath = Paths.get(commandLine.getOptionValue("output"))
-            val packageName = commandLine.getOptionValue("package")
+            val outputDirectoryPath = Paths.get(commandLine.getOptionValue(OUTPUT_SHORT_OPT)!!)
+            val packageName = commandLine.getOptionValue(PACKAGE_SHORT_OPT)!!
             val interfaceDefinitionSources = commandLine
-                    .getOptionValues(INPUT_LONG_OPT)
+                    .getOptionValues(INPUT_SHORT_OPT)!!
                     .map { FileInterfaceDefinitionSource(Paths.get(it)) }
             return CodeGeneratorArguments(
                     packageName = packageName,
@@ -64,6 +64,7 @@ internal class CodeGeneratorArguments(
                     .required()
                     .desc("Path of output directory without package structure")
                     .argName("output directory")
+                    .hasArg()
                     .build()
         }
 
@@ -74,6 +75,7 @@ internal class CodeGeneratorArguments(
                     .required()
                     .desc("Package of generated classes")
                     .argName("package name")
+                    .hasArg()
                     .build()
         }
     }
