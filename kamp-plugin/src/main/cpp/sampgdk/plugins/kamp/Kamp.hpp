@@ -5,6 +5,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <iostream>
 
 #include <jni.h>
 
@@ -17,10 +18,13 @@
 #include <sampgdk/core.h>
 #include <sampgdk/sdk.h>
 
+const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/runtime/KampLauncher";
 const std::string KAMP_LAUNCHER_LAUNCH_METHOD_NAME = "launch";
 const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME = "getCallbacksInstance";
+const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE = "()Lch/leadrian/samp/kamp/runtime/SAMPCallbacks;";
 const std::string KAMP_CLASS_PATH = "./Kamp/launch/jars";
 const std::string KAMP_JVM_OPTIONS_FILE = "./Kamp/launch/jvmopts.txt";
+
 
 class Kamp
 {
@@ -30,19 +34,23 @@ public:
 
 	~Kamp();
 
-	long Launch();
+	void Launch();
 
 	void Shutdown();
+
+	jobject GetSAMPCallbacksInstance();
 
 private:
 
 	long CreateJVM();
 
+	void DestroyJVM();
+
 	bool launched = false;
 	JavaVM *javaVM;
 	JNIEnv *jniEnv;
 	jclass kampLauncherClass = nullptr;
-	jobject kampLauncherInstance = nullptr;
+	jobject sampCallbacksInstance = nullptr;
 
 };
 

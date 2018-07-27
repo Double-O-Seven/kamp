@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.runtime;
 
-import ch.leadrian.samp.kamp.runtime.SAMPCallbacks;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
