@@ -1,12 +1,12 @@
 configurations {
-    apiCodegen
+    runtimeCodegen
 }
 
 dependencies {
-    apiCodegen project(':kamp-api-codegen')
+    runtimeCodegen project(':kamp-runtime-codegen')
 }
 
-def apiPackageName = "ch.leadrian.samp.kamp.api"
+def runtimePackageName = "ch.leadrian.samp.kamp.runtime"
 
 def sampgdkDir = "${projectDir}/src/main/cpp/sampgdk"
 
@@ -28,12 +28,12 @@ def sampPluginSdkDir = "${projectDir}/src/main/cpp/samp-plugin-sdk-original"
 def sampgdkBuildDir = "${sampgdkDir}/build"
 
 task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
-    dependsOn ':kamp-api-codegen:classes'
-    main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsCppHeaderCodeGenerator"
-    classpath configurations.apiCodegen
+    dependsOn ':kamp-runtime-codegen:classes'
+    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsCppHeaderCodeGenerator"
+    classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
-            "-p", apiPackageName,
+            "-p", runtimePackageName,
             "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)

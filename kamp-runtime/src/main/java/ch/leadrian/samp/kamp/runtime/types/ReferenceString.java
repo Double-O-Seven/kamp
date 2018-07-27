@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.api.types;
+package ch.leadrian.samp.kamp.runtime.types;
 
 import org.jetbrains.annotations.Nullable;
 

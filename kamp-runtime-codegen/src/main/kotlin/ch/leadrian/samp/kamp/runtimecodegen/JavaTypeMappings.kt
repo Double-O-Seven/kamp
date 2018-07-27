@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.apicodegen
+package ch.leadrian.samp.kamp.runtimecodegen
 
 import ch.leadrian.samp.cidl.model.Types
 
@@ -24,9 +24,9 @@ val JAVA_TYPE_MAPPING = mapOf(
 )
 
 val JAVA_OUT_TYPE_MAPPING = mapOf(
-        Types.FLOAT to "ch.leadrian.samp.kamp.api.types.ReferenceFloat",
-        Types.INT to "ch.leadrian.samp.kamp.api.types.ReferenceInt",
-        Types.STRING to "ch.leadrian.samp.kamp.api.types.ReferenceString"
+        Types.FLOAT to "ch.leadrian.samp.kamp.runtime.types.ReferenceFloat",
+        Types.INT to "ch.leadrian.samp.kamp.runtime.types.ReferenceInt",
+        Types.STRING to "ch.leadrian.samp.kamp.runtime.types.ReferenceString"
 )
 
 fun getJavaType(typeName: String) =

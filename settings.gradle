@@ -1,5 +1,5 @@
-include ':kamp-api'
-include ':kamp-api-codegen'
+include ':kamp-runtime'
+include ':kamp-runtime-codegen'
 include ':kamp-plugin'
 
 rootProject.name = 'kamp'

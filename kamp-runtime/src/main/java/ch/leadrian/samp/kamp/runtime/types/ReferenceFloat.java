@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.api.types;
+package ch.leadrian.samp.kamp.runtime.types;
 
 public class ReferenceFloat {
 

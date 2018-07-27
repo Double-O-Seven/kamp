@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.apicodegen
+package ch.leadrian.samp.kamp.runtimecodegen
 
 import ch.leadrian.samp.cidl.model.Function
 import ch.leadrian.samp.cidl.parser.InterfaceDefinitionParser
@@ -9,9 +9,9 @@ import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 import java.time.LocalDateTime
 
-class SAMPNativeFunctionsJavaCodeGenerator {
+class SAMPCallbacksJavaCodeGenerator {
 
-    fun generate(outputDirectory: Path, functions: List<Function>, packageName: String, className: String = "SAMPNativeFunctions") {
+    fun generate(outputDirectory: Path, functions: List<Function>, packageName: String, className: String = "SAMPCallbacks") {
         val packageDirectoryPath = outputDirectory.resolve(packageName.replace('.', File.separatorChar))
         Files.createDirectories(packageDirectoryPath)
         val outputFile = packageDirectoryPath.resolve("$className.java")
@@ -35,39 +35,34 @@ class SAMPNativeFunctionsJavaCodeGenerator {
             |    value = "${this::class.java.name}",
             |    date = "${LocalDateTime.now()}"
             |)
-            |public final class $className {
-            |
-            |    private $className() {}
+            |public interface $className {
             |
             |""".trimMargin("|"))
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
-        functions
-                .filter { it.hasAttribute("native") && !it.hasAttribute("noimpl") }
-                .forEach { writeFunction(it, writer) }
-    }
+        writer.write("    void onProcessTick ();\n\n")
 
-    private fun writeFunction(it: Function, writer: BufferedWriter) {
-        val returnJavaType = getJavaType(it.type)
-        if (!isPrimitiveJavaType(returnJavaType)) {
-            writer.write("    @NotNull\n")
-        }
-        val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
-        writer.write("    public static native $returnJavaType $camelCaseName (")
-        val parameters = it.parameters.joinToString(separator = ", ") {
-            val parameterJavaType = when {
-                it.hasAttribute("out") -> getJavaOutType(it.type)
-                else -> getJavaType(it.type)
-            }
-            val notNullAnnotation = when {
-                isPrimitiveJavaType(parameterJavaType) -> ""
-                else -> "@NotNull "
-            }
-            "$notNullAnnotation$parameterJavaType ${it.name}"
-        }
-        writer.write(parameters)
-        writer.write(");\n\n")
+        functions
+                .filter { it.hasAttribute("callback") }
+                .forEach {
+                    val returnJavaType = getJavaType(it.type)
+                    if (!isPrimitiveJavaType(returnJavaType)) {
+                        writer.write("    @NotNull\n")
+                    }
+                    val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
+                    writer.write("    $returnJavaType $camelCaseName (")
+                    val parameters = it.parameters.joinToString(separator = ", ") {
+                        val parameterJavaType = getJavaType(it.type)
+                        val notNullAnnotation = when {
+                            isPrimitiveJavaType(parameterJavaType) -> ""
+                            else -> "@NotNull "
+                        }
+                        "$notNullAnnotation$parameterJavaType ${it.name}"
+                    }
+                    writer.write(parameters)
+                    writer.write(");\n\n")
+                }
     }
 
     private fun writeFooter(writer: BufferedWriter) {
@@ -82,7 +77,7 @@ class SAMPNativeFunctionsJavaCodeGenerator {
             val codeGeneratorArguments = CodeGeneratorArguments.parse(args)
             val interfaceDefinitionParser = InterfaceDefinitionParser()
             val functions = interfaceDefinitionParser.parse(*codeGeneratorArguments.interfaceDefinitionSources).functions
-            SAMPNativeFunctionsJavaCodeGenerator().generate(
+            SAMPCallbacksJavaCodeGenerator().generate(
                     outputDirectory = codeGeneratorArguments.outputDirectoryPath,
                     functions = functions,
                     packageName = codeGeneratorArguments.packageName
