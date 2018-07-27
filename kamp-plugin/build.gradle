@@ -29,7 +29,7 @@ def sampgdkBuildDir = "${sampgdkDir}/build"
 
 task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
     dependsOn ':kamp-api-codegen:classes'
-    main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsHeaderCodeGenerator"
+    main "ch.leadrian.samp.kamp.apicodegen.SAMPNativeFunctionsCppHeaderCodeGenerator"
     classpath configurations.apiCodegen
     args = [
             "-o", kampSrcDir,

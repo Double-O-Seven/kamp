@@ -7,7 +7,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
 
-class SAMPNativeFunctionsHeaderCodeGenerator {
+class SAMPNativeFunctionsCppHeaderCodeGenerator {
 
     fun generate(outputDirectory: Path, functions: List<Function>, packageName: String, fileName: String = "SAMPNativeFunctions") {
         Files.createDirectories(outputDirectory)
@@ -89,7 +89,7 @@ class SAMPNativeFunctionsHeaderCodeGenerator {
             val codeGeneratorArguments = CodeGeneratorArguments.parse(args)
             val interfaceDefinitionParser = InterfaceDefinitionParser()
             val functions = interfaceDefinitionParser.parse(*codeGeneratorArguments.interfaceDefinitionSources).functions
-            SAMPNativeFunctionsHeaderCodeGenerator().generate(
+            SAMPNativeFunctionsCppHeaderCodeGenerator().generate(
                     outputDirectory = codeGeneratorArguments.outputDirectoryPath,
                     functions = functions,
                     packageName = codeGeneratorArguments.packageName
