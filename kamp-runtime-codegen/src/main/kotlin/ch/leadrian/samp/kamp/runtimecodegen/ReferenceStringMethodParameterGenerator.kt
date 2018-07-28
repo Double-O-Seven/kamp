@@ -16,13 +16,14 @@ class ReferenceStringMethodParameterGenerator(
                 |${indentation}static auto $parameterJavaClassVariable = env->GetObjectClass($parameterName);
                 |${indentation}static auto $parameterValueFieldIDVariable = env->GetFieldID(${parameterName}Class, "value", "Ljava/lang/String;");
                 |${indentation}char *$parameterOutVariable = new char[$sizeParameterName];
-                |""".trimMargin()
+            """.trimMargin()
 
     override fun generateMethodCallParameter(): String = "$parameterOutVariable, sizeof(char) * $sizeParameterName"
 
     override fun generateResultProcessing(): String? =
             """
-                |${indentation}env->SetIntField($parameterJavaClassVariable, $parameterValueFieldIDVariable, $parameterOutVariable);\n
-                |delete[] $parameterOutVariable;
+                |${indentation}env->SetObjectField($parameterJavaClassVariable, $parameterValueFieldIDVariable, env->NewStringUTF($parameterOutVariable));
+                |${indentation}delete[] $parameterOutVariable;
+                |
             """.trimMargin()
 }

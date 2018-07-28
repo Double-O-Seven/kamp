@@ -42,4 +42,4 @@ fun getJvmTypeSignature(typeName: String) =
         JVM_TYPE_SIGNATURES[typeName] ?: throw IllegalStateException("Unknown C++ type: $typeName")
 
 fun getJvmOutTypeSignature(typeName: String) =
-        JVM_OUT_TYPE_SIGNATURE[typeName] ?: throw IllegalStateException("Unknown C++ type: $typeName")
+        JVM_OUT_TYPE_SIGNATURE[typeName] ?: throw IllegalStateException("Unknown C++ out type: $typeName")

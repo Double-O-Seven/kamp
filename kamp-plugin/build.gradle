@@ -21,15 +21,15 @@ def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
 def kampSrcDir = "${sampgdkDir}/plugins/kamp"
 
-def generatedSAMPNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
-
 def sampPluginSdkDir = "${projectDir}/src/main/cpp/samp-plugin-sdk-original"
 
 def sampgdkBuildDir = "${sampgdkDir}/build"
 
+def sampNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
+
 task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
     dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsCppHeaderCodeGenerator"
+    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsHeaderCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -37,11 +37,26 @@ task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
             "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file generatedSAMPNativeFunctionsHeaderFile
+    outputs.file sampNativeFunctionsHeaderFile
+}
+
+def sampNativeFunctionsCppFile = "${kampSrcDir}/SAMPNativeFunctions.cpp"
+
+task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
+    dependsOn ':kamp-runtime-codegen:classes'
+    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsCppCodeGenerator"
+    classpath configurations.runtimeCodegen
+    args = [
+            "-o", kampSrcDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file sampNativeFunctionsCppFile
 }
 
 task makePlugin {
-    dependsOn(generateSAMPNativeFunctionsHeaderFile)
+    dependsOn(generateSAMPNativeFunctionsHeaderFile, generateSAMPNativeFunctionsCppFile)
 
     doFirst {
         mkdir sampgdkBuildDir
@@ -73,7 +88,8 @@ task makePlugin {
 
 clean {
     delete += sampgdkBuildDir
-    delete += generatedSAMPNativeFunctionsHeaderFile
+    delete += sampNativeFunctionsHeaderFile
+    delete += sampNativeFunctionsCppFile
 }
 
 build.dependsOn makePlugin

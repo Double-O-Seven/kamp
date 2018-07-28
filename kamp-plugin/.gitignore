@@ -1,2 +1,3 @@
 # Generated C++ files
+src/main/cpp/sampgdk/plugins/kamp/SAMPNativeFunctions.cpp
 src/main/cpp/sampgdk/plugins/kamp/SAMPNativeFunctions.h
