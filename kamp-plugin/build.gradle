@@ -13,7 +13,6 @@ def sampgdkDir = "${projectDir}/src/main/cpp/sampgdk"
 def idlFilesDir = "${sampgdkDir}/lib/sampgdk"
 
 def actorIDLFile = "${idlFilesDir}/a_actor.idl"
-def httpIDLFile = "${idlFilesDir}/a_http.idl"
 def objectsIDLFile = "${idlFilesDir}/a_objects.idl"
 def playersIDLFile = "${idlFilesDir}/a_players.idl"
 def sampIDLFile = "${idlFilesDir}/a_samp.idl"
@@ -34,9 +33,9 @@ task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
     args = [
             "-o", kampSrcDir,
             "-p", runtimePackageName,
-            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
-    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
     outputs.file sampNativeFunctionsHeaderFile
 }
 
@@ -49,9 +48,9 @@ task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
     args = [
             "-o", kampSrcDir,
             "-p", runtimePackageName,
-            "-i", actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
-    inputs.files(actorIDLFile, httpIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
     outputs.file sampNativeFunctionsCppFile
 }
 

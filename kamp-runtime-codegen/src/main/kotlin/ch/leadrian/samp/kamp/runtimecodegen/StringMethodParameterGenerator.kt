@@ -10,7 +10,7 @@ class StringMethodParameterGenerator(
     override fun generatePreCallSetup(): String? =
             "${indentation}const char *$parameterCharsVariable = env->GetStringUTFChars($parameterName, nullptr);\n"
 
-    override fun generateMethodCallParameter(): String = "std::string($parameterCharsVariable)"
+    override fun generateMethodCallParameter(): String = parameterCharsVariable
 
     override fun generateResultProcessing(): String? =
             "${indentation}env->ReleaseStringUTFChars($parameterName, $parameterCharsVariable);\n"

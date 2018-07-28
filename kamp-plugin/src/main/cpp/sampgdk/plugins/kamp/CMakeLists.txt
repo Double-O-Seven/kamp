@@ -15,6 +15,7 @@ endif()
 add_samp_plugin(kamp
   Kamp.cpp
   Kamp.hpp
+  SAMPNativeFunctions.cpp
   SAMPNativeFunctions.h
   ${SAMPSDK_DIR}/amxplugin.cpp
 )

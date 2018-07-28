@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.runtimecodegen
 
-internal class PrimitiveMethodParameterGenerator(private val parameterName: String) : MethodParameterGenerator {
+internal class DefaultMethodParameterGenerator(private val parameterName: String) : MethodParameterGenerator {
 
     override fun generatePreCallSetup(): String? = null
 
