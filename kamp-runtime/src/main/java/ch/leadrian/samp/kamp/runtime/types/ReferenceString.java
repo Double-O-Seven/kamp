@@ -4,6 +4,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class ReferenceString {
 
+    @SuppressWarnings("WeakerAccess")
     @Nullable
     String value = null;
 
