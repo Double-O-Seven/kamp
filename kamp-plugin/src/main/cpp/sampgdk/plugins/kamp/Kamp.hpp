@@ -18,6 +18,7 @@
 #include <sampgdk/sdk.h>
 
 #include "FieldCache.hpp"
+#include "SAMPCallbacksMethodCache.hpp"
 
 const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/runtime/KampLauncher";
 const std::string KAMP_LAUNCHER_LAUNCH_METHOD_NAME = "launch";
@@ -41,10 +42,16 @@ public:
 
 	void Shutdown();
 
-	void CallVoidCallbackMethod(const char *methodSignature);
-
 	FieldCache& GetFieldCache() {
 		return this->fieldCache;
+	}
+
+	jobject GetSAMPCallbacksInstance() {
+		return this->sampCallbacksInstance;
+	}
+
+	SAMPCallbacksMethodCache& GetSAMPCallbacksMethodCache() {
+		return this->sampCallbacksMethodCache;
 	}
 
 private:
@@ -68,6 +75,7 @@ private:
 	jobject sampCallbacksInstanceReference = nullptr;
 
 	FieldCache fieldCache;
+	SAMPCallbacksMethodCache sampCallbacksMethodCache;
 
 };
 

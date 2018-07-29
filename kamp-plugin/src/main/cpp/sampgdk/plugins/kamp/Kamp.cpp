@@ -33,10 +33,10 @@ void Kamp::Launch() {
 		return;
 	}
 
-	int initializeResult = this->fieldCache.Initialize(this->jniEnv);
-	if (initializeResult) {
+	int initializeFieldCacheResult = this->fieldCache.Initialize(this->jniEnv);
+	if (initializeFieldCacheResult) {
 		this->DestroyJVM();
-		std::cerr << "Initializing field cache returned with result " << initializeResult<< ", exiting..." << std::endl;
+		std::cerr << "Initializing field cache returned with result " << initializeFieldCacheResult<< ", exiting..." << std::endl;
 		exit(1);
 		return;
 	}
@@ -72,6 +72,16 @@ void Kamp::Launch() {
 	if (this->sampCallbacksInstanceReference == nullptr) {
 		this->DestroyJVM();
 		std::cerr << "Could not create global reference for SAMPCallbacks instance, exiting..." << std::endl;
+		exit(1);
+		return;
+	}
+
+	jclass sampCallbacksInstanceClass = this->jniEnv->GetObjectClass(this->sampCallbacksInstanceReference);
+	int initializeSAMPCallbacksMethodCacheResult = this->sampCallbacksMethodCache.Initialize(this->jniEnv, sampCallbacksInstanceClass);
+	this->jniEnv->DeleteLocalRef(sampCallbacksInstanceClass);
+	if (initializeSAMPCallbacksMethodCacheResult) {
+		this->DestroyJVM();
+		std::cerr << "Could not initialize SAMPCallbacks method cache (error code " << initializeSAMPCallbacksMethodCacheResult <<"), exiting..." << std::endl;
 		exit(1);
 		return;
 	}
