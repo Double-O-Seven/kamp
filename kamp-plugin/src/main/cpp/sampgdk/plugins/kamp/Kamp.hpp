@@ -41,7 +41,7 @@ public:
 
 	void Shutdown();
 
-	jobject GetSAMPCallbacksInstance();
+	void CallVoidCallbackMethod(const char *methodSignature);
 
 	FieldCache& GetFieldCache() {
 		return this->fieldCache;

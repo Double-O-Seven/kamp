@@ -93,10 +93,6 @@ void Kamp::Shutdown() {
 	this->sampCallbacksInstance = nullptr;
 }
 
-jobject Kamp::GetSAMPCallbacksInstance() {
-	return this->sampCallbacksInstance;
-}
-
 long Kamp::CreateJVM() {
 	std::vector<char *> optionStrings;
 
