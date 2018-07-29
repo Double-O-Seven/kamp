@@ -49,6 +49,9 @@ class SAMPCallbacksCppCodeGenerator {
             |PLUGIN_EXPORT void PLUGIN_CALL ProcessTick() {
             |    sampgdk::ProcessTick();
             |    Kamp& kampInstance = Kamp::GetInstance();
+            |    if (!kampInstance.IsLaunched()) {
+            |        return;
+            |    }
             |    jobject sampCallbacksInstance = kampInstance.GetSAMPCallbacksInstance();
             |    jmethodID callbackMethodID = kampInstance.GetSAMPCallbacksMethodCache().GetOnProcessTickMethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
@@ -77,11 +80,17 @@ class SAMPCallbacksCppCodeGenerator {
         writer.write("""
             |) {
             |    Kamp& kampInstance = Kamp::GetInstance();
+            |""".trimMargin())
+
+        if (function.name == "OnGameModeInit") {
+            writer.write("    kampInstance.Launch();\n")
+        }
+
+        writer.write("""
             |    jobject sampCallbacksInstance = kampInstance.GetSAMPCallbacksInstance();
             |    jmethodID callbackMethodID = kampInstance.GetSAMPCallbacksMethodCache().Get${function.name}MethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
-            |
-        """.trimMargin())
+            |""".trimMargin())
 
         val methodParameterGenerators = getMethodParameterGenerators(function.parameters)
         val resultProcessingSteps = methodParameterGenerators.mapNotNull { it.generateResultProcessing() }
@@ -102,6 +111,10 @@ class SAMPCallbacksCppCodeGenerator {
 
         if (resultProcessingSteps.isNotEmpty()) {
             resultProcessingSteps.forEach { writer.write("$it\n") }
+        }
+
+        if (function.name == "OnGameModeExit") {
+            writer.write("    kampInstance.Shutdown();\n")
         }
 
         if (function.type == Types.BOOL) {

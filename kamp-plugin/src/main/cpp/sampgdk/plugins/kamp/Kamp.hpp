@@ -40,6 +40,10 @@ public:
 
 	void Launch();
 
+	bool IsLaunched() {
+		return launched;
+	}
+
 	void Shutdown();
 
 	FieldCache& GetFieldCache() {
