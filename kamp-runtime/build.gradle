@@ -35,6 +35,8 @@ def playersIDLFile = "${idlFilesDir}/a_players.idl"
 def sampIDLFile = "${idlFilesDir}/a_samp.idl"
 def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
+def constantsPackageName = "${runtimePackageName}.constants"
+
 def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPConstants.java"
 
 task generateSAMPConstantsClass(type: JavaExec) {
@@ -43,7 +45,7 @@ task generateSAMPConstantsClass(type: JavaExec) {
     classpath configurations.runtimeCodegen
     args = [
             "-o", generatedSrcDir,
-            "-p", runtimePackageName,
+            "-p", constantsPackageName,
             "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
     inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
