@@ -25,17 +25,17 @@ internal class CodeGeneratorArguments(
 
     companion object {
 
-        fun parse(args: Array<String>): CodeGeneratorArguments {
+        fun parse(args: Array<String>, packageNameRequired: Boolean = true): CodeGeneratorArguments {
             val options = Options().apply {
                 addOption(buildInputOption())
                 addOption(buildOutputOption())
-                addOption(buildPackageOption())
+                addOption(buildPackageOption(packageNameRequired))
             }
 
             val commandLineParser = DefaultParser()
             val commandLine = commandLineParser.parse(options, args)
             val outputDirectoryPath = Paths.get(commandLine.getOptionValue(OUTPUT_SHORT_OPT)!!)
-            val packageName = commandLine.getOptionValue(PACKAGE_SHORT_OPT)!!
+            val packageName = commandLine.getOptionValue(PACKAGE_SHORT_OPT, "")
             val interfaceDefinitionSources = commandLine
                     .getOptionValues(INPUT_SHORT_OPT)!!
                     .map { FileInterfaceDefinitionSource(Paths.get(it)) }
@@ -68,11 +68,11 @@ internal class CodeGeneratorArguments(
                     .build()
         }
 
-        private fun buildPackageOption(): Option {
+        private fun buildPackageOption(required: Boolean): Option {
             return Option
                     .builder(PACKAGE_SHORT_OPT)
                     .longOpt(PACKAGE_LONG_OPT)
-                    .required()
+                    .required(required)
                     .desc("Package of generated classes")
                     .argName("package name")
                     .hasArg()

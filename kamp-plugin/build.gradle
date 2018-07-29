@@ -54,8 +54,22 @@ task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
     outputs.file sampNativeFunctionsCppFile
 }
 
+def sampCallbacksDefFile = "${kampSrcDir}/SAMPCallbacks.def"
+
+task generateSAMPCallbacksDefFile(type: JavaExec) {
+    dependsOn ':kamp-runtime-codegen:classes'
+    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksDefCodeGenerator"
+    classpath configurations.runtimeCodegen
+    args = [
+            "-o", kampSrcDir,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file sampCallbacksDefFile
+}
+
 task makePlugin {
-    dependsOn(generateSAMPNativeFunctionsHeaderFile, generateSAMPNativeFunctionsCppFile)
+    dependsOn(generateSAMPNativeFunctionsHeaderFile, generateSAMPNativeFunctionsCppFile, generateSAMPCallbacksDefFile)
 
     doFirst {
         mkdir sampgdkBuildDir
@@ -89,6 +103,7 @@ clean {
     delete += sampgdkBuildDir
     delete += sampNativeFunctionsHeaderFile
     delete += sampNativeFunctionsCppFile
+    delete += sampCallbacksDefFile
 }
 
 build.dependsOn makePlugin
