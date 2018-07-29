@@ -89,8 +89,7 @@ class SAMPCallbacksCppCodeGenerator {
         methodParameterGenerators.mapNotNull { it.generatePreCallSetup() }.forEach { writer.write("$it\n") }
 
         when {
-            function.type == Types.BOOL && resultProcessingSteps.isNotEmpty() -> writer.write("    auto _result = jniEnv->CallBooleanMethod(")
-            function.type == Types.BOOL -> writer.write("    return jniEnv->CallBooleanMethod(")
+            function.type == Types.BOOL -> writer.write("    jboolean _result = jniEnv->CallBooleanMethod(")
             function.type == Types.VOID -> writer.write("    jniEnv->CallVoidMethod(")
             else -> throw UnsupportedOperationException("Generating callback with return type ${function.type} is not supported")
         }
@@ -105,8 +104,8 @@ class SAMPCallbacksCppCodeGenerator {
             resultProcessingSteps.forEach { writer.write("$it\n") }
         }
 
-        if (function.type == Types.BOOL && resultProcessingSteps.isNotEmpty()) {
-            writer.write("    return _result;\n")
+        if (function.type == Types.BOOL) {
+            writer.write("    return (_result ? true : false);\n")
         }
         writer.write("}\n\n")
     }

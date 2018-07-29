@@ -66,7 +66,7 @@ class SAMPCallbacksMethodCacheCppCodeGenerator {
     }
 
     private fun writeFooter(writer: BufferedWriter) {
-        writer.write("}\n")
+        writer.write("    return 0;\n}\n")
         writer.close()
     }
 

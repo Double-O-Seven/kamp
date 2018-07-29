@@ -46,6 +46,15 @@ class SAMPCallbacksJavaCodeGenerator {
         functions
                 .filter { it.hasAttribute("callback") }
                 .forEach {
+                    if (it.hasAttribute("badret")) {
+                        val badReturnValueAttribute = it.getAttribute("badret")
+                        writer.write("""
+                            |    /*
+                            |     * Bad return value is ${badReturnValueAttribute.value?.data}
+                            |     */
+                            |
+                        """.trimMargin())
+                    }
                     val returnJavaType = getJavaType(it.type)
                     if (!isPrimitiveJavaType(returnJavaType)) {
                         writer.write("    @NotNull\n")
