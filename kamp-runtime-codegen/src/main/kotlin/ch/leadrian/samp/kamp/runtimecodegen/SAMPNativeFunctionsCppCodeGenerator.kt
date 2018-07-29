@@ -36,6 +36,9 @@ class SAMPNativeFunctionsCppCodeGenerator {
             |
             |#include "$fileName.h"
             |
+            |#include "Kamp.hpp"
+            |#include "FieldCache.hpp"
+            |
             |""".trimMargin("|"))
     }
 

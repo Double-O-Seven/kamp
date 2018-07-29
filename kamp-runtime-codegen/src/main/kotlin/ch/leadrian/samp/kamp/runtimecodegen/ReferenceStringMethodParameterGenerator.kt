@@ -6,15 +6,12 @@ class ReferenceStringMethodParameterGenerator(
         private val indentation: String
 ) : MethodParameterGenerator {
 
-    private val parameterJavaClassVariable = "${parameterName}Class"
     private val parameterValueFieldIDVariable = "${parameterName}ValueFieldID"
     private val parameterOutVariable = "${parameterName}Out"
 
     override fun generatePreCallSetup(): String? =
             """
-                |$indentation// TODO this might not be the best option in case of a server restart!
-                |${indentation}static auto $parameterJavaClassVariable = env->GetObjectClass($parameterName);
-                |${indentation}static auto $parameterValueFieldIDVariable = env->GetFieldID(${parameterName}Class, "value", "Ljava/lang/String;");
+                |${indentation}jfieldID $parameterValueFieldIDVariable = Kamp::GetInstance().GetFieldCache().GetReferenceStringValueFieldID();
                 |${indentation}char *$parameterOutVariable = new char[$sizeParameterName];
             """.trimMargin()
 
@@ -22,7 +19,7 @@ class ReferenceStringMethodParameterGenerator(
 
     override fun generateResultProcessing(): String? =
             """
-                |${indentation}env->SetObjectField($parameterJavaClassVariable, $parameterValueFieldIDVariable, env->NewStringUTF($parameterOutVariable));
+                |${indentation}env->SetObjectField($parameterName, $parameterValueFieldIDVariable, env->NewStringUTF($parameterOutVariable));
                 |${indentation}delete[] $parameterOutVariable;
                 |
             """.trimMargin()
