@@ -12,7 +12,7 @@ interface Location : Vector3D {
 
     fun distanceTo(other: Location): Float {
         if (this.interiorId != other.interiorId || this.worldId != other.worldId) {
-            return Float.MAX_VALUE
+            return Float.POSITIVE_INFINITY
         }
         return distanceTo(other as Vector3D)
     }
