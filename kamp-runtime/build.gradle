@@ -35,23 +35,6 @@ def playersIDLFile = "${idlFilesDir}/a_players.idl"
 def sampIDLFile = "${idlFilesDir}/a_samp.idl"
 def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
-def constantsPackageName = "${runtimePackageName}.constants"
-
-def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPConstants.java"
-
-task generateSAMPConstantsClass(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPConstantsJavaCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", generatedSrcDir,
-            "-p", constantsPackageName,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file generatedSAMPConstantsJavaFile
-}
-
 def generatedSAMPCallbacksJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPCallbacks.java"
 
 task generateSAMPCallbacksClass(type: JavaExec) {
@@ -82,5 +65,5 @@ task generateSAMPNativeFunctionsClass(type: JavaExec) {
     outputs.file generatedSAMPNativeFunctionsJavaFile
 }
 
-compileKotlin.dependsOn(generateSAMPConstantsClass, generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
-compileJava.dependsOn(generateSAMPConstantsClass, generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
+compileKotlin.dependsOn(generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
+compileJava.dependsOn(generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
