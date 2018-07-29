@@ -44,7 +44,7 @@ class SAMPNativeFunctionsHeaderCodeGenerator {
     }
 
     private fun writeFunction(it: Function, packageName: String, writer: BufferedWriter) {
-        val returnCppType = getCppType(it.type)
+        val returnCppType = getJniType(it.type)
         val packagePart = packageName.replace('.', '_')
         val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
         writer.write("""
@@ -55,8 +55,8 @@ class SAMPNativeFunctionsHeaderCodeGenerator {
         }
         val parameters = it.parameters.joinToString(separator = ", ") {
             val parameterJavaType = when {
-                it.hasAttribute("out") -> getCppOutType(it.type)
-                else -> getCppType(it.type)
+                it.hasAttribute("out") -> getJniOutType(it.type)
+                else -> getJniType(it.type)
             }
             "$parameterJavaType ${it.name}"
         }
