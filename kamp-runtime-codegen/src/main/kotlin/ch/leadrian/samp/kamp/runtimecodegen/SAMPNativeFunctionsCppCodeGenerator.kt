@@ -123,11 +123,11 @@ class SAMPNativeFunctionsCppCodeGenerator {
                     )
                 }
                 parameter.type == Types.STRING ->
-                    StringMethodParameterGenerator(
+                    ConstCharMethodParameterGenerator(
                             parameterName = parameter.name,
                             indentation = indentation
                     )
-                parameter.type == Types.BOOL -> BooleanMethodParameterGenerator(parameter.name)
+                parameter.type == Types.BOOL -> JbooleanMethodParameterGenerator(parameter.name)
                 else -> DefaultMethodParameterGenerator(parameter.name)
             }
         }

@@ -47,6 +47,9 @@ fun getJniType(typeName: String) =
 fun getJniOutType(typeName: String) =
         JNI_OUT_TYPE_MAPPING[typeName] ?: throw IllegalStateException("Unknown C++ out type: $typeName")
 
+fun getCppType(typeName: String) =
+        CPP_TYPE_MAPPING[typeName] ?: throw IllegalStateException("Unknown C++ type: $typeName")
+
 fun getJvmTypeSignature(typeName: String) =
         JVM_TYPE_SIGNATURES[typeName] ?: throw IllegalStateException("Unknown C++ type: $typeName")
 

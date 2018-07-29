@@ -54,6 +54,10 @@ public:
 		return this->sampCallbacksMethodCache;
 	}
 
+	JNIEnv *GetJNIEnv() {
+		return this->jniEnv;
+	}
+
 private:
 
 	Kamp() {}

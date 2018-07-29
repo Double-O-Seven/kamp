@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.runtimecodegen
 
-class StringMethodParameterGenerator(
+class ConstCharMethodParameterGenerator(
         private val parameterName: String,
         private val indentation: String
 ) : MethodParameterGenerator {

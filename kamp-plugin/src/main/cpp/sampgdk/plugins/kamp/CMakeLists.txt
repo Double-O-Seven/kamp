@@ -19,6 +19,7 @@ add_samp_plugin(kamp
   SAMPNativeFunctions.h
   FieldCache.cpp
   FieldCache.hpp
+  SAMPCallbacks.cpp
   SAMPCallbacks.def
   SAMPCallbacksMethodCache.cpp
   SAMPCallbacksMethodCache.hpp

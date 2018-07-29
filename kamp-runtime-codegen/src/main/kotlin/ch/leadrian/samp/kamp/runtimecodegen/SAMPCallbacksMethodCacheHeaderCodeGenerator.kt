@@ -37,7 +37,7 @@ class SAMPCallbacksMethodCacheHeaderCodeGenerator {
             |
             |    int Initialize(JNIEnv *jniEnv, jclass clazz);
             |
-            |    jmethodID GetOnProcessTickMethod() {
+            |    jmethodID GetOnProcessTickMethodID() {
             |        return onProcessTickMethodID;
             |    }
             |

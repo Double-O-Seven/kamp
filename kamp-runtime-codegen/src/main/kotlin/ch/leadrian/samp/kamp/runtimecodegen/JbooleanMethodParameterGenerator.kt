@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.runtimecodegen
 
-internal class BooleanMethodParameterGenerator(private val parameterName: String) : MethodParameterGenerator {
+internal class JbooleanMethodParameterGenerator(private val parameterName: String) : MethodParameterGenerator {
 
     override fun generatePreCallSetup(): String? = null
 
