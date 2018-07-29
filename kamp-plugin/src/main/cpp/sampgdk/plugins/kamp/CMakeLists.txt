@@ -20,6 +20,8 @@ add_samp_plugin(kamp
   FieldCache.cpp
   FieldCache.hpp
   SAMPCallbacks.def
+  SAMPCallbacksMethodCache.cpp
+  SAMPCallbacksMethodCache.hpp
   ${SAMPSDK_DIR}/amxplugin.cpp
 )
 

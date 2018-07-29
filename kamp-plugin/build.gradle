@@ -82,12 +82,27 @@ task generateSAMPCallbacksMethodCacheHppFile(type: JavaExec) {
     outputs.file sampCallbacksMethodCacheHppFile
 }
 
+def sampCallbacksMethodCacheCppFile = "${kampSrcDir}/SAMPCallbacksMethodCache.cpp"
+
+task generateSAMPCallbacksMethodCacheCppFile(type: JavaExec) {
+    dependsOn ':kamp-runtime-codegen:classes'
+    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksMethodCacheCppCodeGenerator"
+    classpath configurations.runtimeCodegen
+    args = [
+            "-o", kampSrcDir,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file sampCallbacksMethodCacheCppFile
+}
+
 task makePlugin {
     dependsOn(
             generateSAMPNativeFunctionsHeaderFile,
             generateSAMPNativeFunctionsCppFile,
             generateSAMPCallbacksDefFile,
-            generateSAMPCallbacksMethodCacheHppFile
+            generateSAMPCallbacksMethodCacheHppFile,
+            generateSAMPCallbacksMethodCacheCppFile
     )
 
     doFirst {
@@ -124,6 +139,7 @@ clean {
     delete += sampNativeFunctionsCppFile
     delete += sampCallbacksDefFile
     delete += sampCallbacksMethodCacheHppFile
+    delete += sampCallbacksMethodCacheCppFile
 }
 
 build.dependsOn makePlugin
