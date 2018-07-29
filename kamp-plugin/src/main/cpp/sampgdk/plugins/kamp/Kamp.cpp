@@ -1,10 +1,6 @@
 
 #include "Kamp.hpp"
 
-Kamp::Kamp() {
-
-}
-
 Kamp::~Kamp() {
 	this->Shutdown();
 }
@@ -14,11 +10,11 @@ void Kamp::Launch() {
 		return;
 	}
 
-	long result = this->CreateJVM();
+	long createJVMResult = this->CreateJVM();
 
-	if (result) {
+	if (createJVMResult) {
 		std::cerr << "Failed to create JVM, exiting..." << std::endl;
-		exit(result);
+		exit(createJVMResult);
 		return;
 	}
 
@@ -26,6 +22,21 @@ void Kamp::Launch() {
 	if (this->kampLauncherClass == nullptr) {
 		this->DestroyJVM();
 		std::cerr << "Could not find launcher class " << KAMP_LAUNCHER_CLASS << ", exiting..." << std::endl;
+		exit(1);
+		return;
+	}
+	this->kampLauncherClassReference = this->jniEnv->NewGlobalRef(this->kampLauncherClass);
+	if (this->kampLauncherClassReference == nullptr) {
+		this->DestroyJVM();
+		std::cerr << "Could not create global reference for Kamp launcher class, exiting..." << std::endl;
+		exit(1);
+		return;
+	}
+
+	int initializeResult = this->fieldCache.Initialize(this->jniEnv);
+	if (initializeResult) {
+		this->DestroyJVM();
+		std::cerr << "Initializing field cache returned with result " << initializeResult<< ", exiting..." << std::endl;
 		exit(1);
 		return;
 	}
@@ -54,6 +65,13 @@ void Kamp::Launch() {
 	if (this->sampCallbacksInstance == nullptr) {
 		this->DestroyJVM();
 		std::cerr << "Could not get SAMPCallbacks instance" << std::endl;
+		exit(1);
+		return;
+	}
+	this->sampCallbacksInstanceReference = this->jniEnv->NewGlobalRef(this->sampCallbacksInstance);
+	if (this->sampCallbacksInstanceReference == nullptr) {
+		this->DestroyJVM();
+		std::cerr << "Could not create global reference for SAMPCallbacks instance, exiting..." << std::endl;
 		exit(1);
 		return;
 	}
@@ -119,6 +137,18 @@ long Kamp::CreateJVM() {
 }
 
 void Kamp::DestroyJVM() {
-	this->jniEnv->ExceptionDescribe();
-	this->javaVM->DestroyJavaVM();
+	if (this->jniEnv) {
+		if (this->kampLauncherClassReference) {
+			this->jniEnv->DeleteGlobalRef(this->kampLauncherClassReference);
+		}
+
+		if (this->sampCallbacksInstanceReference) {
+			this->jniEnv->DeleteGlobalRef(this->sampCallbacksInstanceReference);
+		}
+
+		this->jniEnv->ExceptionDescribe();
+	}
+	if (this->javaVM) {
+		this->javaVM->DestroyJavaVM();
+	}
 }

@@ -17,6 +17,8 @@ add_samp_plugin(kamp
   Kamp.hpp
   SAMPNativeFunctions.cpp
   SAMPNativeFunctions.h
+  FieldCache.cpp
+  FieldCache.hpp
   ${SAMPSDK_DIR}/amxplugin.cpp
 )
 

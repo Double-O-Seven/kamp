@@ -17,6 +17,8 @@
 #include <sampgdk/core.h>
 #include <sampgdk/sdk.h>
 
+#include "FieldCache.hpp"
+
 const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/runtime/KampLauncher";
 const std::string KAMP_LAUNCHER_LAUNCH_METHOD_NAME = "launch";
 const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME = "getCallbacksInstance";
@@ -28,8 +30,10 @@ const std::string KAMP_JVM_OPTIONS_FILE = "./Kamp/launch/jvmopts.txt";
 class Kamp
 {
 public:
-
-	Kamp();
+	static Kamp& GetInstance() {
+		static Kamp instance;
+		return instance;
+	}
 
 	~Kamp();
 
@@ -39,7 +43,15 @@ public:
 
 	jobject GetSAMPCallbacksInstance();
 
+	FieldCache& GetFieldCache() {
+		return this->fieldCache;
+	}
+
 private:
+
+	Kamp() {}
+	Kamp(Kamp const&); // Don't implement for singleton
+	void operator=(Kamp const&); // Don't implement for singleton
 
 	long CreateJVM();
 
@@ -48,8 +60,14 @@ private:
 	bool launched = false;
 	JavaVM *javaVM;
 	JNIEnv *jniEnv;
+
 	jclass kampLauncherClass = nullptr;
+	jobject kampLauncherClassReference = nullptr;
+
 	jobject sampCallbacksInstance = nullptr;
+	jobject sampCallbacksInstanceReference = nullptr;
+
+	FieldCache fieldCache;
 
 };
 
