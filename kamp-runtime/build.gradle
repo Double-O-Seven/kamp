@@ -6,6 +6,8 @@ configurations {
 
 dependencies {
 
+    compile project(':kamp-api')
+
     compileOnly(
             'com.google.inject:guice:4.2.0'
     )
