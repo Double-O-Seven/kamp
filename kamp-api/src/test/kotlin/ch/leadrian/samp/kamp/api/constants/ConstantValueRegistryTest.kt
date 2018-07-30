@@ -2,31 +2,60 @@ package ch.leadrian.samp.kamp.api.constants
 
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 
 internal class ConstantValueRegistryTest {
 
-    @ParameterizedTest
-    @EnumSource(TestConstantValue::class)
-    fun shouldReturnConstantByValue(expectedConstant: TestConstantValue) {
-        val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
+    @Nested
+    inner class GetTests {
 
-        val constant = constantValueRegistry[expectedConstant.value]
+        @ParameterizedTest
+        @EnumSource(TestConstantValue::class)
+        fun shouldReturnConstantByValue(expectedConstant: TestConstantValue) {
+            val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
 
-        assertThat(constant)
-                .isEqualTo(expectedConstant)
+            val constant = constantValueRegistry[expectedConstant.value]
+
+            assertThat(constant)
+                    .isEqualTo(expectedConstant)
+        }
+
+        @Test
+        fun givenInvalidValueItShouldThrowAnException() {
+            val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
+
+            val caughtThrowable = catchThrowable { constantValueRegistry[-999] }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalArgumentException::class.java)
+        }
     }
 
-    @Test
-    fun givenInvalidValueItShouldThrowAnException() {
-        val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
+    @Nested
+    inner class ExistsTests {
+        @ParameterizedTest
+        @EnumSource(TestConstantValue::class)
+        fun givenValueExistsItShouldReturnTrue(expectedConstant: TestConstantValue) {
+            val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
 
-        val caughtThrowable = catchThrowable { constantValueRegistry[-999] }
+            val exists = constantValueRegistry.exists(expectedConstant.value)
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(IllegalArgumentException::class.java)
+            assertThat(exists)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenValueDoesNotExistItShouldReturnFalse() {
+            val constantValueRegistry = ConstantValueRegistry(*TestConstantValue.values())
+
+            val exists = constantValueRegistry.exists(-999)
+
+            assertThat(exists)
+                    .isFalse()
+        }
     }
 
     enum class TestConstantValue(override val value: Int) : ConstantValue<Int> {

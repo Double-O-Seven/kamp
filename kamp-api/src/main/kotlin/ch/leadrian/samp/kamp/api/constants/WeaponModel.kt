@@ -1,9 +1,8 @@
 package ch.leadrian.samp.kamp.api.constants
 
-/*
+/**
  * Base damage and range taken from https://github.com/oscar-broman/samp-weapon-config
  */
-
 enum class WeaponModel(
         override val value: Int,
         val slot: WeaponSlot,

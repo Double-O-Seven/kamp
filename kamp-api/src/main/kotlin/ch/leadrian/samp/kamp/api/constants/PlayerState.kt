@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.constants
 
 enum class PlayerState(override val value: Int) : ConstantValue<Int> {
     NONE(SAMPConstants.PLAYER_STATE_NONE),
-    ONFOOT(SAMPConstants.PLAYER_STATE_ONFOOT),
+    ON_FOOT(SAMPConstants.PLAYER_STATE_ONFOOT),
     DRIVER(SAMPConstants.PLAYER_STATE_DRIVER),
     PASSENGER(SAMPConstants.PLAYER_STATE_PASSENGER),
     EXIT_VEHICLE(SAMPConstants.PLAYER_STATE_EXIT_VEHICLE),

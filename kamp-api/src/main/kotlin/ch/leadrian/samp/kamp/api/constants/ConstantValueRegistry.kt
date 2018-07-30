@@ -10,4 +10,6 @@ open class ConstantValueRegistry<K, V : ConstantValue<K>>(vararg constants: V) {
 
     operator fun get(value: K): V? =
             sampConstantsByValue[value] ?: throw IllegalArgumentException("No constant with value $value")
+
+    fun exists(value: K): Boolean = sampConstantsByValue.containsKey(value)
 }
