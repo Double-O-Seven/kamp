@@ -48,5 +48,9 @@ task generateSAMPConstantsClass(type: JavaExec) {
     outputs.file generatedSAMPConstantsJavaFile
 }
 
+clean {
+    delete += generatedSAMPConstantsJavaFile
+}
+
 compileKotlin.dependsOn generateSAMPConstantsClass
 compileJava.dependsOn generateSAMPConstantsClass
