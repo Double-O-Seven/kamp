@@ -1,3 +1,5 @@
+@file:kotlin.jvm.JvmName("Vectors")
+
 package ch.leadrian.samp.kamp.api.data
 
 fun vector2DOf(x: Float, y: Float): Vector2D = Vector2DImpl(
