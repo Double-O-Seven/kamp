@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.runtimecodegen
+package ch.leadrian.samp.kamp.codegen
 
 class JstringMethodParameterGenerator(
         private val parameterName: String,

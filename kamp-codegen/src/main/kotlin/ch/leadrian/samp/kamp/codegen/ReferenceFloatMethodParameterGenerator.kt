@@ -1,6 +1,6 @@
-package ch.leadrian.samp.kamp.runtimecodegen
+package ch.leadrian.samp.kamp.codegen
 
-class ReferenceIntMethodParameterGenerator(
+class ReferenceFloatMethodParameterGenerator(
         private val parameterName: String,
         private val indentation: String
 ) : MethodParameterGenerator {
@@ -10,12 +10,12 @@ class ReferenceIntMethodParameterGenerator(
 
     override fun generatePreCallSetup(): String? =
             """
-                |${indentation}jfieldID $parameterValueFieldIDVariable = Kamp::GetInstance().GetFieldCache().GetReferenceIntValueFieldID();
-                |${indentation}int $parameterOutVariable;
+                |${indentation}jfieldID $parameterValueFieldIDVariable = Kamp::GetInstance().GetFieldCache().GetReferenceFloatValueFieldID();
+                |${indentation}float $parameterOutVariable;
                 |""".trimMargin()
 
     override fun generateMethodCallParameter(): String = "&$parameterOutVariable"
 
     override fun generateResultProcessing(): String? =
-            "${indentation}env->SetIntField($parameterName, $parameterValueFieldIDVariable, $parameterOutVariable);\n"
+            "${indentation}env->SetFloatField($parameterName, $parameterValueFieldIDVariable, $parameterOutVariable);\n"
 }

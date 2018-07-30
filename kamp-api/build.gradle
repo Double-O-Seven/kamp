@@ -6,9 +6,9 @@ configurations {
 
 dependencies {
 
-    compile project(':kamp-runtime-codegen')
+    compile project(':kamp-codegen')
 
-    apiCodegen project(':kamp-runtime-codegen')
+    apiCodegen project(':kamp-codegen')
 }
 
 def generatedSrcDir = "${buildDir}/generated-src/main/java"
@@ -36,8 +36,8 @@ def constantsPackageName = "${apiPackageName}.constants"
 def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPConstants.java"
 
 task generateSAMPConstantsClass(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPConstantsJavaCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPConstantsJavaCodeGenerator"
     classpath configurations.apiCodegen
     args = [
             "-o", generatedSrcDir,

@@ -3,7 +3,7 @@ configurations {
 }
 
 dependencies {
-    runtimeCodegen project(':kamp-runtime-codegen')
+    runtimeCodegen project(':kamp-codegen')
 }
 
 def runtimePackageName = "ch.leadrian.samp.kamp.runtime"
@@ -27,8 +27,8 @@ def sampgdkBuildDir = "${sampgdkDir}/build"
 def sampNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
 
 task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsHeaderCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsHeaderCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -42,8 +42,8 @@ task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
 def sampNativeFunctionsCppFile = "${kampSrcDir}/SAMPNativeFunctions.cpp"
 
 task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsCppCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsCppCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -57,8 +57,8 @@ task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
 def sampCallbacksDefFile = "${kampSrcDir}/SAMPCallbacks.def"
 
 task generateSAMPCallbacksDefFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksDefCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksDefCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -71,8 +71,8 @@ task generateSAMPCallbacksDefFile(type: JavaExec) {
 def sampCallbacksCppFile = "${kampSrcDir}/SAMPCallbacks.cpp"
 
 task generateSAMPCallbacksCppFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksCppCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksCppCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -85,8 +85,8 @@ task generateSAMPCallbacksCppFile(type: JavaExec) {
 def sampCallbacksMethodCacheHppFile = "${kampSrcDir}/SAMPCallbacksMethodCache.hpp"
 
 task generateSAMPCallbacksMethodCacheHppFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksMethodCacheHeaderCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksMethodCacheHeaderCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,
@@ -99,8 +99,8 @@ task generateSAMPCallbacksMethodCacheHppFile(type: JavaExec) {
 def sampCallbacksMethodCacheCppFile = "${kampSrcDir}/SAMPCallbacksMethodCache.cpp"
 
 task generateSAMPCallbacksMethodCacheCppFile(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksMethodCacheCppCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksMethodCacheCppCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", kampSrcDir,

@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.runtimecodegen
+package ch.leadrian.samp.kamp.codegen
 
 class ReferenceStringMethodParameterGenerator(
         private val parameterName: String,

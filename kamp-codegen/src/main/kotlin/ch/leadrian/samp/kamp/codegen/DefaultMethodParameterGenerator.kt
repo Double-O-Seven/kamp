@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.runtimecodegen
+package ch.leadrian.samp.kamp.codegen
 
 internal class DefaultMethodParameterGenerator(private val parameterName: String) : MethodParameterGenerator {
 

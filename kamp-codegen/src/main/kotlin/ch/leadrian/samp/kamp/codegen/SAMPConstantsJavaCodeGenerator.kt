@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.runtimecodegen
+package ch.leadrian.samp.kamp.codegen
 
 import ch.leadrian.samp.cidl.model.Constant
 import ch.leadrian.samp.cidl.parser.InterfaceDefinitionParser

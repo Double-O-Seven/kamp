@@ -12,7 +12,7 @@ dependencies {
             'com.google.inject:guice:4.2.0'
     )
 
-    runtimeCodegen project(':kamp-runtime-codegen')
+    runtimeCodegen project(':kamp-codegen')
 }
 
 def generatedSrcDir = "${buildDir}/generated-src/main/java"
@@ -38,8 +38,8 @@ def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 def generatedSAMPCallbacksJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPCallbacks.java"
 
 task generateSAMPCallbacksClass(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPCallbacksJavaCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksJavaCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", generatedSrcDir,
@@ -53,8 +53,8 @@ task generateSAMPCallbacksClass(type: JavaExec) {
 def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctions.java"
 
 task generateSAMPNativeFunctionsClass(type: JavaExec) {
-    dependsOn ':kamp-runtime-codegen:classes'
-    main "ch.leadrian.samp.kamp.runtimecodegen.SAMPNativeFunctionsJavaCodeGenerator"
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsJavaCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
             "-o", generatedSrcDir,
