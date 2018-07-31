@@ -195,9 +195,7 @@ internal class ShapesTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         create { minX, maxX, minY, maxY -> rectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY) },
-                        create { minX, maxX, minY, maxY -> mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY) },
-                        create { minX, maxX, minY, maxY -> boxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f) },
-                        create { minX, maxX, minY, maxY -> mutableBoxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f) }
+                        create { minX, maxX, minY, maxY -> mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY) }
                 )
 
         fun create(factory: (Float, Float, Float, Float) -> Rectangle): Arguments = Arguments.of(factory)
@@ -220,9 +218,7 @@ internal class ShapesTest {
             ).flatMap { coordinates ->
                 Stream.of(
                         rectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY),
-                        mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY),
-                        boxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f),
-                        mutableBoxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f)
+                        mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY)
                 ).map { rectangle -> Arguments.of(rectangle, coordinates) }
             }
         }
@@ -248,9 +244,7 @@ internal class ShapesTest {
             ).flatMap { coordinates ->
                 Stream.of(
                         rectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY),
-                        mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY),
-                        boxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f),
-                        mutableBoxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = 0f, maxZ = 0f)
+                        mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY)
                 ).map { rectangle -> Arguments.of(rectangle, coordinates) }
             }
         }
@@ -269,7 +263,7 @@ internal class ShapesTest {
                         }
                 )
 
-        fun create(factory: (Float, Float, Float, Float, Float, Float) -> Rectangle): Arguments = Arguments.of(factory)
+        fun create(factory: (Float, Float, Float, Float, Float, Float) -> Box): Arguments = Arguments.of(factory)
 
     }
 

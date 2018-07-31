@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.data
 
-interface Shape3D : Shape2D {
+interface Shape3D {
 
     fun contains(coordinates: Vector3D): Boolean
 
