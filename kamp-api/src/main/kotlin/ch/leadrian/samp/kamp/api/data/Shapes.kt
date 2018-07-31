@@ -62,3 +62,45 @@ fun mutableCircleOf(coordinates: Vector2D, radius: Float): MutableCircle = Mutab
         y = coordinates.y,
         radius = radius
 )
+
+fun sphereOf(x: Float, y: Float, z: Float, radius: Float): Sphere = SphereImpl(
+        x = x,
+        y = y,
+        z = z,
+        radius = radius
+)
+
+fun sphereOf(coordinates: Vector3D, radius: Float): Sphere = SphereImpl(
+        x = coordinates.x,
+        y = coordinates.y,
+        z = coordinates.z,
+        radius = radius
+)
+
+fun sphereOf(circle: Circle, z: Float): Sphere = SphereImpl(
+        x = circle.x,
+        y = circle.y,
+        z = z,
+        radius = circle.radius
+)
+
+fun mutableSphereOf(x: Float, y: Float, z: Float, radius: Float): MutableSphere = MutableSphereImpl(
+        x = x,
+        y = y,
+        z = z,
+        radius = radius
+)
+
+fun mutableSphereOf(coordinates: Vector3D, radius: Float): MutableSphere = MutableSphereImpl(
+        x = coordinates.x,
+        y = coordinates.y,
+        z = coordinates.z,
+        radius = radius
+)
+
+fun mutableSphereOf(circle: Circle, z: Float): MutableSphere = MutableSphereImpl(
+        x = circle.x,
+        y = circle.y,
+        z = z,
+        radius = circle.radius
+)

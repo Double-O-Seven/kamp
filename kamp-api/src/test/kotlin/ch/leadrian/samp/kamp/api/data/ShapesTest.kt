@@ -265,6 +265,88 @@ internal class ShapesTest {
         }
     }
 
+    @Nested
+    inner class SphereTests {
+
+        @ParameterizedTest
+        @ArgumentsSource(SphereFactoryArgumentsProvider::class)
+        fun shouldHaveExpectedArea(factory: (Float, Float, Float, Float) -> Sphere) {
+            val sphere = factory(2f, 5f, -1f, 3.5f)
+
+            val area = sphere.volume
+
+            assertThat(area)
+                    .isCloseTo(179.594f, withPercentage(0.001))
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(SphereFactoryArgumentsProvider::class)
+        fun toSphereShouldReturnImmutableSphere(factory: (Float, Float, Float, Float) -> Sphere) {
+            val x = 2f
+            val y = 5f
+            val z = -1f
+            val radius = 3.5f
+            val sphere = factory(x, y, z, radius)
+
+            val immutableSphere: Sphere = sphere.toSphere()
+
+            assertThat(immutableSphere)
+                    .isNotInstanceOf(MutableSphere::class.java)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isEqualTo(x)
+                        assertThat(it.y)
+                                .isEqualTo(y)
+                        assertThat(it.z)
+                                .isEqualTo(z)
+                        assertThat(it.radius)
+                                .isEqualTo(radius)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(SphereFactoryArgumentsProvider::class)
+        fun toMutableSphereShouldReturnMutableSphere(factory: (Float, Float, Float, Float) -> Sphere) {
+            val x = 2f
+            val y = 5f
+            val z = -1f
+            val radius = 3.5f
+            val sphere = factory(x, y, z, radius)
+
+            val mutableSphere: MutableSphere = sphere.toMutableSphere()
+
+            assertThat(mutableSphere)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isEqualTo(x)
+                        assertThat(it.y)
+                                .isEqualTo(y)
+                        assertThat(it.z)
+                                .isEqualTo(z)
+                        assertThat(it.radius)
+                                .isEqualTo(radius)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(SphereContainsArgumentsProvider::class)
+        fun shouldContainCoordinates(sphere: Sphere, coordinates: Vector3D) {
+            val contains = sphere.contains(coordinates)
+
+            assertThat(contains)
+                    .isTrue()
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(SphereDoesNotContainArgumentsProvider::class)
+        fun shouldNotContainCoordinates(sphere: Sphere, coordinates: Vector3D) {
+            val contains = sphere.contains(coordinates)
+
+            assertThat(contains)
+                    .isFalse()
+        }
+    }
+
     private class RectangleFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
@@ -415,7 +497,6 @@ internal class ShapesTest {
 
     }
 
-
     private class CircleFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
@@ -478,6 +559,110 @@ internal class ShapesTest {
                         circleOf(x = x, y = y, radius = radius),
                         mutableCircleOf(x = x, y = y, radius = radius)
                 ).map { circle -> Arguments.of(circle, coordinates) }
+            }
+        }
+
+    }
+
+
+    private class SphereFactoryArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
+                Stream.of(
+                        create { x, y, z, radius -> sphereOf(x = x, y = y, z = z, radius = radius) },
+                        create { x, y, z, radius -> mutableSphereOf(x = x, y = y, z = z, radius = radius) }
+                )
+
+        fun create(factory: (Float, Float, Float, Float) -> Sphere): Arguments = Arguments.of(factory)
+
+    }
+
+    private class SphereContainsArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+            val x = -1f
+            val y = 2f
+            val z = 1f
+            val radius = 5f
+            return Stream.of(
+                    vector3DOf(x = -1f, y = 2f, z = 1f),
+                    vector3DOf(x = -6f, y = 2f, z = 1f),
+                    vector3DOf(x = 4f, y = 2f, z = 1f),
+                    vector3DOf(x = -1f, y = 7f, z = 1f),
+                    vector3DOf(x = -1f, y = -3f, z = 1f),
+                    vector3DOf(x = -1f, y = 2f, z = 6f),
+                    vector3DOf(x = -1f, y = 2f, z = -4f),
+                    vector3DOf(x = -4f, y = 2f, z = 1f),
+                    vector3DOf(x = 3f, y = 2f, z = 1f),
+                    vector3DOf(x = -1f, y = 6f, z = 1f),
+                    vector3DOf(x = -1f, y = -2f, z = 1f),
+                    vector3DOf(x = -2f, y = 3f, z = 1f),
+                    vector3DOf(x = -2f, y = 1f, z = 1f),
+                    vector3DOf(x = -3f, y = 3f, z = 1f),
+                    vector3DOf(x = -3f, y = 1f, z = 1f),
+                    vector3DOf(x = -4f, y = 2f, z = 2f),
+                    vector3DOf(x = 3f, y = 2f, z = 2f),
+                    vector3DOf(x = -1f, y = 6f, z = 2f),
+                    vector3DOf(x = -1f, y = -2f, z = 2f),
+                    vector3DOf(x = -2f, y = 3f, z = 2f),
+                    vector3DOf(x = -2f, y = 1f, z = 2f),
+                    vector3DOf(x = -3f, y = 3f, z = 2f),
+                    vector3DOf(x = -3f, y = 1f, z = 2f),
+                    vector3DOf(x = -4f, y = 2f, z = 0f),
+                    vector3DOf(x = 3f, y = 2f, z = 0f),
+                    vector3DOf(x = -1f, y = 6f, z = 0f),
+                    vector3DOf(x = -1f, y = -2f, z = 0f),
+                    vector3DOf(x = -2f, y = 3f, z = 0f),
+                    vector3DOf(x = -2f, y = 1f, z = 0f),
+                    vector3DOf(x = -3f, y = 3f, z = 0f),
+                    vector3DOf(x = -3f, y = 1f, z = 0f)
+            ).flatMap { coordinates ->
+                Stream.of(
+                        sphereOf(x = x, y = y, z = z, radius = radius),
+                        mutableSphereOf(x = x, y = y, z = z, radius = radius)
+                ).map { sphere -> Arguments.of(sphere, coordinates) }
+            }
+        }
+
+    }
+
+    private class SphereDoesNotContainArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+            val x = -1f
+            val y = 2f
+            val z = 1f
+            val radius = 5f
+            return Stream.of(
+                    vector3DOf(x = -6.1f, y = 2f, z = -1.2f),
+                    vector3DOf(x = 4.1f, y = 2f, z = -1.2f),
+                    vector3DOf(x = -1f, y = 7.1f, z = -1.2f),
+                    vector3DOf(x = -1f, y = -3.1f, z = -1.2f),
+                    vector3DOf(x = -6.1f, y = 7.1f, z = -1.2f),
+                    vector3DOf(x = 4.1f, y = 7.1f, z = -1.2f),
+                    vector3DOf(x = -6.1f, y = -3.1f, z = -1.2f),
+                    vector3DOf(x = 4.1f, y = -3.1f, z = -1.2f),
+                    vector3DOf(x = -6.1f, y = 2f, z = 6.1f),
+                    vector3DOf(x = 4.1f, y = 2f, z = 6.1f),
+                    vector3DOf(x = -1f, y = 7.1f, z = 6.1f),
+                    vector3DOf(x = -1f, y = -3.1f, z = 6.1f),
+                    vector3DOf(x = -6.1f, y = 7.1f, z = 6.1f),
+                    vector3DOf(x = 4.1f, y = 7.1f, z = 6.1f),
+                    vector3DOf(x = -6.1f, y = -3.1f, z = 6.1f),
+                    vector3DOf(x = 4.1f, y = -3.1f, z = 6.1f),
+                    vector3DOf(x = -6.1f, y = 2f, z = -4.1f),
+                    vector3DOf(x = 4.1f, y = 2f, z = -4.1f),
+                    vector3DOf(x = -1f, y = 7.1f, z = -4.1f),
+                    vector3DOf(x = -1f, y = -3.1f, z = -4.1f),
+                    vector3DOf(x = -6.1f, y = 7.1f, z = -4.1f),
+                    vector3DOf(x = 4.1f, y = 7.1f, z = -4.1f),
+                    vector3DOf(x = -6.1f, y = -3.1f, z = -4.1f),
+                    vector3DOf(x = 4.1f, y = -3.1f, z = -4.1f)
+            ).flatMap { coordinates ->
+                Stream.of(
+                        sphereOf(x = x, y = y, z = z, radius = radius),
+                        mutableSphereOf(x = x, y = y, z = z, radius = radius)
+                ).map { sphere -> Arguments.of(sphere, coordinates) }
             }
         }
 
