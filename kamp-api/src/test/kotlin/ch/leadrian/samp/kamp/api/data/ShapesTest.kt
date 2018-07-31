@@ -94,7 +94,6 @@ internal class ShapesTest {
         }
     }
 
-
     @Nested
     inner class BoxTests {
 
@@ -184,6 +183,82 @@ internal class ShapesTest {
         @ArgumentsSource(BoxDoesNotContainArgumentsProvider::class)
         fun shouldNotContainCoordinates(box: Box, coordinates: Vector3D) {
             val contains = box.contains(coordinates)
+
+            assertThat(contains)
+                    .isFalse()
+        }
+    }
+
+    @Nested
+    inner class CircleTests {
+
+        @ParameterizedTest
+        @ArgumentsSource(CircleFactoryArgumentsProvider::class)
+        fun shouldHaveExpectedArea(factory: (Float, Float, Float) -> Circle) {
+            val circle = factory(2f, 5f, 3.5f)
+
+            val area = circle.area
+
+            assertThat(area)
+                    .isCloseTo(38.4845100065f, withPercentage(0.0001))
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(CircleFactoryArgumentsProvider::class)
+        fun toCircleShouldReturnImmutableCircle(factory: (Float, Float, Float) -> Circle) {
+            val x = 2f
+            val y = 5f
+            val radius = 3.5f
+            val circle = factory(x, y, radius)
+
+            val immutableCircle: Circle = circle.toCircle()
+
+            assertThat(immutableCircle)
+                    .isNotInstanceOf(MutableCircle::class.java)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isEqualTo(x)
+                        assertThat(it.y)
+                                .isEqualTo(y)
+                        assertThat(it.radius)
+                                .isEqualTo(radius)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(CircleFactoryArgumentsProvider::class)
+        fun toMutableCircleShouldReturnMutableCircle(factory: (Float, Float, Float) -> Circle) {
+            val x = 2f
+            val y = 5f
+            val radius = 3.5f
+            val circle = factory(x, y, radius)
+
+            val mutableCircle: MutableCircle = circle.toMutableCircle()
+
+            assertThat(mutableCircle)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isEqualTo(x)
+                        assertThat(it.y)
+                                .isEqualTo(y)
+                        assertThat(it.radius)
+                                .isEqualTo(radius)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(CircleContainsArgumentsProvider::class)
+        fun shouldContainCoordinates(circle: Circle, coordinates: Vector2D) {
+            val contains = circle.contains(coordinates)
+
+            assertThat(contains)
+                    .isTrue()
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(CircleDoesNotContainArgumentsProvider::class)
+        fun shouldNotContainCoordinates(circle: Circle, coordinates: Vector2D) {
+            val contains = circle.contains(coordinates)
 
             assertThat(contains)
                     .isFalse()
@@ -290,7 +365,7 @@ internal class ShapesTest {
                 Stream.of(
                         boxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = minZ, maxZ = maxZ),
                         mutableBoxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = minZ, maxZ = maxZ)
-                ).map { rectangle -> Arguments.of(rectangle, coordinates) }
+                ).map { box -> Arguments.of(box, coordinates) }
             }
         }
 
@@ -334,7 +409,75 @@ internal class ShapesTest {
                 Stream.of(
                         boxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = minZ, maxZ = maxZ),
                         mutableBoxOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY, minZ = minZ, maxZ = maxZ)
-                ).map { rectangle -> Arguments.of(rectangle, coordinates) }
+                ).map { box -> Arguments.of(box, coordinates) }
+            }
+        }
+
+    }
+
+
+    private class CircleFactoryArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
+                Stream.of(
+                        create { x, y, radius -> circleOf(x = x, y = y, radius = radius) },
+                        create { x, y, radius -> mutableCircleOf(x = x, y = y, radius = radius) }
+                )
+
+        fun create(factory: (Float, Float, Float) -> Circle): Arguments = Arguments.of(factory)
+
+    }
+
+    private class CircleContainsArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+            val x = -1f
+            val y = 2f
+            val radius = 5f
+            return Stream.of(
+                    vector2DOf(x = -1f, y = 2f),
+                    vector2DOf(x = -6f, y = 2f),
+                    vector2DOf(x = 4f, y = 2f),
+                    vector2DOf(x = -1f, y = 7f),
+                    vector2DOf(x = -1f, y = -3f),
+                    vector2DOf(x = -4f, y = 2f),
+                    vector2DOf(x = 3f, y = 2f),
+                    vector2DOf(x = -1f, y = 6f),
+                    vector2DOf(x = -1f, y = -2f),
+                    vector2DOf(x = -2f, y = 3f),
+                    vector2DOf(x = -2f, y = 1f),
+                    vector2DOf(x = -3f, y = 3f),
+                    vector2DOf(x = -3f, y = 1f)
+            ).flatMap { coordinates ->
+                Stream.of(
+                        circleOf(x = x, y = y, radius = radius),
+                        mutableCircleOf(x = x, y = y, radius = radius)
+                ).map { circle -> Arguments.of(circle, coordinates) }
+            }
+        }
+
+    }
+
+    private class CircleDoesNotContainArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+            val x = -1f
+            val y = 2f
+            val radius = 5f
+            return Stream.of(
+                    vector2DOf(x = -6.1f, y = 2f),
+                    vector2DOf(x = 4.1f, y = 2f),
+                    vector2DOf(x = -1f, y = 7.1f),
+                    vector2DOf(x = -1f, y = -3.1f),
+                    vector2DOf(x = -6.1f, y = 7.1f),
+                    vector2DOf(x = 4.1f, y = 7.1f),
+                    vector2DOf(x = -6.1f, y = -3.1f),
+                    vector2DOf(x = 4.1f, y = -3.1f)
+            ).flatMap { coordinates ->
+                Stream.of(
+                        circleOf(x = x, y = y, radius = radius),
+                        mutableCircleOf(x = x, y = y, radius = radius)
+                ).map { circle -> Arguments.of(circle, coordinates) }
             }
         }
 

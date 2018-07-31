@@ -38,3 +38,27 @@ fun mutableBoxOf(minX: Float, maxX: Float, minY: Float, maxY: Float, minZ: Float
                 minZ = minZ,
                 maxZ = maxZ
         )
+
+fun circleOf(x: Float, y: Float, radius: Float): Circle = CircleImpl(
+        x = x,
+        y = y,
+        radius = radius
+)
+
+fun circleOf(coordinates: Vector2D, radius: Float): Circle = CircleImpl(
+        x = coordinates.x,
+        y = coordinates.y,
+        radius = radius
+)
+
+fun mutableCircleOf(x: Float, y: Float, radius: Float): MutableCircle = MutableCircleImpl(
+        x = x,
+        y = y,
+        radius = radius
+)
+
+fun mutableCircleOf(coordinates: Vector2D, radius: Float): MutableCircle = MutableCircleImpl(
+        x = coordinates.x,
+        y = coordinates.y,
+        radius = radius
+)
