@@ -7,6 +7,8 @@ internal data class RectangleImpl(
         override val maxY: Float
 ) : Rectangle {
 
+    override val area: Float = (maxX - minX) * (maxY - minY)
+
     override fun toRectangle(): Rectangle = this
 
     override fun toMutableRectangle(): MutableRectangle = MutableRectangleImpl(

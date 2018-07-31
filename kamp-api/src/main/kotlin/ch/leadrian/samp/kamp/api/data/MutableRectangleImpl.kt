@@ -7,6 +7,9 @@ internal data class MutableRectangleImpl(
         override var maxY: Float
 ) : MutableRectangle {
 
+    override val area: Float
+        get() = (maxX - minX) * (maxY - minY)
+
     override fun toRectangle(): Rectangle = RectangleImpl(
             minX = minX,
             maxX = maxX,

@@ -6,9 +6,6 @@ interface Box : Rectangle, Shape3D {
 
     val maxZ: Float
 
-    override val volume: Float
-        get() = area * (maxZ - minZ)
-
     override fun contains(coordinates: Vector3D): Boolean =
             coordinates.z in (minZ..maxZ) && contains(coordinates as Vector2D)
 

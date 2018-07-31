@@ -9,6 +9,12 @@ internal data class MutableBoxImpl(
         override var maxY: Float
 ) : MutableBox {
 
+    override val area: Float
+        get() = (maxX - minX) * (maxY - minY)
+
+    override val volume: Float
+        get() = area * (maxZ - minZ)
+
     override fun toRectangle(): Rectangle = RectangleImpl(
             minX = minX,
             maxX = maxX,
