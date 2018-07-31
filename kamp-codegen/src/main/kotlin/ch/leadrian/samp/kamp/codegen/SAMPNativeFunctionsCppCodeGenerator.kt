@@ -16,7 +16,7 @@ class SAMPNativeFunctionsCppCodeGenerator {
 
         Files.newBufferedWriter(outputFile, StandardOpenOption.CREATE, StandardOpenOption.WRITE).use { writer ->
             writeHeader(writer, fileName)
-            writeFunctions(functions, packageName, writer)
+            writeFunctions(functions, packageName, fileName, writer)
             writeFooter(writer)
         }
     }
@@ -42,18 +42,18 @@ class SAMPNativeFunctionsCppCodeGenerator {
             |""".trimMargin("|"))
     }
 
-    private fun writeFunctions(functions: List<Function>, packageName: String, writer: BufferedWriter) {
+    private fun writeFunctions(functions: List<Function>, packageName: String, className: String, writer: BufferedWriter) {
         functions
                 .filter { it.hasAttribute("native") && !it.hasAttribute("noimpl") }
-                .forEach { writeFunction(it, packageName, writer) }
+                .forEach { writeFunction(it, packageName, className, writer) }
     }
 
-    private fun writeFunction(function: Function, packageName: String, writer: BufferedWriter) {
+    private fun writeFunction(function: Function, packageName: String, className: String, writer: BufferedWriter) {
         val returnCppType = getJniType(function.type)
         val packagePart = packageName.replace('.', '_')
         val camelCaseName = "${function.name[0].toLowerCase()}${function.name.substring(1)}"
         writer.write("""
-            |JNIEXPORT $returnCppType JNICALL Java_${packagePart}_$camelCaseName
+            |JNIEXPORT $returnCppType JNICALL Java_${packagePart}_${className}_$camelCaseName
             |        (JNIEnv *env, jclass clazz""".trimMargin())
         if (function.parameters.isNotEmpty()) {
             writer.write(", ")

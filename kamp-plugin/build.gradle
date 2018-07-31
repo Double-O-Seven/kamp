@@ -1,9 +1,14 @@
+import org.gradle.internal.jvm.Jvm
+
 configurations {
     runtimeCodegen
 }
 
 dependencies {
-    runtimeCodegen project(':kamp-codegen')
+    runtimeCodegen(
+            project(':kamp-codegen'),
+            project(':kamp-runtime')
+    )
 }
 
 def runtimePackageName = "ch.leadrian.samp.kamp.runtime"
@@ -26,17 +31,25 @@ def sampgdkBuildDir = "${sampgdkDir}/build"
 
 def sampNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
 
-task generateSAMPNativeFunctionsHeaderFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
-    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsHeaderCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-p", runtimePackageName,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+def kampRuntimeMainOutput = project(':kamp-runtime').sourceSets.main.output
+
+task generateSAMPNativeFunctionsHeaderFile {
+    dependsOn ':kamp-runtime:classes'
+    inputs.dir kampRuntimeMainOutput
     outputs.file sampNativeFunctionsHeaderFile
+    doLast {
+        file(sampNativeFunctionsHeaderFile).parentFile.mkdirs()
+        exec {
+            executable Jvm.current().getExecutable('javah')
+            args = [
+                    "-o", sampNativeFunctionsHeaderFile,
+                    "-classpath", project(':kamp-runtime').sourceSets.main.output.asPath,
+                    "-jni",
+                    "-verbose",
+                    "${runtimePackageName}.SAMPNativeFunctions"
+            ]
+        }
+    }
 }
 
 def sampNativeFunctionsCppFile = "${kampSrcDir}/SAMPNativeFunctions.cpp"
@@ -71,7 +84,7 @@ task generateSAMPCallbacksDefFile(type: JavaExec) {
 def sampCallbacksCppFile = "${kampSrcDir}/SAMPCallbacks.cpp"
 
 task generateSAMPCallbacksCppFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
+    dependsOn ':kamp-codegen:build'
     main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksCppCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
