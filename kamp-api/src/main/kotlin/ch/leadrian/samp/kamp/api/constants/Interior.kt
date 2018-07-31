@@ -61,7 +61,7 @@ enum class Interior(val description: String, val interiorId: Int, val coordinate
     MILLIE_ROOM("Millie room", 6, vector3DOf(346.870025f, 309.259033f, 999.155700f)),
     SHERMAN_DAM("Sherman dam", 17, vector3DOf(-959.564392f, 1848.576782f, 9.000000f)),
     PLANNING_DEPT("Planning dept", 3, vector3DOf(384.808624f, 173.804992f, 1008.382812f)),
-    AREA_51("Area 51", 0, vector3DOf(223.431976f, 1872.400268f, 13.734375f)),
+    AREA_51("Shape2D 51", 0, vector3DOf(223.431976f, 1872.400268f, 13.734375f)),
     LS_GYM("LS gym", 5, vector3DOf(772.111999f, -3.898649f, 1000.728820f)),
     SF_GYM("SF gym", 6, vector3DOf(774.213989f, -48.924297f, 1000.585937f)),
     LV_GYM("LV gym", 7, vector3DOf(773.579956f, -77.096694f, 1000.655029f)),

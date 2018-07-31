@@ -16,7 +16,7 @@ enum class CrimeReport(
     CODE_10_34(17, "Riot"),
     CODE_10_37(18, "(Investigate) suspicious vehicle"),
     CODE_10_47(4, "Emergency road repairs needed"),
-    CODE_10_71(3, "Advise nature of fire (size, type, contents of the building)"),
+    CODE_10_71(3, "Advise nature of fire (area, type, contents of the building)"),
     CODE_10_81_A(5, "Breathalyzer"),
     CODE_10_81_B(11, "Breathalyzer"),
     CODE_10_81_C(14, "Breathalyzer"),
