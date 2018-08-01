@@ -216,5 +216,25 @@ interface Player {
 
     fun stopSpectating()
 
+    fun startRecording(type: PlayerRecordingType, recordName: String)
+
+    fun stopRecording()
+
     fun createExplosion(type: ExplosionType, area: Sphere)
+
+    fun createExplosion(type: ExplosionType, coordinates: Vector3D, radius: Float)
+
+    val isAdmin: Boolean
+
+    val isNPC: Boolean
+
+    val isHuman: Boolean
+
+    fun kick()
+
+    fun ban(reason: String? = null)
+
+    val version: String
+
+    val networkStatistics: PlayerNetworkStatistics
 }

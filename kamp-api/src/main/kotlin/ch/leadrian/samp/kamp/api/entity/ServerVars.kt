@@ -1,16 +1,16 @@
 package ch.leadrian.samp.kamp.api.entity
 
-import ch.leadrian.samp.kamp.api.constants.PlayerVarType
+import ch.leadrian.samp.kamp.api.constants.ServerVarType
 
-interface PlayerVars {
+interface ServerVars {
 
     fun setInt(varName: String, value: Int): Boolean
 
     fun getInt(varName: String): Int
 
-    fun setString(varName: String, value: String, resultLength: Int = 256): Boolean
+    fun setString(varName: String, value: String): Boolean
 
-    fun getString(varName: String): String?
+    fun getString(varName: String, resultLength: Int = 256): String?
 
     fun setFloat(varName: String, value: Float): Boolean
 
@@ -22,5 +22,5 @@ interface PlayerVars {
 
     fun getNameAtIndex(index: Int, resultLength: Int = 256): String
 
-    fun getType(varName: String): PlayerVarType
+    fun getType(varName: String): ServerVarType
 }
