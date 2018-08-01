@@ -21,4 +21,15 @@ internal data class Vector3DImpl(
             y = y
     )
 
+    override fun plus(other: Vector2D): Vector3D = copy(
+            x = this.x + other.x,
+            y = this.y + other.y
+    )
+
+    override fun plus(other: Vector3D): Vector3D = copy(
+            x = this.x + other.x,
+            y = this.y + other.y,
+            z = this.z + other.z
+    )
+
 }

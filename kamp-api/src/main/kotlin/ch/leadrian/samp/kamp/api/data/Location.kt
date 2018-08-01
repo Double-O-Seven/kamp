@@ -24,4 +24,8 @@ interface Location : Vector3D {
         return isInRange(other as Vector3D, distance)
     }
 
+    override fun plus(other: Vector2D): Location
+
+    override fun plus(other: Vector3D): Location
+
 }

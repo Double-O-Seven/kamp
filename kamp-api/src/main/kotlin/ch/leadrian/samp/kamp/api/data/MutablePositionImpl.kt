@@ -31,4 +31,15 @@ internal data class MutablePositionImpl(
 
     override fun toMutableVector2D(): MutableVector2D = this
 
+    override fun plus(other: Vector2D): MutablePosition = copy(
+            x = this.x + other.x,
+            y = this.y + other.y
+    )
+
+    override fun plus(other: Vector3D): MutablePosition = copy(
+            x = this.x + other.x,
+            y = this.y + other.y,
+            z = this.z + other.z
+    )
+
 }

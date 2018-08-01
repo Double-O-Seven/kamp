@@ -6,4 +6,8 @@ interface MutableLocation : Location, MutableVector3D {
 
     override var virtualWorldId: Int
 
+    override fun plus(other: Vector2D): MutableLocation
+
+    override fun plus(other: Vector3D): MutableLocation
+
 }

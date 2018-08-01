@@ -12,4 +12,9 @@ internal data class MutableVector2DImpl(
 
     override fun toMutableVector2D(): MutableVector2D = this
 
+    override fun plus(other: Vector2D): MutableVector2D = copy(
+            x = this.x + other.x,
+            y = this.y + other.y
+    )
+
 }

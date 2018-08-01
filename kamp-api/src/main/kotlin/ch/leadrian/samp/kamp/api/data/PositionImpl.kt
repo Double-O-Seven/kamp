@@ -31,4 +31,15 @@ internal data class PositionImpl(
             y = y
     )
 
+    override fun plus(other: Vector2D): Position = copy(
+            x = this.x + other.x,
+            y = this.y + other.y
+    )
+
+    override fun plus(other: Vector3D): Position = copy(
+            x = this.x + other.x,
+            y = this.y + other.y,
+            z = this.z + other.z
+    )
+
 }

@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.api.data
 
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.data.Percentage
+import org.assertj.core.data.Percentage.withPercentage
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
@@ -29,6 +29,39 @@ internal class VectorsTest {
                                 .isEqualTo(x)
                         assertThat(it.y)
                                 .isEqualTo(y)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(Vector2DFactoryArgumentsProvider::class)
+        fun shouldAddVector2D(factory: (Float, Float) -> Vector2D) {
+            val vector2D: Vector2D = factory(13.37f, 69f)
+
+            val compositeVector2D = vector2D + vector2DOf(x = 10f, y = 5f)
+
+            assertThat(compositeVector2D)
+                    .isNotSameAs(vector2D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(23.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(74f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector2DFactoryArgumentsProvider::class)
+        fun shouldUpdateVector2D(factory: (Float, Float) -> MutableVector2D) {
+            val mutableVector2D: MutableVector2D = factory(13.37f, 69f)
+
+            mutableVector2D += vector2DOf(x = 10f, y = 5f)
+
+            assertThat(mutableVector2D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(23.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(74f, withPercentage(0.0001))
                     }
         }
 
@@ -78,7 +111,7 @@ internal class VectorsTest {
             val distance = vector2D.distanceTo(otherVector2D)
 
             assertThat(distance)
-                    .isCloseTo(26.196374f, Percentage.withPercentage(0.001))
+                    .isCloseTo(26.196374f, withPercentage(0.001))
         }
 
 
@@ -127,6 +160,43 @@ internal class VectorsTest {
                                 .isEqualTo(y)
                         assertThat(it.z)
                                 .isEqualTo(z)
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(Vector3DFactoryArgumentsProvider::class)
+        fun shouldAddVector3D(factory: (Float, Float, Float) -> Vector3D) {
+            val vector3D: Vector3D = factory(13.37f, 69f, 11f)
+
+            val compositeVector3D = vector3D + vector3DOf(x = 10f, y = 5f, z = -8f)
+
+            assertThat(compositeVector3D)
+                    .isNotSameAs(vector3D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(23.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(74f, withPercentage(0.0001))
+                        assertThat(it.z)
+                                .isCloseTo(3f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector3DFactoryArgumentsProvider::class)
+        fun shouldUpdateVector3D(factory: (Float, Float, Float) -> MutableVector3D) {
+            val mutableVector3D: MutableVector3D = factory(13.37f, 69f, 11f)
+
+            mutableVector3D += vector3DOf(x = 10f, y = 5f, z = -8f)
+
+            assertThat(mutableVector3D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(23.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(74f, withPercentage(0.0001))
+                        assertThat(it.z)
+                                .isCloseTo(3f, withPercentage(0.0001))
                     }
         }
 
@@ -182,7 +252,7 @@ internal class VectorsTest {
             val distance = vector3D.distanceTo(otherVector3D)
 
             assertThat(distance)
-                    .isCloseTo(10.246951f, Percentage.withPercentage(0.001))
+                    .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
 
@@ -292,7 +362,7 @@ internal class VectorsTest {
             val distance = position.distanceTo(otherPosition)
 
             assertThat(distance)
-                    .isCloseTo(10.246951f, Percentage.withPercentage(0.001))
+                    .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
 
@@ -414,7 +484,7 @@ internal class VectorsTest {
             val distance = location.distanceTo(otherLocation)
 
             assertThat(distance)
-                    .isCloseTo(10.246951f, Percentage.withPercentage(0.001))
+                    .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
         @ParameterizedTest
@@ -592,7 +662,7 @@ internal class VectorsTest {
             val distance = angledLocation.distanceTo(otherAngledLocation)
 
             assertThat(distance)
-                    .isCloseTo(10.246951f, Percentage.withPercentage(0.001))
+                    .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
         @ParameterizedTest
@@ -687,6 +757,20 @@ internal class VectorsTest {
 
     }
 
+    private class MutableVector2DFactoryArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
+                createArguments { x, y -> mutableVector2DOf(x = x, y = y) },
+                createArguments { x, y -> mutableVector3DOf(x = x, y = y, z = 0f) },
+                createArguments { x, y -> mutablePositionOf(x = x, y = y, z = 0f, angle = 0f) },
+                createArguments { x, y -> mutableLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0) },
+                createArguments { x, y -> mutableAngledLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0, angle = 0f) }
+        )
+
+        private fun createArguments(factory: (Float, Float) -> MutableVector2D): Arguments = Arguments.of(factory)
+
+    }
+
     private class Vector3DFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
@@ -701,6 +785,19 @@ internal class VectorsTest {
         )
 
         private fun createArguments(factory: (Float, Float, Float) -> Vector3D): Arguments = Arguments.of(factory)
+
+    }
+
+    private class MutableVector3DFactoryArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
+                createArguments { x, y, z -> mutableVector3DOf(x = x, y = y, z = z) },
+                createArguments { x, y, z -> mutablePositionOf(x = x, y = y, z = z, angle = 0f) },
+                createArguments { x, y, z -> mutableLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0) },
+                createArguments { x, y, z -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = 0f) }
+        )
+
+        private fun createArguments(factory: (Float, Float, Float) -> MutableVector3D): Arguments = Arguments.of(factory)
 
     }
 

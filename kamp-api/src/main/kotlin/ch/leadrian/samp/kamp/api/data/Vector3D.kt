@@ -21,4 +21,8 @@ interface Vector3D : Vector2D {
     fun toVector3D(): Vector3D
 
     fun toMutableVector3D(): MutableVector3D
+
+    override fun plus(other: Vector2D): Vector3D
+
+    operator fun plus(other: Vector3D): Vector3D
 }

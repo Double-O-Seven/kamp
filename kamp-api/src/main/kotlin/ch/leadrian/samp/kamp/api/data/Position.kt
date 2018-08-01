@@ -8,4 +8,8 @@ interface Position : Vector3D {
 
     fun toMutablePosition(): MutablePosition
 
+    override fun plus(other: Vector2D): Position
+
+    override fun plus(other: Vector3D): Position
+
 }
