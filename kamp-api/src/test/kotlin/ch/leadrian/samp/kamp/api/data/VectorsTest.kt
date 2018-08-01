@@ -345,7 +345,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                     }
         }
@@ -372,7 +372,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                     }
         }
@@ -400,7 +400,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                     }
         }
@@ -515,7 +515,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                         assertThat(it.angle)
                                 .isEqualTo(angle)
@@ -545,7 +545,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                         assertThat(it.angle)
                                 .isEqualTo(angle)
@@ -576,7 +576,7 @@ internal class VectorsTest {
                                 .isEqualTo(z)
                         assertThat(it.interiorId)
                                 .isEqualTo(interiorId)
-                        assertThat(it.worldId)
+                        assertThat(it.virtualWorldId)
                                 .isEqualTo(worldId)
                         assertThat(it.angle)
                                 .isEqualTo(angle)

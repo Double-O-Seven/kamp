@@ -7,6 +7,8 @@ import ch.leadrian.samp.kamp.api.entity.id.TeamId
 
 interface Player {
 
+    val isOnline: Boolean
+
     val id: PlayerId
 
     fun spawn()
@@ -91,9 +93,9 @@ interface Player {
 
     fun playCrimeReport(suspect: Player, crimeReport: CrimeReport)
 
-    // TODO fun playAudioStream(url: URL, position: Sphere)
+    fun playAudioStream(url: String, position: Sphere, usePosition: Boolean = true)
 
-    // TODO fun playAudioStream(url: URL)
+    fun playAudioStream(url: String)
 
     fun stopAudiStream()
 
@@ -101,4 +103,114 @@ interface Player {
 
     fun setSkillLevel(skill: WeaponSkill, level: Int)
 
+    val surfingVehicle: Vehicle?
+
+    val surfingObject: MapObject?
+
+    fun removeBuilding(modelId: Int, position: Sphere)
+
+    val lastShotVectors: LastShotVectors
+
+    fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int)
+
+    val vehicle: Vehicle?
+
+    val vehicleSeat: Int?
+
+    fun removeFromVehicle()
+
+    fun toggleControllable(toggle: Boolean)
+
+    fun playSound(soundId: Int, coordinates: Vector3D)
+
+    fun applyAnimation(
+            animation: Animation,
+            fDelta: Float,
+            loop: Boolean,
+            lockX: Boolean,
+            lockY: Boolean,
+            freeze: Boolean,
+            time: Int,
+            forceSync: Boolean = false
+    )
+
+    fun clearAnimation(forceSync: Boolean = false)
+
+    val animationIndex: Int
+
+    val animation: Animation
+
+    var specialAction: SpecialAction?
+
+    fun disableRemoteVehicleCollisions(disable: Boolean)
+
+    var checkpoint: PlayerCheckpoint?
+
+    var raceCheckpoint: RaceCheckpoint?
+
+    var worldBounds: Rectangle?
+
+    fun showPlayerMarker(player: Player, color: Color)
+
+    fun showPlayerNameTag(player: Player, show: Boolean)
+
+    val mapIcon: PlayerMapIcon?
+
+    fun allowTeleport(allow: Boolean)
+
+    var cameraPosition: Vector3D
+
+    fun setCameraLookAt(coordinates: Vector3D, type: CameraType = CameraType.CUT)
+
+    fun setCameraBehind()
+
+    val cameraFrontVector: Vector3D
+
+    val cameraMode: CameraMode
+
+    fun enableCameraTarget(enable: Boolean)
+
+    val cameraTargetObject: MapObject?
+
+    val cameraTargetVehicle: Vehicle?
+
+    val cameraTargetPlayer: Player?
+
+    val cameraTargetActor: Actor?
+
+    val cameraAspectRatio: Float
+
+    val cameraZoom: Float
+
+    fun attachCameraToObject(mapObject: MapObject)
+
+    fun attachCameraToPlayerObject(playerMapObject: PlayerMapObject)
+
+    fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT)
+
+    fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT)
+
+    fun isInVehicle(vehicle: Vehicle)
+
+    val isInAnyVehicle: Boolean
+
+    fun isInCheckpoint(checkpoint: PlayerCheckpoint)
+
+    val isInAnyCheckpoint: Boolean
+
+    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint)
+
+    val isInAnyRaceCheckpoint: Boolean
+
+    var virtualWorldId: Boolean
+
+    fun enableStuntBonus(enable: Boolean)
+
+    fun spectate(player: Player, mode: SpectateType = SpectateType.NORMAL)
+
+    fun spectate(vehicle: Vehicle, mode: SpectateType = SpectateType.NORMAL)
+
+    fun stopSpectating()
+
+    fun createExplosion(type: ExplosionType, area: Sphere)
 }

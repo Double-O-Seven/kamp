@@ -5,7 +5,7 @@ internal data class MutableLocationImpl(
         override var y: Float,
         override var z: Float,
         override var interiorId: Int,
-        override var worldId: Int
+        override var virtualWorldId: Int
 ) : MutableLocation {
 
     override fun toLocation(): Location = LocationImpl(
@@ -13,7 +13,7 @@ internal data class MutableLocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId
+            virtualWorldId = virtualWorldId
     )
 
     override fun toMutableLocation(): MutableLocation = this

@@ -5,7 +5,7 @@ internal data class AngledLocationImpl(
         override val y: Float,
         override val z: Float,
         override val interiorId: Int,
-        override val worldId: Int,
+        override val virtualWorldId: Int,
         override val angle: Float
 ) : AngledLocation {
 
@@ -16,7 +16,7 @@ internal data class AngledLocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId,
+            virtualWorldId = virtualWorldId,
             angle = angle
     )
 
@@ -36,7 +36,7 @@ internal data class AngledLocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId
+            virtualWorldId = virtualWorldId
     )
 
     override fun toVector3D(): Vector3D = this

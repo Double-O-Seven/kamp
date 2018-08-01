@@ -5,7 +5,7 @@ internal data class LocationImpl(
         override val y: Float,
         override val z: Float,
         override val interiorId: Int,
-        override val worldId: Int
+        override val virtualWorldId: Int
 ) : Location {
 
     override fun toLocation(): Location = this
@@ -15,7 +15,7 @@ internal data class LocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId
+            virtualWorldId = virtualWorldId
     )
 
     override fun toVector3D(): Vector3D = this

@@ -5,7 +5,7 @@ internal data class MutableAngledLocationImpl(
         override var y: Float,
         override var z: Float,
         override var interiorId: Int,
-        override var worldId: Int,
+        override var virtualWorldId: Int,
         override var angle: Float
 ) : MutableAngledLocation {
 
@@ -14,7 +14,7 @@ internal data class MutableAngledLocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId,
+            virtualWorldId = virtualWorldId,
             angle = angle
     )
 
@@ -34,7 +34,7 @@ internal data class MutableAngledLocationImpl(
             y = y,
             z = z,
             interiorId = interiorId,
-            worldId = worldId
+            virtualWorldId = virtualWorldId
     )
 
     override fun toMutableLocation(): MutableLocation = this
