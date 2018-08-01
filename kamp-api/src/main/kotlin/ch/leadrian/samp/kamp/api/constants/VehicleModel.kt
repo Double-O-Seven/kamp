@@ -1,5 +1,8 @@
 package ch.leadrian.samp.kamp.api.constants
 
+/**
+ * Taken from https://github.com/Shoebill/shoebill-api
+ */
 enum class VehicleModel(
         override val value: Int,
         val modelName: String,

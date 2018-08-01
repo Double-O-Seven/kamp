@@ -29,7 +29,7 @@ interface Player {
 
     var virtualWorld: Int
 
-    fun setPositionFindZ(position: Position)
+    fun setPositionFindZ(position: Vector3D)
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
