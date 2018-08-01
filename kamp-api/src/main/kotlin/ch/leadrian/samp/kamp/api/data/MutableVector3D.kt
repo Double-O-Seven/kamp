@@ -31,4 +31,12 @@ interface MutableVector3D : MutableVector2D, Vector3D {
         this.y *= value
         this.z *= value
     }
+
+    override fun div(value: Float): MutableVector3D
+
+    override operator fun divAssign(value: Float) {
+        this.x /= value
+        this.y /= value
+        this.z /= value
+    }
 }

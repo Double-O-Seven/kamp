@@ -31,4 +31,6 @@ interface Vector3D : Vector2D {
     operator fun minus(other: Vector3D): Vector3D
 
     override fun times(value: Float): Vector3D
+
+    override fun div(value: Float): Vector3D
 }

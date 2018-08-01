@@ -26,4 +26,9 @@ internal data class Vector2DImpl(
             x = this.x * value,
             y = this.y * value
     )
+
+    override fun div(value: Float): Vector2D = copy(
+            x = this.x / value,
+            y = this.y / value
+    )
 }

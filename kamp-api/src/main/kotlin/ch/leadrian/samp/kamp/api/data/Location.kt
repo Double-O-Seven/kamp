@@ -34,4 +34,6 @@ interface Location : Vector3D {
 
     override fun times(value: Float): Location
 
+    override fun div(value: Float): Location
+
 }

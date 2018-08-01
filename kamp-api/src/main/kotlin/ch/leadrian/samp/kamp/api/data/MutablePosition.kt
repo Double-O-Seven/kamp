@@ -14,4 +14,6 @@ interface MutablePosition : Position, MutableVector3D {
 
     override fun times(value: Float): MutablePosition
 
+    override fun div(value: Float): MutablePosition
+
 }

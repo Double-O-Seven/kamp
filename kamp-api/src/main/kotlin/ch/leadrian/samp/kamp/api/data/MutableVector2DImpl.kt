@@ -27,4 +27,9 @@ internal data class MutableVector2DImpl(
             y = this.y * value
     )
 
+    override fun div(value: Float): MutableVector2D = copy(
+            x = this.x / value,
+            y = this.y / value
+    )
+
 }

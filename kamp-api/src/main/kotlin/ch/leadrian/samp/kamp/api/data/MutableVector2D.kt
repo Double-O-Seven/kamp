@@ -26,4 +26,11 @@ interface MutableVector2D : Vector2D {
         this.x *= value
         this.y *= value
     }
+
+    override fun div(value: Float): MutableVector2D
+
+    operator fun divAssign(value: Float) {
+        this.x /= value
+        this.y /= value
+    }
 }

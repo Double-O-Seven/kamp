@@ -16,4 +16,6 @@ interface AngledLocation : Location, Position {
 
     override fun times(value: Float): AngledLocation
 
+    override fun div(value: Float): AngledLocation
+
 }

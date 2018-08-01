@@ -18,4 +18,6 @@ interface Position : Vector3D {
 
     override fun times(value: Float): Position
 
+    override fun div(value: Float): Position
+
 }

@@ -11,4 +11,6 @@ interface MutableAngledLocation : AngledLocation, MutableLocation, MutablePositi
     override fun minus(other: Vector3D): MutableAngledLocation
 
     override fun times(value: Float): MutableAngledLocation
+
+    override fun div(value: Float): MutableAngledLocation
 }

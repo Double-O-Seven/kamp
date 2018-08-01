@@ -60,4 +60,10 @@ internal data class MutableLocationImpl(
             y = this.y * value,
             z = this.z * value
     )
+
+    override fun div(value: Float): MutableLocation = copy(
+            x = this.x / value,
+            y = this.y / value,
+            z = this.z / value
+    )
 }

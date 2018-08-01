@@ -81,4 +81,10 @@ internal data class AngledLocationImpl(
             y = this.y * value,
             z = this.z * value
     )
+
+    override fun div(value: Float): AngledLocation = copy(
+            x = this.x / value,
+            y = this.y / value,
+            z = this.z / value
+    )
 }

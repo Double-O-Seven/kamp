@@ -49,4 +49,10 @@ internal data class MutableVector3DImpl(
             z = this.z * value
     )
 
+    override fun div(value: Float): MutableVector3D = copy(
+            x = this.x / value,
+            y = this.y / value,
+            z = this.z / value
+    )
+
 }

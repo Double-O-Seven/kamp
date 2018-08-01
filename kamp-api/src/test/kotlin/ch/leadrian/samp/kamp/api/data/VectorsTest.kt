@@ -144,6 +144,39 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(Vector2DFactoryArgumentsProvider::class)
+        fun shouldDivideVector2DByValue(factory: (Float, Float) -> Vector2D) {
+            val vector2D: Vector2D = factory(13.37f, 69f)
+
+            val compositeVector2D = vector2D / 2f
+
+            assertThat(compositeVector2D)
+                    .isNotSameAs(vector2D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(6.685f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(34.5f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector2DFactoryArgumentsProvider::class)
+        fun shouldDivideAndAssignVector2DByValue(factory: (Float, Float) -> MutableVector2D) {
+            val mutableVector2D: MutableVector2D = factory(13.37f, 69f)
+
+            mutableVector2D /= 2f
+
+            assertThat(mutableVector2D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(6.685f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(34.5f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(Vector2DFactoryArgumentsProvider::class)
         fun shouldConvert2DToMutableVector2D(factory: (Float, Float) -> Vector2D) {
             val x = 13.37f
             val y = 69f
@@ -359,6 +392,43 @@ internal class VectorsTest {
                                 .isCloseTo(138f, withPercentage(0.0001))
                         assertThat(it.z)
                                 .isCloseTo(22f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(Vector3DFactoryArgumentsProvider::class)
+        fun shouldDivideVector3DByValue(factory: (Float, Float, Float) -> Vector3D) {
+            val vector3D: Vector3D = factory(13.37f, 69f, 11f)
+
+            val compositeVector3D = vector3D / 2f
+
+            assertThat(compositeVector3D)
+                    .isNotSameAs(vector3D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(6.685f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(34.5f, withPercentage(0.0001))
+                        assertThat(it.z)
+                                .isCloseTo(5.5f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector3DFactoryArgumentsProvider::class)
+        fun shouldDivideAndAssignVector3DByValue(factory: (Float, Float, Float) -> MutableVector3D) {
+            val mutableVector3D: MutableVector3D = factory(13.37f, 69f, 11f)
+
+            mutableVector3D /= 2f
+
+            assertThat(mutableVector3D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(6.685f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(34.5f, withPercentage(0.0001))
+                        assertThat(it.z)
+                                .isCloseTo(5.5f, withPercentage(0.0001))
                     }
         }
 
