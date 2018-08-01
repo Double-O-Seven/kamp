@@ -25,4 +25,10 @@ interface Vector2D {
     operator fun plus(other: Vector2D): Vector2D
 
     operator fun minus(other: Vector2D): Vector2D
+
+    operator fun times(value: Float): Vector2D
 }
+
+fun <T : Vector2D> T.abs(): Double = Math.sqrt((x * x + y * y).toDouble())
+
+fun <T : Vector3D> T.abs(): Double = Math.sqrt((x * x + y * y + z * z).toDouble())

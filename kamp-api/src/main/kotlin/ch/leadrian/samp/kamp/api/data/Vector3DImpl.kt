@@ -43,4 +43,10 @@ internal data class Vector3DImpl(
             z = this.z - other.z
     )
 
+    override fun times(value: Float): Vector3D = copy(
+            x = this.x * value,
+            y = this.y * value,
+            z = this.z * value
+    )
+
 }

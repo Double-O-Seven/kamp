@@ -32,4 +32,6 @@ interface Location : Vector3D {
 
     override fun minus(other: Vector3D): Location
 
+    override fun times(value: Float): Location
+
 }

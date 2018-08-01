@@ -53,4 +53,10 @@ internal data class PositionImpl(
             z = this.z - other.z
     )
 
+    override fun times(value: Float): Position = copy(
+            x = this.x * value,
+            y = this.y * value,
+            z = this.z * value
+    )
+
 }

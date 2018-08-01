@@ -75,4 +75,10 @@ internal data class MutableAngledLocationImpl(
             y = this.y - other.y,
             z = this.z - other.z
     )
+
+    override fun times(value: Float): MutableAngledLocation = copy(
+            x = this.x * value,
+            y = this.y * value,
+            z = this.z * value
+    )
 }

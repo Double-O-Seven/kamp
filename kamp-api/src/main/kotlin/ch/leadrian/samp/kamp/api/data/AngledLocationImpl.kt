@@ -75,4 +75,10 @@ internal data class AngledLocationImpl(
             y = this.y - other.y,
             z = this.z - other.z
     )
+
+    override fun times(value: Float): AngledLocation = copy(
+            x = this.x * value,
+            y = this.y * value,
+            z = this.z * value
+    )
 }

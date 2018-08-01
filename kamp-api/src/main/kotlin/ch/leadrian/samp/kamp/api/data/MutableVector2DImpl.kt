@@ -22,4 +22,9 @@ internal data class MutableVector2DImpl(
             y = this.y - other.y
     )
 
+    override fun times(value: Float): MutableVector2D = copy(
+            x = this.x * value,
+            y = this.y * value
+    )
+
 }

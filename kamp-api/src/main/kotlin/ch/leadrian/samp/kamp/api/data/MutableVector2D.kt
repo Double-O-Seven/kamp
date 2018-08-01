@@ -19,4 +19,11 @@ interface MutableVector2D : Vector2D {
         this.x -= other.x
         this.y -= other.y
     }
+
+    override fun times(value: Float): MutableVector2D
+
+    operator fun timesAssign(value: Float) {
+        this.x *= value
+        this.y *= value
+    }
 }

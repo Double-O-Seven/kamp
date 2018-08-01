@@ -14,4 +14,6 @@ interface MutableLocation : Location, MutableVector3D {
 
     override fun minus(other: Vector3D): MutableLocation
 
+    override fun times(value: Float): MutableLocation
+
 }

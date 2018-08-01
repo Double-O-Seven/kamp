@@ -54,4 +54,10 @@ internal data class LocationImpl(
             y = this.y - other.y,
             z = this.z - other.z
     )
+
+    override fun times(value: Float): Location = copy(
+            x = this.x * value,
+            y = this.y * value,
+            z = this.z * value
+    )
 }

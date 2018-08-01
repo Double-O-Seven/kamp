@@ -16,4 +16,6 @@ interface Position : Vector3D {
 
     override fun minus(other: Vector3D): Position
 
+    override fun times(value: Float): Position
+
 }

@@ -14,4 +14,6 @@ interface AngledLocation : Location, Position {
 
     override fun minus(other: Vector3D): AngledLocation
 
+    override fun times(value: Float): AngledLocation
+
 }

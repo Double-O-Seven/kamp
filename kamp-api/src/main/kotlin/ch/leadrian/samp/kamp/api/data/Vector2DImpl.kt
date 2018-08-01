@@ -21,4 +21,9 @@ internal data class Vector2DImpl(
             x = this.x - other.x,
             y = this.y - other.y
     )
+
+    override fun times(value: Float): Vector2D = copy(
+            x = this.x * value,
+            y = this.y * value
+    )
 }

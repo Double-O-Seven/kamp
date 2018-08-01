@@ -23,4 +23,12 @@ interface MutableVector3D : MutableVector2D, Vector3D {
         this.y -= other.y
         this.z -= other.z
     }
+
+    override fun times(value: Float): MutableVector3D
+
+    override fun timesAssign(value: Float) {
+        this.x *= value
+        this.y *= value
+        this.z *= value
+    }
 }

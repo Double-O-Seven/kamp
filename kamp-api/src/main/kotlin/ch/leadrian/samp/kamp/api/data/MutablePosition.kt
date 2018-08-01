@@ -12,4 +12,6 @@ interface MutablePosition : Position, MutableVector3D {
 
     override fun minus(other: Vector3D): MutablePosition
 
+    override fun times(value: Float): MutablePosition
+
 }
