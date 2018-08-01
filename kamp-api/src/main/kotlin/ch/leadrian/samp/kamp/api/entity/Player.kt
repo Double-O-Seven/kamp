@@ -4,12 +4,15 @@ import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
+import java.util.*
 
 interface Player {
 
     val isOnline: Boolean
 
     val id: PlayerId
+
+    var locale: Locale
 
     fun spawn()
 
