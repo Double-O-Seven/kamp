@@ -29,6 +29,4 @@ interface GameTextSender {
 
     fun sendGameText(style: GameTextStyle, textKey: TextKey, vararg args: Any, playerFilter: (Player) -> Boolean)
 
-    fun sanitizePlayerInput(text: String, placeholder: String = "?"): String
-
 }
