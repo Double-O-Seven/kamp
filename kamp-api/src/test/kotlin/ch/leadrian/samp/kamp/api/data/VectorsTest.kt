@@ -51,7 +51,7 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(MutableVector2DFactoryArgumentsProvider::class)
-        fun shouldUpdateVector2D(factory: (Float, Float) -> MutableVector2D) {
+        fun shouldAddAndAssignVector2D(factory: (Float, Float) -> MutableVector2D) {
             val mutableVector2D: MutableVector2D = factory(13.37f, 69f)
 
             mutableVector2D += vector2DOf(x = 10f, y = 5f)
@@ -62,6 +62,22 @@ internal class VectorsTest {
                                 .isCloseTo(23.37f, withPercentage(0.0001))
                         assertThat(it.y)
                                 .isCloseTo(74f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector2DFactoryArgumentsProvider::class)
+        fun shouldSubtractAndAssignVector2D(factory: (Float, Float) -> MutableVector2D) {
+            val mutableVector2D: MutableVector2D = factory(13.37f, 69f)
+
+            mutableVector2D -= vector2DOf(x = 10f, y = 5f)
+
+            assertThat(mutableVector2D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(3.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(64f, withPercentage(0.0001))
                     }
         }
 
@@ -184,7 +200,7 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(MutableVector3DFactoryArgumentsProvider::class)
-        fun shouldUpdateVector3D(factory: (Float, Float, Float) -> MutableVector3D) {
+        fun shouldAddAndAssignVector3D(factory: (Float, Float, Float) -> MutableVector3D) {
             val mutableVector3D: MutableVector3D = factory(13.37f, 69f, 11f)
 
             mutableVector3D += vector3DOf(x = 10f, y = 5f, z = -8f)
@@ -197,6 +213,24 @@ internal class VectorsTest {
                                 .isCloseTo(74f, withPercentage(0.0001))
                         assertThat(it.z)
                                 .isCloseTo(3f, withPercentage(0.0001))
+                    }
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(MutableVector3DFactoryArgumentsProvider::class)
+        fun shouldSubtractAndAssignVector3D(factory: (Float, Float, Float) -> MutableVector3D) {
+            val mutableVector3D: MutableVector3D = factory(13.37f, 69f, 11f)
+
+            mutableVector3D -= vector3DOf(x = 10f, y = 5f, z = -8f)
+
+            assertThat(mutableVector3D)
+                    .satisfies {
+                        assertThat(it.x)
+                                .isCloseTo(3.37f, withPercentage(0.0001))
+                        assertThat(it.y)
+                                .isCloseTo(64f, withPercentage(0.0001))
+                        assertThat(it.z)
+                                .isCloseTo(19f, withPercentage(0.0001))
                     }
         }
 

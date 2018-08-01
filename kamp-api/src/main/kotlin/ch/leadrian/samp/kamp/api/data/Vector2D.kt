@@ -23,4 +23,6 @@ interface Vector2D {
     fun toMutableVector2D(): MutableVector2D
 
     operator fun plus(other: Vector2D): Vector2D
+
+    operator fun minus(other: Vector2D): Vector2D
 }

@@ -10,4 +10,8 @@ interface AngledLocation : Location, Position {
 
     override fun plus(other: Vector3D): AngledLocation
 
+    override fun minus(other: Vector2D): AngledLocation
+
+    override fun minus(other: Vector3D): AngledLocation
+
 }

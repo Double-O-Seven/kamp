@@ -25,4 +25,8 @@ interface Vector3D : Vector2D {
     override fun plus(other: Vector2D): Vector3D
 
     operator fun plus(other: Vector3D): Vector3D
+
+    override fun minus(other: Vector2D): Vector3D
+
+    operator fun minus(other: Vector3D): Vector3D
 }

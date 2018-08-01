@@ -42,4 +42,15 @@ internal data class PositionImpl(
             z = this.z + other.z
     )
 
+    override fun minus(other: Vector2D): Position = copy(
+            x = this.x - other.x,
+            y = this.y - other.y
+    )
+
+    override fun minus(other: Vector3D): Position = copy(
+            x = this.x - other.x,
+            y = this.y - other.y,
+            z = this.z - other.z
+    )
+
 }

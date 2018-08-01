@@ -13,4 +13,14 @@ interface MutableVector3D : MutableVector2D, Vector3D {
         this.y += other.y
         this.z += other.z
     }
+
+    override fun minus(other: Vector2D): MutableVector3D
+
+    override fun minus(other: Vector3D): MutableVector3D
+
+    operator fun minusAssign(other: Vector3D) {
+        this.x -= other.x
+        this.y -= other.y
+        this.z -= other.z
+    }
 }

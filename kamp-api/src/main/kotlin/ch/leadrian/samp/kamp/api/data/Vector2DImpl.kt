@@ -16,4 +16,9 @@ internal data class Vector2DImpl(
             x = this.x + other.x,
             y = this.y + other.y
     )
+
+    override fun minus(other: Vector2D): Vector2D = copy(
+            x = this.x - other.x,
+            y = this.y - other.y
+    )
 }

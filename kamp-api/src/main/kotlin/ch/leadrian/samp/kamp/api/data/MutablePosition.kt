@@ -8,4 +8,8 @@ interface MutablePosition : Position, MutableVector3D {
 
     override fun plus(other: Vector3D): MutablePosition
 
+    override fun minus(other: Vector2D): MutablePosition
+
+    override fun minus(other: Vector3D): MutablePosition
+
 }

@@ -43,4 +43,15 @@ internal data class MutableLocationImpl(
             y = this.y + other.y,
             z = this.z + other.z
     )
+
+    override fun minus(other: Vector2D): MutableLocation = copy(
+            x = this.x - other.x,
+            y = this.y - other.y
+    )
+
+    override fun minus(other: Vector3D): MutableLocation = copy(
+            x = this.x - other.x,
+            y = this.y - other.y,
+            z = this.z - other.z
+    )
 }

@@ -64,4 +64,15 @@ internal data class AngledLocationImpl(
             y = this.y + other.y,
             z = this.z + other.z
     )
+
+    override fun minus(other: Vector2D): AngledLocation = copy(
+            x = this.x - other.x,
+            y = this.y - other.y
+    )
+
+    override fun minus(other: Vector3D): AngledLocation = copy(
+            x = this.x - other.x,
+            y = this.y - other.y,
+            z = this.z - other.z
+    )
 }

@@ -28,4 +28,8 @@ interface Location : Vector3D {
 
     override fun plus(other: Vector3D): Location
 
+    override fun minus(other: Vector2D): Location
+
+    override fun minus(other: Vector3D): Location
+
 }

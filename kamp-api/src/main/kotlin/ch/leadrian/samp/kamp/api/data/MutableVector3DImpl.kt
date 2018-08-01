@@ -32,4 +32,15 @@ internal data class MutableVector3DImpl(
             z = this.z + other.z
     )
 
+    override fun minus(other: Vector2D): MutableVector3D = copy(
+            x = this.x - other.x,
+            y = this.y - other.y
+    )
+
+    override fun minus(other: Vector3D): MutableVector3D = copy(
+            x = this.x - other.x,
+            y = this.y - other.y,
+            z = this.z - other.z
+    )
+
 }

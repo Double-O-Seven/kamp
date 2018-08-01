@@ -12,4 +12,8 @@ interface Position : Vector3D {
 
     override fun plus(other: Vector3D): Position
 
+    override fun minus(other: Vector2D): Position
+
+    override fun minus(other: Vector3D): Position
+
 }

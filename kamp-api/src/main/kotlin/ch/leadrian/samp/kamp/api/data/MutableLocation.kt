@@ -10,4 +10,8 @@ interface MutableLocation : Location, MutableVector3D {
 
     override fun plus(other: Vector3D): MutableLocation
 
+    override fun minus(other: Vector2D): MutableLocation
+
+    override fun minus(other: Vector3D): MutableLocation
+
 }

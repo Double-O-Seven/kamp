@@ -12,4 +12,11 @@ interface MutableVector2D : Vector2D {
         this.x += other.x
         this.y += other.y
     }
+
+    override fun minus(other: Vector2D): MutableVector2D
+
+    operator fun minusAssign(other: Vector2D) {
+        this.x -= other.x
+        this.y -= other.y
+    }
 }
