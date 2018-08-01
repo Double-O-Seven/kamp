@@ -111,6 +111,8 @@ interface Player {
 
     val lastShotVectors: LastShotVectors
 
+    val playerVars: PlayerVars
+
     fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int)
 
     val vehicle: Vehicle?
