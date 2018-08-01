@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class PlayerIdTest {
 
     @ParameterizedTest
-    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_PLAYERS - 1, SAMPConstants.MAX_PLAYERS, Int.MAX_VALUE])
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_PLAYERS - 1, SAMPConstants.MAX_PLAYERS, Int.MAX_VALUE, SAMPConstants.INVALID_PLAYER_ID])
     fun shouldReturnPlayerId(value: Int) {
         val playerId = PlayerId.valueOf(value)
 

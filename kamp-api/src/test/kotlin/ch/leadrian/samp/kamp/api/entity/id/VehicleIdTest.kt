@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class VehicleIdTest {
 
     @ParameterizedTest
-    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_VEHICLES - 1, SAMPConstants.MAX_VEHICLES, Int.MAX_VALUE])
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_VEHICLES - 1, SAMPConstants.MAX_VEHICLES, Int.MAX_VALUE, SAMPConstants.INVALID_VEHICLE_ID])
     fun shouldReturnVehicleId(value: Int) {
         val vehicleId = VehicleId.valueOf(value)
 

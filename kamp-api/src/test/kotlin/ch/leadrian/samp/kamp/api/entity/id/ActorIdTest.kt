@@ -8,7 +8,7 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class ActorIdTest {
 
     @ParameterizedTest
-    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_ACTORS - 1, SAMPConstants.MAX_ACTORS, Int.MAX_VALUE])
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_ACTORS - 1, SAMPConstants.MAX_ACTORS, Int.MAX_VALUE, SAMPConstants.INVALID_ACTOR_ID])
     fun shouldReturnActorId(value: Int) {
         val actorId = ActorId.valueOf(value)
 
