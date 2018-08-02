@@ -51,21 +51,21 @@ internal class BitwiseOperationsTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         Arguments.of(0x12345678, 0, 0x8),
-                        Arguments.of(0x12345678, 4, 0x7),
-                        Arguments.of(0x12345678, 8, 0x6),
-                        Arguments.of(0x12345678, 12, 0x5),
-                        Arguments.of(0x12345678, 16, 0x4),
-                        Arguments.of(0x12345678, 20, 0x3),
-                        Arguments.of(0x12345678, 24, 0x2),
-                        Arguments.of(0x12345678, 28, 0x1),
+                        Arguments.of(0x12345678, 1, 0x7),
+                        Arguments.of(0x12345678, 2, 0x6),
+                        Arguments.of(0x12345678, 3, 0x5),
+                        Arguments.of(0x12345678, 4, 0x4),
+                        Arguments.of(0x12345678, 5, 0x3),
+                        Arguments.of(0x12345678, 6, 0x2),
+                        Arguments.of(0x12345678, 7, 0x1),
                         Arguments.of(0x12345678, 0, 0x8),
-                        Arguments.of(0x12345678, 4, 0x7),
-                        Arguments.of(0x12345678, 8, 0x6),
-                        Arguments.of(0x12345678, 12, 0x5),
-                        Arguments.of(0x12345678, 16, 0x4),
-                        Arguments.of(0x12345678, 20, 0x3),
-                        Arguments.of(0x12345678, 24, 0x2),
-                        Arguments.of(0x12345678, 28, 0x1)
+                        Arguments.of(0x12345678, 1, 0x7),
+                        Arguments.of(0x12345678, 2, 0x6),
+                        Arguments.of(0x12345678, 3, 0x5),
+                        Arguments.of(0x12345678, 4, 0x4),
+                        Arguments.of(0x12345678, 5, 0x3),
+                        Arguments.of(0x12345678, 6, 0x2),
+                        Arguments.of(0x12345678, 7, 0x1)
                 )
 
     }
@@ -75,21 +75,21 @@ internal class BitwiseOperationsTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         Arguments.of(0x4FFFFFFF, 0, 0x3, 0x4FFFFFF3),
-                        Arguments.of(0x4FFFFFFF, 4, 0x3, 0x4FFFFF3F),
-                        Arguments.of(0x4FFFFFFF, 8, 0x3, 0x4FFFF3FF),
-                        Arguments.of(0x4FFFFFFF, 12, 0x3, 0x4FFF3FFF),
-                        Arguments.of(0x4FFFFFFF, 16, 0x3, 0x4FF3FFFF),
-                        Arguments.of(0x4FFFFFFF, 20, 0x3, 0x4F3FFFFF),
-                        Arguments.of(0x4FFFFFFF, 24, 0x3, 0x43FFFFFF),
-                        Arguments.of(0x4FFFFFFF, 28, 0x3, 0x3FFFFFFF),
+                        Arguments.of(0x4FFFFFFF, 1, 0x3, 0x4FFFFF3F),
+                        Arguments.of(0x4FFFFFFF, 2, 0x3, 0x4FFFF3FF),
+                        Arguments.of(0x4FFFFFFF, 3, 0x3, 0x4FFF3FFF),
+                        Arguments.of(0x4FFFFFFF, 4, 0x3, 0x4FF3FFFF),
+                        Arguments.of(0x4FFFFFFF, 5, 0x3, 0x4F3FFFFF),
+                        Arguments.of(0x4FFFFFFF, 6, 0x3, 0x43FFFFFF),
+                        Arguments.of(0x4FFFFFFF, 7, 0x3, 0x3FFFFFFF),
                         Arguments.of(0x4FFFFFFF, 0, 0x73, 0x4FFFFFF3),
-                        Arguments.of(0x4FFFFFFF, 4, 0x73, 0x4FFFFF3F),
-                        Arguments.of(0x4FFFFFFF, 8, 0x73, 0x4FFFF3FF),
-                        Arguments.of(0x4FFFFFFF, 12, 0x73, 0x4FFF3FFF),
-                        Arguments.of(0x4FFFFFFF, 16, 0x73, 0x4FF3FFFF),
-                        Arguments.of(0x4FFFFFFF, 20, 0x73, 0x4F3FFFFF),
-                        Arguments.of(0x4FFFFFFF, 24, 0x73, 0x43FFFFFF),
-                        Arguments.of(0x4FFFFFFF, 28, 0x73, 0x3FFFFFFF)
+                        Arguments.of(0x4FFFFFFF, 1, 0x73, 0x4FFFFF3F),
+                        Arguments.of(0x4FFFFFFF, 2, 0x73, 0x4FFFF3FF),
+                        Arguments.of(0x4FFFFFFF, 3, 0x73, 0x4FFF3FFF),
+                        Arguments.of(0x4FFFFFFF, 4, 0x73, 0x4FF3FFFF),
+                        Arguments.of(0x4FFFFFFF, 5, 0x73, 0x4F3FFFFF),
+                        Arguments.of(0x4FFFFFFF, 6, 0x73, 0x43FFFFFF),
+                        Arguments.of(0x4FFFFFFF, 7, 0x73, 0x3FFFFFFF)
                 )
 
     }

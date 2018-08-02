@@ -3,11 +3,11 @@
 package ch.leadrian.samp.kamp.api.util
 
 @Suppress("NOTHING_TO_INLINE")
-inline fun Int.getByte(position: Int): Int = (this shr position) and 0x0F
+inline fun Int.getByte(position: Int): Int = (this shr (position * 4)) and 0x0F
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Int.setByte(position: Int, value: Int): Int =
-        (this and (0x0F shl position).inv()) or ((value and 0x0F) shl position)
+        (this and (0x0F shl (position * 4)).inv()) or ((value and 0x0F) shl (position * 4))
 
 @Suppress("NOTHING_TO_INLINE")
 inline fun Int.getBit(position: Int): Int = (this shr position) and 1
