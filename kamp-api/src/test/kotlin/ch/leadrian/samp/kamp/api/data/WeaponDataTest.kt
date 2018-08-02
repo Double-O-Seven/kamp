@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.api.data
 
 import ch.leadrian.samp.kamp.api.constants.WeaponModel
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class WeaponDataTest {
@@ -17,7 +17,7 @@ internal class WeaponDataTest {
 
         val weaponData = expectedWeaponData.toWeaponData()
 
-        Assertions.assertThat(weaponData)
+        assertThat(weaponData)
                 .isSameAs(expectedWeaponData)
     }
 
@@ -32,11 +32,11 @@ internal class WeaponDataTest {
 
         val mutableWeaponData = weaponData.toMutableWeaponData()
 
-        Assertions.assertThat(mutableWeaponData)
+        assertThat(mutableWeaponData)
                 .satisfies {
-                    Assertions.assertThat(it.model)
+                    assertThat(it.model)
                             .isEqualTo(weaponModel)
-                    Assertions.assertThat(it.ammo)
+                    assertThat(it.ammo)
                             .isEqualTo(ammo)
                 }
     }
