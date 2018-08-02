@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity
 
-interface VehicleTrailer {
+interface VehicleTrailer : HasVehicle {
 
     fun attach(trailer: Vehicle)
 

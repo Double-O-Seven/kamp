@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.api.entity
 import ch.leadrian.samp.kamp.api.constants.CarModType
 import ch.leadrian.samp.kamp.api.constants.VehicleComponentModel
 
-interface VehicleComponents {
+interface VehicleComponents : HasVehicle {
 
     fun add(model: VehicleComponentModel)
 
