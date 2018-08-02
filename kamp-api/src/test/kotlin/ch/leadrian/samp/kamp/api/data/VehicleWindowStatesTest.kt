@@ -35,7 +35,7 @@ internal class VehicleWindowStatesTest {
 
     @ParameterizedTest
     @ArgumentsSource(VehicleWindowStateArgumentsProvider::class)
-    fun toMutableVehicleWindowStatesShouldReturnImmutableInstance(
+    fun toMutableVehicleWindowStatesShouldReturnMutableInstance(
             driver: VehicleWindowState,
             passenger: VehicleWindowState,
             backLeft: VehicleWindowState,

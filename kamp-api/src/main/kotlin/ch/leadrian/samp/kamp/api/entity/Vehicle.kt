@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.api.entity
 
+import ch.leadrian.samp.kamp.api.constants.VehicleColor
+import ch.leadrian.samp.kamp.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
@@ -30,9 +32,19 @@ interface Vehicle : Destroyable {
 
     val sirenState: VehicleSirenState
 
-    val doorStates: VehicleDoorStates
+    var parameters: VehicleParameters
 
-    val windowStates: VehicleWindowStates
+    var doorStates: VehicleDoorStates
+
+    var windowStates: VehicleWindowStates
+
+    fun addComponent(model: VehicleComponentModel)
+
+    fun removeComponent(model: VehicleComponentModel)
+
+    var color1: VehicleColor
+
+    var color2: VehicleColor
 
     // TODO add more
 }

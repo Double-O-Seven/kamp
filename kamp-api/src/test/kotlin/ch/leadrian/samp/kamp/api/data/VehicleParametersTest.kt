@@ -41,7 +41,7 @@ internal class VehicleParametersTest {
 
     @ParameterizedTest
     @ArgumentsSource(VehicleParametersArgumentsProvider::class)
-    fun toMutableVehicleParametersShouldReturnImmutableInstance(
+    fun toMutableVehicleParametersShouldReturnMutableInstance(
             engine: VehicleEngineState,
             lights: VehicleLightsState,
             alarm: VehicleAlarmState,
