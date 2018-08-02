@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity
 
-import ch.leadrian.samp.kamp.api.constants.VehicleColor
-import ch.leadrian.samp.kamp.api.constants.VehicleComponentModel
+import ch.leadrian.samp.kamp.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
@@ -38,13 +37,25 @@ interface Vehicle : Destroyable {
 
     var windowStates: VehicleWindowStates
 
-    fun addComponent(model: VehicleComponentModel)
+    val components: VehicleComponents
 
-    fun removeComponent(model: VehicleComponentModel)
+    var colors: VehicleColors
 
-    var color1: VehicleColor
+    var paintjob: Int?
 
-    var color2: VehicleColor
+    var health: Float
+
+    val trailer: VehicleTrailer
+
+    var numberPlate: String?
+
+    val model: VehicleModel
+
+    fun repair()
+
+    var velocity: Vector3D
+
+    fun setAngularVelocity(velocity: Vector3D)
 
     // TODO add more
 }
