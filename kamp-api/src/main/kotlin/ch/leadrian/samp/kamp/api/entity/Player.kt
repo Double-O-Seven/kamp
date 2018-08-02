@@ -240,4 +240,16 @@ interface Player {
     val version: String
 
     val networkStatistics: PlayerNetworkStatistics
+
+    fun selectTextDraw(hoverColor: Color)
+
+    fun cancelSelectTextDraw()
+
+    fun editMapObject(mapObject: MapObject)
+
+    fun editPlayerMapObject(playerMapObject: PlayerMapObject)
+
+    fun selectMapObject()
+
+    fun cancelSelectMapObject()
 }
