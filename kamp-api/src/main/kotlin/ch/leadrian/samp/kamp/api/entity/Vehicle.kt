@@ -57,5 +57,7 @@ interface Vehicle : Destroyable {
 
     fun setAngularVelocity(velocity: Vector3D)
 
+    var damageStatus: VehicleDamageStatus
+
     // TODO add more
 }
