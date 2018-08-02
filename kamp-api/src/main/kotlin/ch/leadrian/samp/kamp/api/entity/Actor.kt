@@ -25,7 +25,7 @@ interface Actor : Destroyable {
 
     fun clearAnimation()
 
-    var position3D: Vector3D
+    var coordinates: Vector3D
 
     var position: Position
 

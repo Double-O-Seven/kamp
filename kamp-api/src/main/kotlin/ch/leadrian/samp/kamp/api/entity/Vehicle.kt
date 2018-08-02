@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity
 
+import ch.leadrian.samp.kamp.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.api.data.AngledLocation
 import ch.leadrian.samp.kamp.api.data.Location
 import ch.leadrian.samp.kamp.api.data.Position
@@ -12,7 +13,7 @@ interface Vehicle : Destroyable {
 
     fun isStreamedIn(forPlayer: Player)
 
-    var position3D: Vector3D
+    var coordinates: Vector3D
 
     var position: Position
 
@@ -25,6 +26,12 @@ interface Vehicle : Destroyable {
     var interiorId: Int
 
     var virtualWorld: Int
+
+    fun respawn()
+
+    fun setParametersForPlayer(forPlayer: Player, objective: Boolean, locked: Boolean)
+
+    val sirenState: VehicleSirenState
 
     // TODO add more
 }

@@ -18,7 +18,7 @@ interface Player {
 
     fun setSpawnInfo(spawnInfo: SpawnInfo)
 
-    var position3D: Vector3D
+    var coordinates: Vector3D
 
     var position: Position
 
