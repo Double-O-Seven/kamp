@@ -59,5 +59,4 @@ interface Vehicle : Destroyable {
 
     var damageStatus: VehicleDamageStatus
 
-    // TODO add more
 }
