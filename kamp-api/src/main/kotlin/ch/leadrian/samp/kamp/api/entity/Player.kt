@@ -151,7 +151,7 @@ interface Player {
 
     fun disableRemoteVehicleCollisions(disable: Boolean)
 
-    var checkpoint: PlayerCheckpoint?
+    var checkpoint: Checkpoint?
 
     var raceCheckpoint: RaceCheckpoint?
 
@@ -201,7 +201,7 @@ interface Player {
 
     val isInAnyVehicle: Boolean
 
-    fun isInCheckpoint(checkpoint: PlayerCheckpoint)
+    fun isInCheckpoint(checkpoint: Checkpoint)
 
     val isInAnyCheckpoint: Boolean
 

@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.constants.PlayerKey
 
-interface PlayerKeys {
+interface PlayerKeys : HasPlayer {
 
     val keys: Int
 

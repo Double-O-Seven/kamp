@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.data.AttachedObject
 
-interface AttachedObjectSlot {
+interface AttachedObjectSlot : HasPlayer {
 
     val index: Int
 

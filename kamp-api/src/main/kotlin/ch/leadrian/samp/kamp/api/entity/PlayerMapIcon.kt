@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.constants.MapIconType
 import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
 
-interface PlayerMapIcon {
+interface PlayerMapIcon : HasPlayer, Destroyable {
 
     val coordinates: Vector3D
 

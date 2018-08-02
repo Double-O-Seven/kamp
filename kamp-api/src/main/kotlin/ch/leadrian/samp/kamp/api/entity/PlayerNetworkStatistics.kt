@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.constants.ConnectionStatus
 
-interface PlayerNetworkStatistics {
+interface PlayerNetworkStatistics : HasPlayer {
 
     val connectedTime: Int
 

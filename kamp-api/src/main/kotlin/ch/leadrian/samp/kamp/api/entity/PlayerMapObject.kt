@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.api.data.colorOf
 import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
 
-interface PlayerMapObject : Destroyable {
+interface PlayerMapObject : HasPlayer, Destroyable {
 
     val id: PlayerMapObjectId
 

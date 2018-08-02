@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.constants.PlayerVarType
 
-interface PlayerVars {
+interface PlayerVars : HasPlayer {
 
     fun setInt(varName: String, value: Int): Boolean
 
