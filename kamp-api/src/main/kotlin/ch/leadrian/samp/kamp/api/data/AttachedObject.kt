@@ -8,6 +8,6 @@ data class AttachedObject(
         val offset: Vector3D,
         val rotation: Vector3D,
         val scale: Vector3D,
-        val materialColor1: Color?,
-        val materialColor2: Color?
+        val materialColor1: Color = colorOf(0),
+        val materialColor2: Color = colorOf(0)
 )

@@ -14,4 +14,6 @@ interface MapObjectService {
 
     fun getAllMapObjects(): List<MapObject>
 
+    fun disableDefaultCameraCollision(disable: Boolean)
+
 }
