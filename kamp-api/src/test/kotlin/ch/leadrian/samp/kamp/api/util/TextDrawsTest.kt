@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.api.text
+package ch.leadrian.samp.kamp.api.util
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest
