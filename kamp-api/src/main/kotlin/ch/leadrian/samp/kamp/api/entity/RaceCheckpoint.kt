@@ -10,4 +10,8 @@ interface RaceCheckpoint : Destroyable {
     val nextCoordinates: Vector3D?
 
     val type: RaceCheckpointType
+
+    fun show(forPlayer: Player)
+
+    fun hide(forPlayer: Player)
 }

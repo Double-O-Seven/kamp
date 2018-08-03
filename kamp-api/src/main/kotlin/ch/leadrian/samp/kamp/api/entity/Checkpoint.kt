@@ -7,4 +7,8 @@ interface Checkpoint : Destroyable {
     val coordinates: Vector3D
 
     val size: Float
+
+    fun show(forPlayer: Player)
+
+    fun hide(forPlayer: Player)
 }
