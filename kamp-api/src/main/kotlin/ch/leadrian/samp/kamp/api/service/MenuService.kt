@@ -7,13 +7,13 @@ import java.awt.Menu
 
 interface MenuService {
 
-    fun createMenu(title: String, position: Vector2D, columnWidth: Float)
+    fun createMenu(title: String, position: Vector2D, columnWidth: Float): Menu
 
-    fun createMenu(title: String, position: Vector2D, column1Width: Float, column2Width: Float)
+    fun createMenu(title: String, position: Vector2D, column1Width: Float, column2Width: Float): Menu
 
-    fun createMenu(titleTextKey: TextKey, position: Vector2D, columnWidth: Float)
+    fun createMenu(titleTextKey: TextKey, position: Vector2D, columnWidth: Float): Menu
 
-    fun createMenu(titleTextKey: TextKey, position: Vector2D, column1Width: Float, column2Width: Float)
+    fun createMenu(titleTextKey: TextKey, position: Vector2D, column1Width: Float, column2Width: Float): Menu
 
     fun isValid(menuId: MenuId): Boolean
 

@@ -18,7 +18,7 @@ interface VehicleService {
             color: VehicleColor,
             respawnDelay: Int,
             addSiren: Boolean = false
-    )
+    ): Vehicle
 
     fun createVehicle(
             model: VehicleModel,
@@ -28,7 +28,7 @@ interface VehicleService {
             color: VehicleColor,
             respawnDelay: Int,
             addSiren: Boolean = false
-    )
+    ): Vehicle
 
     fun createVehicle(
             model: VehicleModel,
@@ -37,7 +37,7 @@ interface VehicleService {
             color: VehicleColor,
             respawnDelay: Int,
             addSiren: Boolean = false
-    )
+    ): Vehicle
 
     fun useManualVehicleLightsAndEngine()
 

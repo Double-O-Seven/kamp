@@ -11,11 +11,11 @@ interface ActorService {
 
     fun isValid(actorId: ActorId): Boolean
 
-    fun createActor(skinModel: SkinModel, position: Position)
+    fun createActor(skinModel: SkinModel, position: Position): Actor
 
-    fun createActor(skinModel: SkinModel, coordinates: Vector3D, angle: Float)
+    fun createActor(skinModel: SkinModel, coordinates: Vector3D, angle: Float): Actor
 
-    fun createActor(skinModel: SkinModel, angledLocation: AngledLocation)
+    fun createActor(skinModel: SkinModel, angledLocation: AngledLocation): Actor
 
     fun getActor(actorId: ActorId): Actor
 
