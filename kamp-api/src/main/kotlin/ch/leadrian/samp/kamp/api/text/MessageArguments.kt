@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.entity.Player
 import java.util.*
 
-private class EmbeddedPlayerName constructor(
+private class EmbeddedPlayerName(
         private val player: Player
 ) : MessageArgument {
 
@@ -19,7 +19,7 @@ private class EmbeddedPlayerName constructor(
 
 fun embeddedPlayerNameOf(player: Player): MessageArgument = EmbeddedPlayerName(player)
 
-private class Translatable constructor(
+private class Translatable(
         private val translator: (Locale) -> String
 ) : MessageArgument {
 
