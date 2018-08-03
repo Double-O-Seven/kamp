@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
-import ch.leadrian.samp.kamp.api.data.colorOf
 import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
 
@@ -31,17 +30,17 @@ interface PlayerMapObject : HasPlayer, Destroyable {
 
     val isMoving: Boolean
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color = colorOf(0))
+    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color? = null)
 
     fun setMaterialText(
             text: String,
             index: Int = 0,
             size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
-            fontface: String = "Arial",
+            fontFace: String = "Arial",
             fontSize: Int = 24,
             isBold: Boolean = true,
-            fontColor: Color = colorOf(0xFFFFFFFF),
-            backColor: Color = colorOf(0),
+            fontColor: Color? = null,
+            backColor: Color? = null,
             textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     )
 
