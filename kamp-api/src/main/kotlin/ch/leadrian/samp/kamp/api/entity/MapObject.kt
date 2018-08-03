@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity
 
+import ch.leadrian.samp.kamp.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.api.data.Color
@@ -45,4 +46,8 @@ interface MapObject : Destroyable {
             backColor: Color = colorOf(0),
             textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     )
+
+    fun onMoved(onMoved: MapObject.() -> Unit)
+
+    fun onEdit(onEdit: MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Boolean)
 }

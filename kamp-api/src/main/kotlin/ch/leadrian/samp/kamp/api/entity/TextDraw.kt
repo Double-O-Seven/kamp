@@ -58,4 +58,6 @@ interface TextDraw : Destroyable {
     fun setPreviewModelRotation(rotation: Vector3D, zoom: Float)
 
     fun setPreviewModelVehicleColors(vehicleColors: VehicleColors)
+
+    fun onClick(onClick: TextDraw.(Player) -> Boolean)
 }

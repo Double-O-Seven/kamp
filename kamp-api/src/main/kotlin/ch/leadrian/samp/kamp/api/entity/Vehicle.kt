@@ -59,4 +59,12 @@ interface Vehicle : Destroyable {
 
     var damageStatus: VehicleDamageStatus
 
+    fun onSpawn(onSpawn: Vehicle.() -> Boolean)
+
+    fun onDeath(onDeath: Vehicle.(Player?) -> Boolean)
+
+    fun onEnter(onEnter: Vehicle.(Player, Boolean) -> Unit)
+
+    fun onExit(onExit: Vehicle.(Player) -> Unit)
+
 }

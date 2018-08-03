@@ -11,4 +11,9 @@ interface Checkpoint : Destroyable {
     fun show(forPlayer: Player)
 
     fun hide(forPlayer: Player)
+
+    fun onEnter(onEnter: Checkpoint.(Player) -> Unit)
+
+    fun onLeave(onEnter: Checkpoint.(Player) -> Unit)
+
 }

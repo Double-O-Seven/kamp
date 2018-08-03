@@ -252,4 +252,8 @@ interface Player {
     fun selectMapObject()
 
     fun cancelSelectMapObject()
+
+    fun onSpawn(onSpawn: Player.() -> Boolean)
+
+    fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Boolean)
 }

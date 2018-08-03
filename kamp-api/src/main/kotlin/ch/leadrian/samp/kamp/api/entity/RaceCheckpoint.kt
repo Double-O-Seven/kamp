@@ -14,4 +14,9 @@ interface RaceCheckpoint : Destroyable {
     fun show(forPlayer: Player)
 
     fun hide(forPlayer: Player)
+
+    fun onEnter(onEnter: RaceCheckpoint.(Player) -> Unit)
+
+    fun onLeave(onEnter: RaceCheckpoint.(Player) -> Unit)
+
 }
