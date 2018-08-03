@@ -12,8 +12,8 @@ data class PickupId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): PickupId =
                 when {
-                    value == INVALID.value -> INVALID
                     0 <= value && value < pickupIds.size -> pickupIds[value]
+                    value == INVALID.value -> INVALID
                     else -> PickupId(value)
                 }
     }

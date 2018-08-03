@@ -12,8 +12,8 @@ data class TextDrawId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): TextDrawId =
                 when {
-                    value == SAMPConstants.INVALID_TEXT_DRAW -> INVALID
                     0 <= value && value < textDrawIds.size -> textDrawIds[value]
+                    value == INVALID.value -> INVALID
                     else -> TextDrawId(value)
                 }
     }

@@ -12,8 +12,8 @@ data class GangZoneId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): GangZoneId =
                 when {
-                    value == SAMPConstants.INVALID_GANG_ZONE -> INVALID
                     0 <= value && value < gangZoneIds.size -> gangZoneIds[value]
+                    value == INVALID.value -> INVALID
                     else -> GangZoneId(value)
                 }
     }

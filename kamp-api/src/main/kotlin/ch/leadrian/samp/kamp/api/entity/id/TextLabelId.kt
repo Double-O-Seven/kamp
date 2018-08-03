@@ -12,8 +12,8 @@ data class TextLabelId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): TextLabelId =
                 when {
-                    value == SAMPConstants.INVALID_3DTEXT_ID -> INVALID
                     0 <= value && value < textLabelIds.size -> textLabelIds[value]
+                    value == INVALID.value -> INVALID
                     else -> TextLabelId(value)
                 }
     }

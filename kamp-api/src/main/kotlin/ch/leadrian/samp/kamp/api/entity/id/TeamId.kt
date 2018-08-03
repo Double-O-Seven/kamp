@@ -12,8 +12,8 @@ data class TeamId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): TeamId =
                 when {
-                    value == SAMPConstants.NO_TEAM -> NO_TEAM
                     0 <= value && value < teamIds.size -> teamIds[value]
+                    value == NO_TEAM.value -> NO_TEAM
                     else -> TeamId(value)
                 }
     }

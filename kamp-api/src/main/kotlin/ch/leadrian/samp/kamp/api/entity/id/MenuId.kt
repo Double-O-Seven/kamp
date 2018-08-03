@@ -12,8 +12,8 @@ data class MenuId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): MenuId =
                 when {
-                    value == SAMPConstants.INVALID_MENU -> INVALID
                     0 <= value && value < menuIds.size -> menuIds[value]
+                    value == INVALID.value -> INVALID
                     else -> MenuId(value)
                 }
     }

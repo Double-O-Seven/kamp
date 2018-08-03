@@ -12,8 +12,8 @@ data class VehicleId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): VehicleId =
                 when {
-                    value == SAMPConstants.INVALID_VEHICLE_ID -> INVALID
                     0 <= value && value < vehicleIds.size -> vehicleIds[value]
+                    value == INVALID.value -> INVALID
                     else -> VehicleId(value)
                 }
     }

@@ -12,8 +12,8 @@ data class MapObjectId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): MapObjectId =
                 when {
-                    value == SAMPConstants.INVALID_OBJECT_ID -> INVALID
                     0 <= value && value < mapObjectId.size -> mapObjectId[value]
+                    value == INVALID.value -> INVALID
                     else -> MapObjectId(value)
                 }
     }

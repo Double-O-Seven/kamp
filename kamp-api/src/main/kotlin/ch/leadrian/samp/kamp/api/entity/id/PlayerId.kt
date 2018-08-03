@@ -12,8 +12,8 @@ data class PlayerId internal constructor(val value: Int) {
 
         fun valueOf(value: Int): PlayerId =
                 when {
-                    value == SAMPConstants.INVALID_PLAYER_ID -> INVALID
                     0 <= value && value < playerIds.size -> playerIds[value]
+                    value == INVALID.value -> INVALID
                     else -> PlayerId(value)
                 }
     }
