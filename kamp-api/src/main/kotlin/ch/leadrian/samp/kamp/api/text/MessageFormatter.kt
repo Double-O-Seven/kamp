@@ -5,5 +5,5 @@ import java.util.*
 
 interface MessageFormatter {
 
-    fun format(locale: Locale, color: Color, message: String, vararg args: Any)
+    fun format(locale: Locale, color: Color, message: String, vararg args: Any): String
 }
