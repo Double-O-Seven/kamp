@@ -16,12 +16,14 @@ dependencies {
     runtimeCodegen project(':kamp-codegen')
 }
 
-def generatedSrcDir = "${buildDir}/generated-src/main/java"
+def generatedSrcJavaDir = "${buildDir}/generated-src/main/java"
+def generatedSrcKotlinDir = "${buildDir}/generated-src/main/kotlin"
 
 sourceSets {
     main {
         java {
-            srcDir generatedSrcDir
+            srcDir generatedSrcJavaDir
+            srcDir generatedSrcKotlinDir
         }
     }
 }
@@ -36,14 +38,14 @@ def playersIDLFile = "${idlFilesDir}/a_players.idl"
 def sampIDLFile = "${idlFilesDir}/a_samp.idl"
 def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
-def generatedSAMPCallbacksJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPCallbacks.java"
+def generatedSAMPCallbacksJavaFile = "${generatedSrcJavaDir}/ch/leadrian/samp/kamp/runtime/SAMPCallbacks.java"
 
 task generateSAMPCallbacksClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'
     main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksJavaCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
-            "-o", generatedSrcDir,
+            "-o", generatedSrcJavaDir,
             "-p", runtimePackageName,
             "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
@@ -51,14 +53,14 @@ task generateSAMPCallbacksClass(type: JavaExec) {
     outputs.file generatedSAMPCallbacksJavaFile
 }
 
-def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctions.java"
+def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcJavaDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctions.java"
 
 task generateSAMPNativeFunctionsClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'
     main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsJavaCodeGenerator"
     classpath configurations.runtimeCodegen
     args = [
-            "-o", generatedSrcDir,
+            "-o", generatedSrcJavaDir,
             "-p", runtimePackageName,
             "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
     ]
@@ -66,5 +68,45 @@ task generateSAMPNativeFunctionsClass(type: JavaExec) {
     outputs.file generatedSAMPNativeFunctionsJavaFile
 }
 
-compileKotlin.dependsOn(generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
-compileJava.dependsOn(generateSAMPCallbacksClass, generateSAMPNativeFunctionsClass)
+def generatedSAMPNativeFunctionExecutorKotlinFile = "${generatedSrcKotlinDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctionExecutor.kt"
+
+task generateSAMPNativeFunctionExecutorClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionExecutorKotlinCodeGenerator"
+    classpath configurations.runtimeCodegen
+    args = [
+            "-o", generatedSrcKotlinDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionExecutorKotlinFile
+}
+
+def generatedSAMPNativeFunctionExecutorImplKotlinFile = "${generatedSrcKotlinDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctionExecutorImpl.kt"
+
+task generateSAMPNativeFunctionExecutorImplClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionExecutorImplKotlinCodeGenerator"
+    classpath configurations.runtimeCodegen
+    args = [
+            "-o", generatedSrcKotlinDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionExecutorImplKotlinFile
+}
+
+compileKotlin.dependsOn(
+        generateSAMPCallbacksClass,
+        generateSAMPNativeFunctionsClass,
+        generateSAMPNativeFunctionExecutorClass,
+        generateSAMPNativeFunctionExecutorImplClass
+)
+compileJava.dependsOn(
+        generateSAMPCallbacksClass,
+        generateSAMPNativeFunctionsClass,
+        generateSAMPNativeFunctionExecutorClass,
+        generateSAMPNativeFunctionExecutorImplClass
+)
