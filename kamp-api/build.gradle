@@ -6,7 +6,11 @@ configurations {
 
 dependencies {
 
-    compile project(':kamp-codegen')
+    compile(
+            project(':kamp-codegen'),
+            "com.google.inject:guice:$guiceVersion",
+            "com.netflix.governator:governator-api:$governatorVersion"
+    )
 
     apiCodegen project(':kamp-codegen')
 }

@@ -9,7 +9,8 @@ dependencies {
     compile project(':kamp-api')
 
     compileOnly(
-            'com.google.inject:guice:4.2.0'
+            "com.google.inject:guice:$guiceVersion",
+            "com.netflix.governator:governator:$governatorVersion"
     )
 
     runtimeCodegen project(':kamp-codegen')
