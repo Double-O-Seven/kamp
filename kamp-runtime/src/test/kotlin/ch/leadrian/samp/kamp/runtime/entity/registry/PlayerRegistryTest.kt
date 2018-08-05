@@ -12,9 +12,9 @@ internal class PlayerRegistryTest {
 
     @Test
     fun shouldRegisterAndGetPlayer() {
-        val playerId = PlayerId.valueOf(50)
+        val playerId = 50
         val player = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val playerRegistry = PlayerRegistry()
 
@@ -27,12 +27,12 @@ internal class PlayerRegistryTest {
 
     @Test
     fun givenAnotherPlayerWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
-        val playerId = PlayerId.valueOf(50)
+        val playerId = 50
         val alreadyRegisteredPlayer = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val newPlayer = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val playerRegistry = PlayerRegistry()
         playerRegistry.register(alreadyRegisteredPlayer)
@@ -48,9 +48,9 @@ internal class PlayerRegistryTest {
 
     @Test
     fun shouldUnregisterRegisteredPlayer() {
-        val playerId = PlayerId.valueOf(50)
+        val playerId = 50
         val player = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val playerRegistry = PlayerRegistry()
         playerRegistry.register(player)
@@ -79,12 +79,12 @@ internal class PlayerRegistryTest {
 
     @Test
     fun givenAnotherPlayerWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
-        val playerId = PlayerId.valueOf(50)
+        val playerId = 50
         val alreadyRegisteredPlayer = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val newPlayer = mockk<Player> {
-            every { id } returns playerId
+            every { id } returns PlayerId.valueOf(playerId)
         }
         val playerRegistry = PlayerRegistry()
         playerRegistry.register(alreadyRegisteredPlayer)

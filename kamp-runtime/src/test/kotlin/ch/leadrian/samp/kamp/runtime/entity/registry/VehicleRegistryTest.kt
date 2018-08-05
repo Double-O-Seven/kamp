@@ -12,9 +12,9 @@ internal class VehicleRegistryTest {
 
     @Test
     fun shouldRegisterAndGetVehicle() {
-        val vehicleId = VehicleId.valueOf(50)
+        val vehicleId = 50
         val vehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
 
@@ -27,12 +27,12 @@ internal class VehicleRegistryTest {
 
     @Test
     fun givenAnotherVehicleWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
-        val vehicleId = VehicleId.valueOf(50)
+        val vehicleId = 50
         val alreadyRegisteredVehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val newVehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
         vehicleRegistry.register(alreadyRegisteredVehicle)
@@ -48,9 +48,9 @@ internal class VehicleRegistryTest {
 
     @Test
     fun shouldUnregisterRegisteredVehicle() {
-        val vehicleId = VehicleId.valueOf(50)
+        val vehicleId = 50
         val vehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
         vehicleRegistry.register(vehicle)
@@ -79,12 +79,12 @@ internal class VehicleRegistryTest {
 
     @Test
     fun givenAnotherVehicleWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
-        val vehicleId = VehicleId.valueOf(50)
+        val vehicleId = 50
         val alreadyRegisteredVehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val newVehicle = mockk<Vehicle> {
-            every { id } returns vehicleId
+            every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
         vehicleRegistry.register(alreadyRegisteredVehicle)

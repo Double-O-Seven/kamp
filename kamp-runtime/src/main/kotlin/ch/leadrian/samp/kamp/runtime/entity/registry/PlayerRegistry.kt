@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.Player
-import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import javax.inject.Singleton
 
 @Singleton
@@ -24,7 +23,11 @@ class PlayerRegistry {
         players[player.id.value] = null
     }
 
-    fun getPlayer(playerId: PlayerId): Player? = players[playerId.value]
+    fun getPlayer(playerId: Int): Player? =
+            when {
+                0 <= playerId && playerId < players.size -> players[playerId]
+                else -> null
+            }
 
     fun getAllPlayers(): List<Player> = players.filterNotNull()
 

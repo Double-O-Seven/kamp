@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.Vehicle
-import ch.leadrian.samp.kamp.api.entity.id.VehicleId
 import javax.inject.Singleton
 
 @Singleton
@@ -24,7 +23,11 @@ class VehicleRegistry {
         vehicles[vehicle.id.value] = null
     }
 
-    fun getVehicle(vehicleId: VehicleId): Vehicle? = vehicles[vehicleId.value]
+    fun getVehicle(vehicleId: Int): Vehicle? =
+            when {
+                0 <= vehicleId && vehicleId < vehicles.size -> vehicles[vehicleId]
+                else -> null
+            }
 
     fun getAllVehicles(): List<Vehicle> = vehicles.filterNotNull()
 
