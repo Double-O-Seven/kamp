@@ -11,11 +11,9 @@ internal class PlayerKeysImpl(
         override val player: Player
 ) : PlayerKeys {
 
-    override fun isKeyPressed(vararg keys: PlayerKey): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isKeyPressed(vararg keys: PlayerKey): Boolean =
+            keys.all { this.keys and it.value != 0 }
 
-    override fun isOnlyKeyPressed(vararg keys: PlayerKey): Boolean {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isOnlyKeyPressed(vararg keys: PlayerKey): Boolean =
+            keys.fold(0) { expectedKeys, key -> expectedKeys or key.value } == this.keys
 }
