@@ -32,7 +32,7 @@ interface Player {
 
     var virtualWorld: Int
 
-    fun setPositionFindZ(position: Vector3D)
+    fun setPositionFindZ(coordinates: Vector3D)
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
@@ -42,7 +42,7 @@ interface Player {
 
     fun setAmmo(weaponModel: WeaponModel, ammo: Int)
 
-    fun getAmmo(weaponModel: WeaponModel): Int
+    val ammo: Int
 
     val weaponState: WeaponState
 
@@ -65,6 +65,8 @@ interface Player {
     fun getWeaponData(slot: WeaponSlot): WeaponData
 
     var money: Int
+
+    fun giveMoney(amount: Int)
 
     fun resetMoney()
 
@@ -100,7 +102,7 @@ interface Player {
 
     fun playAudioStream(url: String)
 
-    fun stopAudiStream()
+    fun stopAudioStream()
 
     fun setShopName(shopName: ShopName)
 
@@ -145,9 +147,7 @@ interface Player {
 
     val animationIndex: Int
 
-    val animation: Animation
-
-    var specialAction: SpecialAction?
+    var specialAction: SpecialAction
 
     fun disableRemoteVehicleCollisions(disable: Boolean)
 

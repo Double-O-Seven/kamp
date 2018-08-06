@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.api.service
 
+import ch.leadrian.samp.kamp.api.data.Animation
 import ch.leadrian.samp.kamp.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.api.entity.ServerVars
 
@@ -22,4 +23,6 @@ interface ServerService {
     fun blockIpAddress(ipAddress: String, timeInMs: Int)
 
     fun unblockIpAddress(ipAddress: String)
+
+    fun getAnimationName(animationIndex: Int): Animation
 }

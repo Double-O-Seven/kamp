@@ -8,6 +8,7 @@ enum class ShopName(
         val coordinates: Vector3D,
         val interiorId: Int
 ) : ConstantValue<String> {
+    NONE("", vector3DOf(0f, 0f, 0f), 0),
     FDPIZA("Pizza Stack", vector3DOf(x = 374.0000f, y = -119.6410f, z = 1001.4922f), 5),
     FDBURG("Burger Shot", vector3DOf(x = 375.5660f, y = -68.2220f, z = 1001.5151f), 10),
     FDCHICK("Cluckin' Bell", vector3DOf(x = 368.7890f, y = -6.8570f, z = 1001.8516f), 9),
