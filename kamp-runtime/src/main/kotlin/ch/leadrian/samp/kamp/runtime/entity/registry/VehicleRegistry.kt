@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.Vehicle
 import javax.inject.Singleton
 
 @Singleton
-class VehicleRegistry {
+internal class VehicleRegistry {
 
     private val vehicles: Array<Vehicle?> = arrayOfNulls(SAMPConstants.MAX_VEHICLES)
 

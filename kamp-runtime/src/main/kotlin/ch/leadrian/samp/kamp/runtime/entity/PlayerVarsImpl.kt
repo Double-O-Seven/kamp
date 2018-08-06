@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.PlayerVars
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 
-class PlayerVarsImpl(
+internal class PlayerVarsImpl(
         override val player: Player,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : PlayerVars {

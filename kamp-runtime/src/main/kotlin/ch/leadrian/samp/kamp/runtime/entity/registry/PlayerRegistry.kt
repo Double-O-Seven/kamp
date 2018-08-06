@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.Player
 import javax.inject.Singleton
 
 @Singleton
-class PlayerRegistry {
+internal class PlayerRegistry {
 
     private val players: Array<Player?> = arrayOfNulls(SAMPConstants.MAX_PLAYERS)
 

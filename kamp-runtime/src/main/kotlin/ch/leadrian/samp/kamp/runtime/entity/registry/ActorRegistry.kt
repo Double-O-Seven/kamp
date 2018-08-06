@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.Actor
 import javax.inject.Singleton
 
 @Singleton
-class ActorRegistry {
+internal class ActorRegistry {
 
     private val actors: Array<Actor?> = arrayOfNulls(SAMPConstants.MAX_ACTORS)
 

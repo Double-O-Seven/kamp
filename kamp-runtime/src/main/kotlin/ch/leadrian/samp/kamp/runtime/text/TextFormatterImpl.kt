@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.api.text.TextProvider
 import java.util.*
 import javax.inject.Inject
 
-class TextFormatterImpl
+internal class TextFormatterImpl
 @Inject
 constructor(private val textProvider: TextProvider) : TextFormatter {
 

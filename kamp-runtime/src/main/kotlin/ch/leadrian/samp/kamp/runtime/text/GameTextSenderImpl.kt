@@ -11,7 +11,7 @@ import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 import java.util.*
 import javax.inject.Inject
 
-class GameTextSenderImpl
+internal class GameTextSenderImpl
 @Inject
 constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,

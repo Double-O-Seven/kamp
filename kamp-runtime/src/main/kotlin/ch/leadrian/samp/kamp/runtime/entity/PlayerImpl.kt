@@ -14,7 +14,7 @@ import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.runtime.types.ReferenceString
 import java.util.*
 
-class PlayerImpl(
+internal class PlayerImpl(
         id: PlayerId,
         private val actorRegistry: ActorRegistry,
         private val playerRegistry: PlayerRegistry,

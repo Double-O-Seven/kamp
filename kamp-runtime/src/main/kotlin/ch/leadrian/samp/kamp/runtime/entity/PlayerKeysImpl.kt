@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.PlayerKey
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.PlayerKeys
 
-class PlayerKeysImpl(
+internal class PlayerKeysImpl(
         override val keys: Int,
         override val upDown: Int,
         override val leftRight: Int,
