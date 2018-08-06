@@ -8,9 +8,9 @@ interface PlayerVars : HasPlayer {
 
     fun getInt(varName: String): Int
 
-    fun setString(varName: String, value: String, resultLength: Int = 256): Boolean
+    fun setString(varName: String, value: String): Boolean
 
-    fun getString(varName: String): String?
+    fun getString(varName: String, resultLength: Int = 256): String?
 
     fun setFloat(varName: String, value: Float): Boolean
 
@@ -20,7 +20,7 @@ interface PlayerVars : HasPlayer {
 
     val upperIndex: Int
 
-    fun getNameAtIndex(index: Int, resultLength: Int = 256): String
+    fun getNameAtIndex(index: Int, resultLength: Int = 256): String?
 
     fun getType(varName: String): PlayerVarType
 }

@@ -8,6 +8,10 @@ public class ReferenceString {
     @Nullable
     String value = null;
 
+    public void setValue(@Nullable String value) {
+        this.value = value;
+    }
+
     @Nullable
     public String getValue() {
         return value;
