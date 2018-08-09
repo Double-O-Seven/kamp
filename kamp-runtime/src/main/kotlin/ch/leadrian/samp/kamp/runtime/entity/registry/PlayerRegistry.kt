@@ -24,8 +24,8 @@ internal class PlayerRegistry {
     }
 
     fun getPlayer(playerId: Int): Player? =
-            when {
-                0 <= playerId && playerId < players.size -> players[playerId]
+            when (playerId) {
+                in (0 until players.size) -> players[playerId]
                 else -> null
             }
 

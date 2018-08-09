@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
+import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import java.util.*
 
 interface Player {
@@ -30,7 +31,7 @@ interface Player {
 
     var interiorId: Int
 
-    var virtualWorld: Int
+    var virtualWorldId: Int
 
     fun setPositionFindZ(coordinates: Vector3D)
 
@@ -72,6 +73,7 @@ interface Player {
 
     val ipAddress: String
 
+    @set:Throws(InvalidPlayerNameException::class)
     var name: String
 
     val state: PlayerState
@@ -161,7 +163,9 @@ interface Player {
 
     fun showPlayerNameTag(player: Player, show: Boolean)
 
-    val mapIcon: PlayerMapIcon?
+    fun addMapIcon(mapIcon: PlayerMapIcon, index: Int)
+
+    fun removeMapIcon(mapIcon: PlayerMapIcon)
 
     fun allowTeleport(allow: Boolean)
 
@@ -197,19 +201,17 @@ interface Player {
 
     fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT)
 
-    fun isInVehicle(vehicle: Vehicle)
+    fun isInVehicle(vehicle: Vehicle): Boolean
 
     val isInAnyVehicle: Boolean
 
-    fun isInCheckpoint(checkpoint: Checkpoint)
+    fun isInCheckpoint(checkpoint: Checkpoint): Boolean
 
     val isInAnyCheckpoint: Boolean
 
-    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint)
+    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean
 
     val isInAnyRaceCheckpoint: Boolean
-
-    var virtualWorldId: Boolean
 
     fun enableStuntBonus(enable: Boolean)
 
@@ -218,6 +220,8 @@ interface Player {
     fun spectate(vehicle: Vehicle, mode: SpectateType = SpectateType.NORMAL)
 
     fun stopSpectating()
+
+    val isSpectating: Boolean
 
     fun startRecording(type: PlayerRecordingType, recordName: String)
 

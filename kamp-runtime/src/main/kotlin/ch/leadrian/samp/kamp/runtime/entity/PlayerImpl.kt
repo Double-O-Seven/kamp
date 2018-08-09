@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.*
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
+import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
@@ -152,7 +153,7 @@ internal class PlayerImpl(
             nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value)
         }
 
-    override var virtualWorld: Int
+    override var virtualWorldId: Int
         get() = nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
         set(value) {
             nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
@@ -265,14 +266,24 @@ internal class PlayerImpl(
         ipAddress.value ?: "255.255.255.255"
     }
 
-    override var name: String
+    override var name: String = ""
         get() {
-            val name = ReferenceString()
-            nativeFunctionsExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
-            return name.value.orEmpty()
+            if (field.isEmpty()) {
+                val name = ReferenceString()
+                nativeFunctionsExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
+                field = name.value.orEmpty()
+            }
+            return field
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerName(playerid = id.value, name = value)
+            if (value.isEmpty()) {
+                throw InvalidPlayerNameException("", "Name cannot be empty")
+            }
+            val result = nativeFunctionsExecutor.setPlayerName(playerid = id.value, name = value)
+            when (result) {
+                -1 -> throw InvalidPlayerNameException(name = value, message = "Name is already in use, too long or invalid")
+                else -> field = value
+            }
         }
 
     override val state: PlayerState
@@ -494,71 +505,104 @@ internal class PlayerImpl(
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
         set(value) {}
 
-    override var worldBounds: Rectangle?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+    override var worldBounds: Rectangle? = null
+        set(value) {
+            field = value
+            nativeFunctionsExecutor.setPlayerWorldBounds(
+                    playerid = id.value,
+                    x_min = value?.minX ?: -20_000f,
+                    x_max = value?.maxX ?: 20_000f,
+                    y_min = value?.minY ?: -20_000f,
+                    y_max = value?.maxY ?: 20_000f
+            )
+        }
 
     override fun showPlayerMarker(player: Player, color: Color) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
     }
 
     override fun showPlayerNameTag(player: Player, show: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
     }
 
-    override val mapIcon: PlayerMapIcon?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override fun addMapIcon(mapIcon: PlayerMapIcon, index: Int) {
+        TODO("not implemented")
+    }
+
+    override fun removeMapIcon(mapIcon: PlayerMapIcon) {
+        TODO("not implemented")
+    }
 
     override fun allowTeleport(allow: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.allowPlayerTeleport(playerid = this.id.value, allow = allow)
     }
 
     override var cameraPosition: Vector3D
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionsExecutor.getPlayerCameraPos(playerid = id.value, x = x, y = y, z = z)
+            return vector3DOf(x = x.value, y = y.value, z = z.value)
+        }
+        set(value) {
+            nativeFunctionsExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+        }
 
     override fun setCameraLookAt(coordinates: Vector3D, type: CameraType) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.setPlayerCameraLookAt(
+                playerid = id.value,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z,
+                cut = type.value
+        )
     }
 
     override fun setCameraBehind() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.setCameraBehindPlayer(id.value)
     }
 
     override val cameraFrontVector: Vector3D
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionsExecutor.getPlayerCameraFrontVector(playerid = id.value, x = x, y = y, z = z)
+            return vector3DOf(x = x.value, y = y.value, z = z.value)
+        }
 
     override val cameraMode: CameraMode
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
 
     override fun enableCameraTarget(enable: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.enablePlayerCameraTarget(playerid = id.value, enable = enable)
     }
 
     override val cameraTargetObject: MapObject?
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override val cameraTargetVehicle: Vehicle?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val cameraTargetPlayer: Player?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
 
     override val cameraTargetActor: Actor?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry.getActor(it) }
 
     override val cameraAspectRatio: Float
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraAspectRatio(id.value)
 
     override val cameraZoom: Float
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerCameraZoom(id.value)
 
     override fun attachCameraToObject(mapObject: MapObject) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
     override fun attachCameraToPlayerObject(playerMapObject: PlayerMapObject) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
     }
 
     override fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType) {
@@ -569,53 +613,72 @@ internal class PlayerImpl(
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
-    override fun isInVehicle(vehicle: Vehicle) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isInVehicle(vehicle: Vehicle): Boolean =
+            nativeFunctionsExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
 
     override val isInAnyVehicle: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.isPlayerInAnyVehicle(id.value)
 
-    override fun isInCheckpoint(checkpoint: Checkpoint) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isInCheckpoint(checkpoint: Checkpoint): Boolean =
+            this.checkpoint == checkpoint && isInAnyCheckpoint
 
     override val isInAnyCheckpoint: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.isPlayerInCheckpoint(id.value)
 
-    override fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean =
+            this.raceCheckpoint == raceCheckpoint && isInAnyRaceCheckpoint
 
     override val isInAnyRaceCheckpoint: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-
-    override var virtualWorldId: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
-        set(value) {}
+        get() = nativeFunctionsExecutor.isPlayerInRaceCheckpoint(id.value)
 
     override fun enableStuntBonus(enable: Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.enableStuntBonusForPlayer(playerid = id.value, enable = enable)
     }
 
     override fun spectate(player: Player, mode: SpectateType) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (!isSpectating) {
+            toggleSpectating(true)
+        }
+        nativeFunctionsExecutor.playerSpectatePlayer(
+                playerid = this.id.value,
+                targetplayerid = player.id.value,
+                mode = mode.value
+        )
     }
 
     override fun spectate(vehicle: Vehicle, mode: SpectateType) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (!isSpectating) {
+            toggleSpectating(true)
+        }
+        nativeFunctionsExecutor.playerSpectateVehicle(
+                playerid = this.id.value,
+                targetvehicleid = vehicle.id.value,
+                mode = mode.value
+        )
     }
 
     override fun stopSpectating() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        toggleSpectating(false)
     }
 
+    private fun toggleSpectating(toggle: Boolean) {
+        nativeFunctionsExecutor.togglePlayerSpectating(playerid = id.value, toggle = toggle)
+        isSpectating = toggle
+    }
+
+    override var isSpectating: Boolean = false
+        private set
+
     override fun startRecording(type: PlayerRecordingType, recordName: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.startRecordingPlayerData(
+                playerid = id.value,
+                recordtype = type.value,
+                recordname = recordName
+        )
     }
 
     override fun stopRecording() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.stopRecordingPlayerData(id.value)
     }
 
     override fun createExplosion(type: ExplosionType, area: Sphere) {
@@ -627,20 +690,22 @@ internal class PlayerImpl(
     }
 
     override val isAdmin: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.isPlayerAdmin(id.value)
 
-    override val isNPC: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val isNPC: Boolean by lazy { nativeFunctionsExecutor.isPlayerNPC(id.value) }
 
     override val isHuman: Boolean
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = !isNPC
 
     override fun kick() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        nativeFunctionsExecutor.kick(id.value)
     }
 
     override fun ban(reason: String?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        when {
+            reason != null && reason.isNotBlank() -> nativeFunctionsExecutor.banEx(playerid = id.value, reason = reason)
+            else -> nativeFunctionsExecutor.ban(id.value)
+        }
     }
 
     override val version: String

@@ -24,8 +24,8 @@ internal class VehicleRegistry {
     }
 
     fun getVehicle(vehicleId: Int): Vehicle? =
-            when {
-                0 <= vehicleId && vehicleId < vehicles.size -> vehicles[vehicleId]
+            when (vehicleId) {
+                in (0 until vehicles.size) -> vehicles[vehicleId]
                 else -> null
             }
 

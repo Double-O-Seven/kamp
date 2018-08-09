@@ -24,8 +24,8 @@ internal class ActorRegistry {
     }
 
     fun getActor(actorId: Int): Actor? =
-            when {
-                0 <= actorId && actorId < actors.size -> actors[actorId]
+            when (actorId) {
+                in (0 until actors.size) -> actors[actorId]
                 else -> null
             }
 

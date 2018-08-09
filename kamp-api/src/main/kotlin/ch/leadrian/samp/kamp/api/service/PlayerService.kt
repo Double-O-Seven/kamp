@@ -37,4 +37,8 @@ interface PlayerService {
     fun limitGlobalChatRadius(radius: Float)
 
     fun limitPlayerMarkerRadius(radius: Float)
+
+    fun getPlayerByName(name: String): Player?
+
+    fun findPlayersByName(name: String): List<Player>
 }

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.runtime.entity.registry
 
+import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import io.mockk.every
@@ -7,12 +8,14 @@ import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class PlayerRegistryTest {
 
-    @Test
-    fun shouldRegisterAndGetPlayer() {
-        val playerId = 50
+    @ParameterizedTest
+    @ValueSource(ints = [0, SAMPConstants.MAX_PLAYERS - 1])
+    fun shouldRegisterAndGetPlayer(playerId: Int) {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
