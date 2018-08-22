@@ -88,9 +88,7 @@ interface Player {
 
     fun setWeather(weatherId: Int)
 
-    fun setWeather(weather: Weather) {
-        setWeather(weather.value)
-    }
+    fun setWeather(weather: Weather)
 
     fun forceClassSelection()
 

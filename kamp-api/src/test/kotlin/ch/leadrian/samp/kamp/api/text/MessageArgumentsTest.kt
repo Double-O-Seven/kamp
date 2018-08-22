@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.text
 
-import ch.leadrian.samp.kamp.api.data.COLOR_WHITE
+import ch.leadrian.samp.kamp.api.data.Colors
 import ch.leadrian.samp.kamp.api.data.colorOf
 import ch.leadrian.samp.kamp.api.entity.Player
 import io.mockk.every
@@ -41,7 +41,7 @@ internal class MessageArgumentsTest {
         )
         val messageArgument = translate { locale -> translations[locale]!! }
 
-        val text = messageArgument.get(Locale(language, country), COLOR_WHITE)
+        val text = messageArgument.get(Locale(language, country), Colors.WHITE)
 
         assertThat(text)
                 .isEqualTo(expectedText)

@@ -38,7 +38,7 @@ def playersIDLFile = "${idlFilesDir}/a_players.idl"
 def sampIDLFile = "${idlFilesDir}/a_samp.idl"
 def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
-def generatedSAMPCallbacksJavaFile = "${generatedSrcJavaDir}/ch/leadrian/samp/kamp/runtime/SAMPCallbacks.java"
+def generatedSAMPCallbacksJavaFile = "${generatedSrcJavaDir}/" + runtimePackageName.replace('.', '/') + "/SAMPCallbacks.java"
 
 task generateSAMPCallbacksClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'
@@ -53,7 +53,7 @@ task generateSAMPCallbacksClass(type: JavaExec) {
     outputs.file generatedSAMPCallbacksJavaFile
 }
 
-def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcJavaDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctions.java"
+def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcJavaDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctions.java"
 
 task generateSAMPNativeFunctionsClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'
@@ -68,7 +68,7 @@ task generateSAMPNativeFunctionsClass(type: JavaExec) {
     outputs.file generatedSAMPNativeFunctionsJavaFile
 }
 
-def generatedSAMPNativeFunctionExecutorKotlinFile = "${generatedSrcKotlinDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctionExecutor.kt"
+def generatedSAMPNativeFunctionExecutorKotlinFile = "${generatedSrcKotlinDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctionExecutor.kt"
 
 task generateSAMPNativeFunctionExecutorClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'
@@ -83,7 +83,7 @@ task generateSAMPNativeFunctionExecutorClass(type: JavaExec) {
     outputs.file generatedSAMPNativeFunctionExecutorKotlinFile
 }
 
-def generatedSAMPNativeFunctionExecutorImplKotlinFile = "${generatedSrcKotlinDir}/ch/leadrian/samp/kamp/runtime/SAMPNativeFunctionExecutorImpl.kt"
+def generatedSAMPNativeFunctionExecutorImplKotlinFile = "${generatedSrcKotlinDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctionExecutorImpl.kt"
 
 task generateSAMPNativeFunctionExecutorImplClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'

@@ -11,9 +11,7 @@ interface WorldService {
 
     fun setWeather(weatherId: Int)
 
-    fun setWeather(weather: Weather) {
-        setWeather(weather.value)
-    }
+    fun setWeather(weather: Weather)
 
     fun setGravity(gravity: Float)
 

@@ -12,7 +12,9 @@ dependencies {
             "com.netflix.governator:governator-api:$governatorVersion"
     )
 
-    apiCodegen project(':kamp-codegen')
+    apiCodegen(
+            project(':kamp-codegen')
+    )
 }
 
 def generatedSrcDir = "${buildDir}/generated-src/main/java"
@@ -37,7 +39,7 @@ def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
 
 def constantsPackageName = "${apiPackageName}.constants"
 
-def generatedSAMPConstantsJavaFile = "${generatedSrcDir}/ch/leadrian/samp/kamp/runtime/SAMPConstants.java"
+def generatedSAMPConstantsJavaFile = file("${generatedSrcDir}/" + constantsPackageName.replace('.', '/') + "/SAMPConstants.java")
 
 task generateSAMPConstantsClass(type: JavaExec) {
     dependsOn ':kamp-codegen:classes'

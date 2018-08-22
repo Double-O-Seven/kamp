@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.runtime.text
 
-import ch.leadrian.samp.kamp.api.data.COLOR_RED
+import ch.leadrian.samp.kamp.api.data.Colors
 import ch.leadrian.samp.kamp.api.text.HasTextKey
 import ch.leadrian.samp.kamp.api.text.MessageArgument
 import ch.leadrian.samp.kamp.api.text.TextKey
@@ -16,7 +16,7 @@ internal class MessageFormatterImplTest {
     @Test
     fun shouldFormatMessage() {
         val locale = Locale.GERMANY
-        val color = COLOR_RED
+        val color = Colors.RED
         val textKey1 = TextKey("test.key.abc")
         val textKey2 = TextKey("test.key.def")
         val messageArgument = mockk<MessageArgument> {

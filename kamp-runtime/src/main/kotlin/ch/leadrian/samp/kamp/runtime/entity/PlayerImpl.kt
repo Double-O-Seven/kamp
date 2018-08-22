@@ -325,6 +325,10 @@ internal class PlayerImpl(
         nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
     }
 
+    override fun setWeather(weather: Weather) {
+        nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weather.value)
+    }
+
     override fun forceClassSelection() {
         nativeFunctionsExecutor.forceClassSelection(id.value)
     }
