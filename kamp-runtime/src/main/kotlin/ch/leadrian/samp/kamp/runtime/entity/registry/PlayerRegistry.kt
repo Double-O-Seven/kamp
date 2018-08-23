@@ -1,13 +1,16 @@
 package ch.leadrian.samp.kamp.runtime.entity.registry
 
-import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.Player
+import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-internal class PlayerRegistry {
+internal class PlayerRegistry
+@Inject
+constructor(nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
-    private val players: Array<Player?> = arrayOfNulls(SAMPConstants.MAX_PLAYERS)
+    private val players: Array<Player?> = arrayOfNulls(nativeFunctionExecutor.getMaxPlayers())
 
     fun register(player: Player) {
         if (players[player.id.value] != null) {

@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +20,10 @@ internal class PlayerRegistryTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
 
         playerRegistry.register(player)
 
@@ -37,7 +41,10 @@ internal class PlayerRegistryTest {
         val newPlayer = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
         playerRegistry.register(alreadyRegisteredPlayer)
 
         val caughtThrowable = catchThrowable { playerRegistry.register(newPlayer) }
@@ -55,7 +62,10 @@ internal class PlayerRegistryTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
         playerRegistry.register(player)
 
         playerRegistry.unregister(player)
@@ -72,7 +82,10 @@ internal class PlayerRegistryTest {
         val player = mockk<Player> {
             every { id } returns playerId
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
 
         val caughtThrowable = catchThrowable { playerRegistry.unregister(player) }
 
@@ -89,7 +102,10 @@ internal class PlayerRegistryTest {
         val newPlayer = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
         playerRegistry.register(alreadyRegisteredPlayer)
 
         val caughtThrowable = catchThrowable { playerRegistry.unregister(newPlayer) }
@@ -115,7 +131,10 @@ internal class PlayerRegistryTest {
         val player3 = mockk<Player> {
             every { id } returns playerId3
         }
-        val playerRegistry = PlayerRegistry()
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
         playerRegistry.register(player1)
         playerRegistry.register(player2)
         playerRegistry.register(player3)
