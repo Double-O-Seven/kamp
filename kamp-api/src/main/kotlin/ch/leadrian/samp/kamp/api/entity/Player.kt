@@ -116,7 +116,7 @@ interface Player {
 
     val lastShotVectors: LastShotVectors
 
-    fun getAttachedObjectSlot(index: Int): AttachedObjectSlot
+    val attachedObjectSlots: List<AttachedObjectSlot>
 
     val playerVars: PlayerVars
 

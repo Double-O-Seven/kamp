@@ -17,7 +17,7 @@ interface AttachedObjectSlot : HasPlayer {
 
     fun attach(attachedObject: AttachedObject)
 
-    fun getAttachedObject(): AttachedObject?
+    val attachedObject: AttachedObject?
 
     fun onEdit(onEdit: AttachedObjectSlot.(AttachedObjectEditResponse, Int, Bone, Vector3D, Vector3D, Vector3D) -> Boolean)
 

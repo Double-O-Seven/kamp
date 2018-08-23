@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
+import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
@@ -20,6 +21,7 @@ internal class PlayerImpl(
         private val actorRegistry: ActorRegistry,
         private val playerRegistry: PlayerRegistry,
         private val vehicleRegistry: VehicleRegistry,
+        private val mapObjectRegistry: MapObjectRegistry,
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
@@ -32,9 +34,7 @@ internal class PlayerImpl(
     override var locale: Locale = Locale.getDefault()
 
     fun onDisconnect() {
-        if (!isOnline) {
-            throw IllegalStateException("Player cannot disconnect twice")
-        }
+        if (!isOnline) return
         isOnline = false
         playerRegistry.unregister(this)
         this.id = PlayerId.INVALID
@@ -393,7 +393,7 @@ internal class PlayerImpl(
         get() = nativeFunctionsExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val surfingObject: MapObject?
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.getMapObject(it) }
 
     override fun removeBuilding(modelId: Int, position: Sphere) {
         nativeFunctionsExecutor.removeBuildingForPlayer(
@@ -429,9 +429,14 @@ internal class PlayerImpl(
             )
         }
 
-    override fun getAttachedObjectSlot(index: Int): AttachedObjectSlot {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override val attachedObjectSlots: List<AttachedObjectSlotImpl> =
+            (0..9).map {
+                AttachedObjectSlotImpl(
+                        player = this,
+                        index = it,
+                        nativeFunctionsExecutor = nativeFunctionsExecutor
+                )
+            }.let { Collections.unmodifiableList(it) }
 
     override val playerVars: PlayerVars = PlayerVarsImpl(this, nativeFunctionsExecutor)
 
