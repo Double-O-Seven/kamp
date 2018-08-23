@@ -4,7 +4,7 @@ data class DialogId internal constructor(val value: Int) {
 
     companion object {
 
-        private val dialogIds: Array<DialogId> = (0..255).map { DialogId(it) }.toTypedArray()
+        private val dialogIds: Array<DialogId> = (0 until 255).map { DialogId(it) }.toTypedArray()
 
         fun valueOf(value: Int): DialogId =
                 when {

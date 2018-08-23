@@ -8,7 +8,7 @@ data class PlayerTextDrawId internal constructor(val value: Int) {
 
         val INVALID = PlayerTextDrawId(SAMPConstants.INVALID_TEXT_DRAW)
 
-        private val playerTextDrawIds: Array<PlayerTextDrawId> = (0..SAMPConstants.MAX_PLAYER_TEXT_DRAWS).map { PlayerTextDrawId(it) }.toTypedArray()
+        private val playerTextDrawIds: Array<PlayerTextDrawId> = (0 until SAMPConstants.MAX_PLAYER_TEXT_DRAWS).map { PlayerTextDrawId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PlayerTextDrawId =
                 when {

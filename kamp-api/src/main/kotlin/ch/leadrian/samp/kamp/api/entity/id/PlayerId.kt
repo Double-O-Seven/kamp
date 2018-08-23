@@ -8,7 +8,7 @@ data class PlayerId internal constructor(val value: Int) {
 
         val INVALID = PlayerId(SAMPConstants.INVALID_PLAYER_ID)
 
-        private val playerIds: Array<PlayerId> = (0..SAMPConstants.MAX_PLAYERS).map { PlayerId(it) }.toTypedArray()
+        private val playerIds: Array<PlayerId> = (0 until SAMPConstants.MAX_PLAYERS).map { PlayerId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PlayerId =
                 when {

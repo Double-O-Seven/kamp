@@ -8,7 +8,7 @@ data class PlayerMapObjectId internal constructor(val value: Int) {
 
         val INVALID = PlayerMapObjectId(SAMPConstants.INVALID_OBJECT_ID)
 
-        private val playerMapObjectId: Array<PlayerMapObjectId> = (0..SAMPConstants.MAX_OBJECTS).map { PlayerMapObjectId(it) }.toTypedArray()
+        private val playerMapObjectId: Array<PlayerMapObjectId> = (0 until SAMPConstants.MAX_OBJECTS).map { PlayerMapObjectId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PlayerMapObjectId =
                 when {

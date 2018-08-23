@@ -8,7 +8,7 @@ data class GangZoneId internal constructor(val value: Int) {
 
         val INVALID = GangZoneId(SAMPConstants.INVALID_GANG_ZONE)
 
-        private val gangZoneIds: Array<GangZoneId> = (0..SAMPConstants.MAX_GANG_ZONES).map { GangZoneId(it) }.toTypedArray()
+        private val gangZoneIds: Array<GangZoneId> = (0 until SAMPConstants.MAX_GANG_ZONES).map { GangZoneId(it) }.toTypedArray()
 
         fun valueOf(value: Int): GangZoneId =
                 when {

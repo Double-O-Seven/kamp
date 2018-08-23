@@ -8,7 +8,7 @@ data class PlayerTextLabelId internal constructor(val value: Int) {
 
         val INVALID = PlayerTextLabelId(SAMPConstants.INVALID_3DTEXT_ID)
 
-        private val playerTextLabelIds: Array<PlayerTextLabelId> = (0..SAMPConstants.MAX_3DTEXT_PLAYER).map { PlayerTextLabelId(it) }.toTypedArray()
+        private val playerTextLabelIds: Array<PlayerTextLabelId> = (0 until SAMPConstants.MAX_3DTEXT_PLAYER).map { PlayerTextLabelId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PlayerTextLabelId =
                 when {

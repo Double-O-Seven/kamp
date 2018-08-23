@@ -8,7 +8,7 @@ data class MenuId internal constructor(val value: Int) {
 
         val INVALID = MenuId(SAMPConstants.INVALID_MENU)
 
-        private val menuIds: Array<MenuId> = (0..SAMPConstants.MAX_MENUS).map { MenuId(it) }.toTypedArray()
+        private val menuIds: Array<MenuId> = (0 until SAMPConstants.MAX_MENUS).map { MenuId(it) }.toTypedArray()
 
         fun valueOf(value: Int): MenuId =
                 when {

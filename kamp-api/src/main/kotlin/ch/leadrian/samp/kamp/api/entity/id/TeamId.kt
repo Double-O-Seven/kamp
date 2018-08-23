@@ -8,7 +8,7 @@ data class TeamId internal constructor(val value: Int) {
 
         val NO_TEAM = TeamId(SAMPConstants.NO_TEAM)
 
-        private val teamIds: Array<TeamId> = (0..256).map { TeamId(it) }.toTypedArray()
+        private val teamIds: Array<TeamId> = (0 until 255).map { TeamId(it) }.toTypedArray()
 
         fun valueOf(value: Int): TeamId =
                 when {

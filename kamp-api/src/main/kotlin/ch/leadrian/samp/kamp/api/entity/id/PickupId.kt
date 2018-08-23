@@ -8,7 +8,7 @@ data class PickupId internal constructor(val value: Int) {
 
         val INVALID = PickupId(-1)
 
-        private val pickupIds: Array<PickupId> = (0..SAMPConstants.MAX_PICKUPS).map { PickupId(it) }.toTypedArray()
+        private val pickupIds: Array<PickupId> = (0 until SAMPConstants.MAX_PICKUPS).map { PickupId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PickupId =
                 when {

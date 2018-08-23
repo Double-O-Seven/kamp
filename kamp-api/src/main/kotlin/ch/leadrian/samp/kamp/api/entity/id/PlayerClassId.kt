@@ -4,7 +4,7 @@ data class PlayerClassId internal constructor(val value: Int) {
 
     companion object {
 
-        private val playerClassIds: Array<PlayerClassId> = (0..320).map { PlayerClassId(it) }.toTypedArray()
+        private val playerClassIds: Array<PlayerClassId> = (0 until 320).map { PlayerClassId(it) }.toTypedArray()
 
         fun valueOf(value: Int): PlayerClassId =
                 when {
