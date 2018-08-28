@@ -59,7 +59,7 @@ internal class AttachedObjectSlotImpl(
         onEditHandlers += onEdit
     }
 
-    fun onEdit(
+    internal fun onEdit(
             response: AttachedObjectEditResponse,
             modelId: Int,
             bone: Bone,

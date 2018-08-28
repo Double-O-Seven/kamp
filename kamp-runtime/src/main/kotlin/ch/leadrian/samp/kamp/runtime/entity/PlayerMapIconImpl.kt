@@ -71,7 +71,7 @@ internal class PlayerMapIconImpl internal constructor(
         if (isDestroyed) return
 
         isDestroyed = true
-        player.mapIconsById.remove(id, this)
+        player.unregisterMapIcon(this)
         if (player.isOnline) {
             nativeFunctionsExecutor.removePlayerMapIcon(playerid = player.id.value, iconid = id.value)
         }

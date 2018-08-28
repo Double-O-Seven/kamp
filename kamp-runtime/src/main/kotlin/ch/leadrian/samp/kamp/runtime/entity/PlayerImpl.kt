@@ -26,6 +26,12 @@ internal class PlayerImpl(
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
+    private val onSpawnHandlers: MutableList<Player.() -> Boolean> = mutableListOf()
+
+    private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Boolean> = mutableListOf()
+
+    private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIconImpl> = mutableMapOf()
+
     override val id: PlayerId = id
         get() = requireOnline { field }
 
@@ -573,12 +579,11 @@ internal class PlayerImpl(
         nativeFunctionsExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
     }
 
-    internal val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIconImpl> = mutableMapOf()
-
     override val mapIcons: List<PlayerMapIcon>
         get() = mapIconsById.values.toList()
 
     override fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon {
+        requireOnline()
         mapIconsById[playerMapIconId]?.destroy()
         val playerMapIcon = PlayerMapIconImpl(
                 player = this,
@@ -591,6 +596,10 @@ internal class PlayerImpl(
         )
         mapIconsById[playerMapIconId] = playerMapIcon
         return playerMapIcon
+    }
+
+    internal fun unregisterMapIcon(mapIcon: PlayerMapIcon) {
+        mapIconsById.remove(mapIcon.id, mapIcon)
     }
 
     override fun allowTeleport(allow: Boolean) {
@@ -789,9 +798,13 @@ internal class PlayerImpl(
         )
     }
 
-    override val isAdmin: Boolean
+    override var isAdmin: Boolean = false
+        private set
         get() {
-            return nativeFunctionsExecutor.isPlayerAdmin(id.value)
+            if (!field) {
+                field = nativeFunctionsExecutor.isPlayerAdmin(id.value)
+            }
+            return field
         }
 
     override val isNPC: Boolean by lazy {
@@ -849,11 +862,19 @@ internal class PlayerImpl(
     }
 
     override fun onSpawn(onSpawn: Player.() -> Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        onSpawnHandlers += onSpawn
+    }
+
+    internal fun onSpawn() {
+        onSpawnHandlers.forEach { it.invoke(this) }
     }
 
     override fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Boolean) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        onDeathHandlers += onDeath
+    }
+
+    internal fun onSpawn(killer: Player?, weapon: WeaponModel) {
+        onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
 
     override val menu: Menu?

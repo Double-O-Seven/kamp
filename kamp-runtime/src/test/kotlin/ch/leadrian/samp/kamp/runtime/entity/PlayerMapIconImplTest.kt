@@ -6,11 +6,8 @@ import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
@@ -251,11 +248,10 @@ internal class PlayerMapIconImplTest {
 
         @Test
         fun givenPlayerIsNotOnlineItShouldDestroyPlayerMapIcon() {
-            val mapIconsById = mutableMapOf<PlayerMapIconId, PlayerMapIconImpl>()
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
                 every { isOnline } returns false
-                every { this@mockk.mapIconsById } returns mapIconsById
+                every { unregisterMapIcon(any()) } just Runs
             }
             val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
@@ -269,34 +265,21 @@ internal class PlayerMapIconImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     nativeFunctionsExecutor = nativeFunctionsExecutor
             )
-            val otherPlayerMapIcon = PlayerMapIconImpl(
-                    player = player,
-                    id = PlayerMapIconId.valueOf(99),
-                    type = MapIconType.AIR_YARD,
-                    color = Colors.BLUE,
-                    style = MapIconStyle.LOCAL,
-                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
-            )
-            mapIconsById[playerMapIcon.id] = playerMapIcon
-            mapIconsById[otherPlayerMapIcon.id] = otherPlayerMapIcon
 
             playerMapIcon.destroy()
 
             assertThat(playerMapIcon.isDestroyed)
                     .isTrue()
-            assertThat(mapIconsById)
-                    .containsOnly(entry(otherPlayerMapIcon.id, otherPlayerMapIcon))
+            verify { player.unregisterMapIcon(playerMapIcon) }
             verify(exactly = 0) { nativeFunctionsExecutor.removePlayerMapIcon(any(), any()) }
         }
 
         @Test
         fun givenPlayerIsOnlineItShouldDestroyPlayerMapIcon() {
-            val mapIconsById = mutableMapOf<PlayerMapIconId, PlayerMapIconImpl>()
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
                 every { isOnline } returns true
-                every { this@mockk.mapIconsById } returns mapIconsById
+                every { unregisterMapIcon(any()) } just Runs
             }
             val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
@@ -311,24 +294,12 @@ internal class PlayerMapIconImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     nativeFunctionsExecutor = nativeFunctionsExecutor
             )
-            val otherPlayerMapIcon = PlayerMapIconImpl(
-                    player = player,
-                    id = PlayerMapIconId.valueOf(99),
-                    type = MapIconType.AIR_YARD,
-                    color = Colors.BLUE,
-                    style = MapIconStyle.LOCAL,
-                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
-            )
-            mapIconsById[playerMapIcon.id] = playerMapIcon
-            mapIconsById[otherPlayerMapIcon.id] = otherPlayerMapIcon
 
             playerMapIcon.destroy()
 
             assertThat(playerMapIcon.isDestroyed)
                     .isTrue()
-            assertThat(mapIconsById)
-                    .containsOnly(entry(otherPlayerMapIcon.id, otherPlayerMapIcon))
+            verify { player.unregisterMapIcon(playerMapIcon) }
             verify(exactly = 1) { nativeFunctionsExecutor.removePlayerMapIcon(playerid = 99, iconid = 13) }
         }
     }
