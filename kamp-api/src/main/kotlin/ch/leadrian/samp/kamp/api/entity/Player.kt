@@ -245,8 +245,6 @@ interface Player {
 
     val version: String
 
-    val networkStatisticsString: String
-
     val networkStatistics: PlayerNetworkStatistics
 
     fun selectTextDraw(hoverColor: Color)
@@ -271,4 +269,9 @@ interface Player {
 fun Player.requireOnline(): Player {
     if (!isOnline) throw PlayerOfflineException("Player with ID ${id.value} is already offline")
     return this
+}
+
+inline fun <T> Player.requireOnline(block: Player.() -> T): T {
+    requireOnline()
+    return block(this)
 }

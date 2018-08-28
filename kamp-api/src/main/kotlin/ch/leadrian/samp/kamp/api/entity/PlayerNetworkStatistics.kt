@@ -22,5 +22,5 @@ interface PlayerNetworkStatistics : HasPlayer {
 
     val ipAndPort: String
 
-    fun toSummarizedString(): String
+    val summarizedString: String
 }

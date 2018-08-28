@@ -26,8 +26,8 @@ internal class PlayerImpl(
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
-    override var id: PlayerId = id
-        private set
+    override val id: PlayerId = id
+        get() = requireOnline { field }
 
     override var isOnline: Boolean = true
         private set
@@ -41,7 +41,6 @@ internal class PlayerImpl(
         destroyMapIcons()
 
         playerRegistry.unregister(this)
-        this.id = PlayerId.INVALID
     }
 
     private fun destroyMapIcons() {
@@ -49,12 +48,10 @@ internal class PlayerImpl(
     }
 
     override fun spawn() {
-        requireOnline()
         nativeFunctionsExecutor.spawnPlayer(id.value)
     }
 
     override fun setSpawnInfo(spawnInfo: SpawnInfo) {
-        requireOnline()
         nativeFunctionsExecutor.setSpawnInfo(
                 playerid = id.value,
                 team = spawnInfo.teamId.value,
@@ -74,7 +71,6 @@ internal class PlayerImpl(
 
     override var coordinates: Vector3D
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -82,13 +78,11 @@ internal class PlayerImpl(
             return vector3DOf(x = x.value, y = y.value, z = z.value)
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
     override var position: Position
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -98,14 +92,12 @@ internal class PlayerImpl(
             return positionOf(x = x.value, y = y.value, z = z.value, angle = angle.value)
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
             nativeFunctionsExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
         }
 
     override var location: Location
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -121,7 +113,6 @@ internal class PlayerImpl(
             )
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
             nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
             nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
@@ -129,7 +120,6 @@ internal class PlayerImpl(
 
     override var angledLocation: AngledLocation
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -148,7 +138,6 @@ internal class PlayerImpl(
             )
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
             nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
             nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
@@ -157,162 +146,106 @@ internal class PlayerImpl(
 
     override var angle: Float
         get() {
-            requireOnline()
             val angle = ReferenceFloat()
             nativeFunctionsExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
             return angle.value
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerFacingAngle(playerid = id.value, angle = value)
         }
 
     override var interiorId: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerInterior(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerInterior(id.value)
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value)
         }
 
     override var virtualWorldId: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
         }
 
     override fun setPositionFindZ(coordinates: Vector3D) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerPosFindZ(playerid = id.value, x = position.x, y = position.y, z = position.z)
     }
 
-    override fun isStreamedIn(forPlayer: Player): Boolean {
-        requireOnline()
-        forPlayer.requireOnline()
-        return nativeFunctionsExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
-    }
+    override fun isStreamedIn(forPlayer: Player): Boolean =
+            nativeFunctionsExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
 
     override var health: Float
         get() {
-            requireOnline()
             val health = ReferenceFloat()
             nativeFunctionsExecutor.getPlayerHealth(playerid = id.value, health = health)
             return health.value
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerHealth(playerid = id.value, health = value)
         }
 
     override var armour: Float
         get() {
-            requireOnline()
             val armour = ReferenceFloat()
             nativeFunctionsExecutor.getPlayerArmour(playerid = id.value, armour = armour)
             return armour.value
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerArmour(playerid = id.value, armour = value)
         }
 
     override fun setAmmo(weaponModel: WeaponModel, ammo: Int) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerAmmo(playerid = id.value, weaponid = weaponModel.value, ammo = ammo)
     }
 
     override val ammo: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerAmmo(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerAmmo(id.value)
 
     override val weaponState: WeaponState
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
 
     override val targetPlayer: Player?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
 
     override val targetActor: Actor?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerTargetActor(id.value).let { actorRegistry.getActor(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerTargetActor(id.value).let { actorRegistry.getActor(it) }
 
     override var team: TeamId
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerTeam(playerid = id.value, teamid = value.value)
         }
 
     override var score: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerScore(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerScore(id.value)
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerScore(playerid = id.value, score = value)
         }
 
     override var drunkLevel: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerDrunkLevel(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerDrunkLevel(id.value)
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerDrunkLevel(playerid = id.value, level = value)
         }
 
     override var color: Color
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerColor(id.value).let { colorOf(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerColor(id.value).let { colorOf(it) }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerColor(playerid = id.value, color = value.value)
         }
 
     override var skin: SkinModel
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerSkin(id.value).let { SkinModel[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerSkin(id.value).let { SkinModel[it] }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerSkin(playerid = id.value, skinid = value.value)
         }
 
     override var armedWeapon: WeaponModel
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerWeapon(id.value).let { WeaponModel[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerWeapon(id.value).let { WeaponModel[it] }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerArmedWeapon(playerid = id.value, weaponid = value.value)
         }
 
     override fun getWeaponData(slot: WeaponSlot): WeaponData {
-        requireOnline()
         val weapon = ReferenceInt()
         val ammo = ReferenceInt()
         nativeFunctionsExecutor.getPlayerWeaponData(playerid = id.value, slot = slot.value, weapon = weapon, ammo = ammo)
@@ -320,35 +253,27 @@ internal class PlayerImpl(
     }
 
     override var money: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerMoney(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerMoney(id.value)
         set(value) {
-            requireOnline()
             val moneyToGive = value - nativeFunctionsExecutor.getPlayerMoney(id.value)
             nativeFunctionsExecutor.givePlayerMoney(playerid = id.value, money = moneyToGive)
         }
 
     override fun giveMoney(amount: Int) {
-        requireOnline()
         nativeFunctionsExecutor.givePlayerMoney(playerid = id.value, money = amount)
     }
 
     override fun resetMoney() {
-        requireOnline()
         nativeFunctionsExecutor.resetPlayerMoney(id.value)
     }
 
     override val ipAddress: String by lazy {
-        requireOnline()
         val ipAddress = ReferenceString()
         nativeFunctionsExecutor.getPlayerIp(playerid = id.value, ip = ipAddress, size = 16)
         ipAddress.value ?: "255.255.255.255"
     }
 
     override val gpci: String by lazy {
-        requireOnline()
         val gpci = ReferenceString()
         nativeFunctionsExecutor.gpci(playerid = id.value, buffer = gpci, size = 41)
         gpci.value ?: ""
@@ -356,7 +281,6 @@ internal class PlayerImpl(
 
     override var name: String = ""
         get() {
-            requireOnline()
             if (field.isEmpty()) {
                 val name = ReferenceString()
                 nativeFunctionsExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
@@ -365,7 +289,6 @@ internal class PlayerImpl(
             return field
         }
         set(value) {
-            requireOnline()
             if (value.isEmpty()) {
                 throw InvalidPlayerNameException("", "Name cannot be empty")
             }
@@ -377,20 +300,13 @@ internal class PlayerImpl(
         }
 
     override val state: PlayerState
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerState(id.value).let { PlayerState[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerState(id.value).let { PlayerState[it] }
 
     override val ping: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerPing(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerPing(id.value)
 
     override val keys: PlayerKeys
         get() {
-            requireOnline()
             val keys = ReferenceInt()
             val leftRight = ReferenceInt()
             val upDown = ReferenceInt()
@@ -405,60 +321,44 @@ internal class PlayerImpl(
 
     override var time: Time
         get() {
-            requireOnline()
             val hour = ReferenceInt()
             val minute = ReferenceInt()
             nativeFunctionsExecutor.getPlayerTime(playerid = id.value, hour = hour, minute = minute)
             return timeOf(hour = hour.value, minute = minute.value)
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerTime(playerid = id.value, hour = value.hour, minute = value.minute)
         }
 
     override fun toggleClock(toggle: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
     }
 
     override fun setWeather(weatherId: Int) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
     }
 
     override fun setWeather(weather: Weather) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weather.value)
     }
 
     override fun forceClassSelection() {
-        requireOnline()
         nativeFunctionsExecutor.forceClassSelection(id.value)
     }
 
     override var wantedLevel: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerWantedLevel(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerWantedLevel(id.value)
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerWantedLevel(playerid = id.value, level = value)
         }
 
     override var fightingStyle: FightingStyle
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerFightingStyle(id.value).let { FightingStyle[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerFightingStyle(id.value).let { FightingStyle[it] }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerFightingStyle(playerid = id.value, style = value.value)
         }
 
     override fun playCrimeReport(suspect: Player, crimeReport: CrimeReport) {
-        requireOnline()
-        suspect.requireOnline()
         nativeFunctionsExecutor.playCrimeReportForPlayer(
                 playerid = id.value,
                 crime = crimeReport.value,
@@ -467,7 +367,6 @@ internal class PlayerImpl(
     }
 
     override fun playAudioStream(url: String, position: Sphere, usePosition: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.playAudioStreamForPlayer(
                 playerid = id.value,
                 url = url,
@@ -480,7 +379,6 @@ internal class PlayerImpl(
     }
 
     override fun playAudioStream(url: String) {
-        requireOnline()
         nativeFunctionsExecutor.playAudioStreamForPlayer(
                 playerid = id.value,
                 url = url,
@@ -493,34 +391,24 @@ internal class PlayerImpl(
     }
 
     override fun stopAudioStream() {
-        requireOnline()
         nativeFunctionsExecutor.stopAudioStreamForPlayer(id.value)
     }
 
     override fun setShopName(shopName: ShopName) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
     }
 
     override fun setSkillLevel(skill: WeaponSkill, level: Int) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerSkillLevel(playerid = id.value, skill = skill.value, level = level)
     }
 
     override val surfingVehicle: Vehicle?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val surfingObject: MapObject?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.getMapObject(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.getMapObject(it) }
 
     override fun removeBuilding(modelId: Int, position: Sphere) {
-        requireOnline()
         nativeFunctionsExecutor.removeBuildingForPlayer(
                 playerid = id.value,
                 modelid = modelId,
@@ -533,7 +421,6 @@ internal class PlayerImpl(
 
     override val lastShotVectors: LastShotVectors
         get() {
-            requireOnline()
             val hitPosX = ReferenceFloat()
             val hitPosY = ReferenceFloat()
             val hitPosZ = ReferenceFloat()
@@ -567,7 +454,6 @@ internal class PlayerImpl(
     override val playerVars: PlayerVars = PlayerVarsImpl(this, nativeFunctionsExecutor)
 
     override fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerChatBubble(
                 playerid = id.value,
                 text = text,
@@ -578,29 +464,20 @@ internal class PlayerImpl(
     }
 
     override val vehicle: Vehicle?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val vehicleSeat: Int?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
-        }
+        get() = nativeFunctionsExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
 
     override fun removeFromVehicle() {
-        requireOnline()
         nativeFunctionsExecutor.removePlayerFromVehicle(id.value)
     }
 
     override fun toggleControllable(toggle: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
     }
 
     override fun playSound(soundId: Int, coordinates: Vector3D) {
-        requireOnline()
         nativeFunctionsExecutor.playerPlaySound(
                 playerid = id.value,
                 soundid = soundId,
@@ -611,7 +488,6 @@ internal class PlayerImpl(
     }
 
     override fun applyAnimation(animation: Animation, fDelta: Float, loop: Boolean, lockX: Boolean, lockY: Boolean, freeze: Boolean, time: Int, forceSync: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.applyAnimation(
                 playerid = id.value,
                 animlib = animation.library,
@@ -627,34 +503,24 @@ internal class PlayerImpl(
     }
 
     override fun clearAnimation(forceSync: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.clearAnimations(playerid = id.value, forcesync = forceSync)
     }
 
     override val animationIndex: Int
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerAnimationIndex(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerAnimationIndex(id.value)
 
     override var specialAction: SpecialAction
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerSpecialAction(playerid = id.value, actionid = value.value)
         }
 
     override fun disableRemoteVehicleCollisions(disable: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.disableRemoteVehicleCollisions(playerid = id.value, disable = disable)
     }
 
     override var checkpoint: Checkpoint? = null
         set(value) {
-            requireOnline()
             field = value
             when (value) {
                 null -> nativeFunctionsExecutor.disablePlayerCheckpoint(id.value)
@@ -670,7 +536,6 @@ internal class PlayerImpl(
 
     override var raceCheckpoint: RaceCheckpoint? = null
         set(value) {
-            requireOnline()
             field = value
             when (value) {
                 null -> nativeFunctionsExecutor.disablePlayerRaceCheckpoint(id.value)
@@ -690,7 +555,6 @@ internal class PlayerImpl(
 
     override var worldBounds: Rectangle? = null
         set(value) {
-            requireOnline()
             field = value
             nativeFunctionsExecutor.setPlayerWorldBounds(
                     playerid = id.value,
@@ -702,14 +566,10 @@ internal class PlayerImpl(
         }
 
     override fun showPlayerMarker(player: Player, color: Color) {
-        requireOnline()
-        player.requireOnline()
         nativeFunctionsExecutor.setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
     }
 
     override fun showPlayerNameTag(player: Player, show: Boolean) {
-        requireOnline()
-        player.requireOnline()
         nativeFunctionsExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
     }
 
@@ -719,7 +579,6 @@ internal class PlayerImpl(
         get() = mapIconsById.values.toList()
 
     override fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon {
-        requireOnline()
         mapIconsById[playerMapIconId]?.destroy()
         val playerMapIcon = PlayerMapIconImpl(
                 player = this,
@@ -735,13 +594,11 @@ internal class PlayerImpl(
     }
 
     override fun allowTeleport(allow: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.allowPlayerTeleport(playerid = this.id.value, allow = allow)
     }
 
     override var cameraPosition: Vector3D
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -749,12 +606,10 @@ internal class PlayerImpl(
             return vector3DOf(x = x.value, y = y.value, z = z.value)
         }
         set(value) {
-            requireOnline()
             nativeFunctionsExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
     override fun setCameraLookAt(coordinates: Vector3D, type: CameraType) {
-        requireOnline()
         nativeFunctionsExecutor.setPlayerCameraLookAt(
                 playerid = id.value,
                 x = coordinates.x,
@@ -765,13 +620,11 @@ internal class PlayerImpl(
     }
 
     override fun setCameraBehind() {
-        requireOnline()
         nativeFunctionsExecutor.setCameraBehindPlayer(id.value)
     }
 
     override val cameraFrontVector: Vector3D
         get() {
-            requireOnline()
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
@@ -780,66 +633,41 @@ internal class PlayerImpl(
         }
 
     override val cameraMode: CameraMode
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
 
     override fun enableCameraTarget(enable: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.enablePlayerCameraTarget(playerid = id.value, enable = enable)
     }
 
     override val cameraTargetObject: MapObject?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry.getMapObject(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry.getMapObject(it) }
 
     override val cameraTargetVehicle: Vehicle?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.getVehicle(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val cameraTargetPlayer: Player?
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
 
     override val cameraTargetActor: Actor?
         get() {
-            requireOnline()
             return nativeFunctionsExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry.getActor(it) }
         }
 
     override val cameraAspectRatio: Float
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraAspectRatio(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraAspectRatio(id.value)
 
     override val cameraZoom: Float
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.getPlayerCameraZoom(id.value)
-        }
+        get() = nativeFunctionsExecutor.getPlayerCameraZoom(id.value)
 
     override fun attachCameraToObject(mapObject: MapObject) {
-        requireOnline()
-        mapObject.requireNotDestroyed()
         nativeFunctionsExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
     override fun attachCameraToPlayerObject(playerMapObject: PlayerMapObject) {
-        requireOnline()
-        playerMapObject.requireNotDestroyed()
         nativeFunctionsExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
     }
 
     override fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType) {
-        requireOnline()
         nativeFunctionsExecutor.interpolateCameraPos(
                 playerid = id.value,
                 FromX = from.x,
@@ -854,7 +682,6 @@ internal class PlayerImpl(
     }
 
     override fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType) {
-        requireOnline()
         nativeFunctionsExecutor.interpolateCameraLookAt(
                 playerid = id.value,
                 FromX = from.x,
@@ -868,48 +695,33 @@ internal class PlayerImpl(
         )
     }
 
-    override fun isInVehicle(vehicle: Vehicle): Boolean {
-        requireOnline()
-        vehicle.requireNotDestroyed()
-        return nativeFunctionsExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
-    }
+    override fun isInVehicle(vehicle: Vehicle): Boolean =
+            nativeFunctionsExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
 
     override val isInAnyVehicle: Boolean
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.isPlayerInAnyVehicle(id.value)
-        }
+        get() = nativeFunctionsExecutor.isPlayerInAnyVehicle(id.value)
 
     override fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
-        requireOnline()
         return this.checkpoint == checkpoint && isInAnyCheckpoint
     }
 
     override val isInAnyCheckpoint: Boolean
-        get() {
-            requireOnline()
-            return nativeFunctionsExecutor.isPlayerInCheckpoint(id.value)
-        }
+        get() = nativeFunctionsExecutor.isPlayerInCheckpoint(id.value)
 
     override fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
-        requireOnline()
         return this.raceCheckpoint == raceCheckpoint && isInAnyRaceCheckpoint
     }
 
     override val isInAnyRaceCheckpoint: Boolean
         get() {
-            requireOnline()
             return nativeFunctionsExecutor.isPlayerInRaceCheckpoint(id.value)
         }
 
     override fun enableStuntBonus(enable: Boolean) {
-        requireOnline()
         nativeFunctionsExecutor.enableStuntBonusForPlayer(playerid = id.value, enable = enable)
     }
 
     override fun spectate(player: Player, mode: SpectateType) {
-        requireOnline()
-        player.requireOnline()
         if (!isSpectating) {
             toggleSpectating(true)
         }
@@ -921,8 +733,6 @@ internal class PlayerImpl(
     }
 
     override fun spectate(vehicle: Vehicle, mode: SpectateType) {
-        requireOnline()
-        vehicle.requireNotDestroyed()
         if (!isSpectating) {
             toggleSpectating(true)
         }
@@ -934,7 +744,6 @@ internal class PlayerImpl(
     }
 
     override fun stopSpectating() {
-        requireOnline()
         toggleSpectating(false)
     }
 
@@ -947,7 +756,6 @@ internal class PlayerImpl(
         private set
 
     override fun startRecording(type: PlayerRecordingType, recordName: String) {
-        requireOnline()
         nativeFunctionsExecutor.startRecordingPlayerData(
                 playerid = id.value,
                 recordtype = type.value,
@@ -956,12 +764,10 @@ internal class PlayerImpl(
     }
 
     override fun stopRecording() {
-        requireOnline()
         nativeFunctionsExecutor.stopRecordingPlayerData(id.value)
     }
 
     override fun createExplosion(type: ExplosionType, area: Sphere) {
-        requireOnline()
         nativeFunctionsExecutor.createExplosionForPlayer(
                 playerid = id.value,
                 X = area.x,
@@ -973,7 +779,6 @@ internal class PlayerImpl(
     }
 
     override fun createExplosion(type: ExplosionType, coordinates: Vector3D, radius: Float) {
-        requireOnline()
         nativeFunctionsExecutor.createExplosionForPlayer(
                 playerid = id.value,
                 X = coordinates.x,
@@ -986,12 +791,10 @@ internal class PlayerImpl(
 
     override val isAdmin: Boolean
         get() {
-            requireOnline()
             return nativeFunctionsExecutor.isPlayerAdmin(id.value)
         }
 
     override val isNPC: Boolean by lazy {
-        requireOnline()
         nativeFunctionsExecutor.isPlayerNPC(id.value)
     }
 
@@ -999,12 +802,10 @@ internal class PlayerImpl(
         get() = !isNPC
 
     override fun kick() {
-        requireOnline()
         nativeFunctionsExecutor.kick(id.value)
     }
 
     override fun ban(reason: String?) {
-        requireOnline()
         when {
             reason != null && reason.isNotBlank() -> nativeFunctionsExecutor.banEx(playerid = id.value, reason = reason)
             else -> nativeFunctionsExecutor.ban(id.value)
@@ -1013,52 +814,35 @@ internal class PlayerImpl(
 
     override val version: String
         get() {
-            requireOnline()
             val version = ReferenceString()
             nativeFunctionsExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
             return version.value ?: ""
-        }
-
-    override val networkStatisticsString: String
-        get() {
-            requireOnline()
-            val networkStatisticsString = ReferenceString()
-            nativeFunctionsExecutor.getPlayerNetworkStats(playerid = id.value, retstr = networkStatisticsString, size = 400)
-            return networkStatisticsString.value ?: ""
         }
 
     override val networkStatistics: PlayerNetworkStatistics
         get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
 
     override fun selectTextDraw(hoverColor: Color) {
-        requireOnline()
         nativeFunctionsExecutor.selectTextDraw(playerid = id.value, hovercolor = hoverColor.value)
     }
 
     override fun cancelSelectTextDraw() {
-        requireOnline()
         nativeFunctionsExecutor.cancelSelectTextDraw(id.value)
     }
 
     override fun editMapObject(mapObject: MapObject) {
-        requireOnline()
-        mapObject.requireNotDestroyed()
         nativeFunctionsExecutor.editObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
     override fun editPlayerMapObject(playerMapObject: PlayerMapObject) {
-        requireOnline()
-        playerMapObject.requireNotDestroyed()
         nativeFunctionsExecutor.editPlayerObject(playerid = id.value, objectid = playerMapObject.id.value)
     }
 
     override fun selectMapObject() {
-        requireOnline()
         nativeFunctionsExecutor.selectObject(id.value)
     }
 
     override fun cancelSelectMapObject() {
-        requireOnline()
         nativeFunctionsExecutor.cancelEdit(id.value)
     }
 
@@ -1072,7 +856,6 @@ internal class PlayerImpl(
 
     override val menu: Menu?
         get() {
-            requireOnline()
             TODO("not implemented")
         } //To change initializer of created properties use File | Settings | File Templates.
 }
