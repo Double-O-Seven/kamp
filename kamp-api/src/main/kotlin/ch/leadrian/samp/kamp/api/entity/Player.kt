@@ -3,8 +3,10 @@ package ch.leadrian.samp.kamp.api.entity
 import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
+import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
 import java.util.*
 
 interface Player {
@@ -72,6 +74,8 @@ interface Player {
     fun resetMoney()
 
     val ipAddress: String
+
+    val gpci: String
 
     @set:Throws(InvalidPlayerNameException::class)
     var name: String
@@ -161,9 +165,9 @@ interface Player {
 
     fun showPlayerNameTag(player: Player, show: Boolean)
 
-    fun addMapIcon(mapIcon: PlayerMapIcon, index: Int)
+    val mapIcons: List<PlayerMapIcon>
 
-    fun removeMapIcon(mapIcon: PlayerMapIcon)
+    fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon
 
     fun allowTeleport(allow: Boolean)
 
@@ -241,6 +245,8 @@ interface Player {
 
     val version: String
 
+    val networkStatisticsString: String
+
     val networkStatistics: PlayerNetworkStatistics
 
     fun selectTextDraw(hoverColor: Color)
@@ -260,4 +266,9 @@ interface Player {
     fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Boolean)
 
     val menu: Menu?
+}
+
+fun Player.requireOnline(): Player {
+    if (!isOnline) throw PlayerOfflineException("Player with ID ${id.value} is already offline")
+    return this
 }

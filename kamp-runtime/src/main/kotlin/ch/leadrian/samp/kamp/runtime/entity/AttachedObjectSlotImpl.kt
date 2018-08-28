@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.api.data.AttachedObject
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.AttachedObjectSlot
 import ch.leadrian.samp.kamp.api.entity.Player
+import ch.leadrian.samp.kamp.api.entity.requireOnline
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 
 internal class AttachedObjectSlotImpl(
@@ -17,18 +18,24 @@ internal class AttachedObjectSlotImpl(
     private val onEditHandlers: MutableList<AttachedObjectSlot.(AttachedObjectEditResponse, Int, Bone, Vector3D, Vector3D, Vector3D) -> Boolean> = mutableListOf()
 
     override val isUsed: Boolean
-        get() = nativeFunctionsExecutor.isPlayerAttachedObjectSlotUsed(playerid = player.id.value, index = index)
+        get() {
+            player.requireOnline()
+            return nativeFunctionsExecutor.isPlayerAttachedObjectSlotUsed(playerid = player.id.value, index = index)
+        }
 
     override fun remove() {
+        player.requireOnline()
         nativeFunctionsExecutor.removePlayerAttachedObject(playerid = player.id.value, index = index)
         this.attachedObject = null
     }
 
     override fun edit() {
+        player.requireOnline()
         nativeFunctionsExecutor.editAttachedObject(playerid = player.id.value, index = index)
     }
 
     override fun attach(attachedObject: AttachedObject) {
+        player.requireOnline()
         val success = nativeFunctionsExecutor.setPlayerAttachedObject(
                 playerid = player.id.value,
                 index = index,

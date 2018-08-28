@@ -1,3 +1,3 @@
 package ch.leadrian.samp.kamp.api.exception
 
-class AlreadyDestroyedException(message: String) : RuntimeException(message)
+class AlreadyDestroyedException(message: String) : IllegalStateException(message)

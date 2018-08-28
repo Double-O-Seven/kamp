@@ -1,0 +1,336 @@
+package ch.leadrian.samp.kamp.runtime.entity
+
+import ch.leadrian.samp.kamp.api.constants.MapIconStyle
+import ch.leadrian.samp.kamp.api.constants.MapIconType
+import ch.leadrian.samp.kamp.api.data.*
+import ch.leadrian.samp.kamp.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
+import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.entry
+import org.junit.jupiter.api.Nested
+import org.junit.jupiter.api.Test
+
+internal class PlayerMapIconImplTest {
+
+    @Test
+    fun shouldSetMapIconWhenMapIconIsCreated() {
+        val player = mockk<PlayerImpl> {
+            every { id } returns PlayerId.valueOf(99)
+        }
+        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        }
+
+        val playerMapIcon = PlayerMapIconImpl(
+                player = player,
+                id = PlayerMapIconId.valueOf(13),
+                type = MapIconType.BALLAS,
+                color = Colors.RED,
+                style = MapIconStyle.GLOBAL,
+                coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                nativeFunctionsExecutor = nativeFunctionsExecutor
+        )
+
+        verify {
+            nativeFunctionsExecutor.setPlayerMapIcon(
+                    playerid = 99,
+                    style = MapIconStyle.GLOBAL.value,
+                    color = Colors.RED.value,
+                    markertype = MapIconType.BALLAS.value,
+                    x = 1f,
+                    y = 2f,
+                    z = 3f,
+                    iconid = 13
+            )
+        }
+        assertThat(playerMapIcon.isDestroyed)
+                .isFalse()
+    }
+
+    @Nested
+    inner class CoordinatesTests {
+
+        @Test
+        fun settingCoordinatesShouldUpdateMapIcon() {
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+
+            playerMapIcon.coordinates = mutableVector3DOf(x = 4f, y = 5f, z = 6f)
+
+            verify {
+                nativeFunctionsExecutor.setPlayerMapIcon(
+                        playerid = 99,
+                        style = MapIconStyle.GLOBAL.value,
+                        color = Colors.RED.value,
+                        markertype = MapIconType.BALLAS.value,
+                        x = 4f,
+                        y = 5f,
+                        z = 6f,
+                        iconid = 13
+                )
+            }
+        }
+
+
+        @Test
+        fun settingCoordinatesShouldStoreImmutableVector3D() {
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+
+            playerMapIcon.coordinates = mutableVector3DOf(x = 4f, y = 5f, z = 6f)
+
+            assertThat(playerMapIcon.coordinates)
+                    .isNotInstanceOf(MutableVector3D::class.java)
+                    .isEqualTo(vector3DOf(x = 4f, y = 5f, z = 6f))
+        }
+    }
+
+    @Test
+    fun settingTypeShouldUpdateMapIcon() {
+        val player = mockk<PlayerImpl> {
+            every { id } returns PlayerId.valueOf(99)
+        }
+        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        }
+        val playerMapIcon = PlayerMapIconImpl(
+                player = player,
+                id = PlayerMapIconId.valueOf(13),
+                type = MapIconType.BALLAS,
+                color = Colors.RED,
+                style = MapIconStyle.GLOBAL,
+                coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                nativeFunctionsExecutor = nativeFunctionsExecutor
+        )
+
+        playerMapIcon.type = MapIconType.AIR_YARD
+
+        verify {
+            nativeFunctionsExecutor.setPlayerMapIcon(
+                    playerid = 99,
+                    style = MapIconStyle.GLOBAL.value,
+                    color = Colors.RED.value,
+                    markertype = MapIconType.AIR_YARD.value,
+                    x = 1f,
+                    y = 2f,
+                    z = 3f,
+                    iconid = 13
+            )
+        }
+    }
+
+    @Nested
+    inner class ColorTests {
+
+        @Test
+        fun settingColorShouldUpdateMapIcon() {
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+
+            playerMapIcon.color = mutableColorOf(0x11BBCCFF)
+
+            verify {
+                nativeFunctionsExecutor.setPlayerMapIcon(
+                        playerid = 99,
+                        style = MapIconStyle.GLOBAL.value,
+                        color = 0x11BBCCFF,
+                        markertype = MapIconType.BALLAS.value,
+                        x = 1f,
+                        y = 2f,
+                        z = 3f,
+                        iconid = 13
+                )
+            }
+        }
+
+        @Test
+        fun settingColorShouldStoreImmutableColor() {
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+
+            playerMapIcon.color = mutableColorOf(0x11BBCCFF)
+
+            assertThat(playerMapIcon.color)
+                    .isNotInstanceOf(MutableColor::class.java)
+                    .isEqualTo(colorOf(0x11BBCCFF))
+        }
+    }
+
+    @Test
+    fun settingStyleShouldUpdateMapIcon() {
+        val player = mockk<PlayerImpl> {
+            every { id } returns PlayerId.valueOf(99)
+        }
+        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        }
+        val playerMapIcon = PlayerMapIconImpl(
+                player = player,
+                id = PlayerMapIconId.valueOf(13),
+                type = MapIconType.BALLAS,
+                color = Colors.RED,
+                style = MapIconStyle.GLOBAL,
+                coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                nativeFunctionsExecutor = nativeFunctionsExecutor
+        )
+
+        playerMapIcon.style = MapIconStyle.LOCAL_CHECKPOINT
+
+        verify {
+            nativeFunctionsExecutor.setPlayerMapIcon(
+                    playerid = 99,
+                    style = MapIconStyle.LOCAL_CHECKPOINT.value,
+                    color = Colors.RED.value,
+                    markertype = MapIconType.BALLAS.value,
+                    x = 1f,
+                    y = 2f,
+                    z = 3f,
+                    iconid = 13
+            )
+        }
+    }
+
+    @Nested
+    inner class DestroyTests {
+
+        @Test
+        fun givenPlayerIsNotOnlineItShouldDestroyPlayerMapIcon() {
+            val mapIconsById = mutableMapOf<PlayerMapIconId, PlayerMapIconImpl>()
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+                every { isOnline } returns false
+                every { this@mockk.mapIconsById } returns mapIconsById
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+            val otherPlayerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(99),
+                    type = MapIconType.AIR_YARD,
+                    color = Colors.BLUE,
+                    style = MapIconStyle.LOCAL,
+                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+            mapIconsById[playerMapIcon.id] = playerMapIcon
+            mapIconsById[otherPlayerMapIcon.id] = otherPlayerMapIcon
+
+            playerMapIcon.destroy()
+
+            assertThat(playerMapIcon.isDestroyed)
+                    .isTrue()
+            assertThat(mapIconsById)
+                    .containsOnly(entry(otherPlayerMapIcon.id, otherPlayerMapIcon))
+            verify(exactly = 0) { nativeFunctionsExecutor.removePlayerMapIcon(any(), any()) }
+        }
+
+        @Test
+        fun givenPlayerIsOnlineItShouldDestroyPlayerMapIcon() {
+            val mapIconsById = mutableMapOf<PlayerMapIconId, PlayerMapIconImpl>()
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+                every { isOnline } returns true
+                every { this@mockk.mapIconsById } returns mapIconsById
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+                every { removePlayerMapIcon(any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+            val otherPlayerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(99),
+                    type = MapIconType.AIR_YARD,
+                    color = Colors.BLUE,
+                    style = MapIconStyle.LOCAL,
+                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+            mapIconsById[playerMapIcon.id] = playerMapIcon
+            mapIconsById[otherPlayerMapIcon.id] = otherPlayerMapIcon
+
+            playerMapIcon.destroy()
+
+            assertThat(playerMapIcon.isDestroyed)
+                    .isTrue()
+            assertThat(mapIconsById)
+                    .containsOnly(entry(otherPlayerMapIcon.id, otherPlayerMapIcon))
+            verify(exactly = 1) { nativeFunctionsExecutor.removePlayerMapIcon(playerid = 99, iconid = 13) }
+        }
+    }
+
+}

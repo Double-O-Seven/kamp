@@ -27,6 +27,7 @@ internal class AttachedObjectSlotImplTest {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
         }
         val index = 5
         val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -49,6 +50,7 @@ internal class AttachedObjectSlotImplTest {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
         }
         val index = 5
         val attachedObject = AttachedObject(
@@ -78,6 +80,7 @@ internal class AttachedObjectSlotImplTest {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
         }
         val index = 5
         val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -99,6 +102,7 @@ internal class AttachedObjectSlotImplTest {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
         }
         val index = 5
         val attachedObject = AttachedObject(
@@ -150,6 +154,7 @@ internal class AttachedObjectSlotImplTest {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
         }
         val index = 5
         val offset = vector3DOf(x = 1f, y = 2f, z = 3f)
