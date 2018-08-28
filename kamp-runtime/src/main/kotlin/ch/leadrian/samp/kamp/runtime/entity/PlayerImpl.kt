@@ -8,10 +8,7 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
+import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.runtime.types.ReferenceString
@@ -23,6 +20,7 @@ internal class PlayerImpl(
         private val playerRegistry: PlayerRegistry,
         private val vehicleRegistry: VehicleRegistry,
         private val mapObjectRegistry: MapObjectRegistry,
+        private val menuRegistry: MenuRegistry,
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
@@ -878,7 +876,5 @@ internal class PlayerImpl(
     }
 
     override val menu: Menu?
-        get() {
-            TODO("not implemented")
-        } //To change initializer of created properties use File | Settings | File Templates.
+        get() = nativeFunctionsExecutor.getPlayerMenu(id.value).let { menuRegistry.getMenu(it) }
 }
