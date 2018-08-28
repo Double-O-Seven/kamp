@@ -42,7 +42,7 @@ internal class PlayerNetworkStatisticsImpl(
             return ipAndPort.value ?: ""
         }
 
-    override val summarizedString: String
+    override val summaryString: String
         get() {
             val networkStatisticsString = ReferenceString()
             nativeFunctionsExecutor.getPlayerNetworkStats(playerid = player.id.value, retstr = networkStatisticsString, size = 400)

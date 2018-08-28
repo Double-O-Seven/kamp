@@ -536,7 +536,6 @@ internal class PlayerImpl(
 
     override var raceCheckpoint: RaceCheckpoint? = null
         set(value) {
-            field = value
             when (value) {
                 null -> nativeFunctionsExecutor.disablePlayerRaceCheckpoint(id.value)
                 else -> nativeFunctionsExecutor.setPlayerRaceCheckpoint(
@@ -551,11 +550,11 @@ internal class PlayerImpl(
                         nextz = value.nextCoordinates?.z ?: value.coordinates.z
                 )
             }
+            field = value
         }
 
     override var worldBounds: Rectangle? = null
         set(value) {
-            field = value
             nativeFunctionsExecutor.setPlayerWorldBounds(
                     playerid = id.value,
                     x_min = value?.minX ?: -20_000f,
@@ -563,6 +562,7 @@ internal class PlayerImpl(
                     y_min = value?.minY ?: -20_000f,
                     y_max = value?.maxY ?: 20_000f
             )
+            field = value
         }
 
     override fun showPlayerMarker(player: Player, color: Color) {
@@ -819,8 +819,10 @@ internal class PlayerImpl(
             return version.value ?: ""
         }
 
-    override val networkStatistics: PlayerNetworkStatistics
-        get() = TODO("not implemented") //To change initializer of created properties use File | Settings | File Templates.
+    override val networkStatistics: PlayerNetworkStatistics = PlayerNetworkStatisticsImpl(
+            player = this,
+            nativeFunctionsExecutor = nativeFunctionsExecutor
+    )
 
     override fun selectTextDraw(hoverColor: Color) {
         nativeFunctionsExecutor.selectTextDraw(playerid = id.value, hovercolor = hoverColor.value)
