@@ -170,8 +170,8 @@ internal class PlayerImpl(
             nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
         }
 
-    override fun setPositionFindZ(coordinates: Vector3D) {
-        nativeFunctionsExecutor.setPlayerPosFindZ(playerid = id.value, x = position.x, y = position.y, z = position.z)
+    override fun setCoordinatesFindZ(coordinates: Vector3D) {
+        nativeFunctionsExecutor.setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean =
@@ -213,7 +213,7 @@ internal class PlayerImpl(
     override val targetActor: Actor?
         get() = nativeFunctionsExecutor.getPlayerTargetActor(id.value).let { actorRegistry.getActor(it) }
 
-    override var team: TeamId
+    override var teamId: TeamId
         get() = nativeFunctionsExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
         set(value) {
             nativeFunctionsExecutor.setPlayerTeam(playerid = id.value, teamid = value.value)
@@ -473,9 +473,8 @@ internal class PlayerImpl(
     override val vehicleSeat: Int?
         get() = nativeFunctionsExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
 
-    override fun removeFromVehicle() {
-        nativeFunctionsExecutor.removePlayerFromVehicle(id.value)
-    }
+    override fun removeFromVehicle(): Boolean =
+            nativeFunctionsExecutor.removePlayerFromVehicle(id.value)
 
     override fun toggleControllable(toggle: Boolean) {
         nativeFunctionsExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
@@ -525,7 +524,6 @@ internal class PlayerImpl(
 
     override var checkpoint: Checkpoint? = null
         set(value) {
-            field = value
             when (value) {
                 null -> nativeFunctionsExecutor.disablePlayerCheckpoint(id.value)
                 else -> nativeFunctionsExecutor.setPlayerCheckpoint(
@@ -536,6 +534,7 @@ internal class PlayerImpl(
                         size = value.size
                 )
             }
+            field = value
         }
 
     override var raceCheckpoint: RaceCheckpoint? = null
@@ -666,11 +665,11 @@ internal class PlayerImpl(
     override val cameraZoom: Float
         get() = nativeFunctionsExecutor.getPlayerCameraZoom(id.value)
 
-    override fun attachCameraToObject(mapObject: MapObject) {
+    override fun attachCameraTo(mapObject: MapObject) {
         nativeFunctionsExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
-    override fun attachCameraToPlayerObject(playerMapObject: PlayerMapObject) {
+    override fun attachCameraTo(playerMapObject: PlayerMapObject) {
         nativeFunctionsExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
     }
 

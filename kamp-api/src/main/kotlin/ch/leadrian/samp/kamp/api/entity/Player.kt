@@ -35,7 +35,7 @@ interface Player {
 
     var virtualWorldId: Int
 
-    fun setPositionFindZ(coordinates: Vector3D)
+    fun setCoordinatesFindZ(coordinates: Vector3D)
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
@@ -53,7 +53,7 @@ interface Player {
 
     val targetActor: Actor?
 
-    var team: TeamId
+    var teamId: TeamId
 
     var score: Int
 
@@ -130,7 +130,7 @@ interface Player {
 
     val vehicleSeat: Int?
 
-    fun removeFromVehicle()
+    fun removeFromVehicle(): Boolean
 
     fun toggleControllable(toggle: Boolean)
 
@@ -195,9 +195,9 @@ interface Player {
 
     val cameraZoom: Float
 
-    fun attachCameraToObject(mapObject: MapObject)
+    fun attachCameraTo(mapObject: MapObject)
 
-    fun attachCameraToPlayerObject(playerMapObject: PlayerMapObject)
+    fun attachCameraTo(playerMapObject: PlayerMapObject)
 
     fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT)
 
