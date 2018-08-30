@@ -4,8 +4,8 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.InterceptablePlayer
 import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
-import ch.leadrian.samp.kamp.runtime.entity.interceptor.InterceptorPriority
 import ch.leadrian.samp.kamp.runtime.entity.interceptor.PlayerInterceptor
+import ch.leadrian.samp.kamp.runtime.entity.interceptor.interceptorPriority
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -25,7 +25,7 @@ constructor(
 ) {
 
     private val interceptors: List<PlayerInterceptor> = interceptors
-            .sortedByDescending { it::class.java.getAnnotation(InterceptorPriority::class.java)?.value ?: 0 }
+            .sortedByDescending { it.interceptorPriority }
             .toList()
 
     fun create(playerId: PlayerId): InterceptablePlayer {
