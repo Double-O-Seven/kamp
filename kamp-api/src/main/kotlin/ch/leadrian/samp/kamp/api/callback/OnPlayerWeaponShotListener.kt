@@ -10,7 +10,7 @@ import ch.leadrian.samp.kamp.api.entity.Vehicle
 
 interface OnPlayerWeaponShotListener {
 
-    fun onPlayerShotWeapon(player: Player, weaponModel: WeaponModel, hitTarget: Target<*>, coordinates: Vector3D): Boolean
+    fun onPlayerShotWeapon(player: Player, weaponModel: WeaponModel, hitTarget: Target<*>, coordinates: Vector3D): Result
 
     sealed class Target<V>(val target: V, val type: BulletHitType) {
 
@@ -23,6 +23,13 @@ interface OnPlayerWeaponShotListener {
         class MapObjectTarget(target: MapObject) : Target<MapObject>(target = target, type = BulletHitType.OBJECT)
 
         class NoTarget : Target<Any?>(target = null, type = BulletHitType.NONE)
+    }
+
+    sealed class Result(val value: Boolean) {
+
+        object AllowDamage : Result(true)
+
+        object PreventDamage : Result(false)
     }
 
 }

@@ -5,6 +5,13 @@ import ch.leadrian.samp.kamp.api.entity.Vehicle
 
 interface OnTrailerUpdateListener {
 
-    fun onTrailerUpdate(player: Player, vehicle: Vehicle): Boolean
+    fun onTrailerUpdate(player: Player, vehicle: Vehicle): Result
+
+    sealed class Result(val value: Boolean) {
+
+        object Sync : Result(true)
+
+        object Desync : Result(false)
+    }
 
 }
