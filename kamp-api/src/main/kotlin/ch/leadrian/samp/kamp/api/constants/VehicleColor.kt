@@ -266,6 +266,7 @@ data class VehicleColor internal constructor(
                     colorOf(0x7B7E7DFF),
                     colorOf(0x4A4442FF),
                     colorOf(0x28344EFF)
-            ).mapIndexed { index, color -> VehicleColor(index, color) }.toTypedArray()
+            ).mapIndexed { index, color -> VehicleColor(index, color) }.toTypedArray(),
+            defaultValue = VehicleColor(value = -1, color = colorOf(0xFF))
     )
 }
