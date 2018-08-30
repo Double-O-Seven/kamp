@@ -263,6 +263,8 @@ interface Player {
 
     fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Unit)
 
+    fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit)
+
     val menu: Menu?
 }
 

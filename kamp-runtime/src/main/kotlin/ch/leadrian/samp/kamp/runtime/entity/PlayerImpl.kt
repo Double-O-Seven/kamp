@@ -21,14 +21,17 @@ internal class PlayerImpl(
         private val vehicleRegistry: VehicleRegistry,
         private val mapObjectRegistry: MapObjectRegistry,
         private val menuRegistry: MenuRegistry,
+        private val playerMapIconFactory: PlayerMapIconFactory,
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
-) : Player {
+) : InterceptablePlayer {
 
     private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
 
     private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Unit> = mutableListOf()
 
-    private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIconImpl> = mutableMapOf()
+    private val onDisconnectHandlers: MutableList<Player.(DisconnectReason) -> Unit> = mutableListOf()
+
+    private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
     override val id: PlayerId = id
         get() = requireOnline { field }
@@ -37,19 +40,6 @@ internal class PlayerImpl(
         private set
 
     override var locale: Locale = Locale.getDefault()
-
-    internal fun onDisconnect() {
-        if (!isOnline) return
-        isOnline = false
-
-        destroyMapIcons()
-
-        playerRegistry.unregister(this)
-    }
-
-    private fun destroyMapIcons() {
-        mapIconsById.values.forEach { it.destroy() }
-    }
 
     override fun spawn() {
         nativeFunctionsExecutor.spawnPlayer(id.value)
@@ -582,10 +572,9 @@ internal class PlayerImpl(
     override fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon {
         requireOnline()
         mapIconsById[playerMapIconId]?.destroy()
-        val playerMapIcon = PlayerMapIconImpl(
+        val playerMapIcon = playerMapIconFactory.create(
                 player = this,
-                id = playerMapIconId,
-                nativeFunctionsExecutor = nativeFunctionsExecutor,
+                playerMapIconId = playerMapIconId,
                 coordinates = coordinates,
                 type = type,
                 color = color,
@@ -597,6 +586,10 @@ internal class PlayerImpl(
 
     internal fun unregisterMapIcon(mapIcon: PlayerMapIcon) {
         mapIconsById.remove(mapIcon.id, mapIcon)
+    }
+
+    private fun destroyMapIcons() {
+        mapIconsById.values.forEach { it.destroy() }
     }
 
     override fun allowTeleport(allow: Boolean) {
@@ -865,7 +858,7 @@ internal class PlayerImpl(
         onSpawnHandlers += onSpawn
     }
 
-    internal fun onSpawn() {
+    override fun onSpawn() {
         onSpawnHandlers.forEach { it.invoke(this) }
     }
 
@@ -873,7 +866,23 @@ internal class PlayerImpl(
         onDeathHandlers += onDeath
     }
 
-    internal fun onDeath(killer: Player?, weapon: WeaponModel) {
+    override fun onDeath(killer: Player?, weapon: WeaponModel) {
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
+    }
+
+    override fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
+        onDisconnectHandlers += onDisconnect
+    }
+
+    override fun onDisconnect(reason: DisconnectReason) {
+        if (!isOnline) return
+
+        onDisconnectHandlers.forEach { it.invoke(this, reason) }
+
+        isOnline = false
+
+        destroyMapIcons()
+
+        playerRegistry.unregister(this)
     }
 }

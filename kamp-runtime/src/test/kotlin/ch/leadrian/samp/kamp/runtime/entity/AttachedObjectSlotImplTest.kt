@@ -148,6 +148,40 @@ internal class AttachedObjectSlotImplTest {
                 .isEqualTo(attachedObject)
     }
 
+    @Test
+    fun givenSetPlayerAttachedObjectFailsItShouldSetAttachedObjectToNull() {
+        val playerId = 50
+        val player = mockk<Player> {
+            every { id } returns PlayerId.valueOf(playerId)
+            every { isOnline } returns true
+        }
+        val index = 5
+        val attachedObject = AttachedObject(
+                modelId = 15,
+                bone = Bone.CALF_LEFT,
+                offset = vector3DOf(x = 1f, y = 2f, z = 3f),
+                rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
+                scale = vector3DOf(x = 7f, y = 8f, z = 9f),
+                materialColor1 = Colors.RED,
+                materialColor2 = Colors.BLUE
+        )
+        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every {
+                setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns false
+        }
+        val attachedObjectSlot = AttachedObjectSlotImpl(
+                player = player,
+                index = index,
+                nativeFunctionsExecutor = nativeFunctionsExecutor
+        )
+
+        attachedObjectSlot.attach(attachedObject)
+
+        assertThat(attachedObjectSlot.attachedObject)
+                .isNull()
+    }
+
     @ParameterizedTest
     @EnumSource(AttachedObjectEditResponse::class)
     fun shouldCallOnEditHandler(response: AttachedObjectEditResponse) {

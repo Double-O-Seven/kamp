@@ -32,6 +32,19 @@ internal class PlayerRegistryTest {
                 .isSameAs(player)
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_PLAYERS, SAMPConstants.MAX_PLAYERS + 1])
+    fun givenUnknownPlayerIdGetPlayerShouldReturn(playerId: Int) {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+            every { getMaxPlayers() } returns SAMPConstants.MAX_PLAYERS
+        }
+        val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
+
+        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        assertThat(registeredPlayer)
+                .isNull()
+    }
+
     @Test
     fun givenAnotherPlayerWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val playerId = 50

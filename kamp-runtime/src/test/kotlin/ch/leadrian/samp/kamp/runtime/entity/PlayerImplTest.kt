@@ -10,10 +10,7 @@ import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.runtime.types.ReferenceString
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyOrder
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -23,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.util.*
 
 internal class PlayerImplTest {
 
@@ -39,6 +37,7 @@ internal class PlayerImplTest {
     private val actorRegistry = mockk<ActorRegistry>()
     private val mapObjectRegistry = mockk<MapObjectRegistry>()
     private val menuRegistry = mockk<MenuRegistry>()
+    private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
 
     @BeforeEach
@@ -50,8 +49,35 @@ internal class PlayerImplTest {
                 actorRegistry = actorRegistry,
                 mapObjectRegistry = mapObjectRegistry,
                 menuRegistry = menuRegistry,
+                playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry
         )
+    }
+
+    @Nested
+    inner class LocaleTests {
+
+        @Test
+        fun shouldInitializeLocaleWithSystemDefault() {
+            assertThat(player.locale)
+                    .isEqualTo(Locale.getDefault())
+        }
+
+        @Test
+        fun shouldUpdateLocale() {
+            player.locale = Locale.GERMANY
+
+            player.locale = Locale.CHINA
+
+            assertThat(player.locale)
+                    .isEqualTo(Locale.CHINA)
+        }
+    }
+
+    @Test
+    fun shouldInitializeIsOnlineWithTrue() {
+        assertThat(player.isOnline)
+                .isTrue()
     }
 
     @Test
@@ -1393,6 +1419,37 @@ internal class PlayerImplTest {
         }
 
         @Test
+        fun givenNoNextCheckpointItShouldUseCurrentCoordinates() {
+            every {
+                nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
+            val raceCheckpoint = mockk<RaceCheckpoint> {
+                every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
+                every { size } returns 4f
+                every { nextCoordinates } returns null
+                every { type } returns RaceCheckpointType.AIR_NORMAL
+            }
+
+            player.raceCheckpoint = raceCheckpoint
+
+            verify {
+                nativeFunctionExecutor.setPlayerRaceCheckpoint(
+                        playerid = playerId.value,
+                        type = RaceCheckpointType.AIR_NORMAL.value,
+                        x = 1f,
+                        y = 2f,
+                        z = 3f,
+                        size = 4f,
+                        nextx = 1f,
+                        nexty = 2f,
+                        nextz = 3f
+                )
+            }
+            assertThat(player.raceCheckpoint)
+                    .isSameAs(raceCheckpoint)
+        }
+
+        @Test
         fun givenNullIsSetAsRaceCheckpointItShouldDisableRaceCheckpoint() {
             every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
 
@@ -1486,9 +1543,32 @@ internal class PlayerImplTest {
 
         @Test
         fun shouldCreateMapIcon() {
-            every {
-                nativeFunctionExecutor.setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any())
-            } returns true
+            every { playerMapIconFactory.create(any(), any(), any(), any(), any(), any()) } returns mockk()
+
+            player.createMapIcon(
+                    playerMapIconId = PlayerMapIconId.valueOf(50),
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    color = Colors.RED,
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
+            )
+
+            verify {
+                playerMapIconFactory.create(
+                        player = player,
+                        playerMapIconId = PlayerMapIconId.valueOf(50),
+                        coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                        color = Colors.RED,
+                        type = MapIconType.BALLAS,
+                        style = MapIconStyle.GLOBAL
+                )
+            }
+        }
+
+        @Test
+        fun shouldReturnCreatedMapIcon() {
+            val expectedMapIcon = mockk<PlayerMapIcon>()
+            every { playerMapIconFactory.create(any(), any(), any(), any(), any(), any()) } returns expectedMapIcon
 
             val mapIcon = player.createMapIcon(
                     playerMapIconId = PlayerMapIconId.valueOf(50),
@@ -1499,30 +1579,19 @@ internal class PlayerImplTest {
             )
 
             assertThat(mapIcon)
-                    .isInstanceOfSatisfying(PlayerMapIconImpl::class.java) {
-                        assertThat(it.color)
-                                .isEqualTo(Colors.RED)
-                        assertThat(it.id)
-                                .isEqualTo(PlayerMapIconId.valueOf(50))
-                        assertThat(it.player)
-                                .isSameAs(player)
-                        assertThat(it.coordinates)
-                                .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-                        assertThat(it.type)
-                                .isEqualTo(MapIconType.BALLAS)
-                        assertThat(it.style)
-                                .isEqualTo(MapIconStyle.GLOBAL)
-                    }
+                    .isEqualTo(expectedMapIcon)
         }
 
         @Test
         fun shouldStoreCreatedMapIcon() {
-            every {
-                nativeFunctionExecutor.setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any())
-            } returns true
+            val playerMapIconId = PlayerMapIconId.valueOf(50)
+            val expectedMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns playerMapIconId
+            }
+            every { playerMapIconFactory.create(any(), any(), any(), any(), any(), any()) } returns expectedMapIcon
 
             val mapIcon = player.createMapIcon(
-                    playerMapIconId = PlayerMapIconId.valueOf(50),
+                    playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
                     type = MapIconType.BALLAS,
@@ -1534,11 +1603,38 @@ internal class PlayerImplTest {
         }
 
         @Test
+        fun shouldUnregstierMapIcon() {
+            val playerMapIconId = PlayerMapIconId.valueOf(50)
+            val expectedMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns playerMapIconId
+            }
+            every { playerMapIconFactory.create(any(), any(), any(), any(), any(), any()) } returns expectedMapIcon
+            val mapIcon = player.createMapIcon(
+                    playerMapIconId = playerMapIconId,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    color = Colors.RED,
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
+            )
+
+            player.unregisterMapIcon(mapIcon)
+
+            assertThat(player.mapIcons)
+                    .isEmpty()
+        }
+
+        @Test
         fun shouldNotOverwriteMapIconWithDifferentId() {
+            val existingMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns PlayerMapIconId.valueOf(75)
+            }
+            val newMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns PlayerMapIconId.valueOf(50)
+            }
             every {
-                nativeFunctionExecutor.setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any())
-            } returns true
-            val existingMapIcon = player.createMapIcon(
+                playerMapIconFactory.create(any(), any(), any(), any(), any(), any())
+            } returnsMany listOf(existingMapIcon, newMapIcon)
+            player.createMapIcon(
                     playerMapIconId = PlayerMapIconId.valueOf(75),
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
@@ -1561,13 +1657,17 @@ internal class PlayerImplTest {
         @Test
         fun shouldOverwriteMapIconWithSameId() {
             val playerMapIconId = PlayerMapIconId.valueOf(50)
+            val existingMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns playerMapIconId
+                every { destroy() } just Runs
+            }
+            val newMapIcon = mockk<PlayerMapIcon> {
+                every { id } returns playerMapIconId
+            }
             every {
-                nativeFunctionExecutor.setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any())
-            } returns true
-            every {
-                nativeFunctionExecutor.removePlayerMapIcon(playerid = playerId.value, iconid = playerMapIconId.value)
-            } returns true
-            val existingMapIcon = player.createMapIcon(
+                playerMapIconFactory.create(any(), any(), any(), any(), any(), any())
+            } returnsMany listOf(existingMapIcon, newMapIcon)
+            player.createMapIcon(
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
@@ -1575,7 +1675,7 @@ internal class PlayerImplTest {
                     style = MapIconStyle.GLOBAL
             )
 
-            val mapIcon = player.createMapIcon(
+            player.createMapIcon(
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
                     color = Colors.BLUE,
@@ -1584,9 +1684,9 @@ internal class PlayerImplTest {
             )
 
             assertThat(player.mapIcons)
-                    .containsExactlyInAnyOrder(mapIcon)
-            assertThat(existingMapIcon.isDestroyed)
-                    .isTrue()
+                    .containsExactlyInAnyOrder(newMapIcon)
+            verify { existingMapIcon.destroy() }
+            verify(exactly = 0) { newMapIcon.destroy() }
         }
     }
 
@@ -2541,5 +2641,91 @@ internal class PlayerImplTest {
         player.onDeath(killer = otherPlayer, weapon = WeaponModel.TEC9)
 
         verify { onDeath.invoke(player, otherPlayer, WeaponModel.TEC9) }
+    }
+
+    @Nested
+    inner class OnDisconnectTests {
+
+        @Test
+        fun shouldExecuteOnDisconnectHandlers() {
+            every { playerRegistry.unregister(any()) } just Runs
+            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
+            player.onDisconnect(onDisconnect)
+
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            verify { onDisconnect.invoke(player, DisconnectReason.QUIT) }
+        }
+
+        @Test
+        fun shouldSetIsOnlineToFalse() {
+            every { playerRegistry.unregister(any()) } just Runs
+
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            assertThat(player.isOnline)
+                    .isFalse()
+        }
+
+        @Test
+        fun shouldUnregisterPlayerFromPlayerRegistry() {
+            every { playerRegistry.unregister(any()) } just Runs
+
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            verify { playerRegistry.unregister(player) }
+        }
+
+        @Test
+        fun shouldDestroyMapIcons() {
+            every { playerRegistry.unregister(any()) } just Runs
+            val mapIcon1 = mockk<PlayerMapIcon> {
+                every { id } returns PlayerMapIconId.valueOf(75)
+                every { destroy() } just Runs
+            }
+            val mapIcon2 = mockk<PlayerMapIcon> {
+                every { id } returns PlayerMapIconId.valueOf(50)
+                every { destroy() } just Runs
+            }
+            every {
+                playerMapIconFactory.create(any(), any(), any(), any(), any(), any())
+            } returnsMany listOf(mapIcon1, mapIcon2)
+            player.createMapIcon(
+                    playerMapIconId = PlayerMapIconId.valueOf(75),
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    color = Colors.RED,
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
+            )
+            player.createMapIcon(
+                    playerMapIconId = PlayerMapIconId.valueOf(50),
+                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
+                    color = Colors.BLUE,
+                    type = MapIconType.AIR_YARD,
+                    style = MapIconStyle.LOCAL
+            )
+
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            verify {
+                mapIcon1.destroy()
+                mapIcon2.destroy()
+            }
+        }
+
+        @Test
+        fun shouldNotExecuteTwice() {
+            every { playerRegistry.unregister(any()) } just Runs
+            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
+            player.onDisconnect(onDisconnect)
+
+            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            verify(exactly = 1) {
+                onDisconnect.invoke(player, DisconnectReason.QUIT)
+                playerRegistry.unregister(player)
+            }
+        }
     }
 }

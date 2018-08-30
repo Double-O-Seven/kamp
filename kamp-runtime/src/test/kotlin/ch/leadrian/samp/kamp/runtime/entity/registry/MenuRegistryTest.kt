@@ -28,6 +28,16 @@ internal class MenuRegistryTest {
                 .isSameAs(menu)
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_MENUS, SAMPConstants.MAX_MENUS + 1])
+    fun givenUnknownMenuIdGetMenuShouldReturn(menuId: Int) {
+        val menuRegistry = MenuRegistry()
+
+        val registeredMenu = menuRegistry.getMenu(menuId)
+        assertThat(registeredMenu)
+                .isNull()
+    }
+
     @Test
     fun givenAnotherMenuWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val menuId = 50

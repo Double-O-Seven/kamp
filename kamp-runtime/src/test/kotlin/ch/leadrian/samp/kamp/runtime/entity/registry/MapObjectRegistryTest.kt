@@ -27,6 +27,16 @@ internal class MapObjectRegistryTest {
                 .isSameAs(mapObject)
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_OBJECTS, SAMPConstants.MAX_OBJECTS + 1])
+    fun givenUnknownMapObjectIdGetMapObjectShouldReturn(mapObjectId: Int) {
+        val mapObjectRegistry = MapObjectRegistry()
+
+        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        Assertions.assertThat(registeredMapObject)
+                .isNull()
+    }
+
     @Test
     fun givenAnotherMapObjectWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val mapObjectId = 50

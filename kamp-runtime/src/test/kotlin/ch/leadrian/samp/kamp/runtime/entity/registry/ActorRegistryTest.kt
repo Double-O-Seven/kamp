@@ -28,6 +28,16 @@ internal class ActorRegistryTest {
                 .isSameAs(actor)
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_ACTORS, SAMPConstants.MAX_ACTORS + 1])
+    fun givenUnknownActorIdGetActorShouldReturn(actorId: Int) {
+        val actorRegistry = ActorRegistry()
+
+        val registeredActor = actorRegistry.getActor(actorId)
+        assertThat(registeredActor)
+                .isNull()
+    }
+
     @Test
     fun givenAnotherActorWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val actorId = 50

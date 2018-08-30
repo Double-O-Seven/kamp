@@ -302,6 +302,36 @@ internal class PlayerMapIconImplTest {
             verify { player.unregisterMapIcon(playerMapIcon) }
             verify(exactly = 1) { nativeFunctionsExecutor.removePlayerMapIcon(playerid = 99, iconid = 13) }
         }
+
+        @Test
+        fun shouldNotExecuteTwice() {
+            val player = mockk<PlayerImpl> {
+                every { id } returns PlayerId.valueOf(99)
+                every { isOnline } returns true
+                every { unregisterMapIcon(any()) } just Runs
+            }
+            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+                every { removePlayerMapIcon(any(), any()) } returns true
+            }
+            val playerMapIcon = PlayerMapIconImpl(
+                    player = player,
+                    id = PlayerMapIconId.valueOf(13),
+                    type = MapIconType.BALLAS,
+                    color = Colors.RED,
+                    style = MapIconStyle.GLOBAL,
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    nativeFunctionsExecutor = nativeFunctionsExecutor
+            )
+
+            playerMapIcon.destroy()
+            playerMapIcon.destroy()
+
+            verify(exactly = 1) {
+                player.unregisterMapIcon(playerMapIcon)
+                nativeFunctionsExecutor.removePlayerMapIcon(any(), any())
+            }
+        }
     }
 
 }

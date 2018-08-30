@@ -28,6 +28,16 @@ internal class VehicleRegistryTest {
                 .isSameAs(vehicle)
     }
 
+    @ParameterizedTest
+    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_VEHICLES, SAMPConstants.MAX_VEHICLES + 1])
+    fun givenUnknownVehicleIdGetVehicleShouldReturn(vehicleId: Int) {
+        val vehicleRegistry = VehicleRegistry()
+
+        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        assertThat(registeredVehicle)
+                .isNull()
+    }
+
     @Test
     fun givenAnotherVehicleWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val vehicleId = 50
