@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt

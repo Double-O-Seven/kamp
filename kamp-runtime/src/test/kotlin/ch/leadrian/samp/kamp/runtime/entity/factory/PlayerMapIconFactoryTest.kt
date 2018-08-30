@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.runtime.entity
+package ch.leadrian.samp.kamp.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.api.constants.MapIconStyle
 import ch.leadrian.samp.kamp.api.constants.MapIconType
@@ -7,6 +7,8 @@ import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
+import ch.leadrian.samp.kamp.runtime.entity.PlayerMapIconImpl
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

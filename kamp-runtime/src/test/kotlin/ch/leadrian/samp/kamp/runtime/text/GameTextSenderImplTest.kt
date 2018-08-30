@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.api.text.TextFormatter
 import ch.leadrian.samp.kamp.api.text.TextKey
 import ch.leadrian.samp.kamp.api.text.TextProvider
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
+import ch.leadrian.samp.kamp.runtime.entity.InterceptablePlayer
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 import io.mockk.every
 import io.mockk.mockk
@@ -53,12 +53,12 @@ internal class GameTextSenderImplTest {
         @Test
         fun givenSeveralLocalesItShouldSendProvidedText() {
             val locale1 = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale1
                 every { id } returns PlayerId.valueOf(50)
             }
             val locale2 = Locale.FRANCE
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale2
                 every { id } returns PlayerId.valueOf(75)
             }
@@ -90,11 +90,11 @@ internal class GameTextSenderImplTest {
         @Test
         fun givenSingleLocaleItShouldSendProvidedText() {
             val locale = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale
                 every { id } returns PlayerId.valueOf(50)
             }
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale
                 every { id } returns PlayerId.valueOf(75)
             }
@@ -124,12 +124,12 @@ internal class GameTextSenderImplTest {
         @Test
         fun givenSeveralLocalesItShouldSendFormattedProvidedText() {
             val locale1 = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale1
                 every { id } returns PlayerId.valueOf(50)
             }
             val locale2 = Locale.FRANCE
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale2
                 every { id } returns PlayerId.valueOf(75)
             }
@@ -166,11 +166,11 @@ internal class GameTextSenderImplTest {
         @Test
         fun givenSingleLocalesItShouldSendFormattedProvidedText() {
             val locale = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale
                 every { id } returns PlayerId.valueOf(50)
             }
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.locale } returns locale
                 every { id } returns PlayerId.valueOf(75)
             }
@@ -207,7 +207,7 @@ internal class GameTextSenderImplTest {
 
         @Test
         fun shouldSendSimpleText() {
-            val player = mockk<PlayerImpl> {
+            val player = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -226,7 +226,7 @@ internal class GameTextSenderImplTest {
         fun shouldProvidedText() {
             val textKey = TextKey("test")
             val locale = Locale.GERMANY
-            val player = mockk<PlayerImpl> {
+            val player = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
@@ -251,7 +251,7 @@ internal class GameTextSenderImplTest {
         @Test
         fun shouldSendFormattedText() {
             val locale = Locale.GERMANY
-            val player = mockk<PlayerImpl> {
+            val player = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
@@ -277,7 +277,7 @@ internal class GameTextSenderImplTest {
         fun shouldSendFormattedProvidedText() {
             val textKey = TextKey("test")
             val locale = Locale.GERMANY
-            val player = mockk<PlayerImpl> {
+            val player = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
@@ -309,10 +309,10 @@ internal class GameTextSenderImplTest {
 
         @Test
         fun shouldSendSimpleText() {
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
             }
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(75)
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -337,16 +337,16 @@ internal class GameTextSenderImplTest {
         fun shouldProvidedText() {
             val textKey = TextKey("test")
             val locale1 = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale1
             }
             val locale2 = Locale.FRANCE
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(75)
                 every { this@mockk.locale } returns locale2
             }
-            val player3 = mockk<PlayerImpl> {
+            val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
                 every { this@mockk.locale } returns locale2
             }
@@ -376,13 +376,13 @@ internal class GameTextSenderImplTest {
 
         @Test
         fun shouldSendFormattedText() {
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
             }
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(75)
             }
-            val player3 = mockk<PlayerImpl> {
+            val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -412,16 +412,16 @@ internal class GameTextSenderImplTest {
         fun shouldSendFormattedProvidedText() {
             val textKey = TextKey("test")
             val locale1 = Locale.GERMANY
-            val player1 = mockk<PlayerImpl> {
+            val player1 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale1
             }
             val locale2 = Locale.FRANCE
-            val player2 = mockk<PlayerImpl> {
+            val player2 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(75)
                 every { this@mockk.locale } returns locale2
             }
-            val player3 = mockk<PlayerImpl> {
+            val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
                 every { this@mockk.locale } returns locale2
             }
