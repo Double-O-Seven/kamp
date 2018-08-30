@@ -76,69 +76,6 @@ internal class PlayerImpl(
             nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
-    override var position: Position
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            val angle = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
-            return positionOf(x = x.value, y = y.value, z = z.value, angle = angle.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
-        }
-
-    override var location: Location
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            val interiorId = nativeFunctionExecutor.getPlayerInterior(id.value)
-            val virtualWorldId = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            return locationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
-            nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
-        }
-
-    override var angledLocation: AngledLocation
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            val interiorId = nativeFunctionExecutor.getPlayerInterior(id.value)
-            val virtualWorldId = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
-            val angle = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
-            return angledLocationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId,
-                    angle = angle.value
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
-            nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
-            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
-        }
-
     override var angle: Float
         get() {
             val angle = ReferenceFloat()
@@ -159,6 +96,61 @@ internal class PlayerImpl(
         get() = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
         set(value) {
             nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
+        }
+
+    override var position: Position
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            return positionOf(x = x.value, y = y.value, z = z.value, angle = angle)
+        }
+        set(value) {
+            coordinates = value
+            angle = value.angle
+        }
+
+    override var location: Location
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            return locationOf(
+                    x = x.value,
+                    y = y.value,
+                    z = z.value,
+                    interiorId = interiorId,
+                    worldId = virtualWorldId
+            )
+        }
+        set(value) {
+            coordinates = value
+            interiorId = value.interiorId
+            virtualWorldId = value.virtualWorldId
+        }
+
+    override var angledLocation: AngledLocation
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            return angledLocationOf(
+                    x = x.value,
+                    y = y.value,
+                    z = z.value,
+                    interiorId = interiorId,
+                    worldId = virtualWorldId,
+                    angle = angle
+            )
+        }
+        set(value) {
+            coordinates = value
+            interiorId = value.interiorId
+            virtualWorldId = value.virtualWorldId
+            angle = value.angle
         }
 
     override fun setCoordinatesFindZ(coordinates: Vector3D) {

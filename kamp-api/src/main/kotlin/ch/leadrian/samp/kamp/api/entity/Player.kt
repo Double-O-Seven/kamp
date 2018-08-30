@@ -23,17 +23,17 @@ interface Player {
 
     var coordinates: Vector3D
 
-    var position: Position
-
-    var location: Location
-
-    var angledLocation: AngledLocation
-
     var angle: Float
 
     var interiorId: Int
 
     var virtualWorldId: Int
+
+    var position: Position
+
+    var location: Location
+
+    var angledLocation: AngledLocation
 
     fun setCoordinatesFindZ(coordinates: Vector3D)
 
