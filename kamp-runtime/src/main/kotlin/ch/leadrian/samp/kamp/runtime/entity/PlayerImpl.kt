@@ -24,9 +24,9 @@ internal class PlayerImpl(
         private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
-    private val onSpawnHandlers: MutableList<Player.() -> Boolean> = mutableListOf()
+    private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
 
-    private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Boolean> = mutableListOf()
+    private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Unit> = mutableListOf()
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIconImpl> = mutableMapOf()
 
@@ -854,11 +854,14 @@ internal class PlayerImpl(
         nativeFunctionsExecutor.selectObject(id.value)
     }
 
-    override fun cancelSelectMapObject() {
+    override fun cancelEditMapObject() {
         nativeFunctionsExecutor.cancelEdit(id.value)
     }
 
-    override fun onSpawn(onSpawn: Player.() -> Boolean) {
+    override val menu: Menu?
+        get() = nativeFunctionsExecutor.getPlayerMenu(id.value).let { menuRegistry.getMenu(it) }
+
+    override fun onSpawn(onSpawn: Player.() -> Unit) {
         onSpawnHandlers += onSpawn
     }
 
@@ -866,14 +869,11 @@ internal class PlayerImpl(
         onSpawnHandlers.forEach { it.invoke(this) }
     }
 
-    override fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Boolean) {
+    override fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Unit) {
         onDeathHandlers += onDeath
     }
 
-    internal fun onSpawn(killer: Player?, weapon: WeaponModel) {
+    internal fun onDeath(killer: Player?, weapon: WeaponModel) {
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
-
-    override val menu: Menu?
-        get() = nativeFunctionsExecutor.getPlayerMenu(id.value).let { menuRegistry.getMenu(it) }
 }

@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.runtime.types.ReferenceString
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -20,6 +21,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 
 internal class PlayerImplTest {
@@ -1895,5 +1897,649 @@ internal class PlayerImplTest {
                     time = 150
             )
         }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsInVehicle(expectedResult: Boolean) {
+        val vehicleId = VehicleId.valueOf(20)
+        val vehicle = mockk<Vehicle> {
+            every { id } returns vehicleId
+        }
+        every {
+            nativeFunctionExecutor.isPlayerInVehicle(playerid = playerId.value, vehicleid = vehicleId.value)
+        } returns expectedResult
+
+        val result = player.isInVehicle(vehicle)
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsInAnyVehicle(expectedResult: Boolean) {
+        every {
+            nativeFunctionExecutor.isPlayerInAnyVehicle(playerId.value)
+        } returns expectedResult
+
+        val result = player.isInAnyVehicle
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsInAnyCheckpoint(expectedResult: Boolean) {
+        every {
+            nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
+        } returns expectedResult
+
+        val result = player.isInAnyCheckpoint
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
+    }
+
+    @Nested
+    inner class IsPlayerInCheckpointTests {
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentCheckpointIsNullItShouldReturnFalse(isInAnyCheckpoint: Boolean) {
+            val checkpoint = mockk<Checkpoint>()
+            every {
+                nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
+            } returns isInAnyCheckpoint
+            every { nativeFunctionExecutor.setPlayerCheckpoint(any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerCheckpoint(any()) } returns true
+            player.checkpoint = null
+
+            val result = player.isInCheckpoint(checkpoint)
+
+            assertThat(result)
+                    .isFalse()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentCheckpointIsDifferentCheckpointItShouldReturnFalse(isInAnyCheckpoint: Boolean) {
+            val checkpoint = mockk<Checkpoint>()
+            val otherCheckpoint = mockk<Checkpoint> {
+                every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
+                every { size } returns 4f
+            }
+            every {
+                nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
+            } returns isInAnyCheckpoint
+            every { nativeFunctionExecutor.setPlayerCheckpoint(any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerCheckpoint(any()) } returns true
+            player.checkpoint = otherCheckpoint
+
+            val result = player.isInCheckpoint(checkpoint)
+
+            assertThat(result)
+                    .isFalse()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentCheckpointIsGivenCheckpointItShouldReturnExpectedResult(expectedResult: Boolean) {
+            val checkpoint = mockk<Checkpoint> {
+                every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
+                every { size } returns 4f
+            }
+            every {
+                nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
+            } returns expectedResult
+            every { nativeFunctionExecutor.setPlayerCheckpoint(any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerCheckpoint(any()) } returns true
+            player.checkpoint = checkpoint
+
+            val result = player.isInCheckpoint(checkpoint)
+
+            assertThat(result)
+                    .isEqualTo(expectedResult)
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsInAnyRaceCheckpoint(expectedResult: Boolean) {
+        every {
+            nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
+        } returns expectedResult
+
+        val result = player.isInAnyRaceCheckpoint
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
+    }
+
+    @Nested
+    inner class IsPlayerInRaceCheckpointTests {
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentRaceCheckpointIsNullItShouldReturnFalse(isInAnyRaceCheckpoint: Boolean) {
+            val raceCheckpoint = mockk<RaceCheckpoint>()
+            every {
+                nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
+            } returns isInAnyRaceCheckpoint
+            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
+            player.raceCheckpoint = null
+
+            val result = player.isInRaceCheckpoint(raceCheckpoint)
+
+            assertThat(result)
+                    .isFalse()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentRaceCheckpointIsDifferentRaceCheckpointItShouldReturnFalse(isInAnyRaceCheckpoint: Boolean) {
+            val raceCheckpoint = mockk<RaceCheckpoint>()
+            val otherRaceCheckpoint = mockk<RaceCheckpoint> {
+                every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
+                every { size } returns 4f
+                every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
+                every { type } returns RaceCheckpointType.AIR_NORMAL
+            }
+            every {
+                nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
+            } returns isInAnyRaceCheckpoint
+            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
+            player.raceCheckpoint = otherRaceCheckpoint
+
+            val result = player.isInRaceCheckpoint(raceCheckpoint)
+
+            assertThat(result)
+                    .isFalse()
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenCurrentRaceCheckpointIsGivenRaceCheckpointItShouldReturnExpectedResult(expectedResult: Boolean) {
+            val raceCheckpoint = mockk<RaceCheckpoint> {
+                every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
+                every { size } returns 4f
+                every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
+                every { type } returns RaceCheckpointType.AIR_NORMAL
+            }
+            every {
+                nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
+            } returns expectedResult
+            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
+            player.raceCheckpoint = raceCheckpoint
+
+            val result = player.isInRaceCheckpoint(raceCheckpoint)
+
+            assertThat(result)
+                    .isEqualTo(expectedResult)
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldEnableStuntBonus(enable: Boolean) {
+        every { nativeFunctionExecutor.enableStuntBonusForPlayer(any(), any()) } returns true
+
+        player.enableStuntBonus(enable)
+
+        verify { nativeFunctionExecutor.enableStuntBonusForPlayer(playerid = playerId.value, enable = enable) }
+    }
+
+    @Nested
+    inner class SpectatePlayerTests {
+
+        @ParameterizedTest
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: SpectateType) {
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectatePlayer(any(), any(), any()) } returns true
+
+            player.spectate(otherPlayer, type)
+
+            assertThat(player.isSpectating)
+                    .isTrue()
+            verifyOrder {
+                nativeFunctionExecutor.togglePlayerSpectating(playerId.value, true)
+                nativeFunctionExecutor.playerSpectatePlayer(
+                        playerid = playerId.value,
+                        targetplayerid = otherPlayerId.value,
+                        mode = type.value
+                )
+            }
+        }
+
+        @ParameterizedTest
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: SpectateType) {
+            val spectatedPlayerId = PlayerId.valueOf(123)
+            val spectatedPlayer = mockk<Player> {
+                every { id } returns spectatedPlayerId
+            }
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectatePlayer(any(), any(), any()) } returns true
+            player.spectate(spectatedPlayer, type)
+
+            player.spectate(otherPlayer, type)
+
+            assertThat(player.isSpectating)
+                    .isTrue()
+            verifyOrder {
+                nativeFunctionExecutor.togglePlayerSpectating(playerId.value, true)
+                nativeFunctionExecutor.playerSpectatePlayer(
+                        playerid = playerId.value,
+                        targetplayerid = spectatedPlayerId.value,
+                        mode = type.value
+                )
+                nativeFunctionExecutor.playerSpectatePlayer(
+                        playerid = playerId.value,
+                        targetplayerid = otherPlayerId.value,
+                        mode = type.value
+                )
+            }
+        }
+
+        @Test
+        fun shouldStopSpectating() {
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectatePlayer(any(), any(), any()) } returns true
+            player.spectate(otherPlayer, SpectateType.FIXED)
+
+            player.stopSpectating()
+
+            assertThat(player.isSpectating)
+                    .isFalse()
+            verifyOrder { nativeFunctionExecutor.togglePlayerSpectating(playerId.value, false) }
+        }
+    }
+
+    @Nested
+    inner class SpectateVehicleTests {
+
+        @ParameterizedTest
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: SpectateType) {
+            val vehicleId = VehicleId.valueOf(20)
+            val vehicle = mockk<Vehicle> {
+                every { id } returns vehicleId
+            }
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectateVehicle(any(), any(), any()) } returns true
+
+            player.spectate(vehicle, type)
+
+            assertThat(player.isSpectating)
+                    .isTrue()
+            verifyOrder {
+                nativeFunctionExecutor.togglePlayerSpectating(playerId.value, true)
+                nativeFunctionExecutor.playerSpectateVehicle(
+                        playerid = playerId.value,
+                        targetvehicleid = vehicleId.value,
+                        mode = type.value
+                )
+            }
+        }
+
+        @ParameterizedTest
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: SpectateType) {
+            val oldVehicleId = VehicleId.valueOf(20)
+            val oldVehicle = mockk<Vehicle> {
+                every { id } returns oldVehicleId
+            }
+            val newVehicleId = VehicleId.valueOf(20)
+            val newVehicle = mockk<Vehicle> {
+                every { id } returns newVehicleId
+            }
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectateVehicle(any(), any(), any()) } returns true
+            player.spectate(oldVehicle, type)
+
+            player.spectate(newVehicle, type)
+
+            assertThat(player.isSpectating)
+                    .isTrue()
+            verifyOrder {
+                nativeFunctionExecutor.togglePlayerSpectating(playerId.value, true)
+                nativeFunctionExecutor.playerSpectateVehicle(
+                        playerid = playerId.value,
+                        targetvehicleid = oldVehicleId.value,
+                        mode = type.value
+                )
+                nativeFunctionExecutor.playerSpectateVehicle(
+                        playerid = playerId.value,
+                        targetvehicleid = newVehicleId.value,
+                        mode = type.value
+                )
+            }
+        }
+
+        @Test
+        fun shouldStopSpectating() {
+            val vehicleId = VehicleId.valueOf(20)
+            val vehicle = mockk<Vehicle> {
+                every { id } returns vehicleId
+            }
+            every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
+            every { nativeFunctionExecutor.playerSpectateVehicle(any(), any(), any()) } returns true
+            player.spectate(vehicle, SpectateType.FIXED)
+
+            player.stopSpectating()
+
+            assertThat(player.isSpectating)
+                    .isFalse()
+            verifyOrder { nativeFunctionExecutor.togglePlayerSpectating(playerId.value, false) }
+        }
+    }
+
+    @ParameterizedTest
+    @EnumSource(PlayerRecordingType::class)
+    fun shouldStartRecording(type: PlayerRecordingType) {
+        every { nativeFunctionExecutor.startRecordingPlayerData(any(), any(), any()) } returns true
+
+        player.startRecording(type, "test")
+
+        verify {
+            nativeFunctionExecutor.startRecordingPlayerData(
+                    playerid = playerId.value,
+                    recordtype = type.value,
+                    recordname = "test"
+            )
+        }
+    }
+
+    @Test
+    fun shouldStopRecording() {
+        every { nativeFunctionExecutor.stopRecordingPlayerData(any()) } returns true
+
+        player.stopRecording()
+
+        verify { nativeFunctionExecutor.stopRecordingPlayerData(playerId.value) }
+    }
+
+    @Nested
+    inner class CreateExplosionTests {
+
+        @Test
+        fun shouldCreateExplosionUsingSphere() {
+            every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
+
+            player.createExplosion(ExplosionType.NORMAL_3, sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
+
+            verify {
+                nativeFunctionExecutor.createExplosionForPlayer(
+                        playerid = playerId.value,
+                        type = ExplosionType.NORMAL_3.value,
+                        X = 1f,
+                        Y = 2f,
+                        Z = 3f,
+                        Radius = 4f
+                )
+            }
+        }
+
+        @Test
+        fun shouldCreateExplosionUsingVector() {
+            every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
+
+            player.createExplosion(ExplosionType.NORMAL_3, vector3DOf(x = 1f, y = 2f, z = 3f), 4f)
+
+            verify {
+                nativeFunctionExecutor.createExplosionForPlayer(
+                        playerid = playerId.value,
+                        type = ExplosionType.NORMAL_3.value,
+                        X = 1f,
+                        Y = 2f,
+                        Z = 3f,
+                        Radius = 4f
+                )
+            }
+        }
+    }
+
+    @Nested
+    inner class IsAdminTests {
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun shouldReturnExpectedResult(expectedResult: Boolean) {
+            every { nativeFunctionExecutor.isPlayerAdmin(playerId.value) } returns expectedResult
+
+            val result = player.isAdmin
+
+            assertThat(result)
+                    .isEqualTo(expectedResult)
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun givenPlayerIsNotAdminItShouldCheckAgainOnSecondCall(expectedResult: Boolean) {
+            every { nativeFunctionExecutor.isPlayerAdmin(playerId.value) } returnsMany listOf(false, expectedResult)
+            player.isAdmin
+
+            val result = player.isAdmin
+
+            assertThat(result)
+                    .isEqualTo(expectedResult)
+            verify(exactly = 2) { nativeFunctionExecutor.isPlayerAdmin(playerId.value) }
+        }
+
+        @Test
+        fun givenPlayerIsAdminItShouldRememberResult() {
+            every { nativeFunctionExecutor.isPlayerAdmin(playerId.value) } returns true
+            player.isAdmin
+
+            val result = player.isAdmin
+
+            assertThat(result)
+                    .isTrue()
+            verify(exactly = 1) { nativeFunctionExecutor.isPlayerAdmin(playerId.value) }
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsNPC(expectedResult: Boolean) {
+        every { nativeFunctionExecutor.isPlayerNPC(playerId.value) } returns expectedResult
+
+        val result = player.isNPC
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldReturnWhetherPlayerIsHuman(isNPC: Boolean) {
+        every { nativeFunctionExecutor.isPlayerNPC(playerId.value) } returns isNPC
+
+        val result = player.isHuman
+
+        assertThat(result)
+                .isEqualTo(!isNPC)
+    }
+
+    @Test
+    fun shouldKickPlayer() {
+        every { nativeFunctionExecutor.kick(any()) } returns true
+
+        player.kick()
+
+        verify { nativeFunctionExecutor.kick(playerId.value) }
+    }
+
+    @Nested
+    inner class BanTests {
+
+        @ParameterizedTest
+        @ValueSource(strings = ["", " ", "   "])
+        fun givenBlankReasonItShouldBanPlayer(reason: String) {
+            every { nativeFunctionExecutor.ban(any()) } returns true
+
+            player.ban(reason)
+
+            verify { nativeFunctionExecutor.ban(playerId.value) }
+        }
+
+        @Test
+        fun givenNoReasonAsReasonItShouldBanPlayer() {
+            every { nativeFunctionExecutor.ban(any()) } returns true
+
+            player.ban()
+
+            verify { nativeFunctionExecutor.ban(playerId.value) }
+        }
+
+        @Test
+        fun givenNonBlankReasonAsReasonItShouldBanPlayer() {
+            every { nativeFunctionExecutor.banEx(any(), any()) } returns true
+
+            player.ban("test")
+
+            verify { nativeFunctionExecutor.banEx(playerId.value, "test") }
+        }
+    }
+
+    @Test
+    fun shouldReturnVersion() {
+        every {
+            nativeFunctionExecutor.getPlayerVersion(playerid = playerId.value, version = any(), len = 24)
+        } answers {
+            secondArg<ReferenceString>().value = "0.3.7"
+            true
+        }
+
+        val version = player.version
+
+        assertThat(version)
+                .isEqualTo("0.3.7")
+    }
+
+    @Test
+    fun shouldInitializeNetworkStatistics() {
+        val networkStatistics = player.networkStatistics
+
+        assertThat(networkStatistics)
+                .isInstanceOfSatisfying(PlayerNetworkStatisticsImpl::class.java) {
+                    assertThat(it.player)
+                            .isSameAs(player)
+                }
+    }
+
+    @Test
+    fun shouldSelectTextDraw() {
+        every { nativeFunctionExecutor.selectTextDraw(any(), any()) } returns true
+
+        player.selectTextDraw(Colors.RED)
+
+        verify { nativeFunctionExecutor.selectTextDraw(playerid = playerId.value, hovercolor = Colors.RED.value) }
+    }
+
+    @Test
+    fun shouldCancelSelectTextDraw() {
+        every { nativeFunctionExecutor.cancelSelectTextDraw(any()) } returns true
+
+        player.cancelSelectTextDraw()
+
+        verify { nativeFunctionExecutor.cancelSelectTextDraw(playerId.value) }
+    }
+
+    @Test
+    fun shouldEditMapObject() {
+        val mapObjectId = MapObjectId.valueOf(1337)
+        val mapObject = mockk<MapObject> {
+            every { id } returns mapObjectId
+        }
+        every { nativeFunctionExecutor.editObject(any(), any()) } returns true
+
+        player.editMapObject(mapObject)
+
+        verify { nativeFunctionExecutor.editObject(playerid = playerId.value, objectid = mapObjectId.value) }
+    }
+
+    @Test
+    fun shouldEditPlayerMapObject() {
+        val playerMapObjectId = PlayerMapObjectId.valueOf(1337)
+        val playerMapObject = mockk<PlayerMapObject> {
+            every { id } returns playerMapObjectId
+        }
+        every { nativeFunctionExecutor.editPlayerObject(any(), any()) } returns true
+
+        player.editPlayerMapObject(playerMapObject)
+
+        verify { nativeFunctionExecutor.editPlayerObject(playerid = playerId.value, objectid = playerMapObjectId.value) }
+    }
+
+    @Test
+    fun shouldSelectMapObject() {
+        every { nativeFunctionExecutor.selectObject(any()) } returns true
+
+        player.selectMapObject()
+
+        verify { nativeFunctionExecutor.selectObject(playerId.value) }
+    }
+
+    @Test
+    fun shouldCancelSelectMapObject() {
+        every { nativeFunctionExecutor.cancelEdit(any()) } returns true
+
+        player.cancelEditMapObject()
+
+        verify { nativeFunctionExecutor.cancelEdit(playerId.value) }
+    }
+
+    @Nested
+    inner class MenuTests {
+
+        @Test
+        fun shouldReturnMenu() {
+            val menuId = 1337
+            val menu = mockk<Menu>()
+            every { nativeFunctionExecutor.getPlayerMenu(playerId.value) } returns menuId
+            every { menuRegistry.getMenu(menuId) } returns menu
+
+            val playerMenu = player.menu
+
+            assertThat(playerMenu)
+                    .isSameAs(menu)
+        }
+
+        @Test
+        fun givenNoMenuItShouldReturnNull() {
+            every { nativeFunctionExecutor.getPlayerMenu(playerId.value) } returns SAMPConstants.INVALID_MENU
+            every { menuRegistry.getMenu(SAMPConstants.INVALID_MENU) } returns null
+
+            val playerMenu = player.menu
+
+            assertThat(playerMenu)
+                    .isNull()
+        }
+    }
+
+    @Test
+    fun shouldExecuteOnSpawnHandlers() {
+        val onSpawn = mockk<Player.() -> Unit>(relaxed = true)
+        player.onSpawn(onSpawn)
+
+        player.onSpawn()
+
+        verify { onSpawn.invoke(player) }
+    }
+
+    @Test
+    fun shouldExecuteOnDeathHandlers() {
+        val onDeath = mockk<Player.(Player?, WeaponModel) -> Unit>(relaxed = true)
+        player.onDeath(onDeath)
+
+        player.onDeath(killer = otherPlayer, weapon = WeaponModel.TEC9)
+
+        verify { onDeath.invoke(player, otherPlayer, WeaponModel.TEC9) }
     }
 }

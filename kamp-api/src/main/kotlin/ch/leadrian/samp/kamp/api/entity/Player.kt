@@ -257,11 +257,11 @@ interface Player {
 
     fun selectMapObject()
 
-    fun cancelSelectMapObject()
+    fun cancelEditMapObject()
 
-    fun onSpawn(onSpawn: Player.() -> Boolean)
+    fun onSpawn(onSpawn: Player.() -> Unit)
 
-    fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Boolean)
+    fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Unit)
 
     val menu: Menu?
 }
