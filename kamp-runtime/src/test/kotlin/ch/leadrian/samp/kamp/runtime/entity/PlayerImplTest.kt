@@ -2649,7 +2649,6 @@ internal class PlayerImplTest {
 
         @Test
         fun shouldExecuteOnDisconnectHandlers() {
-            every { playerRegistry.unregister(any()) } just Runs
             val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
             player.onDisconnect(onDisconnect)
 
@@ -2660,7 +2659,6 @@ internal class PlayerImplTest {
 
         @Test
         fun shouldSetIsOnlineToFalse() {
-            every { playerRegistry.unregister(any()) } just Runs
 
             player.onDisconnect(DisconnectReason.QUIT)
 
@@ -2669,17 +2667,7 @@ internal class PlayerImplTest {
         }
 
         @Test
-        fun shouldUnregisterPlayerFromPlayerRegistry() {
-            every { playerRegistry.unregister(any()) } just Runs
-
-            player.onDisconnect(DisconnectReason.QUIT)
-
-            verify { playerRegistry.unregister(player) }
-        }
-
-        @Test
         fun shouldDestroyMapIcons() {
-            every { playerRegistry.unregister(any()) } just Runs
             val mapIcon1 = mockk<PlayerMapIcon> {
                 every { id } returns PlayerMapIconId.valueOf(75)
                 every { destroy() } just Runs
@@ -2716,7 +2704,6 @@ internal class PlayerImplTest {
 
         @Test
         fun shouldNotExecuteTwice() {
-            every { playerRegistry.unregister(any()) } just Runs
             val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
             player.onDisconnect(onDisconnect)
 
@@ -2725,7 +2712,6 @@ internal class PlayerImplTest {
 
             verify(exactly = 1) {
                 onDisconnect.invoke(player, DisconnectReason.QUIT)
-                playerRegistry.unregister(player)
             }
         }
     }

@@ -875,7 +875,5 @@ internal class PlayerImpl(
         isOnline = false
 
         destroyMapIcons()
-
-        playerRegistry.unregister(this)
     }
 }
