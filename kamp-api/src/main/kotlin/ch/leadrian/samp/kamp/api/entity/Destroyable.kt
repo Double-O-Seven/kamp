@@ -14,3 +14,8 @@ fun <T : Destroyable> T.requireNotDestroyed(): T {
     if (this.isDestroyed) throw AlreadyDestroyedException("$this is already destroyed")
     return this
 }
+
+inline fun <T : Destroyable, U> T.requireNotDestroyed(block: T.() -> U): U {
+    requireNotDestroyed()
+    return block(this)
+}

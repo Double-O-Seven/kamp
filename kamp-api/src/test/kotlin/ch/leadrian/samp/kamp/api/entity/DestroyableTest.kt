@@ -1,37 +1,76 @@
 package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class DestroyableTest {
 
-    @Test
-    fun givenDestroyableIsDestroyedItShouldThrowAnException() {
-        val destroyable = mockk<Destroyable> {
-            every { isDestroyed } returns true
+    @Nested
+    inner class NonLambdaTests {
+
+        @Test
+        fun givenDestroyableIsDestroyedItShouldThrowAnException() {
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns true
+            }
+
+            val caughtThrowable = catchThrowable { destroyable.requireNotDestroyed() }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(AlreadyDestroyedException::class.java)
         }
 
-        val caughtThrowable = catchThrowable { destroyable.requireNotDestroyed() }
+        @Test
+        fun givenDestroyableIsDestroyedNotItShouldNotThrowAnException() {
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns false
+            }
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(AlreadyDestroyedException::class.java)
+            val returnedDestroyable = destroyable.requireNotDestroyed()
+
+            assertThat(returnedDestroyable)
+                    .isSameAs(destroyable)
+        }
     }
 
-    @Test
-    fun givenDestroyableIsDestroyedNotItShouldNotThrowAnException() {
-        val destroyable = mockk<Destroyable> {
-            every { isDestroyed } returns false
+    @Nested
+    inner class LambdaTests {
+
+        @Test
+        fun givenDestroyableIsDestroyedItShouldThrowAnException() {
+            val block = mockk<Destroyable.() -> Unit>(relaxed = true)
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns true
+            }
+
+            val caughtThrowable = catchThrowable { destroyable.requireNotDestroyed(block) }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(AlreadyDestroyedException::class.java)
+            verify { block wasNot Called }
         }
 
-        val returnedDestroyable = destroyable.requireNotDestroyed()
+        @Test
+        fun givenDestroyableIsNotDestroyedItShouldNotThrowAnException() {
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns false
+            }
+            val block = mockk<Destroyable.() -> Int> {
+                every { this@mockk.invoke(destroyable) } returns 1337
+            }
 
-        assertThat(returnedDestroyable)
-                .isSameAs(destroyable)
+            val result = destroyable.requireNotDestroyed(block)
+
+            assertThat(result)
+                    .isEqualTo(1337)
+        }
     }
-
 
 }
