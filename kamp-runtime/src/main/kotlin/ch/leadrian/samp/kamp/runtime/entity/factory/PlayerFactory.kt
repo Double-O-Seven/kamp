@@ -21,7 +21,7 @@ constructor(
         private val mapObjectRegistry: MapObjectRegistry,
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
-        private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
     private val interceptors: List<PlayerInterceptor> = interceptors
@@ -37,7 +37,7 @@ constructor(
                 mapObjectRegistry = mapObjectRegistry,
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         interceptors.forEach {

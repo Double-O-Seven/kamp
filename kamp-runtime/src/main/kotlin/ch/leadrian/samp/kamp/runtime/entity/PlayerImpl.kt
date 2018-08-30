@@ -23,7 +23,7 @@ internal class PlayerImpl(
         private val mapObjectRegistry: MapObjectRegistry,
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
-        private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : InterceptablePlayer {
 
     private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
@@ -43,11 +43,11 @@ internal class PlayerImpl(
     override var locale: Locale = Locale.getDefault()
 
     override fun spawn() {
-        nativeFunctionsExecutor.spawnPlayer(id.value)
+        nativeFunctionExecutor.spawnPlayer(id.value)
     }
 
     override fun setSpawnInfo(spawnInfo: SpawnInfo) {
-        nativeFunctionsExecutor.setSpawnInfo(
+        nativeFunctionExecutor.setSpawnInfo(
                 playerid = id.value,
                 team = spawnInfo.teamId.value,
                 skin = spawnInfo.skinModel.value,
@@ -69,11 +69,11 @@ internal class PlayerImpl(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
             return vector3DOf(x = x.value, y = y.value, z = z.value)
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
     override var position: Position
@@ -82,13 +82,13 @@ internal class PlayerImpl(
             val y = ReferenceFloat()
             val z = ReferenceFloat()
             val angle = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            nativeFunctionsExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
             return positionOf(x = x.value, y = y.value, z = z.value, angle = angle.value)
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionsExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
+            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
         }
 
     override var location: Location
@@ -96,9 +96,9 @@ internal class PlayerImpl(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            val interiorId = nativeFunctionsExecutor.getPlayerInterior(id.value)
-            val virtualWorldId = nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
-            nativeFunctionsExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            val interiorId = nativeFunctionExecutor.getPlayerInterior(id.value)
+            val virtualWorldId = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
             return locationOf(
                     x = x.value,
                     y = y.value,
@@ -108,9 +108,9 @@ internal class PlayerImpl(
             )
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
-            nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
+            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+            nativeFunctionExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
+            nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
         }
 
     override var angledLocation: AngledLocation
@@ -118,11 +118,11 @@ internal class PlayerImpl(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            val interiorId = nativeFunctionsExecutor.getPlayerInterior(id.value)
-            val virtualWorldId = nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
+            val interiorId = nativeFunctionExecutor.getPlayerInterior(id.value)
+            val virtualWorldId = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
             val angle = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            nativeFunctionsExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
+            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
+            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
             return angledLocationOf(
                     x = x.value,
                     y = y.value,
@@ -133,144 +133,144 @@ internal class PlayerImpl(
             )
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-            nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
-            nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
-            nativeFunctionsExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
+            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+            nativeFunctionExecutor.setPlayerInterior(playerid = id.value, interiorid = value.interiorId)
+            nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value.virtualWorldId)
+            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value.angle)
         }
 
     override var angle: Float
         get() {
             val angle = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
+            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
             return angle.value
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerFacingAngle(playerid = id.value, angle = value)
+            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value)
         }
 
     override var interiorId: Int
-        get() = nativeFunctionsExecutor.getPlayerInterior(id.value)
+        get() = nativeFunctionExecutor.getPlayerInterior(id.value)
         set(value) {
-            nativeFunctionsExecutor.setPlayerInterior(playerid = id.value, interiorid = value)
+            nativeFunctionExecutor.setPlayerInterior(playerid = id.value, interiorid = value)
         }
 
     override var virtualWorldId: Int
-        get() = nativeFunctionsExecutor.getPlayerVirtualWorld(id.value)
+        get() = nativeFunctionExecutor.getPlayerVirtualWorld(id.value)
         set(value) {
-            nativeFunctionsExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
+            nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
         }
 
     override fun setCoordinatesFindZ(coordinates: Vector3D) {
-        nativeFunctionsExecutor.setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
+        nativeFunctionExecutor.setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean =
-            nativeFunctionsExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
+            nativeFunctionExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
 
     override var health: Float
         get() {
             val health = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerHealth(playerid = id.value, health = health)
+            nativeFunctionExecutor.getPlayerHealth(playerid = id.value, health = health)
             return health.value
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerHealth(playerid = id.value, health = value)
+            nativeFunctionExecutor.setPlayerHealth(playerid = id.value, health = value)
         }
 
     override var armour: Float
         get() {
             val armour = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerArmour(playerid = id.value, armour = armour)
+            nativeFunctionExecutor.getPlayerArmour(playerid = id.value, armour = armour)
             return armour.value
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerArmour(playerid = id.value, armour = value)
+            nativeFunctionExecutor.setPlayerArmour(playerid = id.value, armour = value)
         }
 
     override fun setAmmo(weaponModel: WeaponModel, ammo: Int) {
-        nativeFunctionsExecutor.setPlayerAmmo(playerid = id.value, weaponid = weaponModel.value, ammo = ammo)
+        nativeFunctionExecutor.setPlayerAmmo(playerid = id.value, weaponid = weaponModel.value, ammo = ammo)
     }
 
     override val ammo: Int
-        get() = nativeFunctionsExecutor.getPlayerAmmo(id.value)
+        get() = nativeFunctionExecutor.getPlayerAmmo(id.value)
 
     override val weaponState: WeaponState
-        get() = nativeFunctionsExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
+        get() = nativeFunctionExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
 
     override val targetPlayer: Player?
-        get() = nativeFunctionsExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
+        get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
 
     override val targetActor: Actor?
-        get() = nativeFunctionsExecutor.getPlayerTargetActor(id.value).let { actorRegistry.getActor(it) }
+        get() = nativeFunctionExecutor.getPlayerTargetActor(id.value).let { actorRegistry.getActor(it) }
 
     override var teamId: TeamId
-        get() = nativeFunctionsExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
+        get() = nativeFunctionExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
         set(value) {
-            nativeFunctionsExecutor.setPlayerTeam(playerid = id.value, teamid = value.value)
+            nativeFunctionExecutor.setPlayerTeam(playerid = id.value, teamid = value.value)
         }
 
     override var score: Int
-        get() = nativeFunctionsExecutor.getPlayerScore(id.value)
+        get() = nativeFunctionExecutor.getPlayerScore(id.value)
         set(value) {
-            nativeFunctionsExecutor.setPlayerScore(playerid = id.value, score = value)
+            nativeFunctionExecutor.setPlayerScore(playerid = id.value, score = value)
         }
 
     override var drunkLevel: Int
-        get() = nativeFunctionsExecutor.getPlayerDrunkLevel(id.value)
+        get() = nativeFunctionExecutor.getPlayerDrunkLevel(id.value)
         set(value) {
-            nativeFunctionsExecutor.setPlayerDrunkLevel(playerid = id.value, level = value)
+            nativeFunctionExecutor.setPlayerDrunkLevel(playerid = id.value, level = value)
         }
 
     override var color: Color
-        get() = nativeFunctionsExecutor.getPlayerColor(id.value).let { colorOf(it) }
+        get() = nativeFunctionExecutor.getPlayerColor(id.value).let { colorOf(it) }
         set(value) {
-            nativeFunctionsExecutor.setPlayerColor(playerid = id.value, color = value.value)
+            nativeFunctionExecutor.setPlayerColor(playerid = id.value, color = value.value)
         }
 
     override var skin: SkinModel
-        get() = nativeFunctionsExecutor.getPlayerSkin(id.value).let { SkinModel[it] }
+        get() = nativeFunctionExecutor.getPlayerSkin(id.value).let { SkinModel[it] }
         set(value) {
-            nativeFunctionsExecutor.setPlayerSkin(playerid = id.value, skinid = value.value)
+            nativeFunctionExecutor.setPlayerSkin(playerid = id.value, skinid = value.value)
         }
 
     override var armedWeapon: WeaponModel
-        get() = nativeFunctionsExecutor.getPlayerWeapon(id.value).let { WeaponModel[it] }
+        get() = nativeFunctionExecutor.getPlayerWeapon(id.value).let { WeaponModel[it] }
         set(value) {
-            nativeFunctionsExecutor.setPlayerArmedWeapon(playerid = id.value, weaponid = value.value)
+            nativeFunctionExecutor.setPlayerArmedWeapon(playerid = id.value, weaponid = value.value)
         }
 
     override fun getWeaponData(slot: WeaponSlot): WeaponData {
         val weapon = ReferenceInt()
         val ammo = ReferenceInt()
-        nativeFunctionsExecutor.getPlayerWeaponData(playerid = id.value, slot = slot.value, weapon = weapon, ammo = ammo)
+        nativeFunctionExecutor.getPlayerWeaponData(playerid = id.value, slot = slot.value, weapon = weapon, ammo = ammo)
         return weaponDataOf(model = WeaponModel[weapon.value], ammo = ammo.value)
     }
 
     override var money: Int
-        get() = nativeFunctionsExecutor.getPlayerMoney(id.value)
+        get() = nativeFunctionExecutor.getPlayerMoney(id.value)
         set(value) {
-            val moneyToGive = value - nativeFunctionsExecutor.getPlayerMoney(id.value)
-            nativeFunctionsExecutor.givePlayerMoney(playerid = id.value, money = moneyToGive)
+            val moneyToGive = value - nativeFunctionExecutor.getPlayerMoney(id.value)
+            nativeFunctionExecutor.givePlayerMoney(playerid = id.value, money = moneyToGive)
         }
 
     override fun giveMoney(amount: Int) {
-        nativeFunctionsExecutor.givePlayerMoney(playerid = id.value, money = amount)
+        nativeFunctionExecutor.givePlayerMoney(playerid = id.value, money = amount)
     }
 
     override fun resetMoney() {
-        nativeFunctionsExecutor.resetPlayerMoney(id.value)
+        nativeFunctionExecutor.resetPlayerMoney(id.value)
     }
 
     override val ipAddress: String by lazy {
         val ipAddress = ReferenceString()
-        nativeFunctionsExecutor.getPlayerIp(playerid = id.value, ip = ipAddress, size = 16)
+        nativeFunctionExecutor.getPlayerIp(playerid = id.value, ip = ipAddress, size = 16)
         ipAddress.value ?: "255.255.255.255"
     }
 
     override val gpci: String by lazy {
         val gpci = ReferenceString()
-        nativeFunctionsExecutor.gpci(playerid = id.value, buffer = gpci, size = 41)
+        nativeFunctionExecutor.gpci(playerid = id.value, buffer = gpci, size = 41)
         gpci.value ?: ""
     }
 
@@ -278,7 +278,7 @@ internal class PlayerImpl(
         get() {
             if (field.isEmpty()) {
                 val name = ReferenceString()
-                nativeFunctionsExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
+                nativeFunctionExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
                 field = name.value.orEmpty()
             }
             return field
@@ -287,7 +287,7 @@ internal class PlayerImpl(
             if (value.isEmpty()) {
                 throw InvalidPlayerNameException("", "Name cannot be empty")
             }
-            val result = nativeFunctionsExecutor.setPlayerName(playerid = id.value, name = value)
+            val result = nativeFunctionExecutor.setPlayerName(playerid = id.value, name = value)
             when (result) {
                 -1 -> throw InvalidPlayerNameException(name = value, message = "Name is already in use, too long or invalid")
                 else -> field = value
@@ -295,17 +295,17 @@ internal class PlayerImpl(
         }
 
     override val state: PlayerState
-        get() = nativeFunctionsExecutor.getPlayerState(id.value).let { PlayerState[it] }
+        get() = nativeFunctionExecutor.getPlayerState(id.value).let { PlayerState[it] }
 
     override val ping: Int
-        get() = nativeFunctionsExecutor.getPlayerPing(id.value)
+        get() = nativeFunctionExecutor.getPlayerPing(id.value)
 
     override val keys: PlayerKeys
         get() {
             val keys = ReferenceInt()
             val leftRight = ReferenceInt()
             val upDown = ReferenceInt()
-            nativeFunctionsExecutor.getPlayerKeys(playerid = id.value, keys = keys, leftright = leftRight, updown = upDown)
+            nativeFunctionExecutor.getPlayerKeys(playerid = id.value, keys = keys, leftright = leftRight, updown = upDown)
             return PlayerKeysImpl(
                     keys = keys.value,
                     leftRight = leftRight.value,
@@ -318,43 +318,43 @@ internal class PlayerImpl(
         get() {
             val hour = ReferenceInt()
             val minute = ReferenceInt()
-            nativeFunctionsExecutor.getPlayerTime(playerid = id.value, hour = hour, minute = minute)
+            nativeFunctionExecutor.getPlayerTime(playerid = id.value, hour = hour, minute = minute)
             return timeOf(hour = hour.value, minute = minute.value)
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerTime(playerid = id.value, hour = value.hour, minute = value.minute)
+            nativeFunctionExecutor.setPlayerTime(playerid = id.value, hour = value.hour, minute = value.minute)
         }
 
     override fun toggleClock(toggle: Boolean) {
-        nativeFunctionsExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
+        nativeFunctionExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
     }
 
     override fun setWeather(weatherId: Int) {
-        nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
+        nativeFunctionExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
     }
 
     override fun setWeather(weather: Weather) {
-        nativeFunctionsExecutor.setPlayerWeather(playerid = id.value, weather = weather.value)
+        nativeFunctionExecutor.setPlayerWeather(playerid = id.value, weather = weather.value)
     }
 
     override fun forceClassSelection() {
-        nativeFunctionsExecutor.forceClassSelection(id.value)
+        nativeFunctionExecutor.forceClassSelection(id.value)
     }
 
     override var wantedLevel: Int
-        get() = nativeFunctionsExecutor.getPlayerWantedLevel(id.value)
+        get() = nativeFunctionExecutor.getPlayerWantedLevel(id.value)
         set(value) {
-            nativeFunctionsExecutor.setPlayerWantedLevel(playerid = id.value, level = value)
+            nativeFunctionExecutor.setPlayerWantedLevel(playerid = id.value, level = value)
         }
 
     override var fightingStyle: FightingStyle
-        get() = nativeFunctionsExecutor.getPlayerFightingStyle(id.value).let { FightingStyle[it] }
+        get() = nativeFunctionExecutor.getPlayerFightingStyle(id.value).let { FightingStyle[it] }
         set(value) {
-            nativeFunctionsExecutor.setPlayerFightingStyle(playerid = id.value, style = value.value)
+            nativeFunctionExecutor.setPlayerFightingStyle(playerid = id.value, style = value.value)
         }
 
     override fun playCrimeReport(suspect: Player, crimeReport: CrimeReport) {
-        nativeFunctionsExecutor.playCrimeReportForPlayer(
+        nativeFunctionExecutor.playCrimeReportForPlayer(
                 playerid = id.value,
                 crime = crimeReport.value,
                 suspectid = suspect.id.value
@@ -362,7 +362,7 @@ internal class PlayerImpl(
     }
 
     override fun playAudioStream(url: String, position: Sphere, usePosition: Boolean) {
-        nativeFunctionsExecutor.playAudioStreamForPlayer(
+        nativeFunctionExecutor.playAudioStreamForPlayer(
                 playerid = id.value,
                 url = url,
                 posX = position.x,
@@ -374,7 +374,7 @@ internal class PlayerImpl(
     }
 
     override fun playAudioStream(url: String) {
-        nativeFunctionsExecutor.playAudioStreamForPlayer(
+        nativeFunctionExecutor.playAudioStreamForPlayer(
                 playerid = id.value,
                 url = url,
                 posX = 0f,
@@ -386,25 +386,25 @@ internal class PlayerImpl(
     }
 
     override fun stopAudioStream() {
-        nativeFunctionsExecutor.stopAudioStreamForPlayer(id.value)
+        nativeFunctionExecutor.stopAudioStreamForPlayer(id.value)
     }
 
     override fun setShopName(shopName: ShopName) {
-        nativeFunctionsExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
+        nativeFunctionExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
     }
 
     override fun setSkillLevel(skill: WeaponSkill, level: Int) {
-        nativeFunctionsExecutor.setPlayerSkillLevel(playerid = id.value, skill = skill.value, level = level)
+        nativeFunctionExecutor.setPlayerSkillLevel(playerid = id.value, skill = skill.value, level = level)
     }
 
     override val surfingVehicle: Vehicle?
-        get() = nativeFunctionsExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
+        get() = nativeFunctionExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val surfingObject: MapObject?
-        get() = nativeFunctionsExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.getMapObject(it) }
+        get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.getMapObject(it) }
 
     override fun removeBuilding(modelId: Int, position: Sphere) {
-        nativeFunctionsExecutor.removeBuildingForPlayer(
+        nativeFunctionExecutor.removeBuildingForPlayer(
                 playerid = id.value,
                 modelid = modelId,
                 fX = position.x,
@@ -422,7 +422,7 @@ internal class PlayerImpl(
             val originX = ReferenceFloat()
             val originY = ReferenceFloat()
             val originZ = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerLastShotVectors(
+            nativeFunctionExecutor.getPlayerLastShotVectors(
                     playerid = id.value,
                     fHitPosX = hitPosX,
                     fHitPosY = hitPosY,
@@ -442,14 +442,14 @@ internal class PlayerImpl(
                 AttachedObjectSlotImpl(
                         player = this,
                         index = it,
-                        nativeFunctionsExecutor = nativeFunctionsExecutor
+                        nativeFunctionExecutor = nativeFunctionExecutor
                 )
             }.let { Collections.unmodifiableList(it) }
 
-    override val playerVars: PlayerVars = PlayerVarsImpl(this, nativeFunctionsExecutor)
+    override val playerVars: PlayerVars = PlayerVarsImpl(this, nativeFunctionExecutor)
 
     override fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int) {
-        nativeFunctionsExecutor.setPlayerChatBubble(
+        nativeFunctionExecutor.setPlayerChatBubble(
                 playerid = id.value,
                 text = text,
                 color = color.value,
@@ -459,20 +459,20 @@ internal class PlayerImpl(
     }
 
     override val vehicle: Vehicle?
-        get() = nativeFunctionsExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
+        get() = nativeFunctionExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val vehicleSeat: Int?
-        get() = nativeFunctionsExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
+        get() = nativeFunctionExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
 
     override fun removeFromVehicle(): Boolean =
-            nativeFunctionsExecutor.removePlayerFromVehicle(id.value)
+            nativeFunctionExecutor.removePlayerFromVehicle(id.value)
 
     override fun toggleControllable(toggle: Boolean) {
-        nativeFunctionsExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
+        nativeFunctionExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
     }
 
     override fun playSound(soundId: Int, coordinates: Vector3D) {
-        nativeFunctionsExecutor.playerPlaySound(
+        nativeFunctionExecutor.playerPlaySound(
                 playerid = id.value,
                 soundid = soundId,
                 x = coordinates.x,
@@ -482,7 +482,7 @@ internal class PlayerImpl(
     }
 
     override fun applyAnimation(animation: Animation, fDelta: Float, loop: Boolean, lockX: Boolean, lockY: Boolean, freeze: Boolean, time: Int, forceSync: Boolean) {
-        nativeFunctionsExecutor.applyAnimation(
+        nativeFunctionExecutor.applyAnimation(
                 playerid = id.value,
                 animlib = animation.library,
                 animname = animation.animationName,
@@ -497,27 +497,27 @@ internal class PlayerImpl(
     }
 
     override fun clearAnimation(forceSync: Boolean) {
-        nativeFunctionsExecutor.clearAnimations(playerid = id.value, forcesync = forceSync)
+        nativeFunctionExecutor.clearAnimations(playerid = id.value, forcesync = forceSync)
     }
 
     override val animationIndex: Int
-        get() = nativeFunctionsExecutor.getPlayerAnimationIndex(id.value)
+        get() = nativeFunctionExecutor.getPlayerAnimationIndex(id.value)
 
     override var specialAction: SpecialAction
-        get() = nativeFunctionsExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }
+        get() = nativeFunctionExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }
         set(value) {
-            nativeFunctionsExecutor.setPlayerSpecialAction(playerid = id.value, actionid = value.value)
+            nativeFunctionExecutor.setPlayerSpecialAction(playerid = id.value, actionid = value.value)
         }
 
     override fun disableRemoteVehicleCollisions(disable: Boolean) {
-        nativeFunctionsExecutor.disableRemoteVehicleCollisions(playerid = id.value, disable = disable)
+        nativeFunctionExecutor.disableRemoteVehicleCollisions(playerid = id.value, disable = disable)
     }
 
     override var checkpoint: Checkpoint? = null
         set(value) {
             when (value) {
-                null -> nativeFunctionsExecutor.disablePlayerCheckpoint(id.value)
-                else -> nativeFunctionsExecutor.setPlayerCheckpoint(
+                null -> nativeFunctionExecutor.disablePlayerCheckpoint(id.value)
+                else -> nativeFunctionExecutor.setPlayerCheckpoint(
                         playerid = id.value,
                         x = value.coordinates.x,
                         y = value.coordinates.y,
@@ -531,8 +531,8 @@ internal class PlayerImpl(
     override var raceCheckpoint: RaceCheckpoint? = null
         set(value) {
             when (value) {
-                null -> nativeFunctionsExecutor.disablePlayerRaceCheckpoint(id.value)
-                else -> nativeFunctionsExecutor.setPlayerRaceCheckpoint(
+                null -> nativeFunctionExecutor.disablePlayerRaceCheckpoint(id.value)
+                else -> nativeFunctionExecutor.setPlayerRaceCheckpoint(
                         playerid = id.value,
                         x = value.coordinates.x,
                         y = value.coordinates.y,
@@ -549,7 +549,7 @@ internal class PlayerImpl(
 
     override var worldBounds: Rectangle? = null
         set(value) {
-            nativeFunctionsExecutor.setPlayerWorldBounds(
+            nativeFunctionExecutor.setPlayerWorldBounds(
                     playerid = id.value,
                     x_min = value?.minX ?: -20_000f,
                     x_max = value?.maxX ?: 20_000f,
@@ -560,11 +560,11 @@ internal class PlayerImpl(
         }
 
     override fun showPlayerMarker(player: Player, color: Color) {
-        nativeFunctionsExecutor.setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
+        nativeFunctionExecutor.setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
     }
 
     override fun showPlayerNameTag(player: Player, show: Boolean) {
-        nativeFunctionsExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
+        nativeFunctionExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
     }
 
     override val mapIcons: List<PlayerMapIcon>
@@ -594,7 +594,7 @@ internal class PlayerImpl(
     }
 
     override fun allowTeleport(allow: Boolean) {
-        nativeFunctionsExecutor.allowPlayerTeleport(playerid = this.id.value, allow = allow)
+        nativeFunctionExecutor.allowPlayerTeleport(playerid = this.id.value, allow = allow)
     }
 
     override var cameraPosition: Vector3D
@@ -602,15 +602,15 @@ internal class PlayerImpl(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerCameraPos(playerid = id.value, x = x, y = y, z = z)
+            nativeFunctionExecutor.getPlayerCameraPos(playerid = id.value, x = x, y = y, z = z)
             return vector3DOf(x = x.value, y = y.value, z = z.value)
         }
         set(value) {
-            nativeFunctionsExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
+            nativeFunctionExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
     override fun setCameraLookAt(coordinates: Vector3D, type: CameraType) {
-        nativeFunctionsExecutor.setPlayerCameraLookAt(
+        nativeFunctionExecutor.setPlayerCameraLookAt(
                 playerid = id.value,
                 x = coordinates.x,
                 y = coordinates.y,
@@ -620,7 +620,7 @@ internal class PlayerImpl(
     }
 
     override fun setCameraBehind() {
-        nativeFunctionsExecutor.setCameraBehindPlayer(id.value)
+        nativeFunctionExecutor.setCameraBehindPlayer(id.value)
     }
 
     override val cameraFrontVector: Vector3D
@@ -628,47 +628,47 @@ internal class PlayerImpl(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            nativeFunctionsExecutor.getPlayerCameraFrontVector(playerid = id.value, x = x, y = y, z = z)
+            nativeFunctionExecutor.getPlayerCameraFrontVector(playerid = id.value, x = x, y = y, z = z)
             return vector3DOf(x = x.value, y = y.value, z = z.value)
         }
 
     override val cameraMode: CameraMode
-        get() = nativeFunctionsExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
+        get() = nativeFunctionExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
 
     override fun enableCameraTarget(enable: Boolean) {
-        nativeFunctionsExecutor.enablePlayerCameraTarget(playerid = id.value, enable = enable)
+        nativeFunctionExecutor.enablePlayerCameraTarget(playerid = id.value, enable = enable)
     }
 
     override val cameraTargetObject: MapObject?
-        get() = nativeFunctionsExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry.getMapObject(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry.getMapObject(it) }
 
     override val cameraTargetVehicle: Vehicle?
-        get() = nativeFunctionsExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.getVehicle(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.getVehicle(it) }
 
     override val cameraTargetPlayer: Player?
-        get() = nativeFunctionsExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.getPlayer(it) }
 
     override val cameraTargetActor: Actor?
         get() {
-            return nativeFunctionsExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry.getActor(it) }
+            return nativeFunctionExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry.getActor(it) }
         }
 
     override val cameraAspectRatio: Float
-        get() = nativeFunctionsExecutor.getPlayerCameraAspectRatio(id.value)
+        get() = nativeFunctionExecutor.getPlayerCameraAspectRatio(id.value)
 
     override val cameraZoom: Float
-        get() = nativeFunctionsExecutor.getPlayerCameraZoom(id.value)
+        get() = nativeFunctionExecutor.getPlayerCameraZoom(id.value)
 
     override fun attachCameraTo(mapObject: MapObject) {
-        nativeFunctionsExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
+        nativeFunctionExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
     override fun attachCameraTo(playerMapObject: PlayerMapObject) {
-        nativeFunctionsExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
+        nativeFunctionExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
     }
 
     override fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType) {
-        nativeFunctionsExecutor.interpolateCameraPos(
+        nativeFunctionExecutor.interpolateCameraPos(
                 playerid = id.value,
                 FromX = from.x,
                 FromY = from.y,
@@ -682,7 +682,7 @@ internal class PlayerImpl(
     }
 
     override fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType) {
-        nativeFunctionsExecutor.interpolateCameraLookAt(
+        nativeFunctionExecutor.interpolateCameraLookAt(
                 playerid = id.value,
                 FromX = from.x,
                 FromY = from.y,
@@ -696,17 +696,17 @@ internal class PlayerImpl(
     }
 
     override fun isInVehicle(vehicle: Vehicle): Boolean =
-            nativeFunctionsExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
+            nativeFunctionExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
 
     override val isInAnyVehicle: Boolean
-        get() = nativeFunctionsExecutor.isPlayerInAnyVehicle(id.value)
+        get() = nativeFunctionExecutor.isPlayerInAnyVehicle(id.value)
 
     override fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
         return this.checkpoint == checkpoint && isInAnyCheckpoint
     }
 
     override val isInAnyCheckpoint: Boolean
-        get() = nativeFunctionsExecutor.isPlayerInCheckpoint(id.value)
+        get() = nativeFunctionExecutor.isPlayerInCheckpoint(id.value)
 
     override fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
         return this.raceCheckpoint == raceCheckpoint && isInAnyRaceCheckpoint
@@ -714,18 +714,18 @@ internal class PlayerImpl(
 
     override val isInAnyRaceCheckpoint: Boolean
         get() {
-            return nativeFunctionsExecutor.isPlayerInRaceCheckpoint(id.value)
+            return nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
         }
 
     override fun enableStuntBonus(enable: Boolean) {
-        nativeFunctionsExecutor.enableStuntBonusForPlayer(playerid = id.value, enable = enable)
+        nativeFunctionExecutor.enableStuntBonusForPlayer(playerid = id.value, enable = enable)
     }
 
     override fun spectate(player: Player, mode: SpectateType) {
         if (!isSpectating) {
             toggleSpectating(true)
         }
-        nativeFunctionsExecutor.playerSpectatePlayer(
+        nativeFunctionExecutor.playerSpectatePlayer(
                 playerid = this.id.value,
                 targetplayerid = player.id.value,
                 mode = mode.value
@@ -736,7 +736,7 @@ internal class PlayerImpl(
         if (!isSpectating) {
             toggleSpectating(true)
         }
-        nativeFunctionsExecutor.playerSpectateVehicle(
+        nativeFunctionExecutor.playerSpectateVehicle(
                 playerid = this.id.value,
                 targetvehicleid = vehicle.id.value,
                 mode = mode.value
@@ -748,7 +748,7 @@ internal class PlayerImpl(
     }
 
     private fun toggleSpectating(toggle: Boolean) {
-        nativeFunctionsExecutor.togglePlayerSpectating(playerid = id.value, toggle = toggle)
+        nativeFunctionExecutor.togglePlayerSpectating(playerid = id.value, toggle = toggle)
         isSpectating = toggle
     }
 
@@ -756,7 +756,7 @@ internal class PlayerImpl(
         private set
 
     override fun startRecording(type: PlayerRecordingType, recordName: String) {
-        nativeFunctionsExecutor.startRecordingPlayerData(
+        nativeFunctionExecutor.startRecordingPlayerData(
                 playerid = id.value,
                 recordtype = type.value,
                 recordname = recordName
@@ -764,11 +764,11 @@ internal class PlayerImpl(
     }
 
     override fun stopRecording() {
-        nativeFunctionsExecutor.stopRecordingPlayerData(id.value)
+        nativeFunctionExecutor.stopRecordingPlayerData(id.value)
     }
 
     override fun createExplosion(type: ExplosionType, area: Sphere) {
-        nativeFunctionsExecutor.createExplosionForPlayer(
+        nativeFunctionExecutor.createExplosionForPlayer(
                 playerid = id.value,
                 X = area.x,
                 Y = area.y,
@@ -779,7 +779,7 @@ internal class PlayerImpl(
     }
 
     override fun createExplosion(type: ExplosionType, coordinates: Vector3D, radius: Float) {
-        nativeFunctionsExecutor.createExplosionForPlayer(
+        nativeFunctionExecutor.createExplosionForPlayer(
                 playerid = id.value,
                 X = coordinates.x,
                 Y = coordinates.y,
@@ -793,67 +793,67 @@ internal class PlayerImpl(
         private set
         get() {
             if (!field) {
-                field = nativeFunctionsExecutor.isPlayerAdmin(id.value)
+                field = nativeFunctionExecutor.isPlayerAdmin(id.value)
             }
             return field
         }
 
     override val isNPC: Boolean by lazy {
-        nativeFunctionsExecutor.isPlayerNPC(id.value)
+        nativeFunctionExecutor.isPlayerNPC(id.value)
     }
 
     override val isHuman: Boolean
         get() = !isNPC
 
     override fun kick() {
-        nativeFunctionsExecutor.kick(id.value)
+        nativeFunctionExecutor.kick(id.value)
     }
 
     override fun ban(reason: String?) {
         when {
-            reason != null && reason.isNotBlank() -> nativeFunctionsExecutor.banEx(playerid = id.value, reason = reason)
-            else -> nativeFunctionsExecutor.ban(id.value)
+            reason != null && reason.isNotBlank() -> nativeFunctionExecutor.banEx(playerid = id.value, reason = reason)
+            else -> nativeFunctionExecutor.ban(id.value)
         }
     }
 
     override val version: String
         get() {
             val version = ReferenceString()
-            nativeFunctionsExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
+            nativeFunctionExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
             return version.value ?: ""
         }
 
     override val networkStatistics: PlayerNetworkStatistics = PlayerNetworkStatisticsImpl(
             player = this,
-            nativeFunctionsExecutor = nativeFunctionsExecutor
+            nativeFunctionExecutor = nativeFunctionExecutor
     )
 
     override fun selectTextDraw(hoverColor: Color) {
-        nativeFunctionsExecutor.selectTextDraw(playerid = id.value, hovercolor = hoverColor.value)
+        nativeFunctionExecutor.selectTextDraw(playerid = id.value, hovercolor = hoverColor.value)
     }
 
     override fun cancelSelectTextDraw() {
-        nativeFunctionsExecutor.cancelSelectTextDraw(id.value)
+        nativeFunctionExecutor.cancelSelectTextDraw(id.value)
     }
 
     override fun editMapObject(mapObject: MapObject) {
-        nativeFunctionsExecutor.editObject(playerid = id.value, objectid = mapObject.id.value)
+        nativeFunctionExecutor.editObject(playerid = id.value, objectid = mapObject.id.value)
     }
 
     override fun editPlayerMapObject(playerMapObject: PlayerMapObject) {
-        nativeFunctionsExecutor.editPlayerObject(playerid = id.value, objectid = playerMapObject.id.value)
+        nativeFunctionExecutor.editPlayerObject(playerid = id.value, objectid = playerMapObject.id.value)
     }
 
     override fun selectMapObject() {
-        nativeFunctionsExecutor.selectObject(id.value)
+        nativeFunctionExecutor.selectObject(id.value)
     }
 
     override fun cancelEditMapObject() {
-        nativeFunctionsExecutor.cancelEdit(id.value)
+        nativeFunctionExecutor.cancelEdit(id.value)
     }
 
     override val menu: Menu?
-        get() = nativeFunctionsExecutor.getPlayerMenu(id.value).let { menuRegistry.getMenu(it) }
+        get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry.getMenu(it) }
 
     override fun onSpawn(onSpawn: Player.() -> Unit) {
         onSpawnHandlers += onSpawn

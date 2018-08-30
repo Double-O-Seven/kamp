@@ -31,7 +31,7 @@ internal class PlayerFactoryTest {
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry,
-                nativeFunctionsExecutor = nativeFunctionExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val player = playerFactory.create(playerId)
@@ -66,7 +66,7 @@ internal class PlayerFactoryTest {
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry,
-                nativeFunctionsExecutor = nativeFunctionExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val player = playerFactory.create(playerId)

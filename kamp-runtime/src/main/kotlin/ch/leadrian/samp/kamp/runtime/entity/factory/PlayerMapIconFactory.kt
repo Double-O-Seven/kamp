@@ -15,7 +15,7 @@ import javax.inject.Singleton
 @Singleton
 internal class PlayerMapIconFactory
 @Inject
-constructor(private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor) {
+constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
     fun create(
             player: PlayerImpl,
@@ -27,7 +27,7 @@ constructor(private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor) {
     ): PlayerMapIcon = PlayerMapIconImpl(
             player = player,
             id = playerMapIconId,
-            nativeFunctionsExecutor = nativeFunctionsExecutor,
+            nativeFunctionExecutor = nativeFunctionExecutor,
             coordinates = coordinates,
             type = type,
             color = color,

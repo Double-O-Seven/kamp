@@ -12,7 +12,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 internal class PlayerMapIconImpl internal constructor(
         override val player: PlayerImpl,
         override val id: PlayerMapIconId,
-        private val nativeFunctionsExecutor: SAMPNativeFunctionExecutor,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         coordinates: Vector3D,
         type: MapIconType,
         color: Color,
@@ -52,7 +52,7 @@ internal class PlayerMapIconImpl internal constructor(
     }
 
     private fun update() {
-        nativeFunctionsExecutor.setPlayerMapIcon(
+        nativeFunctionExecutor.setPlayerMapIcon(
                 playerid = player.id.value,
                 iconid = id.value,
                 x = coordinates.x,
@@ -73,7 +73,7 @@ internal class PlayerMapIconImpl internal constructor(
         isDestroyed = true
         player.unregisterMapIcon(this)
         if (player.isOnline) {
-            nativeFunctionsExecutor.removePlayerMapIcon(playerid = player.id.value, iconid = id.value)
+            nativeFunctionExecutor.removePlayerMapIcon(playerid = player.id.value, iconid = id.value)
         }
     }
 }

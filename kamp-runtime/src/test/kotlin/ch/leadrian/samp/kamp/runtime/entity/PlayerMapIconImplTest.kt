@@ -18,7 +18,7 @@ internal class PlayerMapIconImplTest {
         val player = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(99)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
         }
 
@@ -29,11 +29,11 @@ internal class PlayerMapIconImplTest {
                 color = Colors.RED,
                 style = MapIconStyle.GLOBAL,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         verify {
-            nativeFunctionsExecutor.setPlayerMapIcon(
+            nativeFunctionExecutor.setPlayerMapIcon(
                     playerid = 99,
                     style = MapIconStyle.GLOBAL.value,
                     color = Colors.RED.value,
@@ -56,7 +56,7 @@ internal class PlayerMapIconImplTest {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             }
             val playerMapIcon = PlayerMapIconImpl(
@@ -66,13 +66,13 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.coordinates = mutableVector3DOf(x = 4f, y = 5f, z = 6f)
 
             verify {
-                nativeFunctionsExecutor.setPlayerMapIcon(
+                nativeFunctionExecutor.setPlayerMapIcon(
                         playerid = 99,
                         style = MapIconStyle.GLOBAL.value,
                         color = Colors.RED.value,
@@ -91,7 +91,7 @@ internal class PlayerMapIconImplTest {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             }
             val playerMapIcon = PlayerMapIconImpl(
@@ -101,7 +101,7 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.coordinates = mutableVector3DOf(x = 4f, y = 5f, z = 6f)
@@ -117,7 +117,7 @@ internal class PlayerMapIconImplTest {
         val player = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(99)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
         }
         val playerMapIcon = PlayerMapIconImpl(
@@ -127,13 +127,13 @@ internal class PlayerMapIconImplTest {
                 color = Colors.RED,
                 style = MapIconStyle.GLOBAL,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         playerMapIcon.type = MapIconType.AIR_YARD
 
         verify {
-            nativeFunctionsExecutor.setPlayerMapIcon(
+            nativeFunctionExecutor.setPlayerMapIcon(
                     playerid = 99,
                     style = MapIconStyle.GLOBAL.value,
                     color = Colors.RED.value,
@@ -154,7 +154,7 @@ internal class PlayerMapIconImplTest {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             }
             val playerMapIcon = PlayerMapIconImpl(
@@ -164,13 +164,13 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.color = mutableColorOf(0x11BBCCFF)
 
             verify {
-                nativeFunctionsExecutor.setPlayerMapIcon(
+                nativeFunctionExecutor.setPlayerMapIcon(
                         playerid = 99,
                         style = MapIconStyle.GLOBAL.value,
                         color = 0x11BBCCFF,
@@ -188,7 +188,7 @@ internal class PlayerMapIconImplTest {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             }
             val playerMapIcon = PlayerMapIconImpl(
@@ -198,7 +198,7 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.color = mutableColorOf(0x11BBCCFF)
@@ -214,7 +214,7 @@ internal class PlayerMapIconImplTest {
         val player = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(99)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
         }
         val playerMapIcon = PlayerMapIconImpl(
@@ -224,13 +224,13 @@ internal class PlayerMapIconImplTest {
                 color = Colors.RED,
                 style = MapIconStyle.GLOBAL,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         playerMapIcon.style = MapIconStyle.LOCAL_CHECKPOINT
 
         verify {
-            nativeFunctionsExecutor.setPlayerMapIcon(
+            nativeFunctionExecutor.setPlayerMapIcon(
                     playerid = 99,
                     style = MapIconStyle.LOCAL_CHECKPOINT.value,
                     color = Colors.RED.value,
@@ -253,7 +253,7 @@ internal class PlayerMapIconImplTest {
                 every { isOnline } returns false
                 every { unregisterMapIcon(any()) } just Runs
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             }
             val playerMapIcon = PlayerMapIconImpl(
@@ -263,7 +263,7 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.destroy()
@@ -271,7 +271,7 @@ internal class PlayerMapIconImplTest {
             assertThat(playerMapIcon.isDestroyed)
                     .isTrue()
             verify { player.unregisterMapIcon(playerMapIcon) }
-            verify(exactly = 0) { nativeFunctionsExecutor.removePlayerMapIcon(any(), any()) }
+            verify(exactly = 0) { nativeFunctionExecutor.removePlayerMapIcon(any(), any()) }
         }
 
         @Test
@@ -281,7 +281,7 @@ internal class PlayerMapIconImplTest {
                 every { isOnline } returns true
                 every { unregisterMapIcon(any()) } just Runs
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
                 every { removePlayerMapIcon(any(), any()) } returns true
             }
@@ -292,7 +292,7 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.destroy()
@@ -300,7 +300,7 @@ internal class PlayerMapIconImplTest {
             assertThat(playerMapIcon.isDestroyed)
                     .isTrue()
             verify { player.unregisterMapIcon(playerMapIcon) }
-            verify(exactly = 1) { nativeFunctionsExecutor.removePlayerMapIcon(playerid = 99, iconid = 13) }
+            verify(exactly = 1) { nativeFunctionExecutor.removePlayerMapIcon(playerid = 99, iconid = 13) }
         }
 
         @Test
@@ -310,7 +310,7 @@ internal class PlayerMapIconImplTest {
                 every { isOnline } returns true
                 every { unregisterMapIcon(any()) } just Runs
             }
-            val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any()) } returns true
                 every { removePlayerMapIcon(any(), any()) } returns true
             }
@@ -321,7 +321,7 @@ internal class PlayerMapIconImplTest {
                     color = Colors.RED,
                     style = MapIconStyle.GLOBAL,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    nativeFunctionsExecutor = nativeFunctionsExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             playerMapIcon.destroy()
@@ -329,7 +329,7 @@ internal class PlayerMapIconImplTest {
 
             verify(exactly = 1) {
                 player.unregisterMapIcon(playerMapIcon)
-                nativeFunctionsExecutor.removePlayerMapIcon(any(), any())
+                nativeFunctionExecutor.removePlayerMapIcon(any(), any())
             }
         }
     }

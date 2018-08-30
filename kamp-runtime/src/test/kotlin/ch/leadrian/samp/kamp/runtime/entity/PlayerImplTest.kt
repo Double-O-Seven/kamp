@@ -45,7 +45,7 @@ internal class PlayerImplTest {
     fun setUp() {
         player = PlayerImpl(
                 id = playerId,
-                nativeFunctionsExecutor = nativeFunctionExecutor,
+                nativeFunctionExecutor = nativeFunctionExecutor,
                 playerRegistry = playerRegistry,
                 actorRegistry = actorRegistry,
                 mapObjectRegistry = mapObjectRegistry,

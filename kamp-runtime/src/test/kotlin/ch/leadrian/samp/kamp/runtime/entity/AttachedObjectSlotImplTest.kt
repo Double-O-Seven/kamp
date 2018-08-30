@@ -30,13 +30,13 @@ internal class AttachedObjectSlotImplTest {
             every { isOnline } returns true
         }
         val index = 5
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { isPlayerAttachedObjectSlotUsed(playerid = playerId, index = index) } returns expectedResult
         }
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = attachedObjectSlot.isUsed
@@ -57,20 +57,20 @@ internal class AttachedObjectSlotImplTest {
                 modelId = 15,
                 bone = Bone.CALF_LEFT
         )
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
             every { removePlayerAttachedObject(any(), any()) } returns true
         }
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
         attachedObjectSlot.attach(attachedObject)
 
         attachedObjectSlot.remove()
 
-        verify { nativeFunctionsExecutor.removePlayerAttachedObject(playerid = playerId, index = index) }
+        verify { nativeFunctionExecutor.removePlayerAttachedObject(playerid = playerId, index = index) }
         assertThat(attachedObjectSlot.attachedObject)
                 .isNull()
     }
@@ -83,18 +83,18 @@ internal class AttachedObjectSlotImplTest {
             every { isOnline } returns true
         }
         val index = 5
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { editAttachedObject(any(), any()) } returns true
         }
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         attachedObjectSlot.edit()
 
-        verify { nativeFunctionsExecutor.editAttachedObject(playerid = playerId, index = index) }
+        verify { nativeFunctionExecutor.editAttachedObject(playerid = playerId, index = index) }
     }
 
     @Test
@@ -114,19 +114,19 @@ internal class AttachedObjectSlotImplTest {
                 materialColor1 = Colors.RED,
                 materialColor2 = Colors.BLUE
         )
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
         }
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         attachedObjectSlot.attach(attachedObject)
 
         verify {
-            nativeFunctionsExecutor.setPlayerAttachedObject(
+            nativeFunctionExecutor.setPlayerAttachedObject(
                     playerid = playerId,
                     index = index,
                     modelid = 15,
@@ -165,7 +165,7 @@ internal class AttachedObjectSlotImplTest {
                 materialColor1 = Colors.RED,
                 materialColor2 = Colors.BLUE
         )
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every {
                 setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns false
@@ -173,7 +173,7 @@ internal class AttachedObjectSlotImplTest {
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         attachedObjectSlot.attach(attachedObject)
@@ -198,7 +198,7 @@ internal class AttachedObjectSlotImplTest {
         val attachedObjectSlot = AttachedObjectSlotImpl(
                 player = player,
                 index = index,
-                nativeFunctionsExecutor = mockk()
+                nativeFunctionExecutor = mockk()
         )
         attachedObjectSlot.onEdit(onEdit)
 

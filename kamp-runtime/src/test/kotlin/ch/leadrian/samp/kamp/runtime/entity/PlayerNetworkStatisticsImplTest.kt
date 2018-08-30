@@ -18,12 +18,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_GetConnectedTime(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.connectedTime
@@ -38,12 +38,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_MessagesReceived(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.messagesReceived
@@ -58,12 +58,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_BytesReceived(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.bytesReceived
@@ -78,12 +78,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_MessagesSent(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.messagesSent
@@ -98,12 +98,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_BytesSent(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.bytesSent
@@ -118,12 +118,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_MessagesRecvPerSecond(playerId) } returns 12345
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.messagesReceivedPerSecond
@@ -139,12 +139,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_PacketLossPercent(playerId) } returns 95f
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.packetLossPercentage
@@ -159,12 +159,12 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_ConnectionStatus(playerId) } returns ConnectionStatus.CONNECTED.value
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.connectionStatus
@@ -179,7 +179,7 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { netStats_GetIpPort(playerId, any(), 21) } answers {
                 secondArg<ReferenceString>().value = "127.0.0.1:7777"
                 true
@@ -187,7 +187,7 @@ internal class PlayerNetworkStatisticsImplTest {
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.ipAndPort
@@ -202,7 +202,7 @@ internal class PlayerNetworkStatisticsImplTest {
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val nativeFunctionsExecutor = mockk<SAMPNativeFunctionExecutor> {
+        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { getPlayerNetworkStats(playerId, any(), 400) } answers {
                 secondArg<ReferenceString>().value = "Some funny numbers"
                 true
@@ -210,7 +210,7 @@ internal class PlayerNetworkStatisticsImplTest {
         }
         val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
                 player = player,
-                nativeFunctionsExecutor = nativeFunctionsExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor
         )
 
         val result = playerNetworkStatistics.summaryString
