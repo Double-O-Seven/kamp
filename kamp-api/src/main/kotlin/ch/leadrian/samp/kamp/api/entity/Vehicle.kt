@@ -9,21 +9,21 @@ interface Vehicle : Destroyable {
 
     val id: VehicleId
 
-    fun isStreamedIn(forPlayer: Player)
+    fun isStreamedIn(forPlayer: Player): Boolean
 
     var coordinates: Vector3D
+
+    var angle: Float
+
+    var interiorId: Int
+
+    var virtualWorldId: Int
 
     var position: Position
 
     var location: Location
 
     var angledLocation: AngledLocation
-
-    var angle: Float
-
-    var interiorId: Int
-
-    var virtualWorld: Int
 
     fun respawn()
 
@@ -59,9 +59,9 @@ interface Vehicle : Destroyable {
 
     var damageStatus: VehicleDamageStatus
 
-    fun onSpawn(onSpawn: Vehicle.() -> Boolean)
+    fun onSpawn(onSpawn: Vehicle.() -> Unit)
 
-    fun onDeath(onDeath: Vehicle.(Player?) -> Boolean)
+    fun onDeath(onDeath: Vehicle.(Player?) -> Unit)
 
     fun onEnter(onEnter: Vehicle.(Player, Boolean) -> Unit)
 
