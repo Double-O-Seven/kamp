@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.runtime.types.ReferenceString
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class PlayerNetworkStatisticsImplTest {
@@ -173,49 +174,97 @@ internal class PlayerNetworkStatisticsImplTest {
                 .isEqualTo(ConnectionStatus.CONNECTED)
     }
 
-    @Test
-    fun shouldGetIpAndPort() {
-        val playerId = 100
-        val player = mockk<Player> {
-            every { id } returns PlayerId.valueOf(playerId)
-        }
-        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-            every { netStats_GetIpPort(playerId, any(), 21) } answers {
-                secondArg<ReferenceString>().value = "127.0.0.1:7777"
-                true
+    @Nested
+    inner class IpAndPortTests {
+
+        @Test
+        fun shouldGetIpAndPort() {
+            val playerId = 100
+            val player = mockk<Player> {
+                every { id } returns PlayerId.valueOf(playerId)
             }
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { netStats_GetIpPort(playerId, any(), 21) } answers {
+                    secondArg<ReferenceString>().value = "127.0.0.1:7777"
+                    true
+                }
+            }
+            val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
+                    player = player,
+                    nativeFunctionExecutor = nativeFunctionExecutor
+            )
+
+            val result = playerNetworkStatistics.ipAndPort
+
+            assertThat(result)
+                    .isEqualTo("127.0.0.1:7777")
         }
-        val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
-                player = player,
-                nativeFunctionExecutor = nativeFunctionExecutor
-        )
 
-        val result = playerNetworkStatistics.ipAndPort
+        @Test
+        fun givenIpAndPortIsNullItShouldReturnEmptyString() {
+            val playerId = 100
+            val player = mockk<Player> {
+                every { id } returns PlayerId.valueOf(playerId)
+            }
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { netStats_GetIpPort(playerId, any(), 21) } returns true
+            }
+            val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
+                    player = player,
+                    nativeFunctionExecutor = nativeFunctionExecutor
+            )
 
-        assertThat(result)
-                .isEqualTo("127.0.0.1:7777")
+            val result = playerNetworkStatistics.ipAndPort
+
+            assertThat(result)
+                    .isEmpty()
+        }
     }
 
-    @Test
-    fun shouldGetSummaryString() {
-        val playerId = 100
-        val player = mockk<Player> {
-            every { id } returns PlayerId.valueOf(playerId)
-        }
-        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-            every { getPlayerNetworkStats(playerId, any(), 400) } answers {
-                secondArg<ReferenceString>().value = "Some funny numbers"
-                true
+    @Nested
+    inner class SummaryStringTests {
+
+        @Test
+        fun shouldGetSummaryString() {
+            val playerId = 100
+            val player = mockk<Player> {
+                every { id } returns PlayerId.valueOf(playerId)
             }
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { getPlayerNetworkStats(playerId, any(), 400) } answers {
+                    secondArg<ReferenceString>().value = "Some funny numbers"
+                    true
+                }
+            }
+            val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
+                    player = player,
+                    nativeFunctionExecutor = nativeFunctionExecutor
+            )
+
+            val result = playerNetworkStatistics.summaryString
+
+            assertThat(result)
+                    .isEqualTo("Some funny numbers")
         }
-        val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
-                player = player,
-                nativeFunctionExecutor = nativeFunctionExecutor
-        )
 
-        val result = playerNetworkStatistics.summaryString
+        @Test
+        fun givenPlayerNetworkStatsIsNullItShouldReturnEmptyString() {
+            val playerId = 100
+            val player = mockk<Player> {
+                every { id } returns PlayerId.valueOf(playerId)
+            }
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { getPlayerNetworkStats(playerId, any(), 400) } returns true
+            }
+            val playerNetworkStatistics = PlayerNetworkStatisticsImpl(
+                    player = player,
+                    nativeFunctionExecutor = nativeFunctionExecutor
+            )
 
-        assertThat(result)
-                .isEqualTo("Some funny numbers")
+            val result = playerNetworkStatistics.summaryString
+
+            assertThat(result)
+                    .isEmpty()
+        }
     }
 }

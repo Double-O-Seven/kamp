@@ -21,6 +21,14 @@ internal class VehicleImpl(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : InterceptableVehicle {
 
+    private val onSpawnHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
+
+    private val onDeathHandlers: MutableList<Vehicle.(Player?) -> Unit> = mutableListOf()
+
+    private val onEnterHandlers: MutableList<Vehicle.(Player, Boolean) -> Unit> = mutableListOf()
+
+    private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+
     override val id: VehicleId
         get() = requireNotDestroyed { field }
 
@@ -354,14 +362,6 @@ internal class VehicleImpl(
                     lights = value.lights.value
             )
         }
-
-    private val onSpawnHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
-
-    private val onDeathHandlers: MutableList<Vehicle.(Player?) -> Unit> = mutableListOf()
-
-    private val onEnterHandlers: MutableList<Vehicle.(Player, Boolean) -> Unit> = mutableListOf()
-
-    private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
 
     override fun onSpawn(onSpawn: Vehicle.() -> Unit) {
         onSpawnHandlers += onSpawn

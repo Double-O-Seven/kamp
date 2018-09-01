@@ -692,30 +692,58 @@ internal class PlayerImplTest {
         }
     }
 
-    @Test
-    fun shouldGetIpAddress() {
-        every { nativeFunctionExecutor.getPlayerIp(playerId.value, any(), 16) } answers {
-            secondArg<ReferenceString>().value = "127.0.0.1"
-            true
+    @Nested
+    inner class IpAddressTests {
+
+        @Test
+        fun shouldGetIpAddress() {
+            every { nativeFunctionExecutor.getPlayerIp(playerId.value, any(), 16) } answers {
+                secondArg<ReferenceString>().value = "127.0.0.1"
+                true
+            }
+
+            val ipAddress = player.ipAddress
+
+            assertThat(ipAddress)
+                    .isEqualTo("127.0.0.1")
         }
 
-        val ipAddress = player.ipAddress
+        @Test
+        fun givenIpAddressIsNullItShouldUseFallback() {
+            every { nativeFunctionExecutor.getPlayerIp(playerId.value, any(), 16) } returns true
 
-        assertThat(ipAddress)
-                .isEqualTo("127.0.0.1")
+            val ipAddress = player.ipAddress
+
+            assertThat(ipAddress)
+                    .isEqualTo("255.255.255.255")
+        }
     }
 
-    @Test
-    fun shouldGetGpci() {
-        every { nativeFunctionExecutor.gpci(playerId.value, any(), 41) } answers {
-            secondArg<ReferenceString>().value = "ABC1234"
-            true
+    @Nested
+    inner class GpciTests {
+
+        @Test
+        fun shouldGetGpci() {
+            every { nativeFunctionExecutor.gpci(playerId.value, any(), 41) } answers {
+                secondArg<ReferenceString>().value = "ABC1234"
+                true
+            }
+
+            val gpci = player.gpci
+
+            assertThat(gpci)
+                    .isEqualTo("ABC1234")
         }
 
-        val gpci = player.gpci
+        @Test
+        fun givenGpciIsNullItShouldReturnEmptyString() {
+            every { nativeFunctionExecutor.gpci(playerId.value, any(), 41) } returns true
 
-        assertThat(gpci)
-                .isEqualTo("ABC1234")
+            val gpci = player.gpci
+
+            assertThat(gpci)
+                    .isEmpty()
+        }
     }
 
     @Nested
@@ -732,6 +760,16 @@ internal class PlayerImplTest {
 
             assertThat(name)
                     .isEqualTo("hans.wurst")
+        }
+
+        @Test
+        fun givenResultingNameIsNullItShouldReturnEmptyString() {
+            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } returns 0
+
+            val name = player.name
+
+            assertThat(name)
+                    .isEmpty()
         }
 
         @Test
@@ -2508,19 +2546,35 @@ internal class PlayerImplTest {
         }
     }
 
-    @Test
-    fun shouldReturnVersion() {
-        every {
-            nativeFunctionExecutor.getPlayerVersion(playerid = playerId.value, version = any(), len = 24)
-        } answers {
-            secondArg<ReferenceString>().value = "0.3.7"
-            true
+    @Nested
+    inner class VersionTests {
+
+        @Test
+        fun shouldReturnVersion() {
+            every {
+                nativeFunctionExecutor.getPlayerVersion(playerid = playerId.value, version = any(), len = 24)
+            } answers {
+                secondArg<ReferenceString>().value = "0.3.7"
+                true
+            }
+
+            val version = player.version
+
+            assertThat(version)
+                    .isEqualTo("0.3.7")
         }
 
-        val version = player.version
+        @Test
+        fun givenVersionIsNullItShouldReturnEmptyString() {
+            every {
+                nativeFunctionExecutor.getPlayerVersion(playerid = playerId.value, version = any(), len = 24)
+            } returns true
 
-        assertThat(version)
-                .isEqualTo("0.3.7")
+            val version = player.version
+
+            assertThat(version)
+                    .isEmpty()
+        }
     }
 
     @Test

@@ -808,12 +808,11 @@ internal class PlayerImpl(
         }
     }
 
-    override val version: String
-        get() {
-            val version = ReferenceString()
-            nativeFunctionExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
-            return version.value ?: ""
-        }
+    override val version: String by lazy {
+        val version = ReferenceString()
+        nativeFunctionExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
+        version.value ?: ""
+    }
 
     override val networkStatistics: PlayerNetworkStatistics = PlayerNetworkStatisticsImpl(
             player = this,
