@@ -275,7 +275,7 @@ internal class VehicleImpl(
                     color1 = value.color1.value,
                     color2 = value.color2.value
             )
-            field = value
+            field = value.toVehicleColors()
         }
 
     override var paintjob: Int? = null
