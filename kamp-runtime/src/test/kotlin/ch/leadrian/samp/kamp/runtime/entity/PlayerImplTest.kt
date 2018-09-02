@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.*
 import ch.leadrian.samp.kamp.api.entity.id.*
+import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.factory.PlayerMapIconFactory
@@ -1420,6 +1421,7 @@ internal class PlayerImplTest {
             val checkpoint = mockk<Checkpoint> {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
+                every { isDestroyed } returns false
             }
 
             player.checkpoint = checkpoint
@@ -1435,6 +1437,18 @@ internal class PlayerImplTest {
             }
             assertThat(player.checkpoint)
                     .isSameAs(checkpoint)
+        }
+
+        @Test
+        fun givenCheckpointIsDestroyedItShouldThrowAnException() {
+            val checkpoint = mockk<Checkpoint> {
+                every { isDestroyed } returns true
+            }
+
+            val caughtThrowable = catchThrowable { player.checkpoint = checkpoint }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(AlreadyDestroyedException::class.java)
         }
 
         @Test
@@ -1464,6 +1478,7 @@ internal class PlayerImplTest {
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
                 every { type } returns RaceCheckpointType.AIR_NORMAL
+                every { isDestroyed } returns false
             }
 
             player.raceCheckpoint = raceCheckpoint
@@ -1486,6 +1501,18 @@ internal class PlayerImplTest {
         }
 
         @Test
+        fun givenRaceCheckpointIsDestroyedItShouldThrowAnException() {
+            val raceCheckpoint = mockk<RaceCheckpoint> {
+                every { isDestroyed } returns true
+            }
+
+            val caughtThrowable = catchThrowable { player.raceCheckpoint = raceCheckpoint }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(AlreadyDestroyedException::class.java)
+        }
+
+        @Test
         fun givenNoNextCheckpointItShouldUseCurrentCoordinates() {
             every {
                 nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
@@ -1495,6 +1522,7 @@ internal class PlayerImplTest {
                 every { size } returns 4f
                 every { nextCoordinates } returns null
                 every { type } returns RaceCheckpointType.AIR_NORMAL
+                every { isDestroyed } returns false
             }
 
             player.raceCheckpoint = raceCheckpoint
@@ -2136,6 +2164,7 @@ internal class PlayerImplTest {
             val otherCheckpoint = mockk<Checkpoint> {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
+                every { isDestroyed } returns false
             }
             every {
                 nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
@@ -2156,6 +2185,7 @@ internal class PlayerImplTest {
             val checkpoint = mockk<Checkpoint> {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
+                every { isDestroyed } returns false
             }
             every {
                 nativeFunctionExecutor.isPlayerInCheckpoint(playerId.value)
@@ -2213,6 +2243,7 @@ internal class PlayerImplTest {
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
                 every { type } returns RaceCheckpointType.AIR_NORMAL
+                every { isDestroyed } returns false
             }
             every {
                 nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
@@ -2235,6 +2266,7 @@ internal class PlayerImplTest {
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
                 every { type } returns RaceCheckpointType.AIR_NORMAL
+                every { isDestroyed } returns false
             }
             every {
                 nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)

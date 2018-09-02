@@ -519,6 +519,7 @@ internal class PlayerImpl(
 
     override var checkpoint: Checkpoint? = null
         set(value) {
+            value?.requireNotDestroyed()
             when (value) {
                 null -> nativeFunctionExecutor.disablePlayerCheckpoint(id.value)
                 else -> nativeFunctionExecutor.setPlayerCheckpoint(
@@ -534,6 +535,7 @@ internal class PlayerImpl(
 
     override var raceCheckpoint: RaceCheckpoint? = null
         set(value) {
+            value?.requireNotDestroyed()
             when (value) {
                 null -> nativeFunctionExecutor.disablePlayerRaceCheckpoint(id.value)
                 else -> nativeFunctionExecutor.setPlayerRaceCheckpoint(
