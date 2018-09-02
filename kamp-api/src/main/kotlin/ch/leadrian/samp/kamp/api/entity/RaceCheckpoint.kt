@@ -5,13 +5,13 @@ import ch.leadrian.samp.kamp.api.data.Vector3D
 
 interface RaceCheckpoint : Destroyable {
 
-    val coordinates: Vector3D
+    var coordinates: Vector3D
 
-    val size: Float
+    var size: Float
 
-    val nextCoordinates: Vector3D?
+    var nextCoordinates: Vector3D?
 
-    val type: RaceCheckpointType
+    var type: RaceCheckpointType
 
     fun onEnter(onEnter: RaceCheckpoint.(Player) -> Unit)
 

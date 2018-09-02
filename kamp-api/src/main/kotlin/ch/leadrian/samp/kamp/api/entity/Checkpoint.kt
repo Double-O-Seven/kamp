@@ -4,12 +4,12 @@ import ch.leadrian.samp.kamp.api.data.Vector3D
 
 interface Checkpoint : Destroyable {
 
-    val coordinates: Vector3D
+    var coordinates: Vector3D
 
-    val size: Float
+    var size: Float
 
     fun onEnter(onEnter: Checkpoint.(Player) -> Unit)
 
-    fun onLeave(onEnter: Checkpoint.(Player) -> Unit)
+    fun onLeave(onLeave: Checkpoint.(Player) -> Unit)
 
 }
