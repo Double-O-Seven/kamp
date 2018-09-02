@@ -22,8 +22,8 @@ interface GangZone : Destroyable {
 
     fun flashForAll(color: Color)
 
-    fun stopFlash(forPlayer: Player, color: Color)
+    fun stopFlash(forPlayer: Player)
 
-    fun stopFlashForAll(color: Color)
+    fun stopFlashForAll()
 
 }
