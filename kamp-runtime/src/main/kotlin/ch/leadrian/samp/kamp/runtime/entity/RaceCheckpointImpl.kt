@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.RaceCheckpointType
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.RaceCheckpoint
+import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 
 internal class RaceCheckpointImpl(
@@ -20,24 +21,28 @@ internal class RaceCheckpointImpl(
 
     override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
+            requireNotDestroyed()
             field = value.toVector3D()
             update()
         }
 
     override var size: Float = size
         set(value) {
+            requireNotDestroyed()
             field = value
             update()
         }
 
     override var type: RaceCheckpointType = type
         set(value) {
+            requireNotDestroyed()
             field = value
             update()
         }
 
     override var nextCoordinates: Vector3D? = nextCoordinates?.toVector3D()
         set(value) {
+            requireNotDestroyed()
             field = value?.toVector3D()
             update()
         }
@@ -53,6 +58,7 @@ internal class RaceCheckpointImpl(
     }
 
     internal fun onEnter(player: Player) {
+        requireNotDestroyed()
         onEnterHandlers.forEach { it.invoke(this, player) }
     }
 
@@ -61,6 +67,7 @@ internal class RaceCheckpointImpl(
     }
 
     internal fun onLeave(player: Player) {
+        requireNotDestroyed()
         onLeaveHandlers.forEach { it.invoke(this, player) }
     }
 

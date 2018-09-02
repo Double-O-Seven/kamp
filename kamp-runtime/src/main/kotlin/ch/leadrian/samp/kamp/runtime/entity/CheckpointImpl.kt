@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.runtime.entity
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.Checkpoint
 import ch.leadrian.samp.kamp.api.entity.Player
+import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 
 internal class CheckpointImpl(
@@ -17,12 +18,14 @@ internal class CheckpointImpl(
 
     override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
+            requireNotDestroyed()
             field = value.toVector3D()
             update()
         }
 
     override var size: Float = size
         set(value) {
+            requireNotDestroyed()
             field = value
             update()
         }
@@ -38,6 +41,7 @@ internal class CheckpointImpl(
     }
 
     internal fun onEnter(player: Player) {
+        requireNotDestroyed()
         onEnterHandlers.forEach { it.invoke(this, player) }
     }
 
@@ -46,6 +50,7 @@ internal class CheckpointImpl(
     }
 
     internal fun onLeave(player: Player) {
+        requireNotDestroyed()
         onLeaveHandlers.forEach { it.invoke(this, player) }
     }
 
