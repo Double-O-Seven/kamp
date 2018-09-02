@@ -338,6 +338,34 @@ internal class PlayerImplTest {
         }
     }
 
+    @Nested
+    inner class VelocityTests {
+
+        @Test
+        fun shouldGetVelocity() {
+            every { nativeFunctionExecutor.getPlayerVelocity(playerId.value, any(), any(), any()) } answers {
+                secondArg<ReferenceFloat>().value = 1f
+                thirdArg<ReferenceFloat>().value = 2f
+                arg<ReferenceFloat>(3).value = 3f
+                true
+            }
+
+            val velocity = player.velocity
+
+            assertThat(velocity)
+                    .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
+        }
+
+        @Test
+        fun shouldSetVelocity() {
+            every { nativeFunctionExecutor.setPlayerVelocity(any(), any(), any(), any()) } returns true
+
+            player.velocity = vector3DOf(x = 1f, y = 2f, z = 3f)
+
+            verify { nativeFunctionExecutor.setPlayerVelocity(playerid = playerId.value, x = 1f, y = 2f, z = 3f) }
+        }
+    }
+
     @Test
     fun shouldSetCoordinatesFindZ() {
         every { nativeFunctionExecutor.setPlayerPosFindZ(any(), any(), any(), any()) } returns true

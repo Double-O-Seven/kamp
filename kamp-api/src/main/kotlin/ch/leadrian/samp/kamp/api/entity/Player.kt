@@ -35,6 +35,8 @@ interface Player {
 
     var angledLocation: AngledLocation
 
+    var velocity: Vector3D
+
     fun setCoordinatesFindZ(coordinates: Vector3D)
 
     fun isStreamedIn(forPlayer: Player): Boolean

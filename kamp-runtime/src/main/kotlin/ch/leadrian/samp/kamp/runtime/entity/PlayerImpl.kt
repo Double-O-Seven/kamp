@@ -153,6 +153,18 @@ internal class PlayerImpl(
             angle = value.angle
         }
 
+    override var velocity: Vector3D
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getPlayerVelocity(playerid = id.value, x = x, y = y, z = z)
+            return vector3DOf(x = x.value, y = y.value, z = z.value)
+        }
+        set(value) {
+            nativeFunctionExecutor.setPlayerVelocity(playerid = id.value, x = value.x, y = value.y, z = value.z)
+        }
+
     override fun setCoordinatesFindZ(coordinates: Vector3D) {
         nativeFunctionExecutor.setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
     }
