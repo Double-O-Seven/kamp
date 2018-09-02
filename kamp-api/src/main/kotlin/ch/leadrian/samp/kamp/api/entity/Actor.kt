@@ -9,9 +9,9 @@ interface Actor : Destroyable {
 
     val id: ActorId
 
-    fun isStreamedIn(forPlayer: Player)
+    fun isStreamedIn(forPlayer: Player): Boolean
 
-    var virtualWorld: Int
+    var virtualWorldId: Int
 
     fun applyAnimation(
             animation: Animation,
