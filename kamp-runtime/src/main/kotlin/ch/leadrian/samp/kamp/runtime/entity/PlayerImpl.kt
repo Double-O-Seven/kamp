@@ -706,14 +706,14 @@ internal class PlayerImpl(
         get() = nativeFunctionExecutor.isPlayerInAnyVehicle(id.value)
 
     override fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
-        return this.checkpoint == checkpoint && isInAnyCheckpoint
+        return this.checkpoint === checkpoint && isInAnyCheckpoint
     }
 
     override val isInAnyCheckpoint: Boolean
         get() = nativeFunctionExecutor.isPlayerInCheckpoint(id.value)
 
     override fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
-        return this.raceCheckpoint == raceCheckpoint && isInAnyRaceCheckpoint
+        return this.raceCheckpoint === raceCheckpoint && isInAnyRaceCheckpoint
     }
 
     override val isInAnyRaceCheckpoint: Boolean
