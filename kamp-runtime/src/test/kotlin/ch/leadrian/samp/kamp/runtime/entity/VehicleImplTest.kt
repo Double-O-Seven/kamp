@@ -12,7 +12,11 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -20,7 +24,11 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.*
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
+import org.junit.jupiter.params.provider.CsvSource
+import org.junit.jupiter.params.provider.ValueSource
 import java.util.stream.Stream
 
 internal class VehicleImplTest {
@@ -438,7 +446,8 @@ internal class VehicleImplTest {
                                 bonnet = bonnet,
                                 boot = boot,
                                 objective = objective
-                        ))
+                        )
+                        )
             }
 
             @ParameterizedTest
@@ -509,7 +518,8 @@ internal class VehicleImplTest {
                                     passenger = passenger,
                                     backLeft = backLeft,
                                     backRight = backRight
-                            ))
+                            )
+                            )
                 }
 
                 @ParameterizedTest
@@ -572,7 +582,8 @@ internal class VehicleImplTest {
                                     passenger = passenger,
                                     backLeft = backLeft,
                                     backRight = backRight
-                            ))
+                            )
+                            )
                 }
 
                 @ParameterizedTest
@@ -850,7 +861,8 @@ internal class VehicleImplTest {
                                     doors = VehicleDoorsDamageStatus(20),
                                     lights = VehicleLightsDamageStatus(30),
                                     tires = VehicleTiresDamageStatus(40)
-                            ))
+                            )
+                            )
                 }
 
                 @Test

@@ -108,7 +108,6 @@ internal class ShapesTest {
                     .isCloseTo(1050f, withPercentage(0.0001))
         }
 
-
         @ParameterizedTest
         @ArgumentsSource(BoxFactoryArgumentsProvider::class)
         fun toBoxShouldReturnImmutableBox(factory: (Float, Float, Float, Float, Float, Float) -> Box) {
@@ -563,7 +562,6 @@ internal class ShapesTest {
         }
 
     }
-
 
     private class SphereFactoryArgumentsProvider : ArgumentsProvider {
 

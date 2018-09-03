@@ -36,7 +36,8 @@ class SAMPNativeFunctionExecutorKotlinCodeGenerator {
             |)
             |interface $className {
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {

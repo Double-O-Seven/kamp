@@ -10,7 +10,6 @@ import java.nio.file.StandardOpenOption.CREATE
 import java.nio.file.StandardOpenOption.WRITE
 import java.time.LocalDateTime
 
-
 class SAMPConstantsJavaCodeGenerator {
 
     fun generate(outputDirectory: Path, constants: List<Constant>, packageName: String, className: String = "SAMPConstants") {
@@ -39,7 +38,8 @@ class SAMPConstantsJavaCodeGenerator {
             |
             |    private $className () {}
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeConstants(constants: List<Constant>, writer: BufferedWriter) {

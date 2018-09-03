@@ -19,7 +19,8 @@ class SAMPCallbacksDefCodeGenerator {
                 |    Load
                 |    Unload
                 |    ProcessTick
-                |""".trimMargin())
+                |""".trimMargin()
+            )
             functions.filter { it.hasAttribute("callback") }.forEach {
                 writer.write("    ${it.name}\n")
             }

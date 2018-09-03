@@ -15,7 +15,8 @@ internal class PlayerTextLabelIdTest {
         SAMPConstants.MAX_3DTEXT_PLAYER,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_3DTEXT_ID
-    ])
+    ]
+    )
     fun shouldReturnTextLabelId(value: Int) {
         val playerTextLabelId = PlayerTextLabelId.valueOf(value)
 

@@ -13,7 +13,11 @@ import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach

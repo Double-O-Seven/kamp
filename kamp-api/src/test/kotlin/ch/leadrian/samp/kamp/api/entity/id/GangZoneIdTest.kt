@@ -15,7 +15,8 @@ internal class GangZoneIdTest {
         SAMPConstants.MAX_GANG_ZONES,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_GANG_ZONE
-    ])
+    ]
+    )
     fun shouldReturnGangZoneId(value: Int) {
         val gangZoneId = GangZoneId.valueOf(value)
 

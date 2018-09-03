@@ -1,6 +1,12 @@
 package ch.leadrian.samp.kamp.api.data
 
-import ch.leadrian.samp.kamp.api.constants.*
+import ch.leadrian.samp.kamp.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.api.constants.VehicleLightsState
+import ch.leadrian.samp.kamp.api.constants.VehicleObjectiveState
 
 internal data class VehicleParametersImpl(
         override val engine: VehicleEngineState,

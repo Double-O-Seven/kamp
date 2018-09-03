@@ -58,7 +58,8 @@ class SAMPCallbacksCppCodeGenerator {
             |    jniEnv->CallVoidMethod(sampCallbacksInstance, callbackMethodID);
             |}
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
@@ -80,7 +81,8 @@ class SAMPCallbacksCppCodeGenerator {
         writer.write("""
             |) {
             |    Kamp& kampInstance = Kamp::GetInstance();
-            |""".trimMargin())
+            |""".trimMargin()
+        )
 
         if (function.name == "OnGameModeInit") {
             writer.write("    kampInstance.Launch();\n")
@@ -90,7 +92,8 @@ class SAMPCallbacksCppCodeGenerator {
             |    jobject sampCallbacksInstance = kampInstance.GetSAMPCallbacksInstance();
             |    jmethodID callbackMethodID = kampInstance.GetSAMPCallbacksMethodCache().Get${function.name}MethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
-            |""".trimMargin())
+            |""".trimMargin()
+        )
 
         val methodParameterGenerators = getMethodParameterGenerators(function.parameters)
         val resultProcessingSteps = methodParameterGenerators.mapNotNull { it.generateResultProcessing() }

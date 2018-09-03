@@ -5,6 +5,7 @@ enum class SkinModel(
         val description: String,
         val gender: SkinModel.Gender
 ) : ConstantValue<Int> {
+
     CJ(0, "Carl \"CJ\" Johnson", Gender.MALE),
     TRUTH(1, "The Truth", Gender.MALE),
     MACCER(2, "Maccer", Gender.MALE),

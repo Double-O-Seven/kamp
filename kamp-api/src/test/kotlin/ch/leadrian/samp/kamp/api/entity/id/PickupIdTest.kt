@@ -14,7 +14,8 @@ internal class PickupIdTest {
         SAMPConstants.MAX_PICKUPS - 1,
         SAMPConstants.MAX_PICKUPS,
         Int.MAX_VALUE
-    ])
+    ]
+    )
     fun shouldReturnPickupId(value: Int) {
         val pickupId = PickupId.valueOf(value)
 

@@ -39,7 +39,8 @@ class SAMPNativeFunctionsCppCodeGenerator {
             |#include "Kamp.hpp"
             |#include "FieldCache.hpp"
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeFunctions(functions: List<Function>, packageName: String, className: String, writer: BufferedWriter) {
@@ -54,7 +55,8 @@ class SAMPNativeFunctionsCppCodeGenerator {
         val camelCaseName = "${function.name[0].toLowerCase()}${function.name.substring(1)}"
         writer.write("""
             |JNIEXPORT $returnCppType JNICALL Java_${packagePart}_${className}_$camelCaseName
-            |        (JNIEnv *env, jclass clazz""".trimMargin())
+            |        (JNIEnv *env, jclass clazz""".trimMargin()
+        )
         if (function.parameters.isNotEmpty()) {
             writer.write(", ")
         }

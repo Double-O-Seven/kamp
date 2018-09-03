@@ -2,7 +2,11 @@ package ch.leadrian.samp.kamp.runtime.entity
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.constants.SkinModel
-import ch.leadrian.samp.kamp.api.data.*
+import ch.leadrian.samp.kamp.api.data.Animation
+import ch.leadrian.samp.kamp.api.data.Position
+import ch.leadrian.samp.kamp.api.data.Vector3D
+import ch.leadrian.samp.kamp.api.data.positionOf
+import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.Actor
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.id.ActorId

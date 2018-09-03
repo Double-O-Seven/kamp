@@ -10,6 +10,7 @@ enum class VehicleComponentModel(
         val componentName: String,
         val supportedVehicleModelIds: IntArray
 ) : ConstantValue<Int> {
+
     SPOILER_PRO(1000, "spl_b_mar_m", CarModType.SPOILER, "Pro", intArrayOf(589, 492, 516, 404, 547, 489, 405, 421)),
     SPOILER_WIN(1001, "spl_b_bab_m", CarModType.SPOILER, "Win", intArrayOf(496, 401, 518, 527, 415, 585, 546, 410, 603, 426, 436, 405, 580, 439, 550, 549, 420, 540, 529)),
     SPOILER_DRAG(1002, "spl_b_bar_m", CarModType.SPOILER, "Drag", intArrayOf(496, 546, 517, 551, 418, 516, 404, 489)),

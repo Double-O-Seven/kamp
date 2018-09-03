@@ -2,11 +2,21 @@ package ch.leadrian.samp.kamp.runtime.entity
 
 import ch.leadrian.samp.kamp.api.constants.MapIconStyle
 import ch.leadrian.samp.kamp.api.constants.MapIconType
-import ch.leadrian.samp.kamp.api.data.*
+import ch.leadrian.samp.kamp.api.data.Colors
+import ch.leadrian.samp.kamp.api.data.MutableColor
+import ch.leadrian.samp.kamp.api.data.MutableVector3D
+import ch.leadrian.samp.kamp.api.data.colorOf
+import ch.leadrian.samp.kamp.api.data.mutableColorOf
+import ch.leadrian.samp.kamp.api.data.mutableVector3DOf
+import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -84,7 +94,6 @@ internal class PlayerMapIconImplTest {
                 )
             }
         }
-
 
         @Test
         fun settingCoordinatesShouldStoreImmutableVector3D() {

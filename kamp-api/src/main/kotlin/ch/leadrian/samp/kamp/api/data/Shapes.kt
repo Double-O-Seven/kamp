@@ -18,7 +18,6 @@ fun mutableRectangleOf(minX: Float, maxX: Float, minY: Float, maxY: Float): Muta
                 maxY = maxY
         )
 
-
 fun boxOf(minX: Float, maxX: Float, minY: Float, maxY: Float, minZ: Float, maxZ: Float): Box =
         BoxImpl(
                 minX = minX,

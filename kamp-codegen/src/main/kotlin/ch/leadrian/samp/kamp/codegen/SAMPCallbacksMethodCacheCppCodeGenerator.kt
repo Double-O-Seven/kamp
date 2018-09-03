@@ -35,7 +35,8 @@ class SAMPCallbacksMethodCacheCppCodeGenerator {
             |        return -1;
             |    }
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeMethodIDInitializations(functions: List<Function>, writer: BufferedWriter) {
@@ -57,7 +58,8 @@ class SAMPCallbacksMethodCacheCppCodeGenerator {
             |    }
             |
             |
-        """.trimMargin())
+        """.trimMargin()
+        )
     }
 
     private fun getCallbackMethodSignature(function: Function): String {

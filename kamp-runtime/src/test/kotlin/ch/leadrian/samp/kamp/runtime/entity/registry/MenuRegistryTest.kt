@@ -75,7 +75,6 @@ internal class MenuRegistryTest {
                 .isNull()
     }
 
-
     @Test
     fun givenMenuIsNotRegisteredItShouldThrowAnException() {
         val menuId = MenuId.valueOf(50)

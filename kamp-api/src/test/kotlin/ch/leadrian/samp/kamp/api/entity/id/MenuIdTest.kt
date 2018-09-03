@@ -15,7 +15,8 @@ internal class MenuIdTest {
         SAMPConstants.MAX_MENUS,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_MENU
-    ])
+    ]
+    )
     fun shouldReturnMenuId(value: Int) {
         val menuId = MenuId.valueOf(value)
 

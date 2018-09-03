@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.api.data.vector3DOf
  * Taken from https://github.com/Shoebill/shoebill-api
  */
 enum class Interior(val description: String, val interiorId: Int, val coordinates: Vector3D) {
+
     TWENTYFORSEVEN_1("24/7 1", 17, vector3DOf(-25.884498f, -185.868988f, 1003.546875f)),
     TWENTYFORSEVEN_2("24/7 2", 10, vector3DOf(6.091179f, -29.271898f, 1003.549438f)),
     TWENTYFORSEVEN_3("24/7 3", 18, vector3DOf(-30.946699f, -89.609596f, 1003.546875f)),

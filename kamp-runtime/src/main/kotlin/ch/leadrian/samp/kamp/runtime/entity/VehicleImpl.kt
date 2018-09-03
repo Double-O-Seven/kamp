@@ -2,8 +2,12 @@ package ch.leadrian.samp.kamp.runtime.entity
 
 import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
-import ch.leadrian.samp.kamp.api.entity.*
+import ch.leadrian.samp.kamp.api.entity.Player
+import ch.leadrian.samp.kamp.api.entity.Vehicle
+import ch.leadrian.samp.kamp.api.entity.VehicleComponents
+import ch.leadrian.samp.kamp.api.entity.VehicleTrailer
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
+import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry

@@ -9,6 +9,7 @@ enum class VehicleModel(
         val type: VehicleType,
         val numberOfSeats: Int
 ) : ConstantValue<Int> {
+
     LANDSTALKER(SAMPConstants.VEHICLE_LANDSTALKER, "Landstalker", VehicleType.CAR, 4),
     BRAVURA(SAMPConstants.VEHICLE_BRAVURA, "Bravura", VehicleType.CAR, 2),
     BUFFALO(SAMPConstants.VEHICLE_BUFFALO, "Buffalo", VehicleType.CAR, 2),

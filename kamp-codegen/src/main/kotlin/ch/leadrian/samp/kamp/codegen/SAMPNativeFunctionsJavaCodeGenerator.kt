@@ -39,7 +39,8 @@ class SAMPNativeFunctionsJavaCodeGenerator {
             |
             |    private $className() {}
             |
-            |""".trimMargin("|"))
+            |""".trimMargin("|")
+        )
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
