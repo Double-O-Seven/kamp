@@ -39,14 +39,14 @@ internal class CheckpointImplTest {
 
         @Test
         fun shouldUpdateCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns this@CheckpointImplTest.checkpoint
                 every { this@mockk.checkpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -76,14 +76,14 @@ internal class CheckpointImplTest {
 
         @Test
         fun shouldUpdateCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns this@CheckpointImplTest.checkpoint
                 every { this@mockk.checkpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.checkpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -125,9 +125,9 @@ internal class CheckpointImplTest {
     @Nested
     inner class DestroyTests {
 
-        private val player1 = mockk<InterceptablePlayer>()
-        private val player2 = mockk<InterceptablePlayer>()
-        private val player3 = mockk<InterceptablePlayer>()
+        private val player1 = mockk<PlayerImpl>()
+        private val player2 = mockk<PlayerImpl>()
+        private val player3 = mockk<PlayerImpl>()
 
         @BeforeEach
         fun setUp() {

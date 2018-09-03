@@ -19,7 +19,7 @@ internal class VehicleImpl(
         respawnDelay: Int,
         private val vehicleRegistry: VehicleRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : InterceptableVehicle {
+) : Vehicle {
 
     private val onSpawnHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
 
@@ -367,7 +367,7 @@ internal class VehicleImpl(
         onSpawnHandlers += onSpawn
     }
 
-    override fun onSpawn() {
+    internal fun onSpawn() {
         onSpawnHandlers.forEach { it.invoke(this) }
     }
 
@@ -375,7 +375,7 @@ internal class VehicleImpl(
         onDeathHandlers += onDeath
     }
 
-    override fun onDeath(killer: Player?) {
+    internal fun onDeath(killer: Player?) {
         onDeathHandlers.forEach { it.invoke(this, killer) }
     }
 
@@ -383,7 +383,7 @@ internal class VehicleImpl(
         onEnterHandlers += onEnter
     }
 
-    override fun onEnter(player: Player, isPassenger: Boolean) {
+    internal fun onEnter(player: Player, isPassenger: Boolean) {
         onEnterHandlers.forEach { it.invoke(this, player, isPassenger) }
     }
 
@@ -391,7 +391,7 @@ internal class VehicleImpl(
         onExitHandlers += onExit
     }
 
-    override fun onExit(player: Player) {
+    internal fun onExit(player: Player) {
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 

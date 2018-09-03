@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
-import ch.leadrian.samp.kamp.runtime.entity.InterceptableVehicle
+import ch.leadrian.samp.kamp.runtime.entity.VehicleImpl
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -16,14 +16,14 @@ internal class VehicleRegistryTest {
     @ParameterizedTest
     @ValueSource(ints = [0, SAMPConstants.MAX_VEHICLES - 1])
     fun shouldRegisterAndGetVehicle(vehicleId: Int) {
-        val vehicle = mockk<InterceptableVehicle> {
+        val vehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
 
         vehicleRegistry.register(vehicle)
 
-        val registeredVehicle = vehicleRegistry.get(vehicleId)
+        val registeredVehicle = vehicleRegistry[vehicleId]
         assertThat(registeredVehicle)
                 .isSameAs(vehicle)
     }
@@ -33,7 +33,7 @@ internal class VehicleRegistryTest {
     fun givenUnknownVehicleIdGetVehicleShouldReturn(vehicleId: Int) {
         val vehicleRegistry = VehicleRegistry()
 
-        val registeredVehicle = vehicleRegistry.get(vehicleId)
+        val registeredVehicle = vehicleRegistry[vehicleId]
         assertThat(registeredVehicle)
                 .isNull()
     }
@@ -41,10 +41,10 @@ internal class VehicleRegistryTest {
     @Test
     fun givenAnotherVehicleWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val vehicleId = 50
-        val alreadyRegisteredVehicle = mockk<InterceptableVehicle> {
+        val alreadyRegisteredVehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
-        val newVehicle = mockk<InterceptableVehicle> {
+        val newVehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
@@ -54,7 +54,7 @@ internal class VehicleRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredVehicle = vehicleRegistry.get(vehicleId)
+        val registeredVehicle = vehicleRegistry[vehicleId]
         assertThat(registeredVehicle)
                 .isSameAs(alreadyRegisteredVehicle)
     }
@@ -62,7 +62,7 @@ internal class VehicleRegistryTest {
     @Test
     fun shouldUnregisterRegisteredVehicle() {
         val vehicleId = 50
-        val vehicle = mockk<InterceptableVehicle> {
+        val vehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
@@ -70,7 +70,7 @@ internal class VehicleRegistryTest {
 
         vehicleRegistry.unregister(vehicle)
 
-        val registeredVehicle = vehicleRegistry.get(vehicleId)
+        val registeredVehicle = vehicleRegistry[vehicleId]
         assertThat(registeredVehicle)
                 .isNull()
     }
@@ -79,7 +79,7 @@ internal class VehicleRegistryTest {
     @Test
     fun givenVehicleIsNotRegisteredItShouldThrowAnException() {
         val vehicleId = VehicleId.valueOf(50)
-        val vehicle = mockk<InterceptableVehicle> {
+        val vehicle = mockk<VehicleImpl> {
             every { id } returns vehicleId
         }
         val vehicleRegistry = VehicleRegistry()
@@ -93,10 +93,10 @@ internal class VehicleRegistryTest {
     @Test
     fun givenAnotherVehicleWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
         val vehicleId = 50
-        val alreadyRegisteredVehicle = mockk<InterceptableVehicle> {
+        val alreadyRegisteredVehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
-        val newVehicle = mockk<InterceptableVehicle> {
+        val newVehicle = mockk<VehicleImpl> {
             every { id } returns VehicleId.valueOf(vehicleId)
         }
         val vehicleRegistry = VehicleRegistry()
@@ -106,7 +106,7 @@ internal class VehicleRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredVehicle = vehicleRegistry.get(vehicleId)
+        val registeredVehicle = vehicleRegistry[vehicleId]
         assertThat(registeredVehicle)
                 .isSameAs(alreadyRegisteredVehicle)
     }
@@ -114,15 +114,15 @@ internal class VehicleRegistryTest {
     @Test
     fun shouldReturnAllRegisteredVehicles() {
         val vehicleId1 = VehicleId.valueOf(10)
-        val vehicle1 = mockk<InterceptableVehicle> {
+        val vehicle1 = mockk<VehicleImpl> {
             every { id } returns vehicleId1
         }
         val vehicleId2 = VehicleId.valueOf(15)
-        val vehicle2 = mockk<InterceptableVehicle> {
+        val vehicle2 = mockk<VehicleImpl> {
             every { id } returns vehicleId2
         }
         val vehicleId3 = VehicleId.valueOf(30)
-        val vehicle3 = mockk<InterceptableVehicle> {
+        val vehicle3 = mockk<VehicleImpl> {
             every { id } returns vehicleId3
         }
         val vehicleRegistry = VehicleRegistry()

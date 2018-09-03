@@ -2,29 +2,29 @@ package ch.leadrian.samp.kamp.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.InterceptablePlayer
-import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
-import ch.leadrian.samp.kamp.runtime.entity.interceptor.InterceptorPriority
-import ch.leadrian.samp.kamp.runtime.entity.interceptor.PlayerInterceptor
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
-import io.mockk.mockk
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
 internal class PlayerFactoryTest {
 
-    @Test
-    fun givenNoInterceptorItShouldReturnPlayerImpl() {
-        val playerId = PlayerId.valueOf(123)
-        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-        val playerRegistry = mockk<PlayerRegistry>()
-        val actorRegistry = mockk<ActorRegistry>()
-        val mapObjectRegistry = mockk<MapObjectRegistry>()
-        val menuRegistry = mockk<MenuRegistry>()
-        val playerMapIconFactory = mockk<PlayerMapIconFactory>()
-        val vehicleRegistry = mockk<VehicleRegistry>()
-        val playerFactory = PlayerFactory(
-                interceptors = emptySet(),
+    private val playerId = PlayerId.valueOf(123)
+    private lateinit var playerFactory: PlayerFactory
+
+    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
+    private val playerRegistry = mockk<PlayerRegistry>()
+    private val actorRegistry = mockk<ActorRegistry>()
+    private val mapObjectRegistry = mockk<MapObjectRegistry>()
+    private val menuRegistry = mockk<MenuRegistry>()
+    private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
+    private val vehicleRegistry = mockk<VehicleRegistry>()
+
+    @BeforeEach
+    fun setUp() {
+        every { playerRegistry.register(any()) } just Runs
+        playerFactory = PlayerFactory(
                 actorRegistry = actorRegistry,
                 playerRegistry = playerRegistry,
                 mapObjectRegistry = mapObjectRegistry,
@@ -33,93 +33,21 @@ internal class PlayerFactoryTest {
                 vehicleRegistry = vehicleRegistry,
                 nativeFunctionExecutor = nativeFunctionExecutor
         )
-
-        val player = playerFactory.create(playerId)
-
-        assertThat(player)
-                .isInstanceOfSatisfying(PlayerImpl::class.java) {
-                    assertThat(it.id)
-                            .isEqualTo(playerId)
-                }
     }
 
     @Test
-    fun givenInterceptorsItShouldReturnInterceptablePlayer() {
-        val playerId = PlayerId.valueOf(123)
-        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-        val playerRegistry = mockk<PlayerRegistry>()
-        val actorRegistry = mockk<ActorRegistry>()
-        val mapObjectRegistry = mockk<MapObjectRegistry>()
-        val menuRegistry = mockk<MenuRegistry>()
-        val playerMapIconFactory = mockk<PlayerMapIconFactory>()
-        val vehicleRegistry = mockk<VehicleRegistry>()
-        val interceptors = setOf(
-                DefaultPriorityInterceptor("default"),
-                HighPriorityInterceptor("high"),
-                LowPriorityInterceptor("low")
-        )
-        val playerFactory = PlayerFactory(
-                interceptors = interceptors,
-                actorRegistry = actorRegistry,
-                playerRegistry = playerRegistry,
-                mapObjectRegistry = mapObjectRegistry,
-                menuRegistry = menuRegistry,
-                playerMapIconFactory = playerMapIconFactory,
-                vehicleRegistry = vehicleRegistry,
-                nativeFunctionExecutor = nativeFunctionExecutor
-        )
-
+    fun shouldReturnPlayer() {
         val player = playerFactory.create(playerId)
 
-        assertThat(player)
-                .isInstanceOfSatisfying(PlayerWrapper::class.java) {
-                    assertThat(it.interceptorName)
-                            .isEqualTo("low")
-                    assertThat(it.player)
-                            .isInstanceOfSatisfying(PlayerWrapper::class.java) {
-                                assertThat(it.interceptorName)
-                                        .isEqualTo("default")
-                                assertThat(it.player)
-                                        .isInstanceOfSatisfying(PlayerWrapper::class.java) {
-                                            assertThat(it.interceptorName)
-                                                    .isEqualTo("high")
-                                            assertThat(it.player)
-                                                    .isInstanceOfSatisfying(PlayerImpl::class.java) {
-                                                        assertThat(it.id)
-                                                                .isEqualTo(playerId)
-                                                    }
-                                        }
-                            }
-                }
+        assertThat(player.id)
+                .isEqualTo(playerId)
     }
 
-    @InterceptorPriority(-5)
-    private class LowPriorityInterceptor(val name: String) : PlayerInterceptor {
+    @Test
+    fun shouldRegisterPlayer() {
+        val player = playerFactory.create(playerId)
 
-        override fun intercept(interceptablePlayer: InterceptablePlayer): InterceptablePlayer {
-            return PlayerWrapper(name, interceptablePlayer)
-        }
-
+        verify { playerRegistry.register(player) }
     }
-
-    @InterceptorPriority(10)
-    private class HighPriorityInterceptor(val name: String) : PlayerInterceptor {
-
-        override fun intercept(interceptablePlayer: InterceptablePlayer): InterceptablePlayer {
-            return PlayerWrapper(name, interceptablePlayer)
-        }
-
-    }
-
-    private class DefaultPriorityInterceptor(val name: String) : PlayerInterceptor {
-
-        override fun intercept(interceptablePlayer: InterceptablePlayer): InterceptablePlayer {
-            return PlayerWrapper(name, interceptablePlayer)
-        }
-
-    }
-
-    private class PlayerWrapper(val interceptorName: String, val player: InterceptablePlayer) : InterceptablePlayer by player
-
 
 }

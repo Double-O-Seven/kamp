@@ -43,14 +43,14 @@ internal class RaceCheckpointImplTest {
 
         @Test
         fun shouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns this@RaceCheckpointImplTest.raceCheckpoint
                 every { this@mockk.raceCheckpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -80,14 +80,14 @@ internal class RaceCheckpointImplTest {
 
         @Test
         fun shouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns this@RaceCheckpointImplTest.raceCheckpoint
                 every { this@mockk.raceCheckpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -106,14 +106,14 @@ internal class RaceCheckpointImplTest {
 
         @Test
         fun givenNullAsNextCoordinatesItShouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns this@RaceCheckpointImplTest.raceCheckpoint
                 every { this@mockk.raceCheckpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -144,14 +144,14 @@ internal class RaceCheckpointImplTest {
 
         @Test
         fun shouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns this@RaceCheckpointImplTest.raceCheckpoint
                 every { this@mockk.raceCheckpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -181,14 +181,14 @@ internal class RaceCheckpointImplTest {
 
         @Test
         fun shouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
-            val player1 = mockk<InterceptablePlayer> {
+            val player1 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns mockk()
             }
-            val player2 = mockk<InterceptablePlayer> {
+            val player2 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns this@RaceCheckpointImplTest.raceCheckpoint
                 every { this@mockk.raceCheckpoint = any() } just Runs
             }
-            val player3 = mockk<InterceptablePlayer> {
+            val player3 = mockk<PlayerImpl> {
                 every { this@mockk.raceCheckpoint } returns null
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
@@ -230,9 +230,9 @@ internal class RaceCheckpointImplTest {
     @Nested
     inner class DestroyTests {
 
-        private val player1 = mockk<InterceptablePlayer>()
-        private val player2 = mockk<InterceptablePlayer>()
-        private val player3 = mockk<InterceptablePlayer>()
+        private val player1 = mockk<PlayerImpl>()
+        private val player2 = mockk<PlayerImpl>()
+        private val player3 = mockk<PlayerImpl>()
 
         @BeforeEach
         fun setUp() {

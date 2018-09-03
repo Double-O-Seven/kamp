@@ -1099,7 +1099,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnSurfingVehicle() {
             val vehicleId = 1337
-            val vehicle = mockk<InterceptableVehicle>()
+            val vehicle = mockk<VehicleImpl>()
             every { nativeFunctionExecutor.getPlayerSurfingVehicleID(playerId.value) } returns vehicleId
             every { vehicleRegistry[vehicleId] } returns vehicle
 
@@ -1235,7 +1235,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnVehicle() {
             val vehicleId = 1337
-            val vehicle = mockk<InterceptableVehicle>()
+            val vehicle = mockk<VehicleImpl>()
             every { nativeFunctionExecutor.getPlayerVehicleID(playerId.value) } returns vehicleId
             every { vehicleRegistry[vehicleId] } returns vehicle
 
@@ -1947,7 +1947,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnTargetPlayer() {
             val vehicleId = VehicleId.valueOf(20)
-            val vehicle = mockk<InterceptableVehicle>()
+            val vehicle = mockk<VehicleImpl>()
             every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns vehicleId.value
             every { vehicleRegistry[vehicleId.value] } returns vehicle
 

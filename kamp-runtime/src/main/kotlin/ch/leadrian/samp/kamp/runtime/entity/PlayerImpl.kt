@@ -25,7 +25,7 @@ internal class PlayerImpl(
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : InterceptablePlayer {
+) : Player {
 
     private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
 
@@ -865,7 +865,7 @@ internal class PlayerImpl(
         onSpawnHandlers += onSpawn
     }
 
-    override fun onSpawn() {
+    internal fun onSpawn() {
         onSpawnHandlers.forEach { it.invoke(this) }
     }
 
@@ -873,7 +873,7 @@ internal class PlayerImpl(
         onDeathHandlers += onDeath
     }
 
-    override fun onDeath(killer: Player?, weapon: WeaponModel) {
+    internal fun onDeath(killer: Player?, weapon: WeaponModel) {
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
 
@@ -881,7 +881,7 @@ internal class PlayerImpl(
         onDisconnectHandlers += onDisconnect
     }
 
-    override fun onDisconnect(reason: DisconnectReason) {
+    internal fun onDisconnect(reason: DisconnectReason) {
         if (!isOnline) return
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }

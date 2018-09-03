@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.InterceptablePlayer
+import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -17,7 +17,7 @@ internal class PlayerRegistryTest {
     @ParameterizedTest
     @ValueSource(ints = [0, SAMPConstants.MAX_PLAYERS - 1])
     fun shouldRegisterAndGetPlayer(playerId: Int) {
-        val player = mockk<InterceptablePlayer> {
+        val player = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -27,7 +27,7 @@ internal class PlayerRegistryTest {
 
         playerRegistry.register(player)
 
-        val registeredPlayer = playerRegistry.get(playerId)
+        val registeredPlayer = playerRegistry[playerId]
         assertThat(registeredPlayer)
                 .isSameAs(player)
     }
@@ -40,7 +40,7 @@ internal class PlayerRegistryTest {
         }
         val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
 
-        val registeredPlayer = playerRegistry.get(playerId)
+        val registeredPlayer = playerRegistry[playerId]
         assertThat(registeredPlayer)
                 .isNull()
     }
@@ -48,10 +48,10 @@ internal class PlayerRegistryTest {
     @Test
     fun givenAnotherPlayerWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val playerId = 50
-        val alreadyRegisteredPlayer = mockk<InterceptablePlayer> {
+        val alreadyRegisteredPlayer = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val newPlayer = mockk<InterceptablePlayer> {
+        val newPlayer = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -64,7 +64,7 @@ internal class PlayerRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredPlayer = playerRegistry.get(playerId)
+        val registeredPlayer = playerRegistry[playerId]
         assertThat(registeredPlayer)
                 .isSameAs(alreadyRegisteredPlayer)
     }
@@ -72,7 +72,7 @@ internal class PlayerRegistryTest {
     @Test
     fun shouldUnregisterRegisteredPlayer() {
         val playerId = 50
-        val player = mockk<InterceptablePlayer> {
+        val player = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -83,7 +83,7 @@ internal class PlayerRegistryTest {
 
         playerRegistry.unregister(player)
 
-        val registeredPlayer = playerRegistry.get(playerId)
+        val registeredPlayer = playerRegistry[playerId]
         assertThat(registeredPlayer)
                 .isNull()
     }
@@ -92,7 +92,7 @@ internal class PlayerRegistryTest {
     @Test
     fun givenPlayerIsNotRegisteredItShouldThrowAnException() {
         val playerId = PlayerId.valueOf(50)
-        val player = mockk<InterceptablePlayer> {
+        val player = mockk<PlayerImpl> {
             every { id } returns playerId
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -109,10 +109,10 @@ internal class PlayerRegistryTest {
     @Test
     fun givenAnotherPlayerWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
         val playerId = 50
-        val alreadyRegisteredPlayer = mockk<InterceptablePlayer> {
+        val alreadyRegisteredPlayer = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
-        val newPlayer = mockk<InterceptablePlayer> {
+        val newPlayer = mockk<PlayerImpl> {
             every { id } returns PlayerId.valueOf(playerId)
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -125,7 +125,7 @@ internal class PlayerRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredPlayer = playerRegistry.get(playerId)
+        val registeredPlayer = playerRegistry[playerId]
         assertThat(registeredPlayer)
                 .isSameAs(alreadyRegisteredPlayer)
     }
@@ -133,15 +133,15 @@ internal class PlayerRegistryTest {
     @Test
     fun shouldReturnAllRegisteredPlayers() {
         val playerId1 = PlayerId.valueOf(10)
-        val player1 = mockk<InterceptablePlayer> {
+        val player1 = mockk<PlayerImpl> {
             every { id } returns playerId1
         }
         val playerId2 = PlayerId.valueOf(15)
-        val player2 = mockk<InterceptablePlayer> {
+        val player2 = mockk<PlayerImpl> {
             every { id } returns playerId2
         }
         val playerId3 = PlayerId.valueOf(30)
-        val player3 = mockk<InterceptablePlayer> {
+        val player3 = mockk<PlayerImpl> {
             every { id } returns playerId3
         }
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
