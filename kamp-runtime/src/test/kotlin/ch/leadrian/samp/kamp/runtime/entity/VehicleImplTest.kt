@@ -12,9 +12,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -883,6 +881,12 @@ internal class VehicleImplTest {
             @Nested
             inner class DestroyTests {
 
+                @BeforeEach
+                fun setUp() {
+                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
+                    every { vehicleRegistry.unregister(any()) } just Runs
+                }
+
                 @Test
                 fun isDestroyedShouldInitiallyBeFalse() {
                     val isDestroyed = vehicle.isDestroyed
@@ -893,28 +897,29 @@ internal class VehicleImplTest {
 
                 @Test
                 fun shouldDestroyVehicle() {
-                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
-
                     vehicle.destroy()
 
-                    verify { nativeFunctionExecutor.destroyVehicle(vehicleId.value) }
+                    verify {
+                        nativeFunctionExecutor.destroyVehicle(vehicleId.value)
+                        vehicleRegistry.unregister(vehicle)
+                    }
                     assertThat(vehicle.isDestroyed)
                             .isTrue()
                 }
 
                 @Test
                 fun shouldNotExecuteDestroyTwice() {
-                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
-
                     vehicle.destroy()
                     vehicle.destroy()
 
-                    verify(exactly = 1) { nativeFunctionExecutor.destroyVehicle(vehicleId.value) }
+                    verify(exactly = 1) {
+                        nativeFunctionExecutor.destroyVehicle(vehicleId.value)
+                        vehicleRegistry.unregister(vehicle)
+                    }
                 }
 
                 @Test
                 fun givenItDestroyedIdShouldThrowException() {
-                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
                     vehicle.destroy()
 
                     val caughtThrowable = catchThrowable { vehicle.id }

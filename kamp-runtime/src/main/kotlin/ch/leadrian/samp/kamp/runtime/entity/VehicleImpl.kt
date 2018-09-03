@@ -17,7 +17,7 @@ internal class VehicleImpl(
         rotation: Float,
         addSiren: Boolean,
         respawnDelay: Int,
-        vehicleRegistry: VehicleRegistry,
+        private val vehicleRegistry: VehicleRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : InterceptableVehicle {
 
@@ -402,6 +402,7 @@ internal class VehicleImpl(
         if (isDestroyed) return
 
         nativeFunctionExecutor.destroyVehicle(id.value)
+        vehicleRegistry.unregister(this)
         isDestroyed = true
     }
 }

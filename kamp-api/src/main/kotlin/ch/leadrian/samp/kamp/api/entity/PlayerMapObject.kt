@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.api.data.Color
+import ch.leadrian.samp.kamp.api.data.Colors
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
@@ -12,9 +13,9 @@ interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
 
     override val id: PlayerMapObjectId
 
-    fun attachTo(player: Player)
+    fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D)
 
-    fun attachTo(vehicle: Vehicle)
+    fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D)
 
     var coordinates: Vector3D
 
@@ -30,7 +31,7 @@ interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
 
     val isMoving: Boolean
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color? = null)
+    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color = Colors.TRANSPARENT)
 
     fun setMaterialText(
             text: String,
@@ -39,8 +40,8 @@ interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
             fontFace: String = "Arial",
             fontSize: Int = 24,
             isBold: Boolean = true,
-            fontColor: Color? = null,
-            backColor: Color? = null,
+            fontColor: Color = Colors.WHITE,
+            backColor: Color = Colors.TRANSPARENT,
             textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     )
 

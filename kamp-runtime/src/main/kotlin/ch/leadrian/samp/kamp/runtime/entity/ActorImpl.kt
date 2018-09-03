@@ -9,12 +9,14 @@ import ch.leadrian.samp.kamp.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 
 internal class ActorImpl(
         model: SkinModel,
         coordinates: Vector3D,
         rotation: Float,
+        private val actorRegistry: ActorRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Actor {
 
@@ -122,6 +124,7 @@ internal class ActorImpl(
         if (isDestroyed) return
 
         nativeFunctionExecutor.destroyActor(id.value)
+        actorRegistry.unregister(this)
         isDestroyed = true
     }
 }

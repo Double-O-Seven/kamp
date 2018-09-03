@@ -508,7 +508,7 @@ object Colors {
     val TOMATO = colorOf(0xFF6347FF)
 
     @JvmStatic
-    val TRANSPARENT = colorOf(0xFFFFFF00)
+    val TRANSPARENT = colorOf(0x00000000)
 
     @JvmStatic
     val TURQUOISE = colorOf(0x40E0D0FF)

@@ -9,9 +9,11 @@ import ch.leadrian.samp.kamp.api.entity.id.GangZoneId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.runtime.entity.registry.GangZoneRegistry
 
 internal class GangZoneImpl(
         area: Rectangle,
+        private val gangZoneRegistry: GangZoneRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : GangZone {
 
@@ -82,6 +84,7 @@ internal class GangZoneImpl(
         if (isDestroyed) return
 
         nativeFunctionExecutor.gangZoneDestroy(id.value)
+        gangZoneRegistry.unregister(this)
         isDestroyed = true
     }
 }

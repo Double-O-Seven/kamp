@@ -4,34 +4,38 @@ import ch.leadrian.samp.kamp.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.api.data.Color
+import ch.leadrian.samp.kamp.api.data.Colors
 import ch.leadrian.samp.kamp.api.data.Vector3D
+import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.MapObjectId
 
 interface MapObject : Destroyable, Entity<MapObjectId> {
 
     override val id: MapObjectId
 
-    fun attachTo(player: Player)
+    fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D)
 
-    fun attachTo(mapObject: MapObject)
+    fun attachTo(mapObject: MapObject, offset: Vector3D, rotation: Vector3D, syncRotation: Boolean = false)
 
-    fun attachTo(vehicle: Vehicle)
+    fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D)
 
     var coordinates: Vector3D
 
     var rotation: Vector3D
 
+    val drawDistance: Float
+
     val model: Int
 
     fun disableCameraCollision()
 
-    fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D? = null)
+    fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f))
 
     fun stop()
 
     val isMoving: Boolean
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color? = null)
+    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color = Colors.TRANSPARENT)
 
     fun setMaterialText(
             text: String,
@@ -40,12 +44,12 @@ interface MapObject : Destroyable, Entity<MapObjectId> {
             fontFace: String = "Arial",
             fontSize: Int = 24,
             isBold: Boolean = true,
-            fontColor: Color? = null,
-            backColor: Color? = null,
+            fontColor: Color = Colors.WHITE,
+            backColor: Color = Colors.TRANSPARENT,
             textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     )
 
     fun onMoved(onMoved: MapObject.() -> Unit)
 
-    fun onEdit(onEdit: MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Boolean)
+    fun onEdit(onEdit: MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit)
 }

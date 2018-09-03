@@ -10,9 +10,8 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import ch.leadrian.samp.kamp.runtime.entity.registry.GangZoneRegistry
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -33,7 +32,8 @@ internal class GangZoneImplTest {
 
             val gangZone = GangZoneImpl(
                     area = rectangleOf(minX = 1f, maxX = 2f, minY = 3f, maxY = 4f),
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    gangZoneRegistry = mockk()
             )
 
             assertThat(gangZone.id)
@@ -49,7 +49,8 @@ internal class GangZoneImplTest {
             val caughtThrowable = catchThrowable {
                 GangZoneImpl(
                         area = rectangleOf(minX = 1f, maxX = 2f, minY = 3f, maxY = 4f),
-                        nativeFunctionExecutor = nativeFunctionExecutor
+                        nativeFunctionExecutor = nativeFunctionExecutor,
+                        gangZoneRegistry = mockk()
                 )
             }
 
@@ -70,13 +71,15 @@ internal class GangZoneImplTest {
         private lateinit var gangZone: GangZoneImpl
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
+        private val gangZoneRegistry = mockk<GangZoneRegistry>()
 
         @BeforeEach
         fun setUp() {
             every { nativeFunctionExecutor.gangZoneCreate(any(), any(), any(), any()) } returns gangZoneId.value
             gangZone = GangZoneImpl(
                     area = mutableRectangleOf(minX = 1f, maxX = 2f, minY = 3f, maxY = 4f),
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    gangZoneRegistry = gangZoneRegistry
             )
         }
 
@@ -195,6 +198,12 @@ internal class GangZoneImplTest {
         @Nested
         inner class DestroyTests {
 
+            @BeforeEach
+            fun setUp() {
+                every { nativeFunctionExecutor.gangZoneDestroy(any()) } returns true
+                every { gangZoneRegistry.unregister(gangZone) } just Runs
+            }
+
             @Test
             fun isDestroyedShouldInitiallyBeFalse() {
                 val isDestroyed = gangZone.isDestroyed
@@ -205,11 +214,13 @@ internal class GangZoneImplTest {
 
             @Test
             fun shouldDestroyGangZone() {
-                every { nativeFunctionExecutor.gangZoneDestroy(any()) } returns true
 
                 gangZone.destroy()
 
-                verify { nativeFunctionExecutor.gangZoneDestroy(gangZoneId.value) }
+                verify {
+                    nativeFunctionExecutor.gangZoneDestroy(gangZoneId.value)
+                    gangZoneRegistry.unregister(gangZone)
+                }
                 assertThat(gangZone.isDestroyed)
                         .isTrue()
             }
@@ -221,7 +232,10 @@ internal class GangZoneImplTest {
                 gangZone.destroy()
                 gangZone.destroy()
 
-                verify(exactly = 1) { nativeFunctionExecutor.gangZoneDestroy(gangZoneId.value) }
+                verify(exactly = 1) {
+                    nativeFunctionExecutor.gangZoneDestroy(gangZoneId.value)
+                    gangZoneRegistry.unregister(gangZone)
+                }
             }
 
             @Test
