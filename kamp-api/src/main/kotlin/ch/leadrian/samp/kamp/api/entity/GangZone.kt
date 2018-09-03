@@ -4,9 +4,9 @@ import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Rectangle
 import ch.leadrian.samp.kamp.api.entity.id.GangZoneId
 
-interface GangZone : Destroyable {
+interface GangZone : Destroyable, Entity<GangZoneId> {
 
-    val id: GangZoneId
+    override val id: GangZoneId
 
     val area: Rectangle
 

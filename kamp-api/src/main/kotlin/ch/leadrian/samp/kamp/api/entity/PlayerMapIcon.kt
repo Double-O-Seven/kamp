@@ -6,9 +6,9 @@ import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 
-interface PlayerMapIcon : HasPlayer, Destroyable {
+interface PlayerMapIcon : HasPlayer, Destroyable, Entity<PlayerMapIconId> {
 
-    val id: PlayerMapIconId
+    override val id: PlayerMapIconId
 
     var coordinates: Vector3D
 

@@ -5,9 +5,9 @@ import ch.leadrian.samp.kamp.api.data.Position
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.id.ActorId
 
-interface Actor : Destroyable {
+interface Actor : Destroyable, Entity<ActorId> {
 
-    val id: ActorId
+    override val id: ActorId
 
     fun isStreamedIn(forPlayer: Player): Boolean
 

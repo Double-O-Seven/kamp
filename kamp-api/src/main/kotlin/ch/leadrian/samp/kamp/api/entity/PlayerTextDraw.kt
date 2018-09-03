@@ -9,9 +9,9 @@ import ch.leadrian.samp.kamp.api.data.VehicleColors
 import ch.leadrian.samp.kamp.api.entity.id.PlayerTextDrawId
 import ch.leadrian.samp.kamp.api.text.TextKey
 
-interface PlayerTextDraw : HasPlayer, Destroyable {
+interface PlayerTextDraw : HasPlayer, Destroyable, Entity<PlayerTextDrawId> {
 
-    val id: PlayerTextDrawId
+    override val id: PlayerTextDrawId
 
     var letterSize: Vector2D
 

@@ -8,9 +8,9 @@ import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
 
-interface PlayerMapObject : HasPlayer, Destroyable {
+interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
 
-    val id: PlayerMapObjectId
+    override val id: PlayerMapObjectId
 
     fun attachTo(player: Player)
 

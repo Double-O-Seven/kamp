@@ -7,9 +7,9 @@ import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.id.MapObjectId
 
-interface MapObject : Destroyable {
+interface MapObject : Destroyable, Entity<MapObjectId> {
 
-    val id: MapObjectId
+    override val id: MapObjectId
 
     fun attachTo(player: Player)
 

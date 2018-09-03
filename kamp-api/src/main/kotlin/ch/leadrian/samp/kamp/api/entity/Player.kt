@@ -9,11 +9,11 @@ import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
 import java.util.*
 
-interface Player {
+interface Player : Entity<PlayerId> {
 
     val isOnline: Boolean
 
-    val id: PlayerId
+    override val id: PlayerId
 
     var locale: Locale
 

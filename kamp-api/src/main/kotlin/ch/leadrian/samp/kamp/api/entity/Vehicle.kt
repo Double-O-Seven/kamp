@@ -5,9 +5,9 @@ import ch.leadrian.samp.kamp.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
 
-interface Vehicle : Destroyable {
+interface Vehicle : Destroyable, Entity<VehicleId> {
 
-    val id: VehicleId
+    override val id: VehicleId
 
     fun isStreamedIn(forPlayer: Player): Boolean
 

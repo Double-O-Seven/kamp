@@ -4,9 +4,9 @@ import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.entity.id.PlayerTextLabelId
 
-interface PlayerTextLabel : HasPlayer, Destroyable {
+interface PlayerTextLabel : HasPlayer, Destroyable, Entity<PlayerTextLabelId> {
 
-    val id: PlayerTextLabelId
+    override val id: PlayerTextLabelId
 
     var text: String
 

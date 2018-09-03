@@ -4,9 +4,9 @@ import ch.leadrian.samp.kamp.api.constants.MenuColumn
 import ch.leadrian.samp.kamp.api.entity.id.MenuId
 import ch.leadrian.samp.kamp.api.text.TextKey
 
-interface Menu : Destroyable {
+interface Menu : Destroyable, Entity<MenuId> {
 
-    val id: MenuId
+    override val id: MenuId
 
     val rows: List<MenuRow>
 
