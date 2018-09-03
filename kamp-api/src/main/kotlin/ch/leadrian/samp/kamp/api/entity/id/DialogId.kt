@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity.id
 
-data class DialogId internal constructor(val value: Int) {
+data class DialogId internal constructor(override val value: Int) : EntityId {
 
     companion object {
 

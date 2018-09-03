@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.api.entity.id
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 
-data class MenuId internal constructor(val value: Int) {
+data class MenuId internal constructor(override val value: Int) : EntityId {
 
     companion object {
 

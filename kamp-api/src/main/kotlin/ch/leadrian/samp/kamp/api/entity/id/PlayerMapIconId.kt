@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.entity.id
 
-data class PlayerMapIconId internal constructor(val value: Int) {
+data class PlayerMapIconId internal constructor(override val value: Int) : EntityId {
 
     companion object {
 
