@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.runtime.text
 
 import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.text.*
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class MessageFormatterImpl

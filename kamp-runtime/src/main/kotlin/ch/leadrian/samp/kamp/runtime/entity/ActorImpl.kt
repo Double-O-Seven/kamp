@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.Actor
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.id.ActorId
+import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
@@ -18,6 +19,7 @@ internal class ActorImpl(
 ) : Actor {
 
     override val id: ActorId
+        get() = requireNotDestroyed { field }
 
     init {
         val actorId = nativeFunctionExecutor.createActor(

@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.api.text.HasTextKey
 import ch.leadrian.samp.kamp.api.text.TextFormatter
 import ch.leadrian.samp.kamp.api.text.TextKey
 import ch.leadrian.samp.kamp.api.text.TextProvider
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class TextFormatterImpl

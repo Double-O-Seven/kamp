@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.api.text
 
-import java.util.*
+import java.util.Locale
 
 interface TextProvider {
 

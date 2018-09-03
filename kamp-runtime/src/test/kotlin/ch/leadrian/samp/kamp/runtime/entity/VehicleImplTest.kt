@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.Vehicle
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
+import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
@@ -909,6 +910,17 @@ internal class VehicleImplTest {
                     vehicle.destroy()
 
                     verify(exactly = 1) { nativeFunctionExecutor.destroyVehicle(vehicleId.value) }
+                }
+
+                @Test
+                fun givenItDestroyedIdShouldThrowException() {
+                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
+                    vehicle.destroy()
+
+                    val caughtThrowable = catchThrowable { vehicle.id }
+
+                    assertThat(caughtThrowable)
+                            .isInstanceOf(AlreadyDestroyedException::class.java)
                 }
             }
 

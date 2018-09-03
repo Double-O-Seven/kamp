@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.api.entity.*
 import ch.leadrian.samp.kamp.api.entity.id.*
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
+import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
@@ -474,7 +475,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnTargetPlayer() {
             every { nativeFunctionExecutor.getPlayerTargetPlayer(playerId.value) } returns otherPlayerId.value
-            every { playerRegistry.get(otherPlayerId.value) } returns otherPlayer
+            every { playerRegistry[otherPlayerId.value] } returns otherPlayer
 
             val targetPlayer = player.targetPlayer
 
@@ -485,7 +486,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerTargetPlayer(playerId.value) } returns SAMPConstants.INVALID_PLAYER_ID
-            every { playerRegistry.get(SAMPConstants.INVALID_PLAYER_ID) } returns null
+            every { playerRegistry[SAMPConstants.INVALID_PLAYER_ID] } returns null
 
             val targetPlayer = player.targetPlayer
 
@@ -502,7 +503,7 @@ internal class PlayerImplTest {
             val actorId = ActorId.valueOf(13)
             val actor = mockk<Actor>()
             every { nativeFunctionExecutor.getPlayerTargetActor(playerId.value) } returns actorId.value
-            every { actorRegistry.get(actorId.value) } returns actor
+            every { actorRegistry[actorId.value] } returns actor
 
             val targetActor = player.targetActor
 
@@ -513,7 +514,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoTargetActorItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerTargetActor(playerId.value) } returns SAMPConstants.INVALID_ACTOR_ID
-            every { actorRegistry.get(SAMPConstants.INVALID_ACTOR_ID) } returns null
+            every { actorRegistry[SAMPConstants.INVALID_ACTOR_ID] } returns null
 
             val targetActor = player.targetActor
 
@@ -1100,7 +1101,7 @@ internal class PlayerImplTest {
             val vehicleId = 1337
             val vehicle = mockk<InterceptableVehicle>()
             every { nativeFunctionExecutor.getPlayerSurfingVehicleID(playerId.value) } returns vehicleId
-            every { vehicleRegistry.get(vehicleId) } returns vehicle
+            every { vehicleRegistry[vehicleId] } returns vehicle
 
             val surfingVehicle = player.surfingVehicle
 
@@ -1111,7 +1112,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoSurfingVehicleItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerSurfingVehicleID(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
-            every { vehicleRegistry.get(SAMPConstants.INVALID_VEHICLE_ID) } returns null
+            every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
 
             val surfingVehicle = player.surfingVehicle
 
@@ -1128,7 +1129,7 @@ internal class PlayerImplTest {
             val mapObjectId = 1337
             val mapObject = mockk<MapObject>()
             every { nativeFunctionExecutor.getPlayerSurfingObjectID(playerId.value) } returns mapObjectId
-            every { mapObjectRegistry.get(mapObjectId) } returns mapObject
+            every { mapObjectRegistry[mapObjectId] } returns mapObject
 
             val surfingMapObject = player.surfingObject
 
@@ -1139,7 +1140,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoSurfingMapObjectItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerSurfingObjectID(playerId.value) } returns SAMPConstants.INVALID_OBJECT_ID
-            every { mapObjectRegistry.get(SAMPConstants.INVALID_OBJECT_ID) } returns null
+            every { mapObjectRegistry[SAMPConstants.INVALID_OBJECT_ID] } returns null
 
             val surfingMapObject = player.surfingObject
 
@@ -1236,7 +1237,7 @@ internal class PlayerImplTest {
             val vehicleId = 1337
             val vehicle = mockk<InterceptableVehicle>()
             every { nativeFunctionExecutor.getPlayerVehicleID(playerId.value) } returns vehicleId
-            every { vehicleRegistry.get(vehicleId) } returns vehicle
+            every { vehicleRegistry[vehicleId] } returns vehicle
 
             val playerVehicle = player.vehicle
 
@@ -1247,7 +1248,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoVehicleItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerVehicleID(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
-            every { vehicleRegistry.get(SAMPConstants.INVALID_VEHICLE_ID) } returns null
+            every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
 
             val playerVehicle = player.vehicle
 
@@ -1894,7 +1895,7 @@ internal class PlayerImplTest {
             val mapObjectId = MapObjectId.valueOf(13)
             val mapObject = mockk<MapObject>()
             every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns mapObjectId.value
-            every { mapObjectRegistry.get(mapObjectId.value) } returns mapObject
+            every { mapObjectRegistry[mapObjectId.value] } returns mapObject
 
             val cameraTargetMapObject = player.cameraTargetObject
 
@@ -1905,7 +1906,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoCameraTargetMapObjectItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns SAMPConstants.INVALID_OBJECT_ID
-            every { mapObjectRegistry.get(SAMPConstants.INVALID_OBJECT_ID) } returns null
+            every { mapObjectRegistry[SAMPConstants.INVALID_OBJECT_ID] } returns null
 
             val cameraTargetMapObject = player.cameraTargetObject
 
@@ -1920,7 +1921,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnTargetPlayer() {
             every { nativeFunctionExecutor.getPlayerCameraTargetPlayer(playerId.value) } returns otherPlayerId.value
-            every { playerRegistry.get(otherPlayerId.value) } returns otherPlayer
+            every { playerRegistry[otherPlayerId.value] } returns otherPlayer
 
             val targetPlayer = player.cameraTargetPlayer
 
@@ -1931,7 +1932,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerCameraTargetPlayer(playerId.value) } returns SAMPConstants.INVALID_PLAYER_ID
-            every { playerRegistry.get(SAMPConstants.INVALID_PLAYER_ID) } returns null
+            every { playerRegistry[SAMPConstants.INVALID_PLAYER_ID] } returns null
 
             val targetPlayer = player.cameraTargetPlayer
 
@@ -1948,7 +1949,7 @@ internal class PlayerImplTest {
             val vehicleId = VehicleId.valueOf(20)
             val vehicle = mockk<InterceptableVehicle>()
             every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns vehicleId.value
-            every { vehicleRegistry.get(vehicleId.value) } returns vehicle
+            every { vehicleRegistry[vehicleId.value] } returns vehicle
 
             val targetVehicle = player.cameraTargetVehicle
 
@@ -1959,7 +1960,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
-            every { vehicleRegistry.get(SAMPConstants.INVALID_VEHICLE_ID) } returns null
+            every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
 
             val targetVehicle = player.cameraTargetVehicle
 
@@ -1976,7 +1977,7 @@ internal class PlayerImplTest {
             val actorId = ActorId.valueOf(13)
             val actor = mockk<Actor>()
             every { nativeFunctionExecutor.getPlayerCameraTargetActor(playerId.value) } returns actorId.value
-            every { actorRegistry.get(actorId.value) } returns actor
+            every { actorRegistry[actorId.value] } returns actor
 
             val cameraTargetActor = player.cameraTargetActor
 
@@ -1987,7 +1988,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoCameraTargetActorItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerCameraTargetActor(playerId.value) } returns SAMPConstants.INVALID_ACTOR_ID
-            every { actorRegistry.get(SAMPConstants.INVALID_ACTOR_ID) } returns null
+            every { actorRegistry[SAMPConstants.INVALID_ACTOR_ID] } returns null
 
             val cameraTargetActor = player.cameraTargetActor
 
@@ -2718,7 +2719,7 @@ internal class PlayerImplTest {
             val menuId = 1337
             val menu = mockk<Menu>()
             every { nativeFunctionExecutor.getPlayerMenu(playerId.value) } returns menuId
-            every { menuRegistry.get(menuId) } returns menu
+            every { menuRegistry[menuId] } returns menu
 
             val playerMenu = player.menu
 
@@ -2729,7 +2730,7 @@ internal class PlayerImplTest {
         @Test
         fun givenNoMenuItShouldReturnNull() {
             every { nativeFunctionExecutor.getPlayerMenu(playerId.value) } returns SAMPConstants.INVALID_MENU
-            every { menuRegistry.get(SAMPConstants.INVALID_MENU) } returns null
+            every { menuRegistry[SAMPConstants.INVALID_MENU] } returns null
 
             val playerMenu = player.menu
 
@@ -2827,6 +2828,16 @@ internal class PlayerImplTest {
             verify(exactly = 1) {
                 onDisconnect.invoke(player, DisconnectReason.QUIT)
             }
+        }
+
+        @Test
+        fun givenPlayerDisconnectedIdShouldThrowException() {
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            val caughtThrowable = catchThrowable { player.id }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(PlayerOfflineException::class.java)
         }
     }
 }

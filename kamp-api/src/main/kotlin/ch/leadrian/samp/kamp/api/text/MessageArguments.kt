@@ -4,7 +4,7 @@ package ch.leadrian.samp.kamp.api.text
 
 import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.entity.Player
-import java.util.*
+import java.util.Locale
 
 private class EmbeddedPlayerName(
         private val player: Player

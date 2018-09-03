@@ -204,10 +204,10 @@ internal class PlayerImpl(
         get() = nativeFunctionExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
 
     override val targetPlayer: Player?
-        get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry[it] }
 
     override val targetActor: Actor?
-        get() = nativeFunctionExecutor.getPlayerTargetActor(id.value).let { actorRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerTargetActor(id.value).let { actorRegistry[it] }
 
     override var teamId: TeamId
         get() = nativeFunctionExecutor.getPlayerTeam(id.value).let { TeamId.valueOf(it) }
@@ -403,10 +403,10 @@ internal class PlayerImpl(
     }
 
     override val surfingVehicle: Vehicle?
-        get() = nativeFunctionExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry[it] }
 
     override val surfingObject: MapObject?
-        get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry[it] }
 
     override fun removeBuilding(modelId: Int, position: Sphere) {
         nativeFunctionExecutor.removeBuildingForPlayer(
@@ -464,7 +464,7 @@ internal class PlayerImpl(
     }
 
     override val vehicle: Vehicle?
-        get() = nativeFunctionExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry[it] }
 
     override val vehicleSeat: Int?
         get() = nativeFunctionExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
@@ -647,17 +647,17 @@ internal class PlayerImpl(
     }
 
     override val cameraTargetObject: MapObject?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry[it] }
 
     override val cameraTargetVehicle: Vehicle?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry[it] }
 
     override val cameraTargetPlayer: Player?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry[it] }
 
     override val cameraTargetActor: Actor?
         get() {
-            return nativeFunctionExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry.get(it) }
+            return nativeFunctionExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry[it] }
         }
 
     override val cameraAspectRatio: Float
@@ -859,7 +859,7 @@ internal class PlayerImpl(
     }
 
     override val menu: Menu?
-        get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry.get(it) }
+        get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry[it] }
 
     override fun onSpawn(onSpawn: Player.() -> Unit) {
         onSpawnHandlers += onSpawn

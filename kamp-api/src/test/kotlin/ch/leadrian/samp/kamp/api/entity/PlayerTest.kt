@@ -27,7 +27,6 @@ internal class PlayerTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(PlayerOfflineException::class.java)
-                    .hasMessage("Player with ID 1 is already offline")
         }
 
         @Test
@@ -58,7 +57,6 @@ internal class PlayerTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(PlayerOfflineException::class.java)
-                    .hasMessage("Player with ID 1 is already offline")
             verify { block wasNot Called }
         }
 

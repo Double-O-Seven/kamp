@@ -23,7 +23,7 @@ internal class GangZoneImpl(
                 minx = area.minX,
                 maxx = area.maxX,
                 miny = area.minY,
-                maxy = area.maxX
+                maxy = area.maxY
         )
 
         if (gangZoneId == SAMPConstants.INVALID_GANG_ZONE) {

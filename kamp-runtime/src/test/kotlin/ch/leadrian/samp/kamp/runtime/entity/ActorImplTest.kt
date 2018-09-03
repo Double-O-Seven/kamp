@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
@@ -361,6 +362,17 @@ internal class ActorImplTest {
                 actor.destroy()
 
                 verify(exactly = 1) { nativeFunctionExecutor.destroyActor(actorId.value) }
+            }
+
+            @Test
+            fun givenItDestroyedIdShouldThrowException() {
+                every { nativeFunctionExecutor.destroyActor(any()) } returns true
+                actor.destroy()
+
+                val caughtThrowable = catchThrowable { actor.id }
+
+                assertThat(caughtThrowable)
+                        .isInstanceOf(AlreadyDestroyedException::class.java)
             }
         }
     }

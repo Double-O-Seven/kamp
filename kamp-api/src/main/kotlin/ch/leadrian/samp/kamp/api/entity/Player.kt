@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
-import java.util.*
+import java.util.Locale
 
 interface Player : Entity<PlayerId> {
 
@@ -271,7 +271,7 @@ interface Player : Entity<PlayerId> {
 }
 
 fun Player.requireOnline(): Player {
-    if (!isOnline) throw PlayerOfflineException("Player with ID ${id.value} is already offline")
+    if (!isOnline) throw PlayerOfflineException("Player is already offline")
     return this
 }
 
