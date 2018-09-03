@@ -11,21 +11,36 @@ import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.Locale
 
 internal class GameTextSenderImplTest {
 
+    private lateinit var gameTextSender: GameTextSenderImpl
+
+    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
+    private val textProvider = mockk<TextProvider>()
+    private val playerRegistry = mockk<PlayerRegistry>()
+    private val textFormatter = mockk<TextFormatter>()
+
+    @BeforeEach
+    fun setUp() {
+        gameTextSender = GameTextSenderImpl(
+                nativeFunctionExecutor = nativeFunctionExecutor,
+                textProvider = textProvider,
+                playerRegistry = playerRegistry,
+                textFormatter = textFormatter
+        )
+    }
+
     @Nested
     inner class SendGameTextToAllTests {
 
         @Test
         fun shouldSendSimpleText() {
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForAll(any(), any(), any()) } returns true
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(nativeFunctionExecutor = nativeFunctionExecutor)
+            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
 
@@ -34,16 +49,8 @@ internal class GameTextSenderImplTest {
 
         @Test
         fun shouldSendFormattedText() {
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForAll(any(), any(), any()) } returns true
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textFormatter = textFormatter
-            )
+            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
+            every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
@@ -63,21 +70,10 @@ internal class GameTextSenderImplTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale1, textKey) } returns "Hallo"
-                every { getText(locale2, textKey) } returns "Bonjour"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textProvider.getText(locale1, textKey) } returns "Hallo"
+            every { textProvider.getText(locale2, textKey) } returns "Bonjour"
+            every { playerRegistry.getAll() } returns listOf(player1, player2)
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
@@ -99,20 +95,9 @@ internal class GameTextSenderImplTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForAll(any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale, textKey) } returns "Hallo"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
+            every { textProvider.getText(locale, textKey) } returns "Hallo"
+            every { playerRegistry.getAll() } returns listOf(player1, player2)
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
@@ -134,26 +119,12 @@ internal class GameTextSenderImplTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale1, textKey) } returns "Hallo %s"
-                every { getText(locale2, textKey) } returns "Bonjour %s"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2)
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(locale1, "Hallo %s", "SAMP") } returns "Hallo SAMP"
-                every { format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry,
-                    textFormatter = textFormatter
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textProvider.getText(locale1, textKey) } returns "Hallo %s"
+            every { textProvider.getText(locale2, textKey) } returns "Bonjour %s"
+            every { playerRegistry.getAll() } returns listOf(player1, player2)
+            every { textFormatter.format(locale1, "Hallo %s", "SAMP") } returns "Hallo SAMP"
+            every { textFormatter.format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
 
@@ -175,24 +146,10 @@ internal class GameTextSenderImplTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForAll(any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale, textKey) } returns "Hallo %s"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2)
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(locale, "Hallo %s", "SAMP") } returns "Hallo SAMP"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry,
-                    textFormatter = textFormatter
-            )
+            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
+            every { textProvider.getText(locale, textKey) } returns "Hallo %s"
+            every { playerRegistry.getAll() } returns listOf(player1, player2)
+            every { textFormatter.format(locale, "Hallo %s", "SAMP") } returns "Hallo SAMP"
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
 
@@ -210,10 +167,7 @@ internal class GameTextSenderImplTest {
             val player = mockk<PlayerImpl> {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(nativeFunctionExecutor = nativeFunctionExecutor)
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
 
@@ -230,16 +184,8 @@ internal class GameTextSenderImplTest {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale, textKey) } returns "Hi there"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textProvider.getText(locale, textKey) } returns "Hi there"
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
@@ -255,16 +201,8 @@ internal class GameTextSenderImplTest {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(locale, "Hi %s", "there") } returns "Hi there"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textFormatter = textFormatter
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
@@ -281,20 +219,9 @@ internal class GameTextSenderImplTest {
                 every { this@mockk.id } returns PlayerId.valueOf(50)
                 every { this@mockk.locale } returns locale
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(locale, "Hi %s", "there") } returns "Hi there"
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale, textKey) } returns "Hi %s"
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textFormatter = textFormatter,
-                    textProvider = textProvider
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
+            every { textProvider.getText(locale, textKey) } returns "Hi %s"
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there")
 
@@ -315,16 +242,8 @@ internal class GameTextSenderImplTest {
             val player2 = mockk<PlayerImpl> {
                 every { this@mockk.id } returns PlayerId.valueOf(75)
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { playerRegistry.getAll() } returns listOf(player1, player2)
 
             gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there") { it == player2 }
 
@@ -350,21 +269,10 @@ internal class GameTextSenderImplTest {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
                 every { this@mockk.locale } returns locale2
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale1, textKey) } returns "Hi there"
-                every { getText(locale2, textKey) } returns "Bonjour"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2, player3)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textProvider.getText(locale1, textKey) } returns "Hi there"
+            every { textProvider.getText(locale2, textKey) } returns "Bonjour"
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey) { it != player2 }
 
@@ -385,20 +293,9 @@ internal class GameTextSenderImplTest {
             val player3 = mockk<PlayerImpl> {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2, player3)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textFormatter = textFormatter,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there") { it != player2 }
 
@@ -425,26 +322,12 @@ internal class GameTextSenderImplTest {
                 every { this@mockk.id } returns PlayerId.valueOf(100)
                 every { this@mockk.locale } returns locale2
             }
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { gameTextForPlayer(any(), any(), any(), any()) } returns true
-            }
-            val textFormatter = mockk<TextFormatter> {
-                every { format(locale1, "Hi %s", "SAMP") } returns "Hi SAMP"
-                every { format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
-            }
-            val textProvider = mockk<TextProvider> {
-                every { getText(locale1, textKey) } returns "Hi %s"
-                every { getText(locale2, textKey) } returns "Bonjour %s"
-            }
-            val playerRegistry = mockk<PlayerRegistry> {
-                every { getAll() } returns listOf(player1, player2, player3)
-            }
-            val gameTextSender = GameTextSenderImplInjector.inject(
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    textFormatter = textFormatter,
-                    textProvider = textProvider,
-                    playerRegistry = playerRegistry
-            )
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            every { textFormatter.format(locale1, "Hi %s", "SAMP") } returns "Hi SAMP"
+            every { textFormatter.format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
+            every { textProvider.getText(locale1, textKey) } returns "Hi %s"
+            every { textProvider.getText(locale2, textKey) } returns "Bonjour %s"
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP") { it != player2 }
 
