@@ -37,8 +37,7 @@ class SAMPCallbacksJavaCodeGenerator {
             |)
             |public interface $className {
             |
-            |""".trimMargin("|")
-        )
+            |""".trimMargin("|"))
     }
 
     private fun writeFunctions(functions: List<Function>, writer: BufferedWriter) {
@@ -54,8 +53,7 @@ class SAMPCallbacksJavaCodeGenerator {
                             |     * Bad return value is ${badReturnValueAttribute.value?.data}
                             |     */
                             |
-                        """.trimMargin()
-                        )
+                        """.trimMargin())
                     }
                     val returnJavaType = getJavaType(it.type)
                     if (!isPrimitiveJavaType(returnJavaType)) {

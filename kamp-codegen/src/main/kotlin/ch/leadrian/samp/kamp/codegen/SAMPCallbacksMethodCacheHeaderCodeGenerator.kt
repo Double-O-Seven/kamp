@@ -41,8 +41,7 @@ class SAMPCallbacksMethodCacheHeaderCodeGenerator {
             |        return onProcessTickMethodID;
             |    }
             |
-            |""".trimMargin("|")
-        )
+            |""".trimMargin("|"))
     }
 
     private fun writeMethodIDGetters(functions: List<Function>, writer: BufferedWriter) {
@@ -59,8 +58,7 @@ class SAMPCallbacksMethodCacheHeaderCodeGenerator {
             |    }
             |
             |
-        """.trimMargin()
-        )
+        """.trimMargin())
     }
 
     private fun writeMethodIDFields(functions: List<Function>, writer: BufferedWriter) {
@@ -70,8 +68,7 @@ class SAMPCallbacksMethodCacheHeaderCodeGenerator {
             |    jmethodID onProcessTickMethodID;
             |
             |
-        """.trimMargin()
-        )
+        """.trimMargin())
         functions
                 .filter { it.hasAttribute("callback") }
                 .forEach { writeMethodIDField(it, writer) }

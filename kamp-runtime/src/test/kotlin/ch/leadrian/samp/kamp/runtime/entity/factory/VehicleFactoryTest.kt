@@ -7,11 +7,7 @@ import ch.leadrian.samp.kamp.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

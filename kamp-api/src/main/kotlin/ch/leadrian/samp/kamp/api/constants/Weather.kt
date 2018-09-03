@@ -4,7 +4,6 @@ package ch.leadrian.samp.kamp.api.constants
  * Taken from https://github.com/Shoebill/shoebill-api
  */
 enum class Weather(override val value: Int) : ConstantValue<Int> {
-
     EXTRA_SUNNY_LA(0),
     SUNNY_LA(1),
     EXTRA_SUNNY_SMOG_LA(2),

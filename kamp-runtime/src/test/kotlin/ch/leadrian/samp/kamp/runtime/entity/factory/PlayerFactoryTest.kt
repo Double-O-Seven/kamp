@@ -2,16 +2,8 @@ package ch.leadrian.samp.kamp.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.MenuRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
+import ch.leadrian.samp.kamp.runtime.entity.registry.*
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

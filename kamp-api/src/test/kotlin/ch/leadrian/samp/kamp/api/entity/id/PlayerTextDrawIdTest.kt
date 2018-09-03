@@ -15,8 +15,7 @@ internal class PlayerTextDrawIdTest {
         SAMPConstants.MAX_PLAYER_TEXT_DRAWS,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_TEXT_DRAW
-    ]
-    )
+    ])
     fun shouldReturnPlayerTextDrawId(value: Int) {
         val playerTextDrawId = PlayerTextDrawId.valueOf(value)
 

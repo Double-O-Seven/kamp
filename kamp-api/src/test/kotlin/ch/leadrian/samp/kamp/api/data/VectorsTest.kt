@@ -224,6 +224,7 @@ internal class VectorsTest {
                     .isCloseTo(26.196374f, withPercentage(0.001))
         }
 
+
         @ParameterizedTest
         @ArgumentsSource(Vector2DFactoryArgumentsProvider::class)
         fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float) -> Vector2D) {
@@ -486,6 +487,7 @@ internal class VectorsTest {
                     .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
+
         @ParameterizedTest
         @ArgumentsSource(Vector3DFactoryArgumentsProvider::class)
         fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float, Float) -> Vector3D) {
@@ -594,6 +596,7 @@ internal class VectorsTest {
             assertThat(distance)
                     .isCloseTo(10.246951f, withPercentage(0.001))
         }
+
 
         @ParameterizedTest
         @ArgumentsSource(PositionFactoryArgumentsProvider::class)

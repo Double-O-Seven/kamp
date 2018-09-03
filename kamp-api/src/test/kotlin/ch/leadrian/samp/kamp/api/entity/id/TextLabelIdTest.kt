@@ -15,8 +15,7 @@ internal class TextLabelIdTest {
         SAMPConstants.MAX_3DTEXT_GLOBAL,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_3DTEXT_ID
-    ]
-    )
+    ])
     fun shouldReturnTextLabelId(value: Int) {
         val textLabelId = TextLabelId.valueOf(value)
 

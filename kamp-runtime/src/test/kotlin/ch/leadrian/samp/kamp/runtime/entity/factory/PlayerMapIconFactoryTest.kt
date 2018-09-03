@@ -55,4 +55,5 @@ internal class PlayerMapIconFactoryTest {
 
     }
 
+
 }

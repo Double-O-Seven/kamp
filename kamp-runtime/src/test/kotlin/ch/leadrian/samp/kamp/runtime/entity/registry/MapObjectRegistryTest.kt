@@ -74,6 +74,7 @@ internal class MapObjectRegistryTest {
                 .isNull()
     }
 
+
     @Test
     fun givenMapObjectIsNotRegisteredItShouldThrowAnException() {
         val mapObjectId = MapObjectId.valueOf(50)

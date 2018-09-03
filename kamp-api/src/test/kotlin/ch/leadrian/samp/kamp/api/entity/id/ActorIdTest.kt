@@ -15,8 +15,7 @@ internal class ActorIdTest {
         SAMPConstants.MAX_ACTORS,
         Int.MAX_VALUE,
         SAMPConstants.INVALID_ACTOR_ID
-    ]
-    )
+    ])
     fun shouldReturnActorId(value: Int) {
         val actorId = ActorId.valueOf(value)
 

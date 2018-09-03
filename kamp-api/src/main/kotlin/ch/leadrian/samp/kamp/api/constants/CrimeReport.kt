@@ -4,7 +4,6 @@ enum class CrimeReport(
         override val value: Int,
         val description: String
 ) : ConstantValue<Int> {
-
     CODE_10_7_A(21, "Out of service"),
     CODE_10_7_B(22, "Out of service"),
     CODE_10_17(10, "Meet Complainant"),

@@ -1,10 +1,6 @@
 package ch.leadrian.samp.kamp.api.service
 
-import ch.leadrian.samp.kamp.api.entity.Dialog
-import ch.leadrian.samp.kamp.api.entity.InputDialogBuilder
-import ch.leadrian.samp.kamp.api.entity.ListDialogBuilder
-import ch.leadrian.samp.kamp.api.entity.MessageBoxDialogBuilder
-import ch.leadrian.samp.kamp.api.entity.TabListDialogBuilder
+import ch.leadrian.samp.kamp.api.entity.*
 
 interface DialogService {
 

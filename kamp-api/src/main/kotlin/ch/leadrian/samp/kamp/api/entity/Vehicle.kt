@@ -2,15 +2,7 @@ package ch.leadrian.samp.kamp.api.entity
 
 import ch.leadrian.samp.kamp.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.api.constants.VehicleSirenState
-import ch.leadrian.samp.kamp.api.data.AngledLocation
-import ch.leadrian.samp.kamp.api.data.Location
-import ch.leadrian.samp.kamp.api.data.Position
-import ch.leadrian.samp.kamp.api.data.Vector3D
-import ch.leadrian.samp.kamp.api.data.VehicleColors
-import ch.leadrian.samp.kamp.api.data.VehicleDamageStatus
-import ch.leadrian.samp.kamp.api.data.VehicleDoorStates
-import ch.leadrian.samp.kamp.api.data.VehicleParameters
-import ch.leadrian.samp.kamp.api.data.VehicleWindowStates
+import ch.leadrian.samp.kamp.api.data.*
 import ch.leadrian.samp.kamp.api.entity.id.VehicleId
 
 interface Vehicle : Destroyable, Entity<VehicleId> {

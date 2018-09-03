@@ -7,11 +7,7 @@ import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.RaceCheckpoint
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -106,6 +102,7 @@ internal class RaceCheckpointImplTest {
             assertThat(raceCheckpoint.nextCoordinates)
                     .isEqualTo(vector3DOf(x = 11f, y = 22f, z = 33f))
         }
+
 
         @Test
         fun givenNullAsNextCoordinatesItShouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
@@ -293,6 +290,7 @@ internal class RaceCheckpointImplTest {
             assertThat(isDestroyed)
                     .isTrue()
         }
+
 
         @Test
         fun shouldNotBeDestroyedTwice() {

@@ -83,6 +83,7 @@ internal class EntityRegistryTest {
                 .isEmpty()
     }
 
+
     @Test
     fun givenTestEntityIsNotRegisteredItShouldThrowAnException() {
         val testId = TestId(50)

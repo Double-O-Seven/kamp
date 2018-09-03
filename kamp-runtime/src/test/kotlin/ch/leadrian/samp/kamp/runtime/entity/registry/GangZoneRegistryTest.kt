@@ -75,6 +75,7 @@ internal class GangZoneRegistryTest {
                 .isNull()
     }
 
+
     @Test
     fun givenGangZoneIsNotRegisteredItShouldThrowAnException() {
         val gangZoneId = GangZoneId.valueOf(50)

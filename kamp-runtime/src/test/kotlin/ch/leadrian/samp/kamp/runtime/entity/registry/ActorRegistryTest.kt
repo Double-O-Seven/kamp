@@ -75,6 +75,7 @@ internal class ActorRegistryTest {
                 .isNull()
     }
 
+
     @Test
     fun givenActorIsNotRegisteredItShouldThrowAnException() {
         val actorId = ActorId.valueOf(50)

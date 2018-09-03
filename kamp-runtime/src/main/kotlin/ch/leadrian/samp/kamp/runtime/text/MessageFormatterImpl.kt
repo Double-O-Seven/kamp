@@ -1,11 +1,7 @@
 package ch.leadrian.samp.kamp.runtime.text
 
 import ch.leadrian.samp.kamp.api.data.Color
-import ch.leadrian.samp.kamp.api.text.HasTextKey
-import ch.leadrian.samp.kamp.api.text.MessageArgument
-import ch.leadrian.samp.kamp.api.text.MessageFormatter
-import ch.leadrian.samp.kamp.api.text.TextKey
-import ch.leadrian.samp.kamp.api.text.TextProvider
+import ch.leadrian.samp.kamp.api.text.*
 import java.util.Locale
 import javax.inject.Inject
 

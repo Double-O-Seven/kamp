@@ -75,6 +75,7 @@ internal class VehicleRegistryTest {
                 .isNull()
     }
 
+
     @Test
     fun givenVehicleIsNotRegisteredItShouldThrowAnException() {
         val vehicleId = VehicleId.valueOf(50)

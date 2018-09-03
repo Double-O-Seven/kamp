@@ -2,41 +2,18 @@ package ch.leadrian.samp.kamp.runtime.entity
 
 import ch.leadrian.samp.kamp.api.constants.*
 import ch.leadrian.samp.kamp.api.data.*
-import ch.leadrian.samp.kamp.api.entity.Actor
-import ch.leadrian.samp.kamp.api.entity.Checkpoint
-import ch.leadrian.samp.kamp.api.entity.MapObject
-import ch.leadrian.samp.kamp.api.entity.Menu
-import ch.leadrian.samp.kamp.api.entity.Player
-import ch.leadrian.samp.kamp.api.entity.PlayerMapIcon
-import ch.leadrian.samp.kamp.api.entity.PlayerMapObject
-import ch.leadrian.samp.kamp.api.entity.RaceCheckpoint
-import ch.leadrian.samp.kamp.api.entity.Vehicle
-import ch.leadrian.samp.kamp.api.entity.id.ActorId
-import ch.leadrian.samp.kamp.api.entity.id.MapObjectId
-import ch.leadrian.samp.kamp.api.entity.id.PlayerId
-import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
-import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
-import ch.leadrian.samp.kamp.api.entity.id.TeamId
-import ch.leadrian.samp.kamp.api.entity.id.VehicleId
+import ch.leadrian.samp.kamp.api.entity.*
+import ch.leadrian.samp.kamp.api.entity.id.*
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.factory.PlayerMapIconFactory
-import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.MenuRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
+import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.runtime.types.ReferenceString
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
-import io.mockk.verifyOrder
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -128,8 +105,7 @@ internal class PlayerImplTest {
                 weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
                 weapon2 = weaponDataOf(WeaponModel.AK47, 300),
                 weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
-        )
-        )
+        ))
 
         verify {
             nativeFunctionExecutor.setSpawnInfo(
@@ -1209,8 +1185,7 @@ internal class PlayerImplTest {
                 .isEqualTo(LastShotVectors(
                         origin = vector3DOf(x = 1f, y = 2f, z = 3f),
                         hitPosition = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-                )
+                ))
     }
 
     @Test

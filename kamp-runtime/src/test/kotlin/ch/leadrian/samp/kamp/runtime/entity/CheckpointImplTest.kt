@@ -5,11 +5,7 @@ import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.Checkpoint
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import io.mockk.Runs
-import io.mockk.every
-import io.mockk.just
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -189,6 +185,7 @@ internal class CheckpointImplTest {
             assertThat(isDestroyed)
                     .isTrue()
         }
+
 
         @Test
         fun shouldNotBeDestroyedTwice() {

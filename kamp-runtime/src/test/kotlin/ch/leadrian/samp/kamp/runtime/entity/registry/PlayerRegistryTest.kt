@@ -88,6 +88,7 @@ internal class PlayerRegistryTest {
                 .isNull()
     }
 
+
     @Test
     fun givenPlayerIsNotRegisteredItShouldThrowAnException() {
         val playerId = PlayerId.valueOf(50)

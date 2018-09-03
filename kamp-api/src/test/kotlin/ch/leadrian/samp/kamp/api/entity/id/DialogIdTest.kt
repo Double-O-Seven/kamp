@@ -13,8 +13,7 @@ internal class DialogIdTest {
         255,
         256,
         Int.MAX_VALUE
-    ]
-    )
+    ])
     fun shouldReturnDialogId(value: Int) {
         val dialogId = DialogId.valueOf(value)
 
