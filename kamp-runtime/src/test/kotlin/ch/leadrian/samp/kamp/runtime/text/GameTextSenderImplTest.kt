@@ -71,7 +71,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale2, textKey) } returns "Bonjour"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2)
+                every { getAll() } returns listOf(player1, player2)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,
@@ -106,7 +106,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale, textKey) } returns "Hallo"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2)
+                every { getAll() } returns listOf(player1, player2)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,
@@ -142,7 +142,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale2, textKey) } returns "Bonjour %s"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2)
+                every { getAll() } returns listOf(player1, player2)
             }
             val textFormatter = mockk<TextFormatter> {
                 every { format(locale1, "Hallo %s", "SAMP") } returns "Hallo SAMP"
@@ -182,7 +182,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale, textKey) } returns "Hallo %s"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2)
+                every { getAll() } returns listOf(player1, player2)
             }
             val textFormatter = mockk<TextFormatter> {
                 every { format(locale, "Hallo %s", "SAMP") } returns "Hallo SAMP"
@@ -319,7 +319,7 @@ internal class GameTextSenderImplTest {
                 every { gameTextForPlayer(any(), any(), any(), any()) } returns true
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2)
+                every { getAll() } returns listOf(player1, player2)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,
@@ -358,7 +358,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale2, textKey) } returns "Bonjour"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2, player3)
+                every { getAll() } returns listOf(player1, player2, player3)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,
@@ -392,7 +392,7 @@ internal class GameTextSenderImplTest {
                 every { format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2, player3)
+                every { getAll() } returns listOf(player1, player2, player3)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,
@@ -437,7 +437,7 @@ internal class GameTextSenderImplTest {
                 every { getText(locale2, textKey) } returns "Bonjour %s"
             }
             val playerRegistry = mockk<PlayerRegistry> {
-                every { getAllPlayers() } returns listOf(player1, player2, player3)
+                every { getAll() } returns listOf(player1, player2, player3)
             }
             val gameTextSender = GameTextSenderImplInjector.inject(
                     nativeFunctionExecutor = nativeFunctionExecutor,

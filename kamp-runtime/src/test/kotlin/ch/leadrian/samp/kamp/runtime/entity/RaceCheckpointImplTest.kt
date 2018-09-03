@@ -53,7 +53,7 @@ internal class RaceCheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.raceCheckpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             raceCheckpoint.coordinates = mutableVector3DOf(x = 11f, y = 22f, z = 33f)
 
@@ -90,7 +90,7 @@ internal class RaceCheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.raceCheckpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             raceCheckpoint.nextCoordinates = mutableVector3DOf(x = 11f, y = 22f, z = 33f)
 
@@ -116,7 +116,7 @@ internal class RaceCheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.raceCheckpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
             val nextCoordinates: Vector3D? = null
 
             raceCheckpoint.nextCoordinates = nextCoordinates
@@ -154,7 +154,7 @@ internal class RaceCheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.raceCheckpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             raceCheckpoint.size = 44f
 
@@ -191,7 +191,7 @@ internal class RaceCheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.raceCheckpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             raceCheckpoint.type = RaceCheckpointType.AIR_ROTATES_AND_STOPS
 
@@ -241,7 +241,7 @@ internal class RaceCheckpointImplTest {
             every { player2.isInRaceCheckpoint(this@RaceCheckpointImplTest.raceCheckpoint) } returns false
             every { player3.isInRaceCheckpoint(this@RaceCheckpointImplTest.raceCheckpoint) } returns true
             every { player3.raceCheckpoint = any() } just Runs
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
         }
 
         @Test

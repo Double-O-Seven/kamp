@@ -23,7 +23,7 @@ internal class VehicleRegistryTest {
 
         vehicleRegistry.register(vehicle)
 
-        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        val registeredVehicle = vehicleRegistry.get(vehicleId)
         assertThat(registeredVehicle)
                 .isSameAs(vehicle)
     }
@@ -33,7 +33,7 @@ internal class VehicleRegistryTest {
     fun givenUnknownVehicleIdGetVehicleShouldReturn(vehicleId: Int) {
         val vehicleRegistry = VehicleRegistry()
 
-        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        val registeredVehicle = vehicleRegistry.get(vehicleId)
         assertThat(registeredVehicle)
                 .isNull()
     }
@@ -54,7 +54,7 @@ internal class VehicleRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        val registeredVehicle = vehicleRegistry.get(vehicleId)
         assertThat(registeredVehicle)
                 .isSameAs(alreadyRegisteredVehicle)
     }
@@ -70,7 +70,7 @@ internal class VehicleRegistryTest {
 
         vehicleRegistry.unregister(vehicle)
 
-        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        val registeredVehicle = vehicleRegistry.get(vehicleId)
         assertThat(registeredVehicle)
                 .isNull()
     }
@@ -106,7 +106,7 @@ internal class VehicleRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredVehicle = vehicleRegistry.getVehicle(vehicleId)
+        val registeredVehicle = vehicleRegistry.get(vehicleId)
         assertThat(registeredVehicle)
                 .isSameAs(alreadyRegisteredVehicle)
     }
@@ -130,7 +130,7 @@ internal class VehicleRegistryTest {
         vehicleRegistry.register(vehicle2)
         vehicleRegistry.register(vehicle3)
 
-        val allVehicles = vehicleRegistry.getAllVehicles()
+        val allVehicles = vehicleRegistry.getAll()
 
         assertThat(allVehicles)
                 .containsExactly(vehicle1, vehicle2, vehicle3)

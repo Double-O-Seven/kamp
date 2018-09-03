@@ -23,5 +23,5 @@ internal class VehicleTrailerImpl(
         get() = nativeFunctionExecutor.isTrailerAttachedToVehicle(vehicle.id.value)
 
     override val trailer: Vehicle?
-        get() = nativeFunctionExecutor.getVehicleTrailer(vehicle.id.value).let { vehicleRegistry.getVehicle(it) }
+        get() = nativeFunctionExecutor.getVehicleTrailer(vehicle.id.value).let { vehicleRegistry.get(it) }
 }

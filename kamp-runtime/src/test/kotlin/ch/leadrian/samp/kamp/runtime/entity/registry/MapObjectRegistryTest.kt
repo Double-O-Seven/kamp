@@ -22,7 +22,7 @@ internal class MapObjectRegistryTest {
 
         mapObjectRegistry.register(mapObject)
 
-        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(mapObject)
     }
@@ -32,7 +32,7 @@ internal class MapObjectRegistryTest {
     fun givenUnknownMapObjectIdGetMapObjectShouldReturn(mapObjectId: Int) {
         val mapObjectRegistry = MapObjectRegistry()
 
-        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
         Assertions.assertThat(registeredMapObject)
                 .isNull()
     }
@@ -53,7 +53,7 @@ internal class MapObjectRegistryTest {
 
         Assertions.assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(alreadyRegisteredMapObject)
     }
@@ -69,7 +69,7 @@ internal class MapObjectRegistryTest {
 
         mapObjectRegistry.unregister(mapObject)
 
-        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
         Assertions.assertThat(registeredMapObject)
                 .isNull()
     }
@@ -105,7 +105,7 @@ internal class MapObjectRegistryTest {
 
         Assertions.assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMapObject = mapObjectRegistry.getMapObject(mapObjectId)
+        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(alreadyRegisteredMapObject)
     }
@@ -129,7 +129,7 @@ internal class MapObjectRegistryTest {
         mapObjectRegistry.register(mapObject2)
         mapObjectRegistry.register(mapObject3)
 
-        val allMapObjects = mapObjectRegistry.getAllMapObjects()
+        val allMapObjects = mapObjectRegistry.getAll()
 
         Assertions.assertThat(allMapObjects)
                 .containsExactly(mapObject1, mapObject2, mapObject3)

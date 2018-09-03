@@ -48,7 +48,7 @@ internal class RaceCheckpointImpl(
         }
 
     private fun update() {
-        playerRegistry.getAllPlayers().filter { it.raceCheckpoint === this }.forEach {
+        playerRegistry.getAll().filter { it.raceCheckpoint === this }.forEach {
             it.raceCheckpoint = this
         }
     }
@@ -77,7 +77,7 @@ internal class RaceCheckpointImpl(
     override fun destroy() {
         if (isDestroyed) return
 
-        playerRegistry.getAllPlayers().forEach {
+        playerRegistry.getAll().forEach {
             if (it.isInRaceCheckpoint(this)) {
                 onLeave(it)
                 it.raceCheckpoint = null

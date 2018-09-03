@@ -27,7 +27,7 @@ internal class PlayerRegistryTest {
 
         playerRegistry.register(player)
 
-        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        val registeredPlayer = playerRegistry.get(playerId)
         assertThat(registeredPlayer)
                 .isSameAs(player)
     }
@@ -40,7 +40,7 @@ internal class PlayerRegistryTest {
         }
         val playerRegistry = PlayerRegistry(nativeFunctionExecutor)
 
-        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        val registeredPlayer = playerRegistry.get(playerId)
         assertThat(registeredPlayer)
                 .isNull()
     }
@@ -64,7 +64,7 @@ internal class PlayerRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        val registeredPlayer = playerRegistry.get(playerId)
         assertThat(registeredPlayer)
                 .isSameAs(alreadyRegisteredPlayer)
     }
@@ -83,7 +83,7 @@ internal class PlayerRegistryTest {
 
         playerRegistry.unregister(player)
 
-        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        val registeredPlayer = playerRegistry.get(playerId)
         assertThat(registeredPlayer)
                 .isNull()
     }
@@ -125,7 +125,7 @@ internal class PlayerRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredPlayer = playerRegistry.getPlayer(playerId)
+        val registeredPlayer = playerRegistry.get(playerId)
         assertThat(registeredPlayer)
                 .isSameAs(alreadyRegisteredPlayer)
     }
@@ -152,7 +152,7 @@ internal class PlayerRegistryTest {
         playerRegistry.register(player2)
         playerRegistry.register(player3)
 
-        val allPlayers = playerRegistry.getAllPlayers()
+        val allPlayers = playerRegistry.getAll()
 
         assertThat(allPlayers)
                 .containsExactly(player1, player2, player3)

@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.api.text.TextKey
 import ch.leadrian.samp.kamp.api.text.TextProvider
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerRegistry
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class GameTextSenderImpl
@@ -30,13 +30,13 @@ constructor(
     }
 
     override fun sendGameTextToAll(style: GameTextStyle, time: Int, textKey: TextKey) {
-        val allPlayers = playerRegistry.getAllPlayers()
+        val allPlayers = playerRegistry.getAll()
         val translatedTexts = getTranslatedTexts(allPlayers, textKey)
         sendGameTextToAll(style, time, allPlayers, translatedTexts)
     }
 
     override fun sendGameTextToAll(style: GameTextStyle, time: Int, textKey: TextKey, vararg args: Any) {
-        val allPlayers = playerRegistry.getAllPlayers()
+        val allPlayers = playerRegistry.getAll()
         val formattedTexts = getFormattedTexts(allPlayers, textKey, args)
         sendGameTextToAll(style, time, allPlayers, formattedTexts)
     }
@@ -109,7 +109,7 @@ constructor(
 
     override fun sendGameText(style: GameTextStyle, time: Int, text: String, playerFilter: (Player) -> Boolean) {
         playerRegistry
-                .getAllPlayers()
+                .getAll()
                 .asSequence()
                 .filter { playerFilter(it) }
                 .forEach {
@@ -124,7 +124,7 @@ constructor(
 
     override fun sendGameText(style: GameTextStyle, time: Int, textKey: TextKey, playerFilter: (Player) -> Boolean) {
         playerRegistry
-                .getAllPlayers()
+                .getAll()
                 .asSequence()
                 .filter { playerFilter(it) }
                 .forEach {
@@ -141,7 +141,7 @@ constructor(
     override fun sendGameText(style: GameTextStyle, time: Int, text: String, vararg args: Any, playerFilter: (Player) -> Boolean) {
         val formattedText = textFormatter.format(Locale.getDefault(), text, *args)
         playerRegistry
-                .getAllPlayers()
+                .getAll()
                 .asSequence()
                 .filter { playerFilter(it) }
                 .forEach {
@@ -155,7 +155,7 @@ constructor(
     }
 
     override fun sendGameText(style: GameTextStyle, time: Int, textKey: TextKey, vararg args: Any, playerFilter: (Player) -> Boolean) {
-        val players = playerRegistry.getAllPlayers().filter { playerFilter(it) }
+        val players = playerRegistry.getAll().filter { playerFilter(it) }
         val formattedTexts = getFormattedTexts(players, textKey, args)
         players.forEach {
             nativeFunctionExecutor.gameTextForPlayer(

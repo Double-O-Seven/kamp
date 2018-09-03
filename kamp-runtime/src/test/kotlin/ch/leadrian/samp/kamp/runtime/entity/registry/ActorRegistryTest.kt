@@ -23,7 +23,7 @@ internal class ActorRegistryTest {
 
         actorRegistry.register(actor)
 
-        val registeredActor = actorRegistry.getActor(actorId)
+        val registeredActor = actorRegistry.get(actorId)
         assertThat(registeredActor)
                 .isSameAs(actor)
     }
@@ -33,7 +33,7 @@ internal class ActorRegistryTest {
     fun givenUnknownActorIdGetActorShouldReturn(actorId: Int) {
         val actorRegistry = ActorRegistry()
 
-        val registeredActor = actorRegistry.getActor(actorId)
+        val registeredActor = actorRegistry.get(actorId)
         assertThat(registeredActor)
                 .isNull()
     }
@@ -54,7 +54,7 @@ internal class ActorRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredActor = actorRegistry.getActor(actorId)
+        val registeredActor = actorRegistry.get(actorId)
         assertThat(registeredActor)
                 .isSameAs(alreadyRegisteredActor)
     }
@@ -70,7 +70,7 @@ internal class ActorRegistryTest {
 
         actorRegistry.unregister(actor)
 
-        val registeredActor = actorRegistry.getActor(actorId)
+        val registeredActor = actorRegistry.get(actorId)
         assertThat(registeredActor)
                 .isNull()
     }
@@ -106,7 +106,7 @@ internal class ActorRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredActor = actorRegistry.getActor(actorId)
+        val registeredActor = actorRegistry.get(actorId)
         assertThat(registeredActor)
                 .isSameAs(alreadyRegisteredActor)
     }
@@ -130,7 +130,7 @@ internal class ActorRegistryTest {
         actorRegistry.register(actor2)
         actorRegistry.register(actor3)
 
-        val allActors = actorRegistry.getAllActors()
+        val allActors = actorRegistry.getAll()
 
         assertThat(allActors)
                 .containsExactly(actor1, actor2, actor3)

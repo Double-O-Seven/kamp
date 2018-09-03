@@ -49,7 +49,7 @@ internal class CheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.checkpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             checkpoint.coordinates = mutableVector3DOf(x = 11f, y = 22f, z = 33f)
 
@@ -86,7 +86,7 @@ internal class CheckpointImplTest {
             val player3 = mockk<InterceptablePlayer> {
                 every { this@mockk.checkpoint } returns null
             }
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
             checkpoint.size = 44f
 
@@ -136,7 +136,7 @@ internal class CheckpointImplTest {
             every { player2.isInCheckpoint(this@CheckpointImplTest.checkpoint) } returns false
             every { player3.isInCheckpoint(this@CheckpointImplTest.checkpoint) } returns true
             every { player3.checkpoint = any() } just Runs
-            every { playerRegistry.getAllPlayers() } returns listOf(player1, player2, player3)
+            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
         }
 
         @Test

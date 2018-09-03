@@ -31,7 +31,7 @@ internal class CheckpointImpl(
         }
 
     private fun update() {
-        playerRegistry.getAllPlayers().filter { it.checkpoint === this }.forEach {
+        playerRegistry.getAll().filter { it.checkpoint === this }.forEach {
             it.checkpoint = this
         }
     }
@@ -60,7 +60,7 @@ internal class CheckpointImpl(
     override fun destroy() {
         if (isDestroyed) return
 
-        playerRegistry.getAllPlayers().forEach {
+        playerRegistry.getAll().forEach {
             if (it.isInCheckpoint(this)) {
                 onLeave(it)
                 it.checkpoint = null

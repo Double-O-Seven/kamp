@@ -74,7 +74,7 @@ internal class VehicleTrailerImplTest {
         @Test
         fun shouldReturnAttachedTrailer() {
             every { nativeFunctionExecutor.getVehicleTrailer(vehicleId.value) } returns trailerVehicleId.value
-            every { vehicleRegistry.getVehicle(trailerVehicleId.value) } returns trailer
+            every { vehicleRegistry.get(trailerVehicleId.value) } returns trailer
 
             val result = vehicleTrailer.trailer
 
@@ -85,7 +85,7 @@ internal class VehicleTrailerImplTest {
         @Test
         fun givenGetVehicleTrailerReturnsInvalidVehicleIdItShouldReturnNull() {
             every { nativeFunctionExecutor.getVehicleTrailer(vehicleId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
-            every { vehicleRegistry.getVehicle(SAMPConstants.INVALID_VEHICLE_ID) } returns null
+            every { vehicleRegistry.get(SAMPConstants.INVALID_VEHICLE_ID) } returns null
 
             val result = vehicleTrailer.trailer
 
