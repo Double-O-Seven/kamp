@@ -13,127 +13,14 @@ import org.junit.jupiter.params.provider.ValueSource
 
 internal class ActorRegistryTest {
 
-    @ParameterizedTest
-    @ValueSource(ints = [0, SAMPConstants.MAX_ACTORS - 1])
-    fun shouldRegisterAndGetActor(actorId: Int) {
-        val actor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val actorRegistry = ActorRegistry()
-
-        actorRegistry.register(actor)
-
-        val registeredActor = actorRegistry[actorId]
-        assertThat(registeredActor)
-                .isSameAs(actor)
-    }
-
-    @ParameterizedTest
-    @ValueSource(ints = [-1, 0, SAMPConstants.MAX_ACTORS, SAMPConstants.MAX_ACTORS + 1])
-    fun givenUnknownActorIdGetActorShouldReturn(actorId: Int) {
-        val actorRegistry = ActorRegistry()
-
-        val registeredActor = actorRegistry[actorId]
-        assertThat(registeredActor)
-                .isNull()
-    }
-
     @Test
-    fun givenAnotherActorWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
-        val actorId = 50
-        val alreadyRegisteredActor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val newActor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val actorRegistry = ActorRegistry()
-        actorRegistry.register(alreadyRegisteredActor)
-
-        val caughtThrowable = catchThrowable { actorRegistry.register(newActor) }
-
-        assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException::class.java)
-        val registeredActor = actorRegistry[actorId]
-        assertThat(registeredActor)
-                .isSameAs(alreadyRegisteredActor)
-    }
-
-    @Test
-    fun shouldUnregisterRegisteredActor() {
-        val actorId = 50
-        val actor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val actorRegistry = ActorRegistry()
-        actorRegistry.register(actor)
-
-        actorRegistry.unregister(actor)
-
-        val registeredActor = actorRegistry[actorId]
-        assertThat(registeredActor)
-                .isNull()
-    }
-
-
-    @Test
-    fun givenActorIsNotRegisteredItShouldThrowAnException() {
-        val actorId = ActorId.valueOf(50)
-        val actor = mockk<Actor> {
-            every { id } returns actorId
-        }
+    fun shouldHaveExpectedCapacity() {
         val actorRegistry = ActorRegistry()
 
-        val caughtThrowable = catchThrowable { actorRegistry.unregister(actor) }
+        val capacity = actorRegistry.capacity
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException::class.java)
-    }
-
-    @Test
-    fun givenAnotherActorWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
-        val actorId = 50
-        val alreadyRegisteredActor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val newActor = mockk<Actor> {
-            every { id } returns ActorId.valueOf(actorId)
-        }
-        val actorRegistry = ActorRegistry()
-        actorRegistry.register(alreadyRegisteredActor)
-
-        val caughtThrowable = catchThrowable { actorRegistry.unregister(newActor) }
-
-        assertThat(caughtThrowable)
-                .isInstanceOf(IllegalStateException::class.java)
-        val registeredActor = actorRegistry[actorId]
-        assertThat(registeredActor)
-                .isSameAs(alreadyRegisteredActor)
-    }
-
-    @Test
-    fun shouldReturnAllRegisteredActors() {
-        val actorId1 = ActorId.valueOf(10)
-        val actor1 = mockk<Actor> {
-            every { id } returns actorId1
-        }
-        val actorId2 = ActorId.valueOf(15)
-        val actor2 = mockk<Actor> {
-            every { id } returns actorId2
-        }
-        val actorId3 = ActorId.valueOf(30)
-        val actor3 = mockk<Actor> {
-            every { id } returns actorId3
-        }
-        val actorRegistry = ActorRegistry()
-        actorRegistry.register(actor1)
-        actorRegistry.register(actor2)
-        actorRegistry.register(actor3)
-
-        val allActors = actorRegistry.getAll()
-
-        assertThat(allActors)
-                .containsExactly(actor1, actor2, actor3)
+        assertThat(capacity)
+                .isEqualTo(SAMPConstants.MAX_ACTORS)
     }
 
 }
