@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.api.entity.Entity
 import ch.leadrian.samp.kamp.api.entity.id.EntityId
-import java.util.LinkedList
+import java.util.*
 
 internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val entities: Array<T?>) {
 
@@ -33,5 +33,7 @@ internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val 
             }
 
     fun getAll(): List<T> = entityList.toList()
+
+    val capacity: Int = entities.size
 
 }

@@ -144,6 +144,16 @@ internal class EntityRegistryTest {
                 .containsExactly(testEntity1, testEntity2, testEntity3)
     }
 
+    @Test
+    fun shouldReturnCapacity() {
+        val testEntityRegistry = TestEntityRegistry(50)
+
+        val capacity = testEntityRegistry.capacity
+
+        assertThat(capacity)
+                .isEqualTo(50)
+    }
+
     private class TestEntityRegistry(numberOfEntities: Int) : EntityRegistry<TestEntity, TestId>(arrayOfNulls(numberOfEntities))
 
     private class TestEntity(override val id: TestId) : Entity<TestId>
