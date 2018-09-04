@@ -13,6 +13,8 @@ interface Pickup : Destroyable, Entity<PickupId> {
 
     val coordinates: Vector3D
 
-    val virtualWorldId: Int
+    val virtualWorldId: Int?
+
+    fun onPickUp(onPickUp: Pickup.(Player) -> Unit)
 
 }
