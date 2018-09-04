@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.api.data.Color
 import ch.leadrian.samp.kamp.api.data.Vector3D
+import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.MapObject
 import ch.leadrian.samp.kamp.api.entity.Player
 import ch.leadrian.samp.kamp.api.entity.Vehicle
@@ -14,6 +15,7 @@ import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
+import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 
 internal class MapObjectImpl(
         override val model: Int,
@@ -91,7 +93,19 @@ internal class MapObjectImpl(
         )
     }
 
-    override var coordinates: Vector3D = coordinates.toVector3D()
+    override var coordinates: Vector3D
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getObjectPos(
+                    objectid = id.value,
+                    x = x,
+                    y = y,
+                    z = z
+            )
+            return vector3DOf(x = x.value, y = y.value, z = z.value)
+        }
         set(value) {
             nativeFunctionExecutor.setObjectPos(
                     objectid = id.value,
@@ -99,10 +113,21 @@ internal class MapObjectImpl(
                     y = value.y,
                     z = value.z
             )
-            field = value.toVector3D()
         }
 
-    override var rotation: Vector3D = rotation.toVector3D()
+    override var rotation: Vector3D
+        get() {
+            val x = ReferenceFloat()
+            val y = ReferenceFloat()
+            val z = ReferenceFloat()
+            nativeFunctionExecutor.getObjectRot(
+                    objectid = id.value,
+                    rotX = x,
+                    rotY = y,
+                    rotZ = z
+            )
+            return vector3DOf(x = x.value, y = y.value, z = z.value)
+        }
         set(value) {
             nativeFunctionExecutor.setObjectRot(
                     objectid = id.value,
@@ -110,25 +135,23 @@ internal class MapObjectImpl(
                     rotY = value.y,
                     rotZ = value.z
             )
-            field = value.toVector3D()
         }
 
     override fun disableCameraCollision() {
         nativeFunctionExecutor.setObjectNoCameraCol(id.value)
     }
 
-    override fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D) {
-        nativeFunctionExecutor.moveObject(
-                objectid = id.value,
-                X = coordinates.x,
-                Y = coordinates.y,
-                Z = coordinates.z,
-                Speed = speed,
-                RotX = rotation.x,
-                RotY = rotation.y,
-                RotZ = rotation.z
-        )
-    }
+    override fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D): Int =
+            nativeFunctionExecutor.moveObject(
+                    objectid = id.value,
+                    X = coordinates.x,
+                    Y = coordinates.y,
+                    Z = coordinates.z,
+                    Speed = speed,
+                    RotX = rotation.x,
+                    RotY = rotation.y,
+                    RotZ = rotation.z
+            )
 
     override fun stop() {
         nativeFunctionExecutor.stopObject(id.value)

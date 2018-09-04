@@ -29,7 +29,11 @@ interface MapObject : Destroyable, Entity<MapObjectId> {
 
     fun disableCameraCollision()
 
-    fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f))
+    fun moveTo(
+            coordinates: Vector3D,
+            speed: Float,
+            rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
+    ): Int
 
     fun stop()
 
