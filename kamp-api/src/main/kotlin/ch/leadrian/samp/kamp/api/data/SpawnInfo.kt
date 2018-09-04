@@ -32,8 +32,8 @@ fun spawnInfoOf(
 ): SpawnInfo = SpawnInfoImpl(
         teamId = teamId,
         skinModel = skinModel,
-        position = position,
-        weapon1 = weapon1,
-        weapon2 = weapon2,
-        weapon3 = weapon3
+        position = position.toPosition(),
+        weapon1 = weapon1.toWeaponData(),
+        weapon2 = weapon2.toWeaponData(),
+        weapon3 = weapon3.toWeaponData()
 )
