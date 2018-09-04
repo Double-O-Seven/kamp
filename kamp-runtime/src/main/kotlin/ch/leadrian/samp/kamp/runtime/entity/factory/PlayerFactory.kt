@@ -5,9 +5,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class PlayerFactory
 @Inject
 constructor(

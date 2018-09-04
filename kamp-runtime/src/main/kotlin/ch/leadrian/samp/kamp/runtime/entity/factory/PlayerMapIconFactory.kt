@@ -10,9 +10,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.PlayerImpl
 import ch.leadrian.samp.kamp.runtime.entity.PlayerMapIconImpl
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class PlayerMapIconFactory
 @Inject
 constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {

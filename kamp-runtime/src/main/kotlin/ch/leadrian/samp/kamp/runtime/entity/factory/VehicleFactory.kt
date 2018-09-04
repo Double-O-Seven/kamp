@@ -7,9 +7,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.VehicleImpl
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
 import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
 internal class VehicleFactory
 @Inject
 constructor(
