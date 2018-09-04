@@ -92,37 +92,74 @@ internal class PlayerImplTest {
         verify { nativeFunctionExecutor.spawnPlayer(playerId.value) }
     }
 
-    @Test
-    fun shouldSetSpawnInfo() {
-        every {
-            nativeFunctionExecutor.setSpawnInfo(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
-        } returns true
+    @Nested
+    inner class SetSpawnInfoTests {
 
-        player.setSpawnInfo(spawnInfoOf(
-                teamId = TeamId.valueOf(69),
-                position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
-                skinModel = SkinModel.ARMY,
-                weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
-                weapon2 = weaponDataOf(WeaponModel.AK47, 300),
-                weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
-        ))
+        @Test
+        fun shouldSetSpawnInfo() {
+            every {
+                nativeFunctionExecutor.setSpawnInfo(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
 
-        verify {
-            nativeFunctionExecutor.setSpawnInfo(
-                    playerid = playerId.value,
-                    x = 1f,
-                    y = 2f,
-                    z = 3f,
-                    rotation = 4f,
-                    skin = SkinModel.ARMY.value,
-                    team = 69,
-                    weapon1 = WeaponModel.TEC9.value,
-                    weapon1_ammo = 150,
-                    weapon2 = WeaponModel.AK47.value,
-                    weapon2_ammo = 300,
-                    weapon3 = WeaponModel.DESERT_EAGLE.value,
-                    weapon3_ammo = 20
-            )
+            player.setSpawnInfo(spawnInfoOf(
+                    teamId = TeamId.valueOf(69),
+                    position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
+                    skinModel = SkinModel.ARMY,
+                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
+            ))
+
+            verify {
+                nativeFunctionExecutor.setSpawnInfo(
+                        playerid = playerId.value,
+                        x = 1f,
+                        y = 2f,
+                        z = 3f,
+                        rotation = 4f,
+                        skin = SkinModel.ARMY.value,
+                        team = 69,
+                        weapon1 = WeaponModel.TEC9.value,
+                        weapon1_ammo = 150,
+                        weapon2 = WeaponModel.AK47.value,
+                        weapon2_ammo = 300,
+                        weapon3 = WeaponModel.DESERT_EAGLE.value,
+                        weapon3_ammo = 20
+                )
+            }
+        }
+
+        @Test
+        fun givenNoTeamItShouldSetSpawnInfo() {
+            every {
+                nativeFunctionExecutor.setSpawnInfo(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
+
+            player.setSpawnInfo(spawnInfoOf(
+                    position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
+                    skinModel = SkinModel.ARMY,
+                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
+            ))
+
+            verify {
+                nativeFunctionExecutor.setSpawnInfo(
+                        playerid = playerId.value,
+                        x = 1f,
+                        y = 2f,
+                        z = 3f,
+                        rotation = 4f,
+                        skin = SkinModel.ARMY.value,
+                        team = SAMPConstants.NO_TEAM,
+                        weapon1 = WeaponModel.TEC9.value,
+                        weapon1_ammo = 150,
+                        weapon2 = WeaponModel.AK47.value,
+                        weapon2_ammo = 300,
+                        weapon3 = WeaponModel.DESERT_EAGLE.value,
+                        weapon3_ammo = 20
+                )
+            }
         }
     }
 

@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.id.TeamId
 
 interface SpawnInfo {
 
-    val teamId: TeamId
+    val teamId: TeamId?
 
     val skinModel: SkinModel
 
@@ -23,12 +23,12 @@ interface SpawnInfo {
 }
 
 fun spawnInfoOf(
-        teamId: TeamId,
         skinModel: SkinModel,
         position: Position,
         weapon1: WeaponData,
         weapon2: WeaponData,
-        weapon3: WeaponData
+        weapon3: WeaponData,
+        teamId: TeamId? = null
 ): SpawnInfo = SpawnInfoImpl(
         teamId = teamId,
         skinModel = skinModel,

@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.SkinModel
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 
 internal data class SpawnInfoImpl(
-        override val teamId: TeamId,
+        override val teamId: TeamId?,
         override val skinModel: SkinModel,
         override val position: Position,
         override val weapon1: WeaponData,

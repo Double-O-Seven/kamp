@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.api.entity.id.TeamId
 
 interface MutableSpawnInfo : SpawnInfo {
 
-    override var teamId: TeamId
+    override var teamId: TeamId?
 
     override var skinModel: SkinModel
 
@@ -19,12 +19,12 @@ interface MutableSpawnInfo : SpawnInfo {
 }
 
 fun mutableSpawnInfoOf(
-        teamId: TeamId,
         skinModel: SkinModel,
         position: Position,
         weapon1: WeaponData,
         weapon2: WeaponData,
-        weapon3: WeaponData
+        weapon3: WeaponData,
+        teamId: TeamId? = null
 ): MutableSpawnInfo = MutableSpawnInfoImpl(
         teamId = teamId,
         skinModel = skinModel,

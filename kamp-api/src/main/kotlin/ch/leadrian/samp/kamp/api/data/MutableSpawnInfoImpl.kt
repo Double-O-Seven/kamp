@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.api.constants.SkinModel
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 
 internal data class MutableSpawnInfoImpl(
-        override var teamId: TeamId,
+        override var teamId: TeamId?,
         override var skinModel: SkinModel,
         override var position: Position,
         override var weapon1: WeaponData,

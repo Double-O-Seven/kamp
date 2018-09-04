@@ -49,7 +49,7 @@ internal class PlayerImpl(
     override fun setSpawnInfo(spawnInfo: SpawnInfo) {
         nativeFunctionExecutor.setSpawnInfo(
                 playerid = id.value,
-                team = spawnInfo.teamId.value,
+                team = spawnInfo.teamId?.value ?: SAMPConstants.NO_TEAM,
                 skin = spawnInfo.skinModel.value,
                 x = spawnInfo.position.x,
                 y = spawnInfo.position.y,
