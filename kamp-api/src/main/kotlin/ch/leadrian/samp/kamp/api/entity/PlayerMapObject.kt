@@ -23,6 +23,8 @@ interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
 
     val model: Int
 
+    val drawDistance: Float
+
     fun disableCameraCollision()
 
     fun moveTo(
@@ -51,6 +53,6 @@ interface PlayerMapObject : HasPlayer, Destroyable, Entity<PlayerMapObjectId> {
 
     fun onMoved(onMoved: PlayerMapObject.() -> Unit)
 
-    fun onEdit(onEdit: PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Boolean)
+    fun onEdit(onEdit: PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit)
 
 }
