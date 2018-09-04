@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.runtime.entity
 
+import ch.leadrian.samp.kamp.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.api.data.vector3DOf
 import ch.leadrian.samp.kamp.api.entity.Pickup
@@ -139,6 +140,7 @@ internal class PickupImplTest {
             val coordinates = pickup.coordinates
 
             assertThat(coordinates)
+                    .isNotInstanceOf(MutableVector3D::class.java)
                     .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
         }
 
