@@ -23,7 +23,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.Locale
+import java.util.*
 
 internal class PlayerImplTest {
 
@@ -1127,7 +1127,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnSurfingMapObject() {
             val mapObjectId = 1337
-            val mapObject = mockk<MapObject>()
+            val mapObject = mockk<MapObjectImpl>()
             every { nativeFunctionExecutor.getPlayerSurfingObjectID(playerId.value) } returns mapObjectId
             every { mapObjectRegistry[mapObjectId] } returns mapObject
 
@@ -1893,7 +1893,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnCameraTargetMapObject() {
             val mapObjectId = MapObjectId.valueOf(13)
-            val mapObject = mockk<MapObject>()
+            val mapObject = mockk<MapObjectImpl>()
             every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns mapObjectId.value
             every { mapObjectRegistry[mapObjectId.value] } returns mapObject
 
@@ -2762,6 +2762,11 @@ internal class PlayerImplTest {
     @Nested
     inner class OnDisconnectTests {
 
+        @BeforeEach
+        fun setUp() {
+            every { playerRegistry.unregister(any()) } just Runs
+        }
+
         @Test
         fun shouldExecuteOnDisconnectHandlers() {
             val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
@@ -2774,11 +2779,17 @@ internal class PlayerImplTest {
 
         @Test
         fun shouldSetIsOnlineToFalse() {
-
             player.onDisconnect(DisconnectReason.QUIT)
 
             assertThat(player.isOnline)
                     .isFalse()
+        }
+
+        @Test
+        fun shouldUnregisterPlayer() {
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            verify { playerRegistry.unregister(player) }
         }
 
         @Test

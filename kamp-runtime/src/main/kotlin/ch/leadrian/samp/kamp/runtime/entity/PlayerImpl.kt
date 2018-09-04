@@ -13,8 +13,7 @@ import ch.leadrian.samp.kamp.runtime.entity.registry.*
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.runtime.types.ReferenceString
-import java.util.Collections
-import java.util.Locale
+import java.util.*
 
 internal class PlayerImpl(
         id: PlayerId,
@@ -886,8 +885,8 @@ internal class PlayerImpl(
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
+        playerRegistry.unregister(this)
         isOnline = false
-
         destroyMapIcons()
     }
 }

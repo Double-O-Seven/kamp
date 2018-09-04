@@ -1,8 +1,8 @@
 package ch.leadrian.samp.kamp.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.api.entity.MapObject
 import ch.leadrian.samp.kamp.api.entity.id.MapObjectId
+import ch.leadrian.samp.kamp.runtime.entity.MapObjectImpl
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions
@@ -15,14 +15,14 @@ internal class MapObjectRegistryTest {
     @ParameterizedTest
     @ValueSource(ints = [0, SAMPConstants.MAX_OBJECTS - 1])
     fun shouldRegisterAndGetMapObject(mapObjectId: Int) {
-        val mapObject = mockk<MapObject> {
+        val mapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
         val mapObjectRegistry = MapObjectRegistry()
 
         mapObjectRegistry.register(mapObject)
 
-        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
+        val registeredMapObject = mapObjectRegistry[mapObjectId]
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(mapObject)
     }
@@ -32,7 +32,7 @@ internal class MapObjectRegistryTest {
     fun givenUnknownMapObjectIdGetMapObjectShouldReturn(mapObjectId: Int) {
         val mapObjectRegistry = MapObjectRegistry()
 
-        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
+        val registeredMapObject = mapObjectRegistry[mapObjectId]
         Assertions.assertThat(registeredMapObject)
                 .isNull()
     }
@@ -40,10 +40,10 @@ internal class MapObjectRegistryTest {
     @Test
     fun givenAnotherMapObjectWithTheSameIdIsAlreadyRegisteredRegisterShouldThrowAnException() {
         val mapObjectId = 50
-        val alreadyRegisteredMapObject = mockk<MapObject> {
+        val alreadyRegisteredMapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
-        val newMapObject = mockk<MapObject> {
+        val newMapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
         val mapObjectRegistry = MapObjectRegistry()
@@ -53,7 +53,7 @@ internal class MapObjectRegistryTest {
 
         Assertions.assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
+        val registeredMapObject = mapObjectRegistry[mapObjectId]
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(alreadyRegisteredMapObject)
     }
@@ -61,7 +61,7 @@ internal class MapObjectRegistryTest {
     @Test
     fun shouldUnregisterRegisteredMapObject() {
         val mapObjectId = 50
-        val mapObject = mockk<MapObject> {
+        val mapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
         val mapObjectRegistry = MapObjectRegistry()
@@ -69,7 +69,7 @@ internal class MapObjectRegistryTest {
 
         mapObjectRegistry.unregister(mapObject)
 
-        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
+        val registeredMapObject = mapObjectRegistry[mapObjectId]
         Assertions.assertThat(registeredMapObject)
                 .isNull()
     }
@@ -78,7 +78,7 @@ internal class MapObjectRegistryTest {
     @Test
     fun givenMapObjectIsNotRegisteredItShouldThrowAnException() {
         val mapObjectId = MapObjectId.valueOf(50)
-        val mapObject = mockk<MapObject> {
+        val mapObject = mockk<MapObjectImpl> {
             every { id } returns mapObjectId
         }
         val mapObjectRegistry = MapObjectRegistry()
@@ -92,10 +92,10 @@ internal class MapObjectRegistryTest {
     @Test
     fun givenAnotherMapObjectWithTheSameIdIsAlreadyRegisteredUnregisterShouldThrowAnException() {
         val mapObjectId = 50
-        val alreadyRegisteredMapObject = mockk<MapObject> {
+        val alreadyRegisteredMapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
-        val newMapObject = mockk<MapObject> {
+        val newMapObject = mockk<MapObjectImpl> {
             every { id } returns MapObjectId.valueOf(mapObjectId)
         }
         val mapObjectRegistry = MapObjectRegistry()
@@ -105,7 +105,7 @@ internal class MapObjectRegistryTest {
 
         Assertions.assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMapObject = mapObjectRegistry.get(mapObjectId)
+        val registeredMapObject = mapObjectRegistry[mapObjectId]
         Assertions.assertThat(registeredMapObject)
                 .isSameAs(alreadyRegisteredMapObject)
     }
@@ -113,15 +113,15 @@ internal class MapObjectRegistryTest {
     @Test
     fun shouldReturnAllRegisteredMapObjects() {
         val mapObjectId1 = MapObjectId.valueOf(10)
-        val mapObject1 = mockk<MapObject> {
+        val mapObject1 = mockk<MapObjectImpl> {
             every { id } returns mapObjectId1
         }
         val mapObjectId2 = MapObjectId.valueOf(15)
-        val mapObject2 = mockk<MapObject> {
+        val mapObject2 = mockk<MapObjectImpl> {
             every { id } returns mapObjectId2
         }
         val mapObjectId3 = MapObjectId.valueOf(30)
-        val mapObject3 = mockk<MapObject> {
+        val mapObject3 = mockk<MapObjectImpl> {
             every { id } returns mapObjectId3
         }
         val mapObjectRegistry = MapObjectRegistry()

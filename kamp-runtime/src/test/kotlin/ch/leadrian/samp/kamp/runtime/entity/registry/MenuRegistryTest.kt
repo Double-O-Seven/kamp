@@ -23,7 +23,7 @@ internal class MenuRegistryTest {
 
         menuRegistry.register(menu)
 
-        val registeredMenu = menuRegistry.get(menuId)
+        val registeredMenu = menuRegistry[menuId]
         assertThat(registeredMenu)
                 .isSameAs(menu)
     }
@@ -33,7 +33,7 @@ internal class MenuRegistryTest {
     fun givenUnknownMenuIdGetMenuShouldReturn(menuId: Int) {
         val menuRegistry = MenuRegistry()
 
-        val registeredMenu = menuRegistry.get(menuId)
+        val registeredMenu = menuRegistry[menuId]
         assertThat(registeredMenu)
                 .isNull()
     }
@@ -54,7 +54,7 @@ internal class MenuRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMenu = menuRegistry.get(menuId)
+        val registeredMenu = menuRegistry[menuId]
         assertThat(registeredMenu)
                 .isSameAs(alreadyRegisteredMenu)
     }
@@ -70,7 +70,7 @@ internal class MenuRegistryTest {
 
         menuRegistry.unregister(menu)
 
-        val registeredMenu = menuRegistry.get(menuId)
+        val registeredMenu = menuRegistry[menuId]
         assertThat(registeredMenu)
                 .isNull()
     }
@@ -106,7 +106,7 @@ internal class MenuRegistryTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-        val registeredMenu = menuRegistry.get(menuId)
+        val registeredMenu = menuRegistry[menuId]
         assertThat(registeredMenu)
                 .isSameAs(alreadyRegisteredMenu)
     }
