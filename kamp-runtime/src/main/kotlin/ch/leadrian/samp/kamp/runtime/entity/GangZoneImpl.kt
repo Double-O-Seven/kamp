@@ -9,13 +9,13 @@ import ch.leadrian.samp.kamp.api.entity.id.GangZoneId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.GangZoneRegistry
 
 internal class GangZoneImpl(
         area: Rectangle,
-        private val gangZoneRegistry: GangZoneRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : GangZone {
+
+    private val onDestroyHandlers: MutableList<GangZoneImpl.() -> Unit> = mutableListOf()
 
     override val id: GangZoneId
         get() = requireNotDestroyed { field }
@@ -77,14 +77,18 @@ internal class GangZoneImpl(
         nativeFunctionExecutor.gangZoneStopFlashForAll(id.value)
     }
 
+    internal fun onDestroy(onDestroy: GangZoneImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.gangZoneDestroy(id.value)
-        gangZoneRegistry.unregister(this)
         isDestroyed = true
     }
 }
