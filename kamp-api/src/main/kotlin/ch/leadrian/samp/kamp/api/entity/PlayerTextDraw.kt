@@ -13,6 +13,8 @@ interface PlayerTextDraw : HasPlayer, Destroyable, Entity<PlayerTextDrawId> {
 
     override val id: PlayerTextDrawId
 
+    val position: Vector2D
+
     var letterSize: Vector2D
 
     var textSize: Vector2D
@@ -41,7 +43,7 @@ interface PlayerTextDraw : HasPlayer, Destroyable, Entity<PlayerTextDrawId> {
 
     fun hide()
 
-    val text: String
+    var text: String
 
     fun setText(text: String, vararg args: Any)
 
@@ -49,7 +51,7 @@ interface PlayerTextDraw : HasPlayer, Destroyable, Entity<PlayerTextDrawId> {
 
     fun setText(textKey: TextKey, vararg args: Any)
 
-    val previewModel: Int?
+    var previewModel: Int?
 
     fun setPreviewModelRotation(rotation: Vector3D, zoom: Float)
 

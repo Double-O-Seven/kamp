@@ -13,6 +13,8 @@ interface TextDraw : Destroyable, Entity<TextDrawId> {
 
     override val id: TextDrawId
 
+    val position: Vector2D
+
     var letterSize: Vector2D
 
     var textSize: Vector2D
@@ -45,7 +47,7 @@ interface TextDraw : Destroyable, Entity<TextDrawId> {
 
     fun hideForAll()
 
-    val text: String
+    var text: String
 
     fun setText(text: String, vararg args: Any)
 
@@ -53,7 +55,7 @@ interface TextDraw : Destroyable, Entity<TextDrawId> {
 
     fun setText(textKey: TextKey, vararg args: Any)
 
-    val previewModel: Int?
+    var previewModel: Int?
 
     fun setPreviewModelRotation(rotation: Vector3D, zoom: Float)
 
