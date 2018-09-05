@@ -16,7 +16,7 @@ internal class ActorImpl(
         coordinates: Vector3D,
         rotation: Float,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Actor {
+) : Actor, AbstractDestroyable() {
 
     private val onDestroyHandlers: MutableList<ActorImpl.() -> Unit> = mutableListOf()
 

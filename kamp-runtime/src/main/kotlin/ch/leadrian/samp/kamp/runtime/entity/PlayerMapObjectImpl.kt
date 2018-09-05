@@ -23,7 +23,7 @@ internal class PlayerMapObjectImpl(
         coordinates: Vector3D,
         rotation: Vector3D,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : PlayerMapObject {
+) : PlayerMapObject, AbstractDestroyable() {
 
     private val onMovedHandlers: MutableList<PlayerMapObject.() -> Unit> = mutableListOf()
 

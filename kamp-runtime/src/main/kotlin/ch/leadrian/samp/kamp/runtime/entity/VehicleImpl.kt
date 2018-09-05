@@ -19,7 +19,7 @@ internal class VehicleImpl(
         respawnDelay: Int,
         vehicleRegistry: VehicleRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Vehicle {
+) : Vehicle, AbstractDestroyable() {
 
     private val onSpawnHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
 

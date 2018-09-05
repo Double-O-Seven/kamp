@@ -14,7 +14,7 @@ internal class PickupImpl(
         override val type: Int,
         override val virtualWorldId: Int?,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Pickup {
+) : Pickup, AbstractDestroyable() {
 
     private val onPickUpHandlers: MutableList<Pickup.(Player) -> Unit> = mutableListOf()
 

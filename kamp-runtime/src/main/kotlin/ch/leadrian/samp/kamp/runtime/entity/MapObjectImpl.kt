@@ -22,7 +22,7 @@ internal class MapObjectImpl(
         rotation: Vector3D,
         override val drawDistance: Float,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : MapObject {
+) : MapObject, AbstractDestroyable() {
 
     private val onMovedHandlers: MutableList<MapObject.() -> Unit> = mutableListOf()
 

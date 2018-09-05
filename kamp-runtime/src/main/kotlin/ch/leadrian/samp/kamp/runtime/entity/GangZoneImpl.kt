@@ -13,7 +13,7 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 internal class GangZoneImpl(
         area: Rectangle,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : GangZone {
+) : GangZone, AbstractDestroyable() {
 
     private val onDestroyHandlers: MutableList<GangZoneImpl.() -> Unit> = mutableListOf()
 
