@@ -7,18 +7,18 @@ import ch.leadrian.samp.kamp.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.PickupRegistry
 
 internal class PickupImpl(
         override val modelId: Int,
         coordinates: Vector3D,
         override val type: Int,
         override val virtualWorldId: Int?,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
-        private val pickupRegistry: PickupRegistry
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Pickup {
 
     private val onPickUpHandlers: MutableList<Pickup.(Player) -> Unit> = mutableListOf()
+
+    private val onDestroyHandlers: MutableList<PickupImpl.() -> Unit> = mutableListOf()
 
     override val id: PickupId
         get() = requireNotDestroyed { field }
@@ -50,14 +50,18 @@ internal class PickupImpl(
         onPickUpHandlers.forEach { it.invoke(this, player) }
     }
 
+    internal fun onDestroy(onDestroy: PickupImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.destroyPickup(id.value)
-        pickupRegistry.unregister(this)
         isDestroyed = true
     }
 

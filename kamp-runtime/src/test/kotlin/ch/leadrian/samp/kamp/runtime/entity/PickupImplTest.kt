@@ -9,8 +9,10 @@ import ch.leadrian.samp.kamp.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.PickupRegistry
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -43,8 +45,7 @@ internal class PickupImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     type = 13,
                     virtualWorldId = 187,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    pickupRegistry = mockk()
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             assertThat(pickup.id)
@@ -72,8 +73,7 @@ internal class PickupImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     type = 13,
                     virtualWorldId = null,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    pickupRegistry = mockk()
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             assertThat(pickup.id)
@@ -101,8 +101,7 @@ internal class PickupImplTest {
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                         type = 13,
                         virtualWorldId = 187,
-                        nativeFunctionExecutor = nativeFunctionExecutor,
-                        pickupRegistry = mockk()
+                        nativeFunctionExecutor = nativeFunctionExecutor
                 )
             }
 
@@ -118,7 +117,6 @@ internal class PickupImplTest {
         private lateinit var pickup: PickupImpl
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-        private val pickupRegistry = mockk<PickupRegistry>()
 
         @BeforeEach
         fun setUp() {
@@ -130,8 +128,7 @@ internal class PickupImplTest {
                     coordinates = mutableVector3DOf(x = 1f, y = 2f, z = 3f),
                     type = 13,
                     virtualWorldId = 187,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    pickupRegistry = pickupRegistry
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
         }
 
@@ -161,7 +158,6 @@ internal class PickupImplTest {
             @BeforeEach
             fun setUp() {
                 every { nativeFunctionExecutor.destroyPickup(any()) } returns true
-                every { pickupRegistry.unregister(any()) } just Runs
             }
 
             @Test
@@ -174,11 +170,14 @@ internal class PickupImplTest {
 
             @Test
             fun shouldDestroyPickup() {
+                val onDestroy = mockk<Pickup.() -> Unit>(relaxed = true)
+                pickup.onDestroy(onDestroy)
+
                 pickup.destroy()
 
-                verify {
+                verifyOrder {
+                    onDestroy.invoke(pickup)
                     nativeFunctionExecutor.destroyPickup(pickupId.value)
-                    pickupRegistry.unregister(pickup)
                 }
                 assertThat(pickup.isDestroyed)
                         .isTrue()
@@ -186,12 +185,15 @@ internal class PickupImplTest {
 
             @Test
             fun shouldNotExecuteDestroyTwice() {
+                val onDestroy = mockk<Pickup.() -> Unit>(relaxed = true)
+                pickup.onDestroy(onDestroy)
+
                 pickup.destroy()
                 pickup.destroy()
 
                 verify(exactly = 1) {
                     nativeFunctionExecutor.destroyPickup(pickupId.value)
-                    pickupRegistry.unregister(pickup)
+                    onDestroy.invoke(pickup)
                 }
             }
 
