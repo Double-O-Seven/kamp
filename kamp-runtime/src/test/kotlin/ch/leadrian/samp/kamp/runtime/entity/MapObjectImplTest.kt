@@ -453,8 +453,8 @@ internal class MapObjectImplTest {
                 mapObject.destroy()
 
                 verify(exactly = 1) {
-                    nativeFunctionExecutor.destroyObject(mapObjectId.value)
                     onDestroy.invoke(mapObject)
+                    nativeFunctionExecutor.destroyObject(mapObjectId.value)
                 }
             }
 

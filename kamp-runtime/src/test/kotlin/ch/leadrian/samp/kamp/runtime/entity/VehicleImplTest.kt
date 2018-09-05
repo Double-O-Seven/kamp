@@ -899,7 +899,7 @@ internal class VehicleImplTest {
 
                 @Test
                 fun shouldDestroyVehicle() {
-                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                    val onDestroy = mockk<VehicleImpl.() -> Unit>(relaxed = true)
                     vehicle.onDestroy(onDestroy)
 
                     vehicle.destroy()
@@ -914,7 +914,7 @@ internal class VehicleImplTest {
 
                 @Test
                 fun shouldNotExecuteDestroyTwice() {
-                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                    val onDestroy = mockk<VehicleImpl.() -> Unit>(relaxed = true)
                     vehicle.onDestroy(onDestroy)
 
                     vehicle.destroy()

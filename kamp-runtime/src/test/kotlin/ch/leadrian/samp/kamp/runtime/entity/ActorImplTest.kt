@@ -11,9 +11,11 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -47,8 +49,7 @@ internal class ActorImplTest {
                     model = SkinModel.BALLAS2,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = 4f,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    actorRegistry = mockk()
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             assertThat(actor.id)
@@ -74,8 +75,7 @@ internal class ActorImplTest {
                         model = SkinModel.BALLAS2,
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                         rotation = 4f,
-                        nativeFunctionExecutor = nativeFunctionExecutor,
-                        actorRegistry = mockk()
+                        nativeFunctionExecutor = nativeFunctionExecutor
                 )
             }
 
@@ -91,7 +91,6 @@ internal class ActorImplTest {
         private lateinit var actor: ActorImpl
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-        private val actorRegistry = mockk<ActorRegistry>()
 
         @BeforeEach
         fun setUp() {
@@ -100,8 +99,7 @@ internal class ActorImplTest {
                     model = SkinModel.BALLAS2,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = 4f,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    actorRegistry = actorRegistry
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
         }
 
@@ -341,7 +339,6 @@ internal class ActorImplTest {
             @BeforeEach
             fun setUp() {
                 every { nativeFunctionExecutor.destroyActor(any()) } returns true
-                every { actorRegistry.unregister(any()) } just Runs
             }
 
             @Test
@@ -354,11 +351,14 @@ internal class ActorImplTest {
 
             @Test
             fun shouldDestroyActor() {
+                val onDestroy = mockk<ActorImpl.() -> Unit>(relaxed = true)
+                actor.onDestroy(onDestroy)
+
                 actor.destroy()
 
-                verify {
+                verifyOrder {
+                    onDestroy.invoke(actor)
                     nativeFunctionExecutor.destroyActor(actorId.value)
-                    actorRegistry.unregister(actor)
                 }
                 assertThat(actor.isDestroyed)
                         .isTrue()
@@ -366,12 +366,15 @@ internal class ActorImplTest {
 
             @Test
             fun shouldNotExecuteDestroyTwice() {
+                val onDestroy = mockk<ActorImpl.() -> Unit>(relaxed = true)
+                actor.onDestroy(onDestroy)
+
                 actor.destroy()
                 actor.destroy()
 
                 verify(exactly = 1) {
+                    onDestroy.invoke(actor)
                     nativeFunctionExecutor.destroyActor(actorId.value)
-                    actorRegistry.unregister(actor)
                 }
             }
 

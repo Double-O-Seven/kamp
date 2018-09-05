@@ -170,7 +170,7 @@ internal class PickupImplTest {
 
             @Test
             fun shouldDestroyPickup() {
-                val onDestroy = mockk<Pickup.() -> Unit>(relaxed = true)
+                val onDestroy = mockk<PickupImpl.() -> Unit>(relaxed = true)
                 pickup.onDestroy(onDestroy)
 
                 pickup.destroy()
@@ -185,15 +185,15 @@ internal class PickupImplTest {
 
             @Test
             fun shouldNotExecuteDestroyTwice() {
-                val onDestroy = mockk<Pickup.() -> Unit>(relaxed = true)
+                val onDestroy = mockk<PickupImpl.() -> Unit>(relaxed = true)
                 pickup.onDestroy(onDestroy)
 
                 pickup.destroy()
                 pickup.destroy()
 
                 verify(exactly = 1) {
-                    nativeFunctionExecutor.destroyPickup(pickupId.value)
                     onDestroy.invoke(pickup)
+                    nativeFunctionExecutor.destroyPickup(pickupId.value)
                 }
             }
 

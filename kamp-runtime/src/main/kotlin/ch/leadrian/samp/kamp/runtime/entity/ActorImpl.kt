@@ -9,16 +9,16 @@ import ch.leadrian.samp.kamp.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 
 internal class ActorImpl(
         model: SkinModel,
         coordinates: Vector3D,
         rotation: Float,
-        private val actorRegistry: ActorRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Actor {
+
+    private val onDestroyHandlers: MutableList<ActorImpl.() -> Unit> = mutableListOf()
 
     override val id: ActorId
         get() = requireNotDestroyed { field }
@@ -117,14 +117,18 @@ internal class ActorImpl(
             nativeFunctionExecutor.setActorInvulnerable(id.value, value)
         }
 
+    internal fun onDestroy(onDestroy: ActorImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.destroyActor(id.value)
-        actorRegistry.unregister(this)
         isDestroyed = true
     }
 }
