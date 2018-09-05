@@ -19,7 +19,7 @@ internal class PlayerTest {
         @Test
         fun givenPlayerIsOfflineItShouldThrowAnException() {
             val player = mockk<Player> {
-                every { isOnline } returns false
+                every { isConnected } returns false
                 every { id } returns PlayerId.valueOf(1)
             }
 
@@ -30,9 +30,9 @@ internal class PlayerTest {
         }
 
         @Test
-        fun givenPlayerIsOnlineItShouldNotThrowAnException() {
+        fun givenPlayerIsConnectedItShouldNotThrowAnException() {
             val player = mockk<Player> {
-                every { isOnline } returns true
+                every { isConnected } returns true
             }
 
             val returnedPlayer = player.requireOnline()
@@ -49,7 +49,7 @@ internal class PlayerTest {
         fun givenPlayerIsOfflineItShouldThrowAnException() {
             val block = mockk<Player.() -> Unit>(relaxed = true)
             val player = mockk<Player> {
-                every { isOnline } returns false
+                every { isConnected } returns false
                 every { id } returns PlayerId.valueOf(1)
             }
 
@@ -61,9 +61,9 @@ internal class PlayerTest {
         }
 
         @Test
-        fun givenPlayerIsOnlineItShouldNotThrowAnException() {
+        fun givenPlayerIsConnectedItShouldNotThrowAnException() {
             val player = mockk<Player> {
-                every { isOnline } returns true
+                every { isConnected } returns true
             }
             val block = mockk<Player.() -> Int> {
                 every { this@mockk.invoke(player) } returns 1337

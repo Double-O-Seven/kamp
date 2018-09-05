@@ -37,7 +37,7 @@ internal class PlayerImpl(
     override val id: PlayerId = id
         get() = requireOnline { field }
 
-    override var isOnline: Boolean = true
+    override var isConnected: Boolean = true
         private set
 
     override var locale: Locale = Locale.getDefault()
@@ -876,17 +876,17 @@ internal class PlayerImpl(
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
 
-    override fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
+    internal fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
         onDisconnectHandlers += onDisconnect
     }
 
     internal fun onDisconnect(reason: DisconnectReason) {
-        if (!isOnline) return
+        if (!isConnected) return
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
         playerRegistry.unregister(this)
-        isOnline = false
+        isConnected = false
         destroyMapIcons()
     }
 }

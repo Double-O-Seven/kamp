@@ -7,11 +7,11 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.api.exception.PlayerOfflineException
-import java.util.Locale
+import java.util.*
 
 interface Player : Entity<PlayerId> {
 
-    val isOnline: Boolean
+    val isConnected: Boolean
 
     override val id: PlayerId
 
@@ -265,13 +265,11 @@ interface Player : Entity<PlayerId> {
 
     fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Unit)
 
-    fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit)
-
     val menu: Menu?
 }
 
 fun Player.requireOnline(): Player {
-    if (!isOnline) throw PlayerOfflineException("Player is already offline")
+    if (!isConnected) throw PlayerOfflineException("Player is already offline")
     return this
 }
 

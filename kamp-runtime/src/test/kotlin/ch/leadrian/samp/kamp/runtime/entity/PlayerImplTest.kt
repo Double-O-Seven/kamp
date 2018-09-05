@@ -78,8 +78,8 @@ internal class PlayerImplTest {
     }
 
     @Test
-    fun shouldInitializeIsOnlineWithTrue() {
-        assertThat(player.isOnline)
+    fun shouldInitializeIsConnectedWithTrue() {
+        assertThat(player.isConnected)
                 .isTrue()
     }
 
@@ -2815,10 +2815,10 @@ internal class PlayerImplTest {
         }
 
         @Test
-        fun shouldSetIsOnlineToFalse() {
+        fun shouldSetIsConnectedToFalse() {
             player.onDisconnect(DisconnectReason.QUIT)
 
-            assertThat(player.isOnline)
+            assertThat(player.isConnected)
                     .isFalse()
         }
 

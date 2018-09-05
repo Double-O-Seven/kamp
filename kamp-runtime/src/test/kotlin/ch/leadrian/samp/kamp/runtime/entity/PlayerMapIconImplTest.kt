@@ -250,7 +250,7 @@ internal class PlayerMapIconImplTest {
         fun givenPlayerIsNotOnlineItShouldDestroyPlayerMapIcon() {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
-                every { isOnline } returns false
+                every { isConnected } returns false
                 every { unregisterMapIcon(any()) } just Runs
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -275,10 +275,10 @@ internal class PlayerMapIconImplTest {
         }
 
         @Test
-        fun givenPlayerIsOnlineItShouldDestroyPlayerMapIcon() {
+        fun givenPlayerIsConnectedItShouldDestroyPlayerMapIcon() {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
-                every { isOnline } returns true
+                every { isConnected } returns true
                 every { unregisterMapIcon(any()) } just Runs
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -307,7 +307,7 @@ internal class PlayerMapIconImplTest {
         fun shouldNotExecuteTwice() {
             val player = mockk<PlayerImpl> {
                 every { id } returns PlayerId.valueOf(99)
-                every { isOnline } returns true
+                every { isConnected } returns true
                 every { unregisterMapIcon(any()) } just Runs
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {

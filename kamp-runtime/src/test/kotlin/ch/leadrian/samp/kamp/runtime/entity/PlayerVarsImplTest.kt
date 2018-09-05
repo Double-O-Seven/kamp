@@ -23,7 +23,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -43,7 +43,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -64,7 +64,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -84,7 +84,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -105,7 +105,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -128,7 +128,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -149,7 +149,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -169,7 +169,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -193,7 +193,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
@@ -215,7 +215,7 @@ internal class PlayerVarsImplTest {
         }
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
-            every { isOnline } returns true
+            every { isConnected } returns true
         }
         val playerVars = PlayerVarsImpl(
                 player = player,
