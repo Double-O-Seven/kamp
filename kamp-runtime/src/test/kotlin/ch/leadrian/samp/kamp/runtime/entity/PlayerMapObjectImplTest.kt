@@ -16,9 +16,10 @@ import ch.leadrian.samp.kamp.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerMapObjectRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -65,8 +66,7 @@ internal class PlayerMapObjectImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    playerMapObjectRegistry = mockk()
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
 
             assertThat(playerMapObject.id)
@@ -98,8 +98,7 @@ internal class PlayerMapObjectImplTest {
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                         rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                         drawDistance = 7f,
-                        nativeFunctionExecutor = nativeFunctionExecutor,
-                        playerMapObjectRegistry = mockk()
+                        nativeFunctionExecutor = nativeFunctionExecutor
                 )
             }
 
@@ -115,7 +114,6 @@ internal class PlayerMapObjectImplTest {
         private lateinit var playerMapObject: PlayerMapObjectImpl
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-        private val playerMapObjectRegistry = mockk<PlayerMapObjectRegistry>()
 
         @BeforeEach
         fun setUp() {
@@ -128,8 +126,7 @@ internal class PlayerMapObjectImplTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
-                    nativeFunctionExecutor = nativeFunctionExecutor,
-                    playerMapObjectRegistry = playerMapObjectRegistry
+                    nativeFunctionExecutor = nativeFunctionExecutor
             )
         }
 
@@ -451,7 +448,6 @@ internal class PlayerMapObjectImplTest {
             @BeforeEach
             fun setUp() {
                 every { nativeFunctionExecutor.destroyPlayerObject(any(), any()) } returns true
-                every { playerMapObjectRegistry.unregister(any()) } just Runs
             }
 
             @Test
@@ -471,14 +467,26 @@ internal class PlayerMapObjectImplTest {
                             playerid = playerId.value,
                             objectid = playerMapObjectId.value
                     )
-                    playerMapObjectRegistry.unregister(playerMapObject)
                 }
                 assertThat(playerMapObject.isDestroyed)
                         .isTrue()
             }
 
             @Test
+            fun shouldExecuteOnDestroyHandlers() {
+                val onDestroy = mockk<PlayerMapObjectImpl.() -> Unit>(relaxed = true)
+                playerMapObject.onDestroy(onDestroy)
+
+                playerMapObject.onDestroy()
+
+                verify { onDestroy.invoke(playerMapObject) }
+            }
+
+            @Test
             fun shouldNotExecuteDestroyTwice() {
+                val onDestroy = mockk<PlayerMapObjectImpl.() -> Unit>(relaxed = true)
+                playerMapObject.onDestroy(onDestroy)
+
                 playerMapObject.destroy()
                 playerMapObject.destroy()
 
@@ -487,7 +495,7 @@ internal class PlayerMapObjectImplTest {
                             playerid = playerId.value,
                             objectid = playerMapObjectId.value
                     )
-                    playerMapObjectRegistry.unregister(playerMapObject)
+                    onDestroy.invoke(playerMapObject)
                 }
             }
 

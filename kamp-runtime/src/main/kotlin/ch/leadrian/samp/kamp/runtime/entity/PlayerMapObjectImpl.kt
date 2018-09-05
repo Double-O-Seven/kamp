@@ -14,7 +14,6 @@ import ch.leadrian.samp.kamp.api.entity.id.PlayerMapObjectId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.PlayerMapObjectRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 
 internal class PlayerMapObjectImpl(
@@ -23,7 +22,6 @@ internal class PlayerMapObjectImpl(
         override val drawDistance: Float,
         coordinates: Vector3D,
         rotation: Vector3D,
-        private val playerMapObjectRegistry: PlayerMapObjectRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : PlayerMapObject {
 
@@ -31,6 +29,8 @@ internal class PlayerMapObjectImpl(
 
     private val onEditHandlers: MutableList<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit> =
             mutableListOf()
+
+    private val onDestroyHandlers: MutableList<PlayerMapObjectImpl.() -> Unit> = mutableListOf()
 
     override val id: PlayerMapObjectId
         get() = requireNotDestroyed { field }
@@ -209,14 +209,18 @@ internal class PlayerMapObjectImpl(
         onEditHandlers.forEach { it.invoke(this, response, offset, rotation) }
     }
 
+    internal fun onDestroy(onDestroy: PlayerMapObjectImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.destroyPlayerObject(playerid = player.id.value, objectid = id.value)
-        playerMapObjectRegistry.unregister(this)
         isDestroyed = true
     }
 }

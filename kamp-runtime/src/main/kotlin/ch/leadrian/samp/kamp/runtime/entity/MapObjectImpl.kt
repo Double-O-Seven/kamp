@@ -14,7 +14,6 @@ import ch.leadrian.samp.kamp.api.entity.id.MapObjectId
 import ch.leadrian.samp.kamp.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 
 internal class MapObjectImpl(
@@ -22,7 +21,6 @@ internal class MapObjectImpl(
         coordinates: Vector3D,
         rotation: Vector3D,
         override val drawDistance: Float,
-        private val mapObjectRegistry: MapObjectRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : MapObject {
 
@@ -30,6 +28,8 @@ internal class MapObjectImpl(
 
     private val onEditHandlers: MutableList<MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> =
             mutableListOf()
+
+    private val onDestroyHandlers: MutableList<MapObjectImpl.() -> Unit> = mutableListOf()
 
     override val id: MapObjectId
         get() = requireNotDestroyed { field }
@@ -212,14 +212,18 @@ internal class MapObjectImpl(
         onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
     }
 
+    internal fun onDestroy(onDestroy: MapObjectImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.destroyObject(id.value)
-        mapObjectRegistry.unregister(this)
         isDestroyed = true
     }
 }
