@@ -20,6 +20,7 @@ import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -460,9 +461,13 @@ internal class PlayerMapObjectImplTest {
 
             @Test
             fun shouldDestroyPlayerMapObject() {
+                val onDestroy = mockk<PlayerMapObjectImpl.() -> Unit>(relaxed = true)
+                playerMapObject.onDestroy(onDestroy)
+
                 playerMapObject.destroy()
 
-                verify {
+                verifyOrder {
+                    onDestroy.invoke(playerMapObject)
                     nativeFunctionExecutor.destroyPlayerObject(
                             playerid = playerId.value,
                             objectid = playerMapObjectId.value
@@ -470,16 +475,6 @@ internal class PlayerMapObjectImplTest {
                 }
                 assertThat(playerMapObject.isDestroyed)
                         .isTrue()
-            }
-
-            @Test
-            fun shouldExecuteOnDestroyHandlers() {
-                val onDestroy = mockk<PlayerMapObjectImpl.() -> Unit>(relaxed = true)
-                playerMapObject.onDestroy(onDestroy)
-
-                playerMapObject.onDestroy()
-
-                verify { onDestroy.invoke(playerMapObject) }
             }
 
             @Test
