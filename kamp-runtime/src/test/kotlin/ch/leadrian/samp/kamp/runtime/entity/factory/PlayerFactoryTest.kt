@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.*
@@ -48,6 +49,16 @@ internal class PlayerFactoryTest {
         val player = playerFactory.create(playerId)
 
         verify { playerRegistry.register(player) }
+    }
+
+    @Test
+    fun shouldUnregisterPlayerOnDisconnect() {
+        every { playerRegistry.unregister(any()) } just Runs
+        val player = playerFactory.create(playerId)
+
+        player.onDisconnect(DisconnectReason.QUIT)
+
+        verify { playerRegistry.unregister(player) }
     }
 
 }

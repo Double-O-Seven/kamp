@@ -2799,14 +2799,9 @@ internal class PlayerImplTest {
     @Nested
     inner class OnDisconnectTests {
 
-        @BeforeEach
-        fun setUp() {
-            every { playerRegistry.unregister(any()) } just Runs
-        }
-
         @Test
         fun shouldExecuteOnDisconnectHandlers() {
-            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
+            val onDisconnect = mockk<PlayerImpl.(DisconnectReason) -> Unit>(relaxed = true)
             player.onDisconnect(onDisconnect)
 
             player.onDisconnect(DisconnectReason.QUIT)
@@ -2820,13 +2815,6 @@ internal class PlayerImplTest {
 
             assertThat(player.isConnected)
                     .isFalse()
-        }
-
-        @Test
-        fun shouldUnregisterPlayer() {
-            player.onDisconnect(DisconnectReason.QUIT)
-
-            verify { playerRegistry.unregister(player) }
         }
 
         @Test

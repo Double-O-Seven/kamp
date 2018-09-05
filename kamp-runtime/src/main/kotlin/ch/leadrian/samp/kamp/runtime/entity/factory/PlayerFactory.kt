@@ -30,6 +30,7 @@ constructor(
                 nativeFunctionExecutor = nativeFunctionExecutor
         )
         playerRegistry.register(player)
+        player.onDisconnect { playerRegistry.unregister(this) }
         return player
     }
 }

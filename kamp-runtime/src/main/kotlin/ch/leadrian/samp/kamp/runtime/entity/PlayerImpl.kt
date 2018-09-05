@@ -30,7 +30,7 @@ internal class PlayerImpl(
 
     private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Unit> = mutableListOf()
 
-    private val onDisconnectHandlers: MutableList<Player.(DisconnectReason) -> Unit> = mutableListOf()
+    private val onDisconnectHandlers: MutableList<PlayerImpl.(DisconnectReason) -> Unit> = mutableListOf()
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
@@ -876,7 +876,7 @@ internal class PlayerImpl(
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
 
-    internal fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
+    internal fun onDisconnect(onDisconnect: PlayerImpl.(DisconnectReason) -> Unit) {
         onDisconnectHandlers += onDisconnect
     }
 
@@ -885,7 +885,6 @@ internal class PlayerImpl(
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
-        playerRegistry.unregister(this)
         isConnected = false
         destroyMapIcons()
     }
