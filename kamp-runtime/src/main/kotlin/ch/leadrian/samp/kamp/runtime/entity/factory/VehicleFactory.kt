@@ -34,6 +34,7 @@ constructor(
                 nativeFunctionExecutor = nativeFunctionExecutor
         )
         vehicleRegistry.register(vehicle)
+        vehicle.onDestroy { vehicleRegistry.unregister(this) }
         return vehicle
     }
 }

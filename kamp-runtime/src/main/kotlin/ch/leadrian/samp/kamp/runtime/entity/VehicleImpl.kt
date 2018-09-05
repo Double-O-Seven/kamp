@@ -17,7 +17,7 @@ internal class VehicleImpl(
         rotation: Float,
         addSiren: Boolean,
         respawnDelay: Int,
-        private val vehicleRegistry: VehicleRegistry,
+        vehicleRegistry: VehicleRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Vehicle {
 
@@ -28,6 +28,8 @@ internal class VehicleImpl(
     private val onEnterHandlers: MutableList<Vehicle.(Player, Boolean) -> Unit> = mutableListOf()
 
     private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+
+    private val onDestroyHandlers: MutableList<VehicleImpl.() -> Unit> = mutableListOf()
 
     override val id: VehicleId
         get() = requireNotDestroyed { field }
@@ -395,14 +397,18 @@ internal class VehicleImpl(
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
+    internal fun onDestroy(onDestroy: VehicleImpl.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         nativeFunctionExecutor.destroyVehicle(id.value)
-        vehicleRegistry.unregister(this)
         isDestroyed = true
     }
 }

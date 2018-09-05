@@ -12,7 +12,9 @@ import ch.leadrian.samp.kamp.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.runtime.types.ReferenceInt
-import io.mockk.*
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -884,7 +886,6 @@ internal class VehicleImplTest {
                 @BeforeEach
                 fun setUp() {
                     every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
-                    every { vehicleRegistry.unregister(any()) } just Runs
                 }
 
                 @Test
@@ -901,20 +902,32 @@ internal class VehicleImplTest {
 
                     verify {
                         nativeFunctionExecutor.destroyVehicle(vehicleId.value)
-                        vehicleRegistry.unregister(vehicle)
                     }
                     assertThat(vehicle.isDestroyed)
                             .isTrue()
                 }
 
                 @Test
+                fun shouldExecuteOnDestroyHandlers() {
+                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                    vehicle.onDestroy(onDestroy)
+
+                    vehicle.onDestroy()
+
+                    verify { onDestroy.invoke(vehicle) }
+                }
+
+                @Test
                 fun shouldNotExecuteDestroyTwice() {
+                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                    vehicle.onDestroy(onDestroy)
+
                     vehicle.destroy()
                     vehicle.destroy()
 
                     verify(exactly = 1) {
                         nativeFunctionExecutor.destroyVehicle(vehicleId.value)
-                        vehicleRegistry.unregister(vehicle)
+                        onDestroy.invoke(vehicle)
                     }
                 }
 
