@@ -47,7 +47,8 @@ internal class TextDrawImplTest {
                     position = vector2DOf(x = 1f, y = 2f),
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     textFormatter = mockk(),
-                    textProvider = mockk()
+                    textProvider = mockk(),
+                    locale = Locale.CANADA
             )
 
             assertThat(textDraw.id)
@@ -68,7 +69,8 @@ internal class TextDrawImplTest {
                         position = vector2DOf(x = 1f, y = 2f),
                         nativeFunctionExecutor = nativeFunctionExecutor,
                         textFormatter = mockk(),
-                        textProvider = mockk()
+                        textProvider = mockk(),
+                        locale = Locale.CANADA
                 )
             }
 

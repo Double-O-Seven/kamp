@@ -21,7 +21,7 @@ internal class TextDrawImpl(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val textProvider: TextProvider,
         private val textFormatter: TextFormatter,
-        override var locale: Locale = Locale.getDefault()
+        override var locale: Locale
 ) : TextDraw, AbstractDestroyable() {
 
     private val onClickHandlers: MutableList<TextDraw.(Player) -> Boolean> = mutableListOf()
