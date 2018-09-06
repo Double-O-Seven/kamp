@@ -34,6 +34,10 @@ internal class PlayerImpl(
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
+    internal val playerMapObjectRegistry = PlayerMapObjectRegistry()
+
+    internal val playerTextDrawRegistry = PlayerTextDrawRegistry()
+
     override val id: PlayerId = id
         get() = requireOnline { field }
 
