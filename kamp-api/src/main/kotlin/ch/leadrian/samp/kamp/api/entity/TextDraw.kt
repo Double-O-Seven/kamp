@@ -8,10 +8,13 @@ import ch.leadrian.samp.kamp.api.data.Vector3D
 import ch.leadrian.samp.kamp.api.data.VehicleColors
 import ch.leadrian.samp.kamp.api.entity.id.TextDrawId
 import ch.leadrian.samp.kamp.api.text.TextKey
+import java.util.*
 
 interface TextDraw : Destroyable, Entity<TextDrawId> {
 
     override val id: TextDrawId
+
+    var locale: Locale
 
     val position: Vector2D
 
