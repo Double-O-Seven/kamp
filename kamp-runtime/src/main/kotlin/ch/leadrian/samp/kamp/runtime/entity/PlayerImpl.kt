@@ -26,6 +26,8 @@ internal class PlayerImpl(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Player {
 
+    private val onNameChangeHandlers: MutableList<Player.(String, String) -> Unit> = mutableListOf()
+
     private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
 
     private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Unit> = mutableListOf()
@@ -295,11 +297,13 @@ internal class PlayerImpl(
             if (value.isEmpty()) {
                 throw InvalidPlayerNameException("", "Name cannot be empty")
             }
+            val oldName = name
             val result = nativeFunctionExecutor.setPlayerName(playerid = id.value, name = value)
             when (result) {
                 -1 -> throw InvalidPlayerNameException(name = value, message = "Name is already in use, too long or invalid")
                 else -> field = value
             }
+            onNameChange(oldName, value)
         }
 
     override val state: PlayerState
@@ -882,6 +886,14 @@ internal class PlayerImpl(
 
     internal fun onDisconnect(onDisconnect: PlayerImpl.(DisconnectReason) -> Unit) {
         onDisconnectHandlers += onDisconnect
+    }
+
+    internal fun onNameChange(onNameChange: Player.(String, String) -> Unit) {
+        onNameChangeHandlers += onNameChange
+    }
+
+    private fun onNameChange(oldName: String, newName: String) {
+        onNameChangeHandlers.forEach { it.invoke(this, oldName, newName) }
     }
 
     internal fun onDisconnect(reason: DisconnectReason) {

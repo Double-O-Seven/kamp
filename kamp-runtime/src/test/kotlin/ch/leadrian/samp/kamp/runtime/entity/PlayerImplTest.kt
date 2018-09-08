@@ -841,6 +841,10 @@ internal class PlayerImplTest {
 
         @Test
         fun givenNameWasSetItShouldReturnCachedName() {
+            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+                secondArg<ReferenceString>().value = "John.Sausage"
+                0
+            }
             every { nativeFunctionExecutor.setPlayerName(playerId.value, any()) } returns 0
             player.name = "hans.wurst"
 
@@ -848,16 +852,40 @@ internal class PlayerImplTest {
 
             assertThat(name)
                     .isEqualTo("hans.wurst")
-            verify(exactly = 0) { nativeFunctionExecutor.getPlayerName(any(), any(), any()) }
+            verify(exactly = 1) { nativeFunctionExecutor.getPlayerName(any(), any(), any()) }
+            verifyOrder {
+                nativeFunctionExecutor.getPlayerName(any(), any(), any())
+                nativeFunctionExecutor.setPlayerName(any(), any())
+            }
         }
 
         @Test
         fun shouldSetPlayerName() {
+            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+                secondArg<ReferenceString>().value = "John.Sausage"
+                0
+            }
             every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
 
             player.name = "hans.wurst"
 
             verify { nativeFunctionExecutor.setPlayerName(playerid = playerId.value, name = "hans.wurst") }
+        }
+
+        @Test
+        fun shouldExecuteOnChangeHandlers() {
+            every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
+            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+                secondArg<ReferenceString>().value = "hans.wurst"
+                0
+            }
+            val onNameChange = mockk<Player.(String, String) -> Unit>(relaxed = true)
+            player.onNameChange(onNameChange)
+
+
+            player.name = "John.Sausage"
+
+            verify { onNameChange.invoke(player, "hans.wurst", "John.Sausage") }
         }
 
         @Test
@@ -870,6 +898,10 @@ internal class PlayerImplTest {
 
         @Test
         fun givenInvalidNameIsSetItShouldThrowAnException() {
+            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+                secondArg<ReferenceString>().value = "hans.wurst"
+                0
+            }
             every { nativeFunctionExecutor.setPlayerName(playerId.value, "???") } returns -1
             val caughtThrowable = catchThrowable { player.name = "???" }
 
