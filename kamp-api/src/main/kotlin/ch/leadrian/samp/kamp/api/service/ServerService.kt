@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.api.service
 import ch.leadrian.samp.kamp.api.data.Animation
 import ch.leadrian.samp.kamp.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.api.entity.ServerVars
+import java.nio.file.Path
 
 interface ServerService {
 
@@ -25,4 +26,6 @@ interface ServerService {
     fun unblockIpAddress(ipAddress: String)
 
     fun getAnimationName(animationIndex: Int): Animation
+
+    fun getDataDirectory(): Path
 }
