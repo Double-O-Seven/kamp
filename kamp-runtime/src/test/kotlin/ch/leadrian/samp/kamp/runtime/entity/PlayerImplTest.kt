@@ -2786,7 +2786,7 @@ internal class PlayerImplTest {
         @Test
         fun shouldReturnMenu() {
             val menuId = 1337
-            val menu = mockk<Menu>()
+            val menu = mockk<MenuImpl>()
             every { nativeFunctionExecutor.getPlayerMenu(playerId.value) } returns menuId
             every { menuRegistry[menuId] } returns menu
 
