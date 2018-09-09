@@ -64,6 +64,27 @@ internal class MenuImplTest {
                     .isEqualTo(menuId)
         }
 
+        @ParameterizedTest
+        @ValueSource(ints = [-1, 0, 3])
+        fun givenInvalidNumberOfColumnsItShouldThrowAnException(numberOfColumns: Int) {
+            val caughtThrowable = catchThrowable {
+                MenuImpl(
+                        numberOfColumns = numberOfColumns,
+                        title = "Hi there",
+                        locale = Locale.GERMANY,
+                        position = vector2DOf(x = 1f, y = 2f),
+                        columnWidth1 = 5f,
+                        columnWidth2 = 10f,
+                        nativeFunctionExecutor = mockk(),
+                        textFormatter = mockk(),
+                        textProvider = mockk()
+                )
+            }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalArgumentException::class.java)
+        }
+
         @Test
         fun givenCreateMenuReturnsInvalidMenuIdItShouldThrowCreationFailedException() {
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
