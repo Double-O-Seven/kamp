@@ -57,25 +57,26 @@ internal class MenuImpl(
 
     override val rows: MutableList<MenuRowImpl> = mutableListOf()
 
-    override fun addItem(column: Int, text: String): MenuRow {
-        val row = rows.lastOrNull()?.takeIf { it.getText(column) == null }
-                ?: MenuRowImpl(this, rows.size, nativeFunctionExecutor).apply { rows.add(this) }
+    override fun addItem(column: Int, text: String): MenuRowImpl {
+        checkColumn(column)
+        val rowIndex = nativeFunctionExecutor.addMenuItem(menuid = id.value, column = column, menutext = text)
+        val row = rows.getOrNull(rowIndex)
+                ?: MenuRowImpl(this, rowIndex, nativeFunctionExecutor).apply { rows.add(this) }
         row.setText(column, text)
-        nativeFunctionExecutor.addMenuItem(menuid = id.value, column = column, menutext = text)
         return row
     }
 
-    override fun addItem(column: Int, text: String, vararg args: Any): MenuRow {
+    override fun addItem(column: Int, text: String, vararg args: Any): MenuRowImpl {
         val formattedText = textFormatter.format(locale, text, *args)
         return addItem(column, formattedText)
     }
 
-    override fun addItem(column: Int, textKey: TextKey): MenuRow {
+    override fun addItem(column: Int, textKey: TextKey): MenuRowImpl {
         val text = textProvider.getText(locale, textKey)
         return addItem(column, text)
     }
 
-    override fun addItem(column: Int, textKey: TextKey, vararg args: Any): MenuRow {
+    override fun addItem(column: Int, textKey: TextKey, vararg args: Any): MenuRowImpl {
         val text = textProvider.getText(locale, textKey)
         return addItem(column, text, *args)
     }
