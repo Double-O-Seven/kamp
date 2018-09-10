@@ -3,8 +3,14 @@ package ch.leadrian.samp.kamp.core.runtime.entity.registry
 import ch.leadrian.samp.kamp.core.api.entity.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import java.lang.ref.WeakReference
+import javax.inject.Inject
+import javax.inject.Singleton
 
-internal class DialogRegistry(private val maxDialogs: Int = 32768) {
+@Singleton
+internal class DialogRegistry(private val maxDialogs: Int) {
+
+    @Inject
+    constructor() : this(maxDialogs = 32768)
 
     private val dialogsById: MutableMap<Int, WeakReference<Dialog>> = hashMapOf()
 

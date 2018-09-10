@@ -7,7 +7,12 @@ configurations {
 dependencies {
 
     compileOnly(
-            "com.google.inject:guice:$guiceVersion",
+            "com.google.util:guice:$guiceVersion",
+            "com.netflix.governator:governator:$governatorVersion"
+    )
+
+    testCompile(
+            "com.google.util:guice:$guiceVersion",
             "com.netflix.governator:governator:$governatorVersion"
     )
 
