@@ -11,24 +11,21 @@ import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
 
 internal class GameTextSenderTest {
 
     private lateinit var gameTextSender: GameTextSender
 
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-    private val textProvider = mockk<TextProvider>()
     private val playerRegistry = mockk<PlayerRegistry>()
-    private val textFormatter = mockk<TextFormatter>()
+    private val textPreparer = mockk<TextPreparer>()
 
     @BeforeEach
     fun setUp() {
         gameTextSender = GameTextSender(
                 nativeFunctionExecutor = nativeFunctionExecutor,
-                textProvider = textProvider,
                 playerRegistry = playerRegistry,
-                textFormatter = textFormatter
+                textPreparer = textPreparer
         )
     }
 
@@ -36,122 +33,171 @@ internal class GameTextSenderTest {
     inner class SendGameTextToAllTests {
 
         @Test
-        fun shouldSendSimpleText() {
+        fun shouldSendSimpleGameTextToAll() {
             every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
 
-            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
+            verify {
+                nativeFunctionExecutor.gameTextForAll(
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+            }
         }
 
         @Test
-        fun shouldSendFormattedText() {
-            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
-            every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
+        fun shouldSendFormattedGameTextToEachPlayer() {
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            val player1 = mockk<Player> {
+                every { id } returns PlayerId.valueOf(50)
+            }
+            val player2 = mockk<Player> {
+                every { id } returns PlayerId.valueOf(75)
+            }
+            every { textPreparer.prepareForAllPlayers("Hi %s", arrayOf("there"), any(), any()) } answers {
+                thirdArg<(Player, String) -> Unit>().invoke(player1, "Hallo")
+                thirdArg<(Player, String) -> Unit>().invoke(player2, "Bonjour")
+            }
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
-            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
+            verify {
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 50,
+                        text = "Hallo",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 75,
+                        text = "Bonjour",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+            }
         }
 
         @Test
-        fun givenSeveralLocalesItShouldSendProvidedText() {
-            val locale1 = Locale.GERMANY
+        fun shouldSendFormattedGameTextToAll() {
+            every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
+            every { textPreparer.prepareForAllPlayers("Hi %s", arrayOf("there"), any(), any()) } answers {
+                arg<(String) -> Unit>(3).invoke("Hi there")
+            }
+
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
+
+            verify {
+                nativeFunctionExecutor.gameTextForAll(
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+            }
+        }
+
+        @Test
+        fun shouldSendTranslatedGameTextToEachPlayer() {
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             val player1 = mockk<Player> {
-                every { this@mockk.locale } returns locale1
                 every { id } returns PlayerId.valueOf(50)
             }
-            val locale2 = Locale.FRANCE
             val player2 = mockk<Player> {
-                every { this@mockk.locale } returns locale2
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textProvider.getText(locale1, textKey) } returns "Hallo"
-            every { textProvider.getText(locale2, textKey) } returns "Bonjour"
-            every { playerRegistry.getAll() } returns listOf(player1, player2)
+            every { textPreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
+                secondArg<(Player, String) -> Unit>().invoke(player1, "Hallo")
+                secondArg<(Player, String) -> Unit>().invoke(player2, "Bonjour")
+            }
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 50,
+                        text = "Hallo",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 75,
+                        text = "Bonjour",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun givenSingleLocaleItShouldSendProvidedText() {
-            val locale = Locale.GERMANY
-            val player1 = mockk<Player> {
-                every { this@mockk.locale } returns locale
-                every { id } returns PlayerId.valueOf(50)
-            }
-            val player2 = mockk<Player> {
-                every { this@mockk.locale } returns locale
-                every { id } returns PlayerId.valueOf(75)
-            }
+        fun shouldSendTranslatedGameTextToAll() {
             val textKey = TextKey("test")
             every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
-            every { textProvider.getText(locale, textKey) } returns "Hallo"
-            every { playerRegistry.getAll() } returns listOf(player1, player2)
+            every { textPreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
+                thirdArg<(String) -> Unit>().invoke("Hi there")
+            }
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForAll("Hallo", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForAll(
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun givenSeveralLocalesItShouldSendFormattedProvidedText() {
-            val locale1 = Locale.GERMANY
+        fun shouldSendFormattedTranslatedGameTextToEachPlayer() {
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             val player1 = mockk<Player> {
-                every { this@mockk.locale } returns locale1
                 every { id } returns PlayerId.valueOf(50)
             }
-            val locale2 = Locale.FRANCE
             val player2 = mockk<Player> {
-                every { this@mockk.locale } returns locale2
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textProvider.getText(locale1, textKey) } returns "Hallo %s"
-            every { textProvider.getText(locale2, textKey) } returns "Bonjour %s"
-            every { playerRegistry.getAll() } returns listOf(player1, player2)
-            every { textFormatter.format(locale1, "Hallo %s", "SAMP") } returns "Hallo SAMP"
-            every { textFormatter.format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
+            every { textPreparer.prepareForAllPlayers(textKey, arrayOf("SAMP"), any(), any()) } answers {
+                thirdArg<(Player, String) -> Unit>().invoke(player1, "Hallo")
+                thirdArg<(Player, String) -> Unit>().invoke(player2, "Bonjour")
+            }
 
             gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 50,
+                        text = "Hallo",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = 75,
+                        text = "Bonjour",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun givenSingleLocalesItShouldSendFormattedProvidedText() {
-            val locale = Locale.GERMANY
-            val player1 = mockk<Player> {
-                every { this@mockk.locale } returns locale
-                every { id } returns PlayerId.valueOf(50)
-            }
-            val player2 = mockk<Player> {
-                every { this@mockk.locale } returns locale
-                every { id } returns PlayerId.valueOf(75)
-            }
+        fun shouldSendFormattedTranslatedGameTextToAll() {
             val textKey = TextKey("test")
             every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
-            every { textProvider.getText(locale, textKey) } returns "Hallo %s"
-            every { playerRegistry.getAll() } returns listOf(player1, player2)
-            every { textFormatter.format(locale, "Hallo %s", "SAMP") } returns "Hallo SAMP"
+            every { textPreparer.prepareForAllPlayers(textKey, arrayOf("there"), any(), any()) } answers {
+                arg<(String) -> Unit>(3).invoke("Hi there")
+            }
 
-            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there")
 
             verify {
-                nativeFunctionExecutor.gameTextForAll("Hallo SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForAll(
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
     }
@@ -159,71 +205,84 @@ internal class GameTextSenderTest {
     @Nested
     inner class SendGameTextToPlayerTests {
 
-        @Test
-        fun shouldSendSimpleText() {
-            val player = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-            }
+        private val playerId = PlayerId.valueOf(50)
+        private lateinit var player: Player
+
+        @BeforeEach
+        fun setUp() {
             every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-
-            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
-
-            verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+            player = mockk {
+                every { id } returns playerId
             }
         }
 
         @Test
-        fun shouldProvidedText() {
-            val textKey = TextKey("test")
-            val locale = Locale.GERMANY
-            val player = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-                every { this@mockk.locale } returns locale
+        fun shouldSendSimpleText() {
+            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
+
+            verify {
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textProvider.getText(locale, textKey) } returns "Hi there"
+        }
+
+        @Test
+        fun shouldSendTranslatedText() {
+            val textKey = TextKey("test")
+            every { textPreparer.prepareForPlayer(player, textKey, any()) } answers {
+                thirdArg<(Player, String) -> String>().invoke(player, "Hi there")
+            }
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
         fun shouldSendFormattedText() {
-            val locale = Locale.GERMANY
-            val player = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-                every { this@mockk.locale } returns locale
+            every { textPreparer.prepareForPlayer(player, "Hi %s", arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> String>(3).invoke(player, "Hi there")
             }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun shouldSendFormattedProvidedText() {
+        fun shouldSendFormattedTranslatedText() {
             val textKey = TextKey("test")
-            val locale = Locale.GERMANY
-            val player = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-                every { this@mockk.locale } returns locale
+            every { textPreparer.prepareForPlayer(player, textKey, arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> String>(3).invoke(player, "Hi there")
             }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
-            every { textProvider.getText(locale, textKey) } returns "Hi %s"
 
             gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
     }
@@ -231,108 +290,95 @@ internal class GameTextSenderTest {
     @Nested
     inner class SendGameTextTests {
 
+        private val playerId1 = PlayerId.valueOf(50)
+        private lateinit var player1: Player
+        private val playerId2 = PlayerId.valueOf(50)
+        private lateinit var player2: Player
+
+        @BeforeEach
+        fun setUp() {
+            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
+            player1 = mockk {
+                every { id } returns playerId1
+            }
+            player2 = mockk {
+                every { id } returns playerId2
+            }
+        }
+
         @Test
         fun shouldSendSimpleText() {
-            val player1 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-            }
-            val player2 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(75)
-            }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             every { playerRegistry.getAll() } returns listOf(player1, player2)
 
             gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there") { it == player2 }
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(75, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId2.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun shouldProvidedText() {
+        fun shouldSendTranslatedText() {
             val textKey = TextKey("test")
-            val locale1 = Locale.GERMANY
-            val player1 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-                every { this@mockk.locale } returns locale1
+            val playerFilter: (Player) -> Boolean = { it != player2 }
+            every { textPreparer.prepare(playerFilter, textKey, any()) } answers {
+                thirdArg<(Player, String) -> Unit>().invoke(player1, "Hi there")
             }
-            val locale2 = Locale.FRANCE
-            val player2 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(75)
-                every { this@mockk.locale } returns locale2
-            }
-            val player3 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(100)
-                every { this@mockk.locale } returns locale2
-            }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textProvider.getText(locale1, textKey) } returns "Hi there"
-            every { textProvider.getText(locale2, textKey) } returns "Bonjour"
-            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey) { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, playerFilter)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId1.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
         fun shouldSendFormattedText() {
-            val player1 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
+            val playerFilter: (Player) -> Boolean = { it != player2 }
+            every { textPreparer.prepare(playerFilter, "Hi %s", arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
             }
-            val player2 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(75)
-            }
-            val player3 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(100)
-            }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
-            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there") { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there", playerFilter = playerFilter)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId1.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
 
         @Test
-        fun shouldSendFormattedProvidedText() {
+        fun shouldSendFormattedTranslatedText() {
             val textKey = TextKey("test")
-            val locale1 = Locale.GERMANY
-            val player1 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(50)
-                every { this@mockk.locale } returns locale1
+            val playerFilter: (Player) -> Boolean = { it != player2 }
+            every { textPreparer.prepare(playerFilter, textKey, arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
             }
-            val locale2 = Locale.FRANCE
-            val player2 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(75)
-                every { this@mockk.locale } returns locale2
-            }
-            val player3 = mockk<Player> {
-                every { this@mockk.id } returns PlayerId.valueOf(100)
-                every { this@mockk.locale } returns locale2
-            }
-            every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
-            every { textFormatter.format(locale1, "Hi %s", "SAMP") } returns "Hi SAMP"
-            every { textFormatter.format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
-            every { textProvider.getText(locale1, textKey) } returns "Hi %s"
-            every { textProvider.getText(locale2, textKey) } returns "Bonjour %s"
-            every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP") { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there", playerFilter = playerFilter)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(
+                        playerid = playerId1.value,
+                        text = "Hi there",
+                        time = 13,
+                        style = GameTextStyle.BANK_GOTHIC_CENTER_1.value
+                )
             }
         }
     }
-
 }
