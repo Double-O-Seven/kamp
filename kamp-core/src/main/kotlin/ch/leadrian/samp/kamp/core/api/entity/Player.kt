@@ -52,6 +52,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerMapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextDrawRegistry
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextLabelRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
@@ -83,6 +84,8 @@ internal constructor(
     internal val playerMapObjectRegistry = PlayerMapObjectRegistry()
 
     internal val playerTextDrawRegistry = PlayerTextDrawRegistry()
+
+    internal val playerTextLabelRegistry = PlayerTextLabelRegistry()
 
     override val id: PlayerId = id
         get() = requireConnected { field }
