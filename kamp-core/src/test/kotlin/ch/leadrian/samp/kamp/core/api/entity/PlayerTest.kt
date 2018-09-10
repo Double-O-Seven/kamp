@@ -2934,71 +2934,58 @@ internal class PlayerTest {
             assertThat(caughtThrowable)
                     .isInstanceOf(PlayerOfflineException::class.java)
         }
-    }
-
-    @Nested
-    inner class RequireOnlineTests {
 
         @Nested
-        inner class NonLambdaTests {
+        inner class RequireOnlineTests {
 
-            @Test
-            fun givenPlayerIsOfflineItShouldThrowAnException() {
-                val player = mockk<Player> {
-                    every { isConnected } returns false
-                    every { id } returns PlayerId.valueOf(1)
+            @Nested
+            inner class NonLambdaTests {
+
+                @Test
+                fun givenPlayerIsOfflineItShouldThrowAnException() {
+                    player.onDisconnect(QUIT)
+
+                    val caughtThrowable = catchThrowable { player.requireOnline() }
+
+                    assertThat(caughtThrowable)
+                            .isInstanceOf(PlayerOfflineException::class.java)
                 }
 
-                val caughtThrowable = catchThrowable { player.requireOnline() }
+                @Test
+                fun givenPlayerIsConnectedItShouldNotThrowAnException() {
+                    val returnedPlayer = player.requireOnline()
 
-                assertThat(caughtThrowable)
-                        .isInstanceOf(PlayerOfflineException::class.java)
+                    assertThat(returnedPlayer)
+                            .isSameAs(player)
+                }
             }
 
-            @Test
-            fun givenPlayerIsConnectedItShouldNotThrowAnException() {
-                val player = mockk<Player> {
-                    every { isConnected } returns true
+            @Nested
+            inner class LambdaTests {
+
+                @Test
+                fun givenPlayerIsOfflineItShouldThrowAnException() {
+                    val block = mockk<Player.() -> Unit>(relaxed = true)
+                    player.onDisconnect(QUIT)
+
+                    val caughtThrowable = catchThrowable { player.requireOnline(block) }
+
+                    assertThat(caughtThrowable)
+                            .isInstanceOf(PlayerOfflineException::class.java)
+                    verify { block wasNot Called }
                 }
 
-                val returnedPlayer = player.requireOnline()
+                @Test
+                fun givenPlayerIsConnectedItShouldNotThrowAnException() {
+                    val block = mockk<Player.() -> Int> {
+                        every { this@mockk.invoke(player) } returns 1337
+                    }
 
-                assertThat(returnedPlayer)
-                        .isSameAs(player)
-            }
-        }
+                    val result = player.requireOnline(block)
 
-        @Nested
-        inner class LambdaTests {
-
-            @Test
-            fun givenPlayerIsOfflineItShouldThrowAnException() {
-                val block = mockk<Player.() -> Unit>(relaxed = true)
-                val player = mockk<Player> {
-                    every { isConnected } returns false
-                    every { id } returns PlayerId.valueOf(1)
+                    assertThat(result)
+                            .isEqualTo(1337)
                 }
-
-                val caughtThrowable = catchThrowable { player.requireOnline(block) }
-
-                assertThat(caughtThrowable)
-                        .isInstanceOf(PlayerOfflineException::class.java)
-                verify { block wasNot Called }
-            }
-
-            @Test
-            fun givenPlayerIsConnectedItShouldNotThrowAnException() {
-                val player = mockk<Player> {
-                    every { isConnected } returns true
-                }
-                val block = mockk<Player.() -> Int> {
-                    every { this@mockk.invoke(player) } returns 1337
-                }
-
-                val result = player.requireOnline(block)
-
-                assertThat(result)
-                        .isEqualTo(1337)
             }
         }
     }

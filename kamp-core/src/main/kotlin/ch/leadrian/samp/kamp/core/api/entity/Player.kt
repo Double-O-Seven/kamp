@@ -957,14 +957,14 @@ internal constructor(
         isConnected = false
         destroyMapIcons()
     }
-}
 
-fun Player.requireOnline(): Player {
-    if (!isConnected) throw PlayerOfflineException("Player is already offline")
-    return this
-}
+    fun requireOnline(): Player {
+        if (!isConnected) throw PlayerOfflineException("Player is already offline")
+        return this
+    }
 
-inline fun <T> Player.requireOnline(block: Player.() -> T): T {
-    requireOnline()
-    return block(this)
+    inline fun <T> requireOnline(block: Player.() -> T): T {
+        requireOnline()
+        return block(this)
+    }
 }
