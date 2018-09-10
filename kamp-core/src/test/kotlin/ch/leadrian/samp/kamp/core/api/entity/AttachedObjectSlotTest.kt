@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse
+import ch.leadrian.samp.kamp.core.api.constants.Bone
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -50,7 +52,7 @@ internal class AttachedObjectSlotTest {
         val index = 5
         val attachedObject = ch.leadrian.samp.kamp.core.api.data.AttachedObject(
                 modelId = 15,
-                bone = ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT
+                bone = Bone.CALF_LEFT
         )
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
@@ -102,7 +104,7 @@ internal class AttachedObjectSlotTest {
         val index = 5
         val attachedObject = ch.leadrian.samp.kamp.core.api.data.AttachedObject(
                 modelId = 15,
-                bone = ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT,
+                bone = Bone.CALF_LEFT,
                 offset = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                 scale = vector3DOf(x = 7f, y = 8f, z = 9f),
@@ -125,7 +127,7 @@ internal class AttachedObjectSlotTest {
                     playerid = playerId,
                     index = index,
                     modelid = 15,
-                    bone = ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT.value,
+                    bone = Bone.CALF_LEFT.value,
                     fOffsetX = 1f,
                     fOffsetY = 2f,
                     fOffsetZ = 3f,
@@ -153,7 +155,7 @@ internal class AttachedObjectSlotTest {
         val index = 5
         val attachedObject = ch.leadrian.samp.kamp.core.api.data.AttachedObject(
                 modelId = 15,
-                bone = ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT,
+                bone = Bone.CALF_LEFT,
                 offset = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                 scale = vector3DOf(x = 7f, y = 8f, z = 9f),
@@ -178,8 +180,8 @@ internal class AttachedObjectSlotTest {
     }
 
     @ParameterizedTest
-    @EnumSource(ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse::class)
-    fun shouldCallOnEditHandler(response: ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse) {
+    @EnumSource(AttachedObjectEditResponse::class)
+    fun shouldCallOnEditHandler(response: AttachedObjectEditResponse) {
         val playerId = 50
         val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(playerId)
@@ -189,7 +191,7 @@ internal class AttachedObjectSlotTest {
         val offset = vector3DOf(x = 1f, y = 2f, z = 3f)
         val rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
         val scale = vector3DOf(x = 7f, y = 8f, z = 9f)
-        val onEdit = mockk<AttachedObjectSlot.(ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse, Int, ch.leadrian.samp.kamp.core.api.constants.Bone, Vector3D, Vector3D, Vector3D) -> Boolean>(relaxed = true)
+        val onEdit = mockk<AttachedObjectSlot.(AttachedObjectEditResponse, Int, Bone, Vector3D, Vector3D, Vector3D) -> Boolean>(relaxed = true)
         val attachedObjectSlot = AttachedObjectSlot(
                 player = player,
                 index = index,
@@ -200,13 +202,13 @@ internal class AttachedObjectSlotTest {
         attachedObjectSlot.onEdit(
                 response = response,
                 modelId = 15,
-                bone = ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT,
+                bone = Bone.CALF_LEFT,
                 offset = offset,
                 rotation = rotation,
                 scale = scale
         )
 
-        verify { onEdit.invoke(attachedObjectSlot, response, 15, ch.leadrian.samp.kamp.core.api.constants.Bone.CALF_LEFT, offset, rotation, scale) }
+        verify { onEdit.invoke(attachedObjectSlot, response, 15, Bone.CALF_LEFT, offset, rotation, scale) }
     }
 
 }

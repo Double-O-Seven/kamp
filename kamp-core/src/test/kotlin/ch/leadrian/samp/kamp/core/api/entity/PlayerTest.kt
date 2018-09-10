@@ -1,7 +1,26 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.constants.*
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason.QUIT
+import ch.leadrian.samp.kamp.core.api.constants.CameraMode
+import ch.leadrian.samp.kamp.core.api.constants.CameraType
+import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
+import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
+import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
+import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
+import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
+import ch.leadrian.samp.kamp.core.api.constants.MapIconType
+import ch.leadrian.samp.kamp.core.api.constants.PlayerRecordingType
+import ch.leadrian.samp.kamp.core.api.constants.PlayerState
+import ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType
+import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.ShopName
+import ch.leadrian.samp.kamp.core.api.constants.SkinModel
+import ch.leadrian.samp.kamp.core.api.constants.SpecialAction
+import ch.leadrian.samp.kamp.core.api.constants.SpectateType
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.constants.WeaponSkill
+import ch.leadrian.samp.kamp.core.api.constants.WeaponSlot
+import ch.leadrian.samp.kamp.core.api.constants.WeaponState
+import ch.leadrian.samp.kamp.core.api.constants.Weather
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
 import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
@@ -131,10 +150,10 @@ internal class PlayerTest {
             player.setSpawnInfo(spawnInfoOf(
                     teamId = TeamId.valueOf(69),
                     position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
-                    skinModel = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY,
-                    weapon1 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9, 150),
-                    weapon2 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.AK47, 300),
-                    weapon3 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.DESERT_EAGLE, 20)
+                    skinModel = SkinModel.ARMY,
+                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
             ))
 
             verify {
@@ -144,13 +163,13 @@ internal class PlayerTest {
                         y = 2f,
                         z = 3f,
                         rotation = 4f,
-                        skin = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY.value,
+                        skin = SkinModel.ARMY.value,
                         team = 69,
-                        weapon1 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value,
+                        weapon1 = WeaponModel.TEC9.value,
                         weapon1_ammo = 150,
-                        weapon2 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.AK47.value,
+                        weapon2 = WeaponModel.AK47.value,
                         weapon2_ammo = 300,
-                        weapon3 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.DESERT_EAGLE.value,
+                        weapon3 = WeaponModel.DESERT_EAGLE.value,
                         weapon3_ammo = 20
                 )
             }
@@ -164,10 +183,10 @@ internal class PlayerTest {
 
             player.setSpawnInfo(spawnInfoOf(
                     position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
-                    skinModel = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY,
-                    weapon1 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9, 150),
-                    weapon2 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.AK47, 300),
-                    weapon3 = weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.DESERT_EAGLE, 20)
+                    skinModel = SkinModel.ARMY,
+                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
             ))
 
             verify {
@@ -177,13 +196,13 @@ internal class PlayerTest {
                         y = 2f,
                         z = 3f,
                         rotation = 4f,
-                        skin = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY.value,
+                        skin = SkinModel.ARMY.value,
                         team = SAMPConstants.NO_TEAM,
-                        weapon1 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value,
+                        weapon1 = WeaponModel.TEC9.value,
                         weapon1_ammo = 150,
-                        weapon2 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.AK47.value,
+                        weapon2 = WeaponModel.AK47.value,
                         weapon2_ammo = 300,
-                        weapon3 = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.DESERT_EAGLE.value,
+                        weapon3 = WeaponModel.DESERT_EAGLE.value,
                         weapon3_ammo = 20
                 )
             }
@@ -508,9 +527,9 @@ internal class PlayerTest {
     fun shouldSetAmmo() {
         every { nativeFunctionExecutor.setPlayerAmmo(any(), any(), any()) } returns true
 
-        player.setAmmo(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9, 150)
+        player.setAmmo(WeaponModel.TEC9, 150)
 
-        verify { nativeFunctionExecutor.setPlayerAmmo(playerid = playerId.value, weaponid = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value, ammo = 150) }
+        verify { nativeFunctionExecutor.setPlayerAmmo(playerid = playerId.value, weaponid = WeaponModel.TEC9.value, ammo = 150) }
     }
 
     @Test
@@ -525,12 +544,12 @@ internal class PlayerTest {
 
     @Test
     fun shouldGetWeaponState() {
-        every { nativeFunctionExecutor.getPlayerWeaponState(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.WeaponState.MORE_BULLETS.value
+        every { nativeFunctionExecutor.getPlayerWeaponState(playerId.value) } returns WeaponState.MORE_BULLETS.value
 
         val weaponState = player.weaponState
 
         assertThat(weaponState)
-                .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.WeaponState.MORE_BULLETS)
+                .isEqualTo(WeaponState.MORE_BULLETS)
     }
 
     @Nested
@@ -684,21 +703,21 @@ internal class PlayerTest {
 
         @Test
         fun shouldGetSkinModel() {
-            every { nativeFunctionExecutor.getPlayerSkin(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY.value
+            every { nativeFunctionExecutor.getPlayerSkin(playerId.value) } returns SkinModel.ARMY.value
 
             val skinModel = player.skin
 
             assertThat(skinModel)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY)
+                    .isEqualTo(SkinModel.ARMY)
         }
 
         @Test
         fun shouldSetSkinModel() {
             every { nativeFunctionExecutor.setPlayerSkin(any(), any()) } returns true
 
-            player.skin = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY
+            player.skin = SkinModel.ARMY
 
-            verify { nativeFunctionExecutor.setPlayerSkin(playerid = playerId.value, skinid = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY.value) }
+            verify { nativeFunctionExecutor.setPlayerSkin(playerid = playerId.value, skinid = SkinModel.ARMY.value) }
         }
     }
 
@@ -707,36 +726,36 @@ internal class PlayerTest {
 
         @Test
         fun shouldGetArmedWeapon() {
-            every { nativeFunctionExecutor.getPlayerWeapon(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value
+            every { nativeFunctionExecutor.getPlayerWeapon(playerId.value) } returns WeaponModel.TEC9.value
 
             val armedWeapon = player.armedWeapon
 
             assertThat(armedWeapon)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9)
+                    .isEqualTo(WeaponModel.TEC9)
         }
 
         @Test
         fun shouldSetArmedWeapon() {
             every { nativeFunctionExecutor.setPlayerArmedWeapon(any(), any()) } returns true
 
-            player.armedWeapon = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9
+            player.armedWeapon = WeaponModel.TEC9
 
-            verify { nativeFunctionExecutor.setPlayerArmedWeapon(playerid = playerId.value, weaponid = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value) }
+            verify { nativeFunctionExecutor.setPlayerArmedWeapon(playerid = playerId.value, weaponid = WeaponModel.TEC9.value) }
         }
     }
 
     @Test
     fun shouldGetWeaponData() {
-        every { nativeFunctionExecutor.getPlayerWeaponData(playerId.value, ch.leadrian.samp.kamp.core.api.constants.WeaponSlot.MACHINE_PISTOL.value, any(), any()) } answers {
-            thirdArg<ReferenceInt>().value = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9.value
+        every { nativeFunctionExecutor.getPlayerWeaponData(playerId.value, WeaponSlot.MACHINE_PISTOL.value, any(), any()) } answers {
+            thirdArg<ReferenceInt>().value = WeaponModel.TEC9.value
             arg<ReferenceInt>(3).value = 150
             true
         }
 
-        val weaponData = player.getWeaponData(ch.leadrian.samp.kamp.core.api.constants.WeaponSlot.MACHINE_PISTOL)
+        val weaponData = player.getWeaponData(WeaponSlot.MACHINE_PISTOL)
 
         assertThat(weaponData)
-                .isEqualTo(weaponDataOf(ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9, 150))
+                .isEqualTo(weaponDataOf(WeaponModel.TEC9, 150))
     }
 
     @Nested
@@ -939,12 +958,12 @@ internal class PlayerTest {
 
     @Test
     fun shouldGetPlayerState() {
-        every { nativeFunctionExecutor.getPlayerState(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.PlayerState.ON_FOOT.value
+        every { nativeFunctionExecutor.getPlayerState(playerId.value) } returns PlayerState.ON_FOOT.value
 
         val playerState = player.state
 
         assertThat(playerState)
-                .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.PlayerState.ON_FOOT)
+                .isEqualTo(PlayerState.ON_FOOT)
     }
 
     @Test
@@ -1025,9 +1044,9 @@ internal class PlayerTest {
         fun shouldSetWeatherByEnum() {
             every { nativeFunctionExecutor.setPlayerWeather(any(), any()) } returns true
 
-            player.setWeather(ch.leadrian.samp.kamp.core.api.constants.Weather.SUNNY_DESERT)
+            player.setWeather(Weather.SUNNY_DESERT)
 
-            verify { nativeFunctionExecutor.setPlayerWeather(playerid = playerId.value, weather = ch.leadrian.samp.kamp.core.api.constants.Weather.SUNNY_DESERT.value) }
+            verify { nativeFunctionExecutor.setPlayerWeather(playerid = playerId.value, weather = Weather.SUNNY_DESERT.value) }
         }
 
         @Test
@@ -1077,21 +1096,21 @@ internal class PlayerTest {
 
         @Test
         fun shouldGetFightingStyle() {
-            every { nativeFunctionExecutor.getPlayerFightingStyle(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.FightingStyle.GRABKICK.value
+            every { nativeFunctionExecutor.getPlayerFightingStyle(playerId.value) } returns FightingStyle.GRABKICK.value
 
             val fightingStyle = player.fightingStyle
 
             assertThat(fightingStyle)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.FightingStyle.GRABKICK)
+                    .isEqualTo(FightingStyle.GRABKICK)
         }
 
         @Test
         fun shouldSetFightingStyle() {
             every { nativeFunctionExecutor.setPlayerFightingStyle(any(), any()) } returns true
 
-            player.fightingStyle = ch.leadrian.samp.kamp.core.api.constants.FightingStyle.GRABKICK
+            player.fightingStyle = FightingStyle.GRABKICK
 
-            verify { nativeFunctionExecutor.setPlayerFightingStyle(playerid = playerId.value, style = ch.leadrian.samp.kamp.core.api.constants.FightingStyle.GRABKICK.value) }
+            verify { nativeFunctionExecutor.setPlayerFightingStyle(playerid = playerId.value, style = FightingStyle.GRABKICK.value) }
         }
     }
 
@@ -1099,13 +1118,13 @@ internal class PlayerTest {
     fun shouldPlayCrimeReport() {
         every { nativeFunctionExecutor.playCrimeReportForPlayer(any(), any(), any()) } returns true
 
-        player.playCrimeReport(otherPlayer, ch.leadrian.samp.kamp.core.api.constants.CrimeReport.CODE_10_17)
+        player.playCrimeReport(otherPlayer, CrimeReport.CODE_10_17)
 
         verify {
             nativeFunctionExecutor.playCrimeReportForPlayer(
                     playerid = playerId.value,
                     suspectid = otherPlayerId.value,
-                    crime = ch.leadrian.samp.kamp.core.api.constants.CrimeReport.CODE_10_17.value
+                    crime = CrimeReport.CODE_10_17.value
             )
         }
     }
@@ -1169,21 +1188,21 @@ internal class PlayerTest {
     fun shouldSetShopName() {
         every { nativeFunctionExecutor.setPlayerShopName(any(), any()) } returns true
 
-        player.setShopName(ch.leadrian.samp.kamp.core.api.constants.ShopName.AMMUN2)
+        player.setShopName(ShopName.AMMUN2)
 
-        verify { nativeFunctionExecutor.setPlayerShopName(playerid = playerId.value, shopname = ch.leadrian.samp.kamp.core.api.constants.ShopName.AMMUN2.value) }
+        verify { nativeFunctionExecutor.setPlayerShopName(playerid = playerId.value, shopname = ShopName.AMMUN2.value) }
     }
 
     @Test
     fun shouldSetSkillLevel() {
         every { nativeFunctionExecutor.setPlayerSkillLevel(any(), any(), any()) } returns true
 
-        player.setSkillLevel(ch.leadrian.samp.kamp.core.api.constants.WeaponSkill.MICRO_UZI, 456)
+        player.setSkillLevel(WeaponSkill.MICRO_UZI, 456)
 
         verify {
             nativeFunctionExecutor.setPlayerSkillLevel(
                     playerid = playerId.value,
-                    skill = ch.leadrian.samp.kamp.core.api.constants.WeaponSkill.MICRO_UZI.value,
+                    skill = WeaponSkill.MICRO_UZI.value,
                     level = 456
             )
         }
@@ -1481,21 +1500,21 @@ internal class PlayerTest {
 
         @Test
         fun shouldGetSpecialAction() {
-            every { nativeFunctionExecutor.getPlayerSpecialAction(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.SpecialAction.USE_JETPACK.value
+            every { nativeFunctionExecutor.getPlayerSpecialAction(playerId.value) } returns SpecialAction.USE_JETPACK.value
 
             val specialAction = player.specialAction
 
             assertThat(specialAction)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.SpecialAction.USE_JETPACK)
+                    .isEqualTo(SpecialAction.USE_JETPACK)
         }
 
         @Test
         fun shouldSetSpecialAction() {
             every { nativeFunctionExecutor.setPlayerSpecialAction(any(), any()) } returns true
 
-            player.specialAction = ch.leadrian.samp.kamp.core.api.constants.SpecialAction.USE_JETPACK
+            player.specialAction = SpecialAction.USE_JETPACK
 
-            verify { nativeFunctionExecutor.setPlayerSpecialAction(playerId.value, ch.leadrian.samp.kamp.core.api.constants.SpecialAction.USE_JETPACK.value) }
+            verify { nativeFunctionExecutor.setPlayerSpecialAction(playerId.value, SpecialAction.USE_JETPACK.value) }
         }
     }
 
@@ -1574,7 +1593,7 @@ internal class PlayerTest {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
-                every { type } returns ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL
+                every { type } returns RaceCheckpointType.AIR_NORMAL
                 every { isDestroyed } returns false
             }
 
@@ -1583,7 +1602,7 @@ internal class PlayerTest {
             verify {
                 nativeFunctionExecutor.setPlayerRaceCheckpoint(
                         playerid = playerId.value,
-                        type = ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL.value,
+                        type = RaceCheckpointType.AIR_NORMAL.value,
                         x = 1f,
                         y = 2f,
                         z = 3f,
@@ -1618,7 +1637,7 @@ internal class PlayerTest {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
                 every { nextCoordinates } returns null
-                every { type } returns ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL
+                every { type } returns RaceCheckpointType.AIR_NORMAL
                 every { isDestroyed } returns false
             }
 
@@ -1627,7 +1646,7 @@ internal class PlayerTest {
             verify {
                 nativeFunctionExecutor.setPlayerRaceCheckpoint(
                         playerid = playerId.value,
-                        type = ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL.value,
+                        type = RaceCheckpointType.AIR_NORMAL.value,
                         x = 1f,
                         y = 2f,
                         z = 3f,
@@ -1741,8 +1760,8 @@ internal class PlayerTest {
                     playerMapIconId = PlayerMapIconId.valueOf(50),
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             verify {
@@ -1751,8 +1770,8 @@ internal class PlayerTest {
                         playerMapIconId = PlayerMapIconId.valueOf(50),
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                         color = Colors.RED,
-                        type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                        style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                        type = MapIconType.BALLAS,
+                        style = MapIconStyle.GLOBAL
                 )
             }
         }
@@ -1766,8 +1785,8 @@ internal class PlayerTest {
                     playerMapIconId = PlayerMapIconId.valueOf(50),
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             assertThat(mapIcon)
@@ -1786,8 +1805,8 @@ internal class PlayerTest {
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             assertThat(player.mapIcons)
@@ -1805,8 +1824,8 @@ internal class PlayerTest {
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             player.unregisterMapIcon(mapIcon)
@@ -1830,16 +1849,16 @@ internal class PlayerTest {
                     playerMapIconId = PlayerMapIconId.valueOf(75),
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             val mapIcon = player.createMapIcon(
                     playerMapIconId = PlayerMapIconId.valueOf(50),
                     coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
                     color = Colors.BLUE,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.AIR_YARD,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.LOCAL
+                    type = MapIconType.AIR_YARD,
+                    style = MapIconStyle.LOCAL
             )
 
             assertThat(player.mapIcons)
@@ -1863,16 +1882,16 @@ internal class PlayerTest {
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
 
             player.createMapIcon(
                     playerMapIconId = playerMapIconId,
                     coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
                     color = Colors.BLUE,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.AIR_YARD,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.LOCAL
+                    type = MapIconType.AIR_YARD,
+                    style = MapIconStyle.LOCAL
             )
 
             assertThat(player.mapIcons)
@@ -1926,7 +1945,7 @@ internal class PlayerTest {
     fun shouldSetCameraLookAt() {
         every { nativeFunctionExecutor.setPlayerCameraLookAt(any(), any(), any(), any(), any()) } returns true
 
-        player.setCameraLookAt(vector3DOf(x = 1f, y = 2f, z = 3f), ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT)
+        player.setCameraLookAt(vector3DOf(x = 1f, y = 2f, z = 3f), CameraType.CUT)
 
         verify {
             nativeFunctionExecutor.setPlayerCameraLookAt(
@@ -1934,7 +1953,7 @@ internal class PlayerTest {
                     x = 1f,
                     y = 2f,
                     z = 3f,
-                    cut = ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT.value
+                    cut = CameraType.CUT.value
             )
         }
     }
@@ -1965,12 +1984,12 @@ internal class PlayerTest {
 
     @Test
     fun shouldGetCameraMode() {
-        every { nativeFunctionExecutor.getPlayerCameraMode(playerId.value) } returns ch.leadrian.samp.kamp.core.api.constants.CameraMode.TRAIN_OR_TRAM.value
+        every { nativeFunctionExecutor.getPlayerCameraMode(playerId.value) } returns CameraMode.TRAIN_OR_TRAM.value
 
         val cameraMode = player.cameraMode
 
         assertThat(cameraMode)
-                .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.CameraMode.TRAIN_OR_TRAM)
+                .isEqualTo(CameraMode.TRAIN_OR_TRAM)
     }
 
     @ParameterizedTest
@@ -2146,7 +2165,7 @@ internal class PlayerTest {
         player.interpolateCameraPosition(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),
                 to = vector3DOf(x = 4f, y = 5f, z = 6f),
-                type = ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT,
+                type = CameraType.CUT,
                 time = 150
         )
 
@@ -2159,7 +2178,7 @@ internal class PlayerTest {
                     ToX = 4f,
                     ToY = 5f,
                     ToZ = 6f,
-                    cut = ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT.value,
+                    cut = CameraType.CUT.value,
                     time = 150
             )
         }
@@ -2172,7 +2191,7 @@ internal class PlayerTest {
         player.interpolateCameraLookAt(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),
                 to = vector3DOf(x = 4f, y = 5f, z = 6f),
-                type = ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT,
+                type = CameraType.CUT,
                 time = 150
         )
 
@@ -2185,7 +2204,7 @@ internal class PlayerTest {
                     ToX = 4f,
                     ToY = 5f,
                     ToZ = 6f,
-                    cut = ch.leadrian.samp.kamp.core.api.constants.CameraType.CUT.value,
+                    cut = CameraType.CUT.value,
                     time = 150
             )
         }
@@ -2339,7 +2358,7 @@ internal class PlayerTest {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
-                every { type } returns ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL
+                every { type } returns RaceCheckpointType.AIR_NORMAL
                 every { isDestroyed } returns false
             }
             every {
@@ -2362,7 +2381,7 @@ internal class PlayerTest {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
                 every { size } returns 4f
                 every { nextCoordinates } returns vector3DOf(x = 5f, y = 6f, z = 7f)
-                every { type } returns ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_NORMAL
+                every { type } returns RaceCheckpointType.AIR_NORMAL
                 every { isDestroyed } returns false
             }
             every {
@@ -2393,8 +2412,8 @@ internal class PlayerTest {
     inner class SpectatePlayerTests {
 
         @ParameterizedTest
-        @EnumSource(ch.leadrian.samp.kamp.core.api.constants.SpectateType::class)
-        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: ch.leadrian.samp.kamp.core.api.constants.SpectateType) {
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: SpectateType) {
             every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
             every { nativeFunctionExecutor.playerSpectatePlayer(any(), any(), any()) } returns true
 
@@ -2413,8 +2432,8 @@ internal class PlayerTest {
         }
 
         @ParameterizedTest
-        @EnumSource(ch.leadrian.samp.kamp.core.api.constants.SpectateType::class)
-        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: ch.leadrian.samp.kamp.core.api.constants.SpectateType) {
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: SpectateType) {
             val spectatedPlayerId = PlayerId.valueOf(123)
             val spectatedPlayer = mockk<Player> {
                 every { id } returns spectatedPlayerId
@@ -2446,7 +2465,7 @@ internal class PlayerTest {
         fun shouldStopSpectating() {
             every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
             every { nativeFunctionExecutor.playerSpectatePlayer(any(), any(), any()) } returns true
-            player.spectate(otherPlayer, ch.leadrian.samp.kamp.core.api.constants.SpectateType.FIXED)
+            player.spectate(otherPlayer, SpectateType.FIXED)
 
             player.stopSpectating()
 
@@ -2460,8 +2479,8 @@ internal class PlayerTest {
     inner class SpectateVehicleTests {
 
         @ParameterizedTest
-        @EnumSource(ch.leadrian.samp.kamp.core.api.constants.SpectateType::class)
-        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: ch.leadrian.samp.kamp.core.api.constants.SpectateType) {
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsNotSpectatingItShouldToggleSpectatingAndSpectateOtherPlayer(type: SpectateType) {
             val vehicleId = VehicleId.valueOf(20)
             val vehicle = mockk<Vehicle> {
                 every { id } returns vehicleId
@@ -2484,8 +2503,8 @@ internal class PlayerTest {
         }
 
         @ParameterizedTest
-        @EnumSource(ch.leadrian.samp.kamp.core.api.constants.SpectateType::class)
-        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: ch.leadrian.samp.kamp.core.api.constants.SpectateType) {
+        @EnumSource(SpectateType::class)
+        fun givenPlayerIsSpectatingItShouldNotToggleSpectatingAgainAndSpectateOtherPlayer(type: SpectateType) {
             val oldVehicleId = VehicleId.valueOf(20)
             val oldVehicle = mockk<Vehicle> {
                 every { id } returns oldVehicleId
@@ -2525,7 +2544,7 @@ internal class PlayerTest {
             }
             every { nativeFunctionExecutor.togglePlayerSpectating(any(), any()) } returns true
             every { nativeFunctionExecutor.playerSpectateVehicle(any(), any(), any()) } returns true
-            player.spectate(vehicle, ch.leadrian.samp.kamp.core.api.constants.SpectateType.FIXED)
+            player.spectate(vehicle, SpectateType.FIXED)
 
             player.stopSpectating()
 
@@ -2536,8 +2555,8 @@ internal class PlayerTest {
     }
 
     @ParameterizedTest
-    @EnumSource(ch.leadrian.samp.kamp.core.api.constants.PlayerRecordingType::class)
-    fun shouldStartRecording(type: ch.leadrian.samp.kamp.core.api.constants.PlayerRecordingType) {
+    @EnumSource(PlayerRecordingType::class)
+    fun shouldStartRecording(type: PlayerRecordingType) {
         every { nativeFunctionExecutor.startRecordingPlayerData(any(), any(), any()) } returns true
 
         player.startRecording(type, "test")
@@ -2567,12 +2586,12 @@ internal class PlayerTest {
         fun shouldCreateExplosionUsingSphere() {
             every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
 
-            player.createExplosion(ch.leadrian.samp.kamp.core.api.constants.ExplosionType.NORMAL_3, sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
+            player.createExplosion(ExplosionType.NORMAL_3, sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
 
             verify {
                 nativeFunctionExecutor.createExplosionForPlayer(
                         playerid = playerId.value,
-                        type = ch.leadrian.samp.kamp.core.api.constants.ExplosionType.NORMAL_3.value,
+                        type = ExplosionType.NORMAL_3.value,
                         X = 1f,
                         Y = 2f,
                         Z = 3f,
@@ -2585,12 +2604,12 @@ internal class PlayerTest {
         fun shouldCreateExplosionUsingVector() {
             every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
 
-            player.createExplosion(ch.leadrian.samp.kamp.core.api.constants.ExplosionType.NORMAL_3, vector3DOf(x = 1f, y = 2f, z = 3f), 4f)
+            player.createExplosion(ExplosionType.NORMAL_3, vector3DOf(x = 1f, y = 2f, z = 3f), 4f)
 
             verify {
                 nativeFunctionExecutor.createExplosionForPlayer(
                         playerid = playerId.value,
-                        type = ch.leadrian.samp.kamp.core.api.constants.ExplosionType.NORMAL_3.value,
+                        type = ExplosionType.NORMAL_3.value,
                         X = 1f,
                         Y = 2f,
                         Z = 3f,
@@ -2847,12 +2866,12 @@ internal class PlayerTest {
 
     @Test
     fun shouldExecuteOnDeathHandlers() {
-        val onDeath = mockk<Player.(Player?, ch.leadrian.samp.kamp.core.api.constants.WeaponModel) -> Unit>(relaxed = true)
+        val onDeath = mockk<Player.(Player?, WeaponModel) -> Unit>(relaxed = true)
         player.onDeath(onDeath)
 
-        player.onDeath(killer = otherPlayer, weapon = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9)
+        player.onDeath(killer = otherPlayer, weapon = WeaponModel.TEC9)
 
-        verify { onDeath.invoke(player, otherPlayer, ch.leadrian.samp.kamp.core.api.constants.WeaponModel.TEC9) }
+        verify { onDeath.invoke(player, otherPlayer, WeaponModel.TEC9) }
     }
 
     @Nested
@@ -2860,17 +2879,17 @@ internal class PlayerTest {
 
         @Test
         fun shouldExecuteOnDisconnectHandlers() {
-            val onDisconnect = mockk<Player.(ch.leadrian.samp.kamp.core.api.constants.DisconnectReason) -> Unit>(relaxed = true)
+            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
             player.onDisconnect(onDisconnect)
 
-            player.onDisconnect(QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
 
-            verify { onDisconnect.invoke(player, QUIT) }
+            verify { onDisconnect.invoke(player, DisconnectReason.QUIT) }
         }
 
         @Test
         fun shouldSetIsConnectedToFalse() {
-            player.onDisconnect(QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
 
             assertThat(player.isConnected)
                     .isFalse()
@@ -2893,18 +2912,18 @@ internal class PlayerTest {
                     playerMapIconId = PlayerMapIconId.valueOf(75),
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     color = Colors.RED,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                    type = MapIconType.BALLAS,
+                    style = MapIconStyle.GLOBAL
             )
             player.createMapIcon(
                     playerMapIconId = PlayerMapIconId.valueOf(50),
                     coordinates = vector3DOf(x = 4f, y = 5f, z = 6f),
                     color = Colors.BLUE,
-                    type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.AIR_YARD,
-                    style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.LOCAL
+                    type = MapIconType.AIR_YARD,
+                    style = MapIconStyle.LOCAL
             )
 
-            player.onDisconnect(QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
 
             verify {
                 mapIcon1.destroy()
@@ -2914,20 +2933,20 @@ internal class PlayerTest {
 
         @Test
         fun shouldNotExecuteTwice() {
-            val onDisconnect = mockk<Player.(ch.leadrian.samp.kamp.core.api.constants.DisconnectReason) -> Unit>(relaxed = true)
+            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
             player.onDisconnect(onDisconnect)
 
-            player.onDisconnect(QUIT)
-            player.onDisconnect(QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
 
             verify(exactly = 1) {
-                onDisconnect.invoke(player, QUIT)
+                onDisconnect.invoke(player, DisconnectReason.QUIT)
             }
         }
 
         @Test
         fun givenPlayerDisconnectedIdShouldThrowException() {
-            player.onDisconnect(QUIT)
+            player.onDisconnect(DisconnectReason.QUIT)
 
             val caughtThrowable = catchThrowable { player.id }
 
@@ -2943,9 +2962,9 @@ internal class PlayerTest {
 
                 @Test
                 fun givenPlayerIsOfflineItShouldThrowAnException() {
-                    player.onDisconnect(QUIT)
+                    player.onDisconnect(DisconnectReason.QUIT)
 
-                    val caughtThrowable = catchThrowable { player.requireOnline() }
+                    val caughtThrowable = catchThrowable { player.requireConnected() }
 
                     assertThat(caughtThrowable)
                             .isInstanceOf(PlayerOfflineException::class.java)
@@ -2953,7 +2972,7 @@ internal class PlayerTest {
 
                 @Test
                 fun givenPlayerIsConnectedItShouldNotThrowAnException() {
-                    val returnedPlayer = player.requireOnline()
+                    val returnedPlayer = player.requireConnected()
 
                     assertThat(returnedPlayer)
                             .isSameAs(player)
@@ -2966,9 +2985,9 @@ internal class PlayerTest {
                 @Test
                 fun givenPlayerIsOfflineItShouldThrowAnException() {
                     val block = mockk<Player.() -> Unit>(relaxed = true)
-                    player.onDisconnect(QUIT)
+                    player.onDisconnect(DisconnectReason.QUIT)
 
-                    val caughtThrowable = catchThrowable { player.requireOnline(block) }
+                    val caughtThrowable = catchThrowable { player.requireConnected(block) }
 
                     assertThat(caughtThrowable)
                             .isInstanceOf(PlayerOfflineException::class.java)
@@ -2981,7 +3000,7 @@ internal class PlayerTest {
                         every { this@mockk.invoke(player) } returns 1337
                     }
 
-                    val result = player.requireOnline(block)
+                    val result = player.requireConnected(block)
 
                     assertThat(result)
                             .isEqualTo(1337)

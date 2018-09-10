@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
@@ -12,7 +13,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun exactKeysPressedShouldReturnTrue() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value or PlayerKey.JUMP.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -20,7 +21,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE)
+            val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
 
             assertThat(pressed)
                     .isTrue()
@@ -28,7 +29,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun givenSomeOfPressedKeysShouldBePressedItShouldReturnTrue() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value or PlayerKey.JUMP.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -36,7 +37,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP)
+            val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP)
 
             assertThat(pressed)
                     .isTrue()
@@ -44,7 +45,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun givenNotAllKeysArePressedItShouldReturnFalse() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -52,7 +53,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE)
+            val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
 
             assertThat(pressed)
                     .isFalse()
@@ -64,7 +65,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun exactKeysPressedShouldReturnTrue() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value or PlayerKey.JUMP.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -72,7 +73,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isOnlyKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE)
+            val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
 
             assertThat(pressed)
                     .isTrue()
@@ -80,7 +81,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun givenSomeOfPressedKeysShouldBePressedItShouldReturnFalse() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value or PlayerKey.JUMP.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -88,7 +89,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isOnlyKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP)
+            val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP)
 
             assertThat(pressed)
                     .isFalse()
@@ -96,7 +97,7 @@ internal class PlayerKeysTest {
 
         @Test
         fun givenNotAllKeysArePressedItShouldReturnFalse() {
-            val keys = ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION.value or ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE.value
+            val keys = PlayerKey.ACTION.value or PlayerKey.FIRE.value
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
@@ -104,7 +105,7 @@ internal class PlayerKeysTest {
                     player = mockk()
             )
 
-            val pressed = playerKeys.isOnlyKeyPressed(ch.leadrian.samp.kamp.core.api.constants.PlayerKey.ACTION, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.JUMP, ch.leadrian.samp.kamp.core.api.constants.PlayerKey.FIRE)
+            val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
 
             assertThat(pressed)
                     .isFalse()

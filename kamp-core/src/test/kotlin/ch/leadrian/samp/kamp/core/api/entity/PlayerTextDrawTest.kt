@@ -1,6 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
+import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.mutableVector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
@@ -190,24 +193,24 @@ internal class PlayerTextDrawTest {
                 val alignment = playerTextDraw.alignment
 
                 assertThat(alignment)
-                        .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment.LEFT)
+                        .isEqualTo(TextDrawAlignment.LEFT)
             }
 
             @Test
             fun shouldSetAlignment() {
                 every { nativeFunctionExecutor.playerTextDrawAlignment(any(), any(), any()) } returns true
 
-                playerTextDraw.alignment = ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment.CENTERED
+                playerTextDraw.alignment = TextDrawAlignment.CENTERED
 
                 verify {
                     nativeFunctionExecutor.playerTextDrawAlignment(
                             playerid = playerId.value,
                             text = playerTextDrawId.value,
-                            alignment = ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment.CENTERED.value
+                            alignment = TextDrawAlignment.CENTERED.value
                     )
                 }
                 assertThat(playerTextDraw.alignment)
-                        .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment.CENTERED)
+                        .isEqualTo(TextDrawAlignment.CENTERED)
             }
         }
 
@@ -394,24 +397,24 @@ internal class PlayerTextDrawTest {
                 val font = playerTextDraw.font
 
                 assertThat(font)
-                        .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.TextDrawFont.FONT2)
+                        .isEqualTo(TextDrawFont.FONT2)
             }
 
             @Test
             fun shouldSetFont() {
                 every { nativeFunctionExecutor.playerTextDrawFont(any(), any(), any()) } returns true
 
-                playerTextDraw.font = ch.leadrian.samp.kamp.core.api.constants.TextDrawFont.BANK_GOTHIC
+                playerTextDraw.font = TextDrawFont.BANK_GOTHIC
 
                 verify {
                     nativeFunctionExecutor.playerTextDrawFont(
                             playerid = playerId.value,
                             text = playerTextDrawId.value,
-                            font = ch.leadrian.samp.kamp.core.api.constants.TextDrawFont.BANK_GOTHIC.value
+                            font = TextDrawFont.BANK_GOTHIC.value
                     )
                 }
                 assertThat(playerTextDraw.font)
-                        .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.TextDrawFont.BANK_GOTHIC)
+                        .isEqualTo(TextDrawFont.BANK_GOTHIC)
             }
         }
 
@@ -661,8 +664,8 @@ internal class PlayerTextDrawTest {
             every { nativeFunctionExecutor.playerTextDrawSetPreviewVehCol(any(), any(), any(), any()) } returns true
 
             playerTextDraw.setPreviewModelVehicleColors(vehicleColorsOf(
-                    color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3],
-                    color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]
+                    color1 = VehicleColor[3],
+                    color2 = VehicleColor[6]
             ))
 
             verify {

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.constants.GameTextStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -38,9 +39,9 @@ internal class GameTextSenderTest {
         fun shouldSendSimpleText() {
             every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
 
-            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
+            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
         }
 
         @Test
@@ -48,9 +49,9 @@ internal class GameTextSenderTest {
             every { nativeFunctionExecutor.gameTextForAll(any(), any(), any()) } returns true
             every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
-            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
+            verify { nativeFunctionExecutor.gameTextForAll("Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value) }
         }
 
         @Test
@@ -71,11 +72,11 @@ internal class GameTextSenderTest {
             every { textProvider.getText(locale2, textKey) } returns "Bonjour"
             every { playerRegistry.getAll() } returns listOf(player1, player2)
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -95,10 +96,10 @@ internal class GameTextSenderTest {
             every { textProvider.getText(locale, textKey) } returns "Hallo"
             every { playerRegistry.getAll() } returns listOf(player1, player2)
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForAll("Hallo", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForAll("Hallo", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -122,11 +123,11 @@ internal class GameTextSenderTest {
             every { textFormatter.format(locale1, "Hallo %s", "SAMP") } returns "Hallo SAMP"
             every { textFormatter.format(locale2, "Bonjour %s", "SAMP") } returns "Bonjour SAMP"
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo SAMP", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour SAMP", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hallo SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(75, "Bonjour SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -147,10 +148,10 @@ internal class GameTextSenderTest {
             every { playerRegistry.getAll() } returns listOf(player1, player2)
             every { textFormatter.format(locale, "Hallo %s", "SAMP") } returns "Hallo SAMP"
 
-            gameTextSender.sendGameTextToAll(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
+            gameTextSender.sendGameTextToAll(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP")
 
             verify {
-                nativeFunctionExecutor.gameTextForAll("Hallo SAMP", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForAll("Hallo SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
     }
@@ -165,10 +166,10 @@ internal class GameTextSenderTest {
             }
             every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
 
-            gameTextSender.sendGameTextToPlayer(player, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
+            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -183,10 +184,10 @@ internal class GameTextSenderTest {
             every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             every { textProvider.getText(locale, textKey) } returns "Hi there"
 
-            gameTextSender.sendGameTextToPlayer(player, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
+            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey)
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -200,10 +201,10 @@ internal class GameTextSenderTest {
             every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
 
-            gameTextSender.sendGameTextToPlayer(player, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
+            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -219,10 +220,10 @@ internal class GameTextSenderTest {
             every { textFormatter.format(locale, "Hi %s", "there") } returns "Hi there"
             every { textProvider.getText(locale, textKey) } returns "Hi %s"
 
-            gameTextSender.sendGameTextToPlayer(player, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there")
+            gameTextSender.sendGameTextToPlayer(player, GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there")
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
     }
@@ -241,10 +242,10 @@ internal class GameTextSenderTest {
             every { nativeFunctionExecutor.gameTextForPlayer(any(), any(), any(), any()) } returns true
             every { playerRegistry.getAll() } returns listOf(player1, player2)
 
-            gameTextSender.sendGameText(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there") { it == player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi there") { it == player2 }
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(75, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(75, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -270,11 +271,11 @@ internal class GameTextSenderTest {
             every { textProvider.getText(locale2, textKey) } returns "Bonjour"
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey) { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey) { it != player2 }
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -293,11 +294,11 @@ internal class GameTextSenderTest {
             every { textFormatter.format(Locale.getDefault(), "Hi %s", "there") } returns "Hi there"
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there") { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there") { it != player2 }
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Hi there", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(100, "Hi there", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
 
@@ -325,11 +326,11 @@ internal class GameTextSenderTest {
             every { textProvider.getText(locale2, textKey) } returns "Bonjour %s"
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            gameTextSender.sendGameText(ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP") { it != player2 }
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "SAMP") { it != player2 }
 
             verify {
-                nativeFunctionExecutor.gameTextForPlayer(50, "Hi SAMP", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
-                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour SAMP", 13, ch.leadrian.samp.kamp.core.api.constants.GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(50, "Hi SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
+                nativeFunctionExecutor.gameTextForPlayer(100, "Bonjour SAMP", 13, GameTextStyle.BANK_GOTHIC_CENTER_1.value)
             }
         }
     }

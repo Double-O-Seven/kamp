@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -418,7 +419,7 @@ internal class PlayerMapObjectTest {
 
         @Test
         fun shouldExecuteOnEditHandlers() {
-            val onEdit = mockk<PlayerMapObject.(ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
+            val onEdit = mockk<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
             playerMapObject.onEdit(onEdit)
 
             playerMapObject.onEdit(

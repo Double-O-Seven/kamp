@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.PlayerVarType
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
@@ -205,8 +206,8 @@ internal class PlayerVarsTest {
     }
 
     @ParameterizedTest
-    @EnumSource(ch.leadrian.samp.kamp.core.api.constants.PlayerVarType::class)
-    fun shouldReturnType(expectedType: ch.leadrian.samp.kamp.core.api.constants.PlayerVarType) {
+    @EnumSource(PlayerVarType::class)
+    fun shouldReturnType(expectedType: PlayerVarType) {
         val playerId = 1337
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every { getPVarType(playerid = playerId, varname = "Hi") } returns expectedType.value

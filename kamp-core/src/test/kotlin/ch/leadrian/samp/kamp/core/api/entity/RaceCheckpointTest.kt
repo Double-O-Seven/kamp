@@ -178,7 +178,7 @@ internal class RaceCheckpointTest {
             val type = raceCheckpoint.type
 
             assertThat(type)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_FINISH)
+                    .isEqualTo(RaceCheckpointType.AIR_FINISH)
         }
 
         @Test
@@ -195,7 +195,7 @@ internal class RaceCheckpointTest {
             }
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
 
-            raceCheckpoint.type = ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_ROTATES_AND_STOPS
+            raceCheckpoint.type = RaceCheckpointType.AIR_ROTATES_AND_STOPS
 
             verify { player2.raceCheckpoint = raceCheckpoint }
             verify(exactly = 0) {
@@ -203,7 +203,7 @@ internal class RaceCheckpointTest {
                 player3.raceCheckpoint = any()
             }
             assertThat(raceCheckpoint.type)
-                    .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType.AIR_ROTATES_AND_STOPS)
+                    .isEqualTo(RaceCheckpointType.AIR_ROTATES_AND_STOPS)
         }
     }
 

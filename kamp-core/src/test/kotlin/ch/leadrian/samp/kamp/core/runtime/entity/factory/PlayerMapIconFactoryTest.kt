@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
+import ch.leadrian.samp.kamp.core.api.constants.MapIconType
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -31,8 +33,8 @@ internal class PlayerMapIconFactoryTest {
                 playerMapIconId = PlayerMapIconId.valueOf(50),
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 color = Colors.RED,
-                type = ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS,
-                style = ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL
+                type = MapIconType.BALLAS,
+                style = MapIconStyle.GLOBAL
         )
 
         assertThat(playerMapIcon)
@@ -46,9 +48,9 @@ internal class PlayerMapIconFactoryTest {
                     assertThat(it.coordinates)
                             .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
                     assertThat(it.type)
-                            .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.MapIconType.BALLAS)
+                            .isEqualTo(MapIconType.BALLAS)
                     assertThat(it.style)
-                            .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.MapIconStyle.GLOBAL)
+                            .isEqualTo(MapIconStyle.GLOBAL)
                 }
 
     }

@@ -170,7 +170,7 @@ internal class PlayerNetworkStatisticsTest {
         val result = playerNetworkStatistics.connectionStatus
 
         assertThat(result)
-                .isEqualTo(ch.leadrian.samp.kamp.core.api.constants.ConnectionStatus.CONNECTED)
+                .isEqualTo(ConnectionStatus.CONNECTED)
     }
 
     @Nested

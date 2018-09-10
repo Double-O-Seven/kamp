@@ -85,7 +85,7 @@ internal constructor(
     internal val playerTextDrawRegistry = PlayerTextDrawRegistry()
 
     override val id: PlayerId = id
-        get() = requireOnline { field }
+        get() = requireConnected { field }
 
     var isConnected: Boolean = true
         private set
@@ -638,7 +638,7 @@ internal constructor(
         get() = mapIconsById.values.toList()
 
     fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon {
-        requireOnline()
+        requireConnected()
         mapIconsById[playerMapIconId]?.destroy()
         val playerMapIcon = playerMapIconFactory.create(
                 player = this,
@@ -958,13 +958,13 @@ internal constructor(
         destroyMapIcons()
     }
 
-    fun requireOnline(): Player {
+    fun requireConnected(): Player {
         if (!isConnected) throw PlayerOfflineException("Player is already offline")
         return this
     }
 
-    inline fun <T> requireOnline(block: Player.() -> T): T {
-        requireOnline()
+    inline fun <T> requireConnected(block: Player.() -> T): T {
+        requireConnected()
         return block(this)
     }
 }
