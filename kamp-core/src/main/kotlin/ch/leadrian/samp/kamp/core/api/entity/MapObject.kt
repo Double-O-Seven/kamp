@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Color
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
@@ -63,7 +64,7 @@ internal constructor(
         )
     }
 
-    fun attachTo(mapObject: MapObject, offset: Vector3D, rotation: Vector3D, syncRotation: Boolean) {
+    fun attachTo(mapObject: MapObject, offset: Vector3D, rotation: Vector3D, syncRotation: Boolean = false) {
         nativeFunctionExecutor.attachObjectToObject(
                 objectid = id.value,
                 attachtoid = mapObject.id.value,
@@ -138,7 +139,11 @@ internal constructor(
         nativeFunctionExecutor.setObjectNoCameraCol(id.value)
     }
 
-    fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D): Int =
+    fun moveTo(
+            coordinates: Vector3D,
+            speed: Float,
+            rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
+    ): Int =
             nativeFunctionExecutor.moveObject(
                     objectid = id.value,
                     X = coordinates.x,
@@ -170,14 +175,14 @@ internal constructor(
 
     fun setMaterialText(
             text: String,
-            index: Int,
-            size: ObjectMaterialSize,
-            fontFace: String,
-            fontSize: Int,
-            isBold: Boolean,
-            fontColor: Color,
-            backColor: Color,
-            textAlignment: ObjectMaterialTextAlignment
+            index: Int = 0,
+            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
+            fontFace: String = "Arial",
+            fontSize: Int = 24,
+            isBold: Boolean = true,
+            fontColor: Color = Colors.WHITE,
+            backColor: Color = Colors.TRANSPARENT,
+            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     ) {
         nativeFunctionExecutor.setObjectMaterialText(
                 objectid = id.value,
