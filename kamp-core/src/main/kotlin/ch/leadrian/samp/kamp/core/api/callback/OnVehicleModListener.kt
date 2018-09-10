@@ -1,11 +1,12 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 
 interface OnVehicleModListener {
 
-    fun onVehicleMod(player: Player, vehicle: Vehicle, componentModel: ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel): Result
+    fun onVehicleMod(player: Player, vehicle: Vehicle, componentModel: VehicleComponentModel): Result
 
     sealed class Result(val value: Boolean) {
 

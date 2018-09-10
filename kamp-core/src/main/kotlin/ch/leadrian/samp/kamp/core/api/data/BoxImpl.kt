@@ -7,11 +7,11 @@ internal data class BoxImpl(
         override val maxX: Float,
         override val minY: Float,
         override val maxY: Float
-) : ch.leadrian.samp.kamp.core.api.data.Box {
+) : Box {
 
     override val volume: Float = (maxX - minX) * (maxY - minY) * (maxZ - minZ)
 
-    override fun toBox(): ch.leadrian.samp.kamp.core.api.data.Box = this
+    override fun toBox(): Box = this
 
     override fun toMutableBox(): MutableBox = MutableBoxImpl(
             minX = minX,

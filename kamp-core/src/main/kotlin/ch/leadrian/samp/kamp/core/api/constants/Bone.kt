@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class Bone(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class Bone(override val value: Int) : ConstantValue<Int> {
     NOT_USABLE(0),
     SPINE(1),
     HEAD(2),
@@ -22,6 +22,6 @@ enum class Bone(override val value: Int) : ch.leadrian.samp.kamp.core.api.consta
     JAW(18);
 
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, Bone>(*Bone.values())
+    companion object : ConstantValueRegistry<Int, Bone>(*Bone.values())
 
 }

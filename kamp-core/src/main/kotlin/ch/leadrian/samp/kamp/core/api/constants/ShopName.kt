@@ -7,7 +7,7 @@ enum class ShopName(
         val description: String,
         val coordinates: Vector3D,
         val interiorId: Int
-) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<String> {
+) : ConstantValue<String> {
     NONE("", vector3DOf(0f, 0f, 0f), 0),
     FDPIZA("Pizza Stack", vector3DOf(x = 374.0000f, y = -119.6410f, z = 1001.4922f), 5),
     FDBURG("Burger Shot", vector3DOf(x = 375.5660f, y = -68.2220f, z = 1001.5151f), 10),
@@ -21,5 +21,5 @@ enum class ShopName(
 
     override val value: String = name
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<String, ShopName>(*ShopName.values())
+    companion object : ConstantValueRegistry<String, ShopName>(*ShopName.values())
 }

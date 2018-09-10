@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class WeaponSkill(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class WeaponSkill(override val value: Int) : ConstantValue<Int> {
     PISTOL(SAMPConstants.WEAPONSKILL_PISTOL),
     PISTOL_SILENCED(SAMPConstants.WEAPONSKILL_PISTOL_SILENCED),
     DESERT_EAGLE(SAMPConstants.WEAPONSKILL_DESERT_EAGLE),
@@ -13,6 +13,6 @@ enum class WeaponSkill(override val value: Int) : ch.leadrian.samp.kamp.core.api
     M4(SAMPConstants.WEAPONSKILL_M4),
     SNIPER_RIFLE(SAMPConstants.WEAPONSKILL_SNIPERRIFLE);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, WeaponSkill>(*WeaponSkill.values())
+    companion object : ConstantValueRegistry<Int, WeaponSkill>(*WeaponSkill.values())
 
 }

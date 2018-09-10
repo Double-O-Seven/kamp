@@ -1,13 +1,14 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 
 data class VehicleColor internal constructor(
         override val value: Int,
-        val color: ch.leadrian.samp.kamp.core.api.data.Color
-) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+        val color: Color
+) : ConstantValue<Int> {
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, VehicleColor>(
+    companion object : ConstantValueRegistry<Int, VehicleColor>(
             *arrayOf(
                     colorOf(0x000000FF),
                     colorOf(0xF5F5F5FF.toInt()),

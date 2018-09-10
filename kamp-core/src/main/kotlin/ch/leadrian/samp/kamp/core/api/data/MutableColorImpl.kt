@@ -32,7 +32,7 @@ internal data class MutableColorImpl(override var value: Int) : MutableColor {
             this.value = (this.value and 0xFF) or ((value and 0xFFFFFF) shl 8)
         }
 
-    override fun toColor(): ch.leadrian.samp.kamp.core.api.data.Color = ch.leadrian.samp.kamp.core.api.data.ColorImpl(value)
+    override fun toColor(): Color = ColorImpl(value)
 
     override fun toMutableColor(): MutableColor = this
 }

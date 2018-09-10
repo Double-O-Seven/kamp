@@ -1,14 +1,18 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-interface PlayerKeys : HasPlayer {
+import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
 
-    val keys: Int
+class PlayerKeys
+internal constructor(
+        val keys: Int,
+        val upDown: Int,
+        val leftRight: Int,
+        override val player: Player
+) : HasPlayer {
 
-    val upDown: Int
+    fun isKeyPressed(vararg keys: PlayerKey): Boolean =
+            keys.all { this.keys and it.value != 0 }
 
-    val leftRight: Int
-
-    fun isKeyPressed(vararg keys: ch.leadrian.samp.kamp.core.api.constants.PlayerKey): Boolean
-
-    fun isOnlyKeyPressed(vararg keys: ch.leadrian.samp.kamp.core.api.constants.PlayerKey): Boolean
+    fun isOnlyKeyPressed(vararg keys: PlayerKey): Boolean =
+            keys.fold(0) { expectedKeys, key -> expectedKeys or key.value } == this.keys
 }

@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.ServerVarType
+
 interface ServerVars {
 
     fun setInt(varName: String, value: Int): Boolean
@@ -20,5 +22,5 @@ interface ServerVars {
 
     fun getNameAtIndex(index: Int, resultLength: Int = 256): String
 
-    fun getType(varName: String): ch.leadrian.samp.kamp.core.api.constants.ServerVarType
+    fun getType(varName: String): ServerVarType
 }

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-interface MutableCircle : ch.leadrian.samp.kamp.core.api.data.Circle, Shape2D {
+interface MutableCircle : Circle, Shape2D {
 
     override var x: Float
 

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class RaceCheckpointType(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class RaceCheckpointType(override val value: Int) : ConstantValue<Int> {
     NORMAL(0),
     FINISH(1),
     NOTHING(2),
@@ -11,5 +11,5 @@ enum class RaceCheckpointType(override val value: Int) : ch.leadrian.samp.kamp.c
     AIR_SWINGS_DOWN_AND_UP(7),
     AIR_SWINGS_UP_AND_DOWN(8);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, RaceCheckpointType>(*RaceCheckpointType.values())
+    companion object : ConstantValueRegistry<Int, RaceCheckpointType>(*RaceCheckpointType.values())
 }

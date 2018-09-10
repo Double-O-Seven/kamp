@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class SpecialAction(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class SpecialAction(override val value: Int) : ConstantValue<Int> {
     NONE(SAMPConstants.SPECIAL_ACTION_NONE),
     DUCK(SAMPConstants.SPECIAL_ACTION_DUCK),
     USE_JETPACK(SAMPConstants.SPECIAL_ACTION_USEJETPACK),
@@ -22,6 +22,6 @@ enum class SpecialAction(override val value: Int) : ch.leadrian.samp.kamp.core.a
     CARRY(SAMPConstants.SPECIAL_ACTION_CARRY),
     PISSING(SAMPConstants.SPECIAL_ACTION_PISSING);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, SpecialAction>(*SpecialAction.values())
+    companion object : ConstantValueRegistry<Int, SpecialAction>(*SpecialAction.values())
 
 }

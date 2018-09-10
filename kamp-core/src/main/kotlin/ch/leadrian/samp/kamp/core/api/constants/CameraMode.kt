@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class CameraMode(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class CameraMode(override val value: Int) : ConstantValue<Int> {
     NONE(-1),
     TRAIN_OR_TRAM(3),
     FOLLOW_PED(4),
@@ -22,5 +22,5 @@ enum class CameraMode(override val value: Int) : ch.leadrian.samp.kamp.core.api.
     CHASE_CAMERA_HORIZONTAL_FLY_BY_AIRCRAFT(63),
     CHASE_CAMERA_FOCUS_ON_PILOT(64);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, CameraMode>(*CameraMode.values())
+    companion object : ConstantValueRegistry<Int, CameraMode>(*CameraMode.values())
 }

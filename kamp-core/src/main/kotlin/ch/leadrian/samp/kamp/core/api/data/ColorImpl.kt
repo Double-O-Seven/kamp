@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-internal data class ColorImpl(override val value: Int) : ch.leadrian.samp.kamp.core.api.data.Color {
+internal data class ColorImpl(override val value: Int) : Color {
 
     override val r: Int = (value shr 24) and 0xFF
 
@@ -12,7 +12,7 @@ internal data class ColorImpl(override val value: Int) : ch.leadrian.samp.kamp.c
 
     override val rgb: Int = (value shr 8) and 0xFFFFFF
 
-    override fun toColor(): ch.leadrian.samp.kamp.core.api.data.Color = this
+    override fun toColor(): Color = this
 
     override fun toMutableColor(): MutableColor = MutableColorImpl(value)
 }

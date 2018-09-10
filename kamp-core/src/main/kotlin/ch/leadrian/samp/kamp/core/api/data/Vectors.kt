@@ -96,7 +96,7 @@ fun mutableLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int): Mut
         virtualWorldId = worldId
 )
 
-fun angledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int, angle: Float): ch.leadrian.samp.kamp.core.api.data.AngledLocation = ch.leadrian.samp.kamp.core.api.data.AngledLocationImpl(
+fun angledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int, angle: Float): AngledLocation = AngledLocationImpl(
         x = x,
         y = y,
         z = z,
@@ -105,7 +105,7 @@ fun angledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int
         angle = angle
 )
 
-fun angledLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int, angle: Float): ch.leadrian.samp.kamp.core.api.data.AngledLocation = ch.leadrian.samp.kamp.core.api.data.AngledLocationImpl(
+fun angledLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int, angle: Float): AngledLocation = AngledLocationImpl(
         x = coordinates.x,
         y = coordinates.y,
         z = coordinates.z,
@@ -114,7 +114,7 @@ fun angledLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int, angle
         angle = angle
 )
 
-fun angledLocationOf(location: Location, angle: Float): ch.leadrian.samp.kamp.core.api.data.AngledLocation = ch.leadrian.samp.kamp.core.api.data.AngledLocationImpl(
+fun angledLocationOf(location: Location, angle: Float): AngledLocation = AngledLocationImpl(
         x = location.x,
         y = location.y,
         z = location.z,
@@ -123,7 +123,7 @@ fun angledLocationOf(location: Location, angle: Float): ch.leadrian.samp.kamp.co
         angle = angle
 )
 
-fun angledLocationOf(position: Position, interiorId: Int, worldId: Int): ch.leadrian.samp.kamp.core.api.data.AngledLocation = ch.leadrian.samp.kamp.core.api.data.AngledLocationImpl(
+fun angledLocationOf(position: Position, interiorId: Int, worldId: Int): AngledLocation = AngledLocationImpl(
         x = position.x,
         y = position.y,
         z = position.z,

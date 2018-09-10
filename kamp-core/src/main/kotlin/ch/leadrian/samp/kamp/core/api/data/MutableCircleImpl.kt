@@ -9,7 +9,7 @@ internal data class MutableCircleImpl(
     override val area: Float
         get() = radius * radius * Math.PI.toFloat()
 
-    override fun toCircle(): ch.leadrian.samp.kamp.core.api.data.Circle = ch.leadrian.samp.kamp.core.api.data.CircleImpl(
+    override fun toCircle(): Circle = CircleImpl(
             x = x,
             y = y,
             radius = radius

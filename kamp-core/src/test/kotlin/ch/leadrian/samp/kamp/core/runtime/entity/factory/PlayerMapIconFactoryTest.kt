@@ -1,14 +1,12 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
-import ch.leadrian.samp.kamp.core.api.constants.MapIconType
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.PlayerMapIcon
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.entity.PlayerImpl
-import ch.leadrian.samp.kamp.core.runtime.entity.PlayerMapIconImpl
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -23,7 +21,7 @@ internal class PlayerMapIconFactoryTest {
                 setPlayerMapIcon(any(), any(), any(), any(), any(), any(), any(), any())
             } returns true
         }
-        val player = mockk<PlayerImpl> {
+        val player = mockk<Player> {
             every { id } returns PlayerId.valueOf(69)
         }
         val playerMapIconFactory = PlayerMapIconFactory(nativeFunctionExecutor)
@@ -38,7 +36,7 @@ internal class PlayerMapIconFactoryTest {
         )
 
         assertThat(playerMapIcon)
-                .isInstanceOfSatisfying(PlayerMapIconImpl::class.java) {
+                .isInstanceOfSatisfying(PlayerMapIcon::class.java) {
                     assertThat(it.color)
                             .isEqualTo(Colors.RED)
                     assertThat(it.id)

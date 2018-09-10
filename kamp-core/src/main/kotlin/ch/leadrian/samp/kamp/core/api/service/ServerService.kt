@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.service
 
+import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.core.api.entity.ServerVars
 import java.nio.file.Path
@@ -24,7 +25,7 @@ interface ServerService {
 
     fun unblockIpAddress(ipAddress: String)
 
-    fun getAnimationName(animationIndex: Int): ch.leadrian.samp.kamp.core.api.data.Animation
+    fun getAnimationName(animationIndex: Int): Animation
 
     fun getDataDirectory(): Path
 }

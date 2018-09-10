@@ -1,17 +1,19 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+
 interface VehicleColors {
 
-    val color1: ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+    val color1: VehicleColor
 
-    val color2: ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+    val color2: VehicleColor
 
     fun toVehicleColors(): VehicleColors
 
     fun toMutableVehicleColors(): MutableVehicleColors
 }
 
-fun vehicleColorsOf(color1: ch.leadrian.samp.kamp.core.api.constants.VehicleColor, color2: ch.leadrian.samp.kamp.core.api.constants.VehicleColor): VehicleColors = VehicleColorsImpl(
+fun vehicleColorsOf(color1: VehicleColor, color2: VehicleColor): VehicleColors = VehicleColorsImpl(
         color1 = color1,
         color2 = color2
 )

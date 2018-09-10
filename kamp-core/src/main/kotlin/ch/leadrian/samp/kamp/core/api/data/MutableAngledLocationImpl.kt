@@ -9,7 +9,7 @@ internal data class MutableAngledLocationImpl(
         override var angle: Float
 ) : MutableAngledLocation {
 
-    override fun toAngledLocation(): ch.leadrian.samp.kamp.core.api.data.AngledLocation = ch.leadrian.samp.kamp.core.api.data.AngledLocationImpl(
+    override fun toAngledLocation(): AngledLocation = AngledLocationImpl(
             x = x,
             y = y,
             z = z,

@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-fun colorOf(value: Long): ch.leadrian.samp.kamp.core.api.data.Color = ch.leadrian.samp.kamp.core.api.data.ColorImpl(value.toInt())
+fun colorOf(value: Long): Color = ColorImpl(value.toInt())
 
-fun colorOf(value: Int): ch.leadrian.samp.kamp.core.api.data.Color = ch.leadrian.samp.kamp.core.api.data.ColorImpl(value)
+fun colorOf(value: Int): Color = ColorImpl(value)
 
-fun colorOf(r: Int, g: Int, b: Int, a: Int): ch.leadrian.samp.kamp.core.api.data.Color = ch.leadrian.samp.kamp.core.api.data.ColorImpl(rgbaValue(r = r, g = g, b = b, a = a))
+fun colorOf(r: Int, g: Int, b: Int, a: Int): Color = ColorImpl(rgbaValue(r = r, g = g, b = b, a = a))
 
 fun mutableColorOf(value: Int): MutableColor = MutableColorImpl(value)
 

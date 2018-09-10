@@ -4,7 +4,7 @@ enum class SkinModel(
         override val value: Int,
         val description: String,
         val gender: SkinModel.Gender
-) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+) : ConstantValue<Int> {
     CJ(0, "Carl \"CJ\" Johnson", Gender.MALE),
     TRUTH(1, "The Truth", Gender.MALE),
     MACCER(2, "Maccer", Gender.MALE),
@@ -323,5 +323,5 @@ enum class SkinModel(
         FEMALE
     }
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, SkinModel>(*SkinModel.values())
+    companion object : ConstantValueRegistry<Int, SkinModel>(*SkinModel.values())
 }

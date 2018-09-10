@@ -7,9 +7,9 @@ internal data class AngledLocationImpl(
         override val interiorId: Int,
         override val virtualWorldId: Int,
         override val angle: Float
-) : ch.leadrian.samp.kamp.core.api.data.AngledLocation {
+) : AngledLocation {
 
-    override fun toAngledLocation(): ch.leadrian.samp.kamp.core.api.data.AngledLocation = this
+    override fun toAngledLocation(): AngledLocation = this
 
     override fun toMutableAngledLocation(): MutableAngledLocation = MutableAngledLocationImpl(
             x = x,
@@ -54,35 +54,35 @@ internal data class AngledLocationImpl(
             y = y
     )
 
-    override fun plus(other: Vector2D): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun plus(other: Vector2D): AngledLocation = copy(
             x = this.x + other.x,
             y = this.y + other.y
     )
 
-    override fun plus(other: Vector3D): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun plus(other: Vector3D): AngledLocation = copy(
             x = this.x + other.x,
             y = this.y + other.y,
             z = this.z + other.z
     )
 
-    override fun minus(other: Vector2D): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun minus(other: Vector2D): AngledLocation = copy(
             x = this.x - other.x,
             y = this.y - other.y
     )
 
-    override fun minus(other: Vector3D): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun minus(other: Vector3D): AngledLocation = copy(
             x = this.x - other.x,
             y = this.y - other.y,
             z = this.z - other.z
     )
 
-    override fun times(value: Float): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun times(value: Float): AngledLocation = copy(
             x = this.x * value,
             y = this.y * value,
             z = this.z * value
     )
 
-    override fun div(value: Float): ch.leadrian.samp.kamp.core.api.data.AngledLocation = copy(
+    override fun div(value: Float): AngledLocation = copy(
             x = this.x / value,
             y = this.y / value,
             z = this.z / value

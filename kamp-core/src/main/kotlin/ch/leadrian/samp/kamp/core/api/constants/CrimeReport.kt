@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 enum class CrimeReport(
         override val value: Int,
         val description: String
-) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+) : ConstantValue<Int> {
     CODE_10_7_A(21, "Out of service"),
     CODE_10_7_B(22, "Out of service"),
     CODE_10_17(10, "Meet Complainant"),
@@ -24,6 +24,6 @@ enum class CrimeReport(
     CODE_10_91_A(12, "Pick up prisoner/subject"),
     CODE_10_91_B(16, "Pick up prisoner/subject");
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, CrimeReport>(*CrimeReport.values())
+    companion object : ConstantValueRegistry<Int, CrimeReport>(*CrimeReport.values())
 
 }

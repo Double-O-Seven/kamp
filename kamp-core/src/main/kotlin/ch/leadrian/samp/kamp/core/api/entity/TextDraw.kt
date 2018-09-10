@@ -1,65 +1,229 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
+import ch.leadrian.samp.kamp.core.api.data.Color
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
+import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.TextDrawId
+import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
+import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import java.util.*
 
-interface TextDraw : Destroyable, Entity<TextDrawId> {
+class TextDraw
+internal constructor(
+        text: String,
+        position: Vector2D,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val textProvider: TextProvider,
+        private val textFormatter: TextFormatter,
+        var locale: Locale
+) : Entity<TextDrawId>, AbstractDestroyable() {
+
+    private val onClickHandlers: MutableList<TextDraw.(Player) -> Boolean> = mutableListOf()
+
+    private val onDestroyHandlers: MutableList<TextDraw.() -> Unit> = mutableListOf()
 
     override val id: TextDrawId
+        get() = requireNotDestroyed { field }
 
-    var locale: Locale
+    init {
+        val textDrawId = nativeFunctionExecutor.textDrawCreate(
+                x = position.x,
+                y = position.y,
+                text = text
+        )
 
-    val position: Vector2D
+        if (textDrawId == SAMPConstants.INVALID_TEXT_DRAW) {
+            throw CreationFailedException("Could not create player text draw")
+        }
 
-    var letterSize: Vector2D
+        id = TextDrawId.valueOf(textDrawId)
+    }
 
-    var textSize: Vector2D
+    val position: Vector2D = position.toVector2D()
 
-    var alignment: ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
+    var letterSize: Vector2D = vector2DOf(1f, 1f)
+        set(value) {
+            nativeFunctionExecutor.textDrawLetterSize(
+                    text = id.value,
+                    x = value.x,
+                    y = value.y
+            )
+            field = value.toVector2D()
+        }
 
-    var color: ch.leadrian.samp.kamp.core.api.data.Color
+    var textSize: Vector2D = vector2DOf(0f, 0f)
+        set(value) {
+            nativeFunctionExecutor.textDrawTextSize(
+                    text = id.value,
+                    x = value.x,
+                    y = value.y
+            )
+            field = value.toVector2D()
+        }
 
-    var useBox: Boolean
+    var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
+        set(value) {
+            nativeFunctionExecutor.textDrawAlignment(
+                    text = id.value,
+                    alignment = value.value
+            )
+            field = value
+        }
 
-    var boxColor: ch.leadrian.samp.kamp.core.api.data.Color
+    var color: Color = Colors.WHITE
+        set(value) {
+            nativeFunctionExecutor.textDrawColor(
+                    text = id.value,
+                    color = value.value
+            )
+            field = value.toColor()
+        }
 
-    var shadowSize: Int
+    var useBox: Boolean = false
+        set(value) {
+            nativeFunctionExecutor.textDrawUseBox(
+                    text = id.value,
+                    use = value
+            )
+            field = value
+        }
 
-    var outlineSize: Int
+    var boxColor: Color = Colors.TRANSPARENT
+        set(value) {
+            nativeFunctionExecutor.textDrawBoxColor(
+                    text = id.value,
+                    color = value.value
+            )
+            field = value
+        }
 
-    var backgroundColor: ch.leadrian.samp.kamp.core.api.data.Color
+    var shadowSize: Int = 1
+        set(value) {
+            nativeFunctionExecutor.textDrawSetShadow(
+                    text = id.value,
+                    size = value
+            )
+            field = value
+        }
 
-    var font: ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
+    var outlineSize: Int = 0
+        set(value) {
+            nativeFunctionExecutor.textDrawSetOutline(text = id.value, size = value)
+            field = value
+        }
 
-    var isProportional: Boolean
+    var backgroundColor: Color = Colors.BLACK
+        set(value) {
+            nativeFunctionExecutor.textDrawBackgroundColor(text = id.value, color = value.value)
+            field = value
+        }
 
-    var isSelectable: Boolean
+    var font: TextDrawFont = TextDrawFont.FONT2
+        set(value) {
+            nativeFunctionExecutor.textDrawFont(text = id.value, font = value.value)
+            field = value
+        }
 
-    fun show(forPlayer: Player)
+    var isProportional: Boolean = false
+        set(value) {
+            nativeFunctionExecutor.textDrawSetProportional(text = id.value, set = value)
+            field = value
+        }
 
-    fun hide(forPlayer: Player)
+    var isSelectable: Boolean = false
+        set(value) {
+            nativeFunctionExecutor.textDrawSetSelectable(text = id.value, set = value)
+            field = value
+        }
 
-    fun showForAll()
+    fun show(forPlayer: Player) {
+        nativeFunctionExecutor.textDrawShowForPlayer(playerid = forPlayer.id.value, text = id.value)
+    }
 
-    fun hideForAll()
+    fun showForAll() {
+        nativeFunctionExecutor.textDrawShowForAll(id.value)
+    }
 
-    var text: String
+    fun hide(forPlayer: Player) {
+        nativeFunctionExecutor.textDrawHideForPlayer(playerid = forPlayer.id.value, text = id.value)
+    }
 
-    fun setText(text: String, vararg args: Any)
+    fun hideForAll() {
+        nativeFunctionExecutor.textDrawHideForAll(id.value)
+    }
 
-    fun setText(textKey: TextKey)
+    var text: String = text
+        set(value) {
+            nativeFunctionExecutor.textDrawSetString(text = id.value, string = value)
+            field = value
+        }
 
-    fun setText(textKey: TextKey, vararg args: Any)
+    fun setText(text: String, vararg args: Any) {
+        this.text = textFormatter.format(locale, text, *args)
+    }
 
-    var previewModel: Int?
+    fun setText(textKey: TextKey) {
+        text = textProvider.getText(locale, textKey)
+    }
 
-    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float)
+    fun setText(textKey: TextKey, vararg args: Any) {
+        val unformattedText = textProvider.getText(locale, textKey)
+        text = textFormatter.format(locale, unformattedText, *args)
+    }
 
-    fun setPreviewModelVehicleColors(vehicleColors: VehicleColors)
+    var previewModel: Int? = null
+        set(value) {
+            nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
+            field = value
+        }
 
-    fun onClick(onClick: TextDraw.(Player) -> Boolean)
+    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
+        nativeFunctionExecutor.textDrawSetPreviewRot(
+                text = id.value,
+                fRotX = rotation.x,
+                fRotY = rotation.y,
+                fRotZ = rotation.z,
+                fZoom = zoom
+        )
+    }
+
+    fun setPreviewModelVehicleColors(vehicleColors: VehicleColors) {
+        nativeFunctionExecutor.textDrawSetPreviewVehCol(
+                text = id.value,
+                color1 = vehicleColors.color1.value,
+                color2 = vehicleColors.color2.value
+        )
+    }
+
+    fun onClick(onClick: TextDraw.(Player) -> Boolean) {
+        onClickHandlers += onClick
+    }
+
+    internal fun onClick(player: Player) {
+        onClickHandlers.forEach { it.invoke(this, player) }
+    }
+
+    internal fun onDestroy(onDestroy: TextDraw.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
+    override var isDestroyed: Boolean = false
+        private set
+
+    override fun destroy() {
+        if (isDestroyed) return
+
+        onDestroyHandlers.forEach { it.invoke(this) }
+        nativeFunctionExecutor.textDrawDestroy(id.value)
+        isDestroyed = true
+    }
 }

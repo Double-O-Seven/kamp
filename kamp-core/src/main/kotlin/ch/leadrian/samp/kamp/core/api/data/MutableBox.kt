@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-interface MutableBox : ch.leadrian.samp.kamp.core.api.data.Box {
+interface MutableBox : Box {
 
     override var minX: Float
 

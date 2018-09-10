@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId

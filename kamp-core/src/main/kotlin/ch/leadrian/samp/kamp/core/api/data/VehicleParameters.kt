@@ -1,20 +1,28 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+
 interface VehicleParameters {
 
-    val engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+    val engine: VehicleEngineState
 
-    val lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+    val lights: VehicleLightsState
 
-    val alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+    val alarm: VehicleAlarmState
 
-    val doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+    val doorLock: VehicleDoorLockState
 
-    val bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+    val bonnet: VehicleBonnetState
 
-    val boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+    val boot: VehicleBootState
 
-    val objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+    val objective: VehicleObjectiveState
 
     fun toVehicleParameters(): VehicleParameters
 
@@ -23,13 +31,13 @@ interface VehicleParameters {
 }
 
 fun vehicleParametersOf(
-        engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-        lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-        alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-        doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-        bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-        boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-        objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+        engine: VehicleEngineState,
+        lights: VehicleLightsState,
+        alarm: VehicleAlarmState,
+        doorLock: VehicleDoorLockState,
+        bonnet: VehicleBonnetState,
+        boot: VehicleBootState,
+        objective: VehicleObjectiveState
 ): VehicleParameters = VehicleParametersImpl(
         engine = engine,
         lights = lights,

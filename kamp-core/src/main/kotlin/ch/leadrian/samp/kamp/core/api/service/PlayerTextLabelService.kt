@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.service
 
+import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
@@ -11,7 +12,7 @@ interface PlayerTextLabelService {
 
     fun createPlayerTextLabel(
             text: String,
-            color: ch.leadrian.samp.kamp.core.api.data.Color,
+            color: Color,
             coordinates: Vector3D,
             drawDistance: Float,
             testLOS: Boolean = false,
@@ -21,7 +22,7 @@ interface PlayerTextLabelService {
 
     fun createPlayerTextLabel(
             textKey: TextKey,
-            color: ch.leadrian.samp.kamp.core.api.data.Color,
+            color: Color,
             coordinates: Vector3D,
             drawDistance: Float,
             testLOS: Boolean = false,

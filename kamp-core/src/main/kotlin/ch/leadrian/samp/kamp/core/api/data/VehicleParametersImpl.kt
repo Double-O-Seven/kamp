@@ -1,13 +1,21 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+
 internal data class VehicleParametersImpl(
-        override val engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-        override val lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-        override val alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-        override val doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-        override val bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-        override val boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-        override val objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+        override val engine: VehicleEngineState,
+        override val lights: VehicleLightsState,
+        override val alarm: VehicleAlarmState,
+        override val doorLock: VehicleDoorLockState,
+        override val bonnet: VehicleBonnetState,
+        override val boot: VehicleBootState,
+        override val objective: VehicleObjectiveState
 ) : VehicleParameters {
 
     override fun toVehicleParameters(): VehicleParameters = this

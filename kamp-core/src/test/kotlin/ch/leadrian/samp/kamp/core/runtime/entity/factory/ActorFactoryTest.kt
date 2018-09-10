@@ -1,9 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.entity.ActorImpl
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import io.mockk.Runs
 import io.mockk.every
@@ -66,7 +65,7 @@ internal class ActorFactoryTest {
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f
         )
-        val onDestroy = mockk<ActorImpl.() -> Unit>(relaxed = true)
+        val onDestroy = mockk<Actor.() -> Unit>(relaxed = true)
         actor.onDestroy(onDestroy)
 
         actor.destroy()

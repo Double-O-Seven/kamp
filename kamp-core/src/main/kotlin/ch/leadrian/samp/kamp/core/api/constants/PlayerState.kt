@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class PlayerState(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class PlayerState(override val value: Int) : ConstantValue<Int> {
     NONE(SAMPConstants.PLAYER_STATE_NONE),
     ON_FOOT(SAMPConstants.PLAYER_STATE_ONFOOT),
     DRIVER(SAMPConstants.PLAYER_STATE_DRIVER),
@@ -12,6 +12,6 @@ enum class PlayerState(override val value: Int) : ch.leadrian.samp.kamp.core.api
     SPAWNED(SAMPConstants.PLAYER_STATE_SPAWNED),
     SPECTATING(SAMPConstants.PLAYER_STATE_SPECTATING);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, PlayerState>(*PlayerState.values())
+    companion object : ConstantValueRegistry<Int, PlayerState>(*PlayerState.values())
 
 }

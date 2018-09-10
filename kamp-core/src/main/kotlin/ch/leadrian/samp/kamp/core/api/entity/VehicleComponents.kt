@@ -1,11 +1,26 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-interface VehicleComponents : HasVehicle {
+import ch.leadrian.samp.kamp.core.api.constants.CarModType
+import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 
-    fun add(model: ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel)
+class VehicleComponents
+internal constructor(
+        override val vehicle: Vehicle,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+) : HasVehicle {
 
-    fun remove(model: ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel)
+    fun add(model: VehicleComponentModel) {
+        nativeFunctionExecutor.addVehicleComponent(vehicleid = vehicle.id.value, componentid = model.value)
+    }
 
-    operator fun get(slot: ch.leadrian.samp.kamp.core.api.constants.CarModType): ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel?
+    fun remove(model: VehicleComponentModel) {
+        nativeFunctionExecutor.removeVehicleComponent(vehicleid = vehicle.id.value, componentid = model.value)
+    }
 
+    operator fun get(slot: CarModType): VehicleComponentModel? =
+            nativeFunctionExecutor
+                    .getVehicleComponentInSlot(vehicleid = vehicle.id.value, slot = slot.value)
+                    .takeIf { it != 0 }
+                    ?.let { ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel[it] }
 }

@@ -2,6 +2,7 @@
 
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import java.util.*
 
@@ -13,7 +14,7 @@ private class EmbeddedPlayerName(
         "${player.color.toEmbeddedString()}${player.name}"
     }
 
-    override fun get(locale: Locale, color: ch.leadrian.samp.kamp.core.api.data.Color): String = "$coloredName${color.toEmbeddedString()}"
+    override fun get(locale: Locale, color: Color): String = "$coloredName${color.toEmbeddedString()}"
 }
 
 fun embeddedPlayerNameOf(player: Player): MessageArgument = EmbeddedPlayerName(player)
@@ -22,7 +23,7 @@ private class Translatable(
         private val translator: (Locale) -> String
 ) : MessageArgument {
 
-    override fun get(locale: Locale, color: ch.leadrian.samp.kamp.core.api.data.Color): String = translator(locale)
+    override fun get(locale: Locale, color: Color): String = translator(locale)
 
 }
 

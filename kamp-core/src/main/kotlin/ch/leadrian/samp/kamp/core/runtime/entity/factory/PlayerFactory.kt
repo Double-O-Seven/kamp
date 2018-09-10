@@ -1,8 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.entity.PlayerImpl
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
@@ -22,8 +22,8 @@ constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
-    fun create(playerId: PlayerId): PlayerImpl {
-        val player = PlayerImpl(
+    fun create(playerId: PlayerId): Player {
+        val player = Player(
                 id = playerId,
                 actorRegistry = actorRegistry,
                 playerRegistry = playerRegistry,

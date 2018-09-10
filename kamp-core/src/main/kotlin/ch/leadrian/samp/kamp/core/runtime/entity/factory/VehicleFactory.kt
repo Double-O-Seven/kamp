@@ -1,9 +1,10 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
+import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.entity.VehicleImpl
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import javax.inject.Inject
 
@@ -15,14 +16,14 @@ constructor(
 ) {
 
     fun create(
-            model: ch.leadrian.samp.kamp.core.api.constants.VehicleModel,
+            model: VehicleModel,
             colors: VehicleColors,
             coordinates: Vector3D,
             rotation: Float,
             addSiren: Boolean,
             respawnDelay: Int
-    ): VehicleImpl {
-        val vehicle = VehicleImpl(
+    ): Vehicle {
+        val vehicle = Vehicle(
                 model = model,
                 colors = colors,
                 coordinates = coordinates,

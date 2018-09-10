@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.service
 
+import ch.leadrian.samp.kamp.core.api.constants.PlayerMarkersMode
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 
@@ -17,7 +18,7 @@ interface PlayerService {
 
     fun showNameTags(show: Boolean)
 
-    fun showMarkers(mode: ch.leadrian.samp.kamp.core.api.constants.PlayerMarkersMode)
+    fun showMarkers(mode: PlayerMarkersMode)
 
     fun allowInteriorWeapons(allow: Boolean)
 

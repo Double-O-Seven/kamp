@@ -8,7 +8,7 @@ enum class ExplosionType(
         val physicalBlast: Boolean,
         val audibleSound: Boolean,
         val range: Range
-) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+) : ConstantValue<Int> {
     NORMAL_1(
             value = 0,
             visible = true,
@@ -145,5 +145,5 @@ enum class ExplosionType(
         HUGE
     }
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, ExplosionType>(*ExplosionType.values())
+    companion object : ConstantValueRegistry<Int, ExplosionType>(*ExplosionType.values())
 }

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-open class ConstantValueRegistry<K, V : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<K>>(vararg constants: V, private val defaultValue: V? = null) {
+open class ConstantValueRegistry<K, V : ConstantValue<K>>(vararg constants: V, private val defaultValue: V? = null) {
 
     private val constantsByValue: MutableMap<K, V> = mutableMapOf()
 

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class MapIconType(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class MapIconType(override val value: Int) : ConstantValue<Int> {
     COLORED(0),
     WHITE_SQUARE(1),
     PLAYER_POSITION(2),
@@ -66,5 +66,5 @@ enum class MapIconType(override val value: Int) : ch.leadrian.samp.kamp.core.api
     GROVE_STREET(62),
     PAY_N_SPRAY(63);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, MapIconType>(*MapIconType.values())
+    companion object : ConstantValueRegistry<Int, MapIconType>(*MapIconType.values())
 }

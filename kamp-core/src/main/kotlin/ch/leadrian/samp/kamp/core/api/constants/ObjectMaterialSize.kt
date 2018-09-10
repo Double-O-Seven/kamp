@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class ObjectMaterialSize(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class ObjectMaterialSize(override val value: Int) : ConstantValue<Int> {
     SIZE_32X32(SAMPConstants.OBJECT_MATERIAL_SIZE_32x32),
     SIZE_64X32(SAMPConstants.OBJECT_MATERIAL_SIZE_64x32),
     SIZE_64X64(SAMPConstants.OBJECT_MATERIAL_SIZE_64x64),
@@ -16,5 +16,5 @@ enum class ObjectMaterialSize(override val value: Int) : ch.leadrian.samp.kamp.c
     SIZE_512X256(SAMPConstants.OBJECT_MATERIAL_SIZE_512x256),
     SIZE_512X512(SAMPConstants.OBJECT_MATERIAL_SIZE_512x512);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, ObjectMaterialSize>(*ObjectMaterialSize.values())
+    companion object : ConstantValueRegistry<Int, ObjectMaterialSize>(*ObjectMaterialSize.values())
 }

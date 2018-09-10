@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.service
 
+import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.SpawnInfo
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -13,7 +14,7 @@ interface PlayerClassService {
     fun addPlayerClass(spawnInfo: SpawnInfo): PlayerClass
 
     fun addPlayerClass(
-            skinModel: ch.leadrian.samp.kamp.core.api.constants.SkinModel,
+            skinModel: SkinModel,
             coordinates: Vector3D,
             angle: Float,
             weapon1: WeaponData,
@@ -22,7 +23,7 @@ interface PlayerClassService {
     ): PlayerClass
 
     fun addPlayerClass(
-            skinModel: ch.leadrian.samp.kamp.core.api.constants.SkinModel,
+            skinModel: SkinModel,
             position: Position,
             weapon1: WeaponData,
             weapon2: WeaponData,
@@ -31,7 +32,7 @@ interface PlayerClassService {
 
     fun addPlayerClass(
             teamId: TeamId,
-            skinModel: ch.leadrian.samp.kamp.core.api.constants.SkinModel,
+            skinModel: SkinModel,
             position: Position,
             weapon1: WeaponData,
             weapon2: WeaponData,
@@ -40,7 +41,7 @@ interface PlayerClassService {
 
     fun addPlayerClass(
             teamId: TeamId,
-            skinModel: ch.leadrian.samp.kamp.core.api.constants.SkinModel,
+            skinModel: SkinModel,
             coordinates: Vector3D,
             angle: Float,
             weapon1: WeaponData,

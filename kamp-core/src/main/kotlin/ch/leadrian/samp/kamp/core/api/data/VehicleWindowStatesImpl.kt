@@ -1,10 +1,12 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+
 internal data class VehicleWindowStatesImpl(
-        override val driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        override val passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        override val backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        override val backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+        override val driver: VehicleWindowState,
+        override val passenger: VehicleWindowState,
+        override val backLeft: VehicleWindowState,
+        override val backRight: VehicleWindowState
 ) : VehicleWindowStates {
 
     override fun toVehicleWindowStates(): VehicleWindowStates = this

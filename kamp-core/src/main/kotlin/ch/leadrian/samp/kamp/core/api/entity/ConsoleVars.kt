@@ -1,11 +1,20 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-interface ConsoleVars {
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 
-    fun getString(varName: String, resultLength: Int = 256): String
+class ConsoleVars
+internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
-    fun getInt(varName: String): Int
+    fun getString(varName: String, resultLength: Int = 256): String {
+        val varValue = ReferenceString()
+        nativeFunctionExecutor.getConsoleVarAsString(varname = varName, buffer = varValue, len = resultLength)
+        return varValue.value ?: ""
+    }
 
-    fun getBoolean(varName: String): Boolean
+    fun getInt(varName: String): Int =
+            nativeFunctionExecutor.getConsoleVarAsInt(varName)
 
+    fun getBoolean(varName: String): Boolean =
+            nativeFunctionExecutor.getConsoleVarAsBool(varName)
 }

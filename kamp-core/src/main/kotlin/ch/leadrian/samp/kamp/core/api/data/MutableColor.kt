@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-interface MutableColor : ch.leadrian.samp.kamp.core.api.data.Color {
+interface MutableColor : Color {
 
     override var value: Int
 

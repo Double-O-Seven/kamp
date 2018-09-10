@@ -1,10 +1,12 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import ch.leadrian.samp.kamp.core.api.data.Animation
+
 @Suppress("EnumEntryName")
 enum class PredefinedAnimation(
         override val library: String,
         override val animationName: String
-) : ch.leadrian.samp.kamp.core.api.data.Animation {
+) : Animation {
     AIRPORT_thrw_barl_thrw("AIRPORT", "thrw_barl_thrw"),
     Attractors_Stepsit_in("Attractors", "Stepsit_in"),
     Attractors_Stepsit_loop("Attractors", "Stepsit_loop"),

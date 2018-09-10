@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class VehicleModelInfoType(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class VehicleModelInfoType(override val value: Int) : ConstantValue<Int> {
     SIZE(SAMPConstants.VEHICLE_MODEL_INFO_SIZE),
     FRONTSEAT(SAMPConstants.VEHICLE_MODEL_INFO_FRONTSEAT),
     REARSEAT(SAMPConstants.VEHICLE_MODEL_INFO_REARSEAT),
@@ -11,6 +11,6 @@ enum class VehicleModelInfoType(override val value: Int) : ch.leadrian.samp.kamp
     FRONT_BUMPER_Z(SAMPConstants.VEHICLE_MODEL_INFO_FRONT_BUMPER_Z),
     REAR_BUMPER_Z(SAMPConstants.VEHICLE_MODEL_INFO_REAR_BUMPER_Z);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, VehicleModelInfoType>(*VehicleModelInfoType.values())
+    companion object : ConstantValueRegistry<Int, VehicleModelInfoType>(*VehicleModelInfoType.values())
 
 }

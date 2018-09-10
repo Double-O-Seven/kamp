@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class WeaponSlot(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class WeaponSlot(override val value: Int) : ConstantValue<Int> {
     INVALID(-1),
     HAND(0),
     MELEE(1),
@@ -16,5 +16,5 @@ enum class WeaponSlot(override val value: Int) : ch.leadrian.samp.kamp.core.api.
     WEARABLE(11),
     DETONATOR(12);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, WeaponSlot>(*WeaponSlot.values())
+    companion object : ConstantValueRegistry<Int, WeaponSlot>(*WeaponSlot.values())
 }

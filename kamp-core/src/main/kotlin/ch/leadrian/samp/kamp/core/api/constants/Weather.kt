@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
-enum class Weather(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class Weather(override val value: Int) : ConstantValue<Int> {
     EXTRA_SUNNY_LA(0),
     SUNNY_LA(1),
     EXTRA_SUNNY_SMOG_LA(2),
@@ -26,5 +26,5 @@ enum class Weather(override val value: Int) : ch.leadrian.samp.kamp.core.api.con
     SANDSTORM_DESERT(19),
     UNDERWATER(20);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, Weather>(*Weather.values())
+    companion object : ConstantValueRegistry<Int, Weather>(*Weather.values())
 }

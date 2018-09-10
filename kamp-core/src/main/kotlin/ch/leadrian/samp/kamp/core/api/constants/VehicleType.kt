@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
-enum class VehicleType(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class VehicleType(override val value: Int) : ConstantValue<Int> {
     UNKNOWN(-1),
     BICYCLE(0),
     MOTORBIKE(1),
@@ -16,5 +16,5 @@ enum class VehicleType(override val value: Int) : ch.leadrian.samp.kamp.core.api
     HELICOPTER(8),
     TANK(9);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, VehicleType>(*VehicleType.values())
+    companion object : ConstantValueRegistry<Int, VehicleType>(*VehicleType.values())
 }

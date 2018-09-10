@@ -19,8 +19,8 @@ fun mutableRectangleOf(minX: Float, maxX: Float, minY: Float, maxY: Float): Muta
         )
 
 
-fun boxOf(minX: Float, maxX: Float, minY: Float, maxY: Float, minZ: Float, maxZ: Float): ch.leadrian.samp.kamp.core.api.data.Box =
-        ch.leadrian.samp.kamp.core.api.data.BoxImpl(
+fun boxOf(minX: Float, maxX: Float, minY: Float, maxY: Float, minZ: Float, maxZ: Float): Box =
+        BoxImpl(
                 minX = minX,
                 maxX = maxX,
                 minY = minY,
@@ -39,13 +39,13 @@ fun mutableBoxOf(minX: Float, maxX: Float, minY: Float, maxY: Float, minZ: Float
                 maxZ = maxZ
         )
 
-fun circleOf(x: Float, y: Float, radius: Float): ch.leadrian.samp.kamp.core.api.data.Circle = ch.leadrian.samp.kamp.core.api.data.CircleImpl(
+fun circleOf(x: Float, y: Float, radius: Float): Circle = CircleImpl(
         x = x,
         y = y,
         radius = radius
 )
 
-fun circleOf(coordinates: Vector2D, radius: Float): ch.leadrian.samp.kamp.core.api.data.Circle = ch.leadrian.samp.kamp.core.api.data.CircleImpl(
+fun circleOf(coordinates: Vector2D, radius: Float): Circle = CircleImpl(
         x = coordinates.x,
         y = coordinates.y,
         radius = radius
@@ -77,7 +77,7 @@ fun sphereOf(coordinates: Vector3D, radius: Float): Sphere = SphereImpl(
         radius = radius
 )
 
-fun sphereOf(circle: ch.leadrian.samp.kamp.core.api.data.Circle, z: Float): Sphere = SphereImpl(
+fun sphereOf(circle: Circle, z: Float): Sphere = SphereImpl(
         x = circle.x,
         y = circle.y,
         z = z,
@@ -98,7 +98,7 @@ fun mutableSphereOf(coordinates: Vector3D, radius: Float): MutableSphere = Mutab
         radius = radius
 )
 
-fun mutableSphereOf(circle: ch.leadrian.samp.kamp.core.api.data.Circle, z: Float): MutableSphere = MutableSphereImpl(
+fun mutableSphereOf(circle: Circle, z: Float): MutableSphere = MutableSphereImpl(
         x = circle.x,
         y = circle.y,
         z = z,

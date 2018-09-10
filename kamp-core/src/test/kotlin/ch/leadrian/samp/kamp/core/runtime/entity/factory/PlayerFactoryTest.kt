@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry

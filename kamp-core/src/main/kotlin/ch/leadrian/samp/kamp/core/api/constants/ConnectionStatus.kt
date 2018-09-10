@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-enum class ConnectionStatus(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+enum class ConnectionStatus(override val value: Int) : ConstantValue<Int> {
     NO_ACTION(0),
     DISCONNECT_ASAP(1),
     DISCONNECT_ASAP_SILENTLY(2),
@@ -11,5 +11,5 @@ enum class ConnectionStatus(override val value: Int) : ch.leadrian.samp.kamp.cor
     SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET(7),
     CONNECTED(8);
 
-    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, ConnectionStatus>(*ConnectionStatus.values())
+    companion object : ConstantValueRegistry<Int, ConnectionStatus>(*ConnectionStatus.values())
 }

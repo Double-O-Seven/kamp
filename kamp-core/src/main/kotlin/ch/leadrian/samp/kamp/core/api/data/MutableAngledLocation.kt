@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-interface MutableAngledLocation : ch.leadrian.samp.kamp.core.api.data.AngledLocation, MutableLocation, MutablePosition {
+interface MutableAngledLocation : AngledLocation, MutableLocation, MutablePosition {
 
     override fun plus(other: Vector2D): MutableAngledLocation
 

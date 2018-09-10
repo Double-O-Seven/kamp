@@ -1,8 +1,10 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+
 internal data class MutableVehicleColorsImpl(
-        override var color1: ch.leadrian.samp.kamp.core.api.constants.VehicleColor,
-        override var color2: ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+        override var color1: VehicleColor,
+        override var color2: VehicleColor
 ) : MutableVehicleColors {
 
     override fun toVehicleColors(): VehicleColors = VehicleColorsImpl(
