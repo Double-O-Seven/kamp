@@ -92,10 +92,3 @@ subprojects {
         toolVersion = "0.8.1"
     }
 }
-
-dependencies {
-    compile(
-            project(':kamp-runtime'),
-            project(':kamp-api')
-    )
-}

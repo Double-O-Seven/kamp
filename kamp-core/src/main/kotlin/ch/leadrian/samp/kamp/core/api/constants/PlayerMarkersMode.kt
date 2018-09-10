@@ -1,0 +1,10 @@
+package ch.leadrian.samp.kamp.core.api.constants
+
+enum class PlayerMarkersMode(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+    OFF(SAMPConstants.PLAYER_MARKERS_MODE_OFF),
+    GLOBAL(SAMPConstants.PLAYER_MARKERS_MODE_GLOBAL),
+    STREAMED(SAMPConstants.PLAYER_MARKERS_MODE_STREAMED);
+
+    companion object : ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry<Int, PlayerMarkersMode>(*PlayerMarkersMode.values())
+
+}

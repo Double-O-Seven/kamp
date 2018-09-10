@@ -1,0 +1,131 @@
+apply plugin: 'maven'
+
+configurations {
+    coreCodegen
+}
+
+dependencies {
+
+    compileOnly(
+            "com.google.inject:guice:$guiceVersion",
+            "com.netflix.governator:governator:$governatorVersion"
+    )
+
+    coreCodegen project(':kamp-codegen')
+}
+
+def generatedSrcJavaDir = "${buildDir}/generated-src/main/java"
+def generatedSrcKotlinDir = "${buildDir}/generated-src/main/kotlin"
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSrcJavaDir
+            srcDir generatedSrcKotlinDir
+        }
+    }
+}
+
+def corePackageName = "ch.leadrian.samp.kamp.core"
+def apiPackageName = "${corePackageName}.api"
+def runtimePackageName = "${corePackageName}.runtime"
+
+def idlFilesDir = "${project(':kamp-plugin').projectDir}/src/main/cpp/sampgdk/lib/sampgdk"
+
+def actorIDLFile = "${idlFilesDir}/a_actor.idl"
+def objectsIDLFile = "${idlFilesDir}/a_objects.idl"
+def playersIDLFile = "${idlFilesDir}/a_players.idl"
+def sampIDLFile = "${idlFilesDir}/a_samp.idl"
+def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
+
+def constantsPackageName = "${apiPackageName}.constants"
+
+def generatedSAMPConstantsJavaFile = file("${generatedSrcJavaDir}/" + constantsPackageName.replace('.', '/') + "/SAMPConstants.java")
+
+task generateSAMPConstantsClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPConstantsJavaCodeGenerator"
+    classpath configurations.coreCodegen
+    args = [
+            "-o", generatedSrcJavaDir,
+            "-p", constantsPackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPConstantsJavaFile
+}
+
+def generatedSAMPCallbacksJavaFile = "${generatedSrcJavaDir}/" + runtimePackageName.replace('.', '/') + "/SAMPCallbacks.java"
+
+task generateSAMPCallbacksClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksJavaCodeGenerator"
+    classpath configurations.coreCodegen
+    args = [
+            "-o", generatedSrcJavaDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPCallbacksJavaFile
+}
+
+def generatedSAMPNativeFunctionsJavaFile = "${generatedSrcJavaDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctions.java"
+
+task generateSAMPNativeFunctionsClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsJavaCodeGenerator"
+    classpath configurations.coreCodegen
+    args = [
+            "-o", generatedSrcJavaDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionsJavaFile
+}
+
+def generatedSAMPNativeFunctionExecutorKotlinFile = "${generatedSrcKotlinDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctionExecutor.kt"
+
+task generateSAMPNativeFunctionExecutorClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionExecutorKotlinCodeGenerator"
+    classpath configurations.coreCodegen
+    args = [
+            "-o", generatedSrcKotlinDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionExecutorKotlinFile
+}
+
+def generatedSAMPNativeFunctionExecutorImplKotlinFile = "${generatedSrcKotlinDir}/" + runtimePackageName.replace('.', '/') + "/SAMPNativeFunctionExecutorImpl.kt"
+
+task generateSAMPNativeFunctionExecutorImplClass(type: JavaExec) {
+    dependsOn ':kamp-codegen:classes'
+    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionExecutorImplKotlinCodeGenerator"
+    classpath configurations.coreCodegen
+    args = [
+            "-o", generatedSrcKotlinDir,
+            "-p", runtimePackageName,
+            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+    ]
+    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    outputs.file generatedSAMPNativeFunctionExecutorImplKotlinFile
+}
+
+compileKotlin.dependsOn(
+        generateSAMPConstantsClass,
+        generateSAMPCallbacksClass,
+        generateSAMPNativeFunctionsClass,
+        generateSAMPNativeFunctionExecutorClass,
+        generateSAMPNativeFunctionExecutorImplClass
+)
+compileJava.dependsOn(
+        generateSAMPConstantsClass,
+        generateSAMPCallbacksClass,
+        generateSAMPNativeFunctionsClass,
+        generateSAMPNativeFunctionExecutorClass,
+        generateSAMPNativeFunctionExecutorImplClass
+)

@@ -6,9 +6,9 @@
 
 #include <jni.h>
 
-const std::string REFERENCE_FLOAT_CLASS = "ch/leadrian/samp/kamp/runtime/types/ReferenceFloat";
-const std::string REFERENCE_INT_CLASS = "ch/leadrian/samp/kamp/runtime/types/ReferenceInt";
-const std::string REFERENCE_STRING_CLASS = "ch/leadrian/samp/kamp/runtime/types/ReferenceString";
+const std::string REFERENCE_FLOAT_CLASS = "ch/leadrian/samp/kamp/core/runtime/types/ReferenceFloat";
+const std::string REFERENCE_INT_CLASS = "ch/leadrian/samp/kamp/core/runtime/types/ReferenceInt";
+const std::string REFERENCE_STRING_CLASS = "ch/leadrian/samp/kamp/core/runtime/types/ReferenceString";
 
 class FieldCache {
 

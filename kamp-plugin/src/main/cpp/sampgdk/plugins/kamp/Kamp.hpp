@@ -20,10 +20,10 @@
 #include "FieldCache.hpp"
 #include "SAMPCallbacksMethodCache.hpp"
 
-const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/runtime/KampLauncher";
+const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/core/runtime/KampLauncher";
 const std::string KAMP_LAUNCHER_LAUNCH_METHOD_NAME = "launch";
 const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME = "getCallbacksInstance";
-const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE = "()Lch/leadrian/samp/kamp/runtime/SAMPCallbacks;";
+const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE = "()Lch/leadrian/samp/kamp/core/runtime/SAMPCallbacks;";
 const std::string KAMP_CLASS_PATH = "./Kamp/launch/jars";
 const std::string KAMP_JVM_OPTIONS_FILE = "./Kamp/launch/jvmopts.txt";
 

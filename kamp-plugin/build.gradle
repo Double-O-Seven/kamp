@@ -7,11 +7,11 @@ configurations {
 dependencies {
     runtimeCodegen(
             project(':kamp-codegen'),
-            project(':kamp-runtime')
+            project(':kamp-core')
     )
 }
 
-def runtimePackageName = "ch.leadrian.samp.kamp.runtime"
+def runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
 def sampgdkDir = "${projectDir}/src/main/cpp/sampgdk"
 
@@ -31,10 +31,10 @@ def sampgdkBuildDir = "${sampgdkDir}/build"
 
 def sampNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
 
-def kampRuntimeMainOutput = project(':kamp-runtime').sourceSets.main.output
+def kampRuntimeMainOutput = project(':kamp-core').sourceSets.main.output
 
 task generateSAMPNativeFunctionsHeaderFile {
-    dependsOn ':kamp-runtime:classes'
+    dependsOn ':kamp-core:classes'
     inputs.dir kampRuntimeMainOutput
     outputs.file sampNativeFunctionsHeaderFile
     doLast {
@@ -43,7 +43,7 @@ task generateSAMPNativeFunctionsHeaderFile {
             executable Jvm.current().getExecutable('javah')
             args = [
                     "-o", sampNativeFunctionsHeaderFile,
-                    "-classpath", project(':kamp-runtime').sourceSets.main.output.asPath,
+                    "-classpath", project(':kamp-core').sourceSets.main.output.asPath,
                     "-jni",
                     "-verbose",
                     "${runtimePackageName}.SAMPNativeFunctions"

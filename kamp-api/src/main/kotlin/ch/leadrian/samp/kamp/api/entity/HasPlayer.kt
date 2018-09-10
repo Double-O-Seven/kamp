@@ -1,7 +1,0 @@
-package ch.leadrian.samp.kamp.api.entity
-
-interface HasPlayer {
-
-    val player: Player
-
-}

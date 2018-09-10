@@ -36,9 +36,9 @@ val JVM_TYPE_SIGNATURES = mapOf(
 )
 
 val JVM_OUT_TYPE_SIGNATURE = mapOf(
-        Types.FLOAT to "Lch/leadrian/samp/kamp/runtime/types/ReferenceFloat;",
-        Types.INT to "Lch/leadrian/samp/kamp/runtime/types/ReferenceInt",
-        Types.STRING to "Lch/leadrian/samp/kamp/runtime/types/ReferenceString;"
+        Types.FLOAT to "Lch/leadrian/samp/kamp/core/runtime/types/ReferenceFloat;",
+        Types.INT to "Lch/leadrian/samp/kamp/core/runtime/types/ReferenceInt",
+        Types.STRING to "Lch/leadrian/samp/kamp/core/runtime/types/ReferenceString;"
 )
 
 fun getJniType(typeName: String) =

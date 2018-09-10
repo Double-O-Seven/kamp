@@ -24,9 +24,9 @@ val JAVA_TYPE_MAPPING = mapOf(
 )
 
 val JAVA_OUT_TYPE_MAPPING = mapOf(
-        Types.FLOAT to "ch.leadrian.samp.kamp.runtime.types.ReferenceFloat",
-        Types.INT to "ch.leadrian.samp.kamp.runtime.types.ReferenceInt",
-        Types.STRING to "ch.leadrian.samp.kamp.runtime.types.ReferenceString"
+        Types.FLOAT to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat",
+        Types.INT to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt",
+        Types.STRING to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceString"
 )
 
 val KOTLIN_TYPE_MAPPING = mapOf(
@@ -39,9 +39,9 @@ val KOTLIN_TYPE_MAPPING = mapOf(
 )
 
 val KOTLIN_OUT_TYPE_MAPPING = mapOf(
-        Types.FLOAT to "ch.leadrian.samp.kamp.runtime.types.ReferenceFloat",
-        Types.INT to "ch.leadrian.samp.kamp.runtime.types.ReferenceInt",
-        Types.STRING to "ch.leadrian.samp.kamp.runtime.types.ReferenceString"
+        Types.FLOAT to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat",
+        Types.INT to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt",
+        Types.STRING to "ch.leadrian.samp.kamp.core.runtime.types.ReferenceString"
 )
 
 fun getJavaType(typeName: String) =

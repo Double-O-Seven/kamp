@@ -1,0 +1,22 @@
+package ch.leadrian.samp.kamp.core.api.service
+
+import ch.leadrian.samp.kamp.core.api.data.Sphere
+import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.RaceCheckpoint
+
+interface RaceCheckpointService {
+
+    fun createRaceCheckpoint(
+            coordinates: Vector3D,
+            size: Vector3D,
+            type: ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType,
+            nextCoordinates: Vector3D? = null
+    ): RaceCheckpoint
+
+    fun createRaceCheckpoint(
+            sphere: Sphere,
+            type: ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType,
+            nextCoordinates: Vector3D? = null
+    ): RaceCheckpoint
+
+}
