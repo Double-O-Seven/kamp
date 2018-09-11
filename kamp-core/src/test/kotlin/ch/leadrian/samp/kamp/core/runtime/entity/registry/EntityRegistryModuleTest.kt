@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -16,17 +15,11 @@ import org.junit.jupiter.api.Test
 internal class EntityRegistryModuleTest {
 
     private val entityRegistryModule = EntityRegistryModule()
-    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-
-    @BeforeEach
-    fun setUp() {
-        every { nativeFunctionExecutor.getMaxPlayers() } returns 50
-    }
 
     @Test
     fun shouldCreateInjector() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(MockModule(nativeFunctionExecutor), entityRegistryModule)
+            Guice.createInjector(TestModule(), entityRegistryModule)
         }
 
         assertThat(caughtThrowable)
@@ -40,7 +33,7 @@ internal class EntityRegistryModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(MockModule(nativeFunctionExecutor), entityRegistryModule)
+            injector = Guice.createInjector(TestModule(), entityRegistryModule)
         }
 
         @Test
@@ -124,10 +117,10 @@ internal class EntityRegistryModuleTest {
         }
     }
 
-    private class MockModule(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) : AbstractModule() {
+    private class TestModule : AbstractModule() {
 
         override fun configure() {
-            bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
+            bind(SAMPNativeFunctionExecutor::class.java).toInstance(mockk(relaxed = true))
         }
 
     }
