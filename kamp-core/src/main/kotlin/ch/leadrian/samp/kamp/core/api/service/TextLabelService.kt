@@ -13,7 +13,7 @@ interface TextLabelService {
             color: Color,
             coordinates: Vector3D,
             drawDistance: Float,
-            virtualWorldId: Int = -1,
+            virtualWorldId: Int = 0,
             testLOS: Boolean = false
     ): TextLabel
 
@@ -22,7 +22,7 @@ interface TextLabelService {
             color: Color,
             coordinates: Vector3D,
             drawDistance: Float,
-            virtualWorldId: Int = -1,
+            virtualWorldId: Int = 0,
             testLOS: Boolean = false
     ): TextLabel
 
