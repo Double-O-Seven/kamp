@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.registry
 
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
