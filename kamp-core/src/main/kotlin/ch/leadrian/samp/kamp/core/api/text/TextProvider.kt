@@ -10,7 +10,7 @@ class TextProvider
 @Inject
 internal constructor(
         @Named(RESOURCE_BUNDLE_PACKAGES_NAME)
-        private val resourceBundlePackages: Set<String>
+        private val resourceBundlePackages: Set<@JvmSuppressWildcards String>
 ) {
 
     companion object {
