@@ -9,10 +9,9 @@ internal class DefaultCommandAccessDeniedHandlerTest {
 
     @Test
     fun shouldReturnResultUnknownCommand() {
-        val method = Any::class.java.getMethod("hashCode")
         val handler = DefaultCommandAccessDeniedHandler()
 
-        val result = handler.handle(mockk(), "test", listOf("a"), method)
+        val result = handler.handle(mockk(), mockk(), listOf("a"))
 
         assertThat(result)
                 .isEqualTo(OnPlayerCommandTextListener.Result.UnknownCommand)
