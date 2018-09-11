@@ -11,7 +11,7 @@ class MessageSender
 internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val playerRegistry: PlayerRegistry,
-        private val textPreparer: TextPreparer
+        private val messagePreparer: MessagePreparer
 ) {
 
     fun sendMessageToAll(color: Color, message: String) {
@@ -19,7 +19,8 @@ internal constructor(
     }
 
     fun sendMessageToAll(color: Color, message: String, vararg args: Any) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
+                color = color,
                 text = message,
                 args = args,
                 consumer = { player, playerMessage ->
@@ -34,7 +35,7 @@ internal constructor(
     }
 
     fun sendMessageToAll(color: Color, textKey: TextKey) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
                 textKey = textKey,
                 consumer = { player, playerMessage ->
                     nativeFunctionExecutor.sendClientMessage(
@@ -48,7 +49,8 @@ internal constructor(
     }
 
     fun sendMessageToAll(color: Color, textKey: TextKey, vararg args: Any) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
+                color = color,
                 textKey = textKey,
                 args = args,
                 consumer = { player, playerMessage ->
@@ -67,7 +69,7 @@ internal constructor(
     }
 
     fun sendMessageToPlayer(player: Player, color: Color, message: String, vararg args: Any) {
-        textPreparer.prepareForPlayer(player, message, args) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(color, player, message, args) { _, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,
@@ -77,7 +79,7 @@ internal constructor(
     }
 
     fun sendMessageToPlayer(player: Player, color: Color, textKey: TextKey) {
-        textPreparer.prepareForPlayer(player, textKey) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(player, textKey) { _, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,
@@ -87,7 +89,7 @@ internal constructor(
     }
 
     fun sendMessageToPlayer(player: Player, color: Color, textKey: TextKey, vararg args: Any) {
-        textPreparer.prepareForPlayer(player, textKey, args) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(color, player, textKey, args) { _, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,
@@ -111,7 +113,7 @@ internal constructor(
     }
 
     fun sendMessage(color: Color, message: String, vararg args: Any, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, message, args) { player, playerMessage ->
+        messagePreparer.prepare(color, playerFilter, message, args) { player, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,
@@ -121,7 +123,7 @@ internal constructor(
     }
 
     fun sendMessage(color: Color, textKey: TextKey, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, textKey) { player, playerMessage ->
+        messagePreparer.prepare(playerFilter, textKey) { player, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,
@@ -131,7 +133,7 @@ internal constructor(
     }
 
     fun sendMessage(color: Color, textKey: TextKey, vararg args: Any, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, textKey, args) { player, playerMessage ->
+        messagePreparer.prepare(color, playerFilter, textKey, args) { player, playerMessage ->
             nativeFunctionExecutor.sendClientMessage(
                     playerid = player.id.value,
                     color = color.value,

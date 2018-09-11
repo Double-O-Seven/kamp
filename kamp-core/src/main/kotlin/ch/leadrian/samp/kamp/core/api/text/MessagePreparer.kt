@@ -1,27 +1,29 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import java.util.*
 import javax.inject.Inject
 
-class TextPreparer
+class MessagePreparer
 @Inject
 internal constructor(
         private val playerRegistry: PlayerRegistry,
         private val textProvider: TextProvider,
-        private val textFormatter: TextFormatter
+        private val messageFormatter: MessageFormatter
 ) {
 
     fun prepareForAllPlayers(
+            color: Color,
             text: String,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit,
             consumerForAll: (String) -> Unit
     ) {
         val players = playerRegistry.getAll()
-        val formattedTexts = getFormattedTexts(players, text, args)
-        prepare(players, formattedTexts, consumer, consumerForAll)
+        val formattedMessages = getFormattedMessages(color, players, text, args)
+        prepare(players, formattedMessages, consumer, consumerForAll)
     }
 
     fun prepareForAllPlayers(
@@ -30,29 +32,31 @@ internal constructor(
             consumerForAll: (String) -> Unit
     ) {
         val players = playerRegistry.getAll()
-        val translatedTexts = getTranslatedText(players, textKey)
-        prepare(players, translatedTexts, consumer, consumerForAll)
+        val translatedMessages = getTranslatedMessage(players, textKey)
+        prepare(players, translatedMessages, consumer, consumerForAll)
     }
 
     fun prepareForAllPlayers(
+            color: Color,
             textKey: TextKey,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit,
             consumerForAll: (String) -> Unit
     ) {
         val players = playerRegistry.getAll()
-        val formattedTranslatedTexts = getFormattedTranslatedTexts(players, textKey, args)
-        prepare(players, formattedTranslatedTexts, consumer, consumerForAll)
+        val formattedTranslatedMessages = getFormattedTranslatedMessages(color, players, textKey, args)
+        prepare(players, formattedTranslatedMessages, consumer, consumerForAll)
     }
 
     fun prepareForPlayer(
+            color: Color,
             player: Player,
             text: String,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit
     ) {
-        val formattedText = textFormatter.format(player.locale, text, *args)
-        consumer(player, formattedText)
+        val formattedMessage = messageFormatter.format(player.locale, color, text, *args)
+        consumer(player, formattedMessage)
     }
 
     fun prepareForPlayer(
@@ -65,24 +69,26 @@ internal constructor(
     }
 
     fun prepareForPlayer(
+            color: Color,
             player: Player,
             textKey: TextKey,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit
     ) {
         val text = textProvider.getText(player.locale, textKey)
-        prepareForPlayer(player, text, args, consumer)
+        prepareForPlayer(color, player, text, args, consumer)
     }
 
     fun prepare(
+            color: Color,
             playerFilter: (Player) -> Boolean,
             text: String,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit
     ) {
         val players = playerRegistry.getAll().filter(playerFilter)
-        val formattedTexts = getFormattedTexts(players, text, args)
-        prepare(players, formattedTexts, consumer)
+        val formattedMessages = getFormattedMessages(color, players, text, args)
+        prepare(players, formattedMessages, consumer)
     }
 
     fun prepare(
@@ -91,35 +97,36 @@ internal constructor(
             consumer: (Player, String) -> Unit
     ) {
         val players = playerRegistry.getAll().filter(playerFilter)
-        val translatedTexts = getTranslatedText(players, textKey)
-        prepare(players, translatedTexts, consumer)
+        val translatedMessages = getTranslatedMessage(players, textKey)
+        prepare(players, translatedMessages, consumer)
     }
 
     fun prepare(
+            color: Color,
             playerFilter: (Player) -> Boolean,
             textKey: TextKey,
             args: Array<out Any>,
             consumer: (Player, String) -> Unit
     ) {
         val players = playerRegistry.getAll().filter(playerFilter)
-        val formattedTranslatedTexts = getFormattedTranslatedTexts(players, textKey, args)
-        prepare(players, formattedTranslatedTexts, consumer)
+        val formattedTranslatedMessages = getFormattedTranslatedMessages(color, players, textKey, args)
+        prepare(players, formattedTranslatedMessages, consumer)
     }
 
     private fun prepare(
             players: List<Player>,
-            translatedTexts: Map<Locale, String>,
+            translatedMessages: Map<Locale, String>,
             consumer: (Player, String) -> Unit,
             consumerForAll: ((String) -> Unit)? = null
     ) {
-        if (consumerForAll != null && translatedTexts.size == 1) {
-            consumerForAll(translatedTexts.values.first())
+        if (consumerForAll != null && translatedMessages.size == 1) {
+            consumerForAll(translatedMessages.values.first())
         } else {
-            players.forEach { consumer(it, translatedTexts[it.locale]!!) }
+            players.forEach { consumer(it, translatedMessages[it.locale]!!) }
         }
     }
 
-    private fun getTranslatedText(players: List<Player>, textKey: TextKey): Map<Locale, String> =
+    private fun getTranslatedMessage(players: List<Player>, textKey: TextKey): Map<Locale, String> =
             players
                     .asSequence()
                     .map { it.locale }
@@ -129,17 +136,22 @@ internal constructor(
                             valueTransform = { textProvider.getText(it, textKey) }
                     )
 
-    private fun getFormattedTexts(players: List<Player>, text: String, args: Array<out Any>): Map<Locale, String> =
+    private fun getFormattedMessages(color: Color, players: List<Player>, text: String, args: Array<out Any>): Map<Locale, String> =
             players
                     .asSequence()
                     .map { it.locale }
                     .distinct()
                     .associateBy(
                             keySelector = { it },
-                            valueTransform = { textFormatter.format(it, text, *args) }
+                            valueTransform = { messageFormatter.format(it, color, text, *args) }
                     )
 
-    private fun getFormattedTranslatedTexts(players: List<Player>, textKey: TextKey, args: Array<out Any>): Map<Locale, String> =
+    private fun getFormattedTranslatedMessages(
+            color: Color,
+            players: List<Player>,
+            textKey: TextKey,
+            args: Array<out Any>
+    ): Map<Locale, String> =
             players
                     .asSequence()
                     .map { it.locale }
@@ -148,7 +160,7 @@ internal constructor(
                             keySelector = { it },
                             valueTransform = {
                                 val text = textProvider.getText(it, textKey)
-                                textFormatter.format(it, text, *args)
+                                messageFormatter.format(it, color, text, *args)
                             }
                     )
 
