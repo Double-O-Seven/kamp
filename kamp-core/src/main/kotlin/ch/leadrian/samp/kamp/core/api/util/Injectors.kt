@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.core.util
+package ch.leadrian.samp.kamp.core.api.util
 
 import com.google.inject.Injector
 
