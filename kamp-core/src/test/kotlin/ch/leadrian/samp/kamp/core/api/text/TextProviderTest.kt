@@ -1,6 +1,5 @@
-package ch.leadrian.samp.kamp.core.runtime.text
+package ch.leadrian.samp.kamp.core.api.text
 
-import ch.leadrian.samp.kamp.core.api.text.TextKey
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
@@ -12,7 +11,7 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.*
 import java.util.stream.Stream
 
-internal class ResourceBundleTextProviderTest {
+internal class TextProviderTest {
 
     private val defaultLocale = Locale.getDefault()
 
@@ -35,7 +34,7 @@ internal class ResourceBundleTextProviderTest {
             expectedResult: String,
             defaultText: String?
     ) {
-        val textProvider = ResourceBundleTextProvider(resourceBundlePackages)
+        val textProvider = TextProvider(resourceBundlePackages)
 
         val result = textProvider.getText(locale, textKey, defaultText)
 
@@ -48,45 +47,45 @@ internal class ResourceBundleTextProviderTest {
         override fun provideArguments(context: ExtensionContext?): Stream<GetTextArguments> =
                 Stream.of(
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.GERMANY,
                                 textKey = "test.a",
                                 expectedResult = "Hallo"
                         ),
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.a",
                                 expectedResult = "Hello"
                         ),
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.FRENCH,
                                 textKey = "test.a",
                                 expectedResult = "Hi there"
                         ),
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.GERMANY,
                                 textKey = "test.b",
                                 expectedResult = "Test"
                         ),
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.b",
                                 expectedResult = "Test"
                         ),
                         GetTextArguments(
-                                resourceBundlePackages = setOf("ch.leadrian.samp.kamp.core.runtime.text.test1"),
+                                resourceBundlePackages = setOf(getPackageName() + ".test1"),
                                 locale = Locale.FRENCH,
                                 textKey = "test.b",
                                 expectedResult = "Test"
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.GERMANY,
                                 textKey = "test.a",
@@ -94,8 +93,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.a",
@@ -103,8 +102,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.a",
@@ -112,8 +111,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.GERMANY,
                                 textKey = "test.b",
@@ -121,8 +120,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.b",
@@ -130,8 +129,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.b",
@@ -139,8 +138,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.GERMANY,
                                 textKey = "test.c",
@@ -148,8 +147,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.c",
@@ -157,8 +156,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.c",
@@ -166,8 +165,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.GERMANY,
                                 textKey = "test.d",
@@ -175,8 +174,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.ENGLISH,
                                 textKey = "test.d",
@@ -184,8 +183,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.d",
@@ -193,8 +192,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.x",
@@ -202,8 +201,8 @@ internal class ResourceBundleTextProviderTest {
                         ),
                         GetTextArguments(
                                 resourceBundlePackages = setOf(
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test1",
-                                        "ch.leadrian.samp.kamp.core.runtime.text.test2"
+                                        getPackageName() + ".test1",
+                                        getPackageName() + ".test2"
                                 ),
                                 locale = Locale.FRENCH,
                                 textKey = "test.x",
@@ -211,6 +210,8 @@ internal class ResourceBundleTextProviderTest {
                                 expectedResult = "bla"
                         )
                 )
+
+        fun getPackageName() = this::class.java.getPackage().name!!
 
     }
 
