@@ -6,8 +6,8 @@ import java.util.*
 
 data class CommandDescription
 internal constructor(
-        val text: String? = null,
-        val textKey: TextKey? = null,
+        private val text: String? = null,
+        private val textKey: TextKey? = null,
         private val textProvider: TextProvider
 ) {
 

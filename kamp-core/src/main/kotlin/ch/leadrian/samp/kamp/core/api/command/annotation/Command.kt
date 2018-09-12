@@ -5,5 +5,5 @@ package ch.leadrian.samp.kamp.core.api.command.annotation
 annotation class Command(
         val name: String = "",
         val aliases: Array<String> = [],
-        val greedy: Boolean = true
+        val isGreedy: Boolean = true
 )

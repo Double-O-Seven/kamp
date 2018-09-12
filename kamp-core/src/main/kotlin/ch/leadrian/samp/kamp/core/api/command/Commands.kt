@@ -2,8 +2,12 @@ package ch.leadrian.samp.kamp.core.api.command
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
 
-abstract class Commands {
+interface Commands {
 
-    abstract fun showCommandList(player: Player)
+    val groupName: String?
+
+    val definitions: List<CommandDefinition>
+
+    fun showCommandList(title: String, player: Player, executeOnSelect: Boolean = true)
 
 }
