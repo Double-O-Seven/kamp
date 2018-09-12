@@ -1,4 +1,22 @@
+import ch.leadrian.samp.kamp.textkeygen.TextKeysGeneratorPlugin
+
+buildscript {
+
+    dependencies {
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+
+        classpath "ch.leadrian.samp.kamp.textkeygen:kamp-textkeygen:0.0.9"
+    }
+}
+
 apply plugin: 'maven'
+apply plugin: TextKeysGeneratorPlugin
 
 configurations {
     coreCodegen
@@ -120,7 +138,15 @@ task generateSAMPNativeFunctionExecutorImplClass(type: JavaExec) {
     outputs.file generatedSAMPNativeFunctionExecutorImplKotlinFile
 }
 
+textKeyGenerator {
+
+    outputDirectory = generatedSrcJavaDir
+    packageNames.add("ch.leadrian.samp.kamp.core")
+    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
+}
+
 compileKotlin.dependsOn(
+        generateTextKeys,
         generateSAMPConstantsClass,
         generateSAMPCallbacksClass,
         generateSAMPNativeFunctionsClass,
@@ -128,6 +154,7 @@ compileKotlin.dependsOn(
         generateSAMPNativeFunctionExecutorImplClass
 )
 compileJava.dependsOn(
+        generateTextKeys,
         generateSAMPConstantsClass,
         generateSAMPCallbacksClass,
         generateSAMPNativeFunctionsClass,

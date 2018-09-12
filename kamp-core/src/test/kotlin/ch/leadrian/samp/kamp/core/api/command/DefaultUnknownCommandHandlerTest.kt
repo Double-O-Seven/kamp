@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
+import ch.leadrian.samp.kamp.core.TextKeys
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -35,7 +36,7 @@ internal class DefaultUnknownCommandHandlerTest {
         defaultUnknownCommandHandler.handle(player, "help", listOf("abc", "xyz"))
 
         verify {
-            messageSender.sendMessageToPlayer(player, Colors.RED, TextKey("unknown.command"), "help", "abc xyz")
+            messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.unknown, "help", "abc xyz")
         }
     }
 
