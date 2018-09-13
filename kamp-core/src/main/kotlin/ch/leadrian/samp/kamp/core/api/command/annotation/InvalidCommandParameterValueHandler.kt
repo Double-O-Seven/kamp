@@ -4,5 +4,5 @@ import ch.leadrian.samp.kamp.core.api.command.InvalidCommandParameterValueHandle
 import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
-@Target(AnnotationTarget.VALUE_PARAMETER)
+@Target(AnnotationTarget.FUNCTION, AnnotationTarget.VALUE_PARAMETER)
 annotation class InvalidCommandParameterValueHandler(val value: KClass<out InvalidCommandParameterValueHandler>)

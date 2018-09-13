@@ -6,8 +6,8 @@ import java.util.*
 
 data class CommandParameterDefinition
 internal constructor(
-        val type: Class<out Any>,
-        val resolver: CommandParameterResolver<out Any>,
+        val type: Class<*>,
+        val resolver: CommandParameterResolver<*>,
         val invalidCommandParameterValueHandler: InvalidCommandParameterValueHandler?,
         private val name: String?,
         private val nameTextKey: TextKey?,
