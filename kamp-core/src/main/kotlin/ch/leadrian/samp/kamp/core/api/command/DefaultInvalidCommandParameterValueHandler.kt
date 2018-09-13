@@ -8,14 +8,19 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import javax.inject.Inject
 
-class DefaultCommandErrorHandler
+class DefaultInvalidCommandParameterValueHandler
 @Inject
 constructor(
         private val messageSender: MessageSender,
         private val textProvider: TextProvider
-) : CommandErrorHandler {
+) : InvalidCommandParameterValueHandler {
 
-    override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result {
+    override fun handle(
+            player: Player,
+            commandDefinition: CommandDefinition,
+            parameters: List<String>,
+            parameterIndex: Int?
+    ): OnPlayerCommandTextListener.Result {
         val message = StringBuilder().apply {
             append(textProvider.getText(player.locale, TextKeys.command.usage.prefix))
             append(": /")

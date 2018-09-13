@@ -13,7 +13,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Test
 import java.util.*
 
-internal class DefaultCommandErrorHandlerTest {
+internal class DefaultInvalidCommandParameterValueHandlerTest {
 
     @Test
     fun shouldSendMessageToPlayer() {
@@ -37,12 +37,12 @@ internal class DefaultCommandErrorHandlerTest {
         val messageSender = mockk<MessageSender> {
             every { sendMessageToPlayer(any(), any(), any<String>()) } just Runs
         }
-        val defaultUnknownCommandHandler = DefaultCommandErrorHandler(
+        val defaultUnknownCommandHandler = DefaultInvalidCommandParameterValueHandler(
                 textProvider = textProvider,
                 messageSender = messageSender
         )
 
-        defaultUnknownCommandHandler.handle(player, command, emptyList())
+        defaultUnknownCommandHandler.handle(player, command, emptyList(), null)
 
         verify {
             messageSender.sendMessageToPlayer(player, Colors.RED, "Usage: /pm [Player ID] [Message]")

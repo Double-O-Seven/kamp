@@ -9,7 +9,7 @@ interface InvalidCommandParameterValueHandler {
             player: Player,
             commandDefinition: CommandDefinition,
             parameters: List<String>,
-            parameterIndex: Int
+            parameterIndex: Int?
     ): OnPlayerCommandTextListener.Result
 
 }
