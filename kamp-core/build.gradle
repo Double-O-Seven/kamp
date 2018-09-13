@@ -22,6 +22,8 @@ configurations {
 
 dependencies {
 
+    compile 'org.codehaus.plexus:plexus-utils:3.1.0'
+
     compileOnly(
             "com.google.inject:guice:$guiceVersion",
             "com.netflix.governator:governator:$governatorVersion"
