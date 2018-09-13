@@ -1,5 +1,3 @@
-import ch.leadrian.samp.kamp.textkeygen.TextKeysGeneratorPlugin
-
 buildscript {
 
     dependencies {
@@ -11,12 +9,12 @@ buildscript {
             }
         }
 
-        classpath "ch.leadrian.samp.kamp.textkeygen:kamp-textkeygen:0.0.9"
+        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.1.4"
     }
 }
 
 apply plugin: 'maven'
-apply plugin: TextKeysGeneratorPlugin
+apply plugin: 'kamp-textkeygen'
 
 configurations {
     coreCodegen
