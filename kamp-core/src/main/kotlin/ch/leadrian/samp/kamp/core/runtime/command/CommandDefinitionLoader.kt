@@ -7,19 +7,20 @@ import ch.leadrian.samp.kamp.core.api.command.CommandErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterDefinition
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
+import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
+import ch.leadrian.samp.kamp.core.api.command.annotation.AccessChecks
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
-import ch.leadrian.samp.kamp.core.api.command.annotation.CommandAccessChecker
-import ch.leadrian.samp.kamp.core.api.command.annotation.CommandAccessCheckers
-import ch.leadrian.samp.kamp.core.api.command.annotation.CommandParameter
-import ch.leadrian.samp.kamp.core.api.command.annotation.InvalidCommandParameterValueHandler
-import ch.leadrian.samp.kamp.core.api.command.annotation.UnlistedCommand
+import ch.leadrian.samp.kamp.core.api.command.annotation.Description
+import ch.leadrian.samp.kamp.core.api.command.annotation.ErrorHandler
+import ch.leadrian.samp.kamp.core.api.command.annotation.InvalidParameterValueHandler
+import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
+import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import com.google.inject.Injector
 import java.lang.reflect.Method
 import java.lang.reflect.Modifier.isPublic
 import java.lang.reflect.Modifier.isStatic
-import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
 import java.util.Collections.unmodifiableList
 import javax.inject.Inject
@@ -41,10 +42,10 @@ constructor(
     )
 
     fun load(commandsClass: Class<out Commands>): List<CommandDefinition> {
-        val commandAccessCheckerGroups = getCommandAccessCheckerAnnotations(commandsClass).map {
+        val commandAccessCheckerGroups = getAccessChecks(commandsClass).map {
             getCommandAccessCheckerGroup(it)
         }
-        val commandErrorHandler = getCommandErrorHandler(commandsClass)
+        val commandErrorHandler = getErrorHandler(commandsClass)
         val commandMethods = getCommandMethods(commandsClass)
         return commandMethods.map {
             try {
@@ -77,12 +78,12 @@ constructor(
         val commandAnnotation: Command? = commandMethod.getAnnotation(Command::class.java)
         val name = (commandAnnotation?.name ?: commandMethod.name).toLowerCase()
         val aliases = commandAnnotation?.aliases?.toSet().orEmpty()
-        val description = getCommandDescription(commandMethod)
+        val description = getDescription(commandMethod)
         val parameters = getCommandParameterDefinitions(commandMethod)
         val isGreedy = commandAnnotation?.isGreedy ?: true
-        val isListed = commandMethod.getAnnotation(UnlistedCommand::class.java) == null
-        val errorHandler = getCommandErrorHandler(commandMethod) ?: classCommandErrorHandler
-        val methodAccessCheckers = getCommandAccessCheckerAnnotations(commandMethod).map {
+        val isListed = commandMethod.getAnnotation(Unlisted::class.java) == null
+        val errorHandler = getErrorHandler(commandMethod) ?: classCommandErrorHandler
+        val methodAccessCheckers = getAccessChecks(commandMethod).map {
             getCommandAccessCheckerGroup(it)
         }
         val accessCheckers = mutableListOf<CommandAccessCheckerGroup>().apply {
@@ -103,16 +104,16 @@ constructor(
     }
 
     private fun getCommandParameterDefinitions(commandMethod: Method): List<CommandParameterDefinition> {
-        val defaultInvalidValueHandler = commandMethod.getAnnotation(InvalidCommandParameterValueHandler::class.java)?.let {
+        val defaultInvalidValueHandler = commandMethod.getAnnotation(InvalidParameterValueHandler::class.java)?.let {
             injector.getInstance(it.value.java)
         }
         return commandMethod.parameters.map { parameter ->
-            val parameterAnnotation: CommandParameter? = parameter.getAnnotation(CommandParameter::class.java)
+            val parameterAnnotation: Parameter? = parameter.getAnnotation(Parameter::class.java)
             val name = parameterAnnotation?.name?.takeIf { it.isNotEmpty() }
             val nameTextKey = parameterAnnotation?.nameTextKey?.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
             val description = parameterAnnotation?.description?.takeIf { it.isNotEmpty() }
             val descriptionTextKey = parameterAnnotation?.descriptionTextKey?.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
-            val invalidValueHandler = parameter.getAnnotation(InvalidCommandParameterValueHandler::class.java)?.let {
+            val invalidValueHandler = parameter.getAnnotation(InvalidParameterValueHandler::class.java)?.let {
                 injector.getInstance(it.value.java)
             } ?: defaultInvalidValueHandler
             val resolver = getCommandParameterResolver(parameter)
@@ -129,7 +130,7 @@ constructor(
         }
     }
 
-    private fun getCommandParameterResolver(parameter: Parameter): CommandParameterResolver<*> {
+    private fun getCommandParameterResolver(parameter: java.lang.reflect.Parameter): CommandParameterResolver<*> {
         if (java.util.Collection::class.java.isAssignableFrom(parameter.type) || Collection::class.java.isAssignableFrom(parameter.type)) {
             val parameterizedType = parameter.parameterizedType
             if (parameterizedType is ParameterizedType) {
@@ -147,7 +148,7 @@ constructor(
         }
     }
 
-    private fun getCommandAccessCheckerGroup(annotation: CommandAccessChecker): CommandAccessCheckerGroup {
+    private fun getCommandAccessCheckerGroup(annotation: AccessCheck): CommandAccessCheckerGroup {
         val accessCheckers = annotation.accessCheckers.toSet().map { injector.getInstance(it.java) }
         val accessDeniedHandlers = annotation.accessDeniedHandlers.toSet().map { injector.getInstance(it.java) }
         val errorMessage = annotation.errorMessage.takeIf { it.isNotEmpty() }
@@ -161,22 +162,22 @@ constructor(
         )
     }
 
-    private fun getCommandAccessCheckerAnnotations(commandMethod: Method): List<CommandAccessChecker> {
-        val annotations = mutableListOf<CommandAccessChecker>()
-        commandMethod.getAnnotation(CommandAccessChecker::class.java)?.let { annotations += it }
-        commandMethod.getAnnotation(CommandAccessCheckers::class.java)?.let { annotations += it.accessCheckers }
+    private fun getAccessChecks(commandMethod: Method): List<AccessCheck> {
+        val annotations = mutableListOf<AccessCheck>()
+        commandMethod.getAnnotation(AccessCheck::class.java)?.let { annotations += it }
+        commandMethod.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessCheckers }
         return annotations
     }
 
-    private fun getCommandAccessCheckerAnnotations(commandsClass: Class<out Commands>): List<CommandAccessChecker> {
-        val annotations = mutableListOf<CommandAccessChecker>()
-        commandsClass.getAnnotation(CommandAccessChecker::class.java)?.let { annotations += it }
-        commandsClass.getAnnotation(CommandAccessCheckers::class.java)?.let { annotations += it.accessCheckers }
+    private fun getAccessChecks(commandsClass: Class<out Commands>): List<AccessCheck> {
+        val annotations = mutableListOf<AccessCheck>()
+        commandsClass.getAnnotation(AccessCheck::class.java)?.let { annotations += it }
+        commandsClass.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessCheckers }
         return annotations
     }
 
-    private fun getCommandDescription(commandMethod: Method): CommandDescription? =
-            commandMethod.getAnnotation(ch.leadrian.samp.kamp.core.api.command.annotation.CommandDescription::class.java)?.let { annotation ->
+    private fun getDescription(commandMethod: Method): CommandDescription? =
+            commandMethod.getAnnotation(Description::class.java)?.let { annotation ->
                 val text = annotation.text.takeIf { it.isNotEmpty() }
                 val textKey = annotation.textKey.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
                 if (text == null && textKey == null) {
@@ -186,13 +187,13 @@ constructor(
                 }
             }
 
-    private fun getCommandErrorHandler(commandsClass: Class<out Commands>): CommandErrorHandler? =
-            commandsClass.getAnnotation(ch.leadrian.samp.kamp.core.api.command.annotation.CommandErrorHandler::class.java)?.let {
+    private fun getErrorHandler(commandsClass: Class<out Commands>): CommandErrorHandler? =
+            commandsClass.getAnnotation(ErrorHandler::class.java)?.let {
                 injector.getInstance(it.value.java)
             }
 
-    private fun getCommandErrorHandler(commandMethod: Method): CommandErrorHandler? =
-            commandMethod.getAnnotation(ch.leadrian.samp.kamp.core.api.command.annotation.CommandErrorHandler::class.java)?.let {
+    private fun getErrorHandler(commandMethod: Method): CommandErrorHandler? =
+            commandMethod.getAnnotation(ErrorHandler::class.java)?.let {
                 injector.getInstance(it.value.java)
             }
 }

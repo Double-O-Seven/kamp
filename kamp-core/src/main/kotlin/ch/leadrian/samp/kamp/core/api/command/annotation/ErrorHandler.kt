@@ -5,4 +5,4 @@ import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
-annotation class CommandErrorHandler(val value: KClass<out CommandErrorHandler>)
+annotation class ErrorHandler(val value: KClass<out CommandErrorHandler>)

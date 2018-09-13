@@ -6,7 +6,7 @@ import kotlin.reflect.KClass
 
 @Retention(AnnotationRetention.RUNTIME)
 @Target(AnnotationTarget.FUNCTION, AnnotationTarget.CLASS)
-annotation class CommandAccessChecker(
+annotation class AccessCheck(
         val accessCheckers: Array<KClass<out CommandAccessChecker>>,
         val errorMessage: String = "",
         val errorMessageTextKey: String = "",
