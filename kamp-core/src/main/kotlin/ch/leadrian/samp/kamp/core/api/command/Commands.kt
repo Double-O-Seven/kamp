@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.command
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.runtime.command.CommandProcessor
 
 abstract class Commands {
 
@@ -10,6 +11,10 @@ abstract class Commands {
     lateinit var definitions: List<CommandDefinition>
         internal set
 
-    abstract fun showCommandList(title: String, player: Player, executeOnSelect: Boolean = true)
+    internal lateinit var commandProcessor: CommandProcessor
+
+    fun showCommandList(title: String, player: Player, executeOnSelect: Boolean = true) {
+        TODO()
+    }
 
 }
