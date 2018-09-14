@@ -34,7 +34,26 @@ class SAMPNativeFunctionExecutorImplKotlinCodeGenerator {
             |    value = ["${this::class.java.name}"],
             |    date = "${LocalDateTime.now()}"
             |)
-            |object ${className}Impl: $className {
+            |class ${className}Impl: $className {
+            |
+            |    private lateinit var mainThread: Thread
+            |
+            |    private var isInitialized = false
+            |
+            |    @Synchronized
+            |    override fun initialize() {
+            |        if (isInitialized) return
+            |
+            |        mainThread = Thread.currentThread()
+            |        isInitialized = true
+            |    }
+            |
+            |    private inline fun <T> requireOnMainThread(block: () -> T): T {
+            |        if (Thread.currentThread() != mainThread) {
+            |            throw IllegalStateException("Can only execute native functions on main thread")
+            |        }
+            |        return block()
+            |    }
             |
             |""".trimMargin("|"))
     }
@@ -46,6 +65,7 @@ class SAMPNativeFunctionExecutorImplKotlinCodeGenerator {
     }
 
     private fun writeFunction(it: Function, writer: BufferedWriter) {
+        val kotlinReturnType = getKotlinType(it.type)
         val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
         writer.write("    override fun $camelCaseName (")
         val parameters = it.parameters.joinToString(separator = ", ") {
@@ -56,9 +76,9 @@ class SAMPNativeFunctionExecutorImplKotlinCodeGenerator {
             "${it.name}: $parameterJavaType"
         }
         writer.write(parameters)
-        writer.write(") =\n        SAMPNativeFunctions.$camelCaseName(")
+        writer.write("): $kotlinReturnType = requireOnMainThread {\n        SAMPNativeFunctions.$camelCaseName(")
         writer.write(it.parameters.joinToString(separator = ", ") { it.name })
-        writer.write(")\n\n")
+        writer.write(")\n    }\n\n")
     }
 
     private fun writeFooter(writer: BufferedWriter) {

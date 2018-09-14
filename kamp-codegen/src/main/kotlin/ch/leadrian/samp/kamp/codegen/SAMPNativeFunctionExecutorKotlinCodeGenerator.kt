@@ -36,6 +36,8 @@ class SAMPNativeFunctionExecutorKotlinCodeGenerator {
             |)
             |interface $className {
             |
+            |    fun initialize()
+            |
             |""".trimMargin("|"))
     }
 
@@ -46,7 +48,7 @@ class SAMPNativeFunctionExecutorKotlinCodeGenerator {
     }
 
     private fun writeFunction(it: Function, writer: BufferedWriter) {
-        val returnKotlinType = getKotlinType(it.type)
+        val kotlinReturnType = getKotlinType(it.type)
         val camelCaseName = "${it.name[0].toLowerCase()}${it.name.substring(1)}"
         writer.write("    fun $camelCaseName (")
         val parameters = it.parameters.joinToString(separator = ", ") {
@@ -57,7 +59,7 @@ class SAMPNativeFunctionExecutorKotlinCodeGenerator {
             "${it.name}: $parameterJavaType"
         }
         writer.write(parameters)
-        writer.write("): $returnKotlinType\n\n")
+        writer.write("): $kotlinReturnType\n\n")
     }
 
     private fun writeFooter(writer: BufferedWriter) {
