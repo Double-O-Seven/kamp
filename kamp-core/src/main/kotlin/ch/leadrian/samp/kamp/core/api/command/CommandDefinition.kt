@@ -5,12 +5,12 @@ import java.lang.reflect.Method
 data class CommandDefinition
 internal constructor(
         val name: String,
-        val aliases: Set<String>,
-        val description: CommandDescription?,
+        val aliases: Set<String> = emptySet(),
+        val description: CommandDescription? = null,
         val method: Method,
         val parameters: List<CommandParameterDefinition>,
-        val isListed: Boolean,
-        val isGreedy: Boolean,
-        val errorHandler: CommandErrorHandler?,
-        val accessCheckers: List<CommandAccessCheckerGroup>
+        val isListed: Boolean = true,
+        val isGreedy: Boolean = true,
+        val errorHandler: CommandErrorHandler? = null,
+        val accessCheckers: List<CommandAccessCheckerGroup> = emptyList()
 )

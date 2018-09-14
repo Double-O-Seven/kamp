@@ -8,11 +8,11 @@ data class CommandParameterDefinition
 internal constructor(
         val type: Class<*>,
         val resolver: CommandParameterResolver<*>,
-        val invalidCommandParameterValueHandler: InvalidCommandParameterValueHandler?,
-        private val name: String?,
-        private val nameTextKey: TextKey?,
-        private val description: String?,
-        private val descriptionTextKey: TextKey?,
+        val invalidCommandParameterValueHandler: InvalidCommandParameterValueHandler? = null,
+        private val name: String? = null,
+        private val nameTextKey: TextKey? = null,
+        private val description: String? = null,
+        private val descriptionTextKey: TextKey? = null,
         private val textProvider: TextProvider
 ) {
 

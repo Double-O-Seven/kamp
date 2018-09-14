@@ -15,6 +15,7 @@ import ch.leadrian.samp.kamp.core.api.command.annotation.ErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.annotation.InvalidParameterValueHandler
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import com.google.inject.Injector
@@ -76,7 +77,7 @@ constructor(
             classCommandErrorHandler: CommandErrorHandler?
     ): CommandDefinition {
         val commandAnnotation: Command? = commandMethod.getAnnotation(Command::class.java)
-        val name = (commandAnnotation?.name ?: commandMethod.name).toLowerCase()
+        val name = (commandAnnotation?.name?.takeIf { it.isNotEmpty() } ?: commandMethod.name).toLowerCase()
         val aliases = commandAnnotation?.aliases?.toSet().orEmpty()
         val description = getDescription(commandMethod)
         val parameters = getCommandParameterDefinitions(commandMethod)
@@ -104,10 +105,14 @@ constructor(
     }
 
     private fun getCommandParameterDefinitions(commandMethod: Method): List<CommandParameterDefinition> {
+        if (commandMethod.parameters.firstOrNull()?.type != Player::class.java) {
+            throw CommandDefinitionLoaderException("First parameter must be of type ${Player::class.java}")
+        }
         val defaultInvalidValueHandler = commandMethod.getAnnotation(InvalidParameterValueHandler::class.java)?.let {
             injector.getInstance(it.value.java)
         }
-        return commandMethod.parameters.map { parameter ->
+        val commandParameters = commandMethod.parameters.drop(1)
+        return commandParameters.mapIndexed { index, parameter ->
             val parameterAnnotation: Parameter? = parameter.getAnnotation(Parameter::class.java)
             val name = parameterAnnotation?.name?.takeIf { it.isNotEmpty() }
             val nameTextKey = parameterAnnotation?.nameTextKey?.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
@@ -116,7 +121,8 @@ constructor(
             val invalidValueHandler = parameter.getAnnotation(InvalidParameterValueHandler::class.java)?.let {
                 injector.getInstance(it.value.java)
             } ?: defaultInvalidValueHandler
-            val resolver = getCommandParameterResolver(parameter)
+            val isLast = index == commandParameters.size - 1
+            val resolver = getCommandParameterResolver(parameter, isLast)
             CommandParameterDefinition(
                     type = parameter.type,
                     resolver = resolver,
@@ -130,8 +136,11 @@ constructor(
         }
     }
 
-    private fun getCommandParameterResolver(parameter: java.lang.reflect.Parameter): CommandParameterResolver<*> {
+    private fun getCommandParameterResolver(parameter: java.lang.reflect.Parameter, isLast: Boolean): CommandParameterResolver<*> {
         if (java.util.Collection::class.java.isAssignableFrom(parameter.type) || Collection::class.java.isAssignableFrom(parameter.type)) {
+            if (!isLast) {
+                throw CommandDefinitionLoaderException("Only the last parameter can be a collection type")
+            }
             val parameterizedType = parameter.parameterizedType
             if (parameterizedType is ParameterizedType) {
                 if (parameterizedType.actualTypeArguments.size != 1) {
