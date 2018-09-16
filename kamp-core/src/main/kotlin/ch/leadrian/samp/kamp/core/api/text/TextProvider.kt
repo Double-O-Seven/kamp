@@ -15,7 +15,7 @@ internal constructor(
 
     companion object {
 
-        internal const val RESOURCE_BUNDLE_PACKAGES_NAME = "textProviderResourceBundlePackages"
+        const val RESOURCE_BUNDLE_PACKAGES_NAME = "textProviderResourceBundlePackages"
 
         const val PROPERTIES_FILE_NAME = "strings"
 
