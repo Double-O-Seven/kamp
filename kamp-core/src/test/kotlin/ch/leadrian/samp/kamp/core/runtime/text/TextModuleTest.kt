@@ -13,8 +13,6 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import com.google.inject.TypeLiteral
-import com.google.inject.name.Names
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -116,9 +114,6 @@ internal class TextModuleTest {
     private class TestModule : AbstractModule() {
 
         override fun configure() {
-            bind(object : TypeLiteral<@JvmSuppressWildcards Set<@JvmSuppressWildcards String>>() {})
-                    .annotatedWith(Names.named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME))
-                    .toInstance(setOf())
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every { getMaxPlayers() } returns 50
             }
