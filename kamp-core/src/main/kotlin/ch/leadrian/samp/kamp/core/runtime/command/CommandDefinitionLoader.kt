@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.command
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandAccessCheckerGroup
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.CommandDescription
@@ -10,6 +11,7 @@ import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
 import ch.leadrian.samp.kamp.core.api.command.annotation.AccessChecks
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
+import ch.leadrian.samp.kamp.core.api.command.annotation.CommandGroup
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.ErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.annotation.InvalidParameterValueHandler
@@ -24,6 +26,7 @@ import java.lang.reflect.Modifier.isPublic
 import java.lang.reflect.Modifier.isStatic
 import java.lang.reflect.ParameterizedType
 import java.util.Collections.unmodifiableList
+import java.util.Collections.unmodifiableSet
 import javax.inject.Inject
 
 internal class CommandDefinitionLoader
@@ -34,12 +37,25 @@ constructor(
         private val commandParameterResolverRegistry: CommandParameterResolverRegistry
 ) {
 
-    private val allowedReturnTypes = listOf(
+    private val allowedReturnTypes = setOf(
             Unit::class.java,
-            Void::class.javaObjectType,
             Void::class.javaPrimitiveType!!,
             Boolean::class.javaObjectType,
-            Boolean::class.javaPrimitiveType!!
+            Boolean::class.javaPrimitiveType!!,
+            OnPlayerCommandTextListener.Result::class.java,
+            OnPlayerCommandTextListener.Result.Processed::class.java,
+            OnPlayerCommandTextListener.Result.UnknownCommand::class.java
+    )
+
+    private val allowedCollectionTypes = setOf(
+            java.lang.Iterable::class.java,
+            Iterable::class.java,
+            java.util.Collection::class.java,
+            Collection::class.java,
+            java.util.List::class.java,
+            List::class.java,
+            java.util.Set::class.java,
+            Set::class.java
     )
 
     fun load(commandsClass: Class<out Commands>): List<CommandDefinition> {
@@ -48,18 +64,19 @@ constructor(
         }
         val commandErrorHandler = getErrorHandler(commandsClass)
         val commandMethods = getCommandMethods(commandsClass)
+        val commandGroupName = commandsClass.getAnnotation(CommandGroup::class.java)?.name?.toLowerCase()
         return commandMethods.map {
             try {
-                getCommandDefinition(it, commandAccessCheckerGroups, commandErrorHandler)
+                getCommandDefinition(it, commandAccessCheckerGroups, commandErrorHandler, commandGroupName)
             } catch (e: CommandDefinitionLoaderException) {
-                throw IllegalArgumentException("Could not load definition for method $it", e)
+                throw CommandDefinitionLoaderException("Could not load definition for method $it", e)
             }
         }
     }
 
     private fun getCommandMethods(commandsClass: Class<out Commands>): List<Method> {
         val commandMethods = mutableListOf<Method>()
-        commandsClass.methods.filter { it.getAnnotation(Command::class.java) != null }.forEach {
+        commandsClass.declaredMethods.filter { it.getAnnotation(Command::class.java) != null }.forEach {
             if (isStatic(it.modifiers) || !isPublic(it.modifiers)) {
                 throw CommandDefinitionLoaderException("Method $it must be non-static and public")
             }
@@ -74,7 +91,8 @@ constructor(
     private fun getCommandDefinition(
             commandMethod: Method,
             classAccessCheckers: List<CommandAccessCheckerGroup>,
-            classCommandErrorHandler: CommandErrorHandler?
+            classCommandErrorHandler: CommandErrorHandler?,
+            commandGroupName: String?
     ): CommandDefinition {
         val commandAnnotation: Command? = commandMethod.getAnnotation(Command::class.java)
         val name = (commandAnnotation?.name?.takeIf { it.isNotEmpty() } ?: commandMethod.name).toLowerCase()
@@ -93,14 +111,15 @@ constructor(
         }
         return CommandDefinition(
                 name = name,
-                aliases = aliases,
+                groupName = commandGroupName,
+                aliases = unmodifiableSet(aliases),
                 description = description,
                 method = commandMethod,
-                parameters = parameters,
+                parameters = unmodifiableList(parameters),
                 isGreedy = isGreedy,
                 isListed = isListed,
                 errorHandler = errorHandler,
-                accessCheckers = accessCheckers
+                accessCheckers = unmodifiableList(accessCheckers)
         )
     }
 
@@ -137,7 +156,7 @@ constructor(
     }
 
     private fun getCommandParameterResolver(parameter: java.lang.reflect.Parameter, isLast: Boolean): CommandParameterResolver<*> {
-        if (java.util.Collection::class.java.isAssignableFrom(parameter.type) || Collection::class.java.isAssignableFrom(parameter.type)) {
+        if (allowedCollectionTypes.contains(parameter.type)) {
             if (!isLast) {
                 throw CommandDefinitionLoaderException("Only the last parameter can be a collection type")
             }
@@ -174,14 +193,14 @@ constructor(
     private fun getAccessChecks(commandMethod: Method): List<AccessCheck> {
         val annotations = mutableListOf<AccessCheck>()
         commandMethod.getAnnotation(AccessCheck::class.java)?.let { annotations += it }
-        commandMethod.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessCheckers }
+        commandMethod.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessChecks }
         return annotations
     }
 
     private fun getAccessChecks(commandsClass: Class<out Commands>): List<AccessCheck> {
         val annotations = mutableListOf<AccessCheck>()
         commandsClass.getAnnotation(AccessCheck::class.java)?.let { annotations += it }
-        commandsClass.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessCheckers }
+        commandsClass.getAnnotation(AccessChecks::class.java)?.let { annotations += it.accessChecks }
         return annotations
     }
 

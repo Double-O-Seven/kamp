@@ -7,9 +7,9 @@ import java.util.*
 data class CommandAccessCheckerGroup
 internal constructor(
         val accessCheckers: List<CommandAccessChecker>,
-        val accessDeniedHandlers: List<CommandAccessDeniedHandler>,
-        private val errorMessage: String?,
-        private val errorMessageTextKey: TextKey?,
+        val accessDeniedHandlers: List<CommandAccessDeniedHandler> = emptyList(),
+        private val errorMessage: String? = null,
+        private val errorMessageTextKey: TextKey? = null,
         private val textProvider: TextProvider
 ) {
 

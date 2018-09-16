@@ -2,14 +2,24 @@ package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandAccessChecker
+import ch.leadrian.samp.kamp.core.api.command.CommandAccessCheckerGroup
+import ch.leadrian.samp.kamp.core.api.command.CommandAccessDeniedHandler
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.CommandDescription
 import ch.leadrian.samp.kamp.core.api.command.CommandErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterDefinition
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
+import ch.leadrian.samp.kamp.core.api.command.InvalidCommandParameterValueHandler
+import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
+import ch.leadrian.samp.kamp.core.api.command.annotation.AccessChecks
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
+import ch.leadrian.samp.kamp.core.api.command.annotation.CommandGroup
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
+import ch.leadrian.samp.kamp.core.api.command.annotation.ErrorHandler
+import ch.leadrian.samp.kamp.core.api.command.annotation.InvalidParameterValueHandler
+import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
+import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -19,10 +29,17 @@ import com.google.inject.Injector
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
+import java.util.stream.Stream
 
-internal class CommandDefinitionLoaderTest {
+class CommandDefinitionLoaderTest {
 
     private lateinit var commandDefinitionLoader: CommandDefinitionLoader
 
@@ -215,14 +232,775 @@ internal class CommandDefinitionLoaderTest {
 
     }
 
+    @Test
+    fun shouldLoadAliases() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAliases::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(CommandDefinition(
+                        name = "foo",
+                        aliases = setOf("f", "bar", "baz"),
+                        method = CommandsWithAliases::class.java.getMethod(
+                                "foo",
+                                Player::class.java
+                        ),
+                        parameters = listOf()
+                ))
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithAliases : Commands() {
+
+        @Command(aliases = ["f", "bar", "baz"])
+        fun foo(player: Player) {
+        }
+    }
+
+    @Test
+    fun shouldLoadGreediness() {
+        val commandDefinitions = commandDefinitionLoader.load(GreedyCommands::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                isGreedy = true,
+                                method = GreedyCommands::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "bar",
+                                isGreedy = false,
+                                method = GreedyCommands::class.java.getMethod(
+                                        "bar",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "baz",
+                                isGreedy = true,
+                                method = GreedyCommands::class.java.getMethod(
+                                        "baz",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class GreedyCommands : Commands() {
+
+        @Command(isGreedy = true)
+        fun foo(player: Player) {
+        }
+
+        @Command(isGreedy = false)
+        fun bar(player: Player) {
+        }
+
+        @Command
+        fun baz(player: Player) {
+        }
+    }
+
+    @Test
+    fun shouldLoadErrorHandler() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithErrorHandler::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                method = CommandsWithErrorHandler::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                errorHandler = FooCommandErrorHandler
+                        ),
+                        CommandDefinition(
+                                name = "bar",
+                                method = CommandsWithErrorHandler::class.java.getMethod(
+                                        "bar",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                errorHandler = BarCommandErrorHandler
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @ErrorHandler(FooCommandErrorHandler::class)
+    class CommandsWithErrorHandler : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+        @ErrorHandler(BarCommandErrorHandler::class)
+        @Command
+        fun bar(player: Player) {
+        }
+    }
+
+    @Test
+    fun shouldLoadAccessCheckers() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAccessCheckers::class.java)
+
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                method = CommandsWithAccessCheckers::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                accessCheckers = listOf(
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(FooCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(FooCommandAccessDeniedHandler),
+                                                errorMessage = "Foo error",
+                                                errorMessageTextKey = TextKey("foo.error"),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(BarCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(BarCommandAccessDeniedHandler),
+                                                errorMessageTextKey = TextKey("bar.error"),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(BatCommandAccessChecker),
+                                                errorMessage = "Bat error",
+                                                textProvider = textProvider
+                                        )
+                                )
+                        ),
+                        CommandDefinition(
+                                name = "baz",
+                                method = CommandsWithAccessCheckers::class.java.getMethod(
+                                        "baz",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                accessCheckers = listOf(
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(BazCommandAccessChecker, FoobarCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(BazCommandAccessDeniedHandler),
+                                                errorMessage = "Baz error",
+                                                errorMessageTextKey = TextKey("baz.error"),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(QuxCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(QuxCommandAccessDeniedHandler),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(FooCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(FooCommandAccessDeniedHandler),
+                                                errorMessage = "Foo error",
+                                                errorMessageTextKey = TextKey("foo.error"),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(BarCommandAccessChecker),
+                                                accessDeniedHandlers = listOf(BarCommandAccessDeniedHandler),
+                                                errorMessageTextKey = TextKey("bar.error"),
+                                                textProvider = textProvider
+                                        ),
+                                        CommandAccessCheckerGroup(
+                                                accessCheckers = listOf(BatCommandAccessChecker),
+                                                errorMessage = "Bat error",
+                                                textProvider = textProvider
+                                        )
+                                )
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @AccessCheck(
+            accessCheckers = [FooCommandAccessChecker::class],
+            accessDeniedHandlers = [FooCommandAccessDeniedHandler::class],
+            errorMessage = "Foo error",
+            errorMessageTextKey = "foo.error"
+    )
+    @AccessChecks([
+        AccessCheck(
+                accessCheckers = [BarCommandAccessChecker::class],
+                errorMessageTextKey = "bar.error",
+                accessDeniedHandlers = [BarCommandAccessDeniedHandler::class]
+        ),
+        AccessCheck(
+                accessCheckers = [BatCommandAccessChecker::class],
+                errorMessage = "Bat error"
+        )
+    ])
+    class CommandsWithAccessCheckers : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+        @Command
+        @AccessCheck(
+                accessCheckers = [BazCommandAccessChecker::class, FoobarCommandAccessChecker::class],
+                accessDeniedHandlers = [BazCommandAccessDeniedHandler::class],
+                errorMessage = "Baz error",
+                errorMessageTextKey = "baz.error"
+        )
+        @AccessChecks([
+            AccessCheck(
+                    accessCheckers = [QuxCommandAccessChecker::class],
+                    accessDeniedHandlers = [QuxCommandAccessDeniedHandler::class]
+            )
+        ])
+        fun baz(player: Player) {
+        }
+
+    }
+
+    @Test
+    fun shouldLoadWhetherCommandsAreListed() {
+        val commandDefinitions = commandDefinitionLoader.load(ListedAndUnlistedCommands::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                method = ListedAndUnlistedCommands::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                isListed = false
+                        ),
+                        CommandDefinition(
+                                name = "bar",
+                                method = ListedAndUnlistedCommands::class.java.getMethod(
+                                        "bar",
+                                        Player::class.java
+                                ),
+                                parameters = listOf(),
+                                isListed = true
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class ListedAndUnlistedCommands : Commands() {
+
+        @Unlisted
+        @Command
+        fun foo(player: Player) {
+        }
+
+        @Command
+        fun bar(player: Player) {
+        }
+    }
+
+    @Test
+    fun shouldLoadParameters() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithParameters::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(CommandDefinition(
+                        name = "foo",
+                        method = CommandsWithParameters::class.java.getMethod(
+                                "foo",
+                                Player::class.java,
+                                Int::class.javaPrimitiveType!!,
+                                String::class.java
+                        ),
+                        parameters = listOf(
+                                CommandParameterDefinition(
+                                        type = Int::class.javaPrimitiveType!!,
+                                        name = "foobar",
+                                        nameTextKey = TextKey("foo.bar"),
+                                        description = "Foobar param",
+                                        descriptionTextKey = TextKey("foo.bar.description"),
+                                        textProvider = textProvider,
+                                        resolver = PrimitiveIntParameterResolver,
+                                        invalidCommandParameterValueHandler = BarInvalidParameterValueHandler
+                                ),
+                                CommandParameterDefinition(
+                                        type = String::class.java,
+                                        textProvider = textProvider,
+                                        resolver = StringParameterResolver,
+                                        invalidCommandParameterValueHandler = FooInvalidParameterValueHandler
+                                )
+                        )
+                ))
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithParameters : Commands() {
+
+        @Command
+        @InvalidParameterValueHandler(FooInvalidParameterValueHandler::class)
+        fun foo(
+                player: Player,
+                @Parameter(
+                        name = "foobar",
+                        nameTextKey = "foo.bar",
+                        description = "Foobar param",
+                        descriptionTextKey = "foo.bar.description"
+                )
+                @InvalidParameterValueHandler(BarInvalidParameterValueHandler::class)
+                bar: Int,
+                baz: String
+        ) {
+        }
+
+    }
+
+    @Test
+    fun shouldOnlyLoadCommandsWithCommandAnnotation() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithMissingAnnotations::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(CommandDefinition(
+                        name = "foo",
+                        method = CommandsWithMissingAnnotations::class.java.getMethod(
+                                "foo",
+                                Player::class.java
+                        ),
+                        parameters = listOf()
+                ))
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithMissingAnnotations : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+        fun bar(player: Player) {
+        }
+    }
+
+    @Test
+    fun shouldLoadCommandGroupName() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithGroupName::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(CommandDefinition(
+                        name = "foo",
+                        groupName = "test",
+                        method = CommandsWithGroupName::class.java.getMethod(
+                                "foo",
+                                Player::class.java
+                        ),
+                        parameters = listOf()
+                ))
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    @CommandGroup("test")
+    class CommandsWithGroupName : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(CommandsWithInvalidMethodsArgumentsProvider::class)
+    fun givenCommandWithNonPublicOrStaticMethodItShouldThrowException(commandsClass: Class<out Commands>) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(CommandDefinitionLoaderException::class.java)
+    }
+
+    private class CommandsWithInvalidMethodsArgumentsProvider : ArgumentsProvider {
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+                Stream.of(
+                        Arguments.of(CommandsWithPrivateMethod::class.java),
+                        Arguments.of(CommandsWithStaticMethod::class.java),
+                        Arguments.of(CommandsWithProtectedMethod::class.java)
+                )
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithPrivateMethod : Commands() {
+
+        @Command
+        private fun foo(player: Player) {
+        }
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithStaticMethod : Commands() {
+
+        companion object {
+
+            @Command
+            @JvmStatic
+            fun foo(player: Player) {
+            }
+        }
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    open class CommandsWithProtectedMethod : Commands() {
+
+        @Command
+        protected fun foo(player: Player) {
+        }
+
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(InvalidFirstParameterArgumentsProvider::class)
+    fun givenCommandsWithoutPlayerAsFirstMethodParameterItShouldThrowAnException(commandsClass: Class<out Commands>) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(CommandDefinitionLoaderException::class.java)
+    }
+
+    private class InvalidFirstParameterArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+                Stream.of(
+                        Arguments.of(CommandsWithoutPlayerAsFirstParameter::class.java),
+                        Arguments.of(CommandsWithoutMethodParameters::class.java)
+                )
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithoutPlayerAsFirstParameter : Commands() {
+
+        @Command
+        fun foo(bar: Int, player: Player) {
+        }
+
+    }
+
+    class CommandsWithoutMethodParameters : Commands() {
+
+        @Command
+        fun foo() {
+        }
+
+    }
+
+    @Test
+    fun shouldLoadMethodsWithValidReturnTypes() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidMethodReturnTypes::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "bar",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "bar",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "baz",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "baz",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "bat",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "bat",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "qux",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "qux",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        ),
+                        CommandDefinition(
+                                name = "foobar",
+                                method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
+                                        "foobar",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithValidMethodReturnTypes : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+        @Command
+        fun bar(player: Player): Boolean {
+            return true
+        }
+
+        @Command
+        fun baz(player: Player): Boolean? {
+            return null
+        }
+
+        @Command
+        fun bat(player: Player): OnPlayerCommandTextListener.Result {
+            return OnPlayerCommandTextListener.Result.Processed
+        }
+
+        @Command
+        fun qux(player: Player): OnPlayerCommandTextListener.Result.Processed {
+            return OnPlayerCommandTextListener.Result.Processed
+        }
+
+        @Command
+        fun foobar(player: Player): OnPlayerCommandTextListener.Result.UnknownCommand {
+            return OnPlayerCommandTextListener.Result.UnknownCommand
+        }
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(InvalidReturnTypeArgumentsProvider::class)
+    fun givenCommandWithInvalidReturnTypeItShouldThrowException(commandsClass: Class<out Commands>) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(CommandDefinitionLoaderException::class.java)
+    }
+
+    private class InvalidReturnTypeArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
+                Stream.of(
+                        Arguments.of(CommandsWithIntReturnType::class.java),
+                        Arguments.of(CommandsWithFloatReturnType::class.java),
+                        Arguments.of(CommandsWithAnyReturnType::class.java),
+                        Arguments.of(CommandsWithStringReturnType::class.java)
+                )
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithIntReturnType : Commands() {
+
+        @Command
+        fun foo(player: Player): Int {
+            return 1337
+        }
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithFloatReturnType : Commands() {
+
+        @Command
+        fun foo(player: Player): Float {
+            return 1337f
+        }
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithAnyReturnType : Commands() {
+
+        @Command
+        fun foo(player: Player): Any {
+            return Any()
+        }
+
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithStringReturnType : Commands() {
+
+        @Command
+        fun foo(player: Player): String {
+            return "Hi there"
+        }
+
+    }
+
+    @Test
+    fun shouldLoadMethodsWithValidCollectionTypes() {
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidCollectionTypes::class.java)
+
+        assertThat(commandDefinitions)
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                method = CommandsWithValidCollectionTypes::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java,
+                                        Iterable::class.java
+                                ),
+                                parameters = listOf(CommandParameterDefinition(
+                                        type = Iterable::class.java,
+                                        resolver = StringParameterResolver,
+                                        textProvider = textProvider
+                                ))
+                        ),
+                        CommandDefinition(
+                                name = "bar",
+                                method = CommandsWithValidCollectionTypes::class.java.getMethod(
+                                        "bar",
+                                        Player::class.java,
+                                        Collection::class.java
+                                ),
+                                parameters = listOf(CommandParameterDefinition(
+                                        type = Collection::class.java,
+                                        resolver = StringParameterResolver,
+                                        textProvider = textProvider
+                                ))
+                        ),
+                        CommandDefinition(
+                                name = "baz",
+                                method = CommandsWithValidCollectionTypes::class.java.getMethod(
+                                        "baz",
+                                        Player::class.java,
+                                        List::class.java
+                                ),
+                                parameters = listOf(CommandParameterDefinition(
+                                        type = List::class.java,
+                                        resolver = StringParameterResolver,
+                                        textProvider = textProvider
+                                ))
+                        ),
+                        CommandDefinition(
+                                name = "bat",
+                                method = CommandsWithValidCollectionTypes::class.java.getMethod(
+                                        "bat",
+                                        Player::class.java,
+                                        Set::class.java
+                                ),
+                                parameters = listOf(CommandParameterDefinition(
+                                        type = Set::class.java,
+                                        resolver = StringParameterResolver,
+                                        textProvider = textProvider
+                                ))
+                        )
+                )
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithValidCollectionTypes : Commands() {
+
+        @Command
+        fun foo(player: Player, params: Iterable<String>) {
+        }
+
+        @Command
+        fun bar(player: Player, params: Collection<String>) {
+        }
+
+        @Command
+        fun baz(player: Player, params: List<String>) {
+        }
+
+        @Command
+        fun bat(player: Player, params: Set<String>) {
+        }
+
+    }
+
+    @Test
+    fun givenCollectionTypeParameterIsNotTheLastParameterItShouldThrowException() {
+        val caughtThrowable = catchThrowable {
+            commandDefinitionLoader.load(CommandsWithCollectionParameterNotInLastPlace::class.java)
+        }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(CommandDefinitionLoaderException::class.java)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithCollectionParameterNotInLastPlace : Commands() {
+
+        @Command
+        fun foo(player: Player, bar: Iterable<String>, baz: Int) {
+        }
+    }
+
+    @Test
+    fun givenInvalidCollectionTypeArgumentItShouldThrowException() {
+        val caughtThrowable = catchThrowable {
+            commandDefinitionLoader.load(CommandsWithInvalidCollectionTypeArgument::class.java)
+        }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(CommandDefinitionLoaderException::class.java)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    class CommandsWithInvalidCollectionTypeArgument : Commands() {
+
+        @Command
+        fun <T> foo(player: Player, bar: Iterable<T>) {
+        }
+    }
+
     private class TestModule : AbstractModule() {
 
         override fun configure() {
-            bind(FooCommandAccessChecker::class.java)
-            bind(BarCommandAccessChecker::class.java)
-            bind(FooCommandErrorHandler::class.java)
-            bind(BarCommandErrorHandler::class.java)
+            bind(FooInvalidParameterValueHandler::class.java).toInstance(FooInvalidParameterValueHandler)
+            bind(BarInvalidParameterValueHandler::class.java).toInstance(BarInvalidParameterValueHandler)
+            bind(FooCommandAccessChecker::class.java).toInstance(FooCommandAccessChecker)
+            bind(BarCommandAccessChecker::class.java).toInstance(BarCommandAccessChecker)
+            bind(BazCommandAccessChecker::class.java).toInstance(BazCommandAccessChecker)
+            bind(BatCommandAccessChecker::class.java).toInstance(BatCommandAccessChecker)
+            bind(QuxCommandAccessChecker::class.java).toInstance(QuxCommandAccessChecker)
+            bind(FoobarCommandAccessChecker::class.java).toInstance(FoobarCommandAccessChecker)
+            bind(FooCommandAccessDeniedHandler::class.java).toInstance(FooCommandAccessDeniedHandler)
+            bind(BarCommandAccessDeniedHandler::class.java).toInstance(BarCommandAccessDeniedHandler)
+            bind(BazCommandAccessDeniedHandler::class.java).toInstance(BazCommandAccessDeniedHandler)
+            bind(QuxCommandAccessDeniedHandler::class.java).toInstance(QuxCommandAccessDeniedHandler)
+            bind(FooCommandErrorHandler::class.java).toInstance(FooCommandErrorHandler)
+            bind(BarCommandErrorHandler::class.java).toInstance(BarCommandErrorHandler)
         }
+
+    }
+
+    object FooInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+
+    }
+
+    object BarInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
@@ -253,25 +1031,73 @@ internal class CommandDefinitionLoaderTest {
 
     }
 
-    class FooCommandAccessChecker : CommandAccessChecker {
+    object FooCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    class BarCommandAccessChecker : CommandAccessChecker {
+    object BarCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    class FooCommandErrorHandler : CommandErrorHandler {
+    object BazCommandAccessChecker : CommandAccessChecker {
+
+        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+
+    }
+
+    object BatCommandAccessChecker : CommandAccessChecker {
+
+        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+
+    }
+
+    object QuxCommandAccessChecker : CommandAccessChecker {
+
+        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+
+    }
+
+    object FoobarCommandAccessChecker : CommandAccessChecker {
+
+        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+
+    }
+
+    object FooCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+
+    }
+
+    object BarCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+
+    }
+
+    object BazCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+
+    }
+
+    object QuxCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+
+        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+
+    }
+
+    object FooCommandErrorHandler : CommandErrorHandler {
 
         override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    class BarCommandErrorHandler : CommandErrorHandler {
+    object BarCommandErrorHandler : CommandErrorHandler {
 
         override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
