@@ -992,19 +992,19 @@ class CommandDefinitionLoaderTest {
 
     }
 
-    object FooInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
+    private object FooInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object BarInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
+    private object BarInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object StringParameterResolver : CommandParameterResolver<String> {
+    private object StringParameterResolver : CommandParameterResolver<String> {
 
         override val parameterType: Class<String>
             get() = String::class.java
@@ -1013,7 +1013,7 @@ class CommandDefinitionLoaderTest {
 
     }
 
-    object IntParameterResolver : CommandParameterResolver<Int> {
+    private object IntParameterResolver : CommandParameterResolver<Int> {
 
         override val parameterType: Class<Int>
             get() = Int::class.javaObjectType
@@ -1022,7 +1022,7 @@ class CommandDefinitionLoaderTest {
 
     }
 
-    object PrimitiveIntParameterResolver : CommandParameterResolver<Int> {
+    private object PrimitiveIntParameterResolver : CommandParameterResolver<Int> {
 
         override val parameterType: Class<Int>
             get() = Int::class.javaPrimitiveType!!
@@ -1031,73 +1031,73 @@ class CommandDefinitionLoaderTest {
 
     }
 
-    object FooCommandAccessChecker : CommandAccessChecker {
+    private object FooCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object BarCommandAccessChecker : CommandAccessChecker {
+    private object BarCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object BazCommandAccessChecker : CommandAccessChecker {
+    private object BazCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object BatCommandAccessChecker : CommandAccessChecker {
+    private object BatCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object QuxCommandAccessChecker : CommandAccessChecker {
+    private object QuxCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object FoobarCommandAccessChecker : CommandAccessChecker {
+    private object FoobarCommandAccessChecker : CommandAccessChecker {
 
         override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
-    object FooCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+    private object FooCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object BarCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+    private object BarCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object BazCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+    private object BazCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object QuxCommandAccessDeniedHandler : CommandAccessDeniedHandler {
+    private object QuxCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
         override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object FooCommandErrorHandler : CommandErrorHandler {
+    private object FooCommandErrorHandler : CommandErrorHandler {
 
         override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
-    object BarCommandErrorHandler : CommandErrorHandler {
+    private object BarCommandErrorHandler : CommandErrorHandler {
 
         override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 

@@ -7,10 +7,14 @@ import javax.inject.Singleton
 @Singleton
 internal class CommandParameterResolverRegistry
 @Inject
-constructor() {
+constructor(resolvers: Set<@JvmSuppressWildcards CommandParameterResolver<*>>) {
 
-    fun getResolver(clazz: Class<*>): CommandParameterResolver<*> {
-        TODO()
+    private val resolversByParameterType: Map<Class<*>, CommandParameterResolver<*>> = resolvers.associateBy { it.parameterType }
+
+    fun <T : Any> getResolver(parameterType: Class<T>): CommandParameterResolver<out T> {
+        @Suppress("UNCHECKED_CAST")
+        val resolver = resolversByParameterType[parameterType] as CommandParameterResolver<out T>?
+        return resolver ?: throw NoSuchElementException("No resolver for type $parameterType registered")
     }
 
 }

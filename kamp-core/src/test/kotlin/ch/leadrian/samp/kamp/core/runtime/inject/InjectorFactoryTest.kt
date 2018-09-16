@@ -43,13 +43,13 @@ internal class InjectorFactoryTest {
 
     }
 
-    interface BarService {
+    private interface BarService {
 
         fun bar()
 
     }
 
-    class FooService
+    private class FooService
     @Inject
     constructor(private val barService: BarService) {
 

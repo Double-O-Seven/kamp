@@ -4,6 +4,6 @@ interface CommandParameterResolver<T : Any> {
 
     val parameterType: Class<T>
 
-    fun resolve(value: String): T
+    fun resolve(value: String): T?
 
 }
