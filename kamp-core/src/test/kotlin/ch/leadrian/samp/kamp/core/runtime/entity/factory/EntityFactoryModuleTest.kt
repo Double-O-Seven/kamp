@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
@@ -8,8 +7,6 @@ import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import com.google.inject.TypeLiteral
-import com.google.inject.name.Names
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -155,9 +152,6 @@ internal class EntityFactoryModuleTest {
     private class TestModule : AbstractModule() {
 
         override fun configure() {
-            bind(object : TypeLiteral<@JvmSuppressWildcards Set<@JvmSuppressWildcards String>>() {})
-                    .annotatedWith(Names.named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME))
-                    .toInstance(setOf())
             bind(SAMPNativeFunctionExecutor::class.java).toInstance(mockk(relaxed = true))
         }
 

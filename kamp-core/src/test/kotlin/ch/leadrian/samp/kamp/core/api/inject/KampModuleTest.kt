@@ -1,12 +1,14 @@
 package ch.leadrian.samp.kamp.core.api.inject
 
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
+import javax.inject.Named
 
 internal class KampModuleTest {
 
@@ -39,7 +41,10 @@ internal class KampModuleTest {
 
     private class BarService
     @Inject
-    constructor(val resourceBundlePackages: Set<@JvmSuppressWildcards String>)
+    constructor(
+            @Named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME)
+            val resourceBundlePackages: Set<@JvmSuppressWildcards String>
+    )
 
     private class FooModule : KampModule() {
 
