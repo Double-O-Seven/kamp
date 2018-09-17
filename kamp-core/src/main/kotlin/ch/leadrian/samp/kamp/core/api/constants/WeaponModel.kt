@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 import ch.leadrian.samp.kamp.core.TextKeys
 import ch.leadrian.samp.kamp.core.api.text.HasTextKey
 import ch.leadrian.samp.kamp.core.api.text.TextKey
+import org.apache.commons.collections4.trie.PatriciaTrie
 
 /**
  * Base damage and range taken from https://github.com/oscar-broman/samp-weapon-config
@@ -450,6 +451,30 @@ enum class WeaponModel(
             baseDamage = 165f
     );
 
-    companion object : ConstantValueRegistry<Int, WeaponModel>(*WeaponModel.values())
+    companion object : ConstantValueRegistry<Int, WeaponModel>(*WeaponModel.values()) {
+
+        private val weaponModelsByName = PatriciaTrie<WeaponModel>()
+
+        init {
+            // Only index models with unique names
+            WeaponModel
+                    .values()
+                    .groupBy { it.modelName.toLowerCase() }
+                    .values
+                    .filter { it.size == 1 }
+                    .map { it.first() }
+                    .forEach {
+                        weaponModelsByName[it.modelName.toLowerCase()] = it
+                    }
+        }
+
+        operator fun get(modelName: String): WeaponModel? {
+            val models = weaponModelsByName.prefixMap(modelName.toLowerCase()).values
+            return when {
+                models.size == 1 -> models.first()
+                else -> null
+            }
+        }
+    }
 
 }
