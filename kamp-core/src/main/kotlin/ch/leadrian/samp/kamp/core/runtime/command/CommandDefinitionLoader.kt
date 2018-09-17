@@ -58,7 +58,8 @@ constructor(
             Set::class.java
     )
 
-    fun load(commandsClass: Class<out Commands>): List<CommandDefinition> {
+    fun load(commandsInstance: Commands): List<CommandDefinition> {
+        val commandsClass = commandsInstance::class.java
         val commandAccessCheckerGroups = getAccessChecks(commandsClass).map {
             getCommandAccessCheckerGroup(it)
         }
@@ -67,7 +68,13 @@ constructor(
         val commandGroupName = commandsClass.getAnnotation(CommandGroup::class.java)?.name?.toLowerCase()
         return commandMethods.map {
             try {
-                getCommandDefinition(it, commandAccessCheckerGroups, commandErrorHandler, commandGroupName)
+                getCommandDefinition(
+                        commandsInstance,
+                        it,
+                        commandAccessCheckerGroups,
+                        commandErrorHandler,
+                        commandGroupName
+                )
             } catch (e: CommandDefinitionLoaderException) {
                 throw CommandDefinitionLoaderException("Could not load definition for method $it", e)
             }
@@ -89,6 +96,7 @@ constructor(
     }
 
     private fun getCommandDefinition(
+            commandsInstance: Commands,
             commandMethod: Method,
             classAccessCheckers: List<CommandAccessCheckerGroup>,
             classCommandErrorHandler: CommandErrorHandler?,
@@ -114,6 +122,7 @@ constructor(
                 groupName = commandGroupName,
                 aliases = unmodifiableSet(aliases),
                 description = description,
+                commandsInstance = commandsInstance,
                 method = commandMethod,
                 parameters = unmodifiableList(parameters),
                 isGreedy = isGreedy,

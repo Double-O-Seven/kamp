@@ -62,12 +62,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadCommandParameterResolvers() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsForCommandParameterResolverTests::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsForCommandParameterResolverTests)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "say",
+                                commandsInstance = CommandsForCommandParameterResolverTests,
                                 method = CommandsForCommandParameterResolverTests::class.java.getMethod(
                                         "say",
                                         Player::class.java,
@@ -81,6 +82,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "setname",
+                                commandsInstance = CommandsForCommandParameterResolverTests,
                                 method = CommandsForCommandParameterResolverTests::class.java.getMethod(
                                         "setName",
                                         Player::class.java,
@@ -102,6 +104,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "banall",
+                                commandsInstance = CommandsForCommandParameterResolverTests,
                                 method = CommandsForCommandParameterResolverTests::class.java.getMethod(
                                         "banAll",
                                         Player::class.java,
@@ -123,6 +126,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "kill",
+                                commandsInstance = CommandsForCommandParameterResolverTests,
                                 method = CommandsForCommandParameterResolverTests::class.java.getMethod(
                                         "kill",
                                         Player::class.java
@@ -133,7 +137,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsForCommandParameterResolverTests : Commands() {
+    private object CommandsForCommandParameterResolverTests : Commands() {
 
         @Command
         fun say(player: Player, message: String) {
@@ -155,12 +159,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadDescriptions() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithDescriptions::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithDescriptions)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = CommandsWithDescriptions,
                                 description = CommandDescription(
                                         text = "Foo command",
                                         textKey = TextKey("command.foo.description"),
@@ -174,6 +179,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = CommandsWithDescriptions,
                                 description = CommandDescription(
                                         textKey = TextKey("command.bar.description"),
                                         textProvider = textProvider
@@ -186,6 +192,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "baz",
+                                commandsInstance = CommandsWithDescriptions,
                                 description = CommandDescription(
                                         text = "Baz command",
                                         textProvider = textProvider
@@ -198,6 +205,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "lol",
+                                commandsInstance = CommandsWithDescriptions,
                                 method = CommandsWithDescriptions::class.java.getMethod(
                                         "lol",
                                         Player::class.java
@@ -208,7 +216,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithDescriptions : Commands() {
+    private object CommandsWithDescriptions : Commands() {
 
         @Command
         @Description(text = "Foo command", textKey = "command.foo.description")
@@ -234,11 +242,12 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadAliases() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAliases::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAliases)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(CommandDefinition(
                         name = "foo",
+                        commandsInstance = CommandsWithAliases,
                         aliases = setOf("f", "bar", "baz"),
                         method = CommandsWithAliases::class.java.getMethod(
                                 "foo",
@@ -249,7 +258,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithAliases : Commands() {
+    private object CommandsWithAliases : Commands() {
 
         @Command(aliases = ["f", "bar", "baz"])
         fun foo(player: Player) {
@@ -258,12 +267,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadGreediness() {
-        val commandDefinitions = commandDefinitionLoader.load(GreedyCommands::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(GreedyCommands)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = GreedyCommands,
                                 isGreedy = true,
                                 method = GreedyCommands::class.java.getMethod(
                                         "foo",
@@ -273,6 +283,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = GreedyCommands,
                                 isGreedy = false,
                                 method = GreedyCommands::class.java.getMethod(
                                         "bar",
@@ -282,6 +293,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "baz",
+                                commandsInstance = GreedyCommands,
                                 isGreedy = true,
                                 method = GreedyCommands::class.java.getMethod(
                                         "baz",
@@ -293,7 +305,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class GreedyCommands : Commands() {
+    private object GreedyCommands : Commands() {
 
         @Command(isGreedy = true)
         fun foo(player: Player) {
@@ -310,12 +322,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadErrorHandler() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithErrorHandler::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithErrorHandler)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = CommandsWithErrorHandler,
                                 method = CommandsWithErrorHandler::class.java.getMethod(
                                         "foo",
                                         Player::class.java
@@ -325,6 +338,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = CommandsWithErrorHandler,
                                 method = CommandsWithErrorHandler::class.java.getMethod(
                                         "bar",
                                         Player::class.java
@@ -337,7 +351,7 @@ class CommandDefinitionLoaderTest {
 
     @Suppress("UNUSED_PARAMETER")
     @ErrorHandler(FooCommandErrorHandler::class)
-    class CommandsWithErrorHandler : Commands() {
+    private object CommandsWithErrorHandler : Commands() {
 
         @Command
         fun foo(player: Player) {
@@ -351,13 +365,14 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadAccessCheckers() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAccessCheckers::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithAccessCheckers)
 
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = CommandsWithAccessCheckers,
                                 method = CommandsWithAccessCheckers::class.java.getMethod(
                                         "foo",
                                         Player::class.java
@@ -386,6 +401,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "baz",
+                                commandsInstance = CommandsWithAccessCheckers,
                                 method = CommandsWithAccessCheckers::class.java.getMethod(
                                         "baz",
                                         Player::class.java
@@ -445,7 +461,7 @@ class CommandDefinitionLoaderTest {
                 errorMessage = "Bat error"
         )
     ])
-    class CommandsWithAccessCheckers : Commands() {
+    private object CommandsWithAccessCheckers : Commands() {
 
         @Command
         fun foo(player: Player) {
@@ -471,12 +487,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadWhetherCommandsAreListed() {
-        val commandDefinitions = commandDefinitionLoader.load(ListedAndUnlistedCommands::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(ListedAndUnlistedCommands)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = ListedAndUnlistedCommands,
                                 method = ListedAndUnlistedCommands::class.java.getMethod(
                                         "foo",
                                         Player::class.java
@@ -486,6 +503,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = ListedAndUnlistedCommands,
                                 method = ListedAndUnlistedCommands::class.java.getMethod(
                                         "bar",
                                         Player::class.java
@@ -497,7 +515,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class ListedAndUnlistedCommands : Commands() {
+    private object ListedAndUnlistedCommands : Commands() {
 
         @Unlisted
         @Command
@@ -511,11 +529,12 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadParameters() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithParameters::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithParameters)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(CommandDefinition(
                         name = "foo",
+                        commandsInstance = CommandsWithParameters,
                         method = CommandsWithParameters::class.java.getMethod(
                                 "foo",
                                 Player::class.java,
@@ -544,7 +563,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithParameters : Commands() {
+    private object CommandsWithParameters : Commands() {
 
         @Command
         @InvalidParameterValueHandler(FooInvalidParameterValueHandler::class)
@@ -566,11 +585,12 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldOnlyLoadCommandsWithCommandAnnotation() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithMissingAnnotations::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithMissingAnnotations)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(CommandDefinition(
                         name = "foo",
+                        commandsInstance = CommandsWithMissingAnnotations,
                         method = CommandsWithMissingAnnotations::class.java.getMethod(
                                 "foo",
                                 Player::class.java
@@ -580,7 +600,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithMissingAnnotations : Commands() {
+    private object CommandsWithMissingAnnotations : Commands() {
 
         @Command
         fun foo(player: Player) {
@@ -592,11 +612,12 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadCommandGroupName() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithGroupName::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithGroupName)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(CommandDefinition(
                         name = "foo",
+                        commandsInstance = CommandsWithGroupName,
                         groupName = "test",
                         method = CommandsWithGroupName::class.java.getMethod(
                                 "foo",
@@ -608,7 +629,7 @@ class CommandDefinitionLoaderTest {
 
     @Suppress("UNUSED_PARAMETER")
     @CommandGroup("test")
-    class CommandsWithGroupName : Commands() {
+    private object CommandsWithGroupName : Commands() {
 
         @Command
         fun foo(player: Player) {
@@ -618,8 +639,8 @@ class CommandDefinitionLoaderTest {
 
     @ParameterizedTest
     @ArgumentsSource(CommandsWithInvalidMethodsArgumentsProvider::class)
-    fun givenCommandWithNonPublicOrStaticMethodItShouldThrowException(commandsClass: Class<out Commands>) {
-        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+    fun givenCommandWithNonPublicOrStaticMethodItShouldThrowException(commands: Commands) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commands) }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(CommandDefinitionLoaderException::class.java)
@@ -628,15 +649,15 @@ class CommandDefinitionLoaderTest {
     private class CommandsWithInvalidMethodsArgumentsProvider : ArgumentsProvider {
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
                 Stream.of(
-                        Arguments.of(CommandsWithPrivateMethod::class.java),
-                        Arguments.of(CommandsWithStaticMethod::class.java),
-                        Arguments.of(CommandsWithProtectedMethod::class.java)
+                        Arguments.of(CommandsWithPrivateMethod),
+                        Arguments.of(CommandsWithStaticMethod()),
+                        Arguments.of(CommandsWithProtectedMethod())
                 )
 
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithPrivateMethod : Commands() {
+    private object CommandsWithPrivateMethod : Commands() {
 
         @Command
         private fun foo(player: Player) {
@@ -645,7 +666,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithStaticMethod : Commands() {
+    private class CommandsWithStaticMethod : Commands() {
 
         companion object {
 
@@ -658,7 +679,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    open class CommandsWithProtectedMethod : Commands() {
+    private open class CommandsWithProtectedMethod : Commands() {
 
         @Command
         protected fun foo(player: Player) {
@@ -668,8 +689,8 @@ class CommandDefinitionLoaderTest {
 
     @ParameterizedTest
     @ArgumentsSource(InvalidFirstParameterArgumentsProvider::class)
-    fun givenCommandsWithoutPlayerAsFirstMethodParameterItShouldThrowAnException(commandsClass: Class<out Commands>) {
-        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+    fun givenCommandsWithoutPlayerAsFirstMethodParameterItShouldThrowAnException(commands: Commands) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commands) }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(CommandDefinitionLoaderException::class.java)
@@ -679,14 +700,14 @@ class CommandDefinitionLoaderTest {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
                 Stream.of(
-                        Arguments.of(CommandsWithoutPlayerAsFirstParameter::class.java),
-                        Arguments.of(CommandsWithoutMethodParameters::class.java)
+                        Arguments.of(CommandsWithoutPlayerAsFirstParameter),
+                        Arguments.of(CommandsWithoutMethodParameters)
                 )
 
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithoutPlayerAsFirstParameter : Commands() {
+    private object CommandsWithoutPlayerAsFirstParameter : Commands() {
 
         @Command
         fun foo(bar: Int, player: Player) {
@@ -694,7 +715,7 @@ class CommandDefinitionLoaderTest {
 
     }
 
-    class CommandsWithoutMethodParameters : Commands() {
+    private object CommandsWithoutMethodParameters : Commands() {
 
         @Command
         fun foo() {
@@ -704,12 +725,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadMethodsWithValidReturnTypes() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidMethodReturnTypes::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidMethodReturnTypes)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "foo",
                                         Player::class.java
@@ -718,6 +740,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "bar",
                                         Player::class.java
@@ -726,6 +749,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "baz",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "baz",
                                         Player::class.java
@@ -734,6 +758,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bat",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "bat",
                                         Player::class.java
@@ -742,6 +767,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "qux",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "qux",
                                         Player::class.java
@@ -750,6 +776,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "foobar",
+                                commandsInstance = CommandsWithValidMethodReturnTypes,
                                 method = CommandsWithValidMethodReturnTypes::class.java.getMethod(
                                         "foobar",
                                         Player::class.java
@@ -760,7 +787,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithValidMethodReturnTypes : Commands() {
+    private object CommandsWithValidMethodReturnTypes : Commands() {
 
         @Command
         fun foo(player: Player) {
@@ -794,8 +821,8 @@ class CommandDefinitionLoaderTest {
 
     @ParameterizedTest
     @ArgumentsSource(InvalidReturnTypeArgumentsProvider::class)
-    fun givenCommandWithInvalidReturnTypeItShouldThrowException(commandsClass: Class<out Commands>) {
-        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commandsClass) }
+    fun givenCommandWithInvalidReturnTypeItShouldThrowException(commands: Commands) {
+        val caughtThrowable = catchThrowable { commandDefinitionLoader.load(commands) }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(CommandDefinitionLoaderException::class.java)
@@ -805,16 +832,16 @@ class CommandDefinitionLoaderTest {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
                 Stream.of(
-                        Arguments.of(CommandsWithIntReturnType::class.java),
-                        Arguments.of(CommandsWithFloatReturnType::class.java),
-                        Arguments.of(CommandsWithAnyReturnType::class.java),
-                        Arguments.of(CommandsWithStringReturnType::class.java)
+                        Arguments.of(CommandsWithIntReturnType),
+                        Arguments.of(CommandsWithFloatReturnType),
+                        Arguments.of(CommandsWithAnyReturnType),
+                        Arguments.of(CommandsWithStringReturnType)
                 )
 
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithIntReturnType : Commands() {
+    private object CommandsWithIntReturnType : Commands() {
 
         @Command
         fun foo(player: Player): Int {
@@ -824,7 +851,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithFloatReturnType : Commands() {
+    private object CommandsWithFloatReturnType : Commands() {
 
         @Command
         fun foo(player: Player): Float {
@@ -834,7 +861,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithAnyReturnType : Commands() {
+    private object CommandsWithAnyReturnType : Commands() {
 
         @Command
         fun foo(player: Player): Any {
@@ -844,7 +871,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithStringReturnType : Commands() {
+    private object CommandsWithStringReturnType : Commands() {
 
         @Command
         fun foo(player: Player): String {
@@ -855,12 +882,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadMethodsWithValidCollectionTypes() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidCollectionTypes::class.java)
+        val commandDefinitions = commandDefinitionLoader.load(CommandsWithValidCollectionTypes)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(
                         CommandDefinition(
                                 name = "foo",
+                                commandsInstance = CommandsWithValidCollectionTypes,
                                 method = CommandsWithValidCollectionTypes::class.java.getMethod(
                                         "foo",
                                         Player::class.java,
@@ -874,6 +902,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bar",
+                                commandsInstance = CommandsWithValidCollectionTypes,
                                 method = CommandsWithValidCollectionTypes::class.java.getMethod(
                                         "bar",
                                         Player::class.java,
@@ -887,6 +916,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "baz",
+                                commandsInstance = CommandsWithValidCollectionTypes,
                                 method = CommandsWithValidCollectionTypes::class.java.getMethod(
                                         "baz",
                                         Player::class.java,
@@ -900,6 +930,7 @@ class CommandDefinitionLoaderTest {
                         ),
                         CommandDefinition(
                                 name = "bat",
+                                commandsInstance = CommandsWithValidCollectionTypes,
                                 method = CommandsWithValidCollectionTypes::class.java.getMethod(
                                         "bat",
                                         Player::class.java,
@@ -915,7 +946,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithValidCollectionTypes : Commands() {
+    private object CommandsWithValidCollectionTypes : Commands() {
 
         @Command
         fun foo(player: Player, params: Iterable<String>) {
@@ -938,7 +969,7 @@ class CommandDefinitionLoaderTest {
     @Test
     fun givenCollectionTypeParameterIsNotTheLastParameterItShouldThrowException() {
         val caughtThrowable = catchThrowable {
-            commandDefinitionLoader.load(CommandsWithCollectionParameterNotInLastPlace::class.java)
+            commandDefinitionLoader.load(CommandsWithCollectionParameterNotInLastPlace)
         }
 
         assertThat(caughtThrowable)
@@ -946,7 +977,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithCollectionParameterNotInLastPlace : Commands() {
+    private object CommandsWithCollectionParameterNotInLastPlace : Commands() {
 
         @Command
         fun foo(player: Player, bar: Iterable<String>, baz: Int) {
@@ -956,7 +987,7 @@ class CommandDefinitionLoaderTest {
     @Test
     fun givenInvalidCollectionTypeArgumentItShouldThrowException() {
         val caughtThrowable = catchThrowable {
-            commandDefinitionLoader.load(CommandsWithInvalidCollectionTypeArgument::class.java)
+            commandDefinitionLoader.load(CommandsWithInvalidCollectionTypeArgument)
         }
 
         assertThat(caughtThrowable)
@@ -964,7 +995,7 @@ class CommandDefinitionLoaderTest {
     }
 
     @Suppress("UNUSED_PARAMETER")
-    class CommandsWithInvalidCollectionTypeArgument : Commands() {
+    private object CommandsWithInvalidCollectionTypeArgument : Commands() {
 
         @Command
         fun <T> foo(player: Player, bar: Iterable<T>) {

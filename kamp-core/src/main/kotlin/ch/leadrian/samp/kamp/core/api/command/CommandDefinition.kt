@@ -8,6 +8,7 @@ internal constructor(
         val groupName: String? = null,
         val aliases: Set<String> = emptySet(),
         val description: CommandDescription? = null,
+        val commandsInstance: Commands,
         val method: Method,
         val parameters: List<CommandParameterDefinition>,
         val isListed: Boolean = true,
