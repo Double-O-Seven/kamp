@@ -92,7 +92,7 @@ enum class VehicleModel(
     HERMES(SAMPConstants.VEHICLE_HERMES, TextKeys.vehicle.model.name.hermes, "Hermes", VehicleType.CAR, 2),
     SABRE(SAMPConstants.VEHICLE_SABRE, TextKeys.vehicle.model.name.sabre, "Sabre", VehicleType.CAR, 2),
     RUSTLER(SAMPConstants.VEHICLE_RUSTLER, TextKeys.vehicle.model.name.rustler, "Rustler", VehicleType.AIRCRAFT, 1),
-    ZR350(SAMPConstants.VEHICLE_ZR350, TextKeys.vehicle.model.name.zr350, "ZR3 50", VehicleType.CAR, 2),
+    ZR350(SAMPConstants.VEHICLE_ZR350, TextKeys.vehicle.model.name.zr350, "ZR-350", VehicleType.CAR, 2),
     WALTON(SAMPConstants.VEHICLE_WALTON, TextKeys.vehicle.model.name.walton, "Walton", VehicleType.CAR, 2),
     REGINA(SAMPConstants.VEHICLE_REGINA, TextKeys.vehicle.model.name.regina, "Regina", VehicleType.CAR, 4),
     COMET(SAMPConstants.VEHICLE_COMET, TextKeys.vehicle.model.name.comet, "Comet", VehicleType.CAR, 2),
