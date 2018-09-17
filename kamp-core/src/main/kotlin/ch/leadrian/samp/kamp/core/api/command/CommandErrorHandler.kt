@@ -5,6 +5,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 
 interface CommandErrorHandler {
 
-    fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result
+    fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result
 
 }

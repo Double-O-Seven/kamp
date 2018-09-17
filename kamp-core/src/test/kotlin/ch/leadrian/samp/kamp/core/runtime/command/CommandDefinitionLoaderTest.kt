@@ -1124,13 +1124,13 @@ class CommandDefinitionLoaderTest {
 
     private object FooCommandErrorHandler : CommandErrorHandler {
 
-        override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object BarCommandErrorHandler : CommandErrorHandler {
 
-        override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
