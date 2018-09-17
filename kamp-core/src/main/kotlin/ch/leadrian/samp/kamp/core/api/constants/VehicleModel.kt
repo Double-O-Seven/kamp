@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import org.apache.commons.collections4.trie.PatriciaTrie
+
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
@@ -222,6 +224,30 @@ enum class VehicleModel(
     FARMTRAILER(SAMPConstants.VEHICLE_FARMTRAILER, "Farm Plow", VehicleType.TRAILER, 0),
     UTILITYTRAILER(SAMPConstants.VEHICLE_UTILITYTRAILER, "Utility Trailer", VehicleType.TRAILER, 0);
 
-    companion object : ConstantValueRegistry<Int, VehicleModel>(*VehicleModel.values())
+    companion object : ConstantValueRegistry<Int, VehicleModel>(*VehicleModel.values()) {
+
+        private val vehicleModelsByName = PatriciaTrie<VehicleModel>()
+
+        init {
+            // Only index models with unique names
+            VehicleModel
+                    .values()
+                    .groupBy { it.modelName.toLowerCase() }
+                    .values
+                    .filter { it.size == 1 }
+                    .map { it.first() }
+                    .forEach {
+                        vehicleModelsByName[it.modelName.toLowerCase()] = it
+                    }
+        }
+
+        operator fun get(modelName: String): VehicleModel? {
+            val models = vehicleModelsByName.prefixMap(modelName.toLowerCase()).values
+            return when {
+                models.size == 1 -> models.first()
+                else -> null
+            }
+        }
+    }
 
 }
