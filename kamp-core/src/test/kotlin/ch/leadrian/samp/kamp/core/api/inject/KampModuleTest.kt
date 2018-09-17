@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.inject
 
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
+import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -35,6 +36,14 @@ internal class KampModuleTest {
                 .containsExactlyInAnyOrder("ch.leadrian.samp.kamp.foo", "ch.leadrian.samp.kamp.bar")
     }
 
+    @Test
+    fun shouldInjectCommands() {
+        val bazService = injector.getInstance(BazService::class.java)
+
+        assertThat(bazService.commands)
+                .containsExactlyInAnyOrder(FooCommands, BarCommands)
+    }
+
     private class FooService
     @Inject
     constructor(val resolvers: Set<@JvmSuppressWildcards CommandParameterResolver<*>>)
@@ -46,6 +55,10 @@ internal class KampModuleTest {
             val resourceBundlePackages: Set<@JvmSuppressWildcards String>
     )
 
+    private class BazService
+    @Inject
+    constructor(val commands: Set<@JvmSuppressWildcards Commands>)
+
     private class FooModule : KampModule() {
 
         override fun configure() {
@@ -54,6 +67,9 @@ internal class KampModuleTest {
             }
             newTextProviderResourceBundlePackagesSetBinder().apply {
                 addBinding().toInstance("ch.leadrian.samp.kamp.foo")
+            }
+            newCommandsSetBinder().apply {
+                addBinding().toInstance(FooCommands)
             }
         }
 
@@ -67,6 +83,9 @@ internal class KampModuleTest {
             }
             newTextProviderResourceBundlePackagesSetBinder().apply {
                 addBinding().toInstance("ch.leadrian.samp.kamp.bar")
+            }
+            newCommandsSetBinder().apply {
+                addBinding().toInstance(BarCommands)
             }
         }
 
@@ -89,5 +108,9 @@ internal class KampModuleTest {
         override fun resolve(value: String): Int = throw UnsupportedOperationException("test")
 
     }
+
+    private object FooCommands : Commands()
+
+    private object BarCommands : Commands()
 
 }
