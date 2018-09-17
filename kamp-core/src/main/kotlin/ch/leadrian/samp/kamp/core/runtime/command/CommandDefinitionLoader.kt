@@ -48,13 +48,9 @@ constructor(
     )
 
     private val allowedCollectionTypes = setOf(
-            java.lang.Iterable::class.java,
             Iterable::class.java,
-            java.util.Collection::class.java,
             Collection::class.java,
-            java.util.List::class.java,
             List::class.java,
-            java.util.Set::class.java,
             Set::class.java
     )
 
