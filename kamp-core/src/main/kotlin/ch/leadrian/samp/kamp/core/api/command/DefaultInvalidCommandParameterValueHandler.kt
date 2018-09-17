@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import javax.inject.Inject
 
-class DefaultInvalidCommandParameterValueHandler
+open class DefaultInvalidCommandParameterValueHandler
 @Inject
 constructor(
         private val messageSender: MessageSender,

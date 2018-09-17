@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import javax.inject.Inject
 
-class DefaultCommandAccessDeniedHandler
+open class DefaultCommandAccessDeniedHandler
 @Inject
 constructor() : CommandAccessDeniedHandler {
 
