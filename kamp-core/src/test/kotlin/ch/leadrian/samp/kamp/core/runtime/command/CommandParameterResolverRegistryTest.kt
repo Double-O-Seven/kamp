@@ -1,10 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
-import com.google.inject.AbstractModule
+import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import com.google.inject.Guice
-import com.google.inject.TypeLiteral
-import com.google.inject.multibindings.Multibinder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -34,10 +32,10 @@ internal class CommandParameterResolverRegistryTest {
 
     @Test
     fun shouldBeInjectableWithMultibinding() {
-        val module = object : AbstractModule() {
+        val module = object : KampModule() {
 
             override fun configure() {
-                Multibinder.newSetBinder(binder(), object : TypeLiteral<CommandParameterResolver<*>>() {}).apply {
+                newCommandParameterResolverSetBinder().apply {
                     addBinding().toInstance(StringParameterResolver)
                 }
             }
