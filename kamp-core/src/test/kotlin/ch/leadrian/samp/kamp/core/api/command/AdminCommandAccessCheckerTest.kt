@@ -17,7 +17,7 @@ internal class AdminCommandAccessCheckerTest {
         }
         val adminCommandAccessChecker = AdminCommandAccessChecker()
 
-        val result = adminCommandAccessChecker.isAccessGranted(player, mockk(), emptyList())
+        val result = adminCommandAccessChecker.hasAccess(player, mockk(), emptyList())
 
         assertThat(result)
                 .isEqualTo(expectedResult)

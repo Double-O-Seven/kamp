@@ -1064,37 +1064,37 @@ class CommandDefinitionLoaderTest {
 
     private object FooCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
     private object BarCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
     private object BazCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
     private object BatCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
     private object QuxCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 
     private object FoobarCommandAccessChecker : CommandAccessChecker {
 
-        override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
 
     }
 

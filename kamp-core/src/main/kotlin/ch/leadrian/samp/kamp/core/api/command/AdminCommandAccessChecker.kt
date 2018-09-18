@@ -7,6 +7,6 @@ class AdminCommandAccessChecker
 @Inject
 constructor() : CommandAccessChecker {
 
-    override fun isAccessGranted(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean =
+    override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean =
             player.isAdmin
 }
