@@ -31,7 +31,7 @@ internal class CommandExecutorTest {
                 commandsInstance = TestCommands(testService),
                 method = TestCommands::class.java.getMethod(commandMethodName, Player::class.java, Int::class.javaPrimitiveType)
         )
-        val parameterValues = arrayOf<Any?>(player, 1337)
+        val parameterValues = arrayOf(player, 1337)
 
         val result = commandExecutor.execute(commandDefinition, parameterValues)
 

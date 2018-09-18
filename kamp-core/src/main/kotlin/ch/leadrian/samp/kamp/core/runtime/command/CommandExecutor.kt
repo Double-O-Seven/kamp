@@ -9,7 +9,7 @@ internal class CommandExecutor
 @Inject
 constructor() {
 
-    fun execute(commandDefinition: CommandDefinition, parameterValues: Array<Any?>): OnPlayerCommandTextListener.Result {
+    fun execute(commandDefinition: CommandDefinition, parameterValues: Array<Any>): OnPlayerCommandTextListener.Result {
         val result = commandDefinition.method.invoke(commandDefinition.commandsInstance, *parameterValues)
         return when {
             commandDefinition.method.returnType == Unit::class.java -> OnPlayerCommandTextListener.Result.Processed
