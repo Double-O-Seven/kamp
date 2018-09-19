@@ -7,8 +7,7 @@ open class CallbackListenerRegistry<T : Any>(private val listenerClass: KClass<T
 
     private val entries = TreeSet<Entry<T>>()
 
-    val listeners: Sequence<T>
-        get() = entries.asSequence().map { it.listener }
+    fun getListeners(): Sequence<T> = entries.asSequence().map { it.listener }
 
     fun register(listener: T, priority: Int = getPriority(listener)) {
         entries.removeIf { it.listener == listener }

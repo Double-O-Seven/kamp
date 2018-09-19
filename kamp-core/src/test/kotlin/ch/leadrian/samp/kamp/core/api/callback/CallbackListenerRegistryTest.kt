@@ -11,7 +11,7 @@ internal class CallbackListenerRegistryTest {
     fun shouldRegisterCallbackListener() {
         callbackListenerRegistry.register(FooCallbackListener)
 
-        assertThat(callbackListenerRegistry.listeners.toList())
+        assertThat(callbackListenerRegistry.getListeners().toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -24,7 +24,7 @@ internal class CallbackListenerRegistryTest {
         callbackListenerRegistry.register(BatCallbackListener)
 
 
-        val listeners = callbackListenerRegistry.listeners
+        val listeners = callbackListenerRegistry.getListeners()
 
         assertThat(listeners.toList())
                 .containsExactly(
@@ -42,7 +42,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(FooCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.listeners.toList())
+        assertThat(callbackListenerRegistry.getListeners().toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -56,7 +56,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(QuxCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.listeners.toList())
+        assertThat(callbackListenerRegistry.getListeners().toList())
                 .containsExactly(
                         QuxCallbackListener,
                         BatCallbackListener,
@@ -73,7 +73,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.unregister(QuxCallbackListener)
 
-        assertThat(callbackListenerRegistry.listeners.toList())
+        assertThat(callbackListenerRegistry.getListeners().toList())
                 .containsExactlyInAnyOrder(FooCallbackListener)
     }
 
