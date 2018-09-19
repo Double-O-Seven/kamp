@@ -1,7 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
-import io.mockk.mockk
-import io.mockk.verifySequence
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -13,7 +11,7 @@ internal class CallbackListenerRegistryTest {
     fun shouldRegisterCallbackListener() {
         callbackListenerRegistry.register(FooCallbackListener)
 
-        assertThat(callbackListenerRegistry.listeners)
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -28,7 +26,7 @@ internal class CallbackListenerRegistryTest {
 
         val listeners = callbackListenerRegistry.listeners
 
-        assertThat(listeners)
+        assertThat(listeners.toList())
                 .containsExactly(
                         BatCallbackListener,
                         BarCallbackListener,
@@ -44,7 +42,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(FooCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.listeners)
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -58,7 +56,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(QuxCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.listeners)
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(
                         QuxCallbackListener,
                         BatCallbackListener,
@@ -69,33 +67,13 @@ internal class CallbackListenerRegistryTest {
     }
 
     @Test
-    fun shouldExecuteActionForEachListenerInExpectedOrder() {
-        val action = mockk<(CallbackListener) -> Unit>(relaxed = true)
-        callbackListenerRegistry.register(QuxCallbackListener)
-        callbackListenerRegistry.register(FooCallbackListener)
-        callbackListenerRegistry.register(BazCallbackListener)
-        callbackListenerRegistry.register(BarCallbackListener)
-        callbackListenerRegistry.register(BatCallbackListener)
-
-        callbackListenerRegistry.forEach(action)
-
-        verifySequence {
-            action.invoke(BatCallbackListener)
-            action.invoke(BarCallbackListener)
-            action.invoke(FooCallbackListener)
-            action.invoke(BazCallbackListener)
-            action.invoke(QuxCallbackListener)
-        }
-    }
-
-    @Test
     fun shouldRemoveCallbackListener() {
         callbackListenerRegistry.register(QuxCallbackListener)
         callbackListenerRegistry.register(FooCallbackListener)
 
         callbackListenerRegistry.unregister(QuxCallbackListener)
 
-        assertThat(callbackListenerRegistry.listeners)
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactlyInAnyOrder(FooCallbackListener)
     }
 
