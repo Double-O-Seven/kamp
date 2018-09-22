@@ -4,6 +4,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 
 interface OnPlayerSpawnListener {
 
-    fun onPlayerSpawn(player: Player): Boolean
+    fun onPlayerSpawn(player: Player)
 
 }

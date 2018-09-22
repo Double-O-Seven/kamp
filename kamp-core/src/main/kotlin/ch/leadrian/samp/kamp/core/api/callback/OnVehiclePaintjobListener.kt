@@ -5,6 +5,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 
 interface OnVehiclePaintjobListener {
 
-    fun onVehiclePaintjob(player: Player, vehicle: Vehicle, paintjobId: Int): Boolean
+    fun onVehiclePaintjob(player: Player, vehicle: Vehicle, paintjobId: Int)
 
 }

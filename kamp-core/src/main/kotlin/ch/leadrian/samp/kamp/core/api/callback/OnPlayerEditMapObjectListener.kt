@@ -12,6 +12,6 @@ interface OnPlayerEditMapObjectListener {
             response: ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse,
             offset: Vector3D,
             rotation: Vector3D
-    ): Boolean
+    )
 
 }

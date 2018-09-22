@@ -6,6 +6,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 
 interface OnPlayerSelectMapObjectListener {
 
-    fun onPlayerSelectMapObject(player: Player, mapObject: MapObject, modelId: Int, coordinates: Vector3D): Boolean
+    fun onPlayerSelectMapObject(player: Player, mapObject: MapObject, modelId: Int, coordinates: Vector3D)
 
 }

@@ -11,6 +11,6 @@ interface OnPlayerEditPlayerMapObjectListener {
             response: ObjectEditResponse,
             offset: Vector3D,
             rotation: Vector3D
-    ): Boolean
+    )
 
 }

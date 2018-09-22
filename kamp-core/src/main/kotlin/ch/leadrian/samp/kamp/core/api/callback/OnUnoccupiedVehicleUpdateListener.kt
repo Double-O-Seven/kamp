@@ -12,6 +12,13 @@ interface OnUnoccupiedVehicleUpdateListener {
             passengerSeat: Int?,
             coordinates: Vector3D,
             velocity: Vector3D
-    ): Boolean
+    ): Result
+
+    sealed class Result(val value: Boolean) {
+
+        object Sync : Result(true)
+
+        object Desync : Result(false)
+    }
 
 }

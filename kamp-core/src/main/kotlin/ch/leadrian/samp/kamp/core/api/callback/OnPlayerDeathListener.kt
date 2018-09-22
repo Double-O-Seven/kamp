@@ -5,6 +5,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 
 interface OnPlayerDeathListener {
 
-    fun onPlayerDeath(player: Player, killer: Player?, reason: WeaponModel): Boolean
+    fun onPlayerDeath(player: Player, killer: Player?, reason: WeaponModel)
 
 }

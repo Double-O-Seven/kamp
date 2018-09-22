@@ -15,6 +15,6 @@ interface OnPlayerEditAttachedObjectListener {
             offset: Vector3D,
             rotation: Vector3D,
             scale: Vector3D
-    ): Boolean
+    )
 
 }
