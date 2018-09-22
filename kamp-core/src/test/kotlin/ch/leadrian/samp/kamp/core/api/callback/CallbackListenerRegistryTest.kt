@@ -5,6 +5,8 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.util.*
+import kotlin.reflect.KClass
 import kotlin.reflect.full.functions
 
 internal class CallbackListenerRegistryTest {
@@ -15,7 +17,7 @@ internal class CallbackListenerRegistryTest {
     fun shouldRegisterCallbackListener() {
         callbackListenerRegistry.register(FooCallbackListener)
 
-        assertThat(callbackListenerRegistry.getListeners().toList())
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -28,7 +30,7 @@ internal class CallbackListenerRegistryTest {
         callbackListenerRegistry.register(BatCallbackListener)
 
 
-        val listeners = callbackListenerRegistry.getListeners()
+        val listeners = callbackListenerRegistry.listeners
 
         assertThat(listeners.toList())
                 .containsExactly(
@@ -46,7 +48,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(FooCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.getListeners().toList())
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(FooCallbackListener)
     }
 
@@ -60,7 +62,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.register(QuxCallbackListener, 99)
 
-        assertThat(callbackListenerRegistry.getListeners().toList())
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(
                         QuxCallbackListener,
                         BatCallbackListener,
@@ -77,7 +79,7 @@ internal class CallbackListenerRegistryTest {
 
         callbackListenerRegistry.unregister(QuxCallbackListener)
 
-        assertThat(callbackListenerRegistry.getListeners().toList())
+        assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactlyInAnyOrder(FooCallbackListener)
     }
 
@@ -91,20 +93,35 @@ internal class CallbackListenerRegistryTest {
             it.simpleName.startsWith("On") && it.simpleName.endsWith("Listener")
         }.forEach { clazz ->
             val simpleName = clazz.simpleName
-            Files.newBufferedWriter(Paths.get("${simpleName}Registry.kt")).use { writer ->
+            val className = "${simpleName}Processor"
+            Files.newBufferedWriter(Paths.get("src", "main", "kotlin", "ch", "leadrian", "samp", "kamp", "core", "runtime", "callback", "$className.kt")).use { writer ->
                 writer.apply {
+                    val callbackMethod = clazz.kotlin.functions.first { it.name.startsWith("on") }
+                    val packageImports = TreeSet<String>()
+                    packageImports += "ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry"
+                    packageImports += "ch.leadrian.samp.kamp.core.api.callback.$simpleName"
+                    packageImports += "javax.inject.Inject"
+                    packageImports += "javax.inject.Singleton"
+                    packageImports += callbackMethod.parameters.drop(1).map { it.type.classifier as KClass<*> }
+                            .filter { it.java.getPackage() != null }
+                            .filter { it.java.getPackage().name != "kotlin" && it.java.getPackage().name != "java.lang" }
+                            .map { it.java.name }
+
                     write("package ch.leadrian.samp.kamp.core.runtime.callback\n\n")
-                    write("import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry\n")
-                    write("import ch.leadrian.samp.kamp.core.api.callback.$simpleName\n")
-                    write("import javax.inject.Inject\n")
-                    write("import javax.inject.Singleton\n\n")
+                    packageImports.forEach {
+                        write("import $it\n")
+                    }
+                    write("\n")
                     write("@Singleton\n")
-                    write("internal class ${simpleName}Registry\n")
+                    write("internal class $className\n")
                     write("@Inject\n")
                     write("constructor() : CallbackListenerRegistry<$simpleName>($simpleName::class), $simpleName {\n\n")
-                    clazz.kotlin.functions.first { it.name.startsWith("on") }.apply {
+                    callbackMethod.apply {
                         writer.write("    override fun $name(")
-                        writer.write(parameters.drop(1).joinToString(", ") { "${it.name}: ${it.type}" })
+                        writer.write(parameters.drop(1).joinToString(", ") {
+                            val type = (it.type.classifier as KClass<*>).simpleName
+                            "${it.name}: $type"
+                        })
                         writer.write(")")
                         if (returnType.toString() != "kotlin.Unit") {
                             writer.write(": $returnType")

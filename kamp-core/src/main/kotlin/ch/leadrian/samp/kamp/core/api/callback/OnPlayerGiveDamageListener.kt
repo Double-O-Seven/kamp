@@ -6,6 +6,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 
 interface OnPlayerGiveDamageListener {
 
-    fun onPlayerGiveDamage(player: Player, damagedPlayer: Player, amount: Float, weaponModel: WeaponModel, bodyPart: BodyPart): Boolean
+    fun onPlayerGiveDamage(player: Player, damagedPlayer: Player, amount: Float, weaponModel: WeaponModel, bodyPart: BodyPart)
 
 }
