@@ -77,6 +77,15 @@ internal class CallbackListenerRegistryTest {
                 .containsExactlyInAnyOrder(FooCallbackListener)
     }
 
+    @Test
+    fun shouldRegisterCallbackListenersWithSamePriority() {
+        callbackListenerRegistry.register(QuxCallbackListener, 0)
+        callbackListenerRegistry.register(FooCallbackListener, 0)
+
+        assertThat(callbackListenerRegistry.listeners.toList())
+                .containsExactlyInAnyOrder(QuxCallbackListener, FooCallbackListener)
+    }
+
     @Priority(5, CallbackListener::class)
     private object FooCallbackListener : CallbackListener
 

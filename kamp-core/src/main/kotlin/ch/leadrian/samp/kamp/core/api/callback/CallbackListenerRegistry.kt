@@ -1,22 +1,30 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
-import java.util.*
 import kotlin.reflect.KClass
 
 open class CallbackListenerRegistry<T : Any>(private val listenerClass: KClass<T>) {
 
-    private val entries = TreeSet<Entry<T>>()
+    private val entries = mutableListOf<Entry<T>>()
+    private var isSorted = false
 
     val listeners: Sequence<T>
-        get() = entries.asSequence().map { it.listener }
+        get() {
+            if (!isSorted) {
+                entries.sortByDescending { it.priority }
+                isSorted = true
+            }
+            return entries.asSequence().map { it.listener }
+        }
 
     fun register(listener: T, priority: Int = getPriority(listener)) {
-        entries.removeIf { it.listener == listener }
+        entries.removeIf { it.listener === listener }
         entries += Entry(listener, priority)
+        isSorted = false
     }
 
     fun unregister(listener: T) {
-        entries.removeIf { it.listener == listener }
+        entries.removeIf { it.listener === listener }
+        isSorted = false
     }
 
     private fun getPriority(listener: T): Int {
@@ -31,10 +39,6 @@ open class CallbackListenerRegistry<T : Any>(private val listenerClass: KClass<T
         }
     }
 
-    private data class Entry<T>(val listener: T, val priority: Int) : Comparable<Entry<T>> {
-
-        override fun compareTo(other: Entry<T>): Int = other.priority - this.priority
-
-    }
+    private data class Entry<T>(val listener: T, val priority: Int)
 
 }
