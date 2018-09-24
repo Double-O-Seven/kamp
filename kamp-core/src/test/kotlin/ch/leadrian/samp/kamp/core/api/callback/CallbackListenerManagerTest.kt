@@ -11,6 +11,24 @@ import org.junit.jupiter.api.Test
 
 internal class CallbackListenerManagerTest {
 
+    @Test
+    fun givenMultipleRegistriesWithTheSameListenerClassItShouldThrowAnException() {
+        val registry1 = mockk<FooCallbackListenerRegistry> {
+            every { listenerClass } returns FooCallback::class
+        }
+        val registry2 = mockk<FooCallbackListenerRegistry> {
+            every { listenerClass } returns FooCallback::class
+        }
+        val registry3 = mockk<BarCallbackListenerRegistry> {
+            every { listenerClass } returns BarCallback::class
+        }
+
+        val caughtThrowable = catchThrowable { CallbackListenerManager(setOf(registry1, registry2, registry3)) }
+
+        assertThat(caughtThrowable)
+                .isInstanceOf(IllegalArgumentException::class.java)
+    }
+
     @Nested
     inner class PostConstructionTests {
 
