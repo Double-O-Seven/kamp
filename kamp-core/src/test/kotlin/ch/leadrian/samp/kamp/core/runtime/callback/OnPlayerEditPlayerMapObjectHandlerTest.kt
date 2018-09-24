@@ -8,7 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 
-internal class OnPlayerEditPlayerPlayerMapObjectHandlerTest {
+internal class OnPlayerEditPlayerMapObjectHandlerTest {
 
     @Test
     fun shouldCallAllListeners() {
