@@ -84,10 +84,25 @@ internal class CallbackListenerRegistryTest {
         callbackListenerRegistry.register(QuxCallbackListener)
         callbackListenerRegistry.register(FooCallbackListener)
 
-        callbackListenerRegistry.unregister(QuxCallbackListener)
+        val removed = callbackListenerRegistry.unregister(QuxCallbackListener)
 
         assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactlyInAnyOrder(FooCallbackListener)
+        assertThat(removed)
+                .isTrue()
+    }
+
+    @Test
+    fun givenUnregisteredListenerItShouldNotRemoveAnyOther() {
+        callbackListenerRegistry.register(QuxCallbackListener)
+        callbackListenerRegistry.register(FooCallbackListener)
+
+        val removed = callbackListenerRegistry.unregister(BarCallbackListener)
+
+        assertThat(callbackListenerRegistry.listeners.toList())
+                .containsExactlyInAnyOrder(QuxCallbackListener, FooCallbackListener)
+        assertThat(removed)
+                .isFalse()
     }
 
     @Test

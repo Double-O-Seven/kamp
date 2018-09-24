@@ -26,9 +26,12 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
         return true
     }
 
-    fun unregister(listener: Any) {
-        entries.removeIf { it.listener === listener }
-        isSorted = false
+    fun unregister(listener: Any): Boolean {
+        val removed = entries.removeIf { it.listener === listener }
+        if (removed) {
+            isSorted = false
+        }
+        return removed
     }
 
     private fun getPriority(listener: Any): Int {
