@@ -80,6 +80,27 @@ internal class CallbackListenerManagerTest {
             }
 
             @Test
+            fun givenNoRegistrationsWithUnspecifiedInterfaceItShouldThrowException() {
+                every {
+                    fooCallbackListenerRegistry.register(any(), any())
+                } returns false
+                every {
+                    barCallbackListenerRegistry.register(any(), any())
+                } returns false
+
+                val caughtException = catchThrowable {
+                    callbackListenerManager.register(FooService, 1337)
+                }
+
+                assertThat(caughtException)
+                        .isInstanceOf(IllegalStateException::class.java)
+                verify {
+                    fooCallbackListenerRegistry.register(FooService, 1337)
+                    barCallbackListenerRegistry.register(FooService, 1337)
+                }
+            }
+
+            @Test
             fun shouldInlineRegisterWithSpecifiedInterface() {
                 every {
                     fooCallbackListenerRegistry.register(any(), any())
