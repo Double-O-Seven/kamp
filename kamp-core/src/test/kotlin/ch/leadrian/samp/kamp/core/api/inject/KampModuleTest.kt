@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.inject
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -44,6 +45,14 @@ internal class KampModuleTest {
                 .containsExactlyInAnyOrder(FooCommands, BarCommands)
     }
 
+    @Test
+    fun shouldInjectCallbackListenerRegistries() {
+        val quxService = injector.getInstance(QuxService::class.java)
+
+        assertThat(quxService.callbackListenerRegistries)
+                .containsExactlyInAnyOrder(FooCallbackListenerRegistry, BarCallbackListenerRegistry)
+    }
+
     private class FooService
     @Inject
     constructor(val resolvers: Set<@JvmSuppressWildcards CommandParameterResolver<*>>)
@@ -59,6 +68,10 @@ internal class KampModuleTest {
     @Inject
     constructor(val commands: Set<@JvmSuppressWildcards Commands>)
 
+    private class QuxService
+    @Inject
+    constructor(val callbackListenerRegistries: Set<@JvmSuppressWildcards CallbackListenerRegistry<*>>)
+
     private class FooModule : KampModule() {
 
         override fun configure() {
@@ -70,6 +83,9 @@ internal class KampModuleTest {
             }
             newCommandsSetBinder().apply {
                 addBinding().toInstance(FooCommands)
+            }
+            newCallbackListenerRegistry().apply {
+                addBinding().toInstance(FooCallbackListenerRegistry)
             }
         }
 
@@ -86,6 +102,9 @@ internal class KampModuleTest {
             }
             newCommandsSetBinder().apply {
                 addBinding().toInstance(BarCommands)
+            }
+            newCallbackListenerRegistry().apply {
+                addBinding().toInstance(BarCallbackListenerRegistry)
             }
         }
 
@@ -108,6 +127,14 @@ internal class KampModuleTest {
         override fun resolve(value: String): Int = throw UnsupportedOperationException("test")
 
     }
+
+    private object FooCallbackListenerRegistry : CallbackListenerRegistry<FooCallback>(FooCallback::class)
+
+    private object BarCallbackListenerRegistry : CallbackListenerRegistry<BarCallback>(BarCallback::class)
+
+    private interface FooCallback
+
+    private interface BarCallback
 
     private object FooCommands : Commands()
 
