@@ -16,18 +16,22 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
             return entries.asSequence().map { it.listener }
         }
 
-    fun register(listener: T, priority: Int = getPriority(listener)) {
+    fun register(listener: Any, priority: Int = getPriority(listener)): Boolean {
+        if (!listenerClass.isInstance(listener)) return false
+
         entries.removeIf { it.listener === listener }
-        entries += Entry(listener, priority)
+        @Suppress("UNCHECKED_CAST")
+        entries += Entry(listener as T, priority)
+        isSorted = false
+        return true
+    }
+
+    fun unregister(listener: Any) {
+        entries.removeIf { it.listener === listener }
         isSorted = false
     }
 
-    fun unregister(listener: T) {
-        entries.removeIf { it.listener === listener }
-        isSorted = false
-    }
-
-    private fun getPriority(listener: T): Int {
+    private fun getPriority(listener: Any): Int {
         val priority = listener::class.java.getAnnotation(Priority::class.java)?.value
         return when {
             priority != null -> priority

@@ -9,10 +9,23 @@ internal class CallbackListenerRegistryTest {
 
     @Test
     fun shouldRegisterCallbackListener() {
-        callbackListenerRegistry.register(FooCallbackListener)
+        val result = callbackListenerRegistry.register(FooCallbackListener)
 
         assertThat(callbackListenerRegistry.listeners.toList())
                 .containsExactly(FooCallbackListener)
+        assertThat(result)
+                .isTrue()
+    }
+
+    @Test
+    fun givenObjectThatIsInstanceOfListenerClassItShouldNotRegisterObjectAsListener() {
+        val listener = "Hi there"
+        val result = callbackListenerRegistry.register(listener)
+
+        assertThat(callbackListenerRegistry.listeners.toList())
+                .isEmpty()
+        assertThat(result)
+                .isFalse()
     }
 
     @Test
