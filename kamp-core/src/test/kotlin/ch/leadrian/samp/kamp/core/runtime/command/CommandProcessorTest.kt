@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.command
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.Commands
@@ -7,7 +8,9 @@ import ch.leadrian.samp.kamp.core.api.command.DefaultCommandErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.DefaultUnknownCommandHandler
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -26,6 +29,7 @@ internal class CommandProcessorTest {
     private val commandExecutor = mockk<CommandExecutor>()
     private val unknownCommandHandler = mockk<DefaultUnknownCommandHandler>()
     private val defaultCommandErrorHandler = mockk<DefaultCommandErrorHandler>()
+    private val callbackListenerManager = mockk<CallbackListenerManager>()
     private val player = mockk<Player>()
     private val method = Any::class.java.getMethod("hashCode")
 
@@ -38,8 +42,18 @@ internal class CommandProcessorTest {
                 commandParametersResolver = commandParametersResolver,
                 commandExecutor = commandExecutor,
                 defaultUnknownCommandHandler = unknownCommandHandler,
-                defaultCommandErrorHandler = defaultCommandErrorHandler
+                defaultCommandErrorHandler = defaultCommandErrorHandler,
+                callbackListenerManager = callbackListenerManager
         )
+    }
+
+    @Test
+    fun initializeShouldRegisterAsCallbackListener() {
+        every { callbackListenerManager.register(any()) } just Runs
+
+        commandProcessor.initialize()
+
+        verify { callbackListenerManager.register(commandProcessor) }
     }
 
     @Test

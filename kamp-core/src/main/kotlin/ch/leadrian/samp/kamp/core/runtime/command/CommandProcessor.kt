@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.command
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.CommandErrorHandler
@@ -21,6 +22,7 @@ constructor(
         private val commandAccessCheckExecutor: CommandAccessCheckExecutor,
         private val commandParametersResolver: CommandParametersResolver,
         private val commandExecutor: CommandExecutor,
+        private val callbackListenerManager: CallbackListenerManager,
         defaultUnknownCommandHandler: DefaultUnknownCommandHandler,
         defaultCommandErrorHandler: DefaultCommandErrorHandler
 ) : OnPlayerCommandTextListener {
@@ -39,7 +41,7 @@ constructor(
 
     @PostConstruct
     fun initialize() {
-        TODO("register as callback listener")
+        callbackListenerManager.register(this)
     }
 
     override fun onPlayerCommandText(player: Player, commandText: String): OnPlayerCommandTextListener.Result {
