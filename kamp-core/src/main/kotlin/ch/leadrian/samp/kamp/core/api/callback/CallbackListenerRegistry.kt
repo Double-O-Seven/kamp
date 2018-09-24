@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.callback
 
 import kotlin.reflect.KClass
 
-open class CallbackListenerRegistry<T : Any>(private val listenerClass: KClass<T>) {
+open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
 
     private val entries = mutableListOf<Entry<T>>()
     private var isSorted = false
