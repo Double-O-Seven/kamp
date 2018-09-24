@@ -37,83 +37,93 @@ internal class EntityRegistryModuleTest {
         }
 
         @Test
-        fun shouldInjectActorRegistry() {
+        fun shouldInjectActorRegistryAsSingleton() {
             val actorRegistry = injector.getInstance<ActorRegistry>()
 
             assertThat(actorRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<ActorRegistry>())
         }
 
         @Test
-        fun shouldInjectGangZoneRegistry() {
+        fun shouldInjectGangZoneRegistryAsSingleton() {
             val gangZoneRegistry = injector.getInstance<GangZoneRegistry>()
 
             assertThat(gangZoneRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<GangZoneRegistry>())
         }
 
         @Test
-        fun shouldInjectMapObjectRegistry() {
+        fun shouldInjectMapObjectRegistryAsSingleton() {
             val mapObjectRegistry = injector.getInstance<MapObjectRegistry>()
 
             assertThat(mapObjectRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<MapObjectRegistry>())
         }
 
         @Test
-        fun shouldInjectMenuRegistry() {
+        fun shouldInjectMenuRegistryAsSingleton() {
             val menuRegistry = injector.getInstance<MenuRegistry>()
 
             assertThat(menuRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<MenuRegistry>())
         }
 
         @Test
-        fun shouldInjectPickupRegistry() {
+        fun shouldInjectPickupRegistryAsSingleton() {
             val pickupRegistry = injector.getInstance<PickupRegistry>()
 
             assertThat(pickupRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<PickupRegistry>())
         }
 
         @Test
-        fun shouldInjectPlayerClassRegistry() {
+        fun shouldInjectPlayerClassRegistryAsSingleton() {
             val playerClassRegistry = injector.getInstance<PlayerClassRegistry>()
 
             assertThat(playerClassRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<PlayerClassRegistry>())
         }
 
         @Test
-        fun shouldInjectPlayerRegistry() {
+        fun shouldInjectPlayerRegistryAsSingleton() {
             val playerRegistry = injector.getInstance<PlayerRegistry>()
 
             assertThat(playerRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<PlayerRegistry>())
         }
 
         @Test
-        fun shouldInjectTextDrawRegistry() {
+        fun shouldInjectTextDrawRegistryAsSingleton() {
             val textDrawRegistry = injector.getInstance<TextDrawRegistry>()
 
             assertThat(textDrawRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<TextDrawRegistry>())
         }
 
         @Test
-        fun shouldInjectTextLabelRegistry() {
+        fun shouldInjectTextLabelRegistryAsSingleton() {
             val textLabelRegistry = injector.getInstance<TextLabelRegistry>()
 
             assertThat(textLabelRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<TextLabelRegistry>())
         }
 
         @Test
-        fun shouldInjectVehicleRegistry() {
+        fun shouldInjectVehicleRegistryAsSingleton() {
             val vehicleRegistry = injector.getInstance<VehicleRegistry>()
 
             assertThat(vehicleRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<VehicleRegistry>())
         }
     }
 

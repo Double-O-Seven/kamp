@@ -103,11 +103,12 @@ internal class TextModuleTest {
         }
 
         @Test
-        fun shouldInjectTextProvider() {
+        fun shouldInjectTextProviderAsSingleton() {
             val textProvider = injector.getInstance<TextProvider>()
 
             assertThat(textProvider)
                     .isNotNull
+                    .isSameAs(injector.getInstance<TextProvider>())
         }
     }
 
