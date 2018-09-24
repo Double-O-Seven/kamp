@@ -10,19 +10,19 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 
 interface OnPlayerWeaponShotListener {
 
-    fun onPlayerShotWeapon(player: Player, weaponModel: WeaponModel, hitTarget: Target<*>, coordinates: Vector3D): Result
+    fun onPlayerShotWeapon(player: Player, weaponModel: WeaponModel, hitTarget: Target, coordinates: Vector3D): Result
 
-    sealed class Target<V>(val target: V, val type: BulletHitType) {
+    sealed class Target(val type: BulletHitType) {
 
-        class PlayerTarget(target: Player) : Target<Player>(target = target, type = BulletHitType.PLAYER)
+        class PlayerTarget(val target: Player) : Target(BulletHitType.PLAYER)
 
-        class VehicleTarget(target: Vehicle) : Target<Vehicle>(target = target, type = BulletHitType.VEHICLE)
+        class VehicleTarget(val target: Vehicle) : Target(BulletHitType.VEHICLE)
 
-        class PlayerMapObjectTarget(target: PlayerMapObject) : Target<PlayerMapObject>(target = target, type = BulletHitType.PLAYER_OBJECT)
+        class PlayerMapObjectTarget(val target: PlayerMapObject) : Target(BulletHitType.PLAYER_OBJECT)
 
-        class MapObjectTarget(target: MapObject) : Target<MapObject>(target = target, type = BulletHitType.OBJECT)
+        class MapObjectTarget(val target: MapObject) : Target(BulletHitType.OBJECT)
 
-        class NoTarget : Target<Any?>(target = null, type = BulletHitType.NONE)
+        object NoTarget : Target(BulletHitType.NONE)
     }
 
     sealed class Result(val value: Boolean) {

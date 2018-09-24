@@ -15,7 +15,16 @@ internal class OnPlayerEditAttachedObjectHandler
 @Inject
 constructor() : CallbackListenerRegistry<OnPlayerEditAttachedObjectListener>(OnPlayerEditAttachedObjectListener::class), OnPlayerEditAttachedObjectListener {
 
-    override fun onPlayerEditAttachedObject(player: Player, slot: AttachedObjectSlot, response: AttachedObjectEditResponse, modelId: Int, bone: Bone, offset: Vector3D, rotation: Vector3D, scale: Vector3D) {
+    override fun onPlayerEditAttachedObject(
+            player: Player,
+            slot: AttachedObjectSlot,
+            response: AttachedObjectEditResponse,
+            modelId: Int,
+            bone: Bone,
+            offset: Vector3D,
+            rotation: Vector3D,
+            scale: Vector3D
+    ) {
         listeners.forEach {
             it.onPlayerEditAttachedObject(player, slot, response, modelId, bone, offset, rotation, scale)
         }

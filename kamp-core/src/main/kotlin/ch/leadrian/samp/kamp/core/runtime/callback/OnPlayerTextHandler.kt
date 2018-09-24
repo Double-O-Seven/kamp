@@ -15,7 +15,7 @@ constructor() : CallbackListenerRegistry<OnPlayerTextListener>(OnPlayerTextListe
     override fun onPlayerText(player: Player, text: String): Result {
         return listeners.map {
             it.onPlayerText(player, text)
-        }.firstOrNull { it == Result.Block } ?: Result.Allow
+        }.firstOrNull { it == Result.Blocked } ?: Result.Allowed
     }
 
 }

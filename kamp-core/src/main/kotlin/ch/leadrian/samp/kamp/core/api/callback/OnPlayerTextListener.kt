@@ -8,9 +8,9 @@ interface OnPlayerTextListener {
 
     sealed class Result(val value: Boolean) {
 
-        object Allow : Result(true)
+        object Allowed : Result(true)
 
-        object Block : Result(false)
+        object Blocked : Result(false)
     }
 
 }

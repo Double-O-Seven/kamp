@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 interface OnPlayerEditPlayerMapObjectListener {
 
     fun onPlayerEditPlayerMapObject(
-            mapObject: PlayerMapObject,
+            playerMapObject: PlayerMapObject,
             response: ObjectEditResponse,
             offset: Vector3D,
             rotation: Vector3D

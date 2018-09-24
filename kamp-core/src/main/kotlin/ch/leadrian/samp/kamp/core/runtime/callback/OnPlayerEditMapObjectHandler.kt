@@ -14,7 +14,13 @@ internal class OnPlayerEditMapObjectHandler
 @Inject
 constructor() : CallbackListenerRegistry<OnPlayerEditMapObjectListener>(OnPlayerEditMapObjectListener::class), OnPlayerEditMapObjectListener {
 
-    override fun onPlayerEditMapObject(player: Player, mapObject: MapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+    override fun onPlayerEditMapObject(
+            player: Player,
+            mapObject: MapObject,
+            response: ObjectEditResponse,
+            offset: Vector3D,
+            rotation: Vector3D
+    ) {
         listeners.forEach {
             it.onPlayerEditMapObject(player, mapObject, response, offset, rotation)
         }
