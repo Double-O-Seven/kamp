@@ -51,11 +51,12 @@ internal class CommandModuleTest {
         }
 
         @Test
-        fun shouldInjectCommandProcessor() {
+        fun shouldInjectCommandProcessorAsSingleton() {
             val commandProcessor = injector.getInstance<CommandProcessor>()
 
             assertThat(commandProcessor)
                     .isNotNull
+                    .isSameAs(injector.getInstance<CommandProcessor>())
         }
 
         @Test
@@ -67,11 +68,12 @@ internal class CommandModuleTest {
         }
 
         @Test
-        fun shouldInjectCommandRegistry() {
+        fun shouldInjectCommandRegistryAsSingleton() {
             val commandRegistry = injector.getInstance<CommandRegistry>()
 
             assertThat(commandRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<CommandRegistry>())
         }
 
         @Test
@@ -83,11 +85,12 @@ internal class CommandModuleTest {
         }
 
         @Test
-        fun shouldInjectCommandParameterResolverRegistry() {
+        fun shouldInjectCommandParameterResolverRegistryAsSingleton() {
             val commandParameterResolverRegistry = injector.getInstance<CommandParameterResolverRegistry>()
 
             assertThat(commandParameterResolverRegistry)
                     .isNotNull
+                    .isSameAs(injector.getInstance<CommandParameterResolverRegistry>())
         }
 
         @Test
