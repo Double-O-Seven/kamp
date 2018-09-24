@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.callback
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import com.google.inject.Guice
@@ -33,6 +34,15 @@ internal class CallbackModuleTest {
         fun setUpAsSingleton() {
             injector = Guice.createInjector(CallbackModule())
             testService = injector.getInstance()
+        }
+
+        @Test
+        fun shouldInjectCallbackListenerManagerAsSingleton() {
+            val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
+
+            assertThat(callbackListenerManager)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<CallbackListenerManager>())
         }
 
         @Test
