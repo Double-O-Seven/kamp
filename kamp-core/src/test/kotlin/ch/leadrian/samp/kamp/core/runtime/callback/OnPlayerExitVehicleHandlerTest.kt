@@ -5,14 +5,12 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.ValueSource
+import org.junit.jupiter.api.Test
 
 internal class OnPlayerExitVehicleHandlerTest {
 
-    @ParameterizedTest
-    @ValueSource(strings = ["true", "false"])
-    fun shouldCallAllListeners(isPassenger: Boolean) {
+    @Test
+    fun shouldCallAllListeners() {
         val listener1 = mockk<OnPlayerExitVehicleListener>(relaxed = true)
         val listener2 = mockk<OnPlayerExitVehicleListener>(relaxed = true)
         val listener3 = mockk<OnPlayerExitVehicleListener>(relaxed = true)
