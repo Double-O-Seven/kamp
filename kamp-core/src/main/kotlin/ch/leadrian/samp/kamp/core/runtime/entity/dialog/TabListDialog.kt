@@ -10,7 +10,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 
-internal class TabListDialog<V>(
+internal class TabListDialog<V : Any>(
         id: DialogId,
         private val captionTextSupplier: DialogTextSupplier,
         private val leftButtonTextSupplier: DialogTextSupplier,
