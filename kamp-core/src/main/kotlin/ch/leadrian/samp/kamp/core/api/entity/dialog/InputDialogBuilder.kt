@@ -25,6 +25,6 @@ interface InputDialogBuilder : DialogBuilder<InputDialogBuilder> {
 
     infix fun onInvalidInput(onInvalidInput: Dialog.(Player, Any) -> Unit): InputDialogBuilder
 
-    infix fun onCancel(onSubmit: Dialog.(Player) -> Unit): InputDialogBuilder
+    infix fun onCancel(onCancel: Dialog.(Player) -> Unit): InputDialogBuilder
 
 }

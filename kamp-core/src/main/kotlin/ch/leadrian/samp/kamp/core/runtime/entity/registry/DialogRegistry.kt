@@ -12,9 +12,9 @@ internal class DialogRegistry(private val maxDialogs: Int) {
     @Inject
     constructor() : this(maxDialogs = 32768)
 
-    private val dialogsById: MutableMap<Int, WeakReference<AbstractDialog>> = hashMapOf()
+    private val dialogsById: MutableMap<Int, WeakReference<out AbstractDialog>> = hashMapOf()
 
-    fun register(dialogFactory: (DialogId) -> AbstractDialog): AbstractDialog {
+    fun <T : AbstractDialog> register(dialogFactory: (DialogId) -> T): T {
         cleanUpDialogIds()
         val dialogId = findUnusedDialogId()
         val dialog = dialogFactory(DialogId.valueOf(dialogId))

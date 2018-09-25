@@ -12,16 +12,16 @@ interface DialogService {
 
     fun createInputDialog(builderBlock: InputDialogBuilder.() -> Unit): Dialog
 
-    fun <V> createListDialog(builderBlock: ListDialogBuilder<V>.() -> Unit): Dialog
+    fun <V : Any> createListDialog(builderBlock: ListDialogBuilder<V>.() -> Unit): Dialog
 
-    fun <V> createTabListDialog(builderBlock: TabListDialogBuilder<V>.() -> Unit): Dialog
+    fun <V : Any> createTabListDialog(builderBlock: TabListDialogBuilder<V>.() -> Unit): Dialog
 
     fun newMessageBoxDialogBuilder(): MessageBoxDialogBuilder
 
     fun newInputDialogBuilder(): InputDialogBuilder
 
-    fun <V> newListDialogBuilder(): ListDialogBuilder<V>
+    fun <V : Any> newListDialogBuilder(): ListDialogBuilder<V>
 
-    fun <V> newTabListDialogBuilder(): TabListDialogBuilder<V>
+    fun <V : Any> newTabListDialogBuilder(): TabListDialogBuilder<V>
 
 }

@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.entity.dialog
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
-interface TabListDialogBuilder<V> : DialogBuilder<TabListDialogBuilder<V>> {
+interface TabListDialogBuilder<V : Any> : DialogBuilder<TabListDialogBuilder<V>> {
 
     fun headerContent(vararg text: String): TabListDialogBuilder<V>
 
