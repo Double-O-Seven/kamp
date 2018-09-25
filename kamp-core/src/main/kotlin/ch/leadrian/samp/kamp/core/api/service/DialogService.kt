@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.core.api.service
 
-import ch.leadrian.samp.kamp.core.api.entity.Dialog
-import ch.leadrian.samp.kamp.core.api.entity.InputDialogBuilder
-import ch.leadrian.samp.kamp.core.api.entity.ListDialogBuilder
-import ch.leadrian.samp.kamp.core.api.entity.MessageBoxDialogBuilder
-import ch.leadrian.samp.kamp.core.api.entity.TabListDialogBuilder
+import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
+import ch.leadrian.samp.kamp.core.api.entity.dialog.InputDialogBuilder
+import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogBuilder
+import ch.leadrian.samp.kamp.core.api.entity.dialog.MessageBoxDialogBuilder
+import ch.leadrian.samp.kamp.core.api.entity.dialog.TabListDialogBuilder
 
 interface DialogService {
 

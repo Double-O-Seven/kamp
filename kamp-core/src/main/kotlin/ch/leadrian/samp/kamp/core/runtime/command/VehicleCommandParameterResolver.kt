@@ -10,5 +10,5 @@ internal class VehicleCommandParameterResolver
 constructor(vehicleRegistry: VehicleRegistry) : EntityCommandParameterResolver<Vehicle, VehicleId>(vehicleRegistry) {
 
     override val parameterType: Class<Vehicle> = Vehicle::class.java
-    
+
 }

@@ -1,8 +1,9 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.registry
 
-import ch.leadrian.samp.kamp.core.api.entity.Dialog
+import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
+import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
@@ -85,11 +86,13 @@ internal class DialogRegistryTest {
                 .isInstanceOf(NoSuchElementException::class.java)
     }
 
-    private class TestDialog : Dialog {
+    private class TestDialog : AbstractDialog(DialogId.valueOf(0)) {
 
         override lateinit var id: DialogId
 
         override fun show(forPlayer: Player) = throw UnsupportedOperationException()
+
+        override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String) = throw UnsupportedOperationException()
 
     }
 

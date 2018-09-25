@@ -1,14 +1,15 @@
-package ch.leadrian.samp.kamp.core.api.entity
+package ch.leadrian.samp.kamp.core.api.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
 interface TabListDialogItem<V> {
 
     val value: V
 
-    val tabbedContent: String
+    fun getTabbedContent(player: Player): List<String>
 
-    fun onSelect(player: Player)
+    fun onSelect(player: Player, inputText: String)
 
     interface Builder<V> {
 
@@ -22,7 +23,7 @@ interface TabListDialogItem<V> {
 
         fun tabbedContent(vararg supplier: DialogTextSupplier): Builder<V>
 
-        fun onSelect(onSelect: TabListDialogItem<V>.(Player) -> Unit): Builder<V>
+        fun onSelect(onSelect: TabListDialogItem<V>.(Player, String) -> Unit): Builder<V>
 
         fun build(): TabListDialogItem<V>
     }

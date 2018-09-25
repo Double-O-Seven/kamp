@@ -1,14 +1,15 @@
-package ch.leadrian.samp.kamp.core.api.entity
+package ch.leadrian.samp.kamp.core.api.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
 interface ListDialogItem<V> {
 
     val value: V
 
-    val content: String
+    fun getContent(player: Player): String
 
-    fun onSelect(player: Player)
+    fun onSelect(player: Player, inputText: String)
 
     interface Builder<V> {
 
@@ -22,9 +23,9 @@ interface ListDialogItem<V> {
 
         fun content(supplier: DialogTextSupplier): Builder<V>
 
-        fun onSelect(onSelect: ListDialogItem<V>.(Player) -> Unit): Builder<V>
+        fun onSelect(onSelect: ListDialogItem<V>.(Player, String) -> Unit): Builder<V>
 
-        fun build(): ListDialogItem<V>
+        fun build(itemIndex: Int): ListDialogItem<V>
     }
 
 }
