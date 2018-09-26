@@ -74,7 +74,7 @@ internal class ListDialog<V : Any>(
 
         private var items = mutableListOf<ListDialogItem<V>>()
 
-        private var onCancel: Dialog.(Player) -> Unit = { _ -> }
+        private var onCancel: (Dialog.(Player) -> Unit)? = null
 
         private var onSelectItem: (Dialog.(Player, ListDialogItem<V>, String) -> Unit)? = null
 
