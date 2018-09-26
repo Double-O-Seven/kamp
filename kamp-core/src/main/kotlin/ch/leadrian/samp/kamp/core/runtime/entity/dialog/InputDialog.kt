@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogInputValidator
+import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.FunctionalDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.InputDialogBuilder
@@ -26,7 +27,7 @@ internal class InputDialog(
         private val validators: List<DialogInputValidator>,
         private val onSubmit: (Dialog.(Player, String) -> Unit)?,
         private val onInvalidInput: (Dialog.(Player, Any) -> Unit)?,
-        private val onCancel: (Dialog.(Player) -> Unit)?,
+        private val onCancel: (Dialog.(Player) -> OnDialogResponseResult)?,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : AbstractDialog(id) {
 
@@ -46,8 +47,8 @@ internal class InputDialog(
         )
     }
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String) {
-        when (response) {
+    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
+        return when (response) {
             DialogResponse.LEFT_BUTTON -> {
                 val validationError = validators.asSequence().mapNotNull {
                     it.validate(player, inputText)
@@ -56,8 +57,9 @@ internal class InputDialog(
                     validationError != null -> onInvalidInput?.invoke(this, player, validationError)
                     else -> onSubmit?.invoke(this, player, inputText)
                 }
+                OnDialogResponseResult.Processed
             }
-            DialogResponse.RIGHT_BUTTON -> onCancel?.invoke(this, player)
+            DialogResponse.RIGHT_BUTTON -> onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
         }
     }
 
@@ -75,7 +77,7 @@ internal class InputDialog(
 
         private var onInvalidInput: (Dialog.(Player, Any) -> Unit)? = null
 
-        private var onCancel: (Dialog.(Player) -> Unit)? = null
+        private var onCancel: (Dialog.(Player) -> OnDialogResponseResult)? = null
 
         private val validators = mutableListOf<DialogInputValidator>()
 
@@ -134,7 +136,7 @@ internal class InputDialog(
             return self()
         }
 
-        override fun onCancel(onCancel: Dialog.(Player) -> Unit): Builder {
+        override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): Builder {
             this.onCancel = onCancel
             return self()
         }

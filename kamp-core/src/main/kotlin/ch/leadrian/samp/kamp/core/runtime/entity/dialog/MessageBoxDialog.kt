@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
+import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.FunctionalDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.MessageBoxDialogBuilder
@@ -22,7 +23,7 @@ internal class MessageBoxDialog(
         private val rightButtonTextSupplier: DialogTextSupplier,
         private val messageTextSupplier: DialogTextSupplier,
         private val onClickLeftButton: (Dialog.(Player) -> Unit)?,
-        private val onClickRightButton: (Dialog.(Player) -> Unit)?,
+        private val onClickRightButton: (Dialog.(Player) -> OnDialogResponseResult)?,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : AbstractDialog(id) {
 
@@ -38,10 +39,13 @@ internal class MessageBoxDialog(
         )
     }
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String) {
-        when (response) {
-            DialogResponse.LEFT_BUTTON -> onClickLeftButton?.invoke(this, player)
-            DialogResponse.RIGHT_BUTTON -> onClickRightButton?.invoke(this, player)
+    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
+        return when (response) {
+            DialogResponse.LEFT_BUTTON -> {
+                onClickLeftButton?.invoke(this, player)
+                OnDialogResponseResult.Processed
+            }
+            DialogResponse.RIGHT_BUTTON -> onClickRightButton?.invoke(this, player) ?: OnDialogResponseResult.Ignored
         }
     }
 
@@ -55,7 +59,7 @@ internal class MessageBoxDialog(
 
         private var onClickLeftButton: (Dialog.(Player) -> Unit)? = null
 
-        private var onClickRightButton: (Dialog.(Player) -> Unit)? = null
+        private var onClickRightButton: (Dialog.(Player) -> OnDialogResponseResult)? = null
 
         override fun message(text: String): Builder {
             messageTextSupplier = StringDialogTextSupplier(text)
@@ -82,7 +86,7 @@ internal class MessageBoxDialog(
             return self()
         }
 
-        override fun onClickRightButton(onClickRightButton: Dialog.(Player) -> Unit): Builder {
+        override fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseResult): Builder {
             this.onClickRightButton = onClickRightButton
             return self()
         }

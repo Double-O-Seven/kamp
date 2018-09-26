@@ -15,6 +15,6 @@ interface MessageBoxDialogBuilder : DialogBuilder<MessageBoxDialogBuilder> {
 
     infix fun onClickLeftButton(onClickLeftButton: Dialog.(Player) -> Unit): MessageBoxDialogBuilder
 
-    infix fun onClickRightButton(onClickRightButton: Dialog.(Player) -> Unit): MessageBoxDialogBuilder
+    infix fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseResult): MessageBoxDialogBuilder
 
 }

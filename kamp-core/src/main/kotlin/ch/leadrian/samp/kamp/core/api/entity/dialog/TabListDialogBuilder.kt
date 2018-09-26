@@ -21,7 +21,7 @@ interface TabListDialogBuilder<V : Any> : DialogBuilder<TabListDialogBuilder<V>>
 
     infix fun items(items: Collection<TabListDialogItem<V>>): TabListDialogBuilder<V>
 
-    infix fun onCancel(onCancel: Dialog.(Player) -> Unit): TabListDialogBuilder<V>
+    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): TabListDialogBuilder<V>
 
     infix fun onSelectItem(onSelectItem: Dialog.(Player, TabListDialogItem<V>, String) -> Unit): TabListDialogBuilder<V>
 

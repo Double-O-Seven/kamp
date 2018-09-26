@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
+import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.FunctionalDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.StringDialogTextSupplier
@@ -23,7 +24,7 @@ internal class TabListDialog<V : Any>(
         private val leftButtonTextSupplier: DialogTextSupplier,
         private val rightButtonTextSupplier: DialogTextSupplier,
         private val onSelectItem: (Dialog.(Player, TabListDialogItem<V>, String) -> Unit)?,
-        private val onCancel: (Dialog.(Player) -> Unit)?,
+        private val onCancel: (Dialog.(Player) -> OnDialogResponseResult)?,
         private val headerTextSuppliers: List<DialogTextSupplier>?,
         private val items: List<TabListDialogItem<V>>,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
@@ -75,13 +76,14 @@ internal class TabListDialog<V : Any>(
                 }
             }.toString()
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String) {
+    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
         when (response) {
             DialogResponse.LEFT_BUTTON -> {
                 val item = items.getOrNull(listItem)
-                if (item != null) {
+                return if (item != null) {
                     item.onSelect(player, inputText)
                     onSelectItem?.invoke(this, player, item, inputText)
+                    OnDialogResponseResult.Processed
                 } else {
                     log.warn(
                             "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
@@ -90,10 +92,10 @@ internal class TabListDialog<V : Any>(
                             listItem,
                             items.size
                     )
-                    onCancel?.invoke(this, player)
+                    onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
                 }
             }
-            DialogResponse.RIGHT_BUTTON -> onCancel?.invoke(this, player)
+            DialogResponse.RIGHT_BUTTON -> return onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
         }
     }
 
@@ -107,7 +109,7 @@ internal class TabListDialog<V : Any>(
 
         private var headerTextSuppliers: List<DialogTextSupplier>? = null
 
-        private var onCancel: (Dialog.(Player) -> Unit)? = null
+        private var onCancel: (Dialog.(Player) -> OnDialogResponseResult)? = null
 
         private var onSelectItem: (Dialog.(Player, TabListDialogItem<V>, String) -> Unit)? = null
 
@@ -152,7 +154,7 @@ internal class TabListDialog<V : Any>(
             return self()
         }
 
-        override fun onCancel(onCancel: Dialog.(Player) -> Unit): Builder<V> {
+        override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): Builder<V> {
             this.onCancel = onCancel
             return self()
         }

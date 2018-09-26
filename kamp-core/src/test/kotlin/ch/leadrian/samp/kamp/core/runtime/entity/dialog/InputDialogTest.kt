@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogInputValidator
+import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.StringDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -16,6 +17,7 @@ import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -221,13 +223,13 @@ internal class InputDialogTest {
     @Nested
     inner class OnResponseTests {
 
-        private val onCancel = mockk<Dialog.(Player) -> Unit>()
+        private val onCancel = mockk<Dialog.(Player) -> OnDialogResponseResult>()
         private val onSubmit = mockk<Dialog.(Player, String) -> Unit>()
         private val onInvalidInput = mockk<Dialog.(Player, Any) -> Unit>()
 
         @BeforeEach
         fun setUp() {
-            every { onCancel.invoke(any(), any()) } returns Unit
+            every { onCancel.invoke(any(), any()) } returns OnDialogResponseResult.Processed
             every { onSubmit.invoke(any(), any(), any()) } returns Unit
             every { onInvalidInput.invoke(any(), any(), any()) } returns Unit
         }
@@ -244,13 +246,15 @@ internal class InputDialogTest {
                 onInvalidInput(onInvalidInput)
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.RIGHT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.RIGHT_BUTTON, 0, "test")
 
             verify {
                 onCancel.invoke(inputDialog, player)
                 onSubmit wasNot Called
                 onInvalidInput wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -264,13 +268,15 @@ internal class InputDialogTest {
                 onInvalidInput(onInvalidInput)
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.RIGHT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.RIGHT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
                 onSubmit wasNot Called
                 onInvalidInput wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Ignored)
         }
 
         @Test
@@ -285,13 +291,15 @@ internal class InputDialogTest {
                 onInvalidInput(onInvalidInput)
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
                 onSubmit.invoke(inputDialog, player, "test")
                 onInvalidInput wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -305,13 +313,15 @@ internal class InputDialogTest {
                 onInvalidInput(onInvalidInput)
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
                 onSubmit wasNot Called
                 onInvalidInput wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -341,7 +351,7 @@ internal class InputDialogTest {
                 validators(listOf(validator4))
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
@@ -352,6 +362,8 @@ internal class InputDialogTest {
                 validator3.validate(player, "test")
                 validator4.validate(player, "test")
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -380,7 +392,7 @@ internal class InputDialogTest {
                 validators(listOf(validator4))
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
@@ -391,6 +403,8 @@ internal class InputDialogTest {
                 validator3.validate(player, "test")
                 validator4.validate(player, "test")
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -420,7 +434,7 @@ internal class InputDialogTest {
                 validators(listOf(validator4))
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
@@ -431,6 +445,8 @@ internal class InputDialogTest {
                 validator3.validate(player, "test")
                 validator4 wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
 
         @Test
@@ -460,7 +476,7 @@ internal class InputDialogTest {
                 validators(listOf(validator4))
             }.build()
 
-            inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
+            val result = inputDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 0, "test")
 
             verify {
                 onCancel wasNot Called
@@ -471,6 +487,8 @@ internal class InputDialogTest {
                 validator3.validate(player, "test")
                 validator4 wasNot Called
             }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Processed)
         }
     }
 
