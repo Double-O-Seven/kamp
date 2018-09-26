@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.text
 
 import ch.leadrian.samp.kamp.core.api.data.Colors
+import ch.leadrian.samp.kamp.core.api.data.colorOf
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -30,14 +31,15 @@ internal class MessageFormatterTest {
         val formattedMessage = messageFormatter.format(
                 locale,
                 color,
-                "A: %d, B: %s, C: %s, D: %s",
+                "A: %d, B: %s, C: %s, D: %s, E: %s",
                 1337,
                 messageArgument,
                 hasTextKey,
-                textKey2
+                textKey2,
+                colorOf(0x11AADDFF)
         )
 
         assertThat(formattedMessage)
-                .isEqualTo("A: 1337, B: Hi there, C: Hallo, D: Bonjour")
+                .isEqualTo("A: 1337, B: Hi there, C: Hallo, D: Bonjour, E: {11aadd}")
     }
 }

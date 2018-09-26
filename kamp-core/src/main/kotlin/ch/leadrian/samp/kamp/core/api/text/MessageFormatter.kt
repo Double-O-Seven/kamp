@@ -9,14 +9,16 @@ class MessageFormatter
 internal constructor(private val textProvider: TextProvider) {
 
     fun format(locale: Locale, color: Color, message: String, vararg args: Any): String {
-        val formattedArgs = args.map {
-            when (it) {
-                is MessageArgument -> it.get(locale, color)
-                is HasTextKey -> textProvider.getText(locale, it.textKey)
-                is TextKey -> textProvider.getText(locale, it)
-                else -> it
+        val formattedArgs = arrayOfNulls<Any?>(args.size)
+        args.forEachIndexed { i, arg ->
+            formattedArgs[i] = when (arg) {
+                is MessageArgument -> arg.get(locale, color)
+                is Color -> arg.toEmbeddedString()
+                is HasTextKey -> textProvider.getText(locale, arg.textKey)
+                is TextKey -> textProvider.getText(locale, arg)
+                else -> arg
             }
         }
-        return String.format(locale, message, *formattedArgs.toTypedArray())
+        return String.format(locale, message, *formattedArgs)
     }
 }
