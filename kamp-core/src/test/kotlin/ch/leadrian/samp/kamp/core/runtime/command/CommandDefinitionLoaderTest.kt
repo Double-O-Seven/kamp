@@ -39,6 +39,7 @@ import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.stream.Stream
 
+@Suppress("UNUSED")
 class CommandDefinitionLoaderTest {
 
     private lateinit var commandDefinitionLoader: CommandDefinitionLoader
@@ -155,6 +156,32 @@ class CommandDefinitionLoaderTest {
         fun kill(player: Player) {
         }
 
+    }
+
+    @Test
+    fun shouldSetCommandDefinitionsOnCommandsInstance() {
+        val commandsInstance = BoringCommands()
+
+        val commandDefinitions = commandDefinitionLoader.load(commandsInstance)
+
+        assertThat(commandsInstance.definitions)
+                .isSameAs(commandDefinitions)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    private class BoringCommands : Commands() {
+
+        @Command
+        fun foo(player: Player) {
+        }
+
+        @Command
+        fun bar(player: Player) {
+        }
+
+        @Command
+        fun baz(player: Player) {
+        }
     }
 
     @Test
@@ -612,12 +639,13 @@ class CommandDefinitionLoaderTest {
 
     @Test
     fun shouldLoadCommandGroupName() {
-        val commandDefinitions = commandDefinitionLoader.load(CommandsWithGroupName)
+        val commandsInstance = CommandsWithGroupName()
+        val commandDefinitions = commandDefinitionLoader.load(commandsInstance)
 
         assertThat(commandDefinitions)
                 .containsExactlyInAnyOrder(CommandDefinition(
                         name = "foo",
-                        commandsInstance = CommandsWithGroupName,
+                        commandsInstance = commandsInstance,
                         groupName = "test",
                         method = CommandsWithGroupName::class.java.getMethod(
                                 "foo",
@@ -625,11 +653,13 @@ class CommandDefinitionLoaderTest {
                         ),
                         parameters = listOf()
                 ))
+        assertThat(commandsInstance.groupName)
+                .isEqualTo("test")
     }
 
     @Suppress("UNUSED_PARAMETER")
     @CommandGroup("test")
-    private object CommandsWithGroupName : Commands() {
+    private class CommandsWithGroupName : Commands() {
 
         @Command
         fun foo(player: Player) {

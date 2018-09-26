@@ -62,7 +62,7 @@ constructor(
         val commandErrorHandler = getErrorHandler(commandsClass)
         val commandMethods = getCommandMethods(commandsClass)
         val commandGroupName = commandsClass.getAnnotation(CommandGroup::class.java)?.name?.toLowerCase()
-        return commandMethods.map {
+        val definitions = unmodifiableList(commandMethods.map {
             try {
                 getCommandDefinition(
                         commandsInstance,
@@ -74,7 +74,10 @@ constructor(
             } catch (e: CommandDefinitionLoaderException) {
                 throw CommandDefinitionLoaderException("Could not load definition for method $it", e)
             }
-        }
+        })
+        commandsInstance.definitions = definitions
+        commandsInstance.groupName = commandGroupName
+        return definitions
     }
 
     private fun getCommandMethods(commandsClass: Class<out Commands>): List<Method> {
