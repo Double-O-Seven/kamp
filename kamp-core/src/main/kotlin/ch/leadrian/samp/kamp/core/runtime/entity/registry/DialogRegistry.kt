@@ -13,9 +13,9 @@ internal class DialogRegistry(private val maxDialogs: Int) {
     constructor() : this(maxDialogs = 32768)
 
     private val dialogsById: MutableMap<Int, WeakReference<out AbstractDialog>> = hashMapOf()
+    private var nextDialogId = 0
 
     fun <T : AbstractDialog> register(dialogFactory: (DialogId) -> T): T {
-        cleanUpDialogIds()
         val dialogId = findUnusedDialogId()
         val dialog = dialogFactory(DialogId.valueOf(dialogId))
         dialogsById[dialogId] = WeakReference(dialog)
@@ -24,10 +24,18 @@ internal class DialogRegistry(private val maxDialogs: Int) {
 
     operator fun get(dialogId: DialogId): AbstractDialog? = dialogsById[dialogId.value]?.get()
 
-    private fun findUnusedDialogId(): Int = (0 until maxDialogs).first { dialogsById[it]?.get() == null }
-
-    private fun cleanUpDialogIds() {
-        dialogsById.values.removeIf { it.get() == null }
+    private fun findUnusedDialogId(): Int {
+        var tries = 0
+        while (true) {
+            nextDialogId = (nextDialogId + 1) % maxDialogs
+            if (dialogsById[nextDialogId]?.get() == null) {
+                return nextDialogId
+            }
+            tries++
+            if (tries >= maxDialogs) {
+                throw IllegalStateException("Could not find free dialog ID")
+            }
+        }
     }
 
 }

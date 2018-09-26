@@ -18,7 +18,7 @@ internal class DialogRegistryTest {
         dialogRegistry.register { dialog.apply { id = it } }
 
         assertThat(dialog.id)
-                .isEqualTo(DialogId.valueOf(0))
+                .isEqualTo(DialogId.valueOf(1))
     }
 
     @Test
@@ -28,7 +28,7 @@ internal class DialogRegistryTest {
 
         dialogRegistry.register { dialog.apply { id = it } }
 
-        assertThat(dialogRegistry[DialogId.valueOf(0)])
+        assertThat(dialogRegistry[DialogId.valueOf(1)])
                 .isEqualTo(dialog)
     }
 
@@ -44,11 +44,11 @@ internal class DialogRegistryTest {
         dialogRegistry.register { dialog3.apply { id = it } }
 
         assertThat(dialog1.id)
-                .isEqualTo(DialogId.valueOf(0))
-        assertThat(dialog2.id)
                 .isEqualTo(DialogId.valueOf(1))
-        assertThat(dialog3.id)
+        assertThat(dialog2.id)
                 .isEqualTo(DialogId.valueOf(2))
+        assertThat(dialog3.id)
+                .isEqualTo(DialogId.valueOf(0))
     }
 
     @Test
@@ -62,11 +62,11 @@ internal class DialogRegistryTest {
         dialogRegistry.register { dialog2.apply { id = it } }
         dialogRegistry.register { dialog3.apply { id = it } }
 
-        assertThat(dialogRegistry[DialogId.valueOf(0)])
-                .isEqualTo(dialog1)
         assertThat(dialogRegistry[DialogId.valueOf(1)])
-                .isEqualTo(dialog2)
+                .isEqualTo(dialog1)
         assertThat(dialogRegistry[DialogId.valueOf(2)])
+                .isEqualTo(dialog2)
+        assertThat(dialogRegistry[DialogId.valueOf(0)])
                 .isEqualTo(dialog3)
     }
 
@@ -83,7 +83,7 @@ internal class DialogRegistryTest {
         val caughtThrowable = catchThrowable { dialogRegistry.register { dialog3 } }
 
         assertThat(caughtThrowable)
-                .isInstanceOf(NoSuchElementException::class.java)
+                .isInstanceOf(IllegalStateException::class.java)
     }
 
     private class TestDialog : AbstractDialog(DialogId.valueOf(0)) {
