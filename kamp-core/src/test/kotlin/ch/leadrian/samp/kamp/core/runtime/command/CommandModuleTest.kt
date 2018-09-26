@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.core.api.command.DefaultInvalidCommandParameterValu
 import ch.leadrian.samp.kamp.core.api.command.DefaultUnknownCommandHandler
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.google.inject.AbstractModule
 import com.google.inject.Guice
@@ -28,7 +29,8 @@ internal class CommandModuleTest {
             Guice.createInjector(
                     TestModule(),
                     TextModule(),
-                    CommandModule()
+                    CommandModule(),
+                    CallbackModule()
             )
         }
 
@@ -46,7 +48,8 @@ internal class CommandModuleTest {
             injector = Guice.createInjector(
                     TestModule(),
                     TextModule(),
-                    CommandModule()
+                    CommandModule(),
+                    CallbackModule()
             )
         }
 
