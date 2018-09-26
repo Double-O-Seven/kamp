@@ -4,10 +4,10 @@ import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
-import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogItem
+import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
