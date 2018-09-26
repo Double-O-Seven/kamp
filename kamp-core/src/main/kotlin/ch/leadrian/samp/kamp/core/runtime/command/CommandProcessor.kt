@@ -75,7 +75,12 @@ constructor(
             commandDefinition: CommandDefinition,
             stringParameterValues: List<String>
     ): OnPlayerCommandTextListener.Result {
-        commandAccessCheckExecutor.checkAccess(player, commandDefinition, stringParameterValues)?.let { return it }
+        commandAccessCheckExecutor.checkAccess(player, commandDefinition, stringParameterValues)?.let {
+            return when (it) {
+                OnPlayerCommandTextListener.Result.UnknownCommand -> unknownCommandHandler.handle(player, commandDefinition.name, stringParameterValues)
+                else -> OnPlayerCommandTextListener.Result.Processed
+            }
+        }
         val result = commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
         return when (result) {
             is CommandParametersResolver.Result.ParameterValues -> commandExecutor.execute(commandDefinition, result.parameterValues)

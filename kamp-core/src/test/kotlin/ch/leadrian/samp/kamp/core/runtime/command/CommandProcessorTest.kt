@@ -89,7 +89,7 @@ internal class CommandProcessorTest {
     inner class CommandWithGroupTests {
 
         @Test
-        fun givenAccessIsDeniedItShouldReturn() {
+        fun givenAccessDenialHasResultProcessedItShouldReturn() {
             val commandLine = "/hi there"
             val commandDefinition = CommandDefinition(
                     name = "hi",
@@ -106,6 +106,32 @@ internal class CommandProcessorTest {
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
+            assertThat(result)
+                    .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
+        }
+
+        @Test
+        fun givenAccessDenialHasResultUnknownCommandItShouldCallUnknownCommandHandler() {
+            val commandLine = "/hi there lol"
+            val commandDefinition = CommandDefinition(
+                    name = "hi",
+                    groupName = "there",
+                    method = method,
+                    commandsInstance = TestCommands,
+                    parameters = listOf()
+            )
+            every { commandParser.parse(commandLine) } returns ParsedCommand("hi", listOf("there", "lol"))
+            every { commandRegistry.getCommandDefinition("hi", "there") } returns commandDefinition
+            every { unknownCommandHandler.handle(any(), any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every {
+                commandAccessCheckExecutor.checkAccess(player, commandDefinition, listOf("lol"))
+            } returns OnPlayerCommandTextListener.Result.UnknownCommand
+
+            val result = commandProcessor.onPlayerCommandText(player, commandLine)
+
+            verify {
+                unknownCommandHandler.handle(player, "hi", listOf("lol"))
+            }
             assertThat(result)
                     .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
         }
