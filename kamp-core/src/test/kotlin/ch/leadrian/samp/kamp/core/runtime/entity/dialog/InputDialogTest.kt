@@ -60,7 +60,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
             }.build()
 
             inputDialog.show(player)
@@ -95,7 +94,6 @@ internal class InputDialogTest {
                 leftButton(leftButtonTextKey)
                 rightButton(rightButtonTextKey)
                 message(messageTextKey)
-                isPasswordInput(false)
             }.build()
 
             inputDialog.show(player)
@@ -120,7 +118,6 @@ internal class InputDialogTest {
                 leftButton { "OK" }
                 rightButton { "Cancel" }
                 message { "How are you?" }
-                isPasswordInput(false)
             }.build()
 
             inputDialog.show(player)
@@ -145,7 +142,6 @@ internal class InputDialogTest {
                 leftButton(StringDialogTextSupplier("OK"))
                 rightButton(StringDialogTextSupplier("Cancel"))
                 message(StringDialogTextSupplier("How are you?"))
-                isPasswordInput(false)
             }.build()
 
             inputDialog.show(player)
@@ -243,7 +239,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onSubmit(onSubmit)
                 onInvalidInput(onInvalidInput)
@@ -265,7 +260,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onSubmit(onSubmit)
                 onInvalidInput(onInvalidInput)
             }.build()
@@ -286,7 +280,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onSubmit(onSubmit)
                 onInvalidInput(onInvalidInput)
@@ -308,7 +301,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onInvalidInput(onInvalidInput)
             }.build()
@@ -341,7 +333,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onSubmit(onSubmit)
                 onInvalidInput(onInvalidInput)
@@ -382,7 +373,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onInvalidInput(onInvalidInput)
                 validator(validator1)
@@ -422,7 +412,6 @@ internal class InputDialogTest {
                 leftButton("OK")
                 rightButton("Cancel")
                 message("How are you?")
-                isPasswordInput(false)
                 onCancel(onCancel)
                 onSubmit(onSubmit)
                 onInvalidInput(onInvalidInput)

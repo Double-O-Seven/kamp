@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -115,24 +116,36 @@ internal class DefaultTabListDialogItemTest {
                 .isEqualTo(value)
     }
 
-    @Test
-    fun shouldBuildListDialogItemWithOnySelect() {
-        val onSelect = mockk<OnSelect>(relaxed = true)
-        val tabListDialogItem = builder.apply {
-            value(1337)
-            tabbedContent("Hi there")
-            onSelect { player, inputText -> onSelect.onSelect(this, player, inputText) }
-        }.build()
+    @Nested
+    inner class OnSelectTests {
 
-        tabListDialogItem.onSelect(player, "Test")
+        @Test
+        fun shouldBuildListDialogItemWithOnSelect() {
+            val onSelect = mockk<TabListDialogItem<Int>.(Player, String) -> Unit> {
+                every { this@mockk.invoke(any(), any(), any()) } returns Unit
+            }
+            val tabListDialogItem = builder.apply {
+                value(1337)
+                tabbedContent("Hi there")
+                onSelect(onSelect)
+            }.build()
 
-        verify { onSelect.onSelect(tabListDialogItem, player, "Test") }
+            tabListDialogItem.onSelect(player, "Test")
+
+            verify { onSelect(tabListDialogItem, player, "Test") }
+        }
+
+        @Test
+        fun givenBuildWithoutOnSelectItShouldDoNothingOnSelect() {
+            val tabListDialogItem = builder.apply {
+                value(1337)
+                tabbedContent("Hi there")
+            }.build()
+
+            val caughtThrowable = catchThrowable { tabListDialogItem.onSelect(player, "Test") }
+
+            assertThat(caughtThrowable)
+                    .isNull()
+        }
     }
-
-    private interface OnSelect {
-
-        fun onSelect(item: TabListDialogItem<Int>, player: Player, inputText: String)
-
-    }
-
 }

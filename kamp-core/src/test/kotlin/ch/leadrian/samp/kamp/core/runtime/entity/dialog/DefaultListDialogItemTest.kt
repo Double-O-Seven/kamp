@@ -9,6 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -106,24 +107,36 @@ internal class DefaultListDialogItemTest {
                 .isEqualTo(value)
     }
 
-    @Test
-    fun shouldBuildListDialogItemWithOnySelect() {
-        val onSelect = mockk<OnSelect>(relaxed = true)
-        val listDialogItem = builder.apply {
-            value(1337)
-            content("Hi there")
-            onSelect { player, inputText -> onSelect.onSelect(this, player, inputText) }
-        }.build()
+    @Nested
+    inner class OnSelectTests {
 
-        listDialogItem.onSelect(player, "Test")
+        @Test
+        fun shouldBuildListDialogItemWithOnSelect() {
+            val onSelect = mockk<ListDialogItem<Int>.(Player, String) -> Unit> {
+                every { this@mockk.invoke(any(), any(), any()) } returns Unit
+            }
+            val listDialogItem = builder.apply {
+                value(1337)
+                content("Hi there")
+                onSelect(onSelect)
+            }.build()
 
-        verify { onSelect.onSelect(listDialogItem, player, "Test") }
+            listDialogItem.onSelect(player, "Test")
+
+            verify { onSelect(listDialogItem, player, "Test") }
+        }
+
+        @Test
+        fun givenBuildWithoutOnSelectItShouldDoNothingOnSelect() {
+            val listDialogItem = builder.apply {
+                value(1337)
+                content("Hi there")
+            }.build()
+
+            val caughtThrowable = catchThrowable { listDialogItem.onSelect(player, "Test") }
+
+            assertThat(caughtThrowable)
+                    .isNull()
+        }
     }
-
-    private interface OnSelect {
-
-        fun onSelect(item: ListDialogItem<Int>, player: Player, inputText: String)
-
-    }
-
 }
