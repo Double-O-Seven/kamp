@@ -109,6 +109,11 @@ internal class InputDialog(
             return self()
         }
 
+        override fun validators(validators: Collection<DialogInputValidator>): Builder {
+            this.validators.addAll(validators)
+            return self()
+        }
+
         override fun isPasswordInput(isPasswordInput: Boolean): Builder {
             this.isPasswordInput = { isPasswordInput }
             return self()

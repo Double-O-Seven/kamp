@@ -17,6 +17,8 @@ interface InputDialogBuilder : DialogBuilder<InputDialogBuilder> {
 
     fun validators(vararg validator: DialogInputValidator): InputDialogBuilder
 
+    infix fun validators(validators: Collection<DialogInputValidator>): InputDialogBuilder
+
     infix fun isPasswordInput(isPasswordInput: Boolean): InputDialogBuilder
 
     infix fun isPasswordInput(isPasswordInput: Dialog.(Player) -> Boolean): InputDialogBuilder
