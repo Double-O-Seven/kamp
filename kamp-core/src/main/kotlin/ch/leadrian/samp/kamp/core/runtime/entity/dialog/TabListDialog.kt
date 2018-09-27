@@ -164,7 +164,7 @@ internal class TabListDialog<V : Any>(
             return self()
         }
 
-        override fun build(): Dialog = dialogRegistry.register { dialogId ->
+        override fun build(): TabListDialog<V> = dialogRegistry.register { dialogId ->
             TabListDialog(
                     id = dialogId,
                     captionTextSupplier = captionTextSupplier,
