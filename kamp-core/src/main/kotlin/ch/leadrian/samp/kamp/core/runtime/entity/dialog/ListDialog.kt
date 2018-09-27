@@ -52,11 +52,12 @@ internal class ListDialog<V : Any>(
         }
     }
 
-    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseResult.Processed {
+    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseResult {
         val item = items.getOrNull(listItem)
-        if (item != null) {
+        return if (item != null) {
             item.onSelect(player, inputText)
             onSelectItem?.invoke(this, player, item, inputText)
+            OnDialogResponseResult.Processed
         } else {
             log.warn(
                     "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
@@ -65,9 +66,8 @@ internal class ListDialog<V : Any>(
                     listItem,
                     items.size
             )
-            onCancel?.invoke(this, player)
+            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
         }
-        return OnDialogResponseResult.Processed
     }
 
     private fun handleRightButtonClick(player: Player) =

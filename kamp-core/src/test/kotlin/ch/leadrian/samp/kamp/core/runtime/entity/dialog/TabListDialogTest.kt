@@ -568,6 +568,43 @@ internal class TabTabListDialogTest {
             assertThat(result)
                     .isEqualTo(OnDialogResponseResult.Processed)
         }
+
+        @Test
+        fun givenInvalidItemIsClickedAndThereIsNoOnCancelItShouldDoNothing() {
+            val onSelect = mockk<TabListDialogItem<Int>.(Player, String) -> Unit> {
+                every { this@mockk.invoke(any(), any(), any()) } just Runs
+            }
+            every { player.name } returns "hans.wurst"
+            val tabListDialog = builder.apply {
+                caption("Hi there")
+                leftButton("OK")
+                rightButton("Cancel")
+                onSelectItem(onSelectItem)
+                item {
+                    value(1337)
+                    tabbedContent("Hi there")
+                }
+                item {
+                    value(69)
+                    tabbedContent("How are you?")
+                    onSelect(onSelect)
+                }
+                item {
+                    value(187)
+                    tabbedContent("I'm fine")
+                }
+            }.build()
+
+            val result = tabListDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 999, "Test")
+
+            verify {
+                onSelect wasNot Called
+                onCancel wasNot Called
+                onSelectItem wasNot Called
+            }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Ignored)
+        }
     }
 
 }

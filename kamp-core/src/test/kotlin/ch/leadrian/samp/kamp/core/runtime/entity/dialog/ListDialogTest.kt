@@ -449,6 +449,43 @@ internal class ListDialogTest {
             assertThat(result)
                     .isEqualTo(OnDialogResponseResult.Processed)
         }
+
+        @Test
+        fun givenInvalidItemIsClickedAndThereIsNoOnCancelItShouldDoNothing() {
+            val onSelect = mockk<ListDialogItem<Int>.(Player, String) -> Unit> {
+                every { this@mockk.invoke(any(), any(), any()) } just Runs
+            }
+            every { player.name } returns "hans.wurst"
+            val listDialog = builder.apply {
+                caption("Hi there")
+                leftButton("OK")
+                rightButton("Cancel")
+                onSelectItem(onSelectItem)
+                item {
+                    value(1337)
+                    content("Hi there")
+                }
+                item {
+                    value(69)
+                    content("How are you?")
+                    onSelect(onSelect)
+                }
+                item {
+                    value(187)
+                    content("I'm fine")
+                }
+            }.build()
+
+            val result = listDialog.onResponse(player, DialogResponse.LEFT_BUTTON, 999, "Test")
+
+            verify {
+                onSelect wasNot Called
+                onCancel wasNot Called
+                onSelectItem wasNot Called
+            }
+            assertThat(result)
+                    .isEqualTo(OnDialogResponseResult.Ignored)
+        }
     }
 
 }
