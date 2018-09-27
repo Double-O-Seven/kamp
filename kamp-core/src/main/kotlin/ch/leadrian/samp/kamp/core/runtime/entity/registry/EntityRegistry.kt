@@ -3,7 +3,6 @@ package ch.leadrian.samp.kamp.core.runtime.entity.registry
 import ch.leadrian.samp.kamp.core.api.entity.Entity
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
 import java.util.*
-import java.util.Collections.unmodifiableList
 
 internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val entities: Array<T?>) {
 
@@ -29,7 +28,7 @@ internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val 
 
     operator fun get(entityId: Int): T? = entities.getOrNull(entityId)
 
-    fun getAll(): List<T> = unmodifiableList(entityList)
+    fun getAll(): List<T> = entityList.toList()
 
     val capacity: Int = entities.size
 
