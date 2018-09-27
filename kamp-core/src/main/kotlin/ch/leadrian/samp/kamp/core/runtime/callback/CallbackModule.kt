@@ -10,6 +10,7 @@ internal class CallbackModule : KampModule() {
         newCallbackListenerRegistry().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
             addBinding().to(OnActorStreamOutHandler::class.java)
+            addBinding().to(OnDialogResponseHandler::class.java)
             addBinding().to(OnEnterExitModShopHandler::class.java)
             addBinding().to(OnGameModeExitHandler::class.java)
             addBinding().to(OnGameModeInitHandler::class.java)

@@ -66,6 +66,16 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectOnDialogResponseHandlerAsSingleton() {
+            val onDialogResponseHandler = injector.getInstance<OnDialogResponseHandler>()
+
+            assertThat(onDialogResponseHandler)
+                    .isNotNull
+            assertThat(testService.handlers)
+                    .contains(onDialogResponseHandler)
+        }
+
+        @Test
         fun shouldInjectOnEnterExitModShopHandlerAsSingleton() {
             val onEnterExitModShopHandler = injector.getInstance<OnEnterExitModShopHandler>()
 
