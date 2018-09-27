@@ -130,6 +130,12 @@ internal class PlayerTest {
     }
 
     @Test
+    fun shouldInitializeDialogNavigation() {
+        assertThat(player.dialogNavigation.player)
+                .isSameAs(player)
+    }
+
+    @Test
     fun shouldSpawnPlayer() {
         every { nativeFunctionExecutor.spawnPlayer(any()) } returns true
 

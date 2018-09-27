@@ -39,6 +39,7 @@ import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.timeOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
+import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
@@ -94,6 +95,8 @@ internal constructor(
         private set
 
     var locale: Locale = Locale.getDefault()
+
+    val dialogNavigation: DialogNavigation = DialogNavigation(this)
 
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
