@@ -1,11 +1,11 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogItem
-import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.StringDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -263,12 +263,12 @@ internal class ListDialogTest {
     @Nested
     inner class OnResponseTests {
 
-        private val onCancel = mockk<Dialog.(Player) -> OnDialogResponseResult>()
+        private val onCancel = mockk<Dialog.(Player) -> OnDialogResponseListener.Result>()
         private val onSelectItem = mockk<Dialog.(Player, ListDialogItem<Int>, String) -> Unit>()
 
         @BeforeEach
         fun setUp() {
-            every { onCancel.invoke(any(), any()) } returns OnDialogResponseResult.Processed
+            every { onCancel.invoke(any(), any()) } returns OnDialogResponseListener.Result.Processed
             every { onSelectItem.invoke(any(), any(), any(), any()) } returns Unit
         }
 
@@ -293,7 +293,7 @@ internal class ListDialogTest {
                 onSelectItem wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -316,7 +316,7 @@ internal class ListDialogTest {
                 onSelectItem wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Ignored)
+                    .isEqualTo(OnDialogResponseListener.Result.Ignored)
         }
 
         @Test
@@ -363,7 +363,7 @@ internal class ListDialogTest {
                 onSelectItem.invoke(listDialog, player, slot.captured, "Test")
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -409,7 +409,7 @@ internal class ListDialogTest {
                 onSelectItem wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -447,7 +447,7 @@ internal class ListDialogTest {
                 onSelectItem wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -484,7 +484,7 @@ internal class ListDialogTest {
                 onSelectItem wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Ignored)
+                    .isEqualTo(OnDialogResponseListener.Result.Ignored)
         }
     }
 

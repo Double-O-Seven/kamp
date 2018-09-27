@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
@@ -15,6 +16,6 @@ interface MessageBoxDialogBuilder : DialogBuilder<MessageBoxDialogBuilder> {
 
     infix fun onClickLeftButton(onClickLeftButton: Dialog.(Player) -> Unit): MessageBoxDialogBuilder
 
-    infix fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseResult): MessageBoxDialogBuilder
+    infix fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseListener.Result): MessageBoxDialogBuilder
 
 }

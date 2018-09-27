@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -7,7 +8,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogItem
-import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
@@ -20,7 +20,7 @@ internal class ListDialog<V : Any>(
         private val leftButtonTextSupplier: DialogTextSupplier,
         private val rightButtonTextSupplier: DialogTextSupplier,
         private val onSelectItem: (Dialog.(Player, ListDialogItem<V>, String) -> Unit)?,
-        private val onCancel: (Dialog.(Player) -> OnDialogResponseResult)?,
+        private val onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)?,
         private val items: List<ListDialogItem<V>>,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : AbstractDialog(id) {
@@ -45,19 +45,19 @@ internal class ListDialog<V : Any>(
         )
     }
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
+    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseListener.Result {
         return when (response) {
             DialogResponse.LEFT_BUTTON -> handleLeftButtonClick(player, listItem, inputText)
             DialogResponse.RIGHT_BUTTON -> handleRightButtonClick(player)
         }
     }
 
-    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseResult {
+    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseListener.Result {
         val item = items.getOrNull(listItem)
         return if (item != null) {
             item.onSelect(player, inputText)
             onSelectItem?.invoke(this, player, item, inputText)
-            OnDialogResponseResult.Processed
+            OnDialogResponseListener.Result.Processed
         } else {
             log.warn(
                     "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
@@ -66,12 +66,12 @@ internal class ListDialog<V : Any>(
                     listItem,
                     items.size
             )
-            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
+            onCancel?.invoke(this, player) ?: OnDialogResponseListener.Result.Ignored
         }
     }
 
     private fun handleRightButtonClick(player: Player) =
-            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
+            onCancel?.invoke(this, player) ?: OnDialogResponseListener.Result.Ignored
 
     internal class Builder<V : Any>(
             textProvider: TextProvider,
@@ -81,7 +81,7 @@ internal class ListDialog<V : Any>(
 
         private var items = mutableListOf<ListDialogItem<V>>()
 
-        private var onCancel: (Dialog.(Player) -> OnDialogResponseResult)? = null
+        private var onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)? = null
 
         private var onSelectItem: (Dialog.(Player, ListDialogItem<V>, String) -> Unit)? = null
 
@@ -106,7 +106,7 @@ internal class ListDialog<V : Any>(
             return self()
         }
 
-        override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): Builder<V> {
+        override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): Builder<V> {
             this.onCancel = onCancel
             return self()
         }

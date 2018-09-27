@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
@@ -27,6 +28,6 @@ interface InputDialogBuilder : DialogBuilder<InputDialogBuilder> {
 
     infix fun onInvalidInput(onInvalidInput: Dialog.(Player, Any) -> Unit): InputDialogBuilder
 
-    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): InputDialogBuilder
+    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): InputDialogBuilder
 
 }

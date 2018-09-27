@@ -1,11 +1,11 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogInputValidator
-import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.StringDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -223,13 +223,13 @@ internal class InputDialogTest {
     @Nested
     inner class OnResponseTests {
 
-        private val onCancel = mockk<Dialog.(Player) -> OnDialogResponseResult>()
+        private val onCancel = mockk<Dialog.(Player) -> OnDialogResponseListener.Result>()
         private val onSubmit = mockk<Dialog.(Player, String) -> Unit>()
         private val onInvalidInput = mockk<Dialog.(Player, Any) -> Unit>()
 
         @BeforeEach
         fun setUp() {
-            every { onCancel.invoke(any(), any()) } returns OnDialogResponseResult.Processed
+            every { onCancel.invoke(any(), any()) } returns OnDialogResponseListener.Result.Processed
             every { onSubmit.invoke(any(), any(), any()) } returns Unit
             every { onInvalidInput.invoke(any(), any(), any()) } returns Unit
         }
@@ -254,7 +254,7 @@ internal class InputDialogTest {
                 onInvalidInput wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -276,7 +276,7 @@ internal class InputDialogTest {
                 onInvalidInput wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Ignored)
+                    .isEqualTo(OnDialogResponseListener.Result.Ignored)
         }
 
         @Test
@@ -299,7 +299,7 @@ internal class InputDialogTest {
                 onInvalidInput wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -321,7 +321,7 @@ internal class InputDialogTest {
                 onInvalidInput wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -363,7 +363,7 @@ internal class InputDialogTest {
                 validator4.validate(player, "test")
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -404,7 +404,7 @@ internal class InputDialogTest {
                 validator4.validate(player, "test")
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -446,7 +446,7 @@ internal class InputDialogTest {
                 validator4 wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -488,7 +488,7 @@ internal class InputDialogTest {
                 validator4 wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
     }
 

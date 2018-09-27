@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
-import ch.leadrian.samp.kamp.core.api.entity.dialog.OnDialogResponseResult
 import ch.leadrian.samp.kamp.core.api.entity.dialog.StringDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -162,12 +162,12 @@ internal class MessageBoxDialogTest {
     @Nested
     inner class OnResponseTests {
 
-        private val onClickRightButton = mockk<Dialog.(Player) -> OnDialogResponseResult>()
+        private val onClickRightButton = mockk<Dialog.(Player) -> OnDialogResponseListener.Result>()
         private val onClickLeftButton = mockk<Dialog.(Player) -> Unit>()
 
         @BeforeEach
         fun setUp() {
-            every { onClickRightButton.invoke(any(), any()) } returns OnDialogResponseResult.Processed
+            every { onClickRightButton.invoke(any(), any()) } returns OnDialogResponseListener.Result.Processed
             every { onClickLeftButton.invoke(any(), any()) } returns Unit
         }
 
@@ -189,7 +189,7 @@ internal class MessageBoxDialogTest {
                 onClickLeftButton wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
 
         @Test
@@ -209,7 +209,7 @@ internal class MessageBoxDialogTest {
                 onClickLeftButton wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Ignored)
+                    .isEqualTo(OnDialogResponseListener.Result.Ignored)
         }
 
         @Test
@@ -229,7 +229,7 @@ internal class MessageBoxDialogTest {
                 onClickLeftButton wasNot Called
             }
             assertThat(result)
-                    .isEqualTo(OnDialogResponseResult.Processed)
+                    .isEqualTo(OnDialogResponseListener.Result.Processed)
         }
     }
 

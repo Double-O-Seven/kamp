@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.dialog
 
+import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 
@@ -21,7 +22,7 @@ interface TabListDialogBuilder<V : Any> : DialogBuilder<TabListDialogBuilder<V>>
 
     infix fun items(items: Collection<TabListDialogItem<V>>): TabListDialogBuilder<V>
 
-    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseResult): TabListDialogBuilder<V>
+    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): TabListDialogBuilder<V>
 
     infix fun onSelectItem(onSelectItem: Dialog.(Player, TabListDialogItem<V>, String) -> Unit): TabListDialogBuilder<V>
 
