@@ -47,26 +47,31 @@ internal class ListDialog<V : Any>(
 
     override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
         return when (response) {
-            DialogResponse.LEFT_BUTTON -> {
-                val item = items.getOrNull(listItem)
-                if (item != null) {
-                    item.onSelect(player, inputText)
-                    onSelectItem?.invoke(this, player, item, inputText)
-                } else {
-                    log.warn(
-                            "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
-                            id.value,
-                            player.name,
-                            listItem,
-                            items.size
-                    )
-                    onCancel?.invoke(this, player)
-                }
-                OnDialogResponseResult.Processed
-            }
-            DialogResponse.RIGHT_BUTTON -> onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
+            DialogResponse.LEFT_BUTTON -> handleLeftButtonClick(player, listItem, inputText)
+            DialogResponse.RIGHT_BUTTON -> handleRightButtonClick(player)
         }
     }
+
+    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseResult.Processed {
+        val item = items.getOrNull(listItem)
+        if (item != null) {
+            item.onSelect(player, inputText)
+            onSelectItem?.invoke(this, player, item, inputText)
+        } else {
+            log.warn(
+                    "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
+                    id.value,
+                    player.name,
+                    listItem,
+                    items.size
+            )
+            onCancel?.invoke(this, player)
+        }
+        return OnDialogResponseResult.Processed
+    }
+
+    private fun handleRightButtonClick(player: Player) =
+            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
 
     internal class Builder<V : Any>(
             textProvider: TextProvider,

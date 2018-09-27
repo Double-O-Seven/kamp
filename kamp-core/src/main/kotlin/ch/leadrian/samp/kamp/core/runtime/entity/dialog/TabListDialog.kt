@@ -77,27 +77,32 @@ internal class TabListDialog<V : Any>(
             }.toString()
 
     override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseResult {
-        when (response) {
-            DialogResponse.LEFT_BUTTON -> {
-                val item = items.getOrNull(listItem)
-                return if (item != null) {
-                    item.onSelect(player, inputText)
-                    onSelectItem?.invoke(this, player, item, inputText)
-                    OnDialogResponseResult.Processed
-                } else {
-                    log.warn(
-                            "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
-                            id.value,
-                            player.name,
-                            listItem,
-                            items.size
-                    )
-                    onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
-                }
-            }
-            DialogResponse.RIGHT_BUTTON -> return onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
+        return when (response) {
+            DialogResponse.LEFT_BUTTON -> handleLeftButtonClick(player, listItem, inputText)
+            DialogResponse.RIGHT_BUTTON -> handleRightButtonClick(player)
         }
     }
+
+    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseResult {
+        val item = items.getOrNull(listItem)
+        return if (item != null) {
+            item.onSelect(player, inputText)
+            onSelectItem?.invoke(this, player, item, inputText)
+            OnDialogResponseResult.Processed
+        } else {
+            log.warn(
+                    "Dialog {}: Invalid dialog item selected by player {}: {}, {} items available",
+                    id.value,
+                    player.name,
+                    listItem,
+                    items.size
+            )
+            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
+        }
+    }
+
+    private fun handleRightButtonClick(player: Player): OnDialogResponseResult =
+            onCancel?.invoke(this, player) ?: OnDialogResponseResult.Ignored
 
     internal class Builder<V : Any>(
             textProvider: TextProvider,
