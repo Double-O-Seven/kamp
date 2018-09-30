@@ -41,14 +41,9 @@ internal constructor(
 
         fun getText(key: TextKey): String? =
                 resourceBundles
+                        .asSequence()
                         .filter { it.containsKey(key.name) }
-                        .mapNotNull {
-                            try {
-                                it.getString(key.name)
-                            } catch (e: MissingResourceException) {
-                                null
-                            }
-                        }
+                        .mapNotNull { it.getString(key.name) }
                         .firstOrNull()
     }
 
