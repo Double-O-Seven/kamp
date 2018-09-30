@@ -49,9 +49,10 @@ constructor(
                 shutdown()
                 log.info("Awaiting termination...")
                 val terminated = awaitTermination(3, TimeUnit.MINUTES)
-                when (terminated) {
-                    true -> log.info("Terminated")
-                    else -> log.warn("Failed to terminate after 3 minutes")
+                if (terminated) {
+                    log.info("Terminated")
+                } else {
+                    log.warn("Failed to terminate after 3 minutes")
                 }
             }
         }
