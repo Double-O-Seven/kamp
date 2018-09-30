@@ -31,9 +31,18 @@ internal class CallbackModuleTest {
         private lateinit var testService: TestService
 
         @BeforeEach
-        fun setUpAsSingleton() {
+        fun setUp() {
             injector = Guice.createInjector(CallbackModule())
             testService = injector.getInstance()
+        }
+
+        @Test
+        fun shouldInjectCheckpointCallbackListenerAsSingleton() {
+            val checkpointCallbackListener = injector.getInstance<CheckpointCallbackListener>()
+
+            assertThat(checkpointCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<CheckpointCallbackListener>())
         }
 
         @Test

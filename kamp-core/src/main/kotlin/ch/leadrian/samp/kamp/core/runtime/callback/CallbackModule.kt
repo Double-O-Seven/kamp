@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.inject.KampModule
 internal class CallbackModule : KampModule() {
 
     override fun configure() {
+        bind(CheckpointCallbackListener::class.java).asEagerSingleton()
         bind(CallbackListenerManager::class.java)
         newCallbackListenerRegistry().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
