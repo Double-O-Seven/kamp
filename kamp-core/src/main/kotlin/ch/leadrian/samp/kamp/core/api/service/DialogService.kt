@@ -5,23 +5,45 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.InputDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.MessageBoxDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.TabListDialogBuilder
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.dialog.InputDialog
+import ch.leadrian.samp.kamp.core.runtime.entity.dialog.ListDialog
+import ch.leadrian.samp.kamp.core.runtime.entity.dialog.MessageBoxDialog
+import ch.leadrian.samp.kamp.core.runtime.entity.dialog.TabListDialog
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
+import javax.inject.Inject
 
-interface DialogService {
+class DialogService
+@Inject
+internal constructor(
+        private val textProvider: TextProvider,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val dialogRegistry: DialogRegistry
+) {
 
-    fun createMessageBoxDialog(builderBlock: MessageBoxDialogBuilder.() -> Unit): Dialog
+    inline fun createMessageBoxDialog(builderBlock: MessageBoxDialogBuilder.() -> Unit): Dialog =
+            newMessageBoxDialogBuilder().apply(builderBlock).build()
 
-    fun createInputDialog(builderBlock: InputDialogBuilder.() -> Unit): Dialog
+    inline fun createInputDialog(builderBlock: InputDialogBuilder.() -> Unit): Dialog =
+            newInputDialogBuilder().apply(builderBlock).build()
 
-    fun <V : Any> createListDialog(builderBlock: ListDialogBuilder<V>.() -> Unit): Dialog
+    inline fun <V : Any> createListDialog(builderBlock: ListDialogBuilder<V>.() -> Unit): Dialog =
+            newListDialogBuilder<V>().apply(builderBlock).build()
 
-    fun <V : Any> createTabListDialog(builderBlock: TabListDialogBuilder<V>.() -> Unit): Dialog
+    inline fun <V : Any> createTabListDialog(builderBlock: TabListDialogBuilder<V>.() -> Unit): Dialog =
+            newTabListDialogBuilder<V>().apply(builderBlock).build()
 
-    fun newMessageBoxDialogBuilder(): MessageBoxDialogBuilder
+    fun newMessageBoxDialogBuilder(): MessageBoxDialogBuilder =
+            MessageBoxDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
 
-    fun newInputDialogBuilder(): InputDialogBuilder
+    fun newInputDialogBuilder(): InputDialogBuilder =
+            InputDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
 
-    fun <V : Any> newListDialogBuilder(): ListDialogBuilder<V>
+    fun <V : Any> newListDialogBuilder(): ListDialogBuilder<V> =
+            ListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
 
-    fun <V : Any> newTabListDialogBuilder(): TabListDialogBuilder<V>
+    fun <V : Any> newTabListDialogBuilder(): TabListDialogBuilder<V> =
+            TabListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
 
 }

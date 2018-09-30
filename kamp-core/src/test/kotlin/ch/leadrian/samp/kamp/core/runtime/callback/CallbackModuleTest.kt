@@ -46,6 +46,15 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectDialogCallbackListenerAsSingleton() {
+            val dialogCallbackListener = injector.getInstance<DialogCallbackListener>()
+
+            assertThat(dialogCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<DialogCallbackListener>())
+        }
+
+        @Test
         fun shouldInjectCallbackListenerManagerAsSingleton() {
             val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
 
