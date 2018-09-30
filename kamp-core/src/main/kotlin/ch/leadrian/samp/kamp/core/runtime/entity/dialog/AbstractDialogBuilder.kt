@@ -15,7 +15,7 @@ internal abstract class AbstractDialogBuilder<B : DialogBuilder<B>>(protected va
 
     protected lateinit var leftButtonTextSupplier: DialogTextSupplier
 
-    protected lateinit var rightButtonTextSupplier: DialogTextSupplier
+    protected var rightButtonTextSupplier: DialogTextSupplier = StringDialogTextSupplier("")
 
     override fun caption(text: String): B {
         captionTextSupplier = StringDialogTextSupplier(text)
