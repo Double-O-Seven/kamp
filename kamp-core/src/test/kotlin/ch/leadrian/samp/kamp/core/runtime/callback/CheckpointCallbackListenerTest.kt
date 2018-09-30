@@ -8,7 +8,8 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -53,9 +54,9 @@ internal class CheckpointCallbackListenerTest {
         fun givenPlayerHasNoCheckpointSetItShouldDoNothing() {
             every { player.checkpoint } returns null
 
-            val caughtThrowable = Assertions.catchThrowable { checkpointCallbackListener.onPlayerEnterCheckpoint(player) }
+            val caughtThrowable = catchThrowable { checkpointCallbackListener.onPlayerEnterCheckpoint(player) }
 
-            Assertions.assertThat(caughtThrowable)
+            assertThat(caughtThrowable)
                     .isNull()
         }
     }
@@ -80,9 +81,9 @@ internal class CheckpointCallbackListenerTest {
         fun givenPlayerHasNoCheckpointSetItShouldDoNothing() {
             every { player.checkpoint } returns null
 
-            val caughtThrowable = Assertions.catchThrowable { checkpointCallbackListener.onPlayerLeaveCheckpoint(player) }
+            val caughtThrowable = catchThrowable { checkpointCallbackListener.onPlayerLeaveCheckpoint(player) }
 
-            Assertions.assertThat(caughtThrowable)
+            assertThat(caughtThrowable)
                     .isNull()
         }
     }

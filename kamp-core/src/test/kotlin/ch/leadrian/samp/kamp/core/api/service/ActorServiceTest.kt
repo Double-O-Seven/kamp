@@ -16,7 +16,8 @@ import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
-import org.assertj.core.api.Assertions
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -44,7 +45,7 @@ internal class ActorServiceTest {
 
         val result = actorService.isValid(ActorId.valueOf(actorId))
 
-        Assertions.assertThat(result)
+        assertThat(result)
                 .isEqualTo(expectedResult)
     }
 
@@ -63,7 +64,7 @@ internal class ActorServiceTest {
             val createdActor = actorService.createActor(SkinModel.ARMY, positionOf(x = 1f, y = 2f, z = 3f, angle = 4f))
 
             verify { actorFactory.create(SkinModel.ARMY, positionOf(x = 1f, y = 2f, z = 3f, angle = 4f), 4f) }
-            Assertions.assertThat(createdActor)
+            assertThat(createdActor)
                     .isSameAs(actor)
         }
 
@@ -72,7 +73,7 @@ internal class ActorServiceTest {
             val createdActor = actorService.createActor(SkinModel.ARMY, vector3DOf(x = 1f, y = 2f, z = 3f), 4f)
 
             verify { actorFactory.create(SkinModel.ARMY, vector3DOf(x = 1f, y = 2f, z = 3f), 4f) }
-            Assertions.assertThat(createdActor)
+            assertThat(createdActor)
                     .isSameAs(actor)
         }
 
@@ -88,7 +89,7 @@ internal class ActorServiceTest {
                 actorFactory.create(SkinModel.ARMY, angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, worldId = 1337, interiorId = 0), 4f)
                 actor.virtualWorldId = 1337
             }
-            Assertions.assertThat(createdActor)
+            assertThat(createdActor)
                     .isSameAs(actor)
         }
 
@@ -105,7 +106,7 @@ internal class ActorServiceTest {
 
             val actor = actorService.getActor(actorId)
 
-            Assertions.assertThat(actor)
+            assertThat(actor)
                     .isEqualTo(expectedActor)
         }
 
@@ -114,9 +115,9 @@ internal class ActorServiceTest {
             val actorId = ActorId.valueOf(69)
             every { actorRegistry[actorId] } returns null
 
-            val caughtThrowable = Assertions.catchThrowable { actorService.getActor(actorId) }
+            val caughtThrowable = catchThrowable { actorService.getActor(actorId) }
 
-            Assertions.assertThat(caughtThrowable)
+            assertThat(caughtThrowable)
                     .isInstanceOf(NoSuchEntityException::class.java)
                     .hasMessage("No actor with ID 69")
         }
@@ -131,7 +132,7 @@ internal class ActorServiceTest {
 
         val actors = actorService.getAllActors()
 
-        Assertions.assertThat(actors)
+        assertThat(actors)
                 .containsExactlyInAnyOrder(actor1, actor2)
     }
 
@@ -141,7 +142,7 @@ internal class ActorServiceTest {
 
         val poolSize = actorService.getPoolSize()
 
-        Assertions.assertThat(poolSize)
+        assertThat(poolSize)
                 .isEqualTo(1337)
     }
 }
