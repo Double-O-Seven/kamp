@@ -31,7 +31,7 @@ constructor(
         val entry = entriesByName[name]
         return when {
             entry is Entry.CommandGroup && firstParameterValue != null -> {
-                entry.commandsDefinitionsByName[firstParameterValue]
+                entry.commandDefinitionsByName[firstParameterValue]
             }
             entry is Entry.SingleCommand -> entry.commandDefinition
             else -> null
@@ -39,23 +39,31 @@ constructor(
     }
 
     private fun addCommandToGroup(definition: CommandDefinition, groupName: String) {
-        val existingEntry = entriesByName[groupName]
-        when (existingEntry) {
-            is Entry.CommandGroup -> existingEntry.commandsDefinitionsByName.merge(definition.name, definition) { _, _ ->
-                throw IllegalStateException("Duplicate command ${definition.name} within group ${definition.groupName}")
-            }
-            is Entry.SingleCommand -> {
-                throw IllegalStateException("Command and command group with same name: ${definition.groupName}")
-            }
-            else -> entriesByName[groupName] = Entry.CommandGroup().apply {
-                commandsDefinitionsByName[definition.name] = definition
+        definition.nameAndAliases.forEach { nameOrAlias ->
+            val existingEntry = entriesByName[groupName]
+            when (existingEntry) {
+                is Entry.CommandGroup -> {
+                    existingEntry.commandDefinitionsByName.merge(nameOrAlias, definition) { _, _ ->
+                        throw IllegalStateException("Duplicate command $nameOrAlias within group ${definition.groupName}")
+                    }
+                }
+                is Entry.SingleCommand -> {
+                    throw IllegalStateException("Command and command group with same name: ${definition.groupName}")
+                }
+                else -> {
+                    entriesByName[groupName] = Entry.CommandGroup().apply {
+                        commandDefinitionsByName[nameOrAlias] = definition
+                    }
+                }
             }
         }
     }
 
     private fun addSingleCommand(definition: CommandDefinition) {
-        entriesByName.merge(definition.name, Entry.SingleCommand(definition)) { _, _ ->
-            throw IllegalStateException("Duplicate command or command group with name ${definition.name}")
+        definition.nameAndAliases.forEach { nameOrAlias ->
+            entriesByName.merge(nameOrAlias, Entry.SingleCommand(definition)) { _, _ ->
+                throw IllegalStateException("Duplicate command or command group with name or alias $nameOrAlias")
+            }
         }
     }
 
@@ -63,7 +71,7 @@ constructor(
 
         class CommandGroup : Entry() {
 
-            val commandsDefinitionsByName: MutableMap<String, CommandDefinition> = mutableMapOf()
+            val commandDefinitionsByName: MutableMap<String, CommandDefinition> = mutableMapOf()
 
         }
 

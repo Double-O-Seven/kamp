@@ -10,6 +10,8 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class CommandRegistryTest {
 
@@ -21,27 +23,29 @@ internal class CommandRegistryTest {
 
         private lateinit var commandRegistry: CommandRegistry
 
-        private val fooCommandDefinition: CommandDefinition = CommandDefinition(
+        private val commandDefinitionWithoutAliases: CommandDefinition = CommandDefinition(
                 name = "foo",
                 commandsInstance = FooCommands,
                 parameters = listOf(),
                 method = method
         )
-        private val barCommandDefinition = CommandDefinition(
+        private val commandDefinitionWithAliases = CommandDefinition(
                 name = "bar",
+                aliases = setOf("baralias1", "baralias2"),
                 commandsInstance = BarCommands,
                 parameters = listOf(),
                 method = method
         )
-        private val bazBlaCommandDefinition = CommandDefinition(
+        private val groupedCommandDefinitionWithoutAliases = CommandDefinition(
                 name = "bla",
                 groupName = "baz",
                 commandsInstance = BazCommands,
                 parameters = listOf(),
                 method = method
         )
-        private val bazBlubCommandDefinition = CommandDefinition(
+        private val groupedCommandDefinitionWithAliases = CommandDefinition(
                 name = "blub",
+                aliases = setOf("blubalias1", "blubalias2"),
                 groupName = "baz",
                 commandsInstance = BazCommands,
                 parameters = listOf(),
@@ -50,11 +54,11 @@ internal class CommandRegistryTest {
 
         @BeforeEach
         fun setUp() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(fooCommandDefinition)
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(barCommandDefinition)
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(commandDefinitionWithoutAliases)
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(commandDefinitionWithAliases)
             every { commandDefinitionLoader.load(BazCommands) } returns listOf(
-                    bazBlaCommandDefinition,
-                    bazBlubCommandDefinition
+                    groupedCommandDefinitionWithoutAliases,
+                    groupedCommandDefinitionWithAliases
             )
             commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands, BazCommands), commandDefinitionLoader)
         }
@@ -68,43 +72,45 @@ internal class CommandRegistryTest {
         }
 
         @Test
-        fun shouldReturnFooCommandDefinition() {
+        fun shouldReturnCommandDefinitionWithoutAliases() {
             commandRegistry.initialize()
 
             val commandDefinition = commandRegistry.getCommandDefinition("foo", null)
 
             assertThat(commandDefinition)
-                    .isEqualTo(fooCommandDefinition)
+                    .isEqualTo(commandDefinitionWithoutAliases)
         }
 
-        @Test
-        fun shouldReturnBarCommandDefinition() {
+        @ParameterizedTest
+        @ValueSource(strings = ["bar", "baralias1", "baralias2"])
+        fun shouldReturnCommandDefinitionWithAliases(commandName: String) {
             commandRegistry.initialize()
 
-            val commandDefinition = commandRegistry.getCommandDefinition("bar", null)
+            val commandDefinition = commandRegistry.getCommandDefinition(commandName, null)
 
             assertThat(commandDefinition)
-                    .isEqualTo(barCommandDefinition)
+                    .isEqualTo(commandDefinitionWithAliases)
         }
 
         @Test
-        fun shouldReturnBazBlaCommandDefinition() {
+        fun shouldReturnGroupedCommandWithoutAliases() {
             commandRegistry.initialize()
 
             val commandDefinition = commandRegistry.getCommandDefinition("baz", "bla")
 
             assertThat(commandDefinition)
-                    .isEqualTo(bazBlaCommandDefinition)
+                    .isEqualTo(groupedCommandDefinitionWithoutAliases)
         }
 
-        @Test
-        fun shouldReturnBazBlubCommandDefinition() {
+        @ParameterizedTest
+        @ValueSource(strings = ["blub", "blubalias1", "blubalias2"])
+        fun shouldReturnGroupedCommandDefinitionWithAliases(commandName: String) {
             commandRegistry.initialize()
 
-            val commandDefinition = commandRegistry.getCommandDefinition("baz", "blub")
+            val commandDefinition = commandRegistry.getCommandDefinition("baz", commandName)
 
             assertThat(commandDefinition)
-                    .isEqualTo(bazBlubCommandDefinition)
+                    .isEqualTo(groupedCommandDefinitionWithAliases)
         }
 
         @Test
@@ -151,7 +157,32 @@ internal class CommandRegistryTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalStateException::class.java)
-                    .hasMessage("Duplicate command or command group with name foo")
+                    .hasMessage("Duplicate command or command group with name or alias foo")
+        }
+
+        @Test
+        fun givenDuplicateSingleCommandsWithAliasItShouldThrowException() {
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
+                    name = "foo",
+                    aliases = setOf("qux"),
+                    commandsInstance = FooCommands,
+                    parameters = listOf(),
+                    method = method
+            ))
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
+                    name = "bar",
+                    aliases = setOf("foo"),
+                    commandsInstance = BarCommands,
+                    parameters = listOf(),
+                    method = method
+            ))
+            val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
+
+            val caughtThrowable = catchThrowable { commandRegistry.initialize() }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("Duplicate command or command group with name or alias foo")
         }
 
         @Test
@@ -199,7 +230,7 @@ internal class CommandRegistryTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(IllegalStateException::class.java)
-                    .hasMessage("Duplicate command or command group with name foo")
+                    .hasMessage("Duplicate command or command group with name or alias foo")
         }
 
         @Test
@@ -213,6 +244,33 @@ internal class CommandRegistryTest {
             ))
             every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
                     name = "foo",
+                    groupName = "bla",
+                    commandsInstance = BarCommands,
+                    parameters = listOf(),
+                    method = method
+            ))
+            val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
+
+            val caughtThrowable = catchThrowable { commandRegistry.initialize() }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("Duplicate command foo within group bla")
+        }
+
+        @Test
+        fun givenDuplicateCommandsWithAliasesWithinGroupItShouldThrowException() {
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
+                    name = "foo",
+                    aliases = setOf("qux"),
+                    groupName = "bla",
+                    commandsInstance = FooCommands,
+                    parameters = listOf(),
+                    method = method
+            ))
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
+                    name = "bar",
+                    aliases = setOf("foo"),
                     groupName = "bla",
                     commandsInstance = BarCommands,
                     parameters = listOf(),

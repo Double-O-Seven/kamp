@@ -15,4 +15,13 @@ internal constructor(
         val isGreedy: Boolean = true,
         val errorHandler: CommandErrorHandler? = null,
         val accessCheckers: List<CommandAccessCheckerGroup> = emptyList()
-)
+) {
+
+    val nameAndAliases: Set<String>
+        get() {
+            val nameAndAliases = mutableSetOf(name)
+            nameAndAliases += aliases
+            return nameAndAliases
+        }
+
+}
