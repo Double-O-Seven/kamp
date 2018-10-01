@@ -3,42 +3,92 @@ package ch.leadrian.samp.kamp.core.api.service
 import ch.leadrian.samp.kamp.core.api.constants.PlayerMarkersMode
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityException
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerSearchIndex
+import javax.inject.Inject
 
-interface PlayerService {
+class PlayerService
+@Inject
+internal constructor(
+        private val playerRegistry: PlayerRegistry,
+        private val playerSearchIndex: PlayerSearchIndex,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+) {
 
-    fun getPlayer(playerId: PlayerId): Player
+    fun isPlayerConnected(playerId: PlayerId): Boolean = playerRegistry[playerId] != null
 
-    fun getAllPlayers(): List<Player>
+    fun getPlayer(playerId: PlayerId): Player =
+            playerRegistry[playerId] ?: throw NoSuchEntityException("No player with ID ${playerId.value}")
 
-    fun enableStuntBonusForAll()
+    fun getAllPlayers(): List<Player> = playerRegistry.getAll()
 
-    fun getMaxPlayers(): Int
+    fun enableStuntBonusForAll() {
+        nativeFunctionExecutor.enableStuntBonusForAll(true)
+    }
 
-    fun getPoolSize(): Int
+    fun disableStuntBonusForAll() {
+        nativeFunctionExecutor.enableStuntBonusForAll(false)
+    }
 
-    fun showNameTags(show: Boolean)
+    fun getMaxPlayers(): Int = nativeFunctionExecutor.getMaxPlayers()
 
-    fun showMarkers(mode: PlayerMarkersMode)
+    fun getPoolSize(): Int = nativeFunctionExecutor.getPlayerPoolSize()
 
-    fun allowInteriorWeapons(allow: Boolean)
+    fun showNameTags() {
+        nativeFunctionExecutor.showNameTags(true)
+    }
 
-    fun allowAdminTeleport(allow: Boolean)
+    fun hideNameTags() {
+        nativeFunctionExecutor.showNameTags(false)
+    }
 
-    fun setDeathDropAmount(amount: Int)
+    fun showMarkers(mode: PlayerMarkersMode) {
+        nativeFunctionExecutor.showPlayerMarkers(mode.value)
+    }
 
-    fun enableZoneNames(enable: Boolean)
+    fun allowInteriorWeapons() {
+        nativeFunctionExecutor.allowInteriorWeapons(true)
+    }
 
-    fun usePlayerPedAnimations()
+    fun forbidInteriorWeapons() {
+        nativeFunctionExecutor.allowInteriorWeapons(false)
+    }
 
-    fun setNameTagDrawDistance(distance: Float)
+    fun setDeathDropAmount(amount: Int) {
+        nativeFunctionExecutor.setDeathDropAmount(amount)
+    }
 
-    fun disableNameTagLineOfSight()
+    fun enableZoneNames() {
+        nativeFunctionExecutor.enableZoneNames(true)
+    }
 
-    fun limitGlobalChatRadius(radius: Float)
+    fun disableZoneNames() {
+        nativeFunctionExecutor.enableZoneNames(false)
+    }
 
-    fun limitPlayerMarkerRadius(radius: Float)
+    fun usePlayerPedAnimations() {
+        nativeFunctionExecutor.usePlayerPedAnims()
+    }
 
-    fun getPlayerByName(name: String): Player?
+    fun setNameTagDrawDistance(distance: Float) {
+        nativeFunctionExecutor.setNameTagDrawDistance(distance)
+    }
 
-    fun findPlayersByName(name: String): List<Player>
+    fun disableNameTagLineOfSight() {
+        nativeFunctionExecutor.disableNameTagLOS()
+    }
+
+    fun limitGlobalChatRadius(radius: Float) {
+        nativeFunctionExecutor.limitGlobalChatRadius(radius)
+    }
+
+    fun limitPlayerMarkerRadius(radius: Float) {
+        nativeFunctionExecutor.limitPlayerMarkerRadius(radius)
+    }
+
+    fun getPlayerByName(name: String): Player? = playerSearchIndex.getPlayer(name)
+
+    fun findPlayersByName(name: String): List<Player> = playerSearchIndex.findPlayers(name)
 }
