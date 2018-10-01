@@ -73,6 +73,15 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectPickupCallbackListenerAsSingleton() {
+            val pickupCallbackListener = injector.getInstance<PickupCallbackListener>()
+
+            assertThat(pickupCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<PickupCallbackListener>())
+        }
+
+        @Test
         fun shouldInjectCallbackListenerManagerAsSingleton() {
             val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
 

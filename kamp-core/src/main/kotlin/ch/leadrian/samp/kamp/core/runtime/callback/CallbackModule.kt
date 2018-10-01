@@ -10,6 +10,7 @@ internal class CallbackModule : KampModule() {
         bind(DialogCallbackListener::class.java).asEagerSingleton()
         bind(MenuCallbackListener::class.java).asEagerSingleton()
         bind(MapObjectCallbackListener::class.java).asEagerSingleton()
+        bind(PickupCallbackListener::class.java).asEagerSingleton()
 
         bind(CallbackListenerManager::class.java)
         newCallbackListenerRegistry().apply {
