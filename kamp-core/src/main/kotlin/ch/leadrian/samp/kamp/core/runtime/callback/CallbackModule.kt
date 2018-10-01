@@ -12,6 +12,7 @@ internal class CallbackModule : KampModule() {
         bind(MapObjectCallbackListener::class.java).asEagerSingleton()
         bind(PickupCallbackListener::class.java).asEagerSingleton()
         bind(PlayerMapObjectCallbackListener::class.java).asEagerSingleton()
+        bind(PlayerCallbackListener::class.java).asEagerSingleton()
 
         bind(CallbackListenerManager::class.java)
         newCallbackListenerRegistry().apply {
