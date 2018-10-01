@@ -82,6 +82,15 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectPlayerMapObjectCallbackListenerAsSingleton() {
+            val playerMapObjectCallbackListener = injector.getInstance<PlayerMapObjectCallbackListener>()
+
+            assertThat(playerMapObjectCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<PlayerMapObjectCallbackListener>())
+        }
+
+        @Test
         fun shouldInjectCallbackListenerManagerAsSingleton() {
             val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
 
