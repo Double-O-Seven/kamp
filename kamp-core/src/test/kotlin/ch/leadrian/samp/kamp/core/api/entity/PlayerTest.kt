@@ -1907,16 +1907,6 @@ internal class PlayerTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["true", "false"])
-    fun shouldAllowTeleport(allow: Boolean) {
-        every { nativeFunctionExecutor.allowPlayerTeleport(any(), any()) } returns true
-
-        player.allowTeleport(allow)
-
-        verify { nativeFunctionExecutor.allowPlayerTeleport(playerId.value, allow) }
-    }
-
     @Nested
     inner class CameraPositionTests {
 

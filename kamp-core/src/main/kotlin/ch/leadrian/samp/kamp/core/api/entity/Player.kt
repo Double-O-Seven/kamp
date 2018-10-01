@@ -666,10 +666,6 @@ internal constructor(
         mapIconsById.values.forEach { it.destroy() }
     }
 
-    fun allowTeleport(allow: Boolean) {
-        nativeFunctionExecutor.allowPlayerTeleport(playerid = this.id.value, allow = allow)
-    }
-
     var cameraPosition: Vector3D
         get() {
             val x = ReferenceFloat()
