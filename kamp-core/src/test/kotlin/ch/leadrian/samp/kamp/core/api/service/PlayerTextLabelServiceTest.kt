@@ -76,6 +76,7 @@ internal class PlayerTextLabelServiceTest {
         fun shouldCreatePlayerTextLabelWithTextKey() {
             val textKey = TextKey("text.label")
             val locale = Locale.GERMANY
+            every { player.locale } returns locale
             every { textProvider.getText(locale, textKey) } returns "Hi there"
             val attachToPlayer = mockk<Player>()
             val attachToVehicle = mockk<Vehicle>()
@@ -101,8 +102,7 @@ internal class PlayerTextLabelServiceTest {
                     drawDistance = 4f,
                     testLOS = true,
                     attachedToPlayer = attachToPlayer,
-                    attachedToVehicle = attachToVehicle,
-                    locale = locale
+                    attachedToVehicle = attachToVehicle
             )
 
             assertThat(createdPlayerTextLabel)

@@ -10,7 +10,6 @@ import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityException
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerTextLabelFactory
-import java.util.*
 import javax.inject.Inject
 
 class PlayerTextLabelService
@@ -48,10 +47,9 @@ internal constructor(
             drawDistance: Float,
             testLOS: Boolean = false,
             attachedToPlayer: Player? = null,
-            attachedToVehicle: Vehicle? = null,
-            locale: Locale = Locale.getDefault()
+            attachedToVehicle: Vehicle? = null
     ): PlayerTextLabel {
-        val text = textProvider.getText(locale, textKey)
+        val text = textProvider.getText(player.locale, textKey)
         return playerTextLabelFactory.create(
                 player = player,
                 coordinates = coordinates,
