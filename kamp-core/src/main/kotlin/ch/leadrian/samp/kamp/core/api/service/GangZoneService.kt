@@ -17,7 +17,7 @@ internal constructor(
 
     fun createGangZone(area: Rectangle): GangZone = gangZoneFactory.create(area)
 
-    fun isValid(gangZoneId: GangZoneId): Boolean = gangZoneRegistry[gangZoneId] != null
+    fun isValidGangZone(gangZoneId: GangZoneId): Boolean = gangZoneRegistry[gangZoneId] != null
 
     fun getGangZone(gangZoneId: GangZoneId): GangZone =
             gangZoneRegistry[gangZoneId] ?: throw NoSuchEntityException("No gang zone with ID ${gangZoneId.value}")

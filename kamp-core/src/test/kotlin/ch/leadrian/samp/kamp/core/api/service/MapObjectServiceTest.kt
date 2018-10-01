@@ -60,7 +60,7 @@ internal class MapObjectServiceTest {
         val mapObjectId = MapObjectId.valueOf(1337)
         every { nativeFunctionExecutor.isValidObject(mapObjectId.value) } returns expectedResult
 
-        val result = mapObjectService.isValid(mapObjectId)
+        val result = mapObjectService.isValidMapObject(mapObjectId)
 
         assertThat(result)
                 .isEqualTo(expectedResult)

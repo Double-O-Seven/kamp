@@ -130,7 +130,7 @@ internal class MenuServiceTest {
         val menuId = MenuId.valueOf(1337)
         every { nativeFunctionExecutor.isValidMenu(menuId.value) } returns expectedResult
 
-        val result = menuService.isValid(menuId)
+        val result = menuService.isValidMenu(menuId)
 
         assertThat(result)
                 .isEqualTo(expectedResult)

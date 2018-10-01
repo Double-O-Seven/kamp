@@ -57,7 +57,7 @@ internal constructor(
         return createDoubleColumnMenu(position, columnWidth1, columnWidth2, title, locale)
     }
 
-    fun isValid(menuId: MenuId): Boolean = nativeFunctionExecutor.isValidMenu(menuId.value)
+    fun isValidMenu(menuId: MenuId): Boolean = nativeFunctionExecutor.isValidMenu(menuId.value)
 
     fun getMenu(menuId: MenuId): Menu =
             menuRegistry[menuId] ?: throw NoSuchEntityException("No menu with ID ${menuId.value}")

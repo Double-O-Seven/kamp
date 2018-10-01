@@ -20,7 +20,7 @@ internal constructor(
     fun createMapObject(modelId: Int, coordinates: Vector3D, rotation: Vector3D, drawDistance: Float = 0f): MapObject =
             mapObjectFactory.create(modelId, coordinates, rotation, drawDistance)
 
-    fun isValid(mapObjectId: MapObjectId): Boolean =
+    fun isValidMapObject(mapObjectId: MapObjectId): Boolean =
             nativeFunctionExecutor.isValidObject(mapObjectId.value)
 
     fun getMapObject(mapObjectId: MapObjectId): MapObject =

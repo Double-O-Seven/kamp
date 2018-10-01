@@ -46,7 +46,7 @@ internal class GangZoneServiceTest {
             val gangZoneId = GangZoneId.valueOf(69)
             every { gangZoneRegistry[gangZoneId] } returns null
 
-            val isValid = gangZoneService.isValid(gangZoneId)
+            val isValid = gangZoneService.isValidGangZone(gangZoneId)
 
             assertThat(isValid)
                     .isFalse()
@@ -58,7 +58,7 @@ internal class GangZoneServiceTest {
             val gangZone = mockk<GangZone>()
             every { gangZoneRegistry[gangZoneId] } returns gangZone
 
-            val isValid = gangZoneService.isValid(gangZoneId)
+            val isValid = gangZoneService.isValidGangZone(gangZoneId)
 
             assertThat(isValid)
                     .isTrue()
