@@ -55,6 +55,15 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectMenuCallbackListenerAsSingleton() {
+            val menuCallbackListener = injector.getInstance<MenuCallbackListener>()
+
+            assertThat(menuCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<MenuCallbackListener>())
+        }
+
+        @Test
         fun shouldInjectCallbackListenerManagerAsSingleton() {
             val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
 
