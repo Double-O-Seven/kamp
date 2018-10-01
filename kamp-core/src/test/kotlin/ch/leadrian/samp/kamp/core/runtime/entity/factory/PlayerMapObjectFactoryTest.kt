@@ -39,7 +39,7 @@ internal class PlayerMapObjectFactoryTest {
     fun shouldCreatePlayerMapObject() {
         playerMapObjectFactory.create(
                 player = player,
-                model = 1337,
+                modelId = 1337,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                 drawDistance = 7f
@@ -64,7 +64,7 @@ internal class PlayerMapObjectFactoryTest {
     fun shouldRegisterPlayerMapObject() {
         val playerMapObject = playerMapObjectFactory.create(
                 player = player,
-                model = 1337,
+                modelId = 1337,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                 drawDistance = 7f
@@ -78,7 +78,7 @@ internal class PlayerMapObjectFactoryTest {
         every { nativeFunctionExecutor.destroyPlayerObject(any(), any()) } returns true
         val playerMapObject = playerMapObjectFactory.create(
                 player = player,
-                model = 1337,
+                modelId = 1337,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                 drawDistance = 7f

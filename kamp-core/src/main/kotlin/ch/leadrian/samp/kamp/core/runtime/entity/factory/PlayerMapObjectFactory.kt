@@ -12,14 +12,14 @@ constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
     fun create(
             player: Player,
-            model: Int,
+            modelId: Int,
             coordinates: Vector3D,
             rotation: Vector3D,
             drawDistance: Float
     ): PlayerMapObject {
         val playerMapObject = PlayerMapObject(
                 player = player,
-                model = model,
+                model = modelId,
                 coordinates = coordinates,
                 rotation = rotation,
                 drawDistance = drawDistance,
