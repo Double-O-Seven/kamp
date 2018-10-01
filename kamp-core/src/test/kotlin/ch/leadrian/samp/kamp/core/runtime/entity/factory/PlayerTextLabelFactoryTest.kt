@@ -7,8 +7,6 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
-import ch.leadrian.samp.kamp.core.api.text.TextFormatter
-import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextLabelRegistry
 import io.mockk.Runs
@@ -31,8 +29,6 @@ internal class PlayerTextLabelFactoryTest {
 
     private val playerTextLabelRegistry = mockk<PlayerTextLabelRegistry>()
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-    private val textProvider = mockk<TextProvider>()
-    private val textFormatter = mockk<TextFormatter>()
 
     @BeforeEach
     fun setUp() {
@@ -41,7 +37,7 @@ internal class PlayerTextLabelFactoryTest {
         every { nativeFunctionExecutor.createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
         every { playerTextLabelRegistry.register(any()) } just Runs
         every { playerTextLabelRegistry.unregister(any()) } just Runs
-        playerTextLabelFactory = PlayerTextLabelFactory(nativeFunctionExecutor, textProvider, textFormatter)
+        playerTextLabelFactory = PlayerTextLabelFactory(nativeFunctionExecutor)
         player = mockk {
             every { this@mockk.playerTextLabelRegistry } returns this@PlayerTextLabelFactoryTest.playerTextLabelRegistry
             every { id } returns playerId
