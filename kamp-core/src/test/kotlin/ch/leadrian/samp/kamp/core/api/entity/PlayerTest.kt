@@ -2404,14 +2404,22 @@ internal class PlayerTest {
         }
     }
 
-    @ParameterizedTest
-    @ValueSource(strings = ["true", "false"])
-    fun shouldEnableStuntBonus(enable: Boolean) {
+    @Test
+    fun shouldEnableStuntBonus() {
         every { nativeFunctionExecutor.enableStuntBonusForPlayer(any(), any()) } returns true
 
-        player.enableStuntBonus(enable)
+        player.enableStuntBonus()
 
-        verify { nativeFunctionExecutor.enableStuntBonusForPlayer(playerid = playerId.value, enable = enable) }
+        verify { nativeFunctionExecutor.enableStuntBonusForPlayer(playerId.value, true) }
+    }
+
+    @Test
+    fun shouldDisableStuntBonus() {
+        every { nativeFunctionExecutor.enableStuntBonusForPlayer(any(), any()) } returns true
+
+        player.disableStuntBonus()
+
+        verify { nativeFunctionExecutor.enableStuntBonusForPlayer(playerId.value, false) }
     }
 
     @Nested

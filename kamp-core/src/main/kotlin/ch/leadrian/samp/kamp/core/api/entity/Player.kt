@@ -790,8 +790,12 @@ internal constructor(
             return nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
         }
 
-    fun enableStuntBonus(enable: Boolean) {
-        nativeFunctionExecutor.enableStuntBonusForPlayer(playerid = id.value, enable = enable)
+    fun enableStuntBonus() {
+        nativeFunctionExecutor.enableStuntBonusForPlayer(id.value, true)
+    }
+
+    fun disableStuntBonus() {
+        nativeFunctionExecutor.enableStuntBonusForPlayer(id.value, false)
     }
 
     fun spectate(player: Player, mode: SpectateType = SpectateType.NORMAL) {
