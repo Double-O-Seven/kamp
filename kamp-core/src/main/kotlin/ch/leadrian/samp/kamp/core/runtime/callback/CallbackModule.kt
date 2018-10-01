@@ -9,6 +9,7 @@ internal class CallbackModule : KampModule() {
         bind(CheckpointCallbackListener::class.java).asEagerSingleton()
         bind(DialogCallbackListener::class.java).asEagerSingleton()
         bind(MenuCallbackListener::class.java).asEagerSingleton()
+        bind(MapObjectCallbackListener::class.java).asEagerSingleton()
 
         bind(CallbackListenerManager::class.java)
         newCallbackListenerRegistry().apply {
