@@ -22,7 +22,7 @@ constructor(
             position: Vector2D,
             columnWidth: Float,
             title: String,
-            locale: Locale = Locale.getDefault()
+            locale: Locale
     ): Menu = create(
             numberOfColumns = 1,
             position = position,
@@ -37,7 +37,7 @@ constructor(
             columnWidth1: Float,
             columnWidth2: Float,
             title: String,
-            locale: Locale = Locale.getDefault()
+            locale: Locale
     ): Menu = create(
             numberOfColumns = 2,
             position = position,

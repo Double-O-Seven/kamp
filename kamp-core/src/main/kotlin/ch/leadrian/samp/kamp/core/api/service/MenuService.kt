@@ -1,24 +1,67 @@
 package ch.leadrian.samp.kamp.core.api.service
 
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
+import ch.leadrian.samp.kamp.core.api.entity.Menu
 import ch.leadrian.samp.kamp.core.api.entity.id.MenuId
+import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityException
 import ch.leadrian.samp.kamp.core.api.text.TextKey
-import java.awt.Menu
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
+import java.util.*
+import javax.inject.Inject
 
-interface MenuService {
+class MenuService
+@Inject
+internal constructor(
+        private val menuFactory: MenuFactory,
+        private val menuRegistry: MenuRegistry,
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val textProvider: TextProvider
+) {
 
-    fun createMenu(title: String, position: Vector2D, columnWidth: Float): Menu
+    fun createSingleColumnMenu(
+            position: Vector2D,
+            columnWidth: Float,
+            title: String,
+            locale: Locale = Locale.getDefault()
+    ): Menu = menuFactory.create(position, columnWidth, title, locale)
 
-    fun createMenu(title: String, position: Vector2D, column1Width: Float, column2Width: Float): Menu
+    fun createSingleColumnMenu(
+            titleTextKey: TextKey,
+            position: Vector2D,
+            columnWidth: Float,
+            locale: Locale = Locale.getDefault()
+    ): Menu {
+        val title = textProvider.getText(locale, titleTextKey)
+        return createSingleColumnMenu(position, columnWidth, title, locale)
+    }
 
-    fun createMenu(titleTextKey: TextKey, position: Vector2D, columnWidth: Float): Menu
+    fun createDoubleColumnMenu(
+            position: Vector2D,
+            columnWidth1: Float,
+            columnWidth2: Float,
+            title: String,
+            locale: Locale = Locale.getDefault()
+    ): Menu = menuFactory.create(position, columnWidth1, columnWidth2, title, locale)
 
-    fun createMenu(titleTextKey: TextKey, position: Vector2D, column1Width: Float, column2Width: Float): Menu
+    fun createDoubleColumnMenu(
+            titleTextKey: TextKey,
+            position: Vector2D,
+            columnWidth1: Float,
+            columnWidth2: Float,
+            locale: Locale = Locale.getDefault()
+    ): Menu {
+        val title = textProvider.getText(locale, titleTextKey)
+        return createDoubleColumnMenu(position, columnWidth1, columnWidth2, title, locale)
+    }
 
-    fun isValid(menuId: MenuId): Boolean
+    fun isValid(menuId: MenuId): Boolean = nativeFunctionExecutor.isValidMenu(menuId.value)
 
-    fun getMenu(menuId: MenuId): Menu
+    fun getMenu(menuId: MenuId): Menu =
+            menuRegistry[menuId] ?: throw NoSuchEntityException("No menu with ID ${menuId.value}")
 
-    fun getAllMenus(): List<Menu>
+    fun getAllMenus(): List<Menu> = menuRegistry.getAll()
 
 }
