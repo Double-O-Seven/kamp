@@ -12,7 +12,7 @@ internal class OnVehicleDeathHandler
 @Inject
 constructor() : CallbackListenerRegistry<OnVehicleDeathListener>(OnVehicleDeathListener::class), OnVehicleDeathListener {
 
-    override fun onVehicleDeath(vehicle: Vehicle, killer: Player) {
+    override fun onVehicleDeath(vehicle: Vehicle, killer: Player?) {
         listeners.forEach {
             it.onVehicleDeath(vehicle, killer)
         }

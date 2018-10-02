@@ -5,6 +5,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 
 interface OnVehicleDeathListener {
 
-    fun onVehicleDeath(vehicle: Vehicle, killer: Player)
+    fun onVehicleDeath(vehicle: Vehicle, killer: Player?)
 
 }
