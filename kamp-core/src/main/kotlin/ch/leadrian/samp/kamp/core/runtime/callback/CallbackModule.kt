@@ -15,6 +15,7 @@ internal class CallbackModule : KampModule() {
         bind(PlayerCallbackListener::class.java).asEagerSingleton()
         bind(RaceCheckpointCallbackListener::class.java).asEagerSingleton()
         bind(TextDrawCallbackListener::class.java).asEagerSingleton()
+        bind(PlayerTextDrawCallbackListener::class.java).asEagerSingleton()
 
         bind(CallbackListenerManager::class.java)
         newCallbackListenerRegistry().apply {
