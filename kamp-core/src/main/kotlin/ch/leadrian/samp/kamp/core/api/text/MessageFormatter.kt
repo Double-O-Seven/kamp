@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.text
 
 import ch.leadrian.samp.kamp.core.api.data.Color
+import java.text.MessageFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -19,6 +20,6 @@ internal constructor(private val textProvider: TextProvider) {
                 else -> arg
             }
         }
-        return String.format(locale, message, *formattedArgs)
+        return MessageFormat(message, locale).format(formattedArgs)
     }
 }

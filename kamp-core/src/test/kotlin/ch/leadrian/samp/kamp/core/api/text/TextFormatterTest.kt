@@ -24,13 +24,13 @@ internal class TextFormatterTest {
 
         val formattedText = textFormatter.format(
                 locale,
-                "A: %d, B: %s, C: %s",
+                "A: {0}, B: {1}, C: {2}",
                 1337,
                 hasTextKey,
                 textKey2
         )
 
         assertThat(formattedText)
-                .isEqualTo("A: 1337, B: Hallo, C: Bonjour")
+                .isEqualTo("A: 1.337, B: Hallo, C: Bonjour")
     }
 }

@@ -31,7 +31,7 @@ internal class MessageFormatterTest {
         val formattedMessage = messageFormatter.format(
                 locale,
                 color,
-                "A: %d, B: %s, C: %s, D: %s, E: %s",
+                "A: {0}, B: {1}, C: {2}, D: {3}, E: {4}",
                 1337,
                 messageArgument,
                 hasTextKey,
@@ -40,6 +40,6 @@ internal class MessageFormatterTest {
         )
 
         assertThat(formattedMessage)
-                .isEqualTo("A: 1337, B: Hi there, C: Hallo, D: Bonjour, E: {11aadd}")
+                .isEqualTo("A: 1.337, B: Hi there, C: Hallo, D: Bonjour, E: {11aadd}")
     }
 }

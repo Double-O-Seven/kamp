@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import java.text.MessageFormat
 import java.util.*
 import javax.inject.Inject
 
@@ -8,13 +9,14 @@ class TextFormatter
 internal constructor(private val textProvider: TextProvider) {
 
     fun format(locale: Locale, message: String, vararg args: Any): String {
-        val formattedArgs = args.map {
-            when (it) {
-                is HasTextKey -> textProvider.getText(locale, it.textKey)
-                is TextKey -> textProvider.getText(locale, it)
-                else -> it
+        val formattedArgs = arrayOfNulls<Any?>(args.size)
+        args.forEachIndexed { i, arg ->
+            formattedArgs[i] = when (arg) {
+                is HasTextKey -> textProvider.getText(locale, arg.textKey)
+                is TextKey -> textProvider.getText(locale, arg)
+                else -> arg
             }
         }
-        return String.format(locale, message, *formattedArgs.toTypedArray())
+        return MessageFormat(message, locale).format(formattedArgs)
     }
 }
