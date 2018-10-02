@@ -44,6 +44,7 @@ internal constructor(
             colors = colors
     )
 
+    @JvmOverloads
     fun createVehicle(
             model: VehicleModel,
             colors: VehicleColors,
@@ -60,6 +61,7 @@ internal constructor(
             colors = colors
     )
 
+    @JvmOverloads
     fun createVehicle(
             model: VehicleModel,
             colors: VehicleColors,

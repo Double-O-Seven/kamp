@@ -37,7 +37,7 @@ internal constructor(
         coordinates: Vector3D,
         rotation: Float,
         addSiren: Boolean,
-        respawnDelay: Int,
+        respawnDelay: Int?,
         vehicleRegistry: VehicleRegistry,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<VehicleId>, AbstractDestroyable() {
@@ -65,7 +65,7 @@ internal constructor(
                 z = coordinates.z,
                 rotation = rotation,
                 addsiren = addSiren,
-                respawn_delay = respawnDelay
+                respawn_delay = respawnDelay ?: -1
         )
 
         if (vehicleId == SAMPConstants.INVALID_VEHICLE_ID) {

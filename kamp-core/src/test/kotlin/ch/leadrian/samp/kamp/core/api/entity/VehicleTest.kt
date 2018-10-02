@@ -93,6 +93,40 @@ internal class VehicleTest {
         }
 
         @Test
+        fun shouldConstructVehicleWithFallbackValues() {
+            val vehicleId = VehicleId.valueOf(69)
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every {
+                    createVehicle(
+                            vehicletype = VehicleModel.ALPHA.value,
+                            x = 1f,
+                            y = 2f,
+                            z = 3f,
+                            rotation = 4f,
+                            color1 = 3,
+                            color2 = 6,
+                            respawn_delay = -1,
+                            addsiren = true
+                    )
+                } returns vehicleId.value
+            }
+
+            val vehicle = Vehicle(
+                    model = VehicleModel.ALPHA,
+                    colors = vehicleColorsOf(color1 = VehicleColor[3], color2 = VehicleColor[6]),
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    rotation = 4f,
+                    addSiren = true,
+                    respawnDelay = null,
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    vehicleRegistry = mockk()
+            )
+
+            assertThat(vehicle.id)
+                    .isEqualTo(vehicleId)
+        }
+
+        @Test
         fun givenCreateVehicleReturnsInvalidVehicleIdItShouldThrowCreationFailedException() {
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every {

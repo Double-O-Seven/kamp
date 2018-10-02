@@ -51,23 +51,23 @@ internal class VehicleServiceTest {
         @Test
         fun shouldCreateVehicleWithPosition() {
             val createdVehicle = vehicleService.createVehicle(
-                    VehicleModel.FBIRANCHER,
-                    vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                    positionOf(1f, 2f, 3f, 4f),
-                    true,
-                    60
+                    model = VehicleModel.FBIRANCHER,
+                    colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                    position = positionOf(1f, 2f, 3f, 4f),
+                    respawnDelay = 60,
+                    addSiren = true
             )
 
             assertThat(createdVehicle)
                     .isEqualTo(vehicle)
             verify {
                 vehicleFactory.create(
-                        VehicleModel.FBIRANCHER,
-                        vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                        positionOf(1f, 2f, 3f, 4f),
-                        4f,
-                        true,
-                        60
+                        model = VehicleModel.FBIRANCHER,
+                        colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                        coordinates = positionOf(1f, 2f, 3f, 4f),
+                        rotation = 4f,
+                        respawnDelay = 60,
+                        addSiren = true
                 )
             }
         }
@@ -75,24 +75,24 @@ internal class VehicleServiceTest {
         @Test
         fun shouldCreateVehicleWithCoordinatesAndAngle() {
             val createdVehicle = vehicleService.createVehicle(
-                    VehicleModel.FBIRANCHER,
-                    vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                    vector3DOf(1f, 2f, 3f),
-                    4f,
-                    true,
-                    60
+                    model = VehicleModel.FBIRANCHER,
+                    colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                    coordinates = vector3DOf(1f, 2f, 3f),
+                    rotation = 4f,
+                    respawnDelay = 60,
+                    addSiren = true
             )
 
             assertThat(createdVehicle)
                     .isEqualTo(vehicle)
             verify {
                 vehicleFactory.create(
-                        VehicleModel.FBIRANCHER,
-                        vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                        vector3DOf(1f, 2f, 3f),
-                        4f,
-                        true,
-                        60
+                        model = VehicleModel.FBIRANCHER,
+                        colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                        coordinates = vector3DOf(1f, 2f, 3f),
+                        rotation = 4f,
+                        respawnDelay = 60,
+                        addSiren = true
                 )
             }
         }
@@ -103,23 +103,23 @@ internal class VehicleServiceTest {
             every { vehicle.interiorId = any() } just Runs
 
             val createdVehicle = vehicleService.createVehicle(
-                    VehicleModel.FBIRANCHER,
-                    vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                    angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
-                    true,
-                    60
+                    model = VehicleModel.FBIRANCHER,
+                    colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                    angledLocation = angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
+                    respawnDelay = 60,
+                    addSiren = true
             )
 
             assertThat(createdVehicle)
                     .isEqualTo(vehicle)
             verify {
                 vehicleFactory.create(
-                        VehicleModel.FBIRANCHER,
-                        vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                        angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
-                        4f,
-                        true,
-                        60
+                        model = VehicleModel.FBIRANCHER,
+                        colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
+                        coordinates = angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
+                        rotation = 4f,
+                        respawnDelay = 60,
+                        addSiren = true
                 )
                 vehicle.interiorId = 187
                 vehicle.virtualWorldId = 69

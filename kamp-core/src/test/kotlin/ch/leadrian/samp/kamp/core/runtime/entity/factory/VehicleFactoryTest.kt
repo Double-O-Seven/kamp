@@ -58,33 +58,6 @@ internal class VehicleFactoryTest {
         }
     }
 
-
-    @Test
-    fun givenNoRespawnDelayItShouldCreateVehicleWithRespawnDelayValueMinusOne() {
-        vehicleFactory.create(
-                model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
-                coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                rotation = 4f,
-                addSiren = true,
-                respawnDelay = null
-        )
-
-        verify {
-            nativeFunctionExecutor.createVehicle(
-                    vehicletype = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA.value,
-                    x = 1f,
-                    y = 2f,
-                    z = 3f,
-                    rotation = 4f,
-                    color1 = 3,
-                    color2 = 6,
-                    respawn_delay = -1,
-                    addsiren = true
-            )
-        }
-    }
-
     @Test
     fun shouldReturnVehicleImpl() {
         val vehicle = vehicleFactory.create(
