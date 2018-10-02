@@ -109,6 +109,15 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectTextDrawCallbackListenerAsSingleton() {
+            val textDrawCallbackListener = injector.getInstance<TextDrawCallbackListener>()
+
+            assertThat(textDrawCallbackListener)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<TextDrawCallbackListener>())
+        }
+
+        @Test
         fun shouldInjectCallbackListenerManagerAsSingleton() {
             val callbackListenerManager = injector.getInstance<CallbackListenerManager>()
 
