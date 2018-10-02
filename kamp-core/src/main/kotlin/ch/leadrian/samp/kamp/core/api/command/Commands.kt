@@ -1,13 +1,23 @@
 package ch.leadrian.samp.kamp.core.api.command
 
+import ch.leadrian.samp.kamp.core.TextKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerCommandTextHandler
+import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.core.runtime.command.CommandListDialogFactory
 import javax.inject.Inject
 
 abstract class Commands {
 
     @Inject
-    private lateinit var onPlayerCommandTextHandler: OnPlayerCommandTextHandler
+    internal lateinit var commandListDialogFactory: CommandListDialogFactory
+
+    @Inject
+    protected lateinit var textProvider: TextProvider
+
+    private val commandListDialog: Dialog by lazy {
+        commandListDialogFactory.create(this, commandListDialogPageSize)
+    }
 
     var groupName: String? = null
         internal set
@@ -15,12 +25,17 @@ abstract class Commands {
     lateinit var definitions: List<CommandDefinition>
         internal set
 
-    fun showCommandList(title: String, player: Player, executeOnSelect: Boolean = true, maxCommandsPerPage: Int = 30) {
-        TODO()
-    }
+    open val commandListDialogPageSize: Int = 30
 
-    protected fun executeCommand(player: Player, commandText: String) {
-        onPlayerCommandTextHandler.onPlayerCommandText(player, commandText)
+    open fun getCommandListDialogTitle(player: Player): String =
+            textProvider.getText(player.locale, TextKeys.command.dialog.title.generic)
+
+    fun showCommandList(player: Player, showAsNavigationRoot: Boolean = true) {
+        if (showAsNavigationRoot) {
+            player.dialogNavigation.setRoot(commandListDialog)
+        } else {
+            player.dialogNavigation.push(commandListDialog)
+        }
     }
 
 }
