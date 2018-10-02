@@ -25,13 +25,13 @@ constructor(private val dialogService: DialogService) {
         return dialogService.createTabListDialog<String> {
             buildSinglePageCaption(commands)
             buildHeaderContent()
-            buildItems(commands.definitions)
+            buildItems(commands.definitions.sortedBy { it.name })
             buildSinglePageButtons()
         }
     }
 
     private fun createPagedDialog(commands: Commands, maxCommandsPerPage: Int): Dialog {
-        val pages = commands.definitions.chunked(maxCommandsPerPage)
+        val pages = getPages(commands, maxCommandsPerPage)
         val dialogs: MutableList<Dialog> = ArrayList(pages.size)
         pages.forEachIndexed { index, definitions ->
             val dialog = dialogService.createTabListDialog<String> {
@@ -44,6 +44,9 @@ constructor(private val dialogService: DialogService) {
         }
         return dialogs.first()
     }
+
+    private fun getPages(commands: Commands, maxCommandsPerPage: Int) =
+            commands.definitions.asSequence().sortedBy { it.name }.chunked(maxCommandsPerPage).toList()
 
     private fun TabListDialogBuilder<String>.buildSinglePageCaption(commands: Commands) {
         caption(commands::getCommandListDialogTitle)

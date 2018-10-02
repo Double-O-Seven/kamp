@@ -9,7 +9,7 @@ buildscript {
             }
         }
 
-        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.1.4"
+        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.1.6"
     }
 }
 
