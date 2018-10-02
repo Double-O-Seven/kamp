@@ -28,12 +28,13 @@ internal constructor(
 
     private val modelInfoCache = mutableMapOf<Pair<VehicleModel, VehicleModelInfoType>, Vector3D>()
 
+    @JvmOverloads
     fun createVehicle(
             model: VehicleModel,
             colors: VehicleColors,
             position: Position,
-            addSiren: Boolean = false,
-            respawnDelay: Int
+            respawnDelay: Int?,
+            addSiren: Boolean = false
     ): Vehicle = vehicleFactory.create(
             model = model,
             coordinates = position,
@@ -48,8 +49,8 @@ internal constructor(
             colors: VehicleColors,
             coordinates: Vector3D,
             rotation: Float,
-            addSiren: Boolean = false,
-            respawnDelay: Int
+            respawnDelay: Int?,
+            addSiren: Boolean = false
     ): Vehicle = vehicleFactory.create(
             model = model,
             coordinates = coordinates,
@@ -63,8 +64,8 @@ internal constructor(
             model: VehicleModel,
             colors: VehicleColors,
             angledLocation: AngledLocation,
-            addSiren: Boolean = false,
-            respawnDelay: Int
+            respawnDelay: Int,
+            addSiren: Boolean = false
     ): Vehicle = vehicleFactory.create(
             model = model,
             coordinates = angledLocation,

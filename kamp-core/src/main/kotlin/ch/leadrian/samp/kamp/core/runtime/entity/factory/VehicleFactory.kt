@@ -21,7 +21,7 @@ constructor(
             coordinates: Vector3D,
             rotation: Float,
             addSiren: Boolean,
-            respawnDelay: Int
+            respawnDelay: Int?
     ): Vehicle {
         val vehicle = Vehicle(
                 model = model,
@@ -29,7 +29,7 @@ constructor(
                 coordinates = coordinates,
                 rotation = rotation,
                 addSiren = addSiren,
-                respawnDelay = respawnDelay,
+                respawnDelay = respawnDelay ?: -1,
                 vehicleRegistry = vehicleRegistry,
                 nativeFunctionExecutor = nativeFunctionExecutor
         )
