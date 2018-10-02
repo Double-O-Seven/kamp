@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
@@ -17,6 +18,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -664,15 +666,72 @@ internal class TextDrawTest {
             }
         }
 
-        @Test
-        fun shouldExecuteOnSpawnHandlers() {
-            val player = mockk<Player>()
-            val onClick = mockk<TextDraw.(Player) -> Boolean>(relaxed = true)
-            textDraw.onClick(onClick)
+        @Nested
+        inner class OnClickTests {
 
-            textDraw.onClick(player)
+            private val player = mockk<Player>()
 
-            verify { onClick.invoke(textDraw, player) }
+            @Test
+            fun givenEveryOnClickHandlerReturnsNotFoundItShouldReturnNotFound() {
+                val onClick1 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+                }
+                val onClick2 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+                }
+                val onClick3 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+                }
+                textDraw.apply {
+                    onClick(onClick1)
+                    onClick(onClick2)
+                    onClick(onClick3)
+                }
+
+                val result = textDraw.onClick(player)
+
+                assertThat(result)
+                        .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
+                verifyOrder {
+                    onClick1.invoke(textDraw, player)
+                    onClick2.invoke(textDraw, player)
+                    onClick3.invoke(textDraw, player)
+                }
+            }
+
+            @Test
+            fun givenAnOnClickHandlerReturnsProcessedItShouldNotExecuteTheFollowingOnes() {
+                val onClick1 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+                }
+                val onClick2 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
+                }
+                val onClick3 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+                }
+                textDraw.apply {
+                    onClick(onClick1)
+                    onClick(onClick2)
+                    onClick(onClick3)
+                }
+
+                textDraw.onClick(player)
+
+                verify {
+                    onClick1.invoke(textDraw, player)
+                    onClick2.invoke(textDraw, player)
+                    onClick3 wasNot Called
+                }
+            }
+
+            @Test
+            fun givenNoOnClickHandlerItShouldReturnNotFound() {
+                val result = textDraw.onClick(player)
+
+                assertThat(result)
+                        .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
+            }
         }
 
         @Nested

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
@@ -27,7 +28,7 @@ internal constructor(
         var locale: Locale
 ) : Entity<TextDrawId>, AbstractDestroyable() {
 
-    private val onClickHandlers: MutableList<TextDraw.(Player) -> Boolean> = mutableListOf()
+    private val onClickHandlers: MutableList<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> = mutableListOf()
 
     private val onDestroyHandlers: MutableList<TextDraw.() -> Unit> = mutableListOf()
 
@@ -204,13 +205,16 @@ internal constructor(
         )
     }
 
-    fun onClick(onClick: TextDraw.(Player) -> Boolean) {
+    fun onClick(onClick: TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result) {
         onClickHandlers += onClick
     }
 
-    internal fun onClick(player: Player) {
-        onClickHandlers.forEach { it.invoke(this, player) }
-    }
+    internal fun onClick(player: Player): OnPlayerClickTextDrawListener.Result =
+            onClickHandlers
+                    .asSequence()
+                    .map { it.invoke(this, player) }
+                    .firstOrNull { it == OnPlayerClickTextDrawListener.Result.Processed }
+                    ?: OnPlayerClickTextDrawListener.Result.NotFound
 
     internal fun onDestroy(onDestroy: TextDraw.() -> Unit) {
         onDestroyHandlers += onDestroy
