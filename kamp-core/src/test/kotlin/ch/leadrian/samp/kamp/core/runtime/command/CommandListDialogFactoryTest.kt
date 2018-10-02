@@ -17,6 +17,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.dialog.TabListDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.inject.InjectorFactory
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
+import com.netflix.governator.guice.BootstrapModule
 import com.netflix.governator.lifecycle.LifecycleManager
 import io.mockk.every
 import io.mockk.mockk
@@ -42,6 +43,7 @@ internal class CommandListDialogFactoryTest {
         every { nativeFunctionExecutor.getMaxPlayers() } returns 128
         val injector = InjectorFactory.createInjector(
                 setOf(),
+                BootstrapModule { },
                 TestModule(),
                 TextModule(),
                 EntityRegistryModule(),
