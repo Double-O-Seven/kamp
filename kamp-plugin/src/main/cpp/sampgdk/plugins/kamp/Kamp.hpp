@@ -6,6 +6,7 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <exception>
 
 #include <jni.h>
 
@@ -68,9 +69,21 @@ private:
 	Kamp(Kamp const&); // Don't implement for singleton
 	void operator=(Kamp const&); // Don't implement for singleton
 
-	long CreateJVM();
+	long CreateJVM() ;
 
 	void DestroyJVM();
+
+	void InitializeJVM() throw(std::exception);
+
+	void InitializeKampLauncherClass() throw(std::exception);
+
+	void InitializeFieldCache() throw(std::exception);
+
+	void CallLaunchMethod() throw(std::exception);
+
+	void InitializeSAMPCallbacksInstance() throw(std::exception);
+
+	void InitializeSAMPCallbacksMethodCache() throw(std::exception);
 
 	bool launched = false;
 	JavaVM *javaVM;

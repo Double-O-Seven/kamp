@@ -10,83 +10,90 @@ void Kamp::Launch() {
 		return;
 	}
 
-	long createJVMResult = this->CreateJVM();
-
-	if (createJVMResult) {
-		std::cerr << "Failed to create JVM, exiting..." << std::endl;
-		exit(createJVMResult);
-		return;
+	try {
+		this->InitializeJVM();
+		this->InitializeKampLauncherClass();
+		this->InitializeFieldCache();
+		this->CallLaunchMethod();
+		this->InitializeSAMPCallbacksInstance();
+		this->InitializeSAMPCallbacksMethodCache();
+	} catch (std::exception& e) {
+		std::cout << "Failed to initialize Kamp: " << e.what() << std::endl;
+		std::cout << "Destroying JVM..." << std::endl;
+		this->DestroyJVM();
+		std::cout << "Exiting..." << std::endl;
+		exit(1);
 	}
 
+	this->launched = true;
+}
+
+void Kamp::InitializeJVM() throw(std::exception) {
+	long result = this->CreateJVM();
+	if (result) {
+		throw std::exception(("Failed to create JVM: " + std::to_string(result)).c_str());
+	}
+}
+
+void Kamp::InitializeKampLauncherClass() throw(std::exception) {
 	this->kampLauncherClass = this->jniEnv->FindClass(KAMP_LAUNCHER_CLASS.c_str());
-	if (this->kampLauncherClass == nullptr) {
-		this->DestroyJVM();
-		std::cerr << "Could not find launcher class " << KAMP_LAUNCHER_CLASS << ", exiting..." << std::endl;
-		exit(1);
-		return;
+	if (!this->kampLauncherClass) {
+		throw std::exception(("Could not find launcher class " + KAMP_LAUNCHER_CLASS + ", exiting...").c_str());
 	}
+
 	this->kampLauncherClassReference = this->jniEnv->NewGlobalRef(this->kampLauncherClass);
-	if (this->kampLauncherClassReference == nullptr) {
-		this->DestroyJVM();
-		std::cerr << "Could not create global reference for Kamp launcher class, exiting..." << std::endl;
-		exit(1);
-		return;
+	if (!this->kampLauncherClassReference) {
+		throw std::exception("Could not create global reference for Kamp launcher class");
 	}
+}
 
-	int initializeFieldCacheResult = this->fieldCache.Initialize(this->jniEnv);
-	if (initializeFieldCacheResult) {
-		this->DestroyJVM();
-		std::cerr << "Initializing field cache returned with result " << initializeFieldCacheResult<< ", exiting..." << std::endl;
-		exit(1);
-		return;
+void Kamp::InitializeFieldCache() throw(std::exception) {
+	int result = this->fieldCache.Initialize(this->jniEnv);
+	if (result) {
+		throw std::exception(("Initializing field cache failed with result: " + std::to_string(result)).c_str());
 	}
+}
 
+void Kamp::CallLaunchMethod() throw(std::exception) {
 	jmethodID launchMethodID = this->jniEnv->GetStaticMethodID(this->kampLauncherClass, KAMP_LAUNCHER_LAUNCH_METHOD_NAME.c_str(), "()V");
 	if (!launchMethodID) {
-		this->DestroyJVM();
-		std::cerr << "Could not find method " << KAMP_LAUNCHER_LAUNCH_METHOD_NAME << " in class " << KAMP_LAUNCHER_CLASS << ", exiting..." << std::endl;
-		exit(1);
-		return;
+		throw std::exception(("Could not find method " + KAMP_LAUNCHER_LAUNCH_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 	this->jniEnv->CallStaticVoidMethod(this->kampLauncherClass, launchMethodID);
+}
 
+void Kamp::InitializeSAMPCallbacksInstance() throw(std::exception) {
 	jmethodID getCallbacksInstanceMethodID = this->jniEnv->GetStaticMethodID(
 		this->kampLauncherClass,
 		KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME.c_str(),
 		KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE.c_str()
 	);
 	if (!getCallbacksInstanceMethodID) {
-		this->DestroyJVM();
-		std::cerr << "Could not find method " << KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME << " in class " << KAMP_LAUNCHER_CLASS << ", exiting..." << std::endl;
-		exit(1);
-		return;
-	}
-	this->sampCallbacksInstance = this->jniEnv->CallStaticObjectMethod(this->kampLauncherClass, getCallbacksInstanceMethodID);
-	if (this->sampCallbacksInstance == nullptr) {
-		this->DestroyJVM();
-		std::cerr << "Could not get SAMPCallbacks instance" << std::endl;
-		exit(1);
-		return;
-	}
-	this->sampCallbacksInstanceReference = this->jniEnv->NewGlobalRef(this->sampCallbacksInstance);
-	if (this->sampCallbacksInstanceReference == nullptr) {
-		this->DestroyJVM();
-		std::cerr << "Could not create global reference for SAMPCallbacks instance, exiting..." << std::endl;
-		exit(1);
-		return;
+		throw std::exception(("Could not find method " + KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 
+	this->sampCallbacksInstance = this->jniEnv->CallStaticObjectMethod(this->kampLauncherClass, getCallbacksInstanceMethodID);
+	if (!this->sampCallbacksInstance) {
+		throw std::exception("Could not get SAMPCallbacks instance");
+	}
+
+	this->sampCallbacksInstanceReference = this->jniEnv->NewGlobalRef(this->sampCallbacksInstance);
+	if (!this->sampCallbacksInstanceReference) {
+		throw std::exception("Could not create global reference for SAMPCallbacks instance");
+	}
+}
+
+void Kamp::InitializeSAMPCallbacksMethodCache() throw(std::exception) {
 	jclass sampCallbacksInstanceClass = this->jniEnv->GetObjectClass(this->sampCallbacksInstanceReference);
+	if (!sampCallbacksInstanceClass) {
+		throw std::exception("Failed to get SAMPCallbacks instance class");
+	}
+
 	int initializeSAMPCallbacksMethodCacheResult = this->sampCallbacksMethodCache.Initialize(this->jniEnv, sampCallbacksInstanceClass);
 	this->jniEnv->DeleteLocalRef(sampCallbacksInstanceClass);
 	if (initializeSAMPCallbacksMethodCacheResult) {
-		this->DestroyJVM();
-		std::cerr << "Could not initialize SAMPCallbacks method cache (error code " << initializeSAMPCallbacksMethodCacheResult <<"), exiting..." << std::endl;
-		exit(1);
-		return;
+		throw std::exception(("Initializing SAMPCallbacks method cache failed with result: " + std::to_string(initializeSAMPCallbacksMethodCacheResult)).c_str());
 	}
-
-	this->launched = true;
 }
 
 void Kamp::Shutdown() {
@@ -128,6 +135,7 @@ long Kamp::CreateJVM() {
 
 	JavaVMInitArgs vmArgs;
 	vmArgs.version = JNI_VERSION_1_8;
+	JNI_GetDefaultJavaVMInitArgs(&vmArgs);
 	vmArgs.nOptions = optionStrings.size();
 	vmArgs.options = vmOptions;
 	vmArgs.ignoreUnrecognized = true;
@@ -144,14 +152,6 @@ long Kamp::CreateJVM() {
 
 void Kamp::DestroyJVM() {
 	if (this->jniEnv) {
-		if (this->kampLauncherClassReference) {
-			this->jniEnv->DeleteGlobalRef(this->kampLauncherClassReference);
-		}
-
-		if (this->sampCallbacksInstanceReference) {
-			this->jniEnv->DeleteGlobalRef(this->sampCallbacksInstanceReference);
-		}
-
 		this->jniEnv->ExceptionDescribe();
 	}
 	if (this->javaVM) {
