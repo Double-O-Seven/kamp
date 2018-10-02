@@ -14,13 +14,14 @@ internal class PlayerMapIconFactory
 @Inject
 constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
+    @JvmOverloads
     fun create(
             player: Player,
             playerMapIconId: PlayerMapIconId,
             coordinates: Vector3D,
             type: MapIconType,
             color: Color,
-            style: MapIconStyle
+            style: MapIconStyle = MapIconStyle.LOCAL
     ): PlayerMapIcon = PlayerMapIcon(
             player = player,
             id = playerMapIconId,

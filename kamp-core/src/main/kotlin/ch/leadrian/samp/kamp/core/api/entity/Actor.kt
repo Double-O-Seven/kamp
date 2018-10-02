@@ -44,7 +44,15 @@ internal constructor(
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isActorStreamedIn(actorid = id.value, forplayerid = forPlayer.id.value)
 
-    fun applyAnimation(animation: Animation, fDelta: Float, loop: Boolean, lockX: Boolean, lockY: Boolean, freeze: Boolean, time: Int) {
+    fun applyAnimation(
+            animation: Animation,
+            fDelta: Float,
+            loop: Boolean,
+            lockX: Boolean,
+            lockY: Boolean,
+            freeze: Boolean,
+            time: Int
+    ) {
         nativeFunctionExecutor.applyActorAnimation(
                 actorid = id.value,
                 animlib = animation.library,

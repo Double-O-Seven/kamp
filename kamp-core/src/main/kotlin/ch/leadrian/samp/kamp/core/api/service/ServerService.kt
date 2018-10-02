@@ -39,6 +39,7 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
         nativeFunctionExecutor.sendRconCommand(command)
     }
 
+    @JvmOverloads
     fun getNetworkStatistics(resultLength: Int = 401): String {
         val networkStatistics = ReferenceString()
         nativeFunctionExecutor.getNetworkStats(networkStatistics, resultLength)
@@ -53,6 +54,7 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
         nativeFunctionExecutor.unBlockIpAddress(ipAddress)
     }
 
+    @JvmOverloads
     fun getAnimationName(animationIndex: Int, animationLibrarySize: Int = 32, animationNameSize: Int = 32): Animation {
         val animationLibrary = ReferenceString()
         val animationName = ReferenceString()

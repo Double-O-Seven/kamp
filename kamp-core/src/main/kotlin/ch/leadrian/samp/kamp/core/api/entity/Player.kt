@@ -423,6 +423,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun playAudioStream(url: String, position: Sphere, usePosition: Boolean = true) {
         nativeFunctionExecutor.playAudioStreamForPlayer(
                 playerid = id.value,
@@ -543,6 +544,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun applyAnimation(
             animation: Animation,
             fDelta: Float,
@@ -567,6 +569,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun clearAnimation(forceSync: Boolean = false) {
         nativeFunctionExecutor.clearAnimations(playerid = id.value, forcesync = forceSync)
     }
@@ -678,6 +681,7 @@ internal constructor(
             nativeFunctionExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
         }
 
+    @JvmOverloads
     fun setCameraLookAt(coordinates: Vector3D, type: CameraType = CameraType.CUT) {
         nativeFunctionExecutor.setPlayerCameraLookAt(
                 playerid = id.value,
@@ -736,6 +740,7 @@ internal constructor(
         nativeFunctionExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
     }
 
+    @JvmOverloads
     fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT) {
         nativeFunctionExecutor.interpolateCameraPos(
                 playerid = id.value,
@@ -750,6 +755,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT) {
         nativeFunctionExecutor.interpolateCameraLookAt(
                 playerid = id.value,
@@ -794,6 +800,7 @@ internal constructor(
         nativeFunctionExecutor.enableStuntBonusForPlayer(id.value, false)
     }
 
+    @JvmOverloads
     fun spectate(player: Player, mode: SpectateType = SpectateType.NORMAL) {
         if (!isSpectating) {
             toggleSpectating(true)
@@ -805,6 +812,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun spectate(vehicle: Vehicle, mode: SpectateType = SpectateType.NORMAL) {
         if (!isSpectating) {
             toggleSpectating(true)

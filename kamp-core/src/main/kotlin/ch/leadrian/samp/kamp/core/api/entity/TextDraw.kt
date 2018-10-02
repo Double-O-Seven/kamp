@@ -187,7 +187,8 @@ internal constructor(
             field = value
         }
 
-    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
+    @JvmOverloads
+    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float = 1.0f) {
         nativeFunctionExecutor.textDrawSetPreviewRot(
                 text = id.value,
                 fRotX = rotation.x,

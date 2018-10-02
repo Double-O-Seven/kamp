@@ -19,6 +19,7 @@ internal constructor(
         private val textProvider: TextProvider
 ) {
 
+    @JvmOverloads
     fun createPlayerTextLabel(
             player: Player,
             text: String,
@@ -39,6 +40,7 @@ internal constructor(
             attachToVehicle = attachedToVehicle
     )
 
+    @JvmOverloads
     fun createPlayerTextLabel(
             player: Player,
             textKey: TextKey,

@@ -21,6 +21,7 @@ internal constructor(
         private val textProvider: TextProvider
 ) {
 
+    @JvmOverloads
     fun createSingleColumnMenu(
             position: Vector2D,
             columnWidth: Float,
@@ -28,6 +29,7 @@ internal constructor(
             locale: Locale = Locale.getDefault()
     ): Menu = menuFactory.create(position, columnWidth, title, locale)
 
+    @JvmOverloads
     fun createSingleColumnMenu(
             titleTextKey: TextKey,
             position: Vector2D,

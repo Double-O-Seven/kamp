@@ -20,6 +20,7 @@ internal constructor(
         private val textProvider: TextProvider
 ) {
 
+    @JvmOverloads
     fun createTextLabel(
             text: String,
             color: Color,
@@ -36,6 +37,7 @@ internal constructor(
             virtualWorldId = virtualWorldId
     )
 
+    @JvmOverloads
     fun createTextLabel(
             textKey: TextKey,
             color: Color,

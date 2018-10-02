@@ -214,7 +214,7 @@ internal constructor(
             field = value
         }
 
-    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
+    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float = 1f) {
         nativeFunctionExecutor.playerTextDrawSetPreviewRot(
                 playerid = player.id.value,
                 text = id.value,

@@ -12,6 +12,7 @@ class RaceCheckpointService
 @Inject
 internal constructor(private val raceCheckpointFactory: RaceCheckpointFactory) {
 
+    @JvmOverloads
     fun createRaceCheckpoint(
             coordinates: Vector3D,
             size: Float,
@@ -24,6 +25,7 @@ internal constructor(private val raceCheckpointFactory: RaceCheckpointFactory) {
             nextCoordinates = nextCoordinates
     )
 
+    @JvmOverloads
     fun createRaceCheckpoint(
             sphere: Sphere,
             type: RaceCheckpointType,

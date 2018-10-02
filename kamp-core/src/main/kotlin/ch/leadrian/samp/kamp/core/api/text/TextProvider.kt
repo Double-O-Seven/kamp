@@ -23,6 +23,7 @@ internal constructor(
 
     private val resourceBundlesByLocale = mutableMapOf<Locale, ResourceBundleGroup>()
 
+    @JvmOverloads
     fun getText(locale: Locale, key: TextKey, defaultText: String? = null): String =
             resourceBundlesByLocale
                     .computeIfAbsent(locale) { createResourceBundleGroup(it) }

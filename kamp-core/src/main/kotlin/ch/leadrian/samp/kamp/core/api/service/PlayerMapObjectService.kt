@@ -16,6 +16,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
+    @JvmOverloads
     fun createPlayerMapObject(
             player: Player,
             modelId: Int,

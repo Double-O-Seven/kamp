@@ -17,6 +17,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
+    @JvmOverloads
     fun createMapObject(modelId: Int, coordinates: Vector3D, rotation: Vector3D, drawDistance: Float = 0f): MapObject =
             mapObjectFactory.create(modelId, coordinates, rotation, drawDistance)
 

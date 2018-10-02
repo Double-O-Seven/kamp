@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-data class AttachedObject(
+data class AttachedObject
+@JvmOverloads
+constructor(
         val modelId: Int,
         val bone: ch.leadrian.samp.kamp.core.api.constants.Bone,
         val offset: Vector3D = vector3DOf(0f, 0f, 0f),

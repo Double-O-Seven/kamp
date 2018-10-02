@@ -133,6 +133,7 @@ internal constructor(
         nativeFunctionExecutor.setPlayerObjectNoCameraCol(playerid = player.id.value, objectid = id.value)
     }
 
+    @JvmOverloads
     fun moveTo(
             coordinates: Vector3D,
             speed: Float,
@@ -169,6 +170,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun setMaterialText(
             text: String,
             index: Int = 0,

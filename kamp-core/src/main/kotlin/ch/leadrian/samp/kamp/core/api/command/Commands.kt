@@ -30,6 +30,7 @@ abstract class Commands {
     open fun getCommandListDialogTitle(player: Player): String =
             textProvider.getText(player.locale, TextKeys.command.dialog.title.generic)
 
+    @JvmOverloads
     fun showCommandList(player: Player, showAsNavigationRoot: Boolean = true) {
         if (showAsNavigationRoot) {
             player.dialogNavigation.setRoot(commandListDialog)

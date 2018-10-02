@@ -64,6 +64,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun attachTo(mapObject: MapObject, offset: Vector3D, rotation: Vector3D, syncRotation: Boolean = false) {
         nativeFunctionExecutor.attachObjectToObject(
                 objectid = id.value,
@@ -139,6 +140,7 @@ internal constructor(
         nativeFunctionExecutor.setObjectNoCameraCol(id.value)
     }
 
+    @JvmOverloads
     fun moveTo(
             coordinates: Vector3D,
             speed: Float,
@@ -173,6 +175,7 @@ internal constructor(
         )
     }
 
+    @JvmOverloads
     fun setMaterialText(
             text: String,
             index: Int = 0,

@@ -15,6 +15,7 @@ internal constructor(
         private val pickupRegistry: PickupRegistry
 ) {
 
+    @JvmOverloads
     fun createPickup(
             modelId: Int,
             type: Int,
