@@ -39,7 +39,7 @@ internal class MessageArgumentsTest {
                 Locale.FRANCE to "Bonjour",
                 Locale.ITALY to "Ciao"
         )
-        val messageArgument = translate { locale -> translations[locale]!! }
+        val messageArgument = translateForMessage { locale -> translations[locale]!! }
 
         val text = messageArgument.get(Locale(language, country), Colors.WHITE)
 

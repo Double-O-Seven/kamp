@@ -42,4 +42,22 @@ internal class MessageFormatterTest {
         assertThat(formattedMessage)
                 .isEqualTo("A: 1.337, B: Hi there, C: Hallo, D: Bonjour, E: {11aadd}")
     }
+
+    @Test
+    fun givenFormattingThrowsExceptionItShouldReturnUnformattedMessage() {
+        val locale = Locale.GERMANY
+        val color = Colors.RED
+        val messageFormatter = MessageFormatter(mockk())
+
+        val formattedMessage = messageFormatter.format(
+                locale,
+                color,
+                "A: {0}, B: {1}",
+                "Hi",
+                translateForMessage { throw RuntimeException("fail") }
+        )
+
+        assertThat(formattedMessage)
+                .isEqualTo("A: {0}, B: {1}")
+    }
 }

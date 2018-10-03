@@ -19,12 +19,10 @@ private class EmbeddedPlayerName(
 
 fun embeddedPlayerNameOf(player: Player): MessageArgument = EmbeddedPlayerName(player)
 
-private class Translatable(
-        private val translator: (Locale) -> String
-) : MessageArgument {
+private class MessageTranslatable(private val translator: (Locale) -> String) : MessageArgument {
 
     override fun get(locale: Locale, color: Color): String = translator(locale)
 
 }
 
-fun translate(translator: (Locale) -> String): MessageArgument = Translatable(translator)
+fun translateForMessage(translator: (Locale) -> String): MessageArgument = MessageTranslatable(translator)
