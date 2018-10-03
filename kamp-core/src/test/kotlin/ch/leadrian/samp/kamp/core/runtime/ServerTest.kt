@@ -1,12 +1,9 @@
 package ch.leadrian.samp.kamp.core.runtime
 
 import ch.leadrian.samp.kamp.core.api.GameMode
-import ch.leadrian.samp.kamp.core.api.Plugin
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import com.google.inject.Module
-import com.netflix.governator.annotations.Configuration
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -19,7 +16,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.util.*
-import javax.inject.Inject
 
 internal class ServerTest {
 
@@ -120,44 +116,5 @@ internal class ServerTest {
         }
 
     }
-
-    @Suppress("unused")
-    class TestGameMode : GameMode() {
-
-        @Configuration("test.value.foo")
-        var foo: String? = null
-
-        @Inject
-        var fooService: FooService? = null
-
-        override fun getModules(): List<Module> = emptyList()
-
-        override fun getPlugins(): List<Plugin> = listOf(FooPlugin(), BarPlugin())
-
-    }
-
-    @Suppress("unused")
-    private class FooPlugin : Plugin() {
-
-        @Configuration("test.value.bar")
-        var bar: Int = 0
-
-        override fun getModules(): List<Module> = emptyList()
-
-    }
-
-    @Suppress("unused")
-    private class BarPlugin : Plugin() {
-
-        @Inject
-        var barService: BarService? = null
-
-        override fun getModules(): List<Module> = emptyList()
-
-    }
-
-    class FooService
-
-    class BarService
 
 }
