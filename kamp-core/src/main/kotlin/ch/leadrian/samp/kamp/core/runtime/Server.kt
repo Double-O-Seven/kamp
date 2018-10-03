@@ -47,6 +47,8 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
     lateinit var callbackProcessor: CallbackProcessor
         private set
 
+    lateinit var lifecycleManager: LifecycleManager
+
     private fun bootstrap() {
         loadConfigProperties()
         loadGameMode()
@@ -57,8 +59,12 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
 
     private fun start() {
         callbackProcessor = injector.getInstance()
-        val lifecycleManager = injector.getInstance<LifecycleManager>()
+        lifecycleManager = injector.getInstance()
         lifecycleManager.start()
+    }
+
+    fun stop() {
+        lifecycleManager.close()
     }
 
     private fun loadConfigProperties() {
@@ -101,6 +107,7 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
 
     private fun getCoreModule(): Module =
             CoreModule(
+                    server = this,
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     textProviderResourcePackages = getTextProviderResourcePackages(),
                     gameMode = gameMode,

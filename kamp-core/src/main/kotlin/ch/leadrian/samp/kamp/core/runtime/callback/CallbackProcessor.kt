@@ -46,6 +46,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.SAMPCallbacks
+import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -54,7 +55,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerClassRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import com.netflix.governator.lifecycle.LifecycleManager
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -62,7 +62,7 @@ import javax.inject.Singleton
 internal class CallbackProcessor
 @Inject
 constructor(
-        private val lifecycleManager: LifecycleManager,
+        private val server: Server,
         private val playerFactory: PlayerFactory,
         private val playerRegistry: PlayerRegistry,
         private val vehicleRegistry: VehicleRegistry,
@@ -202,7 +202,7 @@ constructor(
     override fun onGameModeExit(): Boolean {
         tryAndCatch {
             onGameModeExitHandler.onGameModeExit()
-            lifecycleManager.close()
+            server.stop()
         }
         return true
     }

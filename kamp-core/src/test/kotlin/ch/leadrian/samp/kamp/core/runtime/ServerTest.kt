@@ -16,6 +16,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import java.util.*
+import javax.annotation.PostConstruct
+import javax.annotation.PreDestroy
+import javax.inject.Singleton
 
 internal class ServerTest {
 
@@ -60,6 +63,24 @@ internal class ServerTest {
 
             assertThat(text)
                     .isEqualTo(expectedText)
+        }
+
+        @Test
+        fun shouldExecutePostConstruct() {
+            val lifecycleAwareService = server.injector.getInstance<LifecycleAwareService>()
+
+            assertThat(lifecycleAwareService.isInitialized)
+                    .isTrue()
+        }
+
+        @Test
+        fun shouldExecutePreDestroy() {
+            val lifecycleAwareService = server.injector.getInstance<LifecycleAwareService>()
+
+            server.stop()
+
+            assertThat(lifecycleAwareService.isShutdown)
+                    .isTrue()
         }
 
         @Nested
@@ -113,6 +134,27 @@ internal class ServerTest {
                         .isSameAs(server.injector.getInstance<BarPlugin>())
             }
 
+        }
+
+    }
+
+    @Singleton
+    private class LifecycleAwareService {
+
+        var isInitialized: Boolean = false
+            private set
+
+        var isShutdown: Boolean = false
+            private set
+
+        @PostConstruct
+        fun initialize() {
+            isInitialized = true
+        }
+
+        @PreDestroy
+        fun shutdown() {
+            isShutdown = true
         }
 
     }

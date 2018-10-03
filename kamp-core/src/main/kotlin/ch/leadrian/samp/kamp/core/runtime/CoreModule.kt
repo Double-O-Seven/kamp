@@ -11,6 +11,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
 
 internal class CoreModule(
+        private val server: Server,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val textProviderResourcePackages: Set<String>,
         private val gameMode: GameMode,
@@ -25,6 +26,7 @@ internal class CoreModule(
         install(EntityRegistryModule())
         install(ServiceModule())
 
+        bind(Server::class.java).toInstance(server)
         bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
         bind(GameMode::class.java).toInstance(gameMode)
         bind(gameMode.javaClass).toInstance(gameMode)
