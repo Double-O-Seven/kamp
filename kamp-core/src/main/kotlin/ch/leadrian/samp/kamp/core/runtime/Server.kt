@@ -25,7 +25,7 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
 
         const val CONFIG_PROPERTIES_FILE = "config.properties"
 
-        const val GAME_MODE_CLASS_PROPERTY_KEY = "kamp.gamemode.class"
+        const val GAME_MODE_CLASS_PROPERTY_KEY = "kamp.gamemode.class.name"
 
         @JvmStatic
         fun start(nativeFunctionExecutor: SAMPNativeFunctionExecutor): Server {
@@ -42,7 +42,7 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
 
     private lateinit var plugins: List<Plugin>
 
-    private lateinit var injector: Injector
+    lateinit var injector: Injector
 
     lateinit var callbackProcessor: CallbackProcessor
         private set
@@ -56,8 +56,6 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
     }
 
     private fun start() {
-        injector.injectMembers(gameMode)
-        plugins.forEach { injector.injectMembers(it) }
         callbackProcessor = injector.getInstance()
         val lifecycleManager = injector.getInstance<LifecycleManager>()
         lifecycleManager.start()
