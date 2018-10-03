@@ -8,11 +8,11 @@ interface OnDialogResponseListener {
 
     fun onDialogResponse(player: Player, dialogId: DialogId, response: DialogResponse, listItem: Int, inputText: String): Result
 
-    sealed class Result {
+    sealed class Result(val value: Boolean) {
 
-        object Processed : Result()
+        object Processed : Result(true)
 
-        object Ignored : Result()
+        object Ignored : Result(false)
 
     }
 }
