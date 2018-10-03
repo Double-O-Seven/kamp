@@ -18,7 +18,9 @@ internal class CallbackModule : KampModule() {
         bind(PlayerTextDrawCallbackListener::class.java).asEagerSingleton()
         bind(VehicleCallbackListener::class.java).asEagerSingleton()
 
+        bind(CallbackProcessor::class.java)
         bind(CallbackListenerManager::class.java)
+
         newCallbackListenerRegistry().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
             addBinding().to(OnActorStreamOutHandler::class.java)

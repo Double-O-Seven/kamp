@@ -3,8 +3,16 @@ package ch.leadrian.samp.kamp.core.runtime.callback
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
+import ch.leadrian.samp.kamp.core.runtime.text.TextModule
+import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.netflix.governator.lifecycle.LifecycleManager
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -17,7 +25,13 @@ internal class CallbackModuleTest {
     @Test
     fun shouldCreateInjectorAsSingleton() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(CallbackModule())
+            Guice.createInjector(
+                    CallbackModule(),
+                    EntityRegistryModule(),
+                    EntityFactoryModule(),
+                    TextModule(),
+                    TestModule()
+            )
         }
 
         assertThat(caughtThrowable)
@@ -32,8 +46,23 @@ internal class CallbackModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(CallbackModule())
+            injector = Guice.createInjector(
+                    CallbackModule(),
+                    EntityRegistryModule(),
+                    EntityFactoryModule(),
+                    TextModule(),
+                    TestModule()
+            )
             testService = injector.getInstance()
+        }
+
+        @Test
+        fun shouldInjectCallbackProcessorAsSingleton() {
+            val callbackProcessor = injector.getInstance<CallbackProcessor>()
+
+            assertThat(callbackProcessor)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<CallbackProcessor>())
         }
 
         @Test
@@ -738,5 +767,17 @@ internal class CallbackModuleTest {
 
     private class TestService
     @Inject constructor(val handlers: Set<@JvmSuppressWildcards CallbackListenerRegistry<*>>)
+
+    private class TestModule : AbstractModule() {
+
+        override fun configure() {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { getMaxPlayers() } returns 50
+            }
+            bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
+            bind(LifecycleManager::class.java).toInstance(mockk())
+        }
+
+    }
 
 }
