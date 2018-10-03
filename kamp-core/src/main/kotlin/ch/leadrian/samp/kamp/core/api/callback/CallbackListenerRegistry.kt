@@ -1,8 +1,14 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import kotlin.reflect.KClass
 
 open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
+
+    private companion object {
+
+        val log = loggerFor<CallbackListenerRegistry<*>>()
+    }
 
     private val entries = mutableListOf<Entry<T>>()
     private var isSorted = false
@@ -21,8 +27,10 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
 
         entries.removeIf { it.listener === listener }
         @Suppress("UNCHECKED_CAST")
-        entries += Entry(listener as T, priority ?: getPriority(listener))
+        val entry = Entry(listener as T, priority ?: getPriority(listener))
+        entries += entry
         isSorted = false
+        logRegistration(listener, entry.priority)
         return true
     }
 
@@ -44,6 +52,10 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
                 }?.value ?: 0
             }
         }
+    }
+
+    private fun logRegistration(listener: Any, priority: Int) {
+        log.info("Registered ${listener::class.java.name} as ${listenerClass.simpleName} with priority $priority")
     }
 
     private data class Entry<T>(val listener: T, val priority: Int)

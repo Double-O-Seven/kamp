@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDeathListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSpawnListener
+import ch.leadrian.samp.kamp.core.api.callback.Priority
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -11,6 +12,7 @@ import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
 
+@Priority(value = Int.MIN_VALUE, listenerClass = OnPlayerDisconnectListener::class)
 @Singleton
 internal class PlayerCallbackListener
 @Inject

@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
-import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.reflect.KClass
@@ -9,11 +8,6 @@ import kotlin.reflect.KClass
 class CallbackListenerManager
 @Inject
 internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards CallbackListenerRegistry<*>>) {
-
-    private companion object {
-
-        val log = loggerFor<CallbackListenerManager>()
-    }
 
     private val callbackListenerRegistries: MutableMap<KClass<out Any>, CallbackListenerRegistry<*>> = mutableMapOf()
 
@@ -28,7 +22,6 @@ internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards Callb
     fun <T : Any> registerOnlyAs(clazz: KClass<T>, listener: T, priority: Int? = null) {
         callbackListenerRegistries[clazz]?.register(listener, priority)
                 ?: throw IllegalStateException("$listener could not be registered as $clazz")
-        logRegistration(listener, clazz)
     }
 
     inline fun <reified T : Any> registerOnlyAs(listener: T, priority: Int? = null) {
@@ -51,7 +44,6 @@ internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards Callb
         callbackListenerRegistries.forEach {
             if (it.value.register(listener, priority)) {
                 registrations++
-                logRegistration(listener, it.key)
             }
         }
         if (registrations == 0) {
@@ -67,10 +59,6 @@ internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards Callb
         if (!unregistered) {
             throw IllegalStateException("$listener was not unregistered as any listener")
         }
-    }
-
-    private fun logRegistration(listener: Any, clazz: KClass<*>) {
-        log.info("Registered ${listener::class.java.name} as ${clazz.simpleName}")
     }
 
 }
