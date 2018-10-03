@@ -47,7 +47,7 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
     lateinit var callbackProcessor: CallbackProcessor
         private set
 
-    lateinit var lifecycleManager: LifecycleManager
+    private lateinit var lifecycleManager: LifecycleManager
 
     private fun bootstrap() {
         loadConfigProperties()
