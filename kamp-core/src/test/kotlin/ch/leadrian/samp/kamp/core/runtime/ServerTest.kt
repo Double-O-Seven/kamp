@@ -2,6 +2,8 @@ package ch.leadrian.samp.kamp.core.runtime
 
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
+import ch.leadrian.samp.kamp.core.api.text.TextKey
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import com.google.inject.Module
 import com.netflix.governator.annotations.Configuration
@@ -14,6 +16,9 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
+import java.util.*
 import javax.inject.Inject
 
 internal class ServerTest {
@@ -42,6 +47,23 @@ internal class ServerTest {
         @BeforeEach
         fun setUp() {
             server = Server.start(nativeFunctionExecutor)
+        }
+
+        @ParameterizedTest
+        @CsvSource(
+                "en, US, test.foo, 'Hi there'",
+                "en, US, test.bar, 'How are you?'",
+                "de, CH, test.foo, 'Hallo'",
+                "de, CH, test.bar, 'Wie geht es dir?'"
+        )
+        fun shouldLoadStringProperties(language: String, country: String, textKey: TextKey, expectedText: String) {
+            val locale = Locale(language, country)
+            val textProvider = server.injector.getInstance<TextProvider>()
+
+            val text = textProvider.getText(locale, textKey)
+
+            assertThat(text)
+                    .isEqualTo(expectedText)
         }
 
         @Nested
@@ -94,7 +116,7 @@ internal class ServerTest {
                 assertThat(barPlugin)
                         .isSameAs(server.injector.getInstance<BarPlugin>())
             }
-            
+
         }
 
     }
