@@ -5,13 +5,6 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 
 interface OnVehicleDamageStatusUpdateListener {
 
-    fun onVehicleDamageStatusUpdate(vehicle: Vehicle, player: Player): Result
-
-    sealed class Result(val value: Boolean) {
-
-        object Sync : Result(true)
-
-        object Desync : Result(false)
-    }
+    fun onVehicleDamageStatusUpdate(vehicle: Vehicle, player: Player)
 
 }
