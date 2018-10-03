@@ -44,6 +44,7 @@ import ch.leadrian.samp.kamp.core.api.entity.TextDraw
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
+import ch.leadrian.samp.kamp.core.api.exception.UncaughtExceptionNotifier
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.SAMPCallbacks
 import ch.leadrian.samp.kamp.core.runtime.Server
@@ -137,12 +138,24 @@ constructor(
         val log = loggerFor<CallbackProcessor>()
     }
 
+    @com.google.inject.Inject(optional = true)
+    private var uncaughtExceptionNotifier: UncaughtExceptionNotifier? = null
+
     private inline fun <T> tryAndCatch(block: () -> T): T? {
         return try {
             block()
         } catch (e: Exception) {
             log.error("Exception in callback", e)
+            notifyAboutException(e)
             null
+        }
+    }
+
+    private fun notifyAboutException(exception: Exception) {
+        try {
+            uncaughtExceptionNotifier?.notify(exception)
+        } catch (e: Exception) {
+            log.error("Exception while notifying {} about exception", uncaughtExceptionNotifier, e)
         }
     }
 
