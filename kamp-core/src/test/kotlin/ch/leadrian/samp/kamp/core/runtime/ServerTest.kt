@@ -138,6 +138,7 @@ internal class ServerTest {
 
     }
 
+    @Suppress("unused")
     @Singleton
     private class LifecycleAwareService {
 
