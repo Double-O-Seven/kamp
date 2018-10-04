@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import com.google.inject.Module
+import com.google.inject.Stage
 import com.netflix.governator.annotations.Configuration
 import io.mockk.Runs
 import io.mockk.every
@@ -44,7 +45,7 @@ internal class ServerTest {
     @Test
     fun shouldStart() {
         val caughtThrowable = catchThrowable {
-            Server.start(nativeFunctionExecutor, configProperties, dataDirectory)
+            Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
         }
 
         assertThat(caughtThrowable)
@@ -58,7 +59,7 @@ internal class ServerTest {
 
         @BeforeEach
         fun setUp() {
-            server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory)
+            server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
         }
 
         @ParameterizedTest

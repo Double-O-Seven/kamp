@@ -7,9 +7,11 @@ import ch.leadrian.samp.kamp.core.runtime.callback.CallbackProcessor
 import ch.leadrian.samp.kamp.core.runtime.inject.InjectorFactory
 import com.google.inject.Injector
 import com.google.inject.Module
+import com.google.inject.Stage
 import com.netflix.governator.configuration.PropertiesConfigurationProvider
 import com.netflix.governator.guice.BootstrapModule
 import com.netflix.governator.lifecycle.LifecycleManager
+import java.nio.file.Files
 import java.nio.file.Path
 import java.util.*
 
@@ -17,16 +19,23 @@ internal class Server
 private constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val configProperties: Properties,
-        private val dataDirectory: Path
+        private val dataDirectory: Path,
+        private val stage: Stage
 ) {
 
     companion object {
 
         const val GAME_MODE_CLASS_PROPERTY_KEY = "kamp.gamemode.class.name"
 
+        @JvmOverloads
         @JvmStatic
-        fun start(nativeFunctionExecutor: SAMPNativeFunctionExecutor, configProperties: Properties, dataDirectory: Path): Server {
-            return Server(nativeFunctionExecutor, configProperties, dataDirectory).apply {
+        fun start(
+                nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+                configProperties: Properties,
+                dataDirectory: Path,
+                stage: Stage = Stage.PRODUCTION
+        ): Server {
+            return Server(nativeFunctionExecutor, configProperties, dataDirectory, stage).apply {
                 bootstrap()
                 start()
             }
@@ -53,9 +62,19 @@ private constructor(
     }
 
     private fun initializeDataDirectories() {
-        gameMode.dataDirectory = dataDirectory.resolve(gameMode.javaClass.name)
+        gameMode.dataDirectory = dataDirectory.resolve(gameMode.javaClass.name).also {
+            if (stage == Stage.PRODUCTION) createDirectoryIfNotExists(it)
+        }
         plugins.forEach { plugin ->
-            plugin.dataDirectory = dataDirectory.resolve(plugin.javaClass.name)
+            plugin.dataDirectory = dataDirectory.resolve(plugin.javaClass.name).also {
+                if (stage == Stage.PRODUCTION) createDirectoryIfNotExists(it)
+            }
+        }
+    }
+
+    private fun createDirectoryIfNotExists(path: Path) {
+        if (!Files.exists(path)) {
+            Files.createDirectories(path)
         }
     }
 
@@ -92,7 +111,8 @@ private constructor(
         injector = InjectorFactory.createInjector(
                 basePackages = getInjectorBasePackages(),
                 bootstrapModule = getBootstrapModule(),
-                modules = *modules.toTypedArray()
+                modules = *modules.toTypedArray(),
+                stage = stage
         )
     }
 

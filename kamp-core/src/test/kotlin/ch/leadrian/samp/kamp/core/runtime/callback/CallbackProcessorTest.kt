@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
 import com.google.inject.Module
+import com.google.inject.Stage
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -44,7 +45,7 @@ internal class CallbackProcessorTest {
             every { getMaxPlayers() } returns 50
             every { initialize() } just Runs
         }
-        server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory)
+        server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
         callbackProcessor = server.injector.getInstance()
         callbackListenerManager = server.injector.getInstance()
     }
