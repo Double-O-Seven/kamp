@@ -11,7 +11,6 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.nio.file.Paths
 
 internal class ServerServiceTest {
 
@@ -186,14 +185,6 @@ internal class ServerServiceTest {
                     .hasMessage("Invalid animation index: 1337")
         }
 
-    }
-
-    @Test
-    fun shouldReturnDataDirectoryPath() {
-        val dataDirectory = serverService.getDataDirectory()
-
-        assertThat(dataDirectory)
-                .isEqualTo(Paths.get(".", "Kamp", "data"))
     }
 
 }

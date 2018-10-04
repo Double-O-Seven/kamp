@@ -4,9 +4,7 @@ import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.core.api.entity.ServerVars
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
-import java.nio.file.Path
 import javax.inject.Inject
 
 class ServerService
@@ -71,6 +69,4 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
             throw IllegalArgumentException("Invalid animation index: $animationIndex")
         }
     }
-
-    fun getDataDirectory(): Path = Server.DATA_DIRECTORY
 }

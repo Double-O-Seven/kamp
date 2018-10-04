@@ -1,9 +1,12 @@
 package ch.leadrian.samp.kamp.core.runtime
 
 import ch.leadrian.samp.kamp.core.api.GameMode
+import ch.leadrian.samp.kamp.core.api.Plugin
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import com.google.inject.Module
+import com.netflix.governator.annotations.Configuration
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -15,24 +18,34 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import java.nio.file.Paths
 import java.util.*
 import javax.annotation.PostConstruct
 import javax.annotation.PreDestroy
+import javax.inject.Inject
 import javax.inject.Singleton
 
 internal class ServerTest {
 
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
+    private val configProperties = Properties()
+    private val dataDirectory = Paths.get(".", "Kamp", "data")
+
     @BeforeEach
     fun setUp() {
+        configProperties["kamp.gamemode.class.name"] = "ch.leadrian.samp.kamp.core.runtime.ServerTest\$TestGameMode"
+        configProperties["test.value.foo"] = "Foobar"
+        configProperties["test.value.bar"] = "1337"
         every { nativeFunctionExecutor.getMaxPlayers() } returns 50
         every { nativeFunctionExecutor.initialize() } just Runs
     }
 
     @Test
     fun shouldStart() {
-        val caughtThrowable = catchThrowable { Server.start(nativeFunctionExecutor) }
+        val caughtThrowable = catchThrowable {
+            Server.start(nativeFunctionExecutor, configProperties, dataDirectory)
+        }
 
         assertThat(caughtThrowable)
                 .isNull()
@@ -45,7 +58,7 @@ internal class ServerTest {
 
         @BeforeEach
         fun setUp() {
-            server = Server.start(nativeFunctionExecutor)
+            server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory)
         }
 
         @ParameterizedTest
@@ -107,6 +120,16 @@ internal class ServerTest {
                         .isSameAs(server.injector.getInstance<GameMode>())
             }
 
+            @Test
+            fun shouldSetDataDirectory() {
+                val gameMode = server.injector.getInstance<GameMode>()
+
+                val gameModeDataDirectory = gameMode.dataDirectory
+
+                assertThat(gameModeDataDirectory)
+                        .isEqualTo(dataDirectory.resolve("ch.leadrian.samp.kamp.core.runtime.ServerTest\$TestGameMode"))
+            }
+
         }
 
         @Nested
@@ -134,6 +157,20 @@ internal class ServerTest {
                         .isSameAs(server.injector.getInstance<BarPlugin>())
             }
 
+            @Test
+            fun shouldSetDataDirectory() {
+                val fooPlugin = server.injector.getInstance<FooPlugin>()
+                val barPlugin = server.injector.getInstance<BarPlugin>()
+
+                val fooPluginDataDirectory = fooPlugin.dataDirectory
+                val barPluginDataDirectory = barPlugin.dataDirectory
+
+                assertThat(fooPluginDataDirectory)
+                        .isEqualTo(dataDirectory.resolve("ch.leadrian.samp.kamp.core.runtime.ServerTest\$FooPlugin"))
+                assertThat(barPluginDataDirectory)
+                        .isEqualTo(dataDirectory.resolve("ch.leadrian.samp.kamp.core.runtime.ServerTest\$BarPlugin"))
+            }
+
         }
 
     }
@@ -159,5 +196,44 @@ internal class ServerTest {
         }
 
     }
+
+    @Suppress("unused")
+    class TestGameMode : GameMode() {
+
+        @Configuration("test.value.foo")
+        var foo: String? = null
+
+        @Inject
+        var fooService: FooService? = null
+
+        override fun getModules(): List<Module> = emptyList()
+
+        override fun getPlugins(): List<Plugin> = listOf(FooPlugin(), BarPlugin())
+
+    }
+
+    @Suppress("unused")
+    private class BarPlugin : Plugin() {
+
+        @Inject
+        var barService: BarService? = null
+
+        override fun getModules(): List<Module> = emptyList()
+
+    }
+
+    @Suppress("unused")
+    private class FooPlugin : Plugin() {
+
+        @Configuration("test.value.bar")
+        var bar: Int = 0
+
+        override fun getModules(): List<Module> = emptyList()
+
+    }
+
+    internal class BarService
+
+    internal class FooService
 
 }

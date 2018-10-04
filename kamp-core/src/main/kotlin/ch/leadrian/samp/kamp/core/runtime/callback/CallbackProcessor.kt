@@ -168,7 +168,7 @@ constructor(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.toPlayerClass(): PlayerClass =
-            playerClassRegistry[this] ?: throw IllegalArgumentException("Invalid playerClass ID $this")
+            playerClassRegistry[this] ?: throw IllegalArgumentException("Invalid player class ID $this")
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.toVehicle(): Vehicle =
@@ -215,6 +215,8 @@ constructor(
     override fun onGameModeExit(): Boolean {
         tryAndCatch {
             onGameModeExitHandler.onGameModeExit()
+        }
+        tryAndCatch {
             server.stop()
         }
         return true

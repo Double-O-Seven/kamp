@@ -10,33 +10,28 @@ import com.google.inject.Module
 import com.netflix.governator.configuration.PropertiesConfigurationProvider
 import com.netflix.governator.guice.BootstrapModule
 import com.netflix.governator.lifecycle.LifecycleManager
-import java.nio.charset.StandardCharsets.ISO_8859_1
-import java.nio.file.Files
 import java.nio.file.Path
-import java.nio.file.Paths
 import java.util.*
 
 internal class Server
-private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
+private constructor(
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val configProperties: Properties,
+        private val dataDirectory: Path
+) {
 
     companion object {
-
-        val DATA_DIRECTORY: Path = Paths.get(".", "Kamp", "data")
-
-        const val CONFIG_PROPERTIES_FILE = "config.properties"
 
         const val GAME_MODE_CLASS_PROPERTY_KEY = "kamp.gamemode.class.name"
 
         @JvmStatic
-        fun start(nativeFunctionExecutor: SAMPNativeFunctionExecutor): Server {
-            return Server(nativeFunctionExecutor).apply {
+        fun start(nativeFunctionExecutor: SAMPNativeFunctionExecutor, configProperties: Properties, dataDirectory: Path): Server {
+            return Server(nativeFunctionExecutor, configProperties, dataDirectory).apply {
                 bootstrap()
                 start()
             }
         }
     }
-
-    private lateinit var configProperties: Properties
 
     private lateinit var gameMode: GameMode
 
@@ -50,11 +45,18 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
     private lateinit var lifecycleManager: LifecycleManager
 
     private fun bootstrap() {
-        loadConfigProperties()
         loadGameMode()
         loadPlugins()
         initializeNativeFunctionExecutor()
         createInjector()
+        initializeDataDirectories()
+    }
+
+    private fun initializeDataDirectories() {
+        gameMode.dataDirectory = dataDirectory.resolve(gameMode.javaClass.name)
+        plugins.forEach { plugin ->
+            plugin.dataDirectory = dataDirectory.resolve(plugin.javaClass.name)
+        }
     }
 
     private fun start() {
@@ -65,12 +67,6 @@ private constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecut
 
     fun stop() {
         lifecycleManager.close()
-    }
-
-    private fun loadConfigProperties() {
-        Files.newBufferedReader(DATA_DIRECTORY.resolve(CONFIG_PROPERTIES_FILE), ISO_8859_1).use { reader ->
-            configProperties = Properties().apply { load(reader) }
-        }
     }
 
     private fun loadGameMode() {
