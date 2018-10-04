@@ -9,6 +9,7 @@ import ch.leadrian.samp.kamp.core.runtime.command.CommandModule
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
+import com.google.inject.multibindings.Multibinder
 
 internal class CoreModule(
         private val server: Server,
@@ -30,9 +31,12 @@ internal class CoreModule(
         bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
         bind(GameMode::class.java).toInstance(gameMode)
         bind(gameMode.javaClass).toInstance(gameMode)
+        val pluginSetBinder = Multibinder.newSetBinder(binder(), Plugin::class.java)
         plugins.forEach { plugin ->
             bind(plugin.javaClass).toInstance(plugin)
+            pluginSetBinder.addBinding().toInstance(plugin)
         }
+        bind(DataDirectoryInitializer::class.java).asEagerSingleton()
 
         newTextProviderResourceBundlePackagesSetBinder().apply {
             textProviderResourcePackages.forEach {

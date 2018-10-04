@@ -48,8 +48,8 @@ private constructor(
         loadGameMode()
         loadPlugins()
         initializeNativeFunctionExecutor()
-        createInjector()
         initializeDataDirectories()
+        createInjector()
     }
 
     private fun initializeDataDirectories() {
