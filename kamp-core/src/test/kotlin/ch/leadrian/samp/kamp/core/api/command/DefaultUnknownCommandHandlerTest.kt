@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextKey
-import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -21,12 +20,11 @@ internal class DefaultUnknownCommandHandlerTest {
     private val player = mockk<Player>()
     private lateinit var defaultUnknownCommandHandler: DefaultUnknownCommandHandler
 
-    private val textProvider = mockk<TextProvider>()
     private val messageSender = mockk<MessageSender>()
 
     @BeforeEach
     fun setUp() {
-        defaultUnknownCommandHandler = DefaultUnknownCommandHandler(textProvider, messageSender)
+        defaultUnknownCommandHandler = DefaultUnknownCommandHandler(messageSender)
     }
 
     @Test
