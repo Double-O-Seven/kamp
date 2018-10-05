@@ -37,4 +37,15 @@ internal class MutableVehicleColorsTest {
                             .isEqualTo(VehicleColor[127])
                 }
     }
+
+    @Test
+    fun shouldCreateMutableVehicleColorsWithIntColors() {
+        val mutableVehicleColors = mutableVehicleColorsOf(color1 = 65, color2 = 127)
+
+        assertThat(mutableVehicleColors)
+                .isEqualTo(mutableVehicleColorsOf(
+                        color1 = VehicleColor[65],
+                        color2 = VehicleColor[127]
+                ))
+    }
 }

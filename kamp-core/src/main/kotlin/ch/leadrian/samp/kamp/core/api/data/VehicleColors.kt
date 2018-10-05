@@ -13,6 +13,11 @@ interface VehicleColors {
     fun toMutableVehicleColors(): MutableVehicleColors
 }
 
+fun vehicleColorsOf(color1: Int, color2: Int): VehicleColors = VehicleColorsImpl(
+        color1 = VehicleColor[color1],
+        color2 = VehicleColor[color2]
+)
+
 fun vehicleColorsOf(color1: VehicleColor, color2: VehicleColor): VehicleColors = VehicleColorsImpl(
         color1 = color1,
         color2 = color2
