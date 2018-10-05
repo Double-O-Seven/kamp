@@ -32,8 +32,12 @@ internal constructor(
                     ?: key.name
 
     private fun createResourceBundleGroup(locale: Locale): ResourceBundleGroup {
-        val resourceBundles = resourceBundlePackages.map {
-            ResourceBundle.getBundle("$it.$PROPERTIES_FILE_NAME", locale)
+        val resourceBundles = resourceBundlePackages.mapNotNull {
+            try {
+                ResourceBundle.getBundle("$it.$PROPERTIES_FILE_NAME", locale)
+            } catch (e: MissingResourceException) {
+                null
+            }
         }
         return ResourceBundleGroup(resourceBundles)
     }

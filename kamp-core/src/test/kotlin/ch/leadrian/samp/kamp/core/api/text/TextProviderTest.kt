@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.text
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -40,6 +41,16 @@ internal class TextProviderTest {
 
         assertThat(result)
                 .isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun givenNoResourceForGivenLocaleItShouldHandleIt() {
+        val textProvider = TextProvider(setOf(this::class.java.getPackage().name!! + ".test1"))
+
+        val result = textProvider.getText(Locale("de", "CH"), TextKey("hahaha"), "Hallo")
+
+        assertThat(result)
+                .isEqualTo("Hallo")
     }
 
     private class GetTextArgumentsProvider : ArgumentsProvider {
