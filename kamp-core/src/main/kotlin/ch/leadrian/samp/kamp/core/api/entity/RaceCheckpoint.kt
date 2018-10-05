@@ -55,6 +55,7 @@ internal constructor(
         onEnterHandlers += onEnter
     }
 
+    @JvmSynthetic
     internal fun onEnter(player: Player) {
         requireNotDestroyed()
         onEnterHandlers.forEach { it.invoke(this, player) }
@@ -64,6 +65,7 @@ internal constructor(
         onLeaveHandlers += onLeave
     }
 
+    @JvmSynthetic
     internal fun onLeave(player: Player) {
         requireNotDestroyed()
         onLeaveHandlers.forEach { it.invoke(this, player) }

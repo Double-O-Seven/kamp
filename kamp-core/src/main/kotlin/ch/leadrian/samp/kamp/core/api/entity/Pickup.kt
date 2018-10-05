@@ -44,10 +44,12 @@ internal constructor(
         onPickUpHandlers += onPickUp
     }
 
+    @JvmSynthetic
     internal fun onPickUp(player: Player) {
         onPickUpHandlers.forEach { it.invoke(this, player) }
     }
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: Pickup.() -> Unit) {
         onDestroyHandlers += onDestroy
     }

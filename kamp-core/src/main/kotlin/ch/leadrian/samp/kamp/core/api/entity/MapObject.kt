@@ -205,6 +205,7 @@ internal constructor(
         onMovedHandlers += onMoved
     }
 
+    @JvmSynthetic
     internal fun onMoved() {
         onMovedHandlers.forEach { it.invoke(this) }
     }
@@ -213,10 +214,12 @@ internal constructor(
         onEditHandlers += onEdit
     }
 
+    @JvmSynthetic
     internal fun onEdit(player: Player, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
         onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
     }
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: MapObject.() -> Unit) {
         onDestroyHandlers += onDestroy
     }

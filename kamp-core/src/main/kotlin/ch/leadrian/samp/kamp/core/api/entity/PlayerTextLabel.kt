@@ -87,6 +87,7 @@ internal constructor(
         _text = text
     }
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: PlayerTextLabel.() -> Unit) {
         onDestroyHandlers += onDestroy
     }

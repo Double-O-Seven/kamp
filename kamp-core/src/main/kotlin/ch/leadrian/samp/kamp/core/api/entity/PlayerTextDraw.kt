@@ -238,6 +238,7 @@ internal constructor(
         onClickHandlers += onClick
     }
 
+    @JvmSynthetic
     internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result =
             onClickHandlers
                     .asSequence()
@@ -245,6 +246,7 @@ internal constructor(
                     .firstOrNull { it == OnPlayerClickPlayerTextDrawListener.Result.Processed }
                     ?: OnPlayerClickPlayerTextDrawListener.Result.NotFound
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: PlayerTextDraw.() -> Unit) {
         onDestroyHandlers += onDestroy
     }

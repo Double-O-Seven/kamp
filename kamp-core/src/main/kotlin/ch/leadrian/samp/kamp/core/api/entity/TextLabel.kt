@@ -100,6 +100,7 @@ internal constructor(
         )
     }
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: TextLabel.() -> Unit) {
         onDestroyHandlers += onDestroy
     }

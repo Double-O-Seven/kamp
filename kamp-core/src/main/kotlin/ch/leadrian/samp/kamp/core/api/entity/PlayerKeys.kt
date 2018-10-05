@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
 
-class PlayerKeys
+data class PlayerKeys
 internal constructor(
         val keys: Int,
         val upDown: Int,

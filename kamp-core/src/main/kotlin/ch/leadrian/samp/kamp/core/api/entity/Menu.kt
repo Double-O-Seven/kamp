@@ -121,6 +121,7 @@ internal constructor(
         onSelectedMenuRowHandlers += onSelectedMenuRow
     }
 
+    @JvmSynthetic
     internal fun onSelectedMenuRow(player: Player, rowIndex: Int) {
         val menuRow = _rows[rowIndex]
         menuRow.onSelected(player)
@@ -131,10 +132,12 @@ internal constructor(
         onExitHandlers += onExit
     }
 
+    @JvmSynthetic
     internal fun onExit(player: Player) {
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
+    @JvmSynthetic
     internal fun onDestroy(onDestroy: Menu.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
