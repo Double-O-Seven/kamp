@@ -26,7 +26,6 @@ import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.PlayerState
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
@@ -257,7 +256,8 @@ constructor(
 
     override fun onVehicleSpawn(vehicleid: Int): Boolean {
         tryAndCatch {
-            onVehicleSpawnHandler.onVehicleSpawn(vehicleid.toVehicle())
+            val vehicle = vehicleid.toVehicle()
+            onVehicleSpawnHandler.onVehicleSpawn(vehicle)
         }
         return true
     }
@@ -405,7 +405,7 @@ constructor(
             onVehicleResprayHandler.onVehicleRespray(
                     playerid.toPlayer(),
                     vehicleid.toVehicle(),
-                    vehicleColorsOf(VehicleColor[color1], VehicleColor[color2])
+                    vehicleColorsOf(color1, color2)
             )
         } ?: OnVehicleResprayListener.Result.Desync
         return result.value
@@ -418,7 +418,17 @@ constructor(
         return true
     }
 
-    override fun onUnoccupiedVehicleUpdate(vehicleid: Int, playerid: Int, passenger_seat: Int, new_x: Float, new_y: Float, new_z: Float, vel_x: Float, vel_y: Float, vel_z: Float): Boolean {
+    override fun onUnoccupiedVehicleUpdate(
+            vehicleid: Int,
+            playerid: Int,
+            passenger_seat: Int,
+            new_x: Float,
+            new_y: Float,
+            new_z: Float,
+            vel_x: Float,
+            vel_y: Float,
+            vel_z: Float
+    ): Boolean {
         val result = tryAndCatch {
             onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
                     vehicle = vehicleid.toVehicle(),
@@ -460,8 +470,8 @@ constructor(
         tryAndCatch {
             val player = playerid.toPlayer()
             onPlayerKeyStateChangeHandler.onPlayerKeyStateChange(
-                    oldKeys = PlayerKeys(keys = newkeys, upDown = 0, leftRight = 0, player = player),
-                    newKeys = PlayerKeys(keys = oldkeys, upDown = 0, leftRight = 0, player = player)
+                    oldKeys = PlayerKeys(keys = oldkeys, upDown = 0, leftRight = 0, player = player),
+                    newKeys = PlayerKeys(keys = newkeys, upDown = 0, leftRight = 0, player = player)
             )
         }
         return true
@@ -665,11 +675,27 @@ constructor(
         return true
     }
 
-    override fun onPlayerEditAttachedObject(playerid: Int, response: Int, index: Int, modelid: Int, boneid: Int, fOffsetX: Float, fOffsetY: Float, fOffsetZ: Float, fRotX: Float, fRotY: Float, fRotZ: Float, fScaleX: Float, fScaleY: Float, fScaleZ: Float): Boolean {
+    override fun onPlayerEditAttachedObject(
+            playerid: Int,
+            response: Int,
+            index: Int,
+            modelid: Int,
+            boneid: Int,
+            fOffsetX: Float,
+            fOffsetY: Float,
+            fOffsetZ: Float,
+            fRotX: Float,
+            fRotY: Float,
+            fRotZ: Float,
+            fScaleX: Float,
+            fScaleY: Float,
+            fScaleZ: Float
+    ): Boolean {
         tryAndCatch {
+            val player = playerid.toPlayer()
             onPlayerEditAttachedObjectHandler.onPlayerEditAttachedObject(
-                    player = playerid.toPlayer(),
-                    slot = playerid.toPlayer().attachedObjectSlots[index],
+                    player = player,
+                    slot = player.attachedObjectSlots[index],
                     response = AttachedObjectEditResponse[response],
                     modelId = modelid,
                     bone = Bone[boneid],
