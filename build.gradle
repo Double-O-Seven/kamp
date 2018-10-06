@@ -3,7 +3,7 @@ version "${version}"
 buildscript {
     ext {
         kotlinVersion = '1.2.71'
-        junitVersion = '5.3.0'
+        junitVersion = '5.2.0'
         guiceVersion = '4.1.0'
         governatorVersion = '1.17.5'
     }

@@ -45,6 +45,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStateChangeListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStreamInListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStreamOutListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerTakeDamageListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerTextListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerUpdateListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerWeaponShotListener
 import ch.leadrian.samp.kamp.core.api.callback.OnProcessTickListener
@@ -641,6 +642,82 @@ internal class CallbackProcessorTest {
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
             verify { onVehicleDeathListener.onVehicleDeath(vehicle, killer) }
+        }
+
+    }
+
+    @Nested
+    inner class OnPlayerTextTests {
+
+        private lateinit var player: Player
+        private val playerId = 69
+
+        @BeforeEach
+        fun setUp() {
+            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+        }
+
+        @Test
+        fun shouldCallOnPlayerTextAndReturnTrue() {
+            val onPlayerTextListener = mockk<OnPlayerTextListener> {
+                every { onPlayerText(player, "hi there!") } returns OnPlayerTextListener.Result.Allowed
+            }
+            callbackListenerManager.register(onPlayerTextListener)
+
+            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
+
+            assertThat(result)
+                    .isTrue()
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
+        }
+
+        @Test
+        fun shouldCallOnPlayerTextAndReturnFalse() {
+            val onPlayerTextListener = mockk<OnPlayerTextListener> {
+                every { onPlayerText(player, "hi there!") } returns OnPlayerTextListener.Result.Blocked
+            }
+            callbackListenerManager.register(onPlayerTextListener)
+
+            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
+
+            assertThat(result)
+                    .isFalse()
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
+        }
+
+        @Test
+        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
+            val onPlayerTextListener = mockk<OnPlayerTextListener>(relaxed = true)
+            callbackListenerManager.register(onPlayerTextListener)
+
+            val result = callbackProcessor.onPlayerText(500, "hi there!")
+
+            assertThat(result)
+                    .isTrue()
+            val slot = slot<Exception>()
+            verify { onPlayerTextListener wasNot Called }
+            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
+            assertThat(slot.captured)
+                    .isInstanceOf(IllegalArgumentException::class.java)
+                    .hasMessage("Invalid player ID 500")
+        }
+
+        @Test
+        fun shouldCatchException() {
+            val exception = RuntimeException("test")
+            val onPlayerTextListener = mockk<OnPlayerTextListener> {
+                every { onPlayerText(any(), any()) } throws exception
+            }
+            callbackListenerManager.register(onPlayerTextListener)
+
+            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
+
+            assertThat(result)
+                    .isTrue()
+            verify { uncaughtExceptionNotifier.notify(exception) }
+            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
         }
 
     }
