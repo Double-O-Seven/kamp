@@ -14,13 +14,13 @@ interface OnPlayerWeaponShotListener {
 
     sealed class Target(val type: BulletHitType) {
 
-        class PlayerTarget(val target: Player) : Target(BulletHitType.PLAYER)
+        data class PlayerTarget(val player: Player) : Target(BulletHitType.PLAYER)
 
-        class VehicleTarget(val target: Vehicle) : Target(BulletHitType.VEHICLE)
+        data class VehicleTarget(val vehicle: Vehicle) : Target(BulletHitType.VEHICLE)
 
-        class PlayerMapObjectTarget(val target: PlayerMapObject) : Target(BulletHitType.PLAYER_OBJECT)
+        data class PlayerMapObjectTarget(val playerMapObject: PlayerMapObject) : Target(BulletHitType.PLAYER_OBJECT)
 
-        class MapObjectTarget(val target: MapObject) : Target(BulletHitType.OBJECT)
+        data class MapObjectTarget(val mapObject: MapObject) : Target(BulletHitType.OBJECT)
 
         object NoTarget : Target(BulletHitType.NONE)
     }
