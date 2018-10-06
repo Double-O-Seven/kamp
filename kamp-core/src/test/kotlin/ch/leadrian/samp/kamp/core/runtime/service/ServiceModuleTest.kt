@@ -17,14 +17,11 @@ import ch.leadrian.samp.kamp.core.api.service.TextLabelService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.service.WorldService
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
-import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import io.mockk.every
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -33,15 +30,12 @@ import org.junit.jupiter.api.Test
 
 internal class ServiceModuleTest {
 
+    private val modules = arrayOf(ServiceModule(), TextModule(), CallbackModule(), TestModule())
+
     @Test
     fun shouldCreateInjector() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(
-                    ServiceModule(),
-                    TextModule(),
-                    CallbackModule(),
-                    TestModule()
-            )
+            Guice.createInjector(*modules)
         }
 
         assertThat(caughtThrowable)
@@ -55,12 +49,7 @@ internal class ServiceModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(
-                    ServiceModule(),
-                    TextModule(),
-                    CallbackModule(),
-                    TestModule()
-            )
+            injector = Guice.createInjector(*modules)
         }
 
         @Test
@@ -191,16 +180,5 @@ internal class ServiceModuleTest {
             assertThat(worldService)
                     .isNotNull
         }
-    }
-
-    private class TestModule : AbstractModule() {
-
-        override fun configure() {
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { getMaxPlayers() } returns 50
-            }
-            bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
-        }
-
     }
 }

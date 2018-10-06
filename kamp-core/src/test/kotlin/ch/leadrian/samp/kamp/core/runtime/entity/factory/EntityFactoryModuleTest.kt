@@ -1,13 +1,11 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
-import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -16,10 +14,12 @@ import org.junit.jupiter.api.Test
 
 internal class EntityFactoryModuleTest {
 
+    private val modules = arrayOf(EntityFactoryModule(), TextModule(), EntityRegistryModule(), TestModule())
+
     @Test
     fun shouldCreateInjector() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(EntityFactoryModule(), TextModule(), EntityRegistryModule(), TestModule())
+            Guice.createInjector(*modules)
         }
 
         assertThat(caughtThrowable)
@@ -33,7 +33,7 @@ internal class EntityFactoryModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(EntityFactoryModule(), TextModule(), EntityRegistryModule(), TestModule())
+            injector = Guice.createInjector(*modules)
         }
 
         @Test
@@ -147,14 +147,6 @@ internal class EntityFactoryModuleTest {
             assertThat(vehicleFactory)
                     .isNotNull
         }
-    }
-
-    private class TestModule : AbstractModule() {
-
-        override fun configure() {
-            bind(SAMPNativeFunctionExecutor::class.java).toInstance(mockk(relaxed = true))
-        }
-
     }
 
 }

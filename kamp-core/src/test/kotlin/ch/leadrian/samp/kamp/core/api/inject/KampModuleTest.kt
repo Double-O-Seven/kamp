@@ -4,11 +4,9 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import com.google.inject.AbstractModule
+import ch.leadrian.samp.kamp.core.runtime.TestModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -142,13 +140,5 @@ internal class KampModuleTest {
     private object FooCommands : Commands()
 
     private object BarCommands : Commands()
-
-    private class TestModule : AbstractModule() {
-
-        override fun configure() {
-            bind(SAMPNativeFunctionExecutor::class.java).toInstance(mockk())
-        }
-
-    }
 
 }

@@ -12,6 +12,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.TabListDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
@@ -224,6 +225,7 @@ internal class CommandListDialogFactoryTest {
 
         override fun configure() {
             bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
+            bind(Server::class.java).toInstance(mockk())
             bind(TestCommands::class.java)
             newCommandsSetBinder().apply {
                 addBinding().to(TestCommands::class.java)

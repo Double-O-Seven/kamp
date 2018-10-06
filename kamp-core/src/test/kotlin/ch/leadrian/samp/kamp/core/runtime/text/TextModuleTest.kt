@@ -9,12 +9,9 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextPreparer
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import com.google.inject.AbstractModule
+import ch.leadrian.samp.kamp.core.runtime.TestModule
 import com.google.inject.Guice
 import com.google.inject.Injector
-import io.mockk.every
-import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
@@ -23,13 +20,12 @@ import org.junit.jupiter.api.Test
 
 internal class TextModuleTest {
 
+    private val modules = arrayOf(TestModule(), TextModule())
+
     @Test
     fun shouldCreateInjector() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(
-                    TestModule(),
-                    TextModule()
-            )
+            Guice.createInjector(*modules)
         }
 
         assertThat(caughtThrowable)
@@ -43,7 +39,7 @@ internal class TextModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(TextModule(), TestModule())
+            injector = Guice.createInjector(*modules)
         }
 
         @Test
@@ -110,16 +106,5 @@ internal class TextModuleTest {
                     .isNotNull
                     .isSameAs(injector.getInstance<TextProvider>())
         }
-    }
-
-    private class TestModule : AbstractModule() {
-
-        override fun configure() {
-            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every { getMaxPlayers() } returns 50
-            }
-            bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
-        }
-
     }
 }

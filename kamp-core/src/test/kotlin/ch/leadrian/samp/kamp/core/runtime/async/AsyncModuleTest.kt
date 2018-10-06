@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.async
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -13,10 +14,12 @@ import org.junit.jupiter.api.Test
 
 internal class AsyncModuleTest {
 
+    private val modules = arrayOf(AsyncModule(), CallbackModule(), TestModule())
+
     @Test
     fun shouldCreateInjector() {
         val caughtThrowable = catchThrowable {
-            Guice.createInjector(AsyncModule(), CallbackModule())
+            Guice.createInjector(*modules)
         }
 
         assertThat(caughtThrowable)
@@ -30,7 +33,7 @@ internal class AsyncModuleTest {
 
         @BeforeEach
         fun setUp() {
-            injector = Guice.createInjector(AsyncModule(), CallbackModule())
+            injector = Guice.createInjector(*modules)
         }
 
         @Test
