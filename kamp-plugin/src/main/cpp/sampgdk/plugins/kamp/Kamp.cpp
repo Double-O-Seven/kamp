@@ -18,10 +18,10 @@ void Kamp::Launch() {
 		this->InitializeSAMPCallbacksInstance();
 		this->InitializeSAMPCallbacksMethodCache();
 	} catch (std::exception& e) {
-		std::cout << "Failed to initialize Kamp: " << e.what() << std::endl;
-		std::cout << "Destroying JVM..." << std::endl;
+		sampgdk::logprintf("Failed to initialize Kamp: %s", e.what());
+		sampgdk::logprintf("Destroying JVM...");
 		this->DestroyJVM();
-		std::cout << "Exiting..." << std::endl;
+		sampgdk::logprintf("Exiting...");
 		exit(1);
 	}
 
@@ -38,7 +38,7 @@ void Kamp::InitializeJVM() throw(std::exception) {
 void Kamp::InitializeKampLauncherClass() throw(std::exception) {
 	this->kampLauncherClass = this->jniEnv->FindClass(KAMP_LAUNCHER_CLASS.c_str());
 	if (!this->kampLauncherClass) {
-		throw std::exception(("Could not find launcher class " + KAMP_LAUNCHER_CLASS + ", exiting...").c_str());
+		throw std::exception(("Could not find launcher class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 
 	this->kampLauncherClassReference = this->jniEnv->NewGlobalRef(this->kampLauncherClass);
@@ -131,6 +131,7 @@ long Kamp::CreateJVM() {
 
 	for (size_t i = 0; i < optionStrings.size(); i++) {
 		vmOptions[i].optionString = optionStrings[i];
+		sampgdk::logprintf("Using VM option: %s", optionStrings[i]);
 	}
 
 	JavaVMInitArgs vmArgs;
