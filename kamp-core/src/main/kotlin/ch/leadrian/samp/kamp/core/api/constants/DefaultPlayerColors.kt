@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.core.api.entity
+package ch.leadrian.samp.kamp.core.api.constants
 
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.colorOf

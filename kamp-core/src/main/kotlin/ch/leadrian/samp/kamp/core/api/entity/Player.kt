@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 import ch.leadrian.samp.kamp.core.api.constants.CameraMode
 import ch.leadrian.samp.kamp.core.api.constants.CameraType
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
+import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
 import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
