@@ -16,7 +16,9 @@ import static java.util.Objects.requireNonNull;
 @SuppressWarnings("unused")
 public class KampLauncher {
 
-    private static final Path DATA_DIRECTORY = Paths.get(".", "Kamp", "data");
+    private static final Path KAMP_DIRECTORY = Paths.get(".", "Kamp");
+
+    private static final Path DATA_DIRECTORY = KAMP_DIRECTORY.resolve("data");
 
     private static final String CONFIG_PROPERTIES_FILE = "config.properties";
 
@@ -37,7 +39,7 @@ public class KampLauncher {
     }
 
     private static Properties loadConfigProperties() throws IOException {
-        try (Reader reader = newBufferedReader(DATA_DIRECTORY.resolve(CONFIG_PROPERTIES_FILE), ISO_8859_1)) {
+        try (Reader reader = newBufferedReader(KAMP_DIRECTORY.resolve(CONFIG_PROPERTIES_FILE), ISO_8859_1)) {
             Properties properties = new Properties();
             properties.load(reader);
             return properties;

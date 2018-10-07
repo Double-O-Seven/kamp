@@ -63,18 +63,16 @@ private constructor(
 
     private fun initializeDataDirectories() {
         gameMode.dataDirectory = dataDirectory.resolve(gameMode.javaClass.name).also {
-            if (stage == Stage.PRODUCTION) createDirectoryIfNotExists(it)
+            if (stage == Stage.PRODUCTION) {
+                Files.createDirectories(it)
+            }
         }
         plugins.forEach { plugin ->
             plugin.dataDirectory = dataDirectory.resolve(plugin.javaClass.name).also {
-                if (stage == Stage.PRODUCTION) createDirectoryIfNotExists(it)
+                if (stage == Stage.PRODUCTION) {
+                    Files.createDirectories(it)
+                }
             }
-        }
-    }
-
-    private fun createDirectoryIfNotExists(path: Path) {
-        if (!Files.exists(path)) {
-            Files.createDirectories(path)
         }
     }
 
