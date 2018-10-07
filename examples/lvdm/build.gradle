@@ -45,4 +45,6 @@ serverStarter {
     kampPluginBinaryPath = project(":kamp-plugin").projectDir.toString() + "/src/main/cpp/sampgdk/build/plugins/kamp/Release/kamp.dll"
 }
 
-configureServer.dependsOn(build)
+compileKotlin.dependsOn generateTextKeys
+compileJava.dependsOn generateTextKeys
+
