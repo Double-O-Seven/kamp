@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import java.util.*
 
-private class EmbeddedPlayerName(
+private class ColoredPlayerName(
         private val player: Player
 ) : MessageArgument {
 
@@ -17,7 +17,7 @@ private class EmbeddedPlayerName(
     override fun get(locale: Locale, color: Color): String = "$coloredName${color.toEmbeddedString()}"
 }
 
-fun embeddedPlayerNameOf(player: Player): MessageArgument = EmbeddedPlayerName(player)
+fun coloredNameOf(player: Player): MessageArgument = ColoredPlayerName(player)
 
 private class MessageTranslatable(private val translator: (Locale) -> String) : MessageArgument {
 

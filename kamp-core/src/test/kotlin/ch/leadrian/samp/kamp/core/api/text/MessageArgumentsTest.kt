@@ -14,12 +14,12 @@ import java.util.*
 internal class MessageArgumentsTest {
 
     @Test
-    fun shouldReturnEmbeddedPlayerName() {
+    fun shouldReturnColoredPlayerName() {
         val player = mockk<Player> {
             every { color } returns colorOf(0x00FF00FF)
             every { name } returns "hans_wurst"
         }
-        val embeddedPlayerName = embeddedPlayerNameOf(player)
+        val embeddedPlayerName = coloredNameOf(player)
 
         val text = embeddedPlayerName.get(Locale.GERMANY, colorOf(0x33CC33FF))
 
