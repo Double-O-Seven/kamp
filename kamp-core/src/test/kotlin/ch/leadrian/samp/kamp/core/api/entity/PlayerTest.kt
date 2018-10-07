@@ -26,6 +26,7 @@ import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
 import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.locationOf
+import ch.leadrian.samp.kamp.core.api.data.mutableColorOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.data.spawnInfoOf
@@ -685,22 +686,22 @@ internal class PlayerTest {
     inner class ColorTests {
 
         @Test
-        fun shouldGetColor() {
-            every { nativeFunctionExecutor.getPlayerColor(playerId.value) } returns 0x00FF00FF
-
+        fun givenColorWasNotSetItShouldReturnDefaultColor() {
             val color = player.color
 
             assertThat(color)
-                    .isEqualTo(colorOf(0x00FF00FF))
+                    .isEqualTo(DefaultPlayerColors[playerId])
         }
 
         @Test
         fun shouldSetColor() {
             every { nativeFunctionExecutor.setPlayerColor(any(), any()) } returns true
 
-            player.color = colorOf(0x00FF00FF)
+            player.color = mutableColorOf(0x00FF00FF)
 
             verify { nativeFunctionExecutor.setPlayerColor(playerid = playerId.value, color = 0x00FF00FF) }
+            assertThat(player.color)
+                    .isEqualTo(colorOf(0x00FF00FF))
         }
     }
 

@@ -33,7 +33,6 @@ import ch.leadrian.samp.kamp.core.api.data.Time
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.WeaponData
 import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
-import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.timeOf
@@ -285,10 +284,10 @@ internal constructor(
             nativeFunctionExecutor.setPlayerDrunkLevel(playerid = id.value, level = value)
         }
 
-    var color: Color
-        get() = colorOf(nativeFunctionExecutor.getPlayerColor(id.value))
+    var color: Color = DefaultPlayerColors[id]
         set(value) {
             nativeFunctionExecutor.setPlayerColor(playerid = id.value, color = value.value)
+            field = value.toColor()
         }
 
     var skin: SkinModel
