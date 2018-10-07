@@ -15,7 +15,6 @@ buildscript {
 
 apply plugin: 'maven'
 apply plugin: 'kamp-textkeygen'
-apply plugin: 'kamp-serverstarter'
 
 configurations {
     coreCodegen

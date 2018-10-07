@@ -9,7 +9,7 @@ buildscript {
             }
         }
 
-        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.2.22"
+        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.2.0"
     }
 }
 
@@ -37,6 +37,12 @@ textKeyGenerator {
     outputDirectory = generatedSrcJavaDir
     packageNames.add("ch.leadrian.samp.kamp.examples.lvdm")
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
+}
+
+serverStarter {
+
+    gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
+    kampPluginBinaryPath = project(":kamp-plugin").projectDir.toString() + "/src/main/cpp/sampgdk/build/plugins/kamp/Release/kamp.dll"
 }
 
 configureServer.dependsOn(build)
