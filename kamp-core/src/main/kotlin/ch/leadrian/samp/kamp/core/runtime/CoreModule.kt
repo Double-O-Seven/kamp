@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
+import ch.leadrian.samp.kamp.core.runtime.timer.TimerModule
 
 internal class CoreModule(
         private val server: Server,
@@ -27,6 +28,7 @@ internal class CoreModule(
         install(EntityRegistryModule())
         install(ServiceModule())
         install(TextModule())
+        install(TimerModule())
 
         bind(Server::class.java).toInstance(server)
         bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
