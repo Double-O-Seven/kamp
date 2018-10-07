@@ -530,6 +530,10 @@ internal constructor(
     val vehicleSeat: Int?
         get() = nativeFunctionExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
 
+    fun putInVehicle(vehicle: Vehicle, seat: Int) {
+        nativeFunctionExecutor.putPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value, seatid = seat)
+    }
+
     fun removeFromVehicle(): Boolean =
             nativeFunctionExecutor.removePlayerFromVehicle(id.value)
 

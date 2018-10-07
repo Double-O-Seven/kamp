@@ -1406,8 +1406,27 @@ internal class PlayerTest {
     }
 
     @Test
+    fun shouldPutPlayerInVehicle() {
+        val vehicleId = VehicleId.valueOf(1337)
+        val vehicle = mockk<Vehicle> {
+            every { id } returns vehicleId
+        }
+        every { nativeFunctionExecutor.putPlayerInVehicle(any(), any(), any()) } returns true
+
+        player.putInVehicle(vehicle, 3)
+
+        verify {
+            nativeFunctionExecutor.putPlayerInVehicle(
+                    playerid = playerId.value,
+                    vehicleid = vehicleId.value,
+                    seatid = 3
+            )
+        }
+    }
+
+    @Test
     fun shouldRemovePlayerFromVehicle() {
-        every { nativeFunctionExecutor.removePlayerFromVehicle(playerId.value) } returns true
+        every { nativeFunctionExecutor.removePlayerFromVehicle(any()) } returns true
 
         player.removeFromVehicle()
 
