@@ -1,5 +1,6 @@
 include ':kamp-core'
 include ':kamp-codegen'
 include ':kamp-plugin'
+include ':examples:lvdm'
 
 rootProject.name = 'kamp'

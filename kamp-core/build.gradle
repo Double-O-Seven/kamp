@@ -9,12 +9,13 @@ buildscript {
             }
         }
 
-        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.1.9"
+        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.2.22"
     }
 }
 
 apply plugin: 'maven'
 apply plugin: 'kamp-textkeygen'
+apply plugin: 'kamp-serverstarter'
 
 configurations {
     coreCodegen

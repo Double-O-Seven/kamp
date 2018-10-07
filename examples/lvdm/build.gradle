@@ -1,0 +1,42 @@
+buildscript {
+
+    dependencies {
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+
+        classpath "ch.leadrian.samp.kamp:kamp-gradle-plugins:0.2.22"
+    }
+}
+
+apply plugin: 'kamp-textkeygen'
+apply plugin: 'kamp-serverstarter'
+
+dependencies {
+
+    compile(project(':kamp-core'))
+
+}
+
+def generatedSrcJavaDir = "${buildDir}/generated-src/main/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSrcJavaDir
+        }
+    }
+}
+
+textKeyGenerator {
+
+    outputDirectory = generatedSrcJavaDir
+    packageNames.add("ch.leadrian.samp.kamp.examples.lvdm")
+    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
+}
+
+configureServer.dependsOn(build)
