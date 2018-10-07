@@ -2831,6 +2831,55 @@ internal class PlayerTest {
     }
 
     @Nested
+    inner class SendDeathMessageTests {
+
+        private val victim = mockk<Player>()
+        private val victimId = PlayerId.valueOf(75)
+
+        @BeforeEach
+        fun setUp() {
+            every { victim.id } returns victimId
+        }
+
+        @Test
+        fun shouldDeathMessageWithKiller() {
+            val killerId = PlayerId.valueOf(25)
+            val killer = mockk<Player> {
+                every { id } returns killerId
+            }
+            every { nativeFunctionExecutor.sendDeathMessageToPlayer(any(), any(), any(), any()) } returns true
+
+            player.sendDeathMessage(victim = victim, weapon = WeaponModel.AK47, killer = killer)
+
+            verify {
+                nativeFunctionExecutor.sendDeathMessageToPlayer(
+                        playerid = playerId.value,
+                        killer = killerId.value,
+                        weapon = WeaponModel.AK47.value,
+                        killee = victimId.value
+                )
+            }
+        }
+
+        @Test
+        fun shouldDeathMessageWithoutKiller() {
+            every { nativeFunctionExecutor.sendDeathMessageToPlayer(any(), any(), any(), any()) } returns true
+
+            player.sendDeathMessage(victim = victim, weapon = WeaponModel.AK47, killer = null)
+
+            verify {
+                nativeFunctionExecutor.sendDeathMessageToPlayer(
+                        playerid = playerId.value,
+                        killer = SAMPConstants.INVALID_PLAYER_ID,
+                        weapon = WeaponModel.AK47.value,
+                        killee = victimId.value
+                )
+            }
+        }
+
+    }
+
+    @Nested
     inner class MenuTests {
 
         @Test

@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.service
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerMarkersMode
+import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityException
@@ -279,6 +281,53 @@ internal class PlayerServiceTest {
 
         assertThat(players)
                 .containsExactly(player1, player2)
+    }
+
+    @Nested
+    inner class SendDeathMessageTests {
+
+        private val victim = mockk<Player>()
+        private val victimId = PlayerId.valueOf(50)
+
+        @BeforeEach
+        fun setUp() {
+            every { victim.id } returns victimId
+        }
+
+        @Test
+        fun shouldDeathMessageWithKiller() {
+            val killerId = PlayerId.valueOf(75)
+            val killer = mockk<Player> {
+                every { id } returns killerId
+            }
+            every { nativeFunctionExecutor.sendDeathMessage(any(), any(), any()) } returns true
+
+            playerService.sendDeathMessage(victim = victim, weapon = WeaponModel.AK47, killer = killer)
+
+            verify {
+                nativeFunctionExecutor.sendDeathMessage(
+                        killer = killerId.value,
+                        weapon = WeaponModel.AK47.value,
+                        killee = victimId.value
+                )
+            }
+        }
+
+        @Test
+        fun shouldDeathMessageWithoutKiller() {
+            every { nativeFunctionExecutor.sendDeathMessage(any(), any(), any()) } returns true
+
+            playerService.sendDeathMessage(victim = victim, weapon = WeaponModel.AK47, killer = null)
+
+            verify {
+                nativeFunctionExecutor.sendDeathMessage(
+                        killer = SAMPConstants.INVALID_PLAYER_ID,
+                        weapon = WeaponModel.AK47.value,
+                        killee = victimId.value
+                )
+            }
+        }
+
     }
 
 }

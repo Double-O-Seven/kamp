@@ -939,6 +939,15 @@ internal constructor(
     val menu: Menu?
         get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry[it] }
 
+    fun sendDeathMessage(victim: Player, weapon: WeaponModel, killer: Player? = null) {
+        nativeFunctionExecutor.sendDeathMessageToPlayer(
+                playerid = id.value,
+                killer = killer?.id?.value ?: SAMPConstants.INVALID_PLAYER_ID,
+                killee = victim.id.value,
+                weapon = weapon.value
+        )
+    }
+
     fun onSpawn(onSpawn: Player.() -> Unit) {
         onSpawnHandlers += onSpawn
     }

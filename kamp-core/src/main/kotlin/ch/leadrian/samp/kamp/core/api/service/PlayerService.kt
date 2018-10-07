@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.service
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerMarkersMode
+import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityException
@@ -91,4 +93,12 @@ internal constructor(
     fun getPlayerByName(name: String): Player? = playerSearchIndex.getPlayer(name)
 
     fun findPlayersByName(name: String): List<Player> = playerSearchIndex.findPlayers(name)
+
+    fun sendDeathMessage(victim: Player, weapon: WeaponModel, killer: Player? = null) {
+        nativeFunctionExecutor.sendDeathMessage(
+                killer = killer?.id?.value ?: SAMPConstants.INVALID_PLAYER_ID,
+                killee = victim.id.value,
+                weapon = weapon.value
+        )
+    }
 }
