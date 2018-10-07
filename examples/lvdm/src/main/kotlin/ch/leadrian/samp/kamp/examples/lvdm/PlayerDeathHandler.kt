@@ -41,7 +41,7 @@ constructor(
             if (reason == WeaponModel.DROWN) {
                 messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.drown, coloredNameOf(player))
             } else {
-                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.died, coloredNameOf(player))
+                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.died, coloredNameOf(player), reason)
             }
         }
     }

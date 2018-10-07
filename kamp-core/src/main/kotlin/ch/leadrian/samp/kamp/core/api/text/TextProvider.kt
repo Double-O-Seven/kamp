@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -19,17 +20,23 @@ internal constructor(
 
         const val PROPERTIES_FILE_NAME = "strings"
 
+        private val log = loggerFor<TextProvider>()
+
     }
 
     private val resourceBundlesByLocale = mutableMapOf<Locale, ResourceBundleGroup>()
 
     @JvmOverloads
-    fun getText(locale: Locale, key: TextKey, defaultText: String? = null): String =
-            resourceBundlesByLocale
-                    .computeIfAbsent(locale) { createResourceBundleGroup(it) }
-                    .getText(key)
-                    ?: defaultText
-                    ?: key.name
+    fun getText(locale: Locale, key: TextKey, defaultText: String? = null): String {
+        val text = (resourceBundlesByLocale
+                .computeIfAbsent(locale) { createResourceBundleGroup(it) }
+                .getText(key)
+                ?: defaultText)
+        if (text == null) {
+            log.warn("Could not find text for key ${key.name}")
+        }
+        return text ?: key.name
+    }
 
     private fun createResourceBundleGroup(locale: Locale): ResourceBundleGroup {
         val resourceBundles = resourceBundlePackages.mapNotNull {

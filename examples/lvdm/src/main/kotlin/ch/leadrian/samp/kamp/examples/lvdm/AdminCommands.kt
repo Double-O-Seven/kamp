@@ -58,7 +58,7 @@ constructor(
                 val vehicle = tabListDialogItem.value
                 player.putInVehicle(vehicle, 0)
             }
-        }
+        }.show(player)
     }
 
 }

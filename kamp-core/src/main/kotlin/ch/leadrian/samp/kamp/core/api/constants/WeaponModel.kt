@@ -449,6 +449,14 @@ enum class WeaponModel(
             slot = WeaponSlot.INVALID,
             modelId = 0,
             baseDamage = 165f
+    ),
+    SUICIDE(
+            value = 255,
+            textKey = TextKeys.weapon.model.name.suicide,
+            modelName = "Suicide",
+            slot = WeaponSlot.INVALID,
+            modelId = 0,
+            baseDamage = 1f
     );
 
     companion object : ConstantValueRegistry<Int, WeaponModel>(*WeaponModel.values()) {

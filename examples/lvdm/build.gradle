@@ -46,6 +46,7 @@ serverStarter {
 
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
     kampPluginBinaryPath = project(":kamp-plugin").projectDir.toString() + "/src/main/cpp/sampgdk/build/plugins/kamp/Release/kamp.dll"
+    rconPassword = "test1234"
 }
 
 compileKotlin.dependsOn generateTextKeys

@@ -55,6 +55,7 @@ constructor(private val callbackListenerManager: CallbackListenerManager) : OnPl
 
     override fun onPlayerSpawn(player: Player) {
         player.coordinates = randomSpawns[random.nextInt(randomSpawns.size)]
+        player.interiorId = 0
     }
 
 }
