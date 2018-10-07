@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
@@ -22,6 +23,8 @@ public class KampLauncher {
 
     private static final String CONFIG_PROPERTIES_FILE = "config.properties";
 
+    private static final String PLUGIN_NAME_PROPERTY = "kamp.plugin.name";
+
     private static final Logger log = LoggerFactory.getLogger(KampLauncher.class);
 
     private static Server server = null;
@@ -32,6 +35,7 @@ public class KampLauncher {
         }
         try {
             Properties properties = loadConfigProperties();
+            System.loadLibrary(Objects.requireNonNull(properties.getProperty(PLUGIN_NAME_PROPERTY)));
             server = Server.start(new SAMPNativeFunctionExecutorImpl(), properties, DATA_DIRECTORY);
         } catch (Exception e) {
             log.error("Failed to launch server", e);

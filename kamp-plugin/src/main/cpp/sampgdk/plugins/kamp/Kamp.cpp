@@ -121,7 +121,6 @@ long Kamp::CreateJVM() {
 	std::string line;
 	while (std::getline(jvmOptionsFile, line)) {
 		if (!line.empty()) {
-			sampgdk::logprintf("Before: Using VM option: %s", line);
 			optionStrings.push_back(_strdup(line.c_str()));
 		}
 	}
@@ -133,7 +132,6 @@ long Kamp::CreateJVM() {
 
 	for (size_t i = 0; i < optionStrings.size(); i++) {
 		vmOptions[i].optionString = optionStrings[i];
-		sampgdk::logprintf("Using VM option: %s", optionStrings[i]);
 	}
 
 	JavaVMInitArgs vmArgs;
