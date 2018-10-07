@@ -60,6 +60,10 @@ void Kamp::CallLaunchMethod() {
 		throw std::exception(("Could not find method " + KAMP_LAUNCHER_LAUNCH_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 	this->jniEnv->CallStaticVoidMethod(this->kampLauncherClass, launchMethodID);
+	if (this->jniEnv->ExceptionOccurred()) {
+		this->jniEnv->ExceptionDescribe();
+		this->jniEnv->ExceptionClear();
+	}
 }
 
 void Kamp::InitializeSAMPCallbacksInstance() {
@@ -117,6 +121,7 @@ long Kamp::CreateJVM() {
 	std::string line;
 	while (std::getline(jvmOptionsFile, line)) {
 		if (!line.empty()) {
+			sampgdk::logprintf("Before: Using VM option: %s", line);
 			optionStrings.push_back(_strdup(line.c_str()));
 		}
 	}

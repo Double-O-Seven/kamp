@@ -18,7 +18,10 @@ apply plugin: 'kamp-serverstarter'
 
 dependencies {
 
-    compile(project(':kamp-core'))
+    compile(
+            project(':kamp-core'),
+            'org.slf4j:slf4j-simple:1.7.25',
+    )
 
 }
 
@@ -48,3 +51,4 @@ serverStarter {
 compileKotlin.dependsOn generateTextKeys
 compileJava.dependsOn generateTextKeys
 
+configureServer.dependsOn build

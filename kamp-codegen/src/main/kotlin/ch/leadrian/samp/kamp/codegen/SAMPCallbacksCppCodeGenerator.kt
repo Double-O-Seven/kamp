@@ -46,6 +46,13 @@ class SAMPCallbacksCppCodeGenerator {
             |    sampgdk::Unload();
             |}
             |
+            |void HandleException(JNIEnv *jniEnv) {
+            |    if (jniEnv->ExceptionOccurred()) {
+		    |       jniEnv->ExceptionDescribe();
+		    |       jniEnv->ExceptionClear();
+	        |    }
+            |}
+            |
             |PLUGIN_EXPORT void PLUGIN_CALL ProcessTick() {
             |    sampgdk::ProcessTick();
             |    Kamp& kampInstance = Kamp::GetInstance();
@@ -56,6 +63,7 @@ class SAMPCallbacksCppCodeGenerator {
             |    jmethodID callbackMethodID = kampInstance.GetSAMPCallbacksMethodCache().GetOnProcessTickMethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
             |    jniEnv->CallVoidMethod(sampCallbacksInstance, callbackMethodID);
+            |    HandleException(jniEnv);
             |}
             |
             |""".trimMargin("|"))
@@ -108,6 +116,7 @@ class SAMPCallbacksCppCodeGenerator {
         }
         methodParameterGenerators.joinToString(separator = ", ") { it.generateMethodCallParameter() }.let { writer.write(it) }
         writer.write(");\n")
+        writer.write("    HandleException(jniEnv);\n")
 
         if (resultProcessingSteps.isNotEmpty()) {
             resultProcessingSteps.forEach { writer.write("$it\n") }
