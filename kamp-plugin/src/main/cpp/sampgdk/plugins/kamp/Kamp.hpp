@@ -25,7 +25,6 @@ const std::string KAMP_LAUNCHER_CLASS = "ch/leadrian/samp/kamp/core/runtime/Kamp
 const std::string KAMP_LAUNCHER_LAUNCH_METHOD_NAME = "launch";
 const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME = "getCallbacksInstance";
 const std::string KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE = "()Lch/leadrian/samp/kamp/core/runtime/SAMPCallbacks;";
-const std::string KAMP_CLASS_PATH = "./Kamp/launch/jars";
 const std::string KAMP_JVM_OPTIONS_FILE = "./Kamp/launch/jvmopts.txt";
 
 
@@ -73,17 +72,17 @@ private:
 
 	void DestroyJVM();
 
-	void InitializeJVM() throw(std::exception);
+	void InitializeJVM();
 
-	void InitializeKampLauncherClass() throw(std::exception);
+	void InitializeKampLauncherClass();
 
-	void InitializeFieldCache() throw(std::exception);
+	void InitializeFieldCache();
 
-	void CallLaunchMethod() throw(std::exception);
+	void CallLaunchMethod();
 
-	void InitializeSAMPCallbacksInstance() throw(std::exception);
+	void InitializeSAMPCallbacksInstance();
 
-	void InitializeSAMPCallbacksMethodCache() throw(std::exception);
+	void InitializeSAMPCallbacksMethodCache();
 
 	bool launched = false;
 	JavaVM *javaVM;

@@ -28,14 +28,14 @@ void Kamp::Launch() {
 	this->launched = true;
 }
 
-void Kamp::InitializeJVM() throw(std::exception) {
+void Kamp::InitializeJVM() {
 	long result = this->CreateJVM();
 	if (result) {
 		throw std::exception(("Failed to create JVM: " + std::to_string(result)).c_str());
 	}
 }
 
-void Kamp::InitializeKampLauncherClass() throw(std::exception) {
+void Kamp::InitializeKampLauncherClass() {
 	this->kampLauncherClass = this->jniEnv->FindClass(KAMP_LAUNCHER_CLASS.c_str());
 	if (!this->kampLauncherClass) {
 		throw std::exception(("Could not find launcher class " + KAMP_LAUNCHER_CLASS).c_str());
@@ -47,14 +47,14 @@ void Kamp::InitializeKampLauncherClass() throw(std::exception) {
 	}
 }
 
-void Kamp::InitializeFieldCache() throw(std::exception) {
+void Kamp::InitializeFieldCache() {
 	int result = this->fieldCache.Initialize(this->jniEnv);
 	if (result) {
 		throw std::exception(("Initializing field cache failed with result: " + std::to_string(result)).c_str());
 	}
 }
 
-void Kamp::CallLaunchMethod() throw(std::exception) {
+void Kamp::CallLaunchMethod() {
 	jmethodID launchMethodID = this->jniEnv->GetStaticMethodID(this->kampLauncherClass, KAMP_LAUNCHER_LAUNCH_METHOD_NAME.c_str(), "()V");
 	if (!launchMethodID) {
 		throw std::exception(("Could not find method " + KAMP_LAUNCHER_LAUNCH_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
@@ -62,7 +62,7 @@ void Kamp::CallLaunchMethod() throw(std::exception) {
 	this->jniEnv->CallStaticVoidMethod(this->kampLauncherClass, launchMethodID);
 }
 
-void Kamp::InitializeSAMPCallbacksInstance() throw(std::exception) {
+void Kamp::InitializeSAMPCallbacksInstance() {
 	jmethodID getCallbacksInstanceMethodID = this->jniEnv->GetStaticMethodID(
 		this->kampLauncherClass,
 		KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME.c_str(),
@@ -83,7 +83,7 @@ void Kamp::InitializeSAMPCallbacksInstance() throw(std::exception) {
 	}
 }
 
-void Kamp::InitializeSAMPCallbacksMethodCache() throw(std::exception) {
+void Kamp::InitializeSAMPCallbacksMethodCache() {
 	jclass sampCallbacksInstanceClass = this->jniEnv->GetObjectClass(this->sampCallbacksInstanceReference);
 	if (!sampCallbacksInstanceClass) {
 		throw std::exception("Failed to get SAMPCallbacks instance class");
@@ -120,9 +120,6 @@ long Kamp::CreateJVM() {
 			optionStrings.push_back(_strdup(line.c_str()));
 		}
 	}
-
-	const std::string classPath = "-Djava.class.path=" + KAMP_CLASS_PATH;
-	optionStrings.push_back(_strdup(classPath.c_str()));
 
 	const std::string libraryPath = "-Djava.library.path=./plugins";
 	optionStrings.push_back(_strdup(libraryPath.c_str()));
