@@ -6,6 +6,7 @@ buildscript {
         junitVersion = '5.2.0'
         guiceVersion = '4.1.0'
         governatorVersion = '1.17.5'
+        kampGradlePluginsVersion = '0.2.1'
     }
 
     dependencies {
