@@ -60,8 +60,12 @@ constructor(
 
     override fun onProcessTick() {
         do {
-            val task = mainThreadTasks.poll() ?: break
-            task.invoke()
+            try {
+                val task = mainThreadTasks.poll() ?: break
+                task.invoke()
+            } catch (e: Exception) {
+                log.error("Exception while processing main thread tasks", e)
+            }
         } while (true)
     }
 
