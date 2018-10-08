@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.timer
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.async.ExecutorServiceFactory
@@ -50,46 +51,57 @@ constructor(
         }
     }
 
-    override fun addTimer(interval: Long, timeUnit: TimeUnit, action: () -> Unit) {
-        scheduledExecutorService.schedule(Task(action), interval, timeUnit)
+    override fun addTimer(interval: Long, timeUnit: TimeUnit, action: () -> Unit): Timer {
+        val timer = SimpleTimer(action)
+        timer.scheduledFuture = scheduledExecutorService.schedule(timer, interval, timeUnit)
+        return timer
     }
 
-    override fun addRepeatingTimer(interval: Long, timeUnit: TimeUnit, action: () -> Unit) {
-        scheduledExecutorService.scheduleAtFixedRate(Task(action), interval, interval, timeUnit)
+    override fun addRepeatingTimer(interval: Long, timeUnit: TimeUnit, action: () -> Unit): Timer {
+        val timer = SimpleTimer(action)
+        timer.scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(timer, interval, interval, timeUnit)
+        return timer
     }
 
-    override fun addRepeatingTimer(interval: Long, timeUnit: TimeUnit, repetions: Int, action: () -> Unit) {
-        val task = CancellableTask(repetions, action)
-        val future = scheduledExecutorService.scheduleAtFixedRate(task, interval, interval, timeUnit)
-        task.future = future
+    override fun addRepeatingTimer(repetitions: Int, interval: Long, timeUnit: TimeUnit, action: () -> Unit): Timer {
+        val timer = RepeatingTimer(repetitions, action)
+        timer.scheduledFuture = scheduledExecutorService.scheduleAtFixedRate(timer, interval, interval, timeUnit)
+        return timer
     }
 
-    private inner class CancellableTask(
-            private val repetitions: Int,
-            private val action: () -> Unit
-    ) : Runnable {
+    private abstract class AbstractTimer : Timer, Runnable {
 
-        lateinit var future: ScheduledFuture<*>
+        lateinit var scheduledFuture: ScheduledFuture<*>
+
+        final override fun stop() {
+            while (!this::scheduledFuture.isInitialized) {
+                Thread.yield()
+            }
+            if (!scheduledFuture.isCancelled) {
+                scheduledFuture.cancel(false)
+            }
+        }
+
+    }
+
+    private inner class SimpleTimer(private val action: () -> Unit) : AbstractTimer() {
+
+        override fun run() {
+            asyncExecutor.executeOnMainThread(action)
+        }
+
+    }
+
+    private inner class RepeatingTimer(private val maxRepetitions: Int, private val action: () -> Unit) : AbstractTimer() {
 
         private var currentRepetition = 0
 
         override fun run() {
             asyncExecutor.executeOnMainThread(action)
             currentRepetition++
-            if (currentRepetition >= repetitions) {
-                while (!this::future.isInitialized) {
-                    Thread.yield()
-                }
-                future.cancel(false)
+            if (currentRepetition >= maxRepetitions) {
+                stop()
             }
-        }
-
-    }
-
-    private inner class Task(private val action: () -> Unit) : Runnable {
-
-        override fun run() {
-            asyncExecutor.executeOnMainThread(action)
         }
 
     }
