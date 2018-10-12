@@ -43,7 +43,9 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
     }
 
     private fun getPriority(listener: Any): Int {
-        val priority = listener::class.java.getAnnotation(Priority::class.java)?.value
+        val priority = listener::class.java.getAnnotation(Priority::class.java)?.takeIf {
+            it.listenerClass == listenerClass
+        }?.value
         return when {
             priority != null -> priority
             else -> {
