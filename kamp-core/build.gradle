@@ -147,7 +147,6 @@ textKeyGenerator {
 }
 
 compileKotlin.dependsOn(
-        generateTextKeys,
         generateSAMPConstantsClass,
         generateSAMPCallbacksClass,
         generateSAMPNativeFunctionsClass,
@@ -155,7 +154,6 @@ compileKotlin.dependsOn(
         generateSAMPNativeFunctionExecutorImplClass
 )
 compileJava.dependsOn(
-        generateTextKeys,
         generateSAMPConstantsClass,
         generateSAMPCallbacksClass,
         generateSAMPNativeFunctionsClass,

@@ -49,7 +49,4 @@ serverStarter {
     rconPassword = "test1234"
 }
 
-compileKotlin.dependsOn generateTextKeys
-compileJava.dependsOn generateTextKeys
-
-configureServer.dependsOn build
+configureServer.dependsOn(project(":kamp-plugin").build)
