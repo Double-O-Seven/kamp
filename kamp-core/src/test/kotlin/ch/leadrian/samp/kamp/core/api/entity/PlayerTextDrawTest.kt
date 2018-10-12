@@ -42,6 +42,7 @@ internal class PlayerTextDrawTest {
             val playerId = PlayerId.valueOf(13)
             val player = mockk<Player> {
                 every { id } returns playerId
+                every { isConnected } returns true
             }
             val playerTextDrawId = PlayerTextDrawId.valueOf(69)
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -68,6 +69,7 @@ internal class PlayerTextDrawTest {
             val playerId = PlayerId.valueOf(13)
             val player = mockk<Player> {
                 every { id } returns playerId
+                every { isConnected } returns true
             }
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
                 every {
@@ -106,6 +108,7 @@ internal class PlayerTextDrawTest {
         @BeforeEach
         fun setUp() {
             every { player.id } returns playerId
+            every { player.isConnected } returns true
             every {
                 nativeFunctionExecutor.createPlayerTextDraw(any(), any(), any(), any())
             } returns playerTextDrawId.value
@@ -760,6 +763,16 @@ internal class PlayerTextDrawTest {
 
                 assertThat(isDestroyed)
                         .isFalse()
+            }
+
+            @Test
+            fun givenPlayerIsNotConnectedIsDestroyShouldBeTrue() {
+                every { player.isConnected } returns false
+
+                val isDestroyed = playerTextDraw.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
 
             @Test

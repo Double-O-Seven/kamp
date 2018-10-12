@@ -32,6 +32,7 @@ internal class PlayerMapObjectTest {
     @BeforeEach
     fun setUp() {
         every { player.id } returns playerId
+        every { player.isConnected } returns true
     }
 
     @Nested
@@ -452,6 +453,16 @@ internal class PlayerMapObjectTest {
 
                 assertThat(isDestroyed)
                         .isFalse()
+            }
+
+            @Test
+            fun givenPlayerIsNotConnectedIsDestroyShouldBeTrue() {
+                every { player.isConnected } returns false
+
+                val isDestroyed = playerMapObject.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
 
             @Test

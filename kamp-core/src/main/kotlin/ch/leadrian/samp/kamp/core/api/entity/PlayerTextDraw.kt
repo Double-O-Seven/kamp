@@ -253,6 +253,7 @@ internal constructor(
 
     override var isDestroyed: Boolean = false
         private set
+        get() = field || !player.isConnected
 
     override fun destroy() {
         if (isDestroyed) return

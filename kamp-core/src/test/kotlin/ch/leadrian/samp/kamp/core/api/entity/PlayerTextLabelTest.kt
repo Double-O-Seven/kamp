@@ -30,6 +30,7 @@ internal class PlayerTextLabelTest {
             val playerId = PlayerId.valueOf(65)
             val player = mockk<Player> {
                 every { id } returns playerId
+                every { isConnected } returns true
             }
             val attachToPlayerId = PlayerId.valueOf(65)
             val attachToPlayer = mockk<Player> {
@@ -79,6 +80,7 @@ internal class PlayerTextLabelTest {
             val playerId = PlayerId.valueOf(65)
             val player = mockk<Player> {
                 every { id } returns playerId
+                every { isConnected } returns true
             }
             val playerTextLabelId = PlayerTextLabelId.valueOf(69)
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
@@ -169,6 +171,7 @@ internal class PlayerTextLabelTest {
         @BeforeEach
         fun setUp() {
             every { player.id } returns playerId
+            every { player.isConnected } returns true
             every {
                 nativeFunctionExecutor.createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns playerTextLabelId.value
@@ -271,6 +274,16 @@ internal class PlayerTextLabelTest {
 
                 assertThat(isDestroyed)
                         .isFalse()
+            }
+
+            @Test
+            fun givenPlayerIsNotConnectedIsDestroyShouldBeTrue() {
+                every { player.isConnected } returns false
+
+                val isDestroyed = playerTextLabel.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
 
             @Test
