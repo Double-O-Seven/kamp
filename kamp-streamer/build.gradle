@@ -1,0 +1,8 @@
+dependencies {
+
+    compile(
+            project(':kamp-core'),
+            'de.lmu.ifi.dbs.elki:elki:0.7.1'
+    )
+
+}
