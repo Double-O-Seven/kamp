@@ -1,8 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -321,7 +321,7 @@ internal class MapObjectTest {
             mapObject.setMaterial(
                     index = 187,
                     modelId = 1337,
-                    color = Colors.RED,
+                    color = colorOf(0x11223344),
                     textureName = "texture A",
                     txdName = "txd A"
             )
@@ -331,7 +331,7 @@ internal class MapObjectTest {
                         objectid = mapObjectId.value,
                         materialindex = 187,
                         modelid = 1337,
-                        materialcolor = Colors.RED.value,
+                        materialcolor = 0x44112233,
                         texturename = "texture A",
                         txdname = "txd A"
                 )
@@ -353,8 +353,8 @@ internal class MapObjectTest {
                     textAlignment = ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment.CENTER,
                     fontFace = "Comic Sans",
                     isBold = isBold,
-                    fontColor = Colors.BLUE,
-                    backColor = Colors.AQUA
+                    fontColor = colorOf(0x11223344),
+                    backColor = colorOf(0x55667788)
             )
 
             verify {
@@ -367,8 +367,8 @@ internal class MapObjectTest {
                         textalignment = ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment.CENTER.value,
                         fontface = "Comic Sans",
                         bold = isBold,
-                        fontcolor = Colors.BLUE.value,
-                        backcolor = Colors.AQUA.value
+                        fontcolor = 0x44112233,
+                        backcolor = 0x88556677.toInt()
                 )
             }
         }

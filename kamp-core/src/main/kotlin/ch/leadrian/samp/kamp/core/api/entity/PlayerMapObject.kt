@@ -138,18 +138,17 @@ internal constructor(
             coordinates: Vector3D,
             speed: Float,
             rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
-    ): Int =
-            nativeFunctionExecutor.movePlayerObject(
-                    playerid = player.id.value,
-                    objectid = id.value,
-                    x = coordinates.x,
-                    y = coordinates.y,
-                    z = coordinates.z,
-                    Speed = speed,
-                    RotX = rotation.x,
-                    RotY = rotation.y,
-                    RotZ = rotation.z
-            )
+    ): Int = nativeFunctionExecutor.movePlayerObject(
+            playerid = player.id.value,
+            objectid = id.value,
+            x = coordinates.x,
+            y = coordinates.y,
+            z = coordinates.z,
+            Speed = speed,
+            RotX = rotation.x,
+            RotY = rotation.y,
+            RotZ = rotation.z
+    )
 
     fun stop() {
         nativeFunctionExecutor.stopPlayerObject(playerid = player.id.value, objectid = id.value)
@@ -164,7 +163,7 @@ internal constructor(
                 objectid = id.value,
                 materialindex = index,
                 modelid = modelId,
-                materialcolor = color.value,
+                materialcolor = color.argb,
                 texturename = textureName,
                 txdname = txdName
         )
@@ -191,8 +190,8 @@ internal constructor(
                 fontface = fontFace,
                 fontsize = fontSize,
                 bold = isBold,
-                fontcolor = fontColor.value,
-                backcolor = backColor.value,
+                fontcolor = fontColor.argb,
+                backcolor = backColor.argb,
                 textalignment = textAlignment.value
         )
     }
