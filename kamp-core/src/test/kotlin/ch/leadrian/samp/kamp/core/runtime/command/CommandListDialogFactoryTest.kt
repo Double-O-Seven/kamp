@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
+import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
@@ -217,6 +218,11 @@ internal class CommandListDialogFactoryTest {
 
         @Command("batman")
         fun bat(player: Player, weapon: WeaponModel) {
+        }
+
+        @Unlisted
+        @Command
+        fun hideMe(player: Player) {
         }
 
     }

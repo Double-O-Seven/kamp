@@ -14,7 +14,7 @@ internal class CommandListDialogFactory
 constructor(private val dialogService: DialogService) {
 
     fun create(commands: Commands, maxCommandsPerPage: Int): Dialog {
-        return if (commands.definitions.size <= maxCommandsPerPage) {
+        return if (commands.listedDefinitions.size <= maxCommandsPerPage) {
             createSinglePageDialog(commands)
         } else {
             createPagedDialog(commands, maxCommandsPerPage)
@@ -25,7 +25,7 @@ constructor(private val dialogService: DialogService) {
         return dialogService.createTabListDialog<String> {
             buildSinglePageCaption(commands)
             buildHeaderContent()
-            buildItems(commands.definitions.sortedBy { it.name })
+            buildItems(commands.listedDefinitions.sortedBy { it.name })
             buildSinglePageButtons()
         }
     }
@@ -46,7 +46,7 @@ constructor(private val dialogService: DialogService) {
     }
 
     private fun getPages(commands: Commands, maxCommandsPerPage: Int) =
-            commands.definitions.asSequence().sortedBy { it.name }.chunked(maxCommandsPerPage).toList()
+            commands.listedDefinitions.asSequence().sortedBy { it.name }.chunked(maxCommandsPerPage).toList()
 
     private fun TabListDialogBuilder<String>.buildSinglePageCaption(commands: Commands) {
         caption(commands::getCommandListDialogTitle)

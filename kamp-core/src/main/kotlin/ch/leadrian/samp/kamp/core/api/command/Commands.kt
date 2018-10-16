@@ -25,6 +25,8 @@ abstract class Commands {
     lateinit var definitions: List<CommandDefinition>
         internal set
 
+    val listedDefinitions: List<CommandDefinition> by lazy { definitions.filter { it.isListed } }
+
     open val commandListDialogPageSize: Int = 30
 
     open fun getCommandListDialogTitle(player: Player): String =
