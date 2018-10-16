@@ -28,6 +28,8 @@ internal class ColorsTest {
                                 .isEqualTo(0xDD)
                         assertThat(it.rgb)
                                 .isEqualTo(0xAABBCC)
+                        assertThat(it.argb)
+                                .isEqualTo(0xDDAABBCC.toInt())
                     }
         }
 
@@ -50,6 +52,8 @@ internal class ColorsTest {
                                 .isEqualTo(0xDD)
                         assertThat(it.rgb)
                                 .isEqualTo(0xAABBCC)
+                        assertThat(it.argb)
+                                .isEqualTo(0xDDAABBCC.toInt())
                     }
         }
 
@@ -95,6 +99,8 @@ internal class ColorsTest {
                                 .isEqualTo(0xDD)
                         assertThat(it.rgb)
                                 .isEqualTo(0xAABBCC)
+                        assertThat(it.argb)
+                                .isEqualTo(0xDDAABBCC.toInt())
                     }
         }
 
@@ -116,6 +122,8 @@ internal class ColorsTest {
                                 .isEqualTo(0xDD)
                         assertThat(it.rgb)
                                 .isEqualTo(0xAABBCC)
+                        assertThat(it.argb)
+                                .isEqualTo(0xDDAABBCC.toInt())
                     }
         }
 
@@ -187,6 +195,16 @@ internal class ColorsTest {
 
             assertThat(mutableColor.value)
                     .isEqualTo(0x112233DD)
+        }
+
+        @Test
+        fun shouldSetArgbValue() {
+            val mutableColor = mutableColorOf(0xAABBCCDD.toInt())
+
+            mutableColor.argb = 0x44112233
+
+            assertThat(mutableColor.value)
+                    .isEqualTo(0x11223344)
         }
     }
 }

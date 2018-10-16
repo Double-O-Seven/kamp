@@ -32,6 +32,13 @@ internal data class MutableColorImpl(override var value: Int) : MutableColor {
             this.value = (this.value and 0xFF) or ((value and 0xFFFFFF) shl 8)
         }
 
+
+    override var argb: Int
+        get() = ((value and 0xFF) shl 24) or rgb
+        set(value) {
+            this.value = ((value and 0xFFFFFF) shl 8) or ((value shr 24) and 0xFF)
+        }
+
     override fun toColor(): Color = ColorImpl(value)
 
     override fun toMutableColor(): MutableColor = this

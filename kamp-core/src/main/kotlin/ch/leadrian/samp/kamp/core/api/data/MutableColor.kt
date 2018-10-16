@@ -13,4 +13,6 @@ interface MutableColor : Color {
     override var a: Int
 
     override var rgb: Int
+
+    override var argb: Int
 }
