@@ -20,7 +20,7 @@ abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<
     abstract override fun getMbr(p1: HyperPoint, p2: HyperPoint): HyperRect<*>
 
     fun add(streamable: S) {
-        rTree.add(Entry(streamable))
+        rTree.add(newEntry(streamable))
     }
 
     fun remove(streamable: S) {
@@ -29,7 +29,7 @@ abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<
 
     fun update(streamable: S) {
         val oldEntry = streamable.spatialIndexEntry
-        rTree.update(oldEntry, Entry(streamable))
+        rTree.update(oldEntry, newEntry(streamable))
     }
 
     fun getIntersections(coordinates: Vector3D): List<S> {
@@ -43,11 +43,14 @@ abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<
         return streamInCandidates
     }
 
-    class Entry<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>>(internal val streamable: S) {
-
-        init {
-            streamable.spatialIndexEntry = this
+    private fun newEntry(streamable: S): Entry<S, T> {
+        return Entry(streamable).also {
+            streamable.spatialIndexEntry = it
         }
+    }
+
+    class Entry<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>>
+    internal constructor(internal val streamable: S) {
 
         val boundingBox: T = streamable.getBoundingBox()
 
