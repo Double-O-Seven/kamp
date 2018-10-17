@@ -82,6 +82,7 @@ constructor(
                 t = System.currentTimeMillis() - t
                 log.info("Streaming with {} took {} ms", streamer::class.java, t)
             } catch (e: Exception) {
+                log.error("Exception while streaming with {}", streamer, e)
             }
         }
     }
