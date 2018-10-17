@@ -16,6 +16,7 @@ import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
+import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.PlayerAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.VehicleAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.util.TimeProvider
@@ -32,12 +33,15 @@ internal constructor(
         var virtualWorldIds: MutableSet<Int>,
         private val playerMapObjectService: PlayerMapObjectService,
         private val timeProvider: TimeProvider,
-        private val timerExecutor: TimerExecutor
+        private val timerExecutor: TimerExecutor,
+        private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler
 ) : DistanceBasedPlayerStreamable, OnPlayerDisconnectListener {
 
     private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
 
     private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+
+    private val onDestroyHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
     private var isCameraCollisionDisabled: Boolean = false
 
@@ -58,10 +62,7 @@ internal constructor(
     }
 
     var coordinates: Vector3D = coordinates
-        get() {
-            requireNotDestroyed()
-            return movement?.coordinates ?: field
-        }
+        get() = movement?.coordinates ?: field
         set(value) {
             requireNotDestroyed()
             if (isMoving) {
@@ -120,8 +121,7 @@ internal constructor(
         )
         movement.timer = timerExecutor.addTimer(movement.duration, TimeUnit.MILLISECONDS) {
             if (this.movement === movement) {
-                this.movement = null
-                onMovedHandlers.forEach { it.invoke(this) }
+                onMoved()
             }
         }
         return movement
@@ -131,11 +131,16 @@ internal constructor(
         requireNotDestroyed()
         if (!isMoving) return
         movement?.stopTimer()
-        movement = null
         playerMapObjects.forEach { _, playerMapObject ->
             playerMapObject.stop()
         }
+        onMoved()
+    }
+
+    private fun onMoved() {
+        movement = null
         onMovedHandlers.forEach { it.invoke(this) }
+        onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
     }
 
     fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
@@ -190,6 +195,7 @@ internal constructor(
     }
 
     override fun onStreamIn(forPlayer: Player) {
+        requireNotDestroyed()
         if (playerMapObjects.contains(forPlayer)) {
             throw IllegalStateException("Streamable map object is already streamed in")
         }
@@ -216,6 +222,7 @@ internal constructor(
     }
 
     override fun onStreamOut(forPlayer: Player) {
+        requireNotDestroyed()
         val playerMapObject = playerMapObjects.remove(forPlayer)
                 ?: throw IllegalStateException("Streamable player map object was not streamed it")
         playerMapObject.destroy()
@@ -238,12 +245,18 @@ internal constructor(
         playerMapObjects.remove(player)
     }
 
+    @JvmSynthetic
+    internal fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {
+        onDestroyHandlers += onDestroy
+    }
+
     override var isDestroyed: Boolean = false
         private set
 
     override fun destroy() {
         if (isDestroyed) return
 
+        onDestroyHandlers.forEach { it.invoke(this) }
         playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
         playerMapObjects.clear()
         isDestroyed = true
