@@ -422,8 +422,7 @@ internal constructor(
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: Vehicle.() -> Unit) {
+    fun onDestroy(onDestroy: Vehicle.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

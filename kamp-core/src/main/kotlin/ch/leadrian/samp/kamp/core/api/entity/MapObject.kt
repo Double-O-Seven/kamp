@@ -218,8 +218,7 @@ internal constructor(
         onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
     }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: MapObject.() -> Unit) {
+    fun onDestroy(onDestroy: MapObject.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

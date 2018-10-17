@@ -137,8 +137,7 @@ internal constructor(
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: Menu.() -> Unit) {
+    fun onDestroy(onDestroy: Menu.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

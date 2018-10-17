@@ -127,8 +127,7 @@ internal constructor(
             nativeFunctionExecutor.setActorInvulnerable(id.value, value)
         }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: Actor.() -> Unit) {
+    fun onDestroy(onDestroy: Actor.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

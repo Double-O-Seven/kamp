@@ -218,8 +218,7 @@ internal constructor(
                     .firstOrNull { it == OnPlayerClickTextDrawListener.Result.Processed }
                     ?: OnPlayerClickTextDrawListener.Result.NotFound
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: TextDraw.() -> Unit) {
+    fun onDestroy(onDestroy: TextDraw.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

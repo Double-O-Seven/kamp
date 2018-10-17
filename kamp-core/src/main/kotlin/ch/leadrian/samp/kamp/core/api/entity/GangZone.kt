@@ -75,8 +75,7 @@ internal constructor(
         nativeFunctionExecutor.gangZoneStopFlashForAll(id.value)
     }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: GangZone.() -> Unit) {
+    fun onDestroy(onDestroy: GangZone.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

@@ -970,13 +970,11 @@ internal constructor(
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
 
-    @JvmSynthetic
-    internal fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
+    fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
         onDisconnectHandlers += onDisconnect
     }
 
-    @JvmSynthetic
-    internal fun onNameChange(onNameChange: Player.(String, String) -> Unit) {
+    fun onNameChange(onNameChange: Player.(String, String) -> Unit) {
         onNameChangeHandlers += onNameChange
     }
 
