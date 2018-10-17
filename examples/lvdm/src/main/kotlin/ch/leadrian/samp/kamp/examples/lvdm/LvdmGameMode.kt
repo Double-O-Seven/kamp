@@ -18,6 +18,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerClassService
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
+import ch.leadrian.samp.kamp.streamer.StreamerPlugin
 import com.google.inject.Module
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -303,5 +304,5 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
 
     override fun getModules(): List<Module> = listOf(LvdmModule())
 
-    override fun getPlugins(): List<Plugin> = emptyList()
+    override fun getPlugins(): List<Plugin> = listOf(StreamerPlugin())
 }
