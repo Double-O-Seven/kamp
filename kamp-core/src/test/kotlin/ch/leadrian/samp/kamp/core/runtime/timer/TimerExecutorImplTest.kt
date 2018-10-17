@@ -1,8 +1,14 @@
 package ch.leadrian.samp.kamp.core.runtime.timer
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
-import ch.leadrian.samp.kamp.core.runtime.async.ExecutorServiceFactory
-import io.mockk.*
+import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
+import io.mockk.Called
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested

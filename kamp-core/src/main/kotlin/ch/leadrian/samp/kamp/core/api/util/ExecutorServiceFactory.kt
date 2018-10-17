@@ -1,10 +1,10 @@
-package ch.leadrian.samp.kamp.core.runtime.async
+package ch.leadrian.samp.kamp.core.api.util
 
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import javax.inject.Inject
 
-internal class ExecutorServiceFactory
+class ExecutorServiceFactory
 @Inject
 constructor() {
 

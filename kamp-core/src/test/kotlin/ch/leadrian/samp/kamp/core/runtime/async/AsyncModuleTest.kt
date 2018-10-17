@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.async
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule

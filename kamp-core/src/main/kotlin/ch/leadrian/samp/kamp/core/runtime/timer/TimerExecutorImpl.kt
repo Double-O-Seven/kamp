@@ -3,8 +3,8 @@ package ch.leadrian.samp.kamp.core.runtime.timer
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
+import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
-import ch.leadrian.samp.kamp.core.runtime.async.ExecutorServiceFactory
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
