@@ -17,16 +17,16 @@ internal constructor(
             streamDistance: Float,
             coordinates: Vector3D,
             rotation: Vector3D,
-            interiorId: Int? = null,
-            virtualWorldId: Int? = null
+            interiorId: Int,
+            virtualWorldId: Int
     ): StreamableMapObject = mapObjectStreamer.createMapObject(
             modelId = modelId,
             priority = priority,
             streamDistance = streamDistance,
             coordinates = coordinates,
             rotation = rotation,
-            interiorIds = interiorId?.let { mutableSetOf(it) } ?: mutableSetOf(),
-            virtualWorldIds = virtualWorldId?.let { mutableSetOf(it) } ?: mutableSetOf()
+            interiorIds = mutableSetOf(interiorId),
+            virtualWorldIds = mutableSetOf(virtualWorldId)
     )
 
     @JvmOverloads
