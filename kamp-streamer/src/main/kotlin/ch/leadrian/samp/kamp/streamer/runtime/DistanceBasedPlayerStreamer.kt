@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
 import java.util.stream.Collectors.toSet
+import java.util.stream.Stream
 
 abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         private val capacity: Int,
@@ -33,7 +34,6 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
 
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
         return getStreamInCandidates(streamLocation)
-                .stream()
                 .filter { !it.isDestroyed }
                 .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
                 .filter { it.distance <= it.streamable.streamDistance }
@@ -80,7 +80,7 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         streamedInStreamables.removeAll(player)
     }
 
-    protected abstract fun getStreamInCandidates(streamLocation: StreamLocation): Collection<T>
+    protected abstract fun getStreamInCandidates(streamLocation: StreamLocation): Stream<T>
 
     private class StreamingInfo<T : DistanceBasedPlayerStreamable>(val streamable: T, val distance: Float)
 

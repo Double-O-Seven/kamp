@@ -47,7 +47,7 @@ constructor(
     @PostConstruct
     fun initialize() {
         scheduledExecutorService = executorServiceFactory.createSingleThreadScheduledExecutor()
-        scheduledExecutorService.schedule(this::execute, streamRateInMs, TimeUnit.MILLISECONDS)
+        scheduledExecutorService.scheduleAtFixedRate(this::execute, streamRateInMs, streamRateInMs, TimeUnit.MILLISECONDS)
     }
 
     @PreDestroy
@@ -77,9 +77,11 @@ constructor(
     private fun stream(streamLocations: List<StreamLocation>) {
         streamers.forEach { streamer ->
             try {
+                var t = System.currentTimeMillis()
                 streamer.stream(streamLocations)
+                t = System.currentTimeMillis() - t
+                log.info("Streaming with {} took {} ms", streamer::class.java, t)
             } catch (e: Exception) {
-                log.error("Exception while streaming with {}", streamer, e)
             }
         }
     }

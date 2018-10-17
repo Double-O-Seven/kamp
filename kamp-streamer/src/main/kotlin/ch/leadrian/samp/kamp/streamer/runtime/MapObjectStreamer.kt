@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
+import java.util.stream.Stream
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -50,5 +51,5 @@ constructor(
         return streamableMapObject
     }
 
-    override fun getStreamInCandidates(streamLocation: StreamLocation): Collection<StreamableMapObject> = streamableMapObjects
+    override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObject> = streamableMapObjects.stream()
 }
