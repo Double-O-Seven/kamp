@@ -20,6 +20,7 @@ import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.PlayerAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.VehicleAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.util.TimeProvider
+import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.concurrent.TimeUnit
 
 class StreamableMapObject
@@ -35,11 +36,15 @@ internal constructor(
         private val timeProvider: TimeProvider,
         private val timerExecutor: TimerExecutor,
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler
-) : DistanceBasedPlayerStreamable, OnPlayerDisconnectListener {
+) : DistanceBasedPlayerStreamable, SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(), OnPlayerDisconnectListener {
 
     private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
 
+    private val onStartMovingHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+
     private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+
+    private val onAttachHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
     private val onDestroyHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
@@ -48,36 +53,36 @@ internal constructor(
     private var movement: Movement? = null
 
     private var attachmentTarget: AttachmentTarget? = null
+        get() {
+            if (field != null && field?.isValid == false) {
+                field = null
+            }
+            return field
+        }
 
     private val materialsByIndex: MutableMap<Int, Material> = mutableMapOf()
 
     private val materialTextsByIndex: MutableMap<Int, MaterialText> = mutableMapOf()
 
-    private fun attachTo(attachmentTarget: AttachmentTarget) {
-        requireNotDestroyed()
-        this.attachmentTarget = attachmentTarget
-        playerMapObjects.forEach { _, playerMapObject ->
-            attachmentTarget.attach(playerMapObject)
-        }
-    }
-
     var coordinates: Vector3D = coordinates
-        get() = movement?.coordinates ?: field
+        get() = attachmentTarget?.playerMapObjectCoordinates
+                ?: movement?.coordinates
+                ?: field
         set(value) {
             requireNotDestroyed()
-            if (isMoving) {
-                stop()
-            }
-            attachmentTarget = null
+            if (isAttached) return
+            cancelMovement()
             field = value.toVector3D()
             playerMapObjects.forEach { _, playerMapObject ->
                 playerMapObject.coordinates = field
             }
+            onBoundingBoxChanged()
         }
 
     var rotation: Vector3D = rotation
         set(value) {
             requireNotDestroyed()
+            if (isAttached) return
             field = value.toVector3D()
             playerMapObjects.forEach { _, playerMapObject ->
                 playerMapObject.rotation = field
@@ -93,9 +98,6 @@ internal constructor(
         }
     }
 
-    val isMoving: Boolean
-        get() = movement != null
-
     @JvmOverloads
     fun moveTo(
             coordinates: Vector3D,
@@ -103,6 +105,10 @@ internal constructor(
             rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
     ) {
         requireNotDestroyed()
+        if (isAttached) return
+        if (!isMoving) {
+            onStartMoving()
+        }
         this.movement?.stopTimer()
         this.movement = createMovement(coordinates, rotation, speed)
         playerMapObjects.forEach { _, playerMapObject ->
@@ -130,17 +136,37 @@ internal constructor(
     fun stop() {
         requireNotDestroyed()
         if (!isMoving) return
-        movement?.stopTimer()
+        cancelMovement()
         playerMapObjects.forEach { _, playerMapObject ->
             playerMapObject.stop()
         }
-        onMoved()
+    }
+
+    val isMoving: Boolean
+        get() = movement != null
+
+    private fun cancelMovement() {
+        movement?.stopTimer()
+        movement = null
     }
 
     private fun onMoved() {
         movement = null
         onMovedHandlers.forEach { it.invoke(this) }
         onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
+    }
+
+    fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
+        onMovedHandlers += onMoved
+    }
+
+    private fun onStartMoving() {
+        onStartMovingHandlers.forEach { it.invoke(this) }
+    }
+
+    @JvmSynthetic
+    internal fun onStartMoving(onStartMoving: StreamableMapObject.() -> Unit) {
+        onStartMovingHandlers += onStartMoving
     }
 
     fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
@@ -181,7 +207,7 @@ internal constructor(
     fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         if (isMoving) {
-            stop()
+            cancelMovement()
         }
         attachTo(PlayerAttachmentTarget(player = player, offset = offset, rotation = rotation))
     }
@@ -189,9 +215,37 @@ internal constructor(
     fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         if (isMoving) {
-            stop()
+            cancelMovement()
         }
         attachTo(VehicleAttachmentTarget(vehicle = vehicle, offset = offset, rotation = rotation))
+    }
+
+    fun detach() {
+        attachmentTarget?.let { this.coordinates = it.playerMapObjectCoordinates }
+        attachmentTarget = null
+        playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
+        playerMapObjects.clear()
+    }
+
+    private fun attachTo(attachmentTarget: AttachmentTarget) {
+        requireNotDestroyed()
+        this.attachmentTarget = attachmentTarget
+        playerMapObjects.forEach { _, playerMapObject ->
+            attachmentTarget.attach(playerMapObject)
+        }
+        onAttach()
+    }
+
+    val isAttached: Boolean
+        get() = attachmentTarget != null
+
+    private fun onAttach() {
+        onAttachHandlers.forEach { it.invoke(this) }
+    }
+
+    @JvmSynthetic
+    internal fun onAttach(onAttach: StreamableMapObject.() -> Unit) {
+        onAttachHandlers += onAttach
     }
 
     override fun onStreamIn(forPlayer: Player) {
@@ -237,16 +291,11 @@ internal constructor(
                 else -> coordinates.distanceTo(location)
             }
 
-    fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
-        onMovedHandlers += onMoved
-    }
-
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
         playerMapObjects.remove(player)
     }
 
-    @JvmSynthetic
-    internal fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {
+    fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 
@@ -259,7 +308,28 @@ internal constructor(
         onDestroyHandlers.forEach { it.invoke(this) }
         playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
         playerMapObjects.clear()
+        attachmentTarget = null
+        movement = null
         isDestroyed = true
+    }
+
+    override fun getBoundingBox(): Rect3d {
+        val coordinates = coordinates
+        val minX = coordinates.x - streamDistance
+        val minY = coordinates.y - streamDistance
+        val minZ = coordinates.z - streamDistance
+        val maxX = coordinates.x + streamDistance
+        val maxY = coordinates.y + streamDistance
+        val maxZ = coordinates.z + streamDistance
+
+        return Rect3d(
+                minX.toDouble(),
+                minY.toDouble(),
+                minZ.toDouble(),
+                maxX.toDouble(),
+                maxY.toDouble(),
+                maxZ.toDouble()
+        )
     }
 
     private class Material(
@@ -356,15 +426,29 @@ internal constructor(
 
         abstract fun attach(playerMapObject: PlayerMapObject)
 
+        abstract val coordinates: Vector3D
+
+        abstract val isValid: Boolean
+
+        val playerMapObjectCoordinates: Vector3D
+            // TODO include rotation to be really correct
+            get() = coordinates + offset
+
         class PlayerAttachmentTarget(
                 private val player: Player,
                 offset: Vector3D,
                 rotation: Vector3D
         ) : AttachmentTarget(offset = offset, rotation = rotation) {
 
+            override val isValid: Boolean
+                get() = player.isConnected
+
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(player = player, offset = offset, rotation = rotation)
             }
+
+            override val coordinates: Vector3D
+                get() = player.coordinates
 
         }
 
@@ -374,9 +458,15 @@ internal constructor(
                 rotation: Vector3D
         ) : AttachmentTarget(offset = offset, rotation = rotation) {
 
+            override val isValid: Boolean
+                get() = !vehicle.isDestroyed
+
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(vehicle = vehicle, offset = offset, rotation = rotation)
             }
+
+            override val coordinates: Vector3D
+                get() = vehicle.coordinates
         }
 
     }

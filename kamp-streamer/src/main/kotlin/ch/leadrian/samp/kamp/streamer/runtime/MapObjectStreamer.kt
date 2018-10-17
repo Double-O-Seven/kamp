@@ -1,12 +1,15 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
+import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import java.util.stream.Stream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -24,7 +27,9 @@ constructor(
         playerService
 ) {
 
-    private val streamableMapObjects = mutableSetOf<StreamableMapObject>()
+    private val mapObjects = mutableSetOf<StreamableMapObject>()
+    private val movingOrAttachedMapObjects = mutableSetOf<StreamableMapObject>()
+    private val spatialIndex = SpatialIndex3D<StreamableMapObject>()
 
     fun createMapObject(
             modelId: Int,
@@ -35,7 +40,7 @@ constructor(
             interiorIds: MutableSet<Int>,
             virtualWorldIds: MutableSet<Int>
     ): StreamableMapObject {
-        val streamableMapObject = streamableMapObjectFactory.create(
+        val mapObject = streamableMapObjectFactory.create(
                 modelId = modelId,
                 priority = priority,
                 streamDistance = streamDistance,
@@ -44,12 +49,37 @@ constructor(
                 interiorIds = interiorIds,
                 virtualWorldIds = virtualWorldIds
         )
-        streamableMapObjects += streamableMapObject
-        streamableMapObject.onDestroy {
-            streamableMapObjects -= this
+        mapObjects += mapObject
+        spatialIndex.add(mapObject)
+        mapObject.onBoundingBoxChanged {
+            if (!movingOrAttachedMapObjects.contains(this)) {
+                spatialIndex.update(this)
+            }
         }
-        return streamableMapObject
+        mapObject.onDestroy {
+            mapObjects -= this
+            movingOrAttachedMapObjects -= this
+            spatialIndex.remove(this)
+        }
+        mapObject.onAttach { enableNonIndexStreaming(this) }
+        mapObject.onStartMoving { enableNonIndexStreaming(this) }
+        return mapObject
     }
 
-    override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObject> = streamableMapObjects.stream()
+    private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObject) {
+        if (movingOrAttachedMapObjects.add(streamableMapObject)) {
+            spatialIndex.remove(streamableMapObject)
+        }
+    }
+
+    override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
+        mapObjects.forEach { it.onPlayerDisconnect(player, reason) }
+        super.onPlayerDisconnect(player, reason)
+    }
+
+    override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObject> =
+            Stream.concat(
+                    spatialIndex.getIntersections(streamLocation.location).stream(),
+                    movingOrAttachedMapObjects.stream()
+            )
 }
