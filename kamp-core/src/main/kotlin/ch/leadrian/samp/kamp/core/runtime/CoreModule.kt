@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import ch.leadrian.samp.kamp.core.runtime.async.AsyncModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.command.CommandModule
+import ch.leadrian.samp.kamp.core.runtime.entity.extension.EntityExtensionModule
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
@@ -26,6 +27,7 @@ internal class CoreModule(
         install(CommandModule())
         install(EntityFactoryModule())
         install(EntityRegistryModule())
+        install(EntityExtensionModule())
         install(ServiceModule())
         install(TextModule())
         install(TimerModule())
