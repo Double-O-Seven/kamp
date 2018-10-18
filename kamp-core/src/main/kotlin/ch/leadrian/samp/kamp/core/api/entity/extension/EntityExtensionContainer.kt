@@ -11,15 +11,11 @@ class EntityExtensionContainer<E : Any>(val entity: E) : Destroyable {
 
     private val extensions: MutableMap<KClass<*>, Any> = mutableMapOf()
 
-    fun <T : Any> install(entityClass: KClass<T>, entityExtensionFactory: EntityExtensionFactory<E, T>) {
+    fun <T : Any> install(entityExtensionFactory: EntityExtensionFactory<E, T>) {
         requireNotDestroyed()
-        extensions.merge(entityClass, entityExtensionFactory.create(entity)) { extension, _ ->
+        extensions.merge(entityExtensionFactory.extensionClass, entityExtensionFactory.create(entity)) { extension, _ ->
             throw EntityExtensionAlreadyInstalledException(extension.toString())
         }
-    }
-
-    inline fun <reified T : Any> install(entityExtensionFactory: EntityExtensionFactory<E, T>) {
-        install(T::class, entityExtensionFactory)
     }
 
     operator fun <T : Any> get(entityClass: KClass<T>): T =

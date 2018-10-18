@@ -28,19 +28,7 @@ internal class EntityExtensionContainerTest {
         val extension = mockk<FooExtension>()
         val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns extension
-        }
-
-        entityExtensionContainer.install(FooExtension::class, entityExtensionFactory)
-
-        assertThat(entityExtensionContainer[FooExtension::class])
-                .isEqualTo(extension)
-    }
-
-    @Test
-    fun shouldInlineInstallExtension() {
-        val extension = mockk<FooExtension>()
-        val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
-            every { create(testEntity) } returns extension
+            every { extensionClass } returns FooExtension::class
         }
 
         entityExtensionContainer.install(entityExtensionFactory)
@@ -54,10 +42,12 @@ internal class EntityExtensionContainerTest {
         val fooExtension = mockk<FooExtension>()
         val fooEntityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns fooExtension
+            every { extensionClass } returns FooExtension::class
         }
         val barExtension = mockk<BarExtension>()
         val barEntityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, BarExtension>> {
             every { create(testEntity) } returns barExtension
+            every { extensionClass } returns BarExtension::class
         }
 
         entityExtensionContainer.install(fooEntityExtensionFactory)
@@ -72,9 +62,10 @@ internal class EntityExtensionContainerTest {
         val extension = mockk<FooExtension>()
         val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns extension
+            every { extensionClass } returns FooExtension::class
         }
 
-        entityExtensionContainer.install(FooExtension::class, entityExtensionFactory)
+        entityExtensionContainer.install(entityExtensionFactory)
 
         assertThat(entityExtensionContainer.get<FooExtension>())
                 .isEqualTo(extension)
@@ -85,6 +76,7 @@ internal class EntityExtensionContainerTest {
         val extension = mockk<FooExtension>()
         val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns extension
+            every { extensionClass } returns FooExtension::class
         }
         entityExtensionContainer.install(entityExtensionFactory)
 
@@ -99,6 +91,7 @@ internal class EntityExtensionContainerTest {
         val extension = mockk<FooExtension>()
         val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns extension
+            every { extensionClass } returns FooExtension::class
         }
         entityExtensionContainer.install(entityExtensionFactory)
 
@@ -113,6 +106,7 @@ internal class EntityExtensionContainerTest {
         val extension = mockk<FooExtension>()
         val entityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
             every { create(testEntity) } returns extension
+            every { extensionClass } returns FooExtension::class
         }
         entityExtensionContainer.install(entityExtensionFactory)
 
@@ -130,14 +124,17 @@ internal class EntityExtensionContainerTest {
             val fooExtension = mockk<FooExtension>(relaxed = true)
             val fooEntityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, FooExtension>> {
                 every { create(testEntity) } returns fooExtension
+                every { extensionClass } returns FooExtension::class
             }
             val barExtension = mockk<BarExtension>(relaxed = true)
             val barEntityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, BarExtension>> {
                 every { create(testEntity) } returns barExtension
+                every { extensionClass } returns BarExtension::class
             }
             val quxExtension = mockk<QuxExtension>(relaxed = true)
             val quxEntityExtensionFactory = mockk<EntityExtensionFactory<TestEntity, QuxExtension>> {
                 every { create(testEntity) } returns quxExtension
+                every { extensionClass } returns QuxExtension::class
             }
             entityExtensionContainer.install(barEntityExtensionFactory)
             entityExtensionContainer.install(fooEntityExtensionFactory)
