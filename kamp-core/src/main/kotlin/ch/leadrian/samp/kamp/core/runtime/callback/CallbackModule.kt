@@ -21,7 +21,7 @@ internal class CallbackModule : KampModule() {
         bind(CallbackProcessor::class.java)
         bind(CallbackListenerManager::class.java)
 
-        newCallbackListenerRegistry().apply {
+        newCallbackListenerRegistrySetBinder().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
             addBinding().to(OnActorStreamOutHandler::class.java)
             addBinding().to(OnDialogResponseHandler::class.java)

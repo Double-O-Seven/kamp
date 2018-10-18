@@ -20,7 +20,10 @@ abstract class KampModule : AbstractModule() {
     protected fun newCommandsSetBinder(): Multibinder<Commands> =
             Multibinder.newSetBinder(binder(), Commands::class.java)
 
-    protected fun newCallbackListenerRegistry(): Multibinder<CallbackListenerRegistry<*>> =
+    protected fun newCallbackListenerRegistrySetBinder(): Multibinder<CallbackListenerRegistry<*>> =
             Multibinder.newSetBinder(binder(), object : TypeLiteral<@JvmSuppressWildcards CallbackListenerRegistry<*>>() {})
 
+    protected fun newPlayerExtensionFactorySetBinder() {
+
+    }
 }

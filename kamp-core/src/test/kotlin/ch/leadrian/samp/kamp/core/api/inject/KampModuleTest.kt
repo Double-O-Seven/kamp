@@ -85,7 +85,7 @@ internal class KampModuleTest {
             newCommandsSetBinder().apply {
                 addBinding().toInstance(FooCommands)
             }
-            newCallbackListenerRegistry().apply {
+            newCallbackListenerRegistrySetBinder().apply {
                 addBinding().toInstance(FooCallbackListenerRegistry)
             }
         }
@@ -104,7 +104,7 @@ internal class KampModuleTest {
             newCommandsSetBinder().apply {
                 addBinding().toInstance(BarCommands)
             }
-            newCallbackListenerRegistry().apply {
+            newCallbackListenerRegistrySetBinder().apply {
                 addBinding().toInstance(BarCallbackListenerRegistry)
             }
         }

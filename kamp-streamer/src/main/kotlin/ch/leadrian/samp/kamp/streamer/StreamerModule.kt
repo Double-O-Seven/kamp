@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.streamer.service.StreamerService
 internal class StreamerModule : AbstractStreamerModule() {
 
     override fun configure() {
-        newCallbackListenerRegistry().apply {
+        newCallbackListenerRegistrySetBinder().apply {
             addBinding().to(OnStreamableMapObjectMovedHandler::class.java)
         }
         newStreamerSetBinder().apply {
