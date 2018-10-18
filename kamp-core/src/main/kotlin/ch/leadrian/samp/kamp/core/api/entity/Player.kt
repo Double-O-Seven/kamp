@@ -40,6 +40,7 @@ import ch.leadrian.samp.kamp.core.api.data.timeOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
@@ -90,6 +91,8 @@ internal constructor(
 
     @get:JvmSynthetic
     internal val playerTextLabelRegistry = PlayerTextLabelRegistry()
+
+    val extensions: EntityExtensionContainer<Player> = EntityExtensionContainer(this)
 
     override val id: PlayerId = id
         get() = requireConnected { field }
@@ -988,6 +991,7 @@ internal constructor(
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
+        extensions.destroy()
         isConnected = false
         destroyMapIcons()
     }

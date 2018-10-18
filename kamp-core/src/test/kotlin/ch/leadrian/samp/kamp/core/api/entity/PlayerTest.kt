@@ -138,6 +138,12 @@ internal class PlayerTest {
     }
 
     @Test
+    fun shouldInitializeEntityExtensionContainer() {
+        assertThat(player.extensions.entity)
+                .isEqualTo(player)
+    }
+
+    @Test
     fun shouldSpawnPlayer() {
         every { nativeFunctionExecutor.spawnPlayer(any()) } returns true
 
@@ -3026,6 +3032,16 @@ internal class PlayerTest {
 
             assertThat(caughtThrowable)
                     .isInstanceOf(PlayerOfflineException::class.java)
+        }
+
+        @Test
+        fun shouldDestroyExtensions() {
+            player.onDisconnect(DisconnectReason.QUIT)
+
+            val isDestroyed = player.extensions.isDestroyed
+
+            assertThat(isDestroyed)
+                    .isTrue()
         }
 
         @Nested
