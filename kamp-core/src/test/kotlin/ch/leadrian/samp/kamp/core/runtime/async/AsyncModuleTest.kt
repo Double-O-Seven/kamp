@@ -5,6 +5,8 @@ import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
+import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
@@ -15,7 +17,13 @@ import org.junit.jupiter.api.Test
 
 internal class AsyncModuleTest {
 
-    private val modules = arrayOf(AsyncModule(), CallbackModule(), TestModule())
+    private val modules = arrayOf(
+            AsyncModule(),
+            CallbackModule(),
+            TestModule(),
+            EntityFactoryModule(),
+            TextModule()
+    )
 
     @Test
     fun shouldCreateInjector() {

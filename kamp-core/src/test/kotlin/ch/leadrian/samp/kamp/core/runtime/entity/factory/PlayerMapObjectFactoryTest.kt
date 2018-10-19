@@ -75,6 +75,7 @@ internal class PlayerMapObjectFactoryTest {
 
     @Test
     fun shouldUnregisterPlayerMapObjectOnDestroy() {
+        every { player.isConnected } returns true
         every { nativeFunctionExecutor.destroyPlayerObject(any(), any()) } returns true
         val playerMapObject = playerMapObjectFactory.create(
                 player = player,

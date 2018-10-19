@@ -70,6 +70,7 @@ internal class PlayerTextDrawFactoryTest {
 
     @Test
     fun shouldUnregisterPlayerTextDrawOnDestroy() {
+        every { player.isConnected } returns true
         every { nativeFunctionExecutor.playerTextDrawDestroy(any(), any()) } returns true
         val playerTextDraw = playerTextDrawFactory.create(
                 player = player,

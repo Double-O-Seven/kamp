@@ -91,6 +91,7 @@ internal class PlayerTextLabelFactoryTest {
 
     @Test
     fun shouldUnregisterPlayerTextLabelOnDestroy() {
+        every { player.isConnected } returns true
         every { nativeFunctionExecutor.deletePlayer3DTextLabel(any(), any()) } returns true
         val playerTextLabel = playerTextLabelFactory.create(
                 player = player,

@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.core.api.command.DefaultUnknownCommandHandler
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.TestModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.google.inject.Guice
 import com.google.inject.Inject
@@ -20,7 +21,13 @@ import org.junit.jupiter.api.Test
 
 internal class CommandModuleTest {
 
-    private val modules = arrayOf(TestModule(), TextModule(), CommandModule(), CallbackModule())
+    private val modules = arrayOf(
+            TestModule(),
+            TextModule(),
+            CommandModule(),
+            CallbackModule(),
+            EntityFactoryModule()
+    )
 
     @Test
     fun shouldCreateInjector() {
