@@ -9,6 +9,7 @@ import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
+import com.netflix.governator.annotations.Configuration
 import java.util.stream.Stream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,7 +38,7 @@ constructor(
     /*
      * Moving or attached map objects constantly change their location. We don't want to constantly update the spatial index.
      */
-    private val movingOrAttachedMapObjects = mutableSetOf<StreamableMapObject>()
+    private val movingOrAttachedMapObjects = HashSet<StreamableMapObject>()
 
     fun createMapObject(
             modelId: Int,

@@ -15,7 +15,7 @@ abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<
 
     private val rTree: SpatialSearch<Entry<S, T>> by lazy { SpatialSearches.rTree(this) }
 
-    override fun getBBox(t: Entry<S, T>): HyperRect<*> = t.streamable.getBoundingBox()
+    override fun getBBox(t: Entry<S, T>): HyperRect<*> = t.boundingBox
 
     abstract override fun getMbr(p1: HyperPoint, p2: HyperPoint): HyperRect<*>
 

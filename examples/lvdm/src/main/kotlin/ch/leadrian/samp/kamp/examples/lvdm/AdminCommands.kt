@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.command.AdminCommandAccessChecker
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
+import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.SanAndreasZone
@@ -16,6 +17,7 @@ import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
+import ch.leadrian.samp.kamp.streamer.service.StreamerService
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -27,7 +29,8 @@ constructor(
         private val dialogService: DialogService,
         private val vehicleService: VehicleService,
         private val messageSender: MessageSender,
-        private val mapObjectService: MapObjectService
+        private val mapObjectService: MapObjectService,
+        private val streamerService: StreamerService
 ) : Commands() {
 
     private val objectsByName: MutableMap<String, MapObject> = mutableMapOf()
@@ -117,5 +120,25 @@ constructor(
     fun attachobj(player: Player, @Parameter("name") name: String) {
         val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.attachTo(player, vector3DOf(0f, 0f, 0f), vector3DOf(0f, 0f, 0f))
+    }
+
+    @Command
+    @Description("Creates cows with a fixed offset at height z")
+    fun moo(player: Player, z: Float, offset: Int) {
+        var numberOfObjects = 0
+        for (x: Int in (-3000..3000) step offset) {
+            for (y: Int in (-3000..3000) step offset) {
+                streamerService.createStreamableMapObject(
+                        modelId = 16442,
+                        priority = 0,
+                        streamDistance = 100f,
+                        coordinates = vector3DOf(x.toFloat(), y.toFloat(), z),
+                        rotation = vector3DOf(0f, 0f, 0f)
+                )
+                numberOfObjects++
+            }
+            messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
+        }
+        messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
     }
 }

@@ -48,6 +48,8 @@ serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
     kampPluginBinaryPath = project(":kamp-plugin").projectDir.toString() + "/src/main/cpp/sampgdk/build/plugins/kamp/Release/kamp.dll"
     rconPassword = "test1234"
+    jvmOptions.add("-Xmx1G")
+    configProperties.put("kamp.streamer.rate.ms", "300")
 }
 
 configureServer.dependsOn(project(":kamp-plugin").build)
