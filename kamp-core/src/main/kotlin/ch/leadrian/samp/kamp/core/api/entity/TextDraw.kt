@@ -210,7 +210,6 @@ internal constructor(
         onClickHandlers += onClick
     }
 
-    @JvmSynthetic
     internal fun onClick(player: Player): OnPlayerClickTextDrawListener.Result =
             onClickHandlers
                     .asSequence()

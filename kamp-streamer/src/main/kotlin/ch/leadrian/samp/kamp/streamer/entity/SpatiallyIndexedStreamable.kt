@@ -20,8 +20,6 @@ abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, 
 
     protected abstract val self: S
 
-    @set:JvmSynthetic
-    @get:JvmSynthetic
     internal lateinit var spatialIndexEntry: SpatialIndex.Entry<S, T>
 
 }

@@ -22,7 +22,6 @@ internal constructor(
         return columnTexts[column]
     }
 
-    @JvmSynthetic
     internal fun setText(column: Int, text: String) {
         checkColumn(column)
         columnTexts[column] = text
@@ -32,7 +31,6 @@ internal constructor(
         onSelectedHandlers += onSelected
     }
 
-    @JvmSynthetic
     internal fun onSelected(player: Player) {
         onSelectedHandlers.forEach { it.invoke(this, player) }
     }

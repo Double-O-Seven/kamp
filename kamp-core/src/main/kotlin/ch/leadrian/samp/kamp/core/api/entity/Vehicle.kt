@@ -390,7 +390,6 @@ internal constructor(
         onSpawnHandlers += onSpawn
     }
 
-    @JvmSynthetic
     internal fun onSpawn() {
         onSpawnHandlers.forEach { it.invoke(this) }
     }
@@ -399,7 +398,6 @@ internal constructor(
         onDeathHandlers += onDeath
     }
 
-    @JvmSynthetic
     internal fun onDeath(killer: Player?) {
         onDeathHandlers.forEach { it.invoke(this, killer) }
     }
@@ -408,7 +406,6 @@ internal constructor(
         onEnterHandlers += onEnter
     }
 
-    @JvmSynthetic
     internal fun onEnter(player: Player, isPassenger: Boolean) {
         onEnterHandlers.forEach { it.invoke(this, player, isPassenger) }
     }
@@ -417,7 +414,6 @@ internal constructor(
         onExitHandlers += onExit
     }
 
-    @JvmSynthetic
     internal fun onExit(player: Player) {
         onExitHandlers.forEach { it.invoke(this, player) }
     }

@@ -83,13 +83,10 @@ internal constructor(
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
-    @get:JvmSynthetic
     internal val playerMapObjectRegistry = PlayerMapObjectRegistry()
 
-    @get:JvmSynthetic
     internal val playerTextDrawRegistry = PlayerTextDrawRegistry()
 
-    @get:JvmSynthetic
     internal val playerTextLabelRegistry = PlayerTextLabelRegistry()
 
     val extensions: EntityExtensionContainer<Player> = EntityExtensionContainer(this)
@@ -671,7 +668,6 @@ internal constructor(
         return playerMapIcon
     }
 
-    @JvmSynthetic
     internal fun unregisterMapIcon(mapIcon: PlayerMapIcon) {
         mapIconsById.remove(mapIcon.id, mapIcon)
     }
@@ -959,7 +955,6 @@ internal constructor(
         onSpawnHandlers += onSpawn
     }
 
-    @JvmSynthetic
     internal fun onSpawn() {
         onSpawnHandlers.forEach { it.invoke(this) }
     }
@@ -968,7 +963,6 @@ internal constructor(
         onDeathHandlers += onDeath
     }
 
-    @JvmSynthetic
     internal fun onDeath(killer: Player?, weapon: WeaponModel) {
         onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
     }
@@ -985,7 +979,6 @@ internal constructor(
         onNameChangeHandlers.forEach { it.invoke(this, oldName, newName) }
     }
 
-    @JvmSynthetic
     internal fun onDisconnect(reason: DisconnectReason) {
         if (!isConnected) return
 

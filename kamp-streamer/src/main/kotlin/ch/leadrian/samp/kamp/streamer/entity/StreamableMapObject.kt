@@ -171,7 +171,6 @@ internal constructor(
         onStartMovingHandlers.forEach { it.invoke(this) }
     }
 
-    @JvmSynthetic
     internal fun onStartMoving(onStartMoving: StreamableMapObject.() -> Unit) {
         onStartMovingHandlers += onStartMoving
     }
@@ -282,7 +281,6 @@ internal constructor(
         onAttachHandlers.forEach { it.invoke(this) }
     }
 
-    @JvmSynthetic
     internal fun onAttach(onAttach: StreamableMapObject.() -> Unit) {
         onAttachHandlers += onAttach
     }

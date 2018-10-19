@@ -200,7 +200,6 @@ internal constructor(
         onMovedHandlers += onMoved
     }
 
-    @JvmSynthetic
     internal fun onMoved() {
         onMovedHandlers.forEach { it.invoke(this) }
     }
@@ -209,7 +208,6 @@ internal constructor(
         onEditHandlers += onEdit
     }
 
-    @JvmSynthetic
     internal fun onEdit(response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
         onEditHandlers.forEach { it.invoke(this, response, offset, rotation) }
     }

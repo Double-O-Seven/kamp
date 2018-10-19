@@ -58,7 +58,6 @@ internal constructor(
         onEditHandlers += onEdit
     }
 
-    @JvmSynthetic
     internal fun onEdit(
             response: AttachedObjectEditResponse,
             modelId: Int,
