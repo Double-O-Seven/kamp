@@ -15,13 +15,13 @@ abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, 
 
     protected fun onBoundingBoxChanged() {
         val boundingBox = getBoundingBox()
-        onBoundingBoxChangedHandlers.forEach {
-            @Suppress("UNCHECKED_CAST")
-            it.invoke(this as S, boundingBox)
-        }
+        onBoundingBoxChangedHandlers.forEach { it.invoke(self, boundingBox) }
     }
 
-    internal lateinit var spatialIndexEntry: SpatialIndex.Entry<S, T>
+    protected abstract val self: S
 
+    @set:JvmSynthetic
+    @get:JvmSynthetic
+    internal lateinit var spatialIndexEntry: SpatialIndex.Entry<S, T>
 
 }

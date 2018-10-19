@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -9,23 +10,34 @@ import ch.leadrian.samp.kamp.streamer.entity.DistanceBasedPlayerStreamable
 import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
+import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.stream.Collectors.toSet
 import java.util.stream.Stream
+import javax.annotation.PostConstruct
 
 abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         private val capacity: Int,
         private val asyncExecutor: AsyncExecutor,
+        protected val callbackListenerManager: CallbackListenerManager,
         playerService: PlayerService
 ) : Streamer, OnPlayerDisconnectListener {
 
     private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap.create(playerService.getMaxPlayers(), capacity)
+
+    private val onStreamActions = ConcurrentLinkedQueue<() -> Unit>()
 
     private val byPriorityDescendingAndDistanceAscending: Comparator<StreamingInfo<T>> = Comparator
             .comparing<StreamingInfo<T>, Int> { it.streamable.priority }
             .reversed()
             .thenComparing(Comparator.comparing<StreamingInfo<T>, Float> { it.distance })
 
+    @PostConstruct
+    protected fun initialize() {
+        callbackListenerManager.register(this)
+    }
+
     override fun stream(streamLocations: List<StreamLocation>) {
+        onStream()
         streamLocations.forEach { streamLocation ->
             val newStreamables: Set<T> = getStreamedInStreamables(streamLocation)
             streamOnMainThread(streamLocation.player, newStreamables)
@@ -46,7 +58,7 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     private fun streamOnMainThread(player: Player, newStreamables: Set<T>) {
         asyncExecutor.executeOnMainThread {
             if (player.isConnected) {
-                val currentStreamables = streamedInStreamables[player]!!
+                val currentStreamables = streamedInStreamables[player]
                 streamOut(player, currentStreamables, newStreamables)
                 streamIn(player, newStreamables)
             }
@@ -81,6 +93,17 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     }
 
     protected abstract fun getStreamInCandidates(streamLocation: StreamLocation): Stream<T>
+
+    protected fun onStream(action: () -> Unit) {
+        onStreamActions += action
+    }
+
+    private fun onStream() {
+        do {
+            val action = onStreamActions.poll() ?: break
+            action()
+        } while (true)
+    }
 
     private class StreamingInfo<T : DistanceBasedPlayerStreamable>(val streamable: T, val distance: Float)
 

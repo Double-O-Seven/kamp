@@ -35,7 +35,8 @@ constructor(
                 PlayerState.ON_FOOT,
                 PlayerState.ENTER_VEHICLE_DRIVER,
                 PlayerState.ENTER_VEHICLE_PASSENGER,
-                PlayerState.EXIT_VEHICLE
+                PlayerState.EXIT_VEHICLE,
+                PlayerState.SPECTATING
         )
     }
 
@@ -98,6 +99,7 @@ constructor(
             val streamLocations = playerService
                     .getAllPlayers()
                     .asSequence()
+                    .filter { it.isHuman }
                     .filter { STREAMABLE_PLAYER_STATES.contains(it.state) }
                     .map { StreamLocation(it, it.location) }
                     .toList()

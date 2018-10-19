@@ -68,6 +68,8 @@ internal constructor(
 
     private val materialTextsByIndex: MutableMap<Int, MaterialText> = mutableMapOf()
 
+    override val self: StreamableMapObject = this
+
     var coordinates: Vector3D = coordinates.toVector3D()
         get() = attachmentTarget?.playerMapObjectCoordinates
                 ?: movement?.coordinates

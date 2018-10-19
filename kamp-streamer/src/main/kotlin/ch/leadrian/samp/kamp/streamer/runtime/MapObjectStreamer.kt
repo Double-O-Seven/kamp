@@ -1,10 +1,9 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
@@ -20,16 +19,25 @@ internal class MapObjectStreamer
 constructor(
         asyncExecutor: AsyncExecutor,
         playerService: PlayerService,
+        callbackListenerManager: CallbackListenerManager,
         private val streamableMapObjectFactory: StreamableMapObjectFactory
 ) : DistanceBasedPlayerStreamer<StreamableMapObject>(
-        SAMPConstants.MAX_OBJECTS - 100,
-        asyncExecutor,
-        playerService
+        capacity = SAMPConstants.MAX_OBJECTS - 100,
+        asyncExecutor = asyncExecutor,
+        playerService = playerService,
+        callbackListenerManager = callbackListenerManager
 ) {
 
-    private val mapObjects = mutableSetOf<StreamableMapObject>()
-    private val movingOrAttachedMapObjects = mutableSetOf<StreamableMapObject>()
+    /*
+     * The spatial index and set of moving or attached objects may only be accessed during
+     * streaming to avoid any race conditions and expensive synchronization.
+     * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
+     */
     private val spatialIndex = SpatialIndex3D<StreamableMapObject>()
+    /*
+     * Moving or attached map objects constantly change their location. We don't want to constantly update the spatial index.
+     */
+    private val movingOrAttachedMapObjects = mutableSetOf<StreamableMapObject>()
 
     fun createMapObject(
             modelId: Int,
@@ -40,7 +48,7 @@ constructor(
             interiorIds: MutableSet<Int>,
             virtualWorldIds: MutableSet<Int>
     ): StreamableMapObject {
-        val mapObject = streamableMapObjectFactory.create(
+        val streamableMapObject = streamableMapObjectFactory.create(
                 modelId = modelId,
                 priority = priority,
                 streamDistance = streamDistance,
@@ -49,32 +57,45 @@ constructor(
                 interiorIds = interiorIds,
                 virtualWorldIds = virtualWorldIds
         )
-        mapObjects += mapObject
-        spatialIndex.add(mapObject)
-        mapObject.onBoundingBoxChanged {
-            if (!movingOrAttachedMapObjects.contains(this)) {
-                spatialIndex.update(this)
-            }
-        }
-        mapObject.onDestroy {
-            mapObjects -= this
-            movingOrAttachedMapObjects -= this
-            spatialIndex.remove(this)
-        }
-        mapObject.onAttach { enableNonIndexStreaming(this) }
-        mapObject.onStartMoving { enableNonIndexStreaming(this) }
-        return mapObject
+        add(streamableMapObject)
+        registerCallbackHandlers(streamableMapObject)
+        return streamableMapObject
     }
 
-    private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObject) {
-        if (movingOrAttachedMapObjects.add(streamableMapObject)) {
+    private fun registerCallbackHandlers(streamableMapObject: StreamableMapObject) {
+        streamableMapObject.onDestroy { remove(this) }
+        streamableMapObject.onBoundingBoxChanged { updateSpatialIndex(this) }
+        streamableMapObject.onAttach { enableNonIndexStreaming(this) }
+        streamableMapObject.onStartMoving { enableNonIndexStreaming(this) }
+    }
+
+    private fun add(streamableMapObject: StreamableMapObject) {
+        callbackListenerManager.register(streamableMapObject)
+        onStream { spatialIndex.add(streamableMapObject) }
+    }
+
+    private fun remove(streamableMapObject: StreamableMapObject) {
+        callbackListenerManager.unregister(streamableMapObject)
+        onStream {
+            movingOrAttachedMapObjects -= streamableMapObject
             spatialIndex.remove(streamableMapObject)
         }
     }
 
-    override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
-        mapObjects.forEach { it.onPlayerDisconnect(player, reason) }
-        super.onPlayerDisconnect(player, reason)
+    private fun updateSpatialIndex(streamableMapObject: StreamableMapObject) {
+        onStream {
+            if (!movingOrAttachedMapObjects.contains(streamableMapObject)) {
+                spatialIndex.update(streamableMapObject)
+            }
+        }
+    }
+
+    private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObject) {
+        onStream {
+            if (movingOrAttachedMapObjects.add(streamableMapObject)) {
+                spatialIndex.remove(streamableMapObject)
+            }
+        }
     }
 
     override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObject> =
