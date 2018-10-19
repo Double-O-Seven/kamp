@@ -25,8 +25,8 @@ constructor(
             streamDistance: Float,
             coordinates: Vector3D,
             rotation: Vector3D,
-            interiorIds: MutableSet<Int> = mutableSetOf(),
-            virtualWorldIds: MutableSet<Int> = mutableSetOf()
+            interiorIds: MutableSet<Int>,
+            virtualWorldIds: MutableSet<Int>
     ): StreamableMapObject {
         return StreamableMapObject(
                 modelId = modelId,
