@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
@@ -19,7 +20,8 @@ constructor(
         private val mapObjectRegistry: MapObjectRegistry,
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val playerExtensionFactories: Set<@JvmSuppressWildcards EntityExtensionFactory<Player, *>>
 ) {
 
     fun create(playerId: PlayerId): Player {
@@ -35,6 +37,7 @@ constructor(
         )
         playerRegistry.register(player)
         player.onDisconnect { playerRegistry.unregister(this) }
+        playerExtensionFactories.forEach { player.extensions.install(it) }
         return player
     }
 }

@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason.QUIT
+import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
@@ -29,10 +31,14 @@ internal class PlayerFactoryTest {
     private val menuRegistry = mockk<MenuRegistry>()
     private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
+    private val playerExtensionFactory = mockk<EntityExtensionFactory<Player, FooExtension>>()
+    private val fooExtension = FooExtension()
 
     @BeforeEach
     fun setUp() {
         every { playerRegistry.register(any()) } just Runs
+        every { playerExtensionFactory.create(any()) } returns fooExtension
+        every { playerExtensionFactory.extensionClass } returns FooExtension::class
         playerFactory = PlayerFactory(
                 actorRegistry = actorRegistry,
                 playerRegistry = playerRegistry,
@@ -40,7 +46,8 @@ internal class PlayerFactoryTest {
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry,
-                nativeFunctionExecutor = nativeFunctionExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor,
+                playerExtensionFactories = setOf(playerExtensionFactory)
         )
     }
 
@@ -68,5 +75,16 @@ internal class PlayerFactoryTest {
 
         verify { playerRegistry.unregister(player) }
     }
+
+    @Test
+    fun shouldInstallExtension() {
+        val player = playerFactory.create(playerId)
+
+        verify { playerExtensionFactory.create(player) }
+        assertThat(player.extensions[FooExtension::class])
+                .isEqualTo(fooExtension)
+    }
+
+    private class FooExtension
 
 }

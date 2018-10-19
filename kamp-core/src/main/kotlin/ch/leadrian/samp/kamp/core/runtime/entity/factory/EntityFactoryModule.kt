@@ -1,8 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import com.google.inject.AbstractModule
+import ch.leadrian.samp.kamp.core.api.inject.KampModule
 
-internal class EntityFactoryModule : AbstractModule() {
+internal class EntityFactoryModule : KampModule() {
 
     override fun configure() {
         bind(ActorFactory::class.java)
@@ -20,6 +20,7 @@ internal class EntityFactoryModule : AbstractModule() {
         bind(TextDrawFactory::class.java)
         bind(TextLabelFactory::class.java)
         bind(VehicleFactory::class.java)
+        newPlayerExtensionFactorySetBinder() // required in order to have at least an empty binding
     }
 
 }
