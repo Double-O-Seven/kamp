@@ -14,6 +14,8 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
+import ch.leadrian.samp.kamp.core.api.text.TextKey
+import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
@@ -21,6 +23,7 @@ import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarge
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.VehicleAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.util.TimeProvider
 import com.conversantmedia.util.collection.geometry.Rect3d
+import java.util.*
 import java.util.concurrent.TimeUnit
 
 class StreamableMapObject
@@ -35,7 +38,8 @@ internal constructor(
         private val playerMapObjectService: PlayerMapObjectService,
         private val timeProvider: TimeProvider,
         private val timerExecutor: TimerExecutor,
-        private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler
+        private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
+        private val textProvider: TextProvider
 ) : DistanceBasedPlayerStreamable, SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(), OnPlayerDisconnectListener {
 
     private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
@@ -64,7 +68,7 @@ internal constructor(
 
     private val materialTextsByIndex: MutableMap<Int, MaterialText> = mutableMapOf()
 
-    var coordinates: Vector3D = coordinates
+    var coordinates: Vector3D = coordinates.toVector3D()
         get() = attachmentTarget?.playerMapObjectCoordinates
                 ?: movement?.coordinates
                 ?: field
@@ -79,7 +83,7 @@ internal constructor(
             onBoundingBoxChanged()
         }
 
-    var rotation: Vector3D = rotation
+    var rotation: Vector3D = rotation.toVector3D()
         set(value) {
             requireNotDestroyed()
             if (isAttached) return
@@ -123,7 +127,8 @@ internal constructor(
                 destination = destination.toVector3D(),
                 rotation = rotation.toVector3D(),
                 speed = speed,
-                startTimeInMs = timeProvider.getCurrentTimeInMs()
+                startTimeInMs = timeProvider.getCurrentTimeInMs(),
+                timeProvider = timeProvider
         )
         movement.timer = timerExecutor.addTimer(movement.duration, TimeUnit.MILLISECONDS) {
             if (this.movement === movement) {
@@ -189,7 +194,7 @@ internal constructor(
             textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
     ) {
         requireNotDestroyed()
-        val materialText = MaterialText(
+        val materialText = SimpleMaterialText(
                 text = text,
                 index = index,
                 size = size,
@@ -200,6 +205,38 @@ internal constructor(
                 backColor = backColor,
                 textAlignment = textAlignment
         )
+        setMaterialText(index, materialText)
+    }
+
+    @JvmOverloads
+    fun setMaterialText(
+            textKey: TextKey,
+            index: Int = 0,
+            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
+            fontFace: String = "Arial",
+            fontSize: Int = 24,
+            isBold: Boolean = true,
+            fontColor: Color = Colors.WHITE,
+            backColor: Color = Colors.TRANSPARENT,
+            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
+    ) {
+        requireNotDestroyed()
+        val materialText = TranslateMaterialText(
+                textKey = textKey,
+                textProvider = textProvider,
+                index = index,
+                size = size,
+                fontFace = fontFace,
+                fontSize = fontSize,
+                isBold = isBold,
+                fontColor = fontColor,
+                backColor = backColor,
+                textAlignment = textAlignment
+        )
+        setMaterialText(index, materialText)
+    }
+
+    private fun setMaterialText(index: Int, materialText: MaterialText) {
         materialTextsByIndex[index] = materialText
         playerMapObjects.forEach { _, playerMapObject -> materialText.apply(playerMapObject) }
     }
@@ -220,13 +257,6 @@ internal constructor(
         attachTo(VehicleAttachmentTarget(vehicle = vehicle, offset = offset, rotation = rotation))
     }
 
-    fun detach() {
-        attachmentTarget?.let { this.coordinates = it.playerMapObjectCoordinates }
-        attachmentTarget = null
-        playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
-        playerMapObjects.clear()
-    }
-
     private fun attachTo(attachmentTarget: AttachmentTarget) {
         requireNotDestroyed()
         this.attachmentTarget = attachmentTarget
@@ -234,6 +264,13 @@ internal constructor(
             attachmentTarget.attach(playerMapObject)
         }
         onAttach()
+    }
+
+    fun detach() {
+        attachmentTarget?.let { coordinates = it.playerMapObjectCoordinates }
+        attachmentTarget = null
+        playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
+        playerMapObjects.clear()
     }
 
     val isAttached: Boolean
@@ -352,8 +389,7 @@ internal constructor(
 
     }
 
-    private class MaterialText(
-            private val text: String,
+    private abstract class MaterialText(
             private val index: Int,
             private val size: ObjectMaterialSize,
             private val fontFace: String,
@@ -364,9 +400,11 @@ internal constructor(
             private val textAlignment: ObjectMaterialTextAlignment
     ) {
 
+        protected abstract fun getText(locale: Locale): String
+
         fun apply(playerMapObject: PlayerMapObject) {
             playerMapObject.setMaterialText(
-                    text = text,
+                    text = getText(playerMapObject.player.locale),
                     index = index,
                     size = size,
                     fontFace = fontFace,
@@ -380,12 +418,64 @@ internal constructor(
 
     }
 
-    private inner class Movement(
+    private class SimpleMaterialText(
+            private val text: String,
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
+    ) : MaterialText(
+            index = index,
+            size = size,
+            fontFace = fontFace,
+            fontSize = fontSize,
+            isBold = isBold,
+            fontColor = fontColor,
+            backColor = backColor,
+            textAlignment = textAlignment
+    ) {
+
+        override fun getText(locale: Locale): String = text
+
+    }
+
+    private class TranslateMaterialText(
+            private val textKey: TextKey,
+            private val textProvider: TextProvider,
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
+    ) : MaterialText(
+            index = index,
+            size = size,
+            fontFace = fontFace,
+            fontSize = fontSize,
+            isBold = isBold,
+            fontColor = fontColor,
+            backColor = backColor,
+            textAlignment = textAlignment
+    ) {
+
+        override fun getText(locale: Locale): String = textProvider.getText(locale, textKey)
+
+    }
+
+    private class Movement(
             private val origin: Vector3D,
             val destination: Vector3D,
             val rotation: Vector3D,
             val speed: Float,
-            private val startTimeInMs: Long
+            private val startTimeInMs: Long,
+            private val timeProvider: TimeProvider
     ) {
 
         private val distanceToMove = origin.distanceTo(destination)
