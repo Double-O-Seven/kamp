@@ -50,6 +50,10 @@ internal constructor(
 
     private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
 
+    private val onStreamInHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+
+    private val onStreamOutHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+
     private val onDestroyHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
 
     override val id: VehicleId
@@ -416,6 +420,22 @@ internal constructor(
 
     internal fun onExit(player: Player) {
         onExitHandlers.forEach { it.invoke(this, player) }
+    }
+
+    fun onStreamIn(onStreamIn: Vehicle.(Player) -> Unit) {
+        onStreamInHandlers += onStreamIn
+    }
+
+    internal fun onStreamIn(player: Player) {
+        onStreamInHandlers.forEach { it.invoke(this, player) }
+    }
+
+    fun onStreamOut(onStreamOut: Vehicle.(Player) -> Unit) {
+        onStreamOutHandlers += onStreamOut
+    }
+
+    internal fun onStreamOut(player: Player) {
+        onStreamOutHandlers.forEach { it.invoke(this, player) }
     }
 
     fun onDestroy(onDestroy: Vehicle.() -> Unit) {

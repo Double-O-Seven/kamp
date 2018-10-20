@@ -1037,6 +1037,26 @@ internal class VehicleTest {
 
                 verify { onExit.invoke(vehicle, player) }
             }
+
+            @Test
+            fun shouldExecuteOnStreamInHandlers() {
+                val onStreamIn = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                vehicle.onStreamIn(onStreamIn)
+
+                vehicle.onStreamIn(player)
+
+                verify { onStreamIn.invoke(vehicle, player) }
+            }
+
+            @Test
+            fun shouldExecuteOnStreamOutHandlers() {
+                val onStreamOut = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                vehicle.onStreamOut(onStreamOut)
+
+                vehicle.onStreamOut(player)
+
+                verify { onStreamOut.invoke(vehicle, player) }
+            }
         }
     }
 

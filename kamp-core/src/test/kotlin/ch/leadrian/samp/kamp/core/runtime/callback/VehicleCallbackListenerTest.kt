@@ -81,4 +81,28 @@ internal class VehicleCallbackListenerTest {
         verify { vehicle.onExit(player) }
     }
 
+    @Test
+    fun shouldExecuteOnStreamIn() {
+        val player = mockk<Player>()
+        val vehicle = mockk<Vehicle> {
+            every { onStreamIn(any<Player>()) } just Runs
+        }
+
+        vehicleCallbackListener.onVehicleStreamIn(vehicle, player)
+
+        verify { vehicle.onStreamIn(player) }
+    }
+
+    @Test
+    fun shouldExecuteOnStreamOut() {
+        val player = mockk<Player>()
+        val vehicle = mockk<Vehicle> {
+            every { onStreamOut(any<Player>()) } just Runs
+        }
+
+        vehicleCallbackListener.onVehicleStreamOut(vehicle, player)
+
+        verify { vehicle.onStreamOut(player) }
+    }
+
 }

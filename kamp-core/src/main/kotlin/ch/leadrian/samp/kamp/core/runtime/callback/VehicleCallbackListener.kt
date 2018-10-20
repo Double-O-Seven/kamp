@@ -5,6 +5,8 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterVehicleListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitVehicleListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDeathListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import javax.annotation.PostConstruct
@@ -16,7 +18,12 @@ internal class VehicleCallbackListener
 @Inject
 constructor(
         private val callbackListenerManager: CallbackListenerManager
-) : OnVehicleSpawnListener, OnVehicleDeathListener, OnPlayerEnterVehicleListener, OnPlayerExitVehicleListener {
+) : OnVehicleSpawnListener,
+        OnVehicleDeathListener,
+        OnPlayerEnterVehicleListener,
+        OnPlayerExitVehicleListener,
+        OnVehicleStreamInListener,
+        OnVehicleStreamOutListener {
 
     @PostConstruct
     fun initialize() {
@@ -37,5 +44,13 @@ constructor(
 
     override fun onPlayerExitVehicle(player: Player, vehicle: Vehicle) {
         vehicle.onExit(player)
+    }
+
+    override fun onVehicleStreamIn(vehicle: Vehicle, forPlayer: Player) {
+        vehicle.onStreamIn(forPlayer)
+    }
+
+    override fun onVehicleStreamOut(vehicle: Vehicle, forPlayer: Player) {
+        vehicle.onStreamOut(forPlayer)
     }
 }
