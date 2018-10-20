@@ -14,15 +14,16 @@ import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.stream.Collectors.toSet
 import java.util.stream.Stream
 import javax.annotation.PostConstruct
+import kotlin.properties.Delegates
 
 abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
-        private val capacity: Int,
+        maxCapacity: Int,
         private val asyncExecutor: AsyncExecutor,
         protected val callbackListenerManager: CallbackListenerManager,
         playerService: PlayerService
 ) : Streamer, OnPlayerDisconnectListener {
 
-    private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap.create(playerService.getMaxPlayers(), capacity)
+    private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap.create(playerService.getMaxPlayers(), maxCapacity)
 
     private val onStreamActions = ConcurrentLinkedQueue<() -> Unit>()
 
@@ -31,8 +32,10 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
             .reversed()
             .thenComparing(Comparator.comparing<StreamingInfo<T>, Float> { it.distance })
 
+    var capacity: Int by Delegates.vetoable(maxCapacity) { _, _, newCapacity -> newCapacity in 0..maxCapacity }
+
     @PostConstruct
-    protected fun initialize() {
+    fun initialize() {
         callbackListenerManager.register(this)
     }
 

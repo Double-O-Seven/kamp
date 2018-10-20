@@ -9,7 +9,6 @@ import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
-import com.netflix.governator.annotations.Configuration
 import java.util.stream.Stream
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,10 +22,10 @@ constructor(
         callbackListenerManager: CallbackListenerManager,
         private val streamableMapObjectFactory: StreamableMapObjectFactory
 ) : DistanceBasedPlayerStreamer<StreamableMapObject>(
-        capacity = SAMPConstants.MAX_OBJECTS - 100,
         asyncExecutor = asyncExecutor,
         playerService = playerService,
-        callbackListenerManager = callbackListenerManager
+        callbackListenerManager = callbackListenerManager,
+        maxCapacity = SAMPConstants.MAX_OBJECTS
 ) {
 
     /*
