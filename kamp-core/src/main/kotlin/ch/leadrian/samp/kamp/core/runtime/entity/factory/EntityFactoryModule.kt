@@ -11,6 +11,7 @@ internal class EntityFactoryModule : KampModule() {
         bind(MapObjectFactory::class.java)
         bind(MenuFactory::class.java)
         bind(PickupFactory::class.java)
+        bind(PlayerFactory::class.java)
         bind(PlayerClassFactory::class.java)
         bind(PlayerMapIconFactory::class.java)
         bind(PlayerMapObjectFactory::class.java)

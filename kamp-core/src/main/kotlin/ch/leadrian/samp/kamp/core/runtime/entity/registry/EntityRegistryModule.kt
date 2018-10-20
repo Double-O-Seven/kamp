@@ -13,6 +13,7 @@ internal class EntityRegistryModule : AbstractModule() {
         bind(PickupRegistry::class.java)
         bind(PlayerClassRegistry::class.java)
         bind(PlayerRegistry::class.java)
+        bind(PlayerSearchIndex::class.java)
         bind(TextDrawRegistry::class.java)
         bind(TextLabelRegistry::class.java)
         bind(VehicleRegistry::class.java)
