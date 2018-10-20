@@ -22,6 +22,10 @@ internal constructor(
 
     private val onDestroyHandlers: MutableList<Actor.() -> Unit> = mutableListOf()
 
+    private val onStreamInHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
+
+    private val onStreamOutHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
+
     override val id: ActorId
         get() = requireNotDestroyed { field }
 
@@ -126,6 +130,22 @@ internal constructor(
         set(value) {
             nativeFunctionExecutor.setActorInvulnerable(id.value, value)
         }
+
+    fun onStreamIn(onStreamIn: Actor.(Player) -> Unit) {
+        onStreamInHandlers += onStreamIn
+    }
+
+    internal fun onStreamIn(player: Player) {
+        onStreamInHandlers.forEach { it.invoke(this, player) }
+    }
+
+    fun onStreamOut(onStreamOut: Actor.(Player) -> Unit) {
+        onStreamOutHandlers += onStreamOut
+    }
+
+    internal fun onStreamOut(player: Player) {
+        onStreamOutHandlers.forEach { it.invoke(this, player) }
+    }
 
     fun onDestroy(onDestroy: Actor.() -> Unit) {
         onDestroyHandlers += onDestroy

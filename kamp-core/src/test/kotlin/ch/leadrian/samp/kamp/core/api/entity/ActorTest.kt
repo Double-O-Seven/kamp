@@ -386,6 +386,28 @@ internal class ActorTest {
                         .isInstanceOf(AlreadyDestroyedException::class.java)
             }
         }
+
+        @Test
+        fun shouldExecuteOnStreamInHandlers() {
+            val player = mockk<Player>()
+            val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
+            actor.onStreamIn(onStreamIn)
+
+            actor.onStreamIn(player)
+
+            verify { onStreamIn.invoke(actor, player) }
+        }
+
+        @Test
+        fun shouldExecuteOnStreamOutHandlers() {
+            val player = mockk<Player>()
+            val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
+            actor.onStreamOut(onStreamOut)
+
+            actor.onStreamOut(player)
+
+            verify { onStreamOut.invoke(actor, player) }
+        }
     }
 
 }

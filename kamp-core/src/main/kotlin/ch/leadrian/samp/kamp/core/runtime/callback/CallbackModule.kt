@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.inject.KampModule
 internal class CallbackModule : KampModule() {
 
     override fun configure() {
+        bind(ActorCallbackListener::class.java).asEagerSingleton()
         bind(CheckpointCallbackListener::class.java).asEagerSingleton()
         bind(DialogCallbackListener::class.java).asEagerSingleton()
         bind(MenuCallbackListener::class.java).asEagerSingleton()
