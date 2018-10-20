@@ -32,7 +32,9 @@ constructor(
 
         private val STREAMABLE_PLAYER_STATES: Set<PlayerState> = EnumSet.of(
                 PlayerState.DRIVER,
+                PlayerState.PASSENGER,
                 PlayerState.ON_FOOT,
+                PlayerState.SPAWNED,
                 PlayerState.ENTER_VEHICLE_DRIVER,
                 PlayerState.ENTER_VEHICLE_PASSENGER,
                 PlayerState.EXIT_VEHICLE,
@@ -66,7 +68,7 @@ constructor(
         }
     }
 
-    private fun execute() {
+    internal fun execute() {
         try {
             val streamLocations = getStreamLocations()
             stream(streamLocations)
@@ -81,7 +83,7 @@ constructor(
                 var t = System.currentTimeMillis()
                 streamer.stream(streamLocations)
                 t = System.currentTimeMillis() - t
-                log.info("Streaming with {} took {} ms", streamer::class.java, t)
+                log.debug("Streaming with {} took {} ms", streamer::class.java, t)
             } catch (e: Exception) {
                 log.error("Exception while streaming with {}", streamer, e)
             }
