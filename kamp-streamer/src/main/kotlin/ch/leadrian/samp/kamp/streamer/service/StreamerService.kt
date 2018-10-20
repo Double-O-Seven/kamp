@@ -48,4 +48,8 @@ internal constructor(
             virtualWorldIds = virtualWorldIds
     )
 
+    fun setMaxStreamedInMapObjects(maxStreamedInMapObjects: Int) {
+        mapObjectStreamer.capacity = maxStreamedInMapObjects
+    }
+
 }

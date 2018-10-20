@@ -3,8 +3,11 @@ package ch.leadrian.samp.kamp.streamer.service
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -137,6 +140,15 @@ internal class StreamerServiceTest {
             assertThat(streamableMapObject)
                     .isEqualTo(expectedStreamableMapObject)
         }
+    }
+
+    @Test
+    fun shouldSetMaxStreamedInMapObjects() {
+        every { mapObjectStreamer.capacity = any() } just Runs
+
+        streamerService.setMaxStreamedInMapObjects(500)
+
+        verify { mapObjectStreamer.capacity = 500 }
     }
 
 }
