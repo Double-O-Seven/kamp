@@ -4713,6 +4713,7 @@ internal class CallbackProcessorTest {
             @BeforeEach
             fun setUp() {
                 every { mapObject.id } returns MapObjectId.valueOf(mapObjectId)
+                every { mapObject.onSelect(any(), any(), any()) } just Runs
                 server.injector.getInstance<MapObjectRegistry>().register(mapObject)
             }
 
@@ -4839,6 +4840,7 @@ internal class CallbackProcessorTest {
             @BeforeEach
             fun setUp() {
                 every { playerMapObject.id } returns PlayerMapObjectId.valueOf(playerMapObjectId)
+                every { playerMapObject.onSelect(any(), any()) } just Runs
                 player.playerMapObjectRegistry.register(playerMapObject)
             }
 

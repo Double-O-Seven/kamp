@@ -2814,32 +2814,6 @@ internal class PlayerTest {
     }
 
     @Test
-    fun shouldEditMapObject() {
-        val mapObjectId = MapObjectId.valueOf(1337)
-        val mapObject = mockk<MapObject> {
-            every { id } returns mapObjectId
-        }
-        every { nativeFunctionExecutor.editObject(any(), any()) } returns true
-
-        player.editMapObject(mapObject)
-
-        verify { nativeFunctionExecutor.editObject(playerid = playerId.value, objectid = mapObjectId.value) }
-    }
-
-    @Test
-    fun shouldEditPlayerMapObject() {
-        val playerMapObjectId = PlayerMapObjectId.valueOf(1337)
-        val playerMapObject = mockk<PlayerMapObject> {
-            every { id } returns playerMapObjectId
-        }
-        every { nativeFunctionExecutor.editPlayerObject(any(), any()) } returns true
-
-        player.editPlayerMapObject(playerMapObject)
-
-        verify { nativeFunctionExecutor.editPlayerObject(playerid = playerId.value, objectid = playerMapObjectId.value) }
-    }
-
-    @Test
     fun shouldSelectMapObject() {
         every { nativeFunctionExecutor.selectObject(any()) } returns true
 

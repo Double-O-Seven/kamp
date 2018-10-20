@@ -18,6 +18,8 @@ internal class StreamableMapObjectFactoryTest {
                 timeProvider = mockk(),
                 timerExecutor = mockk(),
                 onStreamableMapObjectMovedHandler = mockk(),
+                onPlayerEditStreamableMapObjectHandler = mockk(),
+                onPlayerSelectStreamableMapObjectHandler = mockk(),
                 textProvider = mockk()
         )
     }

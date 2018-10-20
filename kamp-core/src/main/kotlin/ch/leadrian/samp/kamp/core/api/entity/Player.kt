@@ -923,14 +923,6 @@ internal constructor(
         nativeFunctionExecutor.cancelSelectTextDraw(id.value)
     }
 
-    fun editMapObject(mapObject: MapObject) {
-        nativeFunctionExecutor.editObject(playerid = id.value, objectid = mapObject.id.value)
-    }
-
-    fun editPlayerMapObject(playerMapObject: PlayerMapObject) {
-        nativeFunctionExecutor.editPlayerObject(playerid = id.value, objectid = playerMapObject.id.value)
-    }
-
     fun selectMapObject() {
         nativeFunctionExecutor.selectObject(id.value)
     }

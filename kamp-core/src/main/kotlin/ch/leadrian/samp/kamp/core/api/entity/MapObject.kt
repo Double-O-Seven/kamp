@@ -24,8 +24,9 @@ internal constructor(
 
     private val onMovedHandlers: MutableList<MapObject.() -> Unit> = mutableListOf()
 
-    private val onEditHandlers: MutableList<MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> =
-            mutableListOf()
+    private val onEditHandlers: MutableList<MapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
+
+    private val onSelectHandlers: MutableList<MapObject.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
     private val onDestroyHandlers: MutableList<MapObject.() -> Unit> = mutableListOf()
 
@@ -49,6 +50,10 @@ internal constructor(
         }
 
         id = MapObjectId.valueOf(mapObjectId)
+    }
+
+    fun edit(player: Player) {
+        nativeFunctionExecutor.editObject(playerid = player.id.value, objectid = id.value)
     }
 
     fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
@@ -214,6 +219,14 @@ internal constructor(
 
     internal fun onEdit(player: Player, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
         onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
+    }
+
+    fun onSelect(onSelect: MapObject.(Player, Int, Vector3D) -> Unit) {
+        onSelectHandlers += onSelect
+    }
+
+    internal fun onSelect(player: Player, modelId: Int, offset: Vector3D) {
+        onSelectHandlers.forEach { it.invoke(this, player, modelId, offset) }
     }
 
     fun onDestroy(onDestroy: MapObject.() -> Unit) {

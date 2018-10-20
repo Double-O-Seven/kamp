@@ -74,4 +74,16 @@ internal class MapObjectCallbackListenerTest {
         }
     }
 
+    @Test
+    fun shouldCallOnSelectOnMapObject() {
+        val player = mockk<Player>()
+        val mapObject = mockk<MapObject> {
+            every { onSelect(player, 1337, vector3DOf(1f, 2f, 3f)) } just Runs
+        }
+
+        mapObjectCallbackListener.onPlayerSelectMapObject(player, mapObject, 1337, vector3DOf(1f, 2f, 3f))
+
+        verify(exactly = 1) { mapObject.onSelect(player, 1337, vector3DOf(1f, 2f, 3f)) }
+    }
+
 }

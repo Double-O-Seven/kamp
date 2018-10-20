@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.streamer.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
+import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Color
@@ -18,6 +19,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
+import ch.leadrian.samp.kamp.streamer.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.PlayerAttachmentTarget
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.VehicleAttachmentTarget
@@ -39,6 +42,8 @@ internal constructor(
         private val timeProvider: TimeProvider,
         private val timerExecutor: TimerExecutor,
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
+        private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
+        private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
         private val textProvider: TextProvider
 ) : DistanceBasedPlayerStreamable, SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(), OnPlayerDisconnectListener {
 
@@ -47,6 +52,10 @@ internal constructor(
     private val onStartMovingHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
     private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+
+    private val onEditHandlers: MutableList<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
+
+    private val onSelectHandlers: MutableList<StreamableMapObject.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
     private val onAttachHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
@@ -310,6 +319,12 @@ internal constructor(
         if (isCameraCollisionDisabled) {
             playerMapObject.disableCameraCollision()
         }
+        playerMapObject.onEdit { objectEditResponse, offset, rotation ->
+            this@StreamableMapObject.onEdit(this.player, objectEditResponse, offset, rotation)
+        }
+        playerMapObject.onSelect { modelId, offset ->
+            this@StreamableMapObject.onSelect(this.player, modelId, offset)
+        }
     }
 
     override fun onStreamOut(forPlayer: Player) {
@@ -330,6 +345,38 @@ internal constructor(
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
         playerMapObjects.remove(player)
+    }
+
+    fun edit(player: Player) {
+        playerMapObjects[player]?.edit(player)
+    }
+
+    fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
+        onEditHandlers += onEdit
+    }
+
+    private fun onEdit(player: Player, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+        if (response == ObjectEditResponse.FINAL) {
+            coordinates = offset
+            this.rotation = rotation
+        }
+        onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
+        onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
+                player = player,
+                streamableMapObject = this,
+                response = response,
+                offset = offset,
+                rotation = rotation
+        )
+    }
+
+    fun onSelect(onSelect: StreamableMapObject.(Player, Int, Vector3D) -> Unit) {
+        onSelectHandlers += onSelect
+    }
+
+    private fun onSelect(player: Player, modelId: Int, offset: Vector3D) {
+        onSelectHandlers.forEach { it.invoke(this, player, modelId, offset) }
+        onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
     }
 
     fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {

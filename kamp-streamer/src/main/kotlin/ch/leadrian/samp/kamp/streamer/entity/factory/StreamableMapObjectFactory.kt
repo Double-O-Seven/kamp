@@ -4,6 +4,8 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
+import ch.leadrian.samp.kamp.streamer.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.util.TimeProvider
@@ -16,6 +18,8 @@ constructor(
         private val timeProvider: TimeProvider,
         private val timerExecutor: TimerExecutor,
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
+        private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
+        private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
         private val textProvider: TextProvider
 ) {
 
@@ -40,6 +44,8 @@ constructor(
                 timeProvider = timeProvider,
                 timerExecutor = timerExecutor,
                 onStreamableMapObjectMovedHandler = onStreamableMapObjectMovedHandler,
+                onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
+                onPlayerSelectStreamableMapObjectHandler = onPlayerSelectStreamableMapObjectHandler,
                 textProvider = textProvider
         )
     }

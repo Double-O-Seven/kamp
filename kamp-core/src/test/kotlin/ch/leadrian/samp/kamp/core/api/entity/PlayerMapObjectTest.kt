@@ -128,6 +128,19 @@ internal class PlayerMapObjectTest {
         }
 
         @Test
+        fun shouldEdit() {
+            val playerId = PlayerId.valueOf(69)
+            val player = mockk<Player> {
+                every { id } returns playerId
+            }
+            every { nativeFunctionExecutor.editPlayerObject(any(), any()) } returns true
+
+            playerMapObject.edit(player)
+
+            verify { nativeFunctionExecutor.editPlayerObject(playerid = playerId.value, objectid = playerMapObjectId.value) }
+        }
+
+        @Test
         fun shouldAttachToPlayer() {
             every {
                 nativeFunctionExecutor.attachPlayerObjectToPlayer(any(), any(), any(), any(), any(), any(), any(), any(), any())
@@ -416,6 +429,16 @@ internal class PlayerMapObjectTest {
             playerMapObject.onMoved()
 
             verify { onMoved.invoke(playerMapObject) }
+        }
+
+        @Test
+        fun shouldExecuteOnSelectHandlers() {
+            val onSelect = mockk<PlayerMapObject.(Int, Vector3D) -> Unit>(relaxed = true)
+            playerMapObject.onSelect(onSelect)
+
+            playerMapObject.onSelect(1337, vector3DOf(1f, 2f, 3f))
+
+            verify { onSelect.invoke(playerMapObject, 1337, vector3DOf(1f, 2f, 3f)) }
         }
 
         @Test
