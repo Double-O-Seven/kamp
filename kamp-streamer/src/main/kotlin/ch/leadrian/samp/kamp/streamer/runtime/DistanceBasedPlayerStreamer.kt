@@ -50,6 +50,7 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
         return getStreamInCandidates(streamLocation)
                 .filter { !it.isDestroyed }
+                .filter { it.streamInCondition(streamLocation.player) }
                 .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
                 .filter { it.distance <= it.streamable.streamDistance }
                 .sorted(byPriorityDescendingAndDistanceAscending)

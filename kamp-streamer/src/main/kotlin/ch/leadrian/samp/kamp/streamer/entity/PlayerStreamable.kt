@@ -10,4 +10,6 @@ interface PlayerStreamable : Streamable {
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
+    var streamInCondition: (Player) -> Boolean
+
 }

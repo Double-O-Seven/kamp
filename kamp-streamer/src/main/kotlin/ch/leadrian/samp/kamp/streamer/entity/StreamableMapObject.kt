@@ -79,6 +79,8 @@ internal constructor(
 
     override val self: StreamableMapObject = this
 
+    override var streamInCondition: (Player) -> Boolean = { true }
+
     var coordinates: Vector3D = coordinates.toVector3D()
         get() = attachmentTarget?.playerMapObjectCoordinates
                 ?: movement?.coordinates

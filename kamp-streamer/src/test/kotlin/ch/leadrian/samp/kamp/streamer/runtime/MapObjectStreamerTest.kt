@@ -105,7 +105,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject1 = mockk<PlayerMapObject>()
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject1
@@ -164,7 +164,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject1 = mockk<PlayerMapObject>()
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject1
@@ -201,6 +201,33 @@ internal class MapObjectStreamerTest {
                         rotation = vector3DOf(1f, 2f, 3f)
                 )
             }
+        }
+
+        @Test
+        fun givenStreamInConditionIsNotFulfilledItShouldNotStreamIn() {
+            every { callbackListenerManager.unregister(any()) } just Runs
+            val player = mockk<Player> {
+                every { isConnected } returns true
+            }
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject1
+            val coordinates = vector3DOf(150f, 100f, 20f)
+            val streamableMapObject = mapObjectStreamer.createMapObject(
+                    modelId = 1337,
+                    priority = 0,
+                    streamDistance = 300f,
+                    coordinates = coordinates,
+                    rotation = vector3DOf(1f, 2f, 3f),
+                    interiorIds = mutableSetOf(),
+                    virtualWorldIds = mutableSetOf()
+            )
+            streamableMapObject.streamInCondition = { false }
+
+            mapObjectStreamer.stream(listOf(StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))))
+
+            verify(exactly = 0) { playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any()) }
         }
 
         @Test
@@ -354,9 +381,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject = mockk<PlayerMapObject> {
-                every { destroy() } just Runs
-            }
+            val playerMapObject = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -392,7 +417,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject1 = mockk<PlayerMapObject>()
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject1
@@ -454,7 +479,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject1 = mockk<PlayerMapObject>()
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject1
@@ -512,7 +537,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
             }
-            val playerMapObject1 = mockk<PlayerMapObject>()
+            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject1
