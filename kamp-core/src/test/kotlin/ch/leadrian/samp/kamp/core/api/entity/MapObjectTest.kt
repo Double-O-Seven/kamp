@@ -282,29 +282,57 @@ internal class MapObjectTest {
             verify { nativeFunctionExecutor.setObjectNoCameraCol(mapObjectId.value) }
         }
 
-        @Test
-        fun shouldMoveObject() {
-            every {
-                nativeFunctionExecutor.moveObject(
-                        objectid = mapObjectId.value,
-                        X = 1f,
-                        Y = 2f,
-                        Z = 3f,
-                        RotX = 4f,
-                        RotY = 5f,
-                        RotZ = 6f,
-                        Speed = 7f
+        @Nested
+        inner class MoveToTests {
+
+            @Test
+            fun shouldMoveObject() {
+                every {
+                    nativeFunctionExecutor.moveObject(
+                            objectid = mapObjectId.value,
+                            X = 1f,
+                            Y = 2f,
+                            Z = 3f,
+                            RotX = 4f,
+                            RotY = 5f,
+                            RotZ = 6f,
+                            Speed = 7f
+                    )
+                } returns 150
+
+                val result = mapObject.moveTo(
+                        coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                        rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
+                        speed = 7f
                 )
-            } returns 150
 
-            val result = mapObject.moveTo(
-                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
-                    speed = 7f
-            )
+                assertThat(result)
+                        .isEqualTo(150)
+            }
 
-            assertThat(result)
-                    .isEqualTo(150)
+            @Test
+            fun givenNoRotationItShouldUseFallbackValues() {
+                every {
+                    nativeFunctionExecutor.moveObject(
+                            objectid = mapObjectId.value,
+                            X = 1f,
+                            Y = 2f,
+                            Z = 3f,
+                            RotX = -1000f,
+                            RotY = -1000f,
+                            RotZ = -1000f,
+                            Speed = 7f
+                    )
+                } returns 150
+
+                val result = mapObject.moveTo(
+                        coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                        speed = 7f
+                )
+
+                assertThat(result)
+                        .isEqualTo(150)
+            }
         }
 
         @Test

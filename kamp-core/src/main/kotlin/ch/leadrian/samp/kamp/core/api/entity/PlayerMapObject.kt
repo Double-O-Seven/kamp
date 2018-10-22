@@ -142,7 +142,7 @@ internal constructor(
     fun moveTo(
             coordinates: Vector3D,
             speed: Float,
-            rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
+            rotation: Vector3D? = null
     ): Int = nativeFunctionExecutor.movePlayerObject(
             playerid = player.id.value,
             objectid = id.value,
@@ -150,9 +150,9 @@ internal constructor(
             y = coordinates.y,
             z = coordinates.z,
             Speed = speed,
-            RotX = rotation.x,
-            RotY = rotation.y,
-            RotZ = rotation.z
+            RotX = rotation?.x ?: -1000f,
+            RotY = rotation?.y ?: -1000f,
+            RotZ = rotation?.z ?: -1000f
     )
 
     fun stop() {
