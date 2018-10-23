@@ -25,7 +25,7 @@ constructor(
         asyncExecutor = asyncExecutor,
         playerService = playerService,
         callbackListenerManager = callbackListenerManager,
-        maxCapacity = SAMPConstants.MAX_OBJECTS
+        maxCapacity = SAMPConstants.MAX_OBJECTS - 1
 ) {
 
     /*
