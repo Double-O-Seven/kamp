@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDestructionHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import io.mockk.Runs
 import io.mockk.every
@@ -12,6 +13,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
 internal class VehicleFactoryTest {
@@ -20,6 +22,7 @@ internal class VehicleFactoryTest {
     private lateinit var vehicleFactory: VehicleFactory
 
     private val vehicleRegistry = mockk<VehicleRegistry>()
+    private val onVehicleDestructionHandler = mockk<OnVehicleDestructionHandler>()
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
     @BeforeEach
@@ -28,7 +31,8 @@ internal class VehicleFactoryTest {
         every { nativeFunctionExecutor.createVehicle(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns vehicleId
         vehicleFactory = VehicleFactory(
                 vehicleRegistry = vehicleRegistry,
-                nativeFunctionExecutor = nativeFunctionExecutor
+                nativeFunctionExecutor = nativeFunctionExecutor,
+                onVehicleDestructionHandler = onVehicleDestructionHandler
         )
     }
 
@@ -87,21 +91,45 @@ internal class VehicleFactoryTest {
         verify { vehicleRegistry.register(vehicle) }
     }
 
-    @Test
-    fun shouldUnregisterVehicleOnDestroy() {
-        every { vehicleRegistry.unregister(any()) } just Runs
-        every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
-        val vehicle = vehicleFactory.create(
-                model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
-                coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                rotation = 4f,
-                addSiren = true,
-                respawnDelay = 60
-        )
+    @Nested
+    inner class OnDestroyTests {
 
-        vehicle.destroy()
+        @Test
+        fun shouldUnregisterVehicle() {
+            every { vehicleRegistry.unregister(any()) } just Runs
+            every { onVehicleDestructionHandler.onVehicleDestruction(any()) } just Runs
+            every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
+            val vehicle = vehicleFactory.create(
+                    model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
+                    colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    rotation = 4f,
+                    addSiren = true,
+                    respawnDelay = 60
+            )
 
-        verify { vehicleRegistry.unregister(vehicle) }
+            vehicle.destroy()
+
+            verify { vehicleRegistry.unregister(vehicle) }
+        }
+
+        @Test
+        fun shouldCallOnVehicleDestructionHandler() {
+            every { vehicleRegistry.unregister(any()) } just Runs
+            every { onVehicleDestructionHandler.onVehicleDestruction(any()) } just Runs
+            every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
+            val vehicle = vehicleFactory.create(
+                    model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
+                    colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                    coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    rotation = 4f,
+                    addSiren = true,
+                    respawnDelay = 60
+            )
+
+            vehicle.destroy()
+
+            verify { onVehicleDestructionHandler.onVehicleDestruction(vehicle) }
+        }
     }
 }

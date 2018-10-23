@@ -758,6 +758,16 @@ internal class CallbackModuleTest {
                     .contains(onVehicleStreamOutHandler)
         }
 
+        @Test
+        fun shouldInjectOnVehicleDestructionHandlerAsSingleton() {
+            val onVehicleDestructionHandler = injector.getInstance<OnVehicleDestructionHandler>()
+
+            assertThat(onVehicleDestructionHandler)
+                    .isNotNull
+            assertThat(testService.handlers)
+                    .contains(onVehicleDestructionHandler)
+        }
+
     }
 
     private class TestService

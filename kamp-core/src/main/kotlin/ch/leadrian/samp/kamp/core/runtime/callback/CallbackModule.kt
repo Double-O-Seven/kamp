@@ -81,6 +81,7 @@ internal class CallbackModule : KampModule() {
         bind(OnVehicleSpawnHandler::class.java)
         bind(OnVehicleStreamInHandler::class.java)
         bind(OnVehicleStreamOutHandler::class.java)
+        bind(OnVehicleDestructionHandler::class.java)
 
         newCallbackListenerRegistrySetBinder().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
@@ -142,6 +143,7 @@ internal class CallbackModule : KampModule() {
             addBinding().to(OnVehicleSpawnHandler::class.java)
             addBinding().to(OnVehicleStreamInHandler::class.java)
             addBinding().to(OnVehicleStreamOutHandler::class.java)
+            addBinding().to(OnVehicleDestructionHandler::class.java)
         }
     }
 }
