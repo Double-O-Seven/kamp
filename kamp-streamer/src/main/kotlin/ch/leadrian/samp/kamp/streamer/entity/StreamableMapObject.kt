@@ -105,7 +105,7 @@ internal constructor(
     override fun onStreamOut(forPlayer: Player) {
         requireNotDestroyed()
         val playerMapObject = playerMapObjects.remove(forPlayer)
-                ?: throw IllegalStateException("Streamable player map object was not streamed it")
+                ?: throw IllegalStateException("Streamable player map object was not streamed in")
         playerMapObject.destroy()
     }
 
@@ -351,7 +351,7 @@ internal constructor(
 
     private fun onSelect(player: Player, modelId: Int, offset: Vector3D) {
         onSelectHandlers.forEach { it.invoke(this, player, modelId, offset) }
-        onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
+        onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, offset)
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
