@@ -72,19 +72,6 @@ constructor(
         }
     }
 
-    private fun add(streamableMapObject: StreamableMapObject) {
-        callbackListenerManager.register(streamableMapObject)
-        onStream { spatialIndex.add(streamableMapObject) }
-    }
-
-    private fun remove(streamableMapObject: StreamableMapObject) {
-        callbackListenerManager.unregister(streamableMapObject)
-        onStream {
-            movingOrAttachedMapObjects -= streamableMapObject
-            spatialIndex.remove(streamableMapObject)
-        }
-    }
-
     private fun updateSpatialIndex(streamableMapObject: StreamableMapObject) {
         onStream {
             if (!movingOrAttachedMapObjects.contains(streamableMapObject)) {
@@ -98,6 +85,19 @@ constructor(
             if (movingOrAttachedMapObjects.add(streamableMapObject)) {
                 spatialIndex.remove(streamableMapObject)
             }
+        }
+    }
+
+    private fun add(streamableMapObject: StreamableMapObject) {
+        callbackListenerManager.register(streamableMapObject)
+        onStream { spatialIndex.add(streamableMapObject) }
+    }
+
+    private fun remove(streamableMapObject: StreamableMapObject) {
+        callbackListenerManager.unregister(streamableMapObject)
+        onStream {
+            movingOrAttachedMapObjects -= streamableMapObject
+            spatialIndex.remove(streamableMapObject)
         }
     }
 

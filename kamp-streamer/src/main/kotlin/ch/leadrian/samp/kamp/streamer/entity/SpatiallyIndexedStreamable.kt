@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.streamer.entity
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex
 import com.conversantmedia.util.collection.spatial.HyperRect
 
-abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> : Streamable {
+abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> : AbstractStreamable() {
 
     private val onBoundingBoxChangedHandlers: MutableList<S.(T) -> Unit> = mutableListOf()
 

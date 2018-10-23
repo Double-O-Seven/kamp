@@ -157,7 +157,7 @@ internal constructor(
             transitionToState(fixedCoordinates)
         }
 
-    private fun fixPosition() {
+    private fun fixCoordinates() {
         val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
                 coordinates = coordinates,
                 rotation = rotation
@@ -198,7 +198,7 @@ internal constructor(
     fun stop() {
         requireNotDestroyed()
         if (isMoving) {
-            fixPosition()
+            fixCoordinates()
         }
     }
 
@@ -304,7 +304,7 @@ internal constructor(
     fun detach() {
         requireNotDestroyed()
         if (isAttached) {
-            fixPosition()
+            fixCoordinates()
         }
     }
 
@@ -321,7 +321,7 @@ internal constructor(
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
         playerMapObjects.remove(player)
         if (state is StreamableMapObjectState.Attached.ToPlayer) {
-            fixPosition()
+            fixCoordinates()
         }
     }
 
