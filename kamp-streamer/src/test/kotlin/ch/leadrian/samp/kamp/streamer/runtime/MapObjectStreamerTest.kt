@@ -236,6 +236,7 @@ internal class MapObjectStreamerTest {
             val player = mockk<Player> {
                 every { isConnected } returns true
                 every { coordinates } returns vector3DOf(1000f, 2000f, 100f)
+                every { angle } returns 0f
             }
             val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
             val playerMapObject2 = mockk<PlayerMapObject>(relaxed = true)
@@ -253,7 +254,7 @@ internal class MapObjectStreamerTest {
             )
 
             mapObjectStreamer.stream(listOf(StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))))
-            playerMapObject.attachTo(player, vector3DOf(1f, 2f, 3f), vector3DOf(-1f, -2f, -3f))
+            playerMapObject.attachTo(player, vector3DOf(1f, 2f, 3f), vector3DOf(-11f, -22f, -33f))
             mapObjectStreamer.stream(listOf(StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))))
             mapObjectStreamer.stream(listOf(StreamLocation(player, locationOf(1100f, 1900f, 50f, 1, 0))))
 
@@ -272,7 +273,7 @@ internal class MapObjectStreamerTest {
                         modelId = 1337,
                         drawDistance = 300f,
                         coordinates = vector3DOf(1001f, 2002f, 103f),
-                        rotation = vector3DOf(1f, 2f, 3f)
+                        rotation = vector3DOf(-11f, -22f, -33f)
                 )
             }
         }

@@ -81,7 +81,7 @@ constructor(
         val oldMapObject = objectsByName.put(name, mapObject)
         oldMapObject?.destroy()
         mapObject.onMoved {
-            messageSender.sendMessageToAll(Colors.YELLOW, "$name stopped moving")
+            messageSender.sendMessageToAll(Colors.YELLOW, "$name stopped createMoving")
         }
     }
 

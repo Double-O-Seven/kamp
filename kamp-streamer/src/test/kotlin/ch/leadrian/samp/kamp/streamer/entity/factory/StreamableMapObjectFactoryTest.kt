@@ -15,12 +15,11 @@ internal class StreamableMapObjectFactoryTest {
     fun setUp() {
         streamableMapObjectFactory = StreamableMapObjectFactory(
                 playerMapObjectService = mockk(),
-                timeProvider = mockk(),
-                timerExecutor = mockk(),
                 onStreamableMapObjectMovedHandler = mockk(),
                 onPlayerEditStreamableMapObjectHandler = mockk(),
                 onPlayerSelectStreamableMapObjectHandler = mockk(),
-                textProvider = mockk()
+                textProvider = mockk(),
+                streamableMapObjectStateFactory = mockk()
         )
     }
 

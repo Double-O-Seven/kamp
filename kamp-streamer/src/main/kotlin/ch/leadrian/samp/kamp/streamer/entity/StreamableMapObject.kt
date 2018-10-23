@@ -9,7 +9,6 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
@@ -17,17 +16,11 @@ import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.api.timer.Timer
-import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.streamer.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
-import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.PlayerAttachmentTarget
-import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject.AttachmentTarget.VehicleAttachmentTarget
-import ch.leadrian.samp.kamp.streamer.util.TimeProvider
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.*
-import java.util.concurrent.TimeUnit
 
 class StreamableMapObject
 internal constructor(
@@ -39,17 +32,14 @@ internal constructor(
         var interiorIds: MutableSet<Int>,
         var virtualWorldIds: MutableSet<Int>,
         private val playerMapObjectService: PlayerMapObjectService,
-        private val timeProvider: TimeProvider,
-        private val timerExecutor: TimerExecutor,
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
-        private val textProvider: TextProvider
+        private val textProvider: TextProvider,
+        private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
 ) : DistanceBasedPlayerStreamable, SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(), OnPlayerDisconnectListener {
 
     private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
-
-    private val onStartMovingHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
     private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
@@ -57,54 +47,126 @@ internal constructor(
 
     private val onSelectHandlers: MutableList<StreamableMapObject.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
-    private val onAttachHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+    private val onStateChangeHandlers: MutableList<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit> = mutableListOf()
 
     private val onDestroyHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
-    private var isCameraCollisionDisabled: Boolean = false
-
-    private var movement: Movement? = null
-
-    private var attachmentTarget: AttachmentTarget? = null
-        get() {
-            if (field != null && field?.isValid == false) {
-                field = null
-            }
-            return field
-        }
+    private var state: StreamableMapObjectState
 
     private val materialsByIndex: MutableMap<Int, Material> = mutableMapOf()
 
     private val materialTextsByIndex: MutableMap<Int, MaterialText> = mutableMapOf()
 
+    init {
+        state = streamableMapObjectStateFactory.createFixedCoordinates(
+                coordinates = coordinates,
+                rotation = rotation
+        )
+    }
+
     override val self: StreamableMapObject = this
+
+    override fun onStreamIn(forPlayer: Player) {
+        requireNotDestroyed()
+        if (playerMapObjects.contains(forPlayer)) {
+            throw IllegalStateException("Streamable map object is already streamed in")
+        }
+        playerMapObjects[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
+    }
+
+    private fun createPlayerMapObject(forPlayer: Player): PlayerMapObject =
+            playerMapObjectService.createPlayerMapObject(
+                    player = forPlayer,
+                    modelId = modelId,
+                    coordinates = coordinates,
+                    rotation = rotation,
+                    drawDistance = streamDistance
+            )
+
+    private fun initializePlayerMapObject(playerMapObject: PlayerMapObject) {
+        materialsByIndex.forEach { _, material -> material.apply(playerMapObject) }
+        materialTextsByIndex.forEach { _, materialText -> materialText.apply(playerMapObject) }
+        state.onStreamIn(playerMapObject)
+        if (isCameraCollisionDisabled) {
+            playerMapObject.disableCameraCollision()
+        }
+        playerMapObject.onEdit { objectEditResponse, offset, rotation ->
+            this@StreamableMapObject.onEdit(this.player, objectEditResponse, offset, rotation)
+        }
+        playerMapObject.onSelect { modelId, offset ->
+            this@StreamableMapObject.onSelect(this.player, modelId, offset)
+        }
+    }
+
+    override fun onStreamOut(forPlayer: Player) {
+        requireNotDestroyed()
+        val playerMapObject = playerMapObjects.remove(forPlayer)
+                ?: throw IllegalStateException("Streamable player map object was not streamed it")
+        playerMapObject.destroy()
+    }
+
+    override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjects.contains(forPlayer)
 
     override var streamInCondition: (Player) -> Boolean = { true }
 
-    var coordinates: Vector3D = coordinates.toVector3D()
-        get() = attachmentTarget?.playerMapObjectCoordinates
-                ?: movement?.coordinates
-                ?: field
+    private fun transitionToState(newState: StreamableMapObjectState) {
+        val oldState = state
+        if (oldState.isStreamOutRequiredOnLeave(newState)) {
+            streamOutAllPlayerMapObjects()
+        }
+        val playerMapObjects = playerMapObjects.values
+        oldState.onLeave(playerMapObjects)
+        newState.onEnter(playerMapObjects)
+        state = newState
+        onStateChange(oldState, newState)
+    }
+
+    private fun onStateChange(oldState: StreamableMapObjectState, newState: StreamableMapObjectState) {
+        onStateChangeHandlers.forEach { it.invoke(this, oldState, newState) }
+    }
+
+    internal fun onStateChange(onStateChange: StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
+        onStateChangeHandlers += onStateChange
+    }
+
+    private fun streamOutAllPlayerMapObjects() {
+        playerMapObjects.values.forEach { it.destroy() }
+        playerMapObjects.clear()
+    }
+
+    var coordinates: Vector3D
+        get() = state.coordinates
         set(value) {
             requireNotDestroyed()
-            if (isAttached) return
-            cancelMovement()
-            field = value.toVector3D()
-            playerMapObjects.forEach { _, playerMapObject ->
-                playerMapObject.coordinates = field
-            }
+            val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
+                    coordinates = value,
+                    rotation = rotation
+            )
+            transitionToState(fixedCoordinates)
             onBoundingBoxChanged()
         }
 
-    var rotation: Vector3D = rotation.toVector3D()
+    var rotation: Vector3D
+        get() = state.rotation
         set(value) {
             requireNotDestroyed()
-            if (isAttached) return
-            field = value.toVector3D()
-            playerMapObjects.forEach { _, playerMapObject ->
-                playerMapObject.rotation = field
-            }
+            val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
+                    coordinates = coordinates,
+                    rotation = value
+            )
+            transitionToState(fixedCoordinates)
         }
+
+    private fun fixPosition() {
+        val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
+                coordinates = coordinates,
+                rotation = rotation
+        )
+        transitionToState(fixedCoordinates)
+    }
+
+    var isCameraCollisionDisabled: Boolean = false
+        private set
 
     fun disableCameraCollision() {
         requireNotDestroyed()
@@ -117,73 +179,39 @@ internal constructor(
 
     @JvmOverloads
     fun moveTo(
-            coordinates: Vector3D,
+            destination: Vector3D,
             speed: Float,
-            rotation: Vector3D = vector3DOf(x = -1000f, y = -1000f, z = -1000f)
+            targetRotation: Vector3D? = null
     ) {
         requireNotDestroyed()
-        if (isAttached) return
-        if (!isMoving) {
-            onStartMoving()
-        }
-        this.movement?.stopTimer()
-        this.movement = createMovement(coordinates, rotation, speed)
-        playerMapObjects.forEach { _, playerMapObject ->
-            playerMapObject.moveTo(coordinates = coordinates, speed = speed, rotation = rotation)
-        }
-    }
-
-    private fun createMovement(destination: Vector3D, rotation: Vector3D, speed: Float): Movement {
-        val origin = this.coordinates
-        val movement = Movement(
-                origin = origin,
-                destination = destination.toVector3D(),
-                rotation = rotation.toVector3D(),
+        val moving = streamableMapObjectStateFactory.createMoving(
+                origin = coordinates,
+                destination = destination,
+                startRotation = rotation,
+                targetRotation = targetRotation,
                 speed = speed,
-                startTimeInMs = timeProvider.getCurrentTimeInMs(),
-                timeProvider = timeProvider
+                onMoved = this::onMoved
         )
-        movement.timer = timerExecutor.addTimer(movement.duration, TimeUnit.MILLISECONDS) {
-            if (this.movement === movement) {
-                onMoved()
-            }
-        }
-        return movement
+        transitionToState(moving)
     }
 
     fun stop() {
         requireNotDestroyed()
-        if (!isMoving) return
-        cancelMovement()
-        playerMapObjects.forEach { _, playerMapObject ->
-            playerMapObject.stop()
+        if (isMoving) {
+            fixPosition()
         }
     }
 
     val isMoving: Boolean
-        get() = movement != null
-
-    private fun cancelMovement() {
-        movement?.stopTimer()
-        movement = null
-    }
+        get() = state is StreamableMapObjectState.Moving
 
     private fun onMoved() {
-        movement = null
         onMovedHandlers.forEach { it.invoke(this) }
         onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
     }
 
     fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
         onMovedHandlers += onMoved
-    }
-
-    private fun onStartMoving() {
-        onStartMovingHandlers.forEach { it.invoke(this) }
-    }
-
-    internal fun onStartMoving(onStartMoving: StreamableMapObject.() -> Unit) {
-        onStartMovingHandlers += onStartMoving
     }
 
     fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
@@ -255,88 +283,33 @@ internal constructor(
 
     fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
-        if (isMoving) {
-            cancelMovement()
-        }
-        attachTo(PlayerAttachmentTarget(player = player, offset = offset, rotation = rotation))
+        val newState = streamableMapObjectStateFactory.createAttachedToPlayer(
+                player = player,
+                offset = offset,
+                attachRotation = rotation
+        )
+        transitionToState(newState)
     }
 
     fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
-        if (isMoving) {
-            cancelMovement()
-        }
-        attachTo(VehicleAttachmentTarget(vehicle = vehicle, offset = offset, rotation = rotation))
-    }
-
-    private fun attachTo(attachmentTarget: AttachmentTarget) {
-        requireNotDestroyed()
-        this.attachmentTarget = attachmentTarget
-        playerMapObjects.forEach { _, playerMapObject ->
-            attachmentTarget.attach(playerMapObject)
-        }
-        onAttach()
+        val newState = streamableMapObjectStateFactory.createAttachedToVehicle(
+                vehicle = vehicle,
+                offset = offset,
+                attachRotation = rotation
+        )
+        transitionToState(newState)
     }
 
     fun detach() {
-        attachmentTarget?.let { coordinates = it.playerMapObjectCoordinates }
-        attachmentTarget = null
-        playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
-        playerMapObjects.clear()
+        requireNotDestroyed()
+        if (isAttached) {
+            fixPosition()
+        }
     }
 
     val isAttached: Boolean
-        get() = attachmentTarget != null
-
-    private fun onAttach() {
-        onAttachHandlers.forEach { it.invoke(this) }
-    }
-
-    internal fun onAttach(onAttach: StreamableMapObject.() -> Unit) {
-        onAttachHandlers += onAttach
-    }
-
-    override fun onStreamIn(forPlayer: Player) {
-        requireNotDestroyed()
-        if (playerMapObjects.contains(forPlayer)) {
-            throw IllegalStateException("Streamable map object is already streamed in")
-        }
-        playerMapObjects[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
-    }
-
-    private fun createPlayerMapObject(forPlayer: Player): PlayerMapObject =
-            playerMapObjectService.createPlayerMapObject(
-                    player = forPlayer,
-                    modelId = modelId,
-                    coordinates = coordinates,
-                    rotation = rotation,
-                    drawDistance = streamDistance
-            )
-
-    private fun initializePlayerMapObject(playerMapObject: PlayerMapObject) {
-        attachmentTarget?.attach(playerMapObject)
-        materialsByIndex.forEach { _, material -> material.apply(playerMapObject) }
-        materialTextsByIndex.forEach { _, materialText -> materialText.apply(playerMapObject) }
-        movement?.apply(playerMapObject)
-        if (isCameraCollisionDisabled) {
-            playerMapObject.disableCameraCollision()
-        }
-        playerMapObject.onEdit { objectEditResponse, offset, rotation ->
-            this@StreamableMapObject.onEdit(this.player, objectEditResponse, offset, rotation)
-        }
-        playerMapObject.onSelect { modelId, offset ->
-            this@StreamableMapObject.onSelect(this.player, modelId, offset)
-        }
-    }
-
-    override fun onStreamOut(forPlayer: Player) {
-        requireNotDestroyed()
-        val playerMapObject = playerMapObjects.remove(forPlayer)
-                ?: throw IllegalStateException("Streamable player map object was not streamed it")
-        playerMapObject.destroy()
-    }
-
-    override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjects.contains(forPlayer)
+        get() = state is StreamableMapObjectState.Attached
 
     override fun distanceTo(location: Location): Float =
             when {
@@ -347,6 +320,9 @@ internal constructor(
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
         playerMapObjects.remove(player)
+        if (state is StreamableMapObjectState.Attached.ToPlayer) {
+            fixPosition()
+        }
     }
 
     fun edit(player: Player) {
@@ -389,13 +365,13 @@ internal constructor(
         private set
 
     override fun destroy() {
-        if (isDestroyed) return
+        if (isDestroyed) {
+            return
+        }
 
         onDestroyHandlers.forEach { it.invoke(this) }
         playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
         playerMapObjects.clear()
-        attachmentTarget = null
-        movement = null
         isDestroyed = true
     }
 
@@ -518,95 +494,4 @@ internal constructor(
 
     }
 
-    private class Movement(
-            private val origin: Vector3D,
-            val destination: Vector3D,
-            val rotation: Vector3D,
-            val speed: Float,
-            private val startTimeInMs: Long,
-            private val timeProvider: TimeProvider
-    ) {
-
-        private val distanceToMove = origin.distanceTo(destination)
-        val duration: Long = Math.round((distanceToMove / speed) * 1000f).toLong()
-        var timer: Timer? = null
-
-        val coordinates: Vector3D
-            get() {
-                if (duration <= 0) {
-                    return destination
-                }
-                val currentTimeInMs = timeProvider.getCurrentTimeInMs()
-                val timeDifference = currentTimeInMs - startTimeInMs
-                if (timeDifference >= duration) {
-                    return destination
-                }
-                val progress: Float = timeDifference.toFloat() / duration.toFloat()
-                val dx = destination.x - origin.x
-                val dy = destination.y - origin.y
-                val dz = destination.z - origin.z
-                val x = origin.x + progress * dx
-                val y = origin.y + progress * dy
-                val z = origin.z + progress * dz
-                return vector3DOf(x = x, y = y, z = z)
-            }
-
-        fun stopTimer() {
-            timer?.stop()
-            timer = null
-        }
-
-        fun apply(playerMapObject: PlayerMapObject) {
-            playerMapObject.moveTo(coordinates = destination, speed = speed, rotation = rotation)
-        }
-    }
-
-    private sealed class AttachmentTarget(val offset: Vector3D, val rotation: Vector3D) {
-
-        abstract fun attach(playerMapObject: PlayerMapObject)
-
-        abstract val coordinates: Vector3D
-
-        abstract val isValid: Boolean
-
-        val playerMapObjectCoordinates: Vector3D
-            // TODO include rotation to be really correct
-            get() = coordinates + offset
-
-        class PlayerAttachmentTarget(
-                private val player: Player,
-                offset: Vector3D,
-                rotation: Vector3D
-        ) : AttachmentTarget(offset = offset, rotation = rotation) {
-
-            override val isValid: Boolean
-                get() = player.isConnected
-
-            override fun attach(playerMapObject: PlayerMapObject) {
-                playerMapObject.attachTo(player = player, offset = offset, rotation = rotation)
-            }
-
-            override val coordinates: Vector3D
-                get() = player.coordinates
-
-        }
-
-        class VehicleAttachmentTarget(
-                private val vehicle: Vehicle,
-                offset: Vector3D,
-                rotation: Vector3D
-        ) : AttachmentTarget(offset = offset, rotation = rotation) {
-
-            override val isValid: Boolean
-                get() = !vehicle.isDestroyed
-
-            override fun attach(playerMapObject: PlayerMapObject) {
-                playerMapObject.attachTo(vehicle = vehicle, offset = offset, rotation = rotation)
-            }
-
-            override val coordinates: Vector3D
-                get() = vehicle.coordinates
-        }
-
-    }
 }

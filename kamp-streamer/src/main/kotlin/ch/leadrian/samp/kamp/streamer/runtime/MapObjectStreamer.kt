@@ -29,7 +29,7 @@ constructor(
 ) {
 
     /*
-     * The spatial index and set of moving or attached objects may only be accessed during
+     * The spatial index and set of createMoving or attached objects may only be accessed during
      * streaming to avoid any race conditions and expensive synchronization.
      * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
      */
@@ -65,8 +65,11 @@ constructor(
     private fun registerCallbackHandlers(streamableMapObject: StreamableMapObject) {
         streamableMapObject.onDestroy { remove(this) }
         streamableMapObject.onBoundingBoxChanged { updateSpatialIndex(this) }
-        streamableMapObject.onAttach { enableNonIndexStreaming(this) }
-        streamableMapObject.onStartMoving { enableNonIndexStreaming(this) }
+        streamableMapObject.onStateChange { _, _ ->
+            if (isMoving || isAttached) {
+                enableNonIndexStreaming(this)
+            }
+        }
     }
 
     private fun add(streamableMapObject: StreamableMapObject) {
