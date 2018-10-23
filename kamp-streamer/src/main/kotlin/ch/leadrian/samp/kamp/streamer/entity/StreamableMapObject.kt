@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
@@ -37,7 +38,10 @@ internal constructor(
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
         private val textProvider: TextProvider,
         private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
-) : DistanceBasedPlayerStreamable, SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(), OnPlayerDisconnectListener {
+) : DistanceBasedPlayerStreamable,
+        SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(),
+        OnPlayerDisconnectListener,
+        OnVehicleDestructionListener {
 
     private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
 
@@ -318,13 +322,6 @@ internal constructor(
                 else -> coordinates.distanceTo(location)
             }
 
-    override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
-        playerMapObjects.remove(player)
-        if (state is StreamableMapObjectState.Attached.ToPlayer) {
-            fixCoordinates()
-        }
-    }
-
     fun edit(player: Player) {
         playerMapObjects[player]?.edit(player)
     }
@@ -355,6 +352,21 @@ internal constructor(
     private fun onSelect(player: Player, modelId: Int, offset: Vector3D) {
         onSelectHandlers.forEach { it.invoke(this, player, modelId, offset) }
         onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
+    }
+
+    override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
+        playerMapObjects.remove(player)
+        val currentState = state
+        if (currentState is StreamableMapObjectState.Attached.ToPlayer && currentState.player == player) {
+            fixCoordinates()
+        }
+    }
+
+    override fun onVehicleDestruction(vehicle: Vehicle) {
+        val currentState = state
+        if (currentState is StreamableMapObjectState.Attached.ToVehicle && currentState.vehicle == vehicle) {
+            fixCoordinates()
+        }
     }
 
     fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {
