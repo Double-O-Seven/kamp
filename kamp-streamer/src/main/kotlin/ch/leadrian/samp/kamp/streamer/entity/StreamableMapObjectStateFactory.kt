@@ -27,10 +27,10 @@ constructor(private val timeProvider: TimeProvider, private val timerExecutor: T
     ): StreamableMapObjectState.Moving =
             StreamableMapObjectState.Moving(
                     onMoved = onMoved,
-                    origin = origin.toVector3D(),
-                    destination = destination.toVector3D(),
-                    startRotation = startRotation.toVector3D(),
-                    targetRotation = targetRotation?.toVector3D(),
+                    origin = origin,
+                    destination = destination,
+                    startRotation = startRotation,
+                    targetRotation = targetRotation,
                     speed = speed,
                     timeProvider = timeProvider,
                     timerExecutor = timerExecutor
@@ -43,8 +43,8 @@ constructor(private val timeProvider: TimeProvider, private val timerExecutor: T
     ): StreamableMapObjectState.Attached.ToVehicle =
             StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
-                    offset = offset.toVector3D(),
-                    attachRotation = attachRotation.toVector3D()
+                    offset = offset,
+                    attachRotation = attachRotation
             )
 
     fun createAttachedToPlayer(
@@ -54,8 +54,8 @@ constructor(private val timeProvider: TimeProvider, private val timerExecutor: T
     ): StreamableMapObjectState.Attached.ToPlayer =
             StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
-                    offset = offset.toVector3D(),
-                    attachRotation = attachRotation.toVector3D()
+                    offset = offset,
+                    attachRotation = attachRotation
             )
 
 }

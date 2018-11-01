@@ -27,9 +27,13 @@ internal sealed class StreamableMapObjectState {
     abstract val rotation: Vector3D
 
     internal class FixedCoordinates(
-            override val coordinates: Vector3D,
-            override val rotation: Vector3D
+            coordinates: Vector3D,
+            rotation: Vector3D
     ) : StreamableMapObjectState() {
+
+        override val coordinates = coordinates.toVector3D()
+
+        override val rotation = rotation.toVector3D()
 
         override fun onStreamIn(playerMapObject: PlayerMapObject) {}
 
@@ -43,19 +47,31 @@ internal sealed class StreamableMapObjectState {
 
     internal class Moving(
             private val onMoved: () -> Unit,
-            private val origin: Vector3D,
-            private var destination: Vector3D,
-            private val startRotation: Vector3D,
-            private val targetRotation: Vector3D?,
+            origin: Vector3D,
+            destination: Vector3D,
+            startRotation: Vector3D,
+            targetRotation: Vector3D?,
             private val speed: Float,
             private val timeProvider: TimeProvider,
             timerExecutor: TimerExecutor
     ) : StreamableMapObjectState() {
 
+        private val origin = origin.toVector3D()
+
+        private var destination = destination.toVector3D()
+
+        private val startRotation = startRotation.toVector3D()
+
+        private val targetRotation = targetRotation?.toVector3D()
+
         private val startTimeInMs: Long = timeProvider.getCurrentTimeInMs()
+
         private val distanceToMove = origin.distanceTo(destination)
+
         private val duration: Long = Math.round((distanceToMove / speed) * 1000f).toLong()
+
         private val timer: Timer
+
         private var stopped: Boolean = false
 
         init {
@@ -120,9 +136,13 @@ internal sealed class StreamableMapObjectState {
     }
 
     internal sealed class Attached(
-            protected val offset: Vector3D,
-            protected val attachRotation: Vector3D
+            offset: Vector3D,
+            attachRotation: Vector3D
     ) : StreamableMapObjectState() {
+
+        protected val attachRotation = attachRotation.toVector3D()
+
+        protected val offset = offset.toVector3D()
 
         protected abstract val entityAngle: Float
 
