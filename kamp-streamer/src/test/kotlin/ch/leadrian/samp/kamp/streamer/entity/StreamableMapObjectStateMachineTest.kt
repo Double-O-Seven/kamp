@@ -8,6 +8,7 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
+import io.mockk.slot
 import io.mockk.verify
 import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
@@ -177,6 +178,33 @@ internal class StreamableMapObjectStateMachineTest {
                 onStateChange1.invoke(streamableMapObject, initialState, moving)
                 onStateChange2.invoke(streamableMapObject, initialState, moving)
             }
+        }
+
+        @Test
+        fun shouldSetStreamableMapObjectOnMovedAsOnMoved() {
+            every { streamableMapObject.onMoved() } just Runs
+
+            streamableMapObjectStateMachine.transitionToMoving(
+                    origin = origin,
+                    destination = destination,
+                    startRotation = startRotation,
+                    targetRotation = targetRotation,
+                    speed = 13f
+            )
+
+            val slot = slot<() -> Unit>()
+            verify {
+                streamableMapObjectStateFactory.createMoving(
+                        origin = any(),
+                        destination = any(),
+                        startRotation = any(),
+                        targetRotation = any(),
+                        speed = any(),
+                        onMoved = capture(slot)
+                )
+            }
+            slot.captured.invoke()
+            verify { streamableMapObject.onMoved() }
         }
     }
 
