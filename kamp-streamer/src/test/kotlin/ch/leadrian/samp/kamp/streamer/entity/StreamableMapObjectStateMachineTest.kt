@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.streamer.entity
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import io.mockk.Runs
 import io.mockk.every
@@ -18,15 +17,8 @@ import org.junit.jupiter.api.Test
 
 internal class StreamableMapObjectStateMachineTest {
 
-    private val playerMapObject1 = mockk<PlayerMapObject>()
-    private val playerMapObject2 = mockk<PlayerMapObject>()
     private val streamableMapObject = mockk<StreamableMapObject>()
     private val streamableMapObjectStateFactory = mockk<StreamableMapObjectStateFactory>()
-
-    @BeforeEach
-    fun setUp() {
-        every { streamableMapObject.playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
-    }
 
     @Nested
     inner class FixedCoordinatesTests {
@@ -62,8 +54,8 @@ internal class StreamableMapObjectStateMachineTest {
             )
 
             verifyOrder {
-                initialState.onLeave(listOf(playerMapObject1, playerMapObject2))
-                fixedCoordinates.onEnter(listOf(playerMapObject1, playerMapObject2))
+                initialState.onLeave(streamableMapObject)
+                fixedCoordinates.onLeave(streamableMapObject)
             }
         }
 
@@ -140,8 +132,8 @@ internal class StreamableMapObjectStateMachineTest {
             )
 
             verifyOrder {
-                initialState.onLeave(listOf(playerMapObject1, playerMapObject2))
-                moving.onEnter(listOf(playerMapObject1, playerMapObject2))
+                initialState.onLeave(streamableMapObject)
+                moving.onLeave(streamableMapObject)
             }
         }
 
@@ -245,8 +237,8 @@ internal class StreamableMapObjectStateMachineTest {
             )
 
             verifyOrder {
-                initialState.onLeave(listOf(playerMapObject1, playerMapObject2))
-                attachedToPlayer.onEnter(listOf(playerMapObject1, playerMapObject2))
+                initialState.onLeave(streamableMapObject)
+                attachedToPlayer.onLeave(streamableMapObject)
             }
         }
 
@@ -319,8 +311,8 @@ internal class StreamableMapObjectStateMachineTest {
             )
 
             verifyOrder {
-                initialState.onLeave(listOf(playerMapObject1, playerMapObject2))
-                attachedToVehicle.onEnter(listOf(playerMapObject1, playerMapObject2))
+                initialState.onLeave(streamableMapObject)
+                attachedToVehicle.onLeave(streamableMapObject)
             }
         }
 

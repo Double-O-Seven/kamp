@@ -40,22 +40,20 @@ internal class StreamableMapObjectTest {
     private val onPlayerEditStreamableMapObjectHandler = mockk<OnPlayerEditStreamableMapObjectHandler>()
     private val onPlayerSelectStreamableMapObjectHandler = mockk<OnPlayerSelectStreamableMapObjectHandler>()
     private val textProvider = mockk<TextProvider>()
-    private val streamableMapObjectStateFactory = mockk<StreamableMapObjectStateFactory>()
+    private val streamableMapObjectStateMachineFactory = mockk<StreamableMapObjectStateMachineFactory>()
     private val playerId = PlayerId.valueOf(69)
     private lateinit var player: Player
     private val playerMapObjectId = PlayerMapObjectId.valueOf(69)
     private lateinit var playerMapObject: PlayerMapObject
     private val initialCoordinates = mutableVector3DOf(1f, 2f, 3f)
     private val initialRotation = mutableVector3DOf(4f, 5f, 6f)
-    private val initialState = mockk<StreamableMapObjectState.FixedCoordinates>()
+    private val streamableMapObjectStateMachine = mockk<StreamableMapObjectStateMachine>()
 
     @BeforeEach
     fun setUp() {
         every {
-            streamableMapObjectStateFactory.createFixedCoordinates(initialCoordinates, initialRotation)
-        } returns initialState
-        every { initialState.coordinates } returns initialCoordinates
-        every { initialState.rotation } returns initialRotation
+            streamableMapObjectStateMachineFactory.create(any(), initialCoordinates, initialRotation)
+        } returns streamableMapObjectStateMachine
         player = mockk {
             every { id } returns playerId
         }
@@ -78,7 +76,7 @@ internal class StreamableMapObjectTest {
                 onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
                 playerMapObjectService = playerMapObjectService,
                 textProvider = textProvider,
-                streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
     }
 
@@ -86,9 +84,12 @@ internal class StreamableMapObjectTest {
     inner class OnStreamInTests {
 
         private val player = mockk<Player>()
+        private val currentState = mockk<StreamableMapObjectState>()
 
         @BeforeEach
         fun setUp() {
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
         }
 
@@ -111,12 +112,11 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
 
             streamableMapObject.onStreamIn(player)
 
             verify {
-                initialState.onStreamIn(playerMapObject)
+                currentState.onStreamIn(playerMapObject)
             }
         }
 
@@ -131,7 +131,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onStreamIn(player)
 
             val caughtThrowable = catchThrowable { streamableMapObject.onStreamIn(player) }
@@ -167,7 +166,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
 
             streamableMapObject.onStreamIn(player)
 
@@ -208,7 +206,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
 
             streamableMapObject.onStreamIn(player)
 
@@ -235,7 +232,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.disableCameraCollision()
 
             streamableMapObject.onStreamIn(player)
@@ -258,7 +254,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onEdit(onEdit)
 
             streamableMapObject.onStreamIn(player)
@@ -304,7 +299,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onSelect(onSelect)
 
             streamableMapObject.onStreamIn(player)
@@ -343,7 +337,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onStreamIn(player)
 
             val isStreamedIn = streamableMapObject.isStreamedIn(player)
@@ -355,6 +348,16 @@ internal class StreamableMapObjectTest {
 
     @Nested
     inner class OnStreamOutTests {
+
+        private val player = mockk<Player>()
+        private val currentState = mockk<StreamableMapObjectState>()
+
+        @BeforeEach
+        fun setUp() {
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            every { currentState.onStreamIn(any()) } just Runs
+            every { playerMapObject.player } returns player
+        }
 
         @Test
         fun shouldDestroyPlayerMapObject() {
@@ -368,7 +371,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onStreamIn(player)
 
             streamableMapObject.onStreamOut(player)
@@ -390,7 +392,6 @@ internal class StreamableMapObjectTest {
                         drawDistance = 75f
                 )
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
             streamableMapObject.onStreamIn(player)
             streamableMapObject.onStreamOut(player)
 
@@ -403,7 +404,10 @@ internal class StreamableMapObjectTest {
 
     @Test
     fun shouldGetBoundingBox() {
-        every { initialState.coordinates } returns vector3DOf(1f, 2f, 3f)
+        val currentState = mockk<StreamableMapObjectState> {
+            every { coordinates } returns vector3DOf(1f, 2f, 3f)
+        }
+        every { streamableMapObjectStateMachine.currentState } returns currentState
         val boundingBox = streamableMapObject.getBoundingBox()
 
         assertThat(boundingBox)
@@ -422,7 +426,10 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun shouldReturnCoordinates() {
-            every { initialState.coordinates } returns vector3DOf(11f, 22f, 33f)
+            val currentState = mockk<StreamableMapObjectState> {
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
 
             val coordinates = streamableMapObject.coordinates
 
@@ -432,55 +439,18 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun setShouldTransitionToFixedCoordinatesState() {
-            every { initialState.isStreamOutRequiredOnLeave(any()) } returns false
-            every { initialState.onLeave(any()) } just Runs
-            val fixedCoordinates = mockk<StreamableMapObjectState.FixedCoordinates> {
-                every { coordinates } returns vector3DOf(0f, 0f, 0f)
-                every { onEnter(any()) } just Runs
-            }
-            clearMocks(streamableMapObjectStateFactory)
-            every {
-                streamableMapObjectStateFactory.createFixedCoordinates(
-                        coordinates = vector3DOf(123f, 456f, 789f),
-                        rotation = initialRotation
-                )
-            } returns fixedCoordinates
-            every {
-                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
-            } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
-            streamableMapObject.onStreamIn(player)
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
 
             streamableMapObject.coordinates = vector3DOf(123f, 456f, 789f)
 
-            val onLeaveSlot = slot<Collection<PlayerMapObject>>()
-            val onEnterSlot = slot<Collection<PlayerMapObject>>()
             verify {
-                initialState.onLeave(capture(onLeaveSlot))
-                fixedCoordinates.onEnter(capture(onEnterSlot))
+                streamableMapObjectStateMachine.transitionToFixedCoordinates(vector3DOf(123f, 456f, 789f), initialRotation)
             }
-            assertThat(onLeaveSlot.captured)
-                    .containsExactlyInAnyOrder(playerMapObject)
-            assertThat(onEnterSlot.captured)
-                    .containsExactlyInAnyOrder(playerMapObject)
         }
 
         @Test
         fun setShouldCallOnBoundingBoxChanged() {
-            initialState.apply {
-                every { coordinates } returns initialCoordinates
-                every { rotation } returns initialRotation
-                every { isStreamOutRequiredOnLeave(any()) } returns false
-                every { onLeave(any()) } just Runs
-            }
-            val fixedCoordinates = mockk<StreamableMapObjectState.FixedCoordinates> {
-                every { coordinates } returns vector3DOf(100f, 200f, 300f)
-                every { onEnter(any()) } just Runs
-            }
-            clearMocks(streamableMapObjectStateFactory)
-            every {
-                streamableMapObjectStateFactory.createFixedCoordinates(any(), any())
-            } returns fixedCoordinates
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
             val onBoundingBoxChanged = mockk<StreamableMapObject.(Rect3d) -> Unit>(relaxed = true)
             streamableMapObject.onBoundingBoxChanged(onBoundingBoxChanged)
 
@@ -491,30 +461,6 @@ internal class StreamableMapObjectTest {
             assertThat(slot.captured)
                     .isEqualTo(Rect3d(25.0, 125.0, 225.0, 175.0, 275.0, 375.0))
         }
-
-        @Test
-        fun shouldCallOnStateChanged() {
-            initialState.apply {
-                every { coordinates } returns initialCoordinates
-                every { rotation } returns initialRotation
-                every { isStreamOutRequiredOnLeave(any()) } returns false
-                every { onLeave(any()) } just Runs
-            }
-            val fixedCoordinates = mockk<StreamableMapObjectState.FixedCoordinates> {
-                every { coordinates } returns vector3DOf(100f, 200f, 300f)
-                every { onEnter(any()) } just Runs
-            }
-            clearMocks(streamableMapObjectStateFactory)
-            every {
-                streamableMapObjectStateFactory.createFixedCoordinates(any(), any())
-            } returns fixedCoordinates
-            val onStateChange = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObject.onStateChange(onStateChange)
-
-            streamableMapObject.coordinates = vector3DOf(100f, 200f, 300f)
-
-            verify { onStateChange.invoke(streamableMapObject, initialState, fixedCoordinates) }
-        }
     }
 
     @Nested
@@ -522,7 +468,10 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun shouldReturnRotation() {
-            every { initialState.rotation } returns vector3DOf(11f, 22f, 33f)
+            val currentState = mockk<StreamableMapObjectState> {
+                every { rotation } returns vector3DOf(11f, 22f, 33f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
 
             val rotation = streamableMapObject.rotation
 
@@ -532,30 +481,14 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun setShouldTransitionToFixedRotationState() {
-            every { initialState.isStreamOutRequiredOnLeave(any()) } returns false
-            every { initialState.onLeave(any()) } just Runs
-            val fixedCoordinates = mockk<StreamableMapObjectState.FixedCoordinates> {
-                every { onEnter(any()) } just Runs
-            }
-            clearMocks(streamableMapObjectStateFactory)
-            every {
-                streamableMapObjectStateFactory.createFixedCoordinates(
-                        coordinates = initialCoordinates,
-                        rotation = vector3DOf(123f, 456f, 789f)
-                )
-            } returns fixedCoordinates
-            every {
-                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
-            } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
-            streamableMapObject.onStreamIn(player)
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
 
             streamableMapObject.rotation = vector3DOf(123f, 456f, 789f)
 
-            val slot = slot<Collection<PlayerMapObject>>()
-            verify { fixedCoordinates.onEnter(capture(slot)) }
-            assertThat(slot.captured)
-                    .containsExactlyInAnyOrder(playerMapObject)
+
+            verify {
+                streamableMapObjectStateMachine.transitionToFixedCoordinates(initialCoordinates, vector3DOf(123f, 456f, 789f))
+            }
         }
     }
 
@@ -582,7 +515,10 @@ internal class StreamableMapObjectTest {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
-            every { initialState.onStreamIn(any()) } just Runs
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
             streamableMapObject.onStreamIn(player)
 
             streamableMapObject.disableCameraCollision()
@@ -599,7 +535,10 @@ internal class StreamableMapObjectTest {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
         } returns playerMapObject
         every { playerMapObject.setMaterial(any(), any(), any(), any(), any()) } just Runs
-        every { initialState.onStreamIn(any()) } just Runs
+        val currentState = mockk<StreamableMapObjectState> {
+            every { onStreamIn(any()) } just Runs
+        }
+        every { streamableMapObjectStateMachine.currentState } returns currentState
         streamableMapObject.onStreamIn(player)
 
         streamableMapObject.setMaterial(3, 69, "txd", "texture", Colors.RED)
@@ -619,7 +558,10 @@ internal class StreamableMapObjectTest {
             every {
                 playerMapObject.setMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any())
             } just Runs
-            every { initialState.onStreamIn(any()) } just Runs
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
             streamableMapObject.onStreamIn(player)
 
             streamableMapObject.setMaterialText(
@@ -661,7 +603,10 @@ internal class StreamableMapObjectTest {
             every {
                 playerMapObject.setMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any())
             } just Runs
-            every { initialState.onStreamIn(any()) } just Runs
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
             streamableMapObject.onStreamIn(player)
 
             streamableMapObject.setMaterialText(
@@ -698,7 +643,10 @@ internal class StreamableMapObjectTest {
         every {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
         } returns playerMapObject
-        every { initialState.onStreamIn(any()) } just Runs
+        val currentState = mockk<StreamableMapObjectState> {
+            every { onStreamIn(any()) } just Runs
+        }
+        every { streamableMapObjectStateMachine.currentState } returns currentState
         streamableMapObject.onStreamIn(player)
 
         streamableMapObject.edit(player)
@@ -735,9 +683,9 @@ internal class StreamableMapObjectTest {
                 every { coordinates } returns vector3DOf(0f, 0f, 0f)
                 every { onEnter(any()) } just Runs
             }
-            clearMocks(streamableMapObjectStateFactory)
+            clearMocks(streamableMapObjectStateMachineFactory)
             every {
-                streamableMapObjectStateFactory.createMoving(
+                streamableMapObjectStateMachineFactory.createMoving(
                         origin = initialCoordinates,
                         destination = vector3DOf(123f, 456f, 789f),
                         startRotation = initialRotation,
@@ -754,7 +702,7 @@ internal class StreamableMapObjectTest {
             )
             val slot = slot<() -> Unit>()
             verify {
-                streamableMapObjectStateFactory.createMoving(any(), any(), any(), any(), any(), capture(slot))
+                streamableMapObjectStateMachineFactory.createMoving(any(), any(), any(), any(), any(), capture(slot))
             }
 
             slot.captured.invoke()
@@ -773,9 +721,9 @@ internal class StreamableMapObjectTest {
                 every { coordinates } returns vector3DOf(0f, 0f, 0f)
                 every { onEnter(any()) } just Runs
             }
-            clearMocks(streamableMapObjectStateFactory)
+            clearMocks(streamableMapObjectStateMachineFactory)
             every {
-                streamableMapObjectStateFactory.createMoving(
+                streamableMapObjectStateMachineFactory.createMoving(
                         origin = initialCoordinates,
                         destination = vector3DOf(123f, 456f, 789f),
                         startRotation = initialRotation,
@@ -819,7 +767,7 @@ internal class StreamableMapObjectTest {
         fun givenItIsMovingItShouldTransitionToFixedCoordinates() {
             every { initialState.isStreamOutRequiredOnLeave(any()) } returns false
             every { initialState.onLeave(any()) } just Runs
-            clearMocks(streamableMapObjectStateFactory)
+            clearMocks(streamableMapObjectStateMachineFactory)
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { coordinates } returns vector3DOf(187f, 0.815f, 69f)
                 every { rotation } returns vector3DOf(0.123f, 0.456f, 0.789f)
@@ -828,14 +776,14 @@ internal class StreamableMapObjectTest {
                 every { isStreamOutRequiredOnLeave(any()) } returns false
             }
             every {
-                streamableMapObjectStateFactory.createMoving(any(), any(), any(), any(), any(), any())
+                streamableMapObjectStateMachineFactory.createMoving(any(), any(), any(), any(), any(), any())
             } returns moving
             val fixedCoordinates = mockk<StreamableMapObjectState.FixedCoordinates> {
                 every { coordinates } returns vector3DOf(0f, 0f, 0f)
                 every { onEnter(any()) } just Runs
             }
             every {
-                streamableMapObjectStateFactory.createFixedCoordinates(
+                streamableMapObjectStateMachineFactory.createFixedCoordinates(
                         coordinates = vector3DOf(187f, 0.815f, 69f),
                         rotation = vector3DOf(0.123f, 0.456f, 0.789f)
                 )

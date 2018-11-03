@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.streamer.callback.OnPlayerEditStreamableMapObjectHa
 import ch.leadrian.samp.kamp.streamer.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
-import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObjectStateFactory
+import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObjectStateMachineFactory
 import javax.inject.Inject
 
 internal class StreamableMapObjectFactory
@@ -18,7 +18,7 @@ constructor(
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
         private val textProvider: TextProvider,
-        private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
+        private val streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) {
 
     fun create(
@@ -43,7 +43,7 @@ constructor(
                 onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
                 onPlayerSelectStreamableMapObjectHandler = onPlayerSelectStreamableMapObjectHandler,
                 textProvider = textProvider,
-                streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
     }
 

@@ -14,13 +14,11 @@ import java.util.concurrent.TimeUnit
 
 internal sealed class StreamableMapObjectState {
 
-    abstract fun onEnter(playerMapObjects: Collection<PlayerMapObject>)
+    abstract fun onEnter(streamableMapObject: StreamableMapObject)
 
     abstract fun onStreamIn(playerMapObject: PlayerMapObject)
 
-    abstract fun onLeave(playerMapObjects: Collection<PlayerMapObject>)
-
-    abstract fun isStreamOutRequiredOnLeave(newState: StreamableMapObjectState): Boolean
+    abstract fun onLeave(streamableMapObject: StreamableMapObject)
 
     abstract val coordinates: Vector3D
 
@@ -37,11 +35,9 @@ internal sealed class StreamableMapObjectState {
 
         override fun onStreamIn(playerMapObject: PlayerMapObject) {}
 
-        override fun onEnter(playerMapObjects: Collection<PlayerMapObject>) {}
+        override fun onEnter(streamableMapObject: StreamableMapObject) {}
 
-        override fun onLeave(playerMapObjects: Collection<PlayerMapObject>) {}
-
-        override fun isStreamOutRequiredOnLeave(newState: StreamableMapObjectState): Boolean = false
+        override fun onLeave(streamableMapObject: StreamableMapObject) {}
 
     }
 
@@ -111,8 +107,8 @@ internal sealed class StreamableMapObjectState {
             return vector3DOf(x = x, y = y, z = z)
         }
 
-        override fun onEnter(playerMapObjects: Collection<PlayerMapObject>) {
-            playerMapObjects.forEach { move(it) }
+        override fun onEnter(streamableMapObject: StreamableMapObject) {
+            streamableMapObject.playerMapObjects.forEach { move(it) }
         }
 
         override fun onStreamIn(playerMapObject: PlayerMapObject) {
@@ -123,15 +119,13 @@ internal sealed class StreamableMapObjectState {
             playerMapObject.moveTo(coordinates = destination, speed = speed, rotation = targetRotation)
         }
 
-        override fun onLeave(playerMapObjects: Collection<PlayerMapObject>) {
+        override fun onLeave(streamableMapObject: StreamableMapObject) {
             if (!stopped) {
                 timer.stop()
-                playerMapObjects.forEach { it.stop() }
+                streamableMapObject.playerMapObjects.forEach { it.stop() }
                 stopped = true
             }
         }
-
-        override fun isStreamOutRequiredOnLeave(newState: StreamableMapObjectState): Boolean = false
 
     }
 
@@ -161,17 +155,17 @@ internal sealed class StreamableMapObjectState {
         override val rotation: Vector3D
             get() = vector3DOf(attachRotation.x, attachRotation.y, attachRotation.z + entityAngle)
 
-        override fun onEnter(playerMapObjects: Collection<PlayerMapObject>) {
-            playerMapObjects.forEach { attach(it) }
+        override fun onEnter(streamableMapObject: StreamableMapObject) {
+            streamableMapObject.playerMapObjects.forEach { attach(it) }
         }
 
         override fun onStreamIn(playerMapObject: PlayerMapObject) {
             attach(playerMapObject)
         }
 
-        override fun onLeave(playerMapObjects: Collection<PlayerMapObject>) {}
-
-        override fun isStreamOutRequiredOnLeave(newState: StreamableMapObjectState): Boolean = newState !is Attached
+        override fun onLeave(streamableMapObject: StreamableMapObject) {
+            streamableMapObject.destroyPlayerMapObjects()
+        }
 
         protected abstract fun attach(playerMapObject: PlayerMapObject)
 

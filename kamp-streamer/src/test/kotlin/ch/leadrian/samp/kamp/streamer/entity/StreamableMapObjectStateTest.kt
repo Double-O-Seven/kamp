@@ -17,15 +17,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.Percentage.withPercentage
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.ArgumentsProvider
-import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.concurrent.TimeUnit
-import java.util.stream.Stream
 
 internal class StreamableMapObjectStateTest {
 
@@ -291,6 +286,9 @@ internal class StreamableMapObjectStateTest {
             val playerMapObject2 = mockk<PlayerMapObject> {
                 every { moveTo(any(), any(), any()) } returns 50
             }
+            val streamableMapObject = mockk<StreamableMapObject> {
+                every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
+            }
             val state = StreamableMapObjectState.Moving(
                     origin = vector3DOf(1f, 2f, 3f),
                     destination = vector3DOf(4f, 5f, 6f),
@@ -302,7 +300,7 @@ internal class StreamableMapObjectStateTest {
                     timeProvider = timeProvider
             )
 
-            state.onEnter(listOf(playerMapObject1, playerMapObject2))
+            state.onEnter(streamableMapObject)
 
             verify {
                 playerMapObject1.moveTo(
@@ -334,6 +332,9 @@ internal class StreamableMapObjectStateTest {
                 val playerMapObject2 = mockk<PlayerMapObject> {
                     every { stop() } just Runs
                 }
+                val streamableMapObject = mockk<StreamableMapObject> {
+                    every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
+                }
                 val state = StreamableMapObjectState.Moving(
                         origin = vector3DOf(1f, 2f, 3f),
                         destination = vector3DOf(4f, 5f, 6f),
@@ -345,7 +346,7 @@ internal class StreamableMapObjectStateTest {
                         timeProvider = timeProvider
                 )
 
-                state.onLeave(listOf(playerMapObject1, playerMapObject2))
+                state.onLeave(streamableMapObject)
 
                 verify {
                     playerMapObject1.stop()
@@ -360,6 +361,9 @@ internal class StreamableMapObjectStateTest {
                     every { stop() } just Runs
                 }
                 every { timerExecutor.addTimer(any(), any(), any()) } returns timer
+                val streamableMapObject = mockk<StreamableMapObject> {
+                    every { playerMapObjects } returns listOf()
+                }
                 val state = StreamableMapObjectState.Moving(
                         origin = vector3DOf(1f, 2f, 3f),
                         destination = vector3DOf(4f, 5f, 6f),
@@ -371,7 +375,7 @@ internal class StreamableMapObjectStateTest {
                         timeProvider = timeProvider
                 )
 
-                state.onLeave(listOf())
+                state.onLeave(streamableMapObject)
 
                 verify { timer.stop() }
             }
@@ -386,6 +390,9 @@ internal class StreamableMapObjectStateTest {
                 val playerMapObject = mockk<PlayerMapObject> {
                     every { stop() } just Runs
                 }
+                val streamableMapObject = mockk<StreamableMapObject> {
+                    every { playerMapObjects } returns listOf(playerMapObject)
+                }
                 val state = StreamableMapObjectState.Moving(
                         origin = vector3DOf(1f, 2f, 3f),
                         destination = vector3DOf(4f, 5f, 6f),
@@ -397,34 +404,13 @@ internal class StreamableMapObjectStateTest {
                         timeProvider = timeProvider
                 )
 
-                state.onLeave(listOf(playerMapObject))
-                state.onLeave(listOf(playerMapObject))
+                state.onLeave(streamableMapObject)
+                state.onLeave(streamableMapObject)
 
                 verify(exactly = 1) {
                     timer.stop()
                     playerMapObject.stop()
                 }
-            }
-
-            @Test
-            fun isStreamOutRequiredOnLeaveShouldReturnFalse() {
-                every { timeProvider.getCurrentTimeInMs() } returns 0
-                every { timerExecutor.addTimer(any(), any(), any()) } returns mockk()
-                val state = StreamableMapObjectState.Moving(
-                        origin = vector3DOf(1f, 2f, 3f),
-                        destination = vector3DOf(4f, 5f, 6f),
-                        startRotation = vector3DOf(7f, 8f, 9f),
-                        targetRotation = vector3DOf(10f, 11f, 12f),
-                        speed = 1f,
-                        onMoved = {},
-                        timerExecutor = timerExecutor,
-                        timeProvider = timeProvider
-                )
-
-                val isStreamOutRequiredOnLeave = state.isStreamOutRequiredOnLeave(mockk())
-
-                assertThat(isStreamOutRequiredOnLeave)
-                        .isFalse()
             }
         }
     }
@@ -497,13 +483,16 @@ internal class StreamableMapObjectStateTest {
             val playerMapObject2 = mockk<PlayerMapObject> {
                 every { attachTo(any<Player>(), any(), any()) } just Runs
             }
+            val streamableMapObject = mockk<StreamableMapObject> {
+                every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
+            }
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(1f, 2f, 3f),
                     attachRotation = vector3DOf(4f, 5f, 6f)
             )
 
-            state.onEnter(listOf(playerMapObject1, playerMapObject2))
+            state.onEnter(streamableMapObject)
 
             verify {
                 playerMapObject1.attachTo(
@@ -541,34 +530,20 @@ internal class StreamableMapObjectStateTest {
             }
         }
 
-        @ParameterizedTest
-        @ArgumentsSource(AttachedStateArgumentsProvider::class)
-        fun givenAttachedStateIsStreamOutRequiredOnLeaveShouldReturnFalse(newState: StreamableMapObjectState) {
+        @Test
+        fun shouldDestroyPlayerMapObjectsOnLeave() {
+            val streamableMapObject = mockk<StreamableMapObject> {
+                every { destroyPlayerMapObjects() } just Runs
+            }
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(1f, 2f, 3f),
                     attachRotation = vector3DOf(4f, 5f, 6f)
             )
 
-            val isStreamOutRequiredOnLeave = state.isStreamOutRequiredOnLeave(newState)
+            state.onLeave(streamableMapObject)
 
-            assertThat(isStreamOutRequiredOnLeave)
-                    .isFalse()
-        }
-
-        @ParameterizedTest
-        @ArgumentsSource(NonAttachedStateArgumentsProvider::class)
-        fun givenNonAttachedStateIsStreamOutRequiredOnLeaveShouldReturnTrue(newState: StreamableMapObjectState) {
-            val state = StreamableMapObjectState.Attached.ToPlayer(
-                    player = player,
-                    offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
-            )
-
-            val isStreamOutRequiredOnLeave = state.isStreamOutRequiredOnLeave(newState)
-
-            assertThat(isStreamOutRequiredOnLeave)
-                    .isTrue()
+            verify { streamableMapObject.destroyPlayerMapObjects() }
         }
     }
 
@@ -633,12 +608,15 @@ internal class StreamableMapObjectStateTest {
         }
 
         @Test
-        fun shouldAttachVehicleMapObjectsOnEnter() {
-            val vehicleMapObject1 = mockk<PlayerMapObject> {
+        fun shouldAttachplayerMapObjectsOnEnter() {
+            val playerMapObject1 = mockk<PlayerMapObject> {
                 every { attachTo(any<Vehicle>(), any(), any()) } just Runs
             }
-            val vehicleMapObject2 = mockk<PlayerMapObject> {
+            val playerMapObject2 = mockk<PlayerMapObject> {
                 every { attachTo(any<Vehicle>(), any(), any()) } just Runs
+            }
+            val streamableMapObject = mockk<StreamableMapObject> {
+                every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
             }
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
@@ -646,15 +624,15 @@ internal class StreamableMapObjectStateTest {
                     attachRotation = vector3DOf(4f, 5f, 6f)
             )
 
-            state.onEnter(listOf(vehicleMapObject1, vehicleMapObject2))
+            state.onEnter(streamableMapObject)
 
             verify {
-                vehicleMapObject1.attachTo(
+                playerMapObject1.attachTo(
                         vehicle = vehicle,
                         offset = vector3DOf(1f, 2f, 3f),
                         rotation = vector3DOf(4f, 5f, 6f)
                 )
-                vehicleMapObject2.attachTo(
+                playerMapObject2.attachTo(
                         vehicle = vehicle,
                         offset = vector3DOf(1f, 2f, 3f),
                         rotation = vector3DOf(4f, 5f, 6f)
@@ -663,8 +641,8 @@ internal class StreamableMapObjectStateTest {
         }
 
         @Test
-        fun shouldAttachVehicleMapObjectOnStreamIn() {
-            val vehicleMapObject = mockk<PlayerMapObject> {
+        fun shouldAttachplayerMapObjectOnStreamIn() {
+            val playerMapObject = mockk<PlayerMapObject> {
                 every { attachTo(any<Vehicle>(), any(), any()) } just Runs
             }
             val state = StreamableMapObjectState.Attached.ToVehicle(
@@ -673,10 +651,10 @@ internal class StreamableMapObjectStateTest {
                     attachRotation = vector3DOf(4f, 5f, 6f)
             )
 
-            state.onStreamIn(vehicleMapObject)
+            state.onStreamIn(playerMapObject)
 
             verify {
-                vehicleMapObject.attachTo(
+                playerMapObject.attachTo(
                         vehicle = vehicle,
                         offset = vector3DOf(1f, 2f, 3f),
                         rotation = vector3DOf(4f, 5f, 6f)
@@ -684,56 +662,21 @@ internal class StreamableMapObjectStateTest {
             }
         }
 
-        @ParameterizedTest
-        @ArgumentsSource(AttachedStateArgumentsProvider::class)
-        fun givenAttachedStateIsStreamOutRequiredOnLeaveShouldReturnFalse(newState: StreamableMapObjectState) {
+        @Test
+        fun shouldDestroyPlayerMapObjectsOnLeave() {
+            val streamableMapObject = mockk<StreamableMapObject> {
+                every { destroyPlayerMapObjects() } just Runs
+            }
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(1f, 2f, 3f),
                     attachRotation = vector3DOf(4f, 5f, 6f)
             )
 
-            val isStreamOutRequiredOnLeave = state.isStreamOutRequiredOnLeave(newState)
+            state.onLeave(streamableMapObject)
 
-            assertThat(isStreamOutRequiredOnLeave)
-                    .isFalse()
+            verify { streamableMapObject.destroyPlayerMapObjects() }
         }
-
-        @ParameterizedTest
-        @ArgumentsSource(NonAttachedStateArgumentsProvider::class)
-        fun givenNonAttachedStateIsStreamOutRequiredOnLeaveShouldReturnTrue(newState: StreamableMapObjectState) {
-            val state = StreamableMapObjectState.Attached.ToVehicle(
-                    vehicle = vehicle,
-                    offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
-            )
-
-            val isStreamOutRequiredOnLeave = state.isStreamOutRequiredOnLeave(newState)
-
-            assertThat(isStreamOutRequiredOnLeave)
-                    .isTrue()
-        }
-    }
-
-    private class AttachedStateArgumentsProvider : ArgumentsProvider {
-
-        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-                Stream.of(
-                        Arguments.of(mockk<StreamableMapObjectState.Attached>()),
-                        Arguments.of(mockk<StreamableMapObjectState.Attached.ToPlayer>()),
-                        Arguments.of(mockk<StreamableMapObjectState.Attached.ToVehicle>())
-                )
-
-    }
-
-    private class NonAttachedStateArgumentsProvider : ArgumentsProvider {
-
-        override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> =
-                Stream.of(
-                        Arguments.of(mockk<StreamableMapObjectState.FixedCoordinates>()),
-                        Arguments.of(mockk<StreamableMapObjectState.Moving>())
-                )
-
     }
 
 }

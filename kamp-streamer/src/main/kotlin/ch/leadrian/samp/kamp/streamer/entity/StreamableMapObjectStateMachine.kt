@@ -62,8 +62,8 @@ internal class StreamableMapObjectStateMachine(
 
     private fun transitionTo(newState: StreamableMapObjectState) {
         val oldState = currentState
-        oldState.onLeave(streamableMapObject.playerMapObjects)
-        newState.onEnter(streamableMapObject.playerMapObjects)
+        oldState.onLeave(streamableMapObject)
+        newState.onEnter(streamableMapObject)
         currentState = newState
         onStateChange(oldState, newState)
     }

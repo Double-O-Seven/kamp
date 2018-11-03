@@ -37,13 +37,13 @@ internal constructor(
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
         private val textProvider: TextProvider,
-        private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
+        streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) : DistanceBasedPlayerStreamable,
         SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(),
         OnPlayerDisconnectListener,
         OnVehicleDestructionListener {
 
-    private val playerMapObjects: MutableMap<Player, PlayerMapObject> = mutableMapOf()
+    private val playerMapObjectsByPlayer: MutableMap<Player, PlayerMapObject> = mutableMapOf()
 
     private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
@@ -51,31 +51,25 @@ internal constructor(
 
     private val onSelectHandlers: MutableList<StreamableMapObject.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
-    private val onStateChangeHandlers: MutableList<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit> = mutableListOf()
-
     private val onDestroyHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
 
-    private var state: StreamableMapObjectState
+    private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(this, coordinates, rotation)
 
     private val materialsByIndex: MutableMap<Int, Material> = mutableMapOf()
 
     private val materialTextsByIndex: MutableMap<Int, MaterialText> = mutableMapOf()
 
-    init {
-        state = streamableMapObjectStateFactory.createFixedCoordinates(
-                coordinates = coordinates,
-                rotation = rotation
-        )
-    }
+    internal val playerMapObjects: Collection<PlayerMapObject>
+        get() = playerMapObjectsByPlayer.values
 
     override val self: StreamableMapObject = this
 
     override fun onStreamIn(forPlayer: Player) {
         requireNotDestroyed()
-        if (playerMapObjects.contains(forPlayer)) {
+        if (playerMapObjectsByPlayer.contains(forPlayer)) {
             throw IllegalStateException("Streamable map object is already streamed in")
         }
-        playerMapObjects[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
+        playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
     }
 
     private fun createPlayerMapObject(forPlayer: Player): PlayerMapObject =
@@ -90,7 +84,7 @@ internal constructor(
     private fun initializePlayerMapObject(playerMapObject: PlayerMapObject) {
         materialsByIndex.forEach { _, material -> material.apply(playerMapObject) }
         materialTextsByIndex.forEach { _, materialText -> materialText.apply(playerMapObject) }
-        state.onStreamIn(playerMapObject)
+        stateMachine.currentState.onStreamIn(playerMapObject)
         if (isCameraCollisionDisabled) {
             playerMapObject.disableCameraCollision()
         }
@@ -104,69 +98,44 @@ internal constructor(
 
     override fun onStreamOut(forPlayer: Player) {
         requireNotDestroyed()
-        val playerMapObject = playerMapObjects.remove(forPlayer)
+        val playerMapObject = playerMapObjectsByPlayer.remove(forPlayer)
                 ?: throw IllegalStateException("Streamable player map object was not streamed in")
         playerMapObject.destroy()
     }
 
-    override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjects.contains(forPlayer)
+    override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjectsByPlayer.contains(forPlayer)
 
     override var streamInCondition: (Player) -> Boolean = { true }
 
-    private fun transitionToState(newState: StreamableMapObjectState) {
-        val oldState = state
-        if (oldState.isStreamOutRequiredOnLeave(newState)) {
-            streamOutAllPlayerMapObjects()
-        }
-        val playerMapObjects = playerMapObjects.values
-        oldState.onLeave(playerMapObjects)
-        newState.onEnter(playerMapObjects)
-        state = newState
-        onStateChange(oldState, newState)
-    }
-
-    private fun onStateChange(oldState: StreamableMapObjectState, newState: StreamableMapObjectState) {
-        onStateChangeHandlers.forEach { it.invoke(this, oldState, newState) }
-    }
-
     internal fun onStateChange(onStateChange: StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
-        onStateChangeHandlers += onStateChange
+        stateMachine.onStateChange(onStateChange)
     }
 
-    private fun streamOutAllPlayerMapObjects() {
-        playerMapObjects.values.forEach { it.destroy() }
-        playerMapObjects.clear()
+    internal fun destroyPlayerMapObjects() {
+        playerMapObjectsByPlayer.values.forEach { it.destroy() }
+        playerMapObjectsByPlayer.clear()
     }
 
     var coordinates: Vector3D
-        get() = state.coordinates
+        get() = stateMachine.currentState.coordinates
         set(value) {
             requireNotDestroyed()
-            val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
-                    coordinates = value,
-                    rotation = rotation
-            )
-            transitionToState(fixedCoordinates)
+            stateMachine.transitionToFixedCoordinates(coordinates = value, rotation = rotation)
             onBoundingBoxChanged()
         }
 
     var rotation: Vector3D
-        get() = state.rotation
+        get() = stateMachine.currentState.rotation
         set(value) {
             requireNotDestroyed()
-            val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
-                    coordinates = coordinates,
-                    rotation = value
-            )
-            transitionToState(fixedCoordinates)
+            stateMachine.transitionToFixedCoordinates(coordinates = coordinates, rotation = value)
         }
 
     private fun fixCoordinates() {
-        val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
+        stateMachine.transitionToFixedCoordinates(
                 coordinates = coordinates,
                 rotation = rotation
         )
-        transitionToState(fixedCoordinates)
     }
 
     var isCameraCollisionDisabled: Boolean = false
@@ -176,7 +145,7 @@ internal constructor(
         requireNotDestroyed()
         if (isCameraCollisionDisabled) return
         isCameraCollisionDisabled = true
-        playerMapObjects.forEach { _, playerMapObject ->
+        playerMapObjectsByPlayer.forEach { _, playerMapObject ->
             playerMapObject.disableCameraCollision()
         }
     }
@@ -188,15 +157,13 @@ internal constructor(
             targetRotation: Vector3D? = null
     ) {
         requireNotDestroyed()
-        val moving = streamableMapObjectStateFactory.createMoving(
+        stateMachine.transitionToMoving(
                 origin = coordinates,
                 destination = destination,
                 startRotation = rotation,
                 targetRotation = targetRotation,
-                speed = speed,
-                onMoved = this::onMoved
+                speed = speed
         )
-        transitionToState(moving)
     }
 
     fun stop() {
@@ -207,9 +174,9 @@ internal constructor(
     }
 
     val isMoving: Boolean
-        get() = state is StreamableMapObjectState.Moving
+        get() = stateMachine.currentState is StreamableMapObjectState.Moving
 
-    private fun onMoved() {
+    internal fun onMoved() {
         onMovedHandlers.forEach { it.invoke(this) }
         onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
     }
@@ -222,7 +189,7 @@ internal constructor(
         requireNotDestroyed()
         val material = Material(index, modelId, txdName, textureName, color)
         materialsByIndex[index] = material
-        playerMapObjects.forEach { _, playerMapObject -> material.apply(playerMapObject) }
+        playerMapObjectsByPlayer.forEach { _, playerMapObject -> material.apply(playerMapObject) }
     }
 
     @JvmOverloads
@@ -282,27 +249,25 @@ internal constructor(
 
     private fun setMaterialText(index: Int, materialText: MaterialText) {
         materialTextsByIndex[index] = materialText
-        playerMapObjects.forEach { _, playerMapObject -> materialText.apply(playerMapObject) }
+        playerMapObjectsByPlayer.forEach { _, playerMapObject -> materialText.apply(playerMapObject) }
     }
 
     fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
-        val newState = streamableMapObjectStateFactory.createAttachedToPlayer(
+        stateMachine.transitionToAttachedToPlayer(
                 player = player,
                 offset = offset,
-                attachRotation = rotation
+                rotation = rotation
         )
-        transitionToState(newState)
     }
 
     fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
-        val newState = streamableMapObjectStateFactory.createAttachedToVehicle(
+        stateMachine.transitionToAttachedToVehicle(
                 vehicle = vehicle,
                 offset = offset,
-                attachRotation = rotation
+                rotation = rotation
         )
-        transitionToState(newState)
     }
 
     fun detach() {
@@ -313,7 +278,7 @@ internal constructor(
     }
 
     val isAttached: Boolean
-        get() = state is StreamableMapObjectState.Attached
+        get() = stateMachine.currentState is StreamableMapObjectState.Attached
 
     override fun distanceTo(location: Location): Float =
             when {
@@ -323,7 +288,7 @@ internal constructor(
             }
 
     fun edit(player: Player) {
-        playerMapObjects[player]?.edit(player)
+        playerMapObjectsByPlayer[player]?.edit(player)
     }
 
     fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
@@ -355,15 +320,15 @@ internal constructor(
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
-        playerMapObjects.remove(player)
-        val currentState = state
+        playerMapObjectsByPlayer.remove(player)
+        val currentState = stateMachine.currentState
         if (currentState is StreamableMapObjectState.Attached.ToPlayer && currentState.player == player) {
             fixCoordinates()
         }
     }
 
     override fun onVehicleDestruction(vehicle: Vehicle) {
-        val currentState = state
+        val currentState = stateMachine.currentState
         if (currentState is StreamableMapObjectState.Attached.ToVehicle && currentState.vehicle == vehicle) {
             fixCoordinates()
         }
@@ -382,8 +347,7 @@ internal constructor(
         }
 
         onDestroyHandlers.forEach { it.invoke(this) }
-        playerMapObjects.forEach { _, playerMapObject -> playerMapObject.destroy() }
-        playerMapObjects.clear()
+        destroyPlayerMapObjects()
         isDestroyed = true
     }
 
