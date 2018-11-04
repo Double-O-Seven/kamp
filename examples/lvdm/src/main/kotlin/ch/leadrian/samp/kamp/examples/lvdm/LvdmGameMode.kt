@@ -18,7 +18,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerClassService
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
-import ch.leadrian.samp.kamp.streamer.StreamerPlugin
+import ch.leadrian.samp.kamp.streamer.api.StreamerPlugin
 import com.google.inject.Module
 import javax.annotation.PostConstruct
 import javax.inject.Inject

@@ -5,9 +5,9 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
-import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
-import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObject
-import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import java.util.stream.Stream
 import javax.inject.Inject

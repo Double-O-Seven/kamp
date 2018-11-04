@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.streamer.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
 import java.io.InputStreamReader
 import javax.annotation.PostConstruct
 import javax.inject.Inject

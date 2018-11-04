@@ -12,9 +12,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.streamer.AbstractStreamerModule
-import ch.leadrian.samp.kamp.streamer.StreamerModule
-import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.api.AbstractStreamerModule
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.google.inject.Guice
 import com.google.inject.Injector
 import io.mockk.Runs

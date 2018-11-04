@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.index
 
-import ch.leadrian.samp.kamp.streamer.entity.SpatiallyIndexedStreamable
+import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatiallyIndexedStreamable
 import com.conversantmedia.util.collection.geometry.Point3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 import org.assertj.core.api.Assertions.assertThat

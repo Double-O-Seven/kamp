@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.streamer.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 
 interface Streamer {
 

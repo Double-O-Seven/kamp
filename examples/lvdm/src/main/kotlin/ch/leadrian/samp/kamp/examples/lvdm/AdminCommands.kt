@@ -17,7 +17,7 @@ import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
-import ch.leadrian.samp.kamp.streamer.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
 import javax.inject.Inject
 import javax.inject.Singleton
 

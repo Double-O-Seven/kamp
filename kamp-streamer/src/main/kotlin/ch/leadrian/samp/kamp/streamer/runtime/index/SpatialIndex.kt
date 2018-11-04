@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.index
 
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.streamer.entity.SpatiallyIndexedStreamable
+import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatiallyIndexedStreamable
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex.Entry
 import com.conversantmedia.util.collection.geometry.Rect3d
 import com.conversantmedia.util.collection.spatial.HyperPoint
