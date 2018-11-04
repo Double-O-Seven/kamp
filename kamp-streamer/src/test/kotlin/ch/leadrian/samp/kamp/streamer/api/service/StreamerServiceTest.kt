@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.streamer.api.service
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -30,7 +30,7 @@ internal class StreamerServiceTest {
 
         @Test
         fun shouldCreateStreamableMapObject() {
-            val expectedStreamableMapObject = mockk<StreamableMapObject>()
+            val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
             every {
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -57,7 +57,7 @@ internal class StreamerServiceTest {
 
         @Test
         fun shouldCreateStreamableMapObjectWithInteriorIdAndVirtualWorldId() {
-            val expectedStreamableMapObject = mockk<StreamableMapObject>()
+            val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
             every {
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -86,7 +86,7 @@ internal class StreamerServiceTest {
 
         @Test
         fun shouldCreateStreamableMapObjectWithMultipleInteriorIdsAndVirtualWorldIds() {
-            val expectedStreamableMapObject = mockk<StreamableMapObject>()
+            val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
             every {
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -115,7 +115,7 @@ internal class StreamerServiceTest {
 
         @Test
         fun shouldCreateStreamableMapObjectWithMultipleInteriorIds() {
-            val expectedStreamableMapObject = mockk<StreamableMapObject>()
+            val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
             every {
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,

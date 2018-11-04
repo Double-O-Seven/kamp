@@ -1,8 +1,9 @@
-package ch.leadrian.samp.kamp.streamer.api.callback
+package ch.leadrian.samp.kamp.streamer.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectListener
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ internal class OnPlayerSelectStreamableMapObjectHandlerTest {
         val listener2 = mockk<OnPlayerSelectStreamableMapObjectListener>(relaxed = true)
         val listener3 = mockk<OnPlayerSelectStreamableMapObjectListener>(relaxed = true)
         val player = mockk<Player>()
-        val streamableMapObject = mockk<StreamableMapObject>()
+        val streamableMapObject = mockk<StreamableMapObjectImpl>()
         val modelId = 69
         val coordinates = vector3DOf(1f, 2f, 3f)
         val onPlayerSelectStreamableMapObjectHandler = OnPlayerSelectStreamableMapObjectHandler()

@@ -17,9 +17,10 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
@@ -42,9 +43,9 @@ import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.*
 import java.util.stream.Stream
 
-internal class StreamableMapObjectTest {
+internal class StreamableMapObjectImplTest {
 
-    private lateinit var streamableMapObject: StreamableMapObject
+    private lateinit var streamableMapObject: StreamableMapObjectImpl
     private val playerMapObjectService = mockk<PlayerMapObjectService>()
     private val onStreamableMapObjectMovedHandler = mockk<OnStreamableMapObjectMovedHandler>()
     private val onPlayerEditStreamableMapObjectHandler = mockk<OnPlayerEditStreamableMapObjectHandler>()
@@ -73,9 +74,9 @@ internal class StreamableMapObjectTest {
             every { id } returns playerMapObjectId
             every { onEdit(any()) } just Runs
             every { onSelect(any()) } just Runs
-            every { this@mockk.player } returns this@StreamableMapObjectTest.player
+            every { this@mockk.player } returns this@StreamableMapObjectImplTest.player
         }
-        streamableMapObject = StreamableMapObject(
+        streamableMapObject = StreamableMapObjectImpl(
                 modelId = modelId,
                 priority = 0,
                 streamDistance = streamDistance,
@@ -486,7 +487,7 @@ internal class StreamableMapObjectTest {
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            val onBoundingBoxChanged = mockk<StreamableMapObject.(Rect3d) -> Unit>(relaxed = true)
+            val onBoundingBoxChanged = mockk<StreamableMapObjectImpl.(Rect3d) -> Unit>(relaxed = true)
             streamableMapObject.onBoundingBoxChanged(onBoundingBoxChanged)
 
             streamableMapObject.coordinates = newCoordinates
@@ -1016,7 +1017,7 @@ internal class StreamableMapObjectTest {
                 every { onStreamIn(any()) } just Runs
                 every { this@mockk.coordinates } returns newCoordinates
                 every { this@mockk.rotation } returns rotation
-                every { this@mockk.player } returns this@StreamableMapObjectTest.player
+                every { this@mockk.player } returns this@StreamableMapObjectImplTest.player
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
@@ -1123,7 +1124,7 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun shouldCallOnDestroyHandlers() {
-            val onDestroy = mockk<StreamableMapObject.() -> Unit>(relaxed = true)
+            val onDestroy = mockk<StreamableMapObjectImpl.() -> Unit>(relaxed = true)
             streamableMapObject.onDestroy(onDestroy)
 
             streamableMapObject.destroy()
@@ -1133,7 +1134,7 @@ internal class StreamableMapObjectTest {
 
         @Test
         fun givenStreamableMapObjectIsDestroyedItShouldCallOnDestroyHandlersOnlyOnce() {
-            val onDestroy = mockk<StreamableMapObject.() -> Unit>(relaxed = true)
+            val onDestroy = mockk<StreamableMapObjectImpl.() -> Unit>(relaxed = true)
             streamableMapObject.onDestroy(onDestroy)
 
             streamableMapObject.destroy()

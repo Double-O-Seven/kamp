@@ -7,14 +7,14 @@ import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObject
 
 internal class StreamableMapObjectStateMachine(
         initialState: StreamableMapObjectState,
-        private val streamableMapObject: StreamableMapObject,
+        private val streamableMapObject: StreamableMapObjectImpl,
         private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
 ) {
 
     var currentState: StreamableMapObjectState = initialState
         private set
 
-    private val onStateChangeHandlers: MutableList<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit> = mutableListOf()
+    private val onStateChangeHandlers: MutableList<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit> = mutableListOf()
 
     fun transitionToFixedCoordinates(coordinates: Vector3D, rotation: Vector3D) {
         val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
@@ -73,7 +73,7 @@ internal class StreamableMapObjectStateMachine(
         onStateChangeHandlers.forEach { it.invoke(streamableMapObject, oldState, newState) }
     }
 
-    internal fun onStateChange(onStateChange: StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
+    internal fun onStateChange(onStateChange: StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
         onStateChangeHandlers += onStateChange
     }
 

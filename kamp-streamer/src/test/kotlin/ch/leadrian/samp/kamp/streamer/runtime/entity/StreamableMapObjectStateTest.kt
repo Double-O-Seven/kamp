@@ -286,7 +286,7 @@ internal class StreamableMapObjectStateTest {
             val playerMapObject2 = mockk<PlayerMapObject> {
                 every { moveTo(any(), any(), any()) } returns 50
             }
-            val streamableMapObject = mockk<StreamableMapObject> {
+            val streamableMapObject = mockk<StreamableMapObjectImpl> {
                 every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
             }
             val state = StreamableMapObjectState.Moving(
@@ -332,7 +332,7 @@ internal class StreamableMapObjectStateTest {
                 val playerMapObject2 = mockk<PlayerMapObject> {
                     every { stop() } just Runs
                 }
-                val streamableMapObject = mockk<StreamableMapObject> {
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
                 }
                 val state = StreamableMapObjectState.Moving(
@@ -361,7 +361,7 @@ internal class StreamableMapObjectStateTest {
                     every { stop() } just Runs
                 }
                 every { timerExecutor.addTimer(any(), any(), any()) } returns timer
-                val streamableMapObject = mockk<StreamableMapObject> {
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { playerMapObjects } returns listOf()
                 }
                 val state = StreamableMapObjectState.Moving(
@@ -390,7 +390,7 @@ internal class StreamableMapObjectStateTest {
                 val playerMapObject = mockk<PlayerMapObject> {
                     every { stop() } just Runs
                 }
-                val streamableMapObject = mockk<StreamableMapObject> {
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { playerMapObjects } returns listOf(playerMapObject)
                 }
                 val state = StreamableMapObjectState.Moving(
@@ -483,7 +483,7 @@ internal class StreamableMapObjectStateTest {
             val playerMapObject2 = mockk<PlayerMapObject> {
                 every { attachTo(any<Player>(), any(), any()) } just Runs
             }
-            val streamableMapObject = mockk<StreamableMapObject> {
+            val streamableMapObject = mockk<StreamableMapObjectImpl> {
                 every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
             }
             val state = StreamableMapObjectState.Attached.ToPlayer(
@@ -532,7 +532,7 @@ internal class StreamableMapObjectStateTest {
 
         @Test
         fun shouldDestroyPlayerMapObjectsOnLeave() {
-            val streamableMapObject = mockk<StreamableMapObject> {
+            val streamableMapObject = mockk<StreamableMapObjectImpl> {
                 every { destroyPlayerMapObjects() } just Runs
             }
             val state = StreamableMapObjectState.Attached.ToPlayer(
@@ -615,7 +615,7 @@ internal class StreamableMapObjectStateTest {
             val playerMapObject2 = mockk<PlayerMapObject> {
                 every { attachTo(any<Vehicle>(), any(), any()) } just Runs
             }
-            val streamableMapObject = mockk<StreamableMapObject> {
+            val streamableMapObject = mockk<StreamableMapObjectImpl> {
                 every { playerMapObjects } returns listOf(playerMapObject1, playerMapObject2)
             }
             val state = StreamableMapObjectState.Attached.ToVehicle(
@@ -664,7 +664,7 @@ internal class StreamableMapObjectStateTest {
 
         @Test
         fun shouldDestroyPlayerMapObjectsOnLeave() {
-            val streamableMapObject = mockk<StreamableMapObject> {
+            val streamableMapObject = mockk<StreamableMapObjectImpl> {
                 every { destroyPlayerMapObjects() } just Runs
             }
             val state = StreamableMapObjectState.Attached.ToVehicle(

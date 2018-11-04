@@ -1,6 +1,7 @@
-package ch.leadrian.samp.kamp.streamer.api.callback
+package ch.leadrian.samp.kamp.streamer.runtime.callback
 
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedListener
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Test
@@ -12,7 +13,7 @@ internal class OnStreamableMapObjectMovedHandlerTest {
         val listener1 = mockk<OnStreamableMapObjectMovedListener>(relaxed = true)
         val listener2 = mockk<OnStreamableMapObjectMovedListener>(relaxed = true)
         val listener3 = mockk<OnStreamableMapObjectMovedListener>(relaxed = true)
-        val streamableMapObject = mockk<StreamableMapObject>()
+        val streamableMapObject = mockk<StreamableMapObjectImpl>()
         val onStreamableMapObjectObjectMovedHandler = OnStreamableMapObjectMovedHandler()
         onStreamableMapObjectObjectMovedHandler.register(listener1)
         onStreamableMapObjectObjectMovedHandler.register(listener2)

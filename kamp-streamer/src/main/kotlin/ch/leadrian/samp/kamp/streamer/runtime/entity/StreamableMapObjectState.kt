@@ -14,11 +14,11 @@ import java.util.concurrent.TimeUnit
 
 internal sealed class StreamableMapObjectState {
 
-    abstract fun onEnter(streamableMapObject: StreamableMapObject)
+    abstract fun onEnter(streamableMapObject: StreamableMapObjectImpl)
 
     abstract fun onStreamIn(playerMapObject: PlayerMapObject)
 
-    abstract fun onLeave(streamableMapObject: StreamableMapObject)
+    abstract fun onLeave(streamableMapObject: StreamableMapObjectImpl)
 
     abstract val coordinates: Vector3D
 
@@ -35,9 +35,9 @@ internal sealed class StreamableMapObjectState {
 
         override fun onStreamIn(playerMapObject: PlayerMapObject) {}
 
-        override fun onEnter(streamableMapObject: StreamableMapObject) {}
+        override fun onEnter(streamableMapObject: StreamableMapObjectImpl) {}
 
-        override fun onLeave(streamableMapObject: StreamableMapObject) {}
+        override fun onLeave(streamableMapObject: StreamableMapObjectImpl) {}
 
     }
 
@@ -107,7 +107,7 @@ internal sealed class StreamableMapObjectState {
             return vector3DOf(x = x, y = y, z = z)
         }
 
-        override fun onEnter(streamableMapObject: StreamableMapObject) {
+        override fun onEnter(streamableMapObject: StreamableMapObjectImpl) {
             streamableMapObject.playerMapObjects.forEach { move(it) }
         }
 
@@ -119,7 +119,7 @@ internal sealed class StreamableMapObjectState {
             playerMapObject.moveTo(coordinates = destination, speed = speed, rotation = targetRotation)
         }
 
-        override fun onLeave(streamableMapObject: StreamableMapObject) {
+        override fun onLeave(streamableMapObject: StreamableMapObjectImpl) {
             if (!stopped) {
                 timer.stop()
                 streamableMapObject.playerMapObjects.forEach { it.stop() }
@@ -155,7 +155,7 @@ internal sealed class StreamableMapObjectState {
         override val rotation: Vector3D
             get() = vector3DOf(attachRotation.x, attachRotation.y, attachRotation.z + entityAngle)
 
-        override fun onEnter(streamableMapObject: StreamableMapObject) {
+        override fun onEnter(streamableMapObject: StreamableMapObjectImpl) {
             streamableMapObject.playerMapObjects.forEach { attach(it) }
         }
 
@@ -163,7 +163,7 @@ internal sealed class StreamableMapObjectState {
             attach(playerMapObject)
         }
 
-        override fun onLeave(streamableMapObject: StreamableMapObject) {
+        override fun onLeave(streamableMapObject: StreamableMapObjectImpl) {
             streamableMapObject.destroyPlayerMapObjects()
         }
 

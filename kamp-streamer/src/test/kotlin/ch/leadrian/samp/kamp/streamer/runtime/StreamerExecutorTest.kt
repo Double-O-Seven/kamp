@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
+import ch.leadrian.samp.kamp.streamer.api.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import io.mockk.Runs
 import io.mockk.every

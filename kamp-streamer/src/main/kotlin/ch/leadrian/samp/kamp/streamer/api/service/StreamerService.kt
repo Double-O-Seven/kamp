@@ -1,8 +1,8 @@
 package ch.leadrian.samp.kamp.streamer.api.service
 
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
 import javax.inject.Inject
 
 class StreamerService

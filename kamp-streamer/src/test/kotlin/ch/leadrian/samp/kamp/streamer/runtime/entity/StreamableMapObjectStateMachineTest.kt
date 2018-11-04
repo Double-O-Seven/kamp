@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test
 
 internal class StreamableMapObjectStateMachineTest {
 
-    private val streamableMapObject = mockk<StreamableMapObject>()
+    private val streamableMapObject = mockk<StreamableMapObjectImpl>()
     private val streamableMapObjectStateFactory = mockk<StreamableMapObjectStateFactory>()
 
     @Nested
@@ -73,9 +73,9 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange2)
 
             streamableMapObjectStateMachine.transitionToFixedCoordinates(
@@ -154,9 +154,9 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange2)
 
             streamableMapObjectStateMachine.transitionToMoving(
@@ -257,9 +257,9 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange2)
 
             streamableMapObjectStateMachine.transitionToAttachedToPlayer(
@@ -331,9 +331,9 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
+            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
             streamableMapObjectStateMachine.onStateChange(onStateChange2)
 
             streamableMapObjectStateMachine.transitionToAttachedToVehicle(

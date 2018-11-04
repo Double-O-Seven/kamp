@@ -7,7 +7,6 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Color
-import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -17,22 +16,23 @@ import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.*
 
-class StreamableMapObject
-internal constructor(
-        val modelId: Int,
+internal class StreamableMapObjectImpl
+constructor(
+        override val modelId: Int,
         override val priority: Int,
         override val streamDistance: Float,
         coordinates: Vector3D,
         rotation: Vector3D,
-        var interiorIds: MutableSet<Int>,
-        var virtualWorldIds: MutableSet<Int>,
+        override var interiorIds: MutableSet<Int>,
+        override var virtualWorldIds: MutableSet<Int>,
         private val playerMapObjectService: PlayerMapObjectService,
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
@@ -40,19 +40,20 @@ internal constructor(
         private val textProvider: TextProvider,
         streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) : DistanceBasedPlayerStreamable,
-        SpatiallyIndexedStreamable<StreamableMapObject, Rect3d>(),
+        SpatiallyIndexedStreamable<StreamableMapObjectImpl, Rect3d>(),
         OnPlayerDisconnectListener,
-        OnVehicleDestructionListener {
+        OnVehicleDestructionListener,
+        StreamableMapObject {
 
     private val playerMapObjectsByPlayer: MutableMap<Player, PlayerMapObject> = mutableMapOf()
 
-    private val onMovedHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+    private val onMovedHandlers: MutableList<StreamableMapObjectImpl.() -> Unit> = mutableListOf()
 
-    private val onEditHandlers: MutableList<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
+    private val onEditHandlers: MutableList<StreamableMapObjectImpl.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
 
-    private val onSelectHandlers: MutableList<StreamableMapObject.(Player, Int, Vector3D) -> Unit> = mutableListOf()
+    private val onSelectHandlers: MutableList<StreamableMapObjectImpl.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<StreamableMapObject.() -> Unit> = mutableListOf()
+    private val onDestroyHandlers: MutableList<StreamableMapObjectImpl.() -> Unit> = mutableListOf()
 
     private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(this, coordinates, rotation)
 
@@ -63,7 +64,7 @@ internal constructor(
     internal val playerMapObjects: Collection<PlayerMapObject>
         get() = playerMapObjectsByPlayer.values
 
-    override val self: StreamableMapObject = this
+    override val self: StreamableMapObjectImpl = this
 
     override fun onStreamIn(forPlayer: Player) {
         requireNotDestroyed()
@@ -90,10 +91,10 @@ internal constructor(
             playerMapObject.disableCameraCollision()
         }
         playerMapObject.onEdit { objectEditResponse, offset, rotation ->
-            this@StreamableMapObject.onEdit(this.player, objectEditResponse, offset, rotation)
+            this@StreamableMapObjectImpl.onEdit(this.player, objectEditResponse, offset, rotation)
         }
         playerMapObject.onSelect { modelId, offset ->
-            this@StreamableMapObject.onSelect(this.player, modelId, offset)
+            this@StreamableMapObjectImpl.onSelect(this.player, modelId, offset)
         }
     }
 
@@ -108,7 +109,7 @@ internal constructor(
 
     override var streamInCondition: (Player) -> Boolean = { true }
 
-    internal fun onStateChange(onStateChange: StreamableMapObject.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
+    internal fun onStateChange(onStateChange: StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
         stateMachine.onStateChange(onStateChange)
     }
 
@@ -117,7 +118,7 @@ internal constructor(
         playerMapObjectsByPlayer.clear()
     }
 
-    var coordinates: Vector3D
+    override var coordinates: Vector3D
         get() = stateMachine.currentState.coordinates
         set(value) {
             requireNotDestroyed()
@@ -125,7 +126,7 @@ internal constructor(
             onBoundingBoxChanged()
         }
 
-    var rotation: Vector3D
+    override var rotation: Vector3D
         get() = stateMachine.currentState.rotation
         set(value) {
             requireNotDestroyed()
@@ -139,10 +140,10 @@ internal constructor(
         )
     }
 
-    var isCameraCollisionDisabled: Boolean = false
+    override var isCameraCollisionDisabled: Boolean = false
         private set
 
-    fun disableCameraCollision() {
+    override fun disableCameraCollision() {
         requireNotDestroyed()
         if (isCameraCollisionDisabled) return
         isCameraCollisionDisabled = true
@@ -151,11 +152,10 @@ internal constructor(
         }
     }
 
-    @JvmOverloads
-    fun moveTo(
+    override fun moveTo(
             destination: Vector3D,
             speed: Float,
-            targetRotation: Vector3D? = null
+            targetRotation: Vector3D?
     ) {
         requireNotDestroyed()
         stateMachine.transitionToMoving(
@@ -167,14 +167,14 @@ internal constructor(
         )
     }
 
-    fun stop() {
+    override fun stop() {
         requireNotDestroyed()
         if (isMoving) {
             fixCoordinates()
         }
     }
 
-    val isMoving: Boolean
+    override val isMoving: Boolean
         get() = stateMachine.currentState is StreamableMapObjectState.Moving
 
     internal fun onMoved() {
@@ -182,28 +182,27 @@ internal constructor(
         onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
     }
 
-    fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
+    override fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
         onMovedHandlers += onMoved
     }
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
+    override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
         requireNotDestroyed()
         val material = Material(index, modelId, txdName, textureName, color)
         materialsByIndex[index] = material
         playerMapObjectsByPlayer.forEach { _, playerMapObject -> material.apply(playerMapObject) }
     }
 
-    @JvmOverloads
-    fun setMaterialText(
+    override fun setMaterialText(
             text: String,
-            index: Int = 0,
-            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
-            fontFace: String = "Arial",
-            fontSize: Int = 24,
-            isBold: Boolean = true,
-            fontColor: Color = Colors.WHITE,
-            backColor: Color = Colors.TRANSPARENT,
-            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
     ) {
         requireNotDestroyed()
         val materialText = SimpleMaterialText(
@@ -220,17 +219,16 @@ internal constructor(
         setMaterialText(index, materialText)
     }
 
-    @JvmOverloads
-    fun setMaterialText(
+    override fun setMaterialText(
             textKey: TextKey,
-            index: Int = 0,
-            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
-            fontFace: String = "Arial",
-            fontSize: Int = 24,
-            isBold: Boolean = true,
-            fontColor: Color = Colors.WHITE,
-            backColor: Color = Colors.TRANSPARENT,
-            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
     ) {
         requireNotDestroyed()
         val materialText = TranslateMaterialText(
@@ -253,7 +251,7 @@ internal constructor(
         playerMapObjectsByPlayer.forEach { _, playerMapObject -> materialText.apply(playerMapObject) }
     }
 
-    fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         stateMachine.transitionToAttachedToPlayer(
                 player = player,
@@ -262,7 +260,7 @@ internal constructor(
         )
     }
 
-    fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         stateMachine.transitionToAttachedToVehicle(
                 vehicle = vehicle,
@@ -271,14 +269,14 @@ internal constructor(
         )
     }
 
-    fun detach() {
+    override fun detach() {
         requireNotDestroyed()
         if (isAttached) {
             fixCoordinates()
         }
     }
 
-    val isAttached: Boolean
+    override val isAttached: Boolean
         get() = stateMachine.currentState is StreamableMapObjectState.Attached
 
     override fun distanceTo(location: Location): Float =
@@ -288,11 +286,11 @@ internal constructor(
                 else -> coordinates.distanceTo(location)
             }
 
-    fun edit(player: Player) {
+    override fun edit(player: Player) {
         playerMapObjectsByPlayer[player]?.edit(player)
     }
 
-    fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
+    override fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
         onEditHandlers += onEdit
     }
 
@@ -311,7 +309,7 @@ internal constructor(
         )
     }
 
-    fun onSelect(onSelect: StreamableMapObject.(Player, Int, Vector3D) -> Unit) {
+    override fun onSelect(onSelect: StreamableMapObject.(Player, Int, Vector3D) -> Unit) {
         onSelectHandlers += onSelect
     }
 
@@ -335,7 +333,7 @@ internal constructor(
         }
     }
 
-    fun onDestroy(onDestroy: StreamableMapObject.() -> Unit) {
+    fun onDestroy(onDestroy: StreamableMapObjectImpl.() -> Unit) {
         onDestroyHandlers += onDestroy
     }
 

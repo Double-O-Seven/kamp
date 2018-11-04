@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.api.callback
 
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 
 interface OnStreamableMapObjectMovedListener {
 

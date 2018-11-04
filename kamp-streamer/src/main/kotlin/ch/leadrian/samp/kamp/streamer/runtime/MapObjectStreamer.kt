@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import java.util.stream.Stream
@@ -21,7 +21,7 @@ constructor(
         playerService: PlayerService,
         callbackListenerManager: CallbackListenerManager,
         private val streamableMapObjectFactory: StreamableMapObjectFactory
-) : DistanceBasedPlayerStreamer<StreamableMapObject>(
+) : DistanceBasedPlayerStreamer<StreamableMapObjectImpl>(
         asyncExecutor = asyncExecutor,
         playerService = playerService,
         callbackListenerManager = callbackListenerManager,
@@ -33,11 +33,11 @@ constructor(
      * streaming to avoid any race conditions and expensive synchronization.
      * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
      */
-    private val spatialIndex = SpatialIndex3D<StreamableMapObject>()
+    private val spatialIndex = SpatialIndex3D<StreamableMapObjectImpl>()
     /*
      * Moving or attached map objects constantly change their location. We don't want to constantly update the spatial index.
      */
-    private val movingOrAttachedMapObjects = HashSet<StreamableMapObject>()
+    private val movingOrAttachedMapObjects = HashSet<StreamableMapObjectImpl>()
 
     fun createMapObject(
             modelId: Int,
@@ -47,7 +47,7 @@ constructor(
             rotation: Vector3D,
             interiorIds: MutableSet<Int>,
             virtualWorldIds: MutableSet<Int>
-    ): StreamableMapObject {
+    ): StreamableMapObjectImpl {
         val streamableMapObject = streamableMapObjectFactory.create(
                 modelId = modelId,
                 priority = priority,
@@ -62,7 +62,7 @@ constructor(
         return streamableMapObject
     }
 
-    private fun registerCallbackHandlers(streamableMapObject: StreamableMapObject) {
+    private fun registerCallbackHandlers(streamableMapObject: StreamableMapObjectImpl) {
         streamableMapObject.onDestroy { remove(this) }
         streamableMapObject.onBoundingBoxChanged { updateSpatialIndex(this) }
         streamableMapObject.onStateChange { _, _ ->
@@ -72,7 +72,7 @@ constructor(
         }
     }
 
-    private fun updateSpatialIndex(streamableMapObject: StreamableMapObject) {
+    private fun updateSpatialIndex(streamableMapObject: StreamableMapObjectImpl) {
         onStream {
             if (!movingOrAttachedMapObjects.contains(streamableMapObject)) {
                 spatialIndex.update(streamableMapObject)
@@ -80,7 +80,7 @@ constructor(
         }
     }
 
-    private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObject) {
+    private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObjectImpl) {
         onStream {
             if (movingOrAttachedMapObjects.add(streamableMapObject)) {
                 spatialIndex.remove(streamableMapObject)
@@ -88,12 +88,12 @@ constructor(
         }
     }
 
-    private fun add(streamableMapObject: StreamableMapObject) {
+    private fun add(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.register(streamableMapObject)
         onStream { spatialIndex.add(streamableMapObject) }
     }
 
-    private fun remove(streamableMapObject: StreamableMapObject) {
+    private fun remove(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.unregister(streamableMapObject)
         onStream {
             movingOrAttachedMapObjects -= streamableMapObject
@@ -101,7 +101,7 @@ constructor(
         }
     }
 
-    override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObject> =
+    override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObjectImpl> =
             Stream.concat(
                     spatialIndex.getIntersections(streamLocation.location).stream(),
                     movingOrAttachedMapObjects.stream()

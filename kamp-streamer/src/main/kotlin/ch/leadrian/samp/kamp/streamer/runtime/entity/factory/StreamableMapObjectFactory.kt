@@ -3,10 +3,10 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
-import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import javax.inject.Inject
 
 internal class StreamableMapObjectFactory
@@ -28,8 +28,8 @@ constructor(
             rotation: Vector3D,
             interiorIds: MutableSet<Int>,
             virtualWorldIds: MutableSet<Int>
-    ): StreamableMapObject {
-        return StreamableMapObject(
+    ): StreamableMapObjectImpl {
+        return StreamableMapObjectImpl(
                 modelId = modelId,
                 priority = priority,
                 streamDistance = streamDistance,

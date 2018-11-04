@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectState
 import io.mockk.every
 import io.mockk.mockk
@@ -18,7 +18,7 @@ internal class StreamableMapObjectStateMachineFactoryTest {
                 createFixedCoordinates(vector3DOf(1f, 2f, 3f), vector3DOf(4f, 5f, 6f))
             } returns fixedCoordinates
         }
-        val streamableMapObject = mockk<StreamableMapObject>()
+        val streamableMapObject = mockk<StreamableMapObjectImpl>()
         val streamableMapObjectStateMachineFactory = StreamableMapObjectStateMachineFactory(streamableMapObjectStateFactory)
 
         val streamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(
