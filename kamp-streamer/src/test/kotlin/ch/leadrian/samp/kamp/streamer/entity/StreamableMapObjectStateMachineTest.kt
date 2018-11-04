@@ -55,7 +55,7 @@ internal class StreamableMapObjectStateMachineTest {
 
             verifyOrder {
                 initialState.onLeave(streamableMapObject)
-                fixedCoordinates.onLeave(streamableMapObject)
+                fixedCoordinates.onEnter(streamableMapObject)
             }
         }
 
@@ -133,7 +133,7 @@ internal class StreamableMapObjectStateMachineTest {
 
             verifyOrder {
                 initialState.onLeave(streamableMapObject)
-                moving.onLeave(streamableMapObject)
+                moving.onEnter(streamableMapObject)
             }
         }
 
@@ -238,7 +238,7 @@ internal class StreamableMapObjectStateMachineTest {
 
             verifyOrder {
                 initialState.onLeave(streamableMapObject)
-                attachedToPlayer.onLeave(streamableMapObject)
+                attachedToPlayer.onEnter(streamableMapObject)
             }
         }
 
@@ -312,7 +312,7 @@ internal class StreamableMapObjectStateMachineTest {
 
             verifyOrder {
                 initialState.onLeave(streamableMapObject)
-                attachedToVehicle.onLeave(streamableMapObject)
+                attachedToVehicle.onEnter(streamableMapObject)
             }
         }
 
