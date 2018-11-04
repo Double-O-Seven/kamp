@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.streamer.callback.OnPlayerEditStreamableMapObjectHa
 import ch.leadrian.samp.kamp.streamer.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObjectStateFactory
+import ch.leadrian.samp.kamp.streamer.entity.StreamableMapObjectStateMachineFactory
 import ch.leadrian.samp.kamp.streamer.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.StreamerExecutor
@@ -29,6 +30,7 @@ internal class StreamerModule : AbstractStreamerModule() {
         bind(StreamerService::class.java)
         bind(StreamableMapObjectFactory::class.java)
         bind(StreamableMapObjectStateFactory::class.java)
+        bind(StreamableMapObjectStateMachineFactory::class.java)
         bind(TimeProvider::class.java)
     }
 
