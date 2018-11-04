@@ -5,9 +5,9 @@ import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObje
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateFactory
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateMachineFactory
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import ch.leadrian.samp.kamp.streamer.runtime.util.TimeProvider
 
 internal class StreamerModule : AbstractStreamerModule() {

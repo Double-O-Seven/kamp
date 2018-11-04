@@ -1,9 +1,10 @@
-package ch.leadrian.samp.kamp.streamer.runtime.entity
+package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectState
 import ch.leadrian.samp.kamp.streamer.runtime.util.TimeProvider
 import javax.inject.Inject
 

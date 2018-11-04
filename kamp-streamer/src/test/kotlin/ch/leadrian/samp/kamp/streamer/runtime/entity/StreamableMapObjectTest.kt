@@ -20,6 +20,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
 import io.mockk.every

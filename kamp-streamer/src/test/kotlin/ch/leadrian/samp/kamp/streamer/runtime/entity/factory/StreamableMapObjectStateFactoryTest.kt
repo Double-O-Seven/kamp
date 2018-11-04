@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.streamer.runtime.entity
+package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player

@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateMachine
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateMachineFactory
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

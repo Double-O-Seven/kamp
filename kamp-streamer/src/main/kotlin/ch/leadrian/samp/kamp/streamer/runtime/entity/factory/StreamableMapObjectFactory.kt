@@ -7,7 +7,6 @@ import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObje
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObject
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateMachineFactory
 import javax.inject.Inject
 
 internal class StreamableMapObjectFactory
