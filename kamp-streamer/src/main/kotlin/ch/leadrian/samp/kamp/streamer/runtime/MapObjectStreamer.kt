@@ -73,7 +73,7 @@ constructor(
     }
 
     private fun updateSpatialIndex(streamableMapObject: StreamableMapObjectImpl) {
-        onStream {
+        beforeStream {
             if (!movingOrAttachedMapObjects.contains(streamableMapObject)) {
                 spatialIndex.update(streamableMapObject)
             }
@@ -81,7 +81,7 @@ constructor(
     }
 
     private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObjectImpl) {
-        onStream {
+        beforeStream {
             if (movingOrAttachedMapObjects.add(streamableMapObject)) {
                 spatialIndex.remove(streamableMapObject)
             }
@@ -90,12 +90,12 @@ constructor(
 
     private fun add(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.register(streamableMapObject)
-        onStream { spatialIndex.add(streamableMapObject) }
+        beforeStream { spatialIndex.add(streamableMapObject) }
     }
 
     private fun remove(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.unregister(streamableMapObject)
-        onStream {
+        beforeStream {
             movingOrAttachedMapObjects -= streamableMapObject
             spatialIndex.remove(streamableMapObject)
         }

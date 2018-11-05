@@ -26,7 +26,7 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
 
     private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap.create(playerService.getMaxPlayers(), maxCapacity)
 
-    private val onStreamActions = ConcurrentLinkedQueue<() -> Unit>()
+    private val beforeStreamActions = ConcurrentLinkedQueue<() -> Unit>()
 
     private val byPriorityDescendingAndDistanceAscending: Comparator<StreamingInfo<T>> = Comparator
             .comparing<StreamingInfo<T>, Int> { it.streamable.priority }
@@ -41,7 +41,7 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     }
 
     override fun stream(streamLocations: List<StreamLocation>) {
-        onStream()
+        beforeStream()
         streamLocations.forEach { streamLocation ->
             val newStreamables: Set<T> = getStreamedInStreamables(streamLocation)
             streamOnMainThread(streamLocation.player, newStreamables)
@@ -98,13 +98,13 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
 
     protected abstract fun getStreamInCandidates(streamLocation: StreamLocation): Stream<T>
 
-    protected fun onStream(action: () -> Unit) {
-        onStreamActions += action
+    protected fun beforeStream(action: () -> Unit) {
+        beforeStreamActions += action
     }
 
-    private fun onStream() {
+    private fun beforeStream() {
         do {
-            val action = onStreamActions.poll() ?: break
+            val action = beforeStreamActions.poll() ?: break
             action()
         } while (true)
     }
