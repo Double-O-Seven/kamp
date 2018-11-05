@@ -35,6 +35,10 @@ interface StreamableMapObject : Destroyable {
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
+    fun onStreamIn(onStreamIn: StreamableMapObject.(Player) -> Unit)
+
+    fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit)
+
     fun disableCameraCollision()
 
     fun moveTo(destination: Vector3D, speed: Float, targetRotation: Vector3D? = null)

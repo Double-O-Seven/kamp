@@ -55,6 +55,10 @@ constructor(
 
     private val onDestroyHandlers: MutableList<StreamableMapObjectImpl.() -> Unit> = mutableListOf()
 
+    private val onStreamInHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
+
+    private val onStreamOutHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
+
     private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(this, coordinates, rotation)
 
     private val materialsByIndex: MutableMap<Int, Material> = mutableMapOf()
@@ -72,6 +76,11 @@ constructor(
             throw IllegalStateException("Streamable map object is already streamed in")
         }
         playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
+        onStreamInHandlers.forEach { it.invoke(this, forPlayer) }
+    }
+
+    override fun onStreamIn(onStreamIn: StreamableMapObject.(Player) -> Unit) {
+        onStreamInHandlers += onStreamIn
     }
 
     private fun createPlayerMapObject(forPlayer: Player): PlayerMapObject =
@@ -103,6 +112,11 @@ constructor(
         val playerMapObject = playerMapObjectsByPlayer.remove(forPlayer)
                 ?: throw IllegalStateException("Streamable player map object was not streamed in")
         playerMapObject.destroy()
+        onStreamOutHandlers.forEach { it.invoke(this, forPlayer) }
+    }
+
+    override fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit) {
+        onStreamOutHandlers += onStreamOut
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjectsByPlayer.contains(forPlayer)
@@ -113,7 +127,11 @@ constructor(
         stateMachine.onStateChange(onStateChange)
     }
 
-    internal fun destroyPlayerMapObjects() {
+    internal fun forceStreamOut() {
+        destroyPlayerMapObjects()
+    }
+
+    private fun destroyPlayerMapObjects() {
         playerMapObjectsByPlayer.values.forEach { it.destroy() }
         playerMapObjectsByPlayer.clear()
     }

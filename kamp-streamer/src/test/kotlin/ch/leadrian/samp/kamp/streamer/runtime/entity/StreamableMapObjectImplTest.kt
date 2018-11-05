@@ -142,6 +142,38 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
+        fun shouldCallOnStreamInHandlers() {
+            val coordinates = vector3DOf(1f, 2f, 3f)
+            val rotation = vector3DOf(4f, 5f, 6f)
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { this@mockk.coordinates } returns coordinates
+                every { this@mockk.rotation } returns rotation
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            every {
+                playerMapObjectService.createPlayerMapObject(
+                        player = player,
+                        modelId = modelId,
+                        coordinates = coordinates,
+                        rotation = rotation,
+                        drawDistance = streamDistance
+                )
+            } returns playerMapObject
+            val onStreamIn1 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
+            val onStreamIn2 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
+            streamableMapObject.onStreamIn(onStreamIn1)
+            streamableMapObject.onStreamIn(onStreamIn2)
+
+            streamableMapObject.onStreamIn(player)
+
+            verify {
+                onStreamIn1.invoke(streamableMapObject, player)
+                onStreamIn2.invoke(streamableMapObject, player)
+            }
+        }
+
+        @Test
         fun givenItIsAlreadyStreamedInItShouldThrowAnException() {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -420,6 +452,32 @@ internal class StreamableMapObjectImplTest {
 
             assertThat(isStreamedIn)
                     .isFalse()
+        }
+
+        @Test
+        fun shouldCallOnStreamOutHandlers() {
+            every { playerMapObject.destroy() } just Runs
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            streamableMapObject.onStreamIn(player)
+            val onStreamOut1 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
+            val onStreamOut2 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
+            streamableMapObject.onStreamOut(onStreamOut1)
+            streamableMapObject.onStreamOut(onStreamOut2)
+
+            streamableMapObject.onStreamOut(player)
+
+            verify {
+                onStreamOut1.invoke(streamableMapObject, player)
+                onStreamOut2.invoke(streamableMapObject, player)
+            }
         }
     }
 
