@@ -21,6 +21,8 @@ internal class StreamableMapObjectFactoryTest {
                 onStreamableMapObjectMovedHandler = mockk(),
                 onPlayerEditStreamableMapObjectHandler = mockk(),
                 onPlayerSelectStreamableMapObjectHandler = mockk(),
+                onStreamableMapObjectStreamInHandler = mockk(),
+                onStreamableMapObjectStreamOutHandler = mockk(),
                 textProvider = mockk(),
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )

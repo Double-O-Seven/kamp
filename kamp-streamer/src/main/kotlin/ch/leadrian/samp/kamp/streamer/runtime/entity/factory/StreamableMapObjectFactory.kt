@@ -6,6 +6,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import javax.inject.Inject
 
@@ -16,6 +18,8 @@ constructor(
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
+        private val onStreamableMapObjectStreamInHandler: OnStreamableMapObjectStreamInHandler,
+        private val onStreamableMapObjectStreamOutHandler: OnStreamableMapObjectStreamOutHandler,
         private val textProvider: TextProvider,
         private val streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) {
@@ -41,6 +45,8 @@ constructor(
                 onStreamableMapObjectMovedHandler = onStreamableMapObjectMovedHandler,
                 onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
                 onPlayerSelectStreamableMapObjectHandler = onPlayerSelectStreamableMapObjectHandler,
+                onStreamableMapObjectStreamInHandler = onStreamableMapObjectStreamInHandler,
+                onStreamableMapObjectStreamOutHandler = onStreamableMapObjectStreamOutHandler,
                 textProvider = textProvider,
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )

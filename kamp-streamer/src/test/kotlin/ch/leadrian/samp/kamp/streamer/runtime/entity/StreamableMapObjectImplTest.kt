@@ -21,6 +21,8 @@ import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
@@ -50,6 +52,8 @@ internal class StreamableMapObjectImplTest {
     private val onStreamableMapObjectMovedHandler = mockk<OnStreamableMapObjectMovedHandler>()
     private val onPlayerEditStreamableMapObjectHandler = mockk<OnPlayerEditStreamableMapObjectHandler>()
     private val onPlayerSelectStreamableMapObjectHandler = mockk<OnPlayerSelectStreamableMapObjectHandler>()
+    private val onStreamMapObjectStreamInHandler = mockk<OnStreamableMapObjectStreamInHandler>()
+    private val onStreamMapObjectStreamOutHandler = mockk<OnStreamableMapObjectStreamOutHandler>()
     private val textProvider = mockk<TextProvider>()
     private val streamableMapObjectStateMachineFactory = mockk<StreamableMapObjectStateMachineFactory>()
     private val playerId = PlayerId.valueOf(69)
@@ -87,6 +91,8 @@ internal class StreamableMapObjectImplTest {
                 onStreamableMapObjectMovedHandler = onStreamableMapObjectMovedHandler,
                 onPlayerSelectStreamableMapObjectHandler = onPlayerSelectStreamableMapObjectHandler,
                 onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
+                onStreamableMapObjectStreamInHandler = onStreamMapObjectStreamInHandler,
+                onStreamableMapObjectStreamOutHandler = onStreamMapObjectStreamOutHandler,
                 playerMapObjectService = playerMapObjectService,
                 textProvider = textProvider,
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
@@ -104,6 +110,7 @@ internal class StreamableMapObjectImplTest {
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         }
 
         @Test
@@ -170,6 +177,7 @@ internal class StreamableMapObjectImplTest {
             verify {
                 onStreamIn1.invoke(streamableMapObject, player)
                 onStreamIn2.invoke(streamableMapObject, player)
+                onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(streamableMapObject, player)
             }
         }
 
@@ -410,6 +418,8 @@ internal class StreamableMapObjectImplTest {
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(any(), any()) } just Runs
         }
 
         @Test
@@ -477,6 +487,7 @@ internal class StreamableMapObjectImplTest {
             verify {
                 onStreamOut1.invoke(streamableMapObject, player)
                 onStreamOut2.invoke(streamableMapObject, player)
+                onStreamMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(streamableMapObject, player)
             }
         }
     }
@@ -610,6 +621,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldDisableCameraCollisionsForPlayerMapObject() {
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { playerMapObject.disableCameraCollision() } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -632,6 +644,7 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldSetMaterial() {
+        every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         every {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
         } returns playerMapObject
@@ -654,6 +667,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldSetMaterialTextWithSimpleString() {
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { player.locale } returns Locale.GERMANY
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -698,6 +712,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldSetMaterialTextWithTextKey() {
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             val locale = Locale.GERMANY
             val textKey = TextKey("hi.there")
             every { textProvider.getText(locale, textKey) } returns "Hi there"
@@ -746,6 +761,7 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldEdit() {
+        every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         every { playerMapObject.edit(any()) } just Runs
         every {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -1050,6 +1066,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldNotBeStreamedInForPlayer() {
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -1161,6 +1178,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldDestroyPlayerMapObjects() {
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { playerMapObject.destroy() } just Runs
             val coordinates = vector3DOf(1f, 2f, 3f)
             val rotation = vector3DOf(4f, 5f, 6f)

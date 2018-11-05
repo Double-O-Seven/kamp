@@ -20,6 +20,8 @@ import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.*
@@ -37,6 +39,8 @@ constructor(
         private val onStreamableMapObjectMovedHandler: OnStreamableMapObjectMovedHandler,
         private val onPlayerEditStreamableMapObjectHandler: OnPlayerEditStreamableMapObjectHandler,
         private val onPlayerSelectStreamableMapObjectHandler: OnPlayerSelectStreamableMapObjectHandler,
+        private val onStreamableMapObjectStreamInHandler: OnStreamableMapObjectStreamInHandler,
+        private val onStreamableMapObjectStreamOutHandler: OnStreamableMapObjectStreamOutHandler,
         private val textProvider: TextProvider,
         streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) : DistanceBasedPlayerStreamable,
@@ -77,6 +81,7 @@ constructor(
         }
         playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
         onStreamInHandlers.forEach { it.invoke(this, forPlayer) }
+        onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(this, forPlayer)
     }
 
     override fun onStreamIn(onStreamIn: StreamableMapObject.(Player) -> Unit) {
@@ -113,6 +118,7 @@ constructor(
                 ?: throw IllegalStateException("Streamable player map object was not streamed in")
         playerMapObject.destroy()
         onStreamOutHandlers.forEach { it.invoke(this, forPlayer) }
+        onStreamableMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(this, forPlayer)
     }
 
     override fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit) {
