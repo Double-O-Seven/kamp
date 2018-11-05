@@ -12,6 +12,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -199,33 +201,6 @@ internal class MapObjectStreamerTest {
                         rotation = vector3DOf(1f, 2f, 3f)
                 )
             }
-        }
-
-        @Test
-        fun givenStreamInConditionIsNotFulfilledItShouldNotStreamIn() {
-            every { callbackListenerManager.unregister(any()) } just Runs
-            val player = mockk<Player> {
-                every { isConnected } returns true
-            }
-            val playerMapObject1 = mockk<PlayerMapObject>(relaxed = true)
-            every {
-                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
-            } returns playerMapObject1
-            val coordinates = vector3DOf(150f, 100f, 20f)
-            val streamableMapObject = mapObjectStreamer.createMapObject(
-                    modelId = 1337,
-                    priority = 0,
-                    streamDistance = 300f,
-                    coordinates = coordinates,
-                    rotation = vector3DOf(1f, 2f, 3f),
-                    interiorIds = mutableSetOf(),
-                    virtualWorldIds = mutableSetOf()
-            )
-            streamableMapObject.streamInCondition = { false }
-
-            mapObjectStreamer.stream(listOf(StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))))
-
-            verify(exactly = 0) { playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any()) }
         }
 
         @Test
@@ -600,6 +575,8 @@ internal class MapObjectStreamerTest {
             bind(PlayerMapObjectService::class.java).toInstance(playerMapObjectService)
             bind(CallbackListenerManager::class.java).toInstance(callbackListenerManager)
             bind(TextProvider::class.java).toInstance(textProvider)
+            bind(OnStreamableMapObjectStreamInHandler::class.java).toInstance(mockk(relaxed = true))
+            bind(OnStreamableMapObjectStreamOutHandler::class.java).toInstance(mockk(relaxed = true))
             binder().requireExplicitBindings()
         }
 

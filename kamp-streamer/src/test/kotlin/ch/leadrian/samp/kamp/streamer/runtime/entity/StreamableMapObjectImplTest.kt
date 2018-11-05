@@ -779,14 +779,6 @@ internal class StreamableMapObjectImplTest {
         verify { playerMapObject.edit(player) }
     }
 
-    @Test
-    fun defaultStreamInConditionShouldReturnTrue() {
-        val result = streamableMapObject.streamInCondition(player)
-
-        assertThat(result)
-                .isTrue()
-    }
-
     @Nested
     inner class MoveToTests {
 

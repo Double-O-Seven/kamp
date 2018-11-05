@@ -127,8 +127,6 @@ constructor(
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjectsByPlayer.contains(forPlayer)
 
-    override var streamInCondition: (Player) -> Boolean = { true }
-
     internal fun onStateChange(onStateChange: StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
         stateMachine.onStateChange(onStateChange)
     }
