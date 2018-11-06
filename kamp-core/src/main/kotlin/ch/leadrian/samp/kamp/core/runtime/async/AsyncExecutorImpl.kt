@@ -3,8 +3,10 @@ package ch.leadrian.samp.kamp.core.runtime.async
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnProcessTickListener
+import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.TimeUnit
@@ -18,6 +20,7 @@ internal class AsyncExecutorImpl
 @Inject
 constructor(
         private val callbackListenerManager: CallbackListenerManager,
+        private val serverService: ServerService,
         executorServiceFactory: ExecutorServiceFactory
 ) : AsyncExecutor, OnProcessTickListener {
 
@@ -95,6 +98,23 @@ constructor(
     }
 
     override fun executeOnMainThread(action: () -> Unit) {
-        mainThreadTasks.add(action)
+        if (serverService.isOnMainThread()) {
+            action()
+        } else {
+            mainThreadTasks.add(action)
+        }
     }
+
+    override fun <T> computeOnMainThread(action: () -> T): CompletableFuture<T> {
+        val result = CompletableFuture<T>()
+        executeOnMainThread {
+            try {
+                result.complete(action())
+            } catch (e: Exception) {
+                result.completeExceptionally(e)
+            }
+        }
+        return result
+    }
+
 }

@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.async
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import io.mockk.Called
 import io.mockk.Runs
@@ -26,6 +27,7 @@ internal class AsyncExecutorImplTest {
     private val executorServiceFactory = mockk<ExecutorServiceFactory>()
     private val callbackListenerManager = mockk<CallbackListenerManager>()
     private val executorService = mockk<ExecutorService>()
+    private val serverService = mockk<ServerService>()
 
     @BeforeEach
     fun setUp() {
@@ -33,7 +35,7 @@ internal class AsyncExecutorImplTest {
         every { executorService.execute(any()) } answers {
             firstArg<Runnable>().run()
         }
-        asyncExecutor = AsyncExecutorImpl(callbackListenerManager, executorServiceFactory)
+        asyncExecutor = AsyncExecutorImpl(callbackListenerManager, serverService, executorServiceFactory)
     }
 
     @Test
@@ -83,7 +85,8 @@ internal class AsyncExecutorImplTest {
         }
 
         @Test
-        fun shouldNotExecuteOnMainThreadActionImmediately() {
+        fun givenExecutionIsNotOnMainThreadItShouldNotExecuteOnMainThreadActionImmediately() {
+            every { serverService.isOnMainThread() } returns false
             val action = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -94,7 +97,33 @@ internal class AsyncExecutorImplTest {
         }
 
         @Test
-        fun shouldExecuteOnMainThreadActionOnProcessTick() {
+        fun givenExecutionIsNotOnMainThreadItShouldExecuteOnMainThreadActionOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
+            val action = mockk<() -> Unit> {
+                every { this@mockk.invoke() } just Runs
+            }
+            asyncExecutor.executeOnMainThread(action)
+
+            asyncExecutor.onProcessTick()
+
+            verify(exactly = 1) { action.invoke() }
+        }
+
+        @Test
+        fun givenExecutionIsOnMainThreadItShouldExecuteOnMainThreadActionImmediately() {
+            every { serverService.isOnMainThread() } returns true
+            val action = mockk<() -> Unit> {
+                every { this@mockk.invoke() } just Runs
+            }
+
+            asyncExecutor.executeOnMainThread(action)
+
+            verify(exactly = 1) { action.invoke() }
+        }
+
+        @Test
+        fun givenExecutionIsOnMainThreadItShouldNotExecuteOnMainThreadActionOnProcessTick() {
+            every { serverService.isOnMainThread() } returns true
             val action = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -107,6 +136,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun shouldExecuteOnMainThreadMultipleActionsOnProcessTickInExpectedOrder() {
+            every { serverService.isOnMainThread() } returns false
             val action1 = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -167,6 +197,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun shouldExecuteOnSuccessOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -185,6 +216,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun givenExceptionItShouldNotExecuteOnFailureImmediately() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -207,6 +239,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun givenExceptionItShouldExecuteOnFailureOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -275,6 +308,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun shouldExecuteOnSuccessOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<(String) -> Unit> {
                 every { this@mockk.invoke(any()) } just Runs
             }
@@ -294,6 +328,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun givenExceptionItShouldNotExecuteOnFailureImmediately() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<(String) -> Unit> {
                 every { this@mockk.invoke(any()) } just Runs
             }
@@ -316,6 +351,7 @@ internal class AsyncExecutorImplTest {
 
         @Test
         fun givenExceptionItShouldExecuteOnFailureOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<(String) -> Unit> {
                 every { this@mockk.invoke(any()) } just Runs
             }
@@ -359,6 +395,53 @@ internal class AsyncExecutorImplTest {
             }
         }
 
+    }
+
+    @Nested
+    inner class ComputeOnMainThreadTests {
+
+        @Test
+        fun givenExecutionIsOnMainThreadItShouldComputeResultImmediately() {
+            every { serverService.isOnMainThread() } returns true
+
+            val result = asyncExecutor.computeOnMainThread { 1337 }
+
+            assertThat(result)
+                    .isCompletedWithValue(1337)
+        }
+
+        @Test
+        fun givenExecutionIsOnMainThreadAndExceptionIsThrownItShouldFailImmediately() {
+            every { serverService.isOnMainThread() } returns true
+
+            val result = asyncExecutor.computeOnMainThread { throw RuntimeException() }
+
+            assertThat(result)
+                    .hasFailed()
+        }
+
+        @Test
+        fun givenExecutionIsNotOnMainThreadItShouldNotComputeResultImmediately() {
+            every { serverService.isOnMainThread() } returns false
+
+            val result = asyncExecutor.computeOnMainThread { 1337 }
+
+            assertThat(result)
+                    .isNotCompleted
+                    .isNotCancelled
+                    .hasNotFailed()
+        }
+
+        @Test
+        fun givenExecutionIsNotOnMainThreadAndExceptionIsThrownItShouldFailOnProcessTick() {
+            every { serverService.isOnMainThread() } returns false
+            val result = asyncExecutor.computeOnMainThread { throw RuntimeException() }
+
+            asyncExecutor.onProcessTick()
+
+            assertThat(result)
+                    .hasFailed()
+        }
     }
 
 }
