@@ -90,7 +90,7 @@ constructor(
         }
     }
 
-    override fun <T> executeWithResult(onSuccess: (T) -> Unit, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> T) {
+    override fun <T> compute(onSuccess: (T) -> Unit, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> T) {
         executorService.execute {
             try {
                 val result = action.invoke(this)

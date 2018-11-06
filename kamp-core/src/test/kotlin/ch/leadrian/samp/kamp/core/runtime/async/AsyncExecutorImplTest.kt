@@ -320,7 +320,7 @@ internal class AsyncExecutorImplTest {
     }
 
     @Nested
-    inner class ExecuteWithResultTests {
+    inner class ComputeTests {
 
         @Test
         fun shouldNotExecuteOnSuccessImmediately() {
@@ -331,7 +331,7 @@ internal class AsyncExecutorImplTest {
                 every { this@mockk.invoke(asyncExecutor) } returns "Hi there"
             }
 
-            asyncExecutor.executeWithResult(onSuccess = onSuccess, action = action)
+            asyncExecutor.compute(onSuccess = onSuccess, action = action)
 
             verify {
                 executorService.execute(any())
@@ -350,7 +350,7 @@ internal class AsyncExecutorImplTest {
                 every { this@mockk.invoke(asyncExecutor) } returns "Hi there"
             }
 
-            asyncExecutor.executeWithResult(onSuccess = onSuccess, action = action)
+            asyncExecutor.compute(onSuccess = onSuccess, action = action)
 
             asyncExecutor.onProcessTick()
 
@@ -373,7 +373,7 @@ internal class AsyncExecutorImplTest {
                 every { this@mockk.invoke(any()) } just Runs
             }
 
-            asyncExecutor.executeWithResult(onSuccess = onSuccess, onFailure = onFailure, action = action)
+            asyncExecutor.compute(onSuccess = onSuccess, onFailure = onFailure, action = action)
 
             verify {
                 executorService.execute(any())
@@ -396,7 +396,7 @@ internal class AsyncExecutorImplTest {
             val action = mockk<AsyncExecutor.() -> String> {
                 every { this@mockk.invoke(asyncExecutor) } throws exception
             }
-            asyncExecutor.executeWithResult(onSuccess = onSuccess, onFailure = onFailure, action = action)
+            asyncExecutor.compute(onSuccess = onSuccess, onFailure = onFailure, action = action)
 
             asyncExecutor.onProcessTick()
 
@@ -424,7 +424,7 @@ internal class AsyncExecutorImplTest {
                 every { notify(any()) } just Runs
             }
             asyncExecutor.uncaughtExceptionNotifier = uncaughtExceptionNotifier
-            asyncExecutor.executeWithResult(onSuccess = onSuccess, action = action)
+            asyncExecutor.compute(onSuccess = onSuccess, action = action)
 
             asyncExecutor.onProcessTick()
 

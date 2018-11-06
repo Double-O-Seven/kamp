@@ -232,7 +232,7 @@ internal class StreamerExecutorTest {
             throw UnsupportedOperationException()
         }
 
-        override fun <T> executeWithResult(onSuccess: (T) -> Unit, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> T) {
+        override fun <T> compute(onSuccess: (T) -> Unit, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> T) {
             throw UnsupportedOperationException()
         }
 
