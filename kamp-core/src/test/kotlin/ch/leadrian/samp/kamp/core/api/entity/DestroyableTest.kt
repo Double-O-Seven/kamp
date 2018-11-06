@@ -73,4 +73,33 @@ internal class DestroyableTest {
         }
     }
 
+    @Nested
+    inner class IfNotDestroyedTests {
+
+        @Test
+        fun givenItIsNotDestroyedItShouldReturnExpectedValue() {
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns false
+            }
+
+            val result = destroyable.ifNotDestroyed { 1337 }
+
+            assertThat(result)
+                    .isEqualTo(1337)
+        }
+
+        @Test
+        fun givenItIsDestroyedItShouldReturnNull() {
+            val destroyable = mockk<Destroyable> {
+                every { isDestroyed } returns true
+            }
+
+            val result = destroyable.ifNotDestroyed { 1337 }
+
+            assertThat(result)
+                    .isNull()
+        }
+
+    }
+
 }

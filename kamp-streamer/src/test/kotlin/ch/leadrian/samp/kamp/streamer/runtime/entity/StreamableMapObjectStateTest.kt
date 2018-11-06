@@ -450,6 +450,7 @@ internal class StreamableMapObjectStateTest {
                 expectedY: Float,
                 expectedZ: Float
         ) {
+            every { player.isConnected } returns true
             every { player.coordinates } returns vector3DOf(playerX, playerY, playerZ)
             every { player.angle } returns angle
             val state = StreamableMapObjectState.Attached.ToPlayer(
@@ -474,7 +475,25 @@ internal class StreamableMapObjectStateTest {
         }
 
         @Test
+        fun givenPlayerIsOfflineItShouldReturnCoordinatesWithOffsetToOrigin() {
+            every { player.isConnected } returns false
+            val state = StreamableMapObjectState.Attached.ToPlayer(
+                    player = player,
+                    offset = vector3DOf(1f, 2f, 3f),
+                    attachRotation = vector3DOf(0f, 0f, 0f),
+                    asyncExecutor = asyncExecutor
+            )
+
+            val coordinates = state.coordinates
+
+            assertThat(coordinates)
+                    .isEqualTo(vector3DOf(1f, 2f, 3f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Vector3D>()) }
+        }
+
+        @Test
         fun shouldReturnRotation() {
+            every { player.isConnected } returns true
             every { player.coordinates } returns vector3DOf(0f, 0f, 0f)
             every { player.angle } returns 15f
             val state = StreamableMapObjectState.Attached.ToPlayer(
@@ -488,6 +507,23 @@ internal class StreamableMapObjectStateTest {
 
             assertThat(rotation)
                     .isEqualTo(vector3DOf(10f, 20f, 45f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
+        }
+
+        @Test
+        fun givenPlayerIsOfflineItShouldReturnRotationWithAngleZero() {
+            every { player.isConnected } returns false
+            val state = StreamableMapObjectState.Attached.ToPlayer(
+                    player = player,
+                    offset = vector3DOf(0f, 0f, 0f),
+                    attachRotation = vector3DOf(10f, 20f, 30f),
+                    asyncExecutor = asyncExecutor
+            )
+
+            val rotation = state.rotation
+
+            assertThat(rotation)
+                    .isEqualTo(vector3DOf(10f, 20f, 30f))
             verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
         }
 
@@ -597,6 +633,7 @@ internal class StreamableMapObjectStateTest {
                 expectedY: Float,
                 expectedZ: Float
         ) {
+            every { vehicle.isDestroyed } returns false
             every { vehicle.coordinates } returns vector3DOf(vehicleX, vehicleY, vehicleZ)
             every { vehicle.angle } returns angle
             val state = StreamableMapObjectState.Attached.ToVehicle(
@@ -621,8 +658,25 @@ internal class StreamableMapObjectStateTest {
         }
 
         @Test
+        fun givenVehicleIsDestroyedItShouldReturnCoordinatesWithOffsetToOrigin() {
+            every { vehicle.isDestroyed } returns true
+            val state = StreamableMapObjectState.Attached.ToVehicle(
+                    vehicle = vehicle,
+                    offset = vector3DOf(1f, 2f, 3f),
+                    attachRotation = vector3DOf(0f, 0f, 0f),
+                    asyncExecutor = asyncExecutor
+            )
+
+            val coordinates = state.coordinates
+
+            assertThat(coordinates)
+                    .isEqualTo(vector3DOf(1f, 2f, 3f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Vector3D>()) }
+        }
+
+        @Test
         fun shouldReturnRotation() {
-            every { vehicle.coordinates } returns vector3DOf(0f, 0f, 0f)
+            every { vehicle.isDestroyed } returns false
             every { vehicle.angle } returns 15f
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
@@ -635,6 +689,23 @@ internal class StreamableMapObjectStateTest {
 
             assertThat(rotation)
                     .isEqualTo(vector3DOf(10f, 20f, 45f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
+        }
+
+        @Test
+        fun givenVehicleIsDestroyedItShouldReturnRotationWithAngleZero() {
+            every { vehicle.isDestroyed } returns true
+            val state = StreamableMapObjectState.Attached.ToVehicle(
+                    vehicle = vehicle,
+                    offset = vector3DOf(0f, 0f, 0f),
+                    attachRotation = vector3DOf(10f, 20f, 30f),
+                    asyncExecutor = asyncExecutor
+            )
+
+            val rotation = state.rotation
+
+            assertThat(rotation)
+                    .isEqualTo(vector3DOf(10f, 20f, 30f))
             verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
         }
 

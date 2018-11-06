@@ -2,6 +2,11 @@ package ch.leadrian.samp.kamp.core.api.data
 
 interface Vector3D : Vector2D {
 
+    companion object {
+
+        val ORIGIN = vector3DOf(0f, 0f, 0f)
+    }
+
     val z: Float
 
     fun distanceTo(other: Vector3D): Float {

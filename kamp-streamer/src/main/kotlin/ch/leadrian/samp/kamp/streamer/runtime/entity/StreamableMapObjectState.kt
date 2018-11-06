@@ -8,6 +8,7 @@ import ch.leadrian.samp.kamp.core.api.entity.HasVehicle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.core.api.entity.ifNotDestroyed
 import ch.leadrian.samp.kamp.core.api.timer.Timer
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.streamer.runtime.util.TimeProvider
@@ -178,10 +179,14 @@ internal sealed class StreamableMapObjectState {
         ) : Attached(offset = offset, attachRotation = attachRotation), HasVehicle {
 
             override val entityAngle: Float
-                get() = asyncExecutor.computeOnMainThread { vehicle.angle }.get()
+                get() = asyncExecutor.computeOnMainThread {
+                    vehicle.ifNotDestroyed { angle } ?: 0f
+                }.get()
 
             override val entityCoordinates: Vector3D
-                get() = asyncExecutor.computeOnMainThread { vehicle.coordinates }.get()
+                get() = asyncExecutor.computeOnMainThread {
+                    vehicle.ifNotDestroyed { coordinates } ?: Vector3D.ORIGIN
+                }.get()
 
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(vehicle, offset, attachRotation)
@@ -197,10 +202,14 @@ internal sealed class StreamableMapObjectState {
         ) : Attached(offset = offset, attachRotation = attachRotation), HasPlayer {
 
             override val entityAngle: Float
-                get() = asyncExecutor.computeOnMainThread { player.angle }.get()
+                get() = asyncExecutor.computeOnMainThread {
+                    player.ifConnected { angle } ?: 0f
+                }.get()
 
             override val entityCoordinates: Vector3D
-                get() = asyncExecutor.computeOnMainThread { player.coordinates }.get()
+                get() = asyncExecutor.computeOnMainThread {
+                    player.ifConnected { coordinates } ?: Vector3D.ORIGIN
+                }.get()
 
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(player, offset, attachRotation)

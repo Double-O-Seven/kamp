@@ -3019,7 +3019,7 @@ internal class PlayerTest {
         }
 
         @Nested
-        inner class RequireOnlineTests {
+        inner class RequireConnectedTests {
 
             @Nested
             inner class NonLambdaTests {
@@ -3071,5 +3071,29 @@ internal class PlayerTest {
                 }
             }
         }
+
+        @Nested
+        inner class IfConnectedTests {
+
+            @Test
+            fun givenPlayerIsConnectedItShouldReturnExpectedValue() {
+                val result = player.ifConnected { 1337 }
+
+                assertThat(result)
+                        .isEqualTo(1337)
+            }
+
+            @Test
+            fun givenPlayerIsOfflineItShouldReturnNull() {
+                player.onDisconnect(DisconnectReason.QUIT)
+
+                val result = player.ifConnected { 1337 }
+
+                assertThat(result)
+                        .isNull()
+            }
+
+        }
+
     }
 }

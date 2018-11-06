@@ -11,11 +11,20 @@ interface Destroyable {
 }
 
 fun <T : Destroyable> T.requireNotDestroyed(): T {
-    if (this.isDestroyed) throw AlreadyDestroyedException("$this is already destroyed")
+    if (this.isDestroyed) {
+        throw AlreadyDestroyedException("$this is already destroyed")
+    }
     return this
 }
 
 inline fun <T : Destroyable, U> T.requireNotDestroyed(block: T.() -> U): U {
     requireNotDestroyed()
     return block(this)
+}
+
+inline fun <T : Destroyable, U : Any?> T.ifNotDestroyed(action: T.() -> U): U? {
+    if (isDestroyed) {
+        return null
+    }
+    return action.invoke(this)
 }

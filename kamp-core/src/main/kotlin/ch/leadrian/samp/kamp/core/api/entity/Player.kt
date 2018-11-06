@@ -972,7 +972,9 @@ internal constructor(
     }
 
     internal fun onDisconnect(reason: DisconnectReason) {
-        if (!isConnected) return
+        if (!isConnected) {
+            return
+        }
 
         onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
@@ -982,12 +984,21 @@ internal constructor(
     }
 
     fun requireConnected(): Player {
-        if (!isConnected) throw PlayerOfflineException("Player is already offline")
+        if (!isConnected) {
+            throw PlayerOfflineException("Player is already offline")
+        }
         return this
     }
 
     inline fun <T> requireConnected(block: Player.() -> T): T {
         requireConnected()
         return block(this)
+    }
+
+    inline fun <T : Any?> ifConnected(action: Player.() -> T): T? {
+        if (isConnected) {
+            return action.invoke(this)
+        }
+        return null
     }
 }
