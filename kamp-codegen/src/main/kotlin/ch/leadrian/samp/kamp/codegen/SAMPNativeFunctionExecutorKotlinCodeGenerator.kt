@@ -38,6 +38,8 @@ class SAMPNativeFunctionExecutorKotlinCodeGenerator {
             |
             |    fun initialize()
             |
+            |    fun isOnMainThread(): Boolean
+            |
             |""".trimMargin("|"))
     }
 

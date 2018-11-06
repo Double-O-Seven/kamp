@@ -48,8 +48,10 @@ class SAMPNativeFunctionExecutorImplKotlinCodeGenerator {
             |        isInitialized = true
             |    }
             |
+            |    override fun isOnMainThread(): Boolean = Thread.currentThread() == mainThread
+            |
             |    private inline fun <T> requireOnMainThread(block: () -> T): T {
-            |        if (Thread.currentThread() != mainThread) {
+            |        if (!isOnMainThread()) {
             |            throw IllegalStateException("Can only execute native functions on main thread")
             |        }
             |        return block()
