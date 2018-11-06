@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
@@ -16,10 +17,11 @@ internal class StreamableMapObjectStateFactoryTest {
     private lateinit var streamableMapObjectStateFactory: StreamableMapObjectStateFactory
     private val timeProvider = mockk<TimeProvider>()
     private val timerExecutor = mockk<TimerExecutor>()
+    private val asyncExecutor = mockk<AsyncExecutor>()
 
     @BeforeEach
     fun setUp() {
-        streamableMapObjectStateFactory = StreamableMapObjectStateFactory(timeProvider, timerExecutor)
+        streamableMapObjectStateFactory = StreamableMapObjectStateFactory(timeProvider, timerExecutor, asyncExecutor)
     }
 
     @Test

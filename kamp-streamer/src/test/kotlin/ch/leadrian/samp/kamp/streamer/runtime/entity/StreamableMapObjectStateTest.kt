@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
+import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
@@ -15,11 +17,13 @@ import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.data.Percentage.withPercentage
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.util.concurrent.CompletableFuture
 import java.util.concurrent.TimeUnit
 
 internal class StreamableMapObjectStateTest {
@@ -419,6 +423,14 @@ internal class StreamableMapObjectStateTest {
     inner class AttachedToPlayerTests {
 
         private val player = mockk<Player>()
+        private val asyncExecutor = mockk<AsyncExecutor>()
+
+        @BeforeEach
+        fun setUp() {
+            every { asyncExecutor.computeOnMainThread<Int>(any()) } answers {
+                CompletableFuture.completedFuture(firstArg<() -> Int>().invoke())
+            }
+        }
 
         @ParameterizedTest
         @CsvSource(
@@ -443,7 +455,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(offsetX, offsetY, offsetZ),
-                    attachRotation = vector3DOf(0f, 0f, 0f)
+                    attachRotation = vector3DOf(0f, 0f, 0f),
+                    asyncExecutor = asyncExecutor
             )
 
             val coordinates = state.coordinates
@@ -457,6 +470,7 @@ internal class StreamableMapObjectStateTest {
                         assertThat(it.z)
                                 .isCloseTo(expectedZ, withPercentage(0.005))
                     }
+            verify { asyncExecutor.computeOnMainThread(any<() -> Vector3D>()) }
         }
 
         @Test
@@ -466,13 +480,15 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(0f, 0f, 0f),
-                    attachRotation = vector3DOf(10f, 20f, 30f)
+                    attachRotation = vector3DOf(10f, 20f, 30f),
+                    asyncExecutor = asyncExecutor
             )
 
             val rotation = state.rotation
 
             assertThat(rotation)
                     .isEqualTo(vector3DOf(10f, 20f, 45f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
         }
 
         @Test
@@ -489,7 +505,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onEnter(streamableMapObject)
@@ -516,7 +533,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onStreamIn(playerMapObject)
@@ -538,7 +556,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onLeave(streamableMapObject)
@@ -551,6 +570,14 @@ internal class StreamableMapObjectStateTest {
     inner class AttachedToVehicleTests {
 
         private val vehicle = mockk<Vehicle>()
+        private val asyncExecutor = mockk<AsyncExecutor>()
+
+        @BeforeEach
+        fun setUp() {
+            every { asyncExecutor.computeOnMainThread<Int>(any()) } answers {
+                CompletableFuture.completedFuture(firstArg<() -> Int>().invoke())
+            }
+        }
 
         @ParameterizedTest
         @CsvSource(
@@ -575,7 +602,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(offsetX, offsetY, offsetZ),
-                    attachRotation = vector3DOf(0f, 0f, 0f)
+                    attachRotation = vector3DOf(0f, 0f, 0f),
+                    asyncExecutor = asyncExecutor
             )
 
             val coordinates = state.coordinates
@@ -589,6 +617,7 @@ internal class StreamableMapObjectStateTest {
                         assertThat(it.z)
                                 .isCloseTo(expectedZ, withPercentage(0.005))
                     }
+            verify { asyncExecutor.computeOnMainThread(any<() -> Vector3D>()) }
         }
 
         @Test
@@ -598,13 +627,15 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(0f, 0f, 0f),
-                    attachRotation = vector3DOf(10f, 20f, 30f)
+                    attachRotation = vector3DOf(10f, 20f, 30f),
+                    asyncExecutor = asyncExecutor
             )
 
             val rotation = state.rotation
 
             assertThat(rotation)
                     .isEqualTo(vector3DOf(10f, 20f, 45f))
+            verify { asyncExecutor.computeOnMainThread(any<() -> Float>()) }
         }
 
         @Test
@@ -621,7 +652,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onEnter(streamableMapObject)
@@ -648,7 +680,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onStreamIn(playerMapObject)
@@ -670,7 +703,8 @@ internal class StreamableMapObjectStateTest {
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = vector3DOf(1f, 2f, 3f),
-                    attachRotation = vector3DOf(4f, 5f, 6f)
+                    attachRotation = vector3DOf(4f, 5f, 6f),
+                    asyncExecutor = asyncExecutor
             )
 
             state.onLeave(streamableMapObject)

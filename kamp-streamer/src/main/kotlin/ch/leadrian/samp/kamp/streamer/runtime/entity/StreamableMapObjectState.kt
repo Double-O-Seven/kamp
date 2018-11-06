@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
+import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
@@ -172,14 +173,15 @@ internal sealed class StreamableMapObjectState {
         internal class ToVehicle(
                 override val vehicle: Vehicle,
                 offset: Vector3D,
-                attachRotation: Vector3D
+                attachRotation: Vector3D,
+                private val asyncExecutor: AsyncExecutor
         ) : Attached(offset = offset, attachRotation = attachRotation), HasVehicle {
 
             override val entityAngle: Float
-                get() = vehicle.angle
+                get() = asyncExecutor.computeOnMainThread { vehicle.angle }.get()
 
             override val entityCoordinates: Vector3D
-                get() = vehicle.coordinates
+                get() = asyncExecutor.computeOnMainThread { vehicle.coordinates }.get()
 
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(vehicle, offset, attachRotation)
@@ -190,14 +192,15 @@ internal sealed class StreamableMapObjectState {
         internal class ToPlayer(
                 override val player: Player,
                 offset: Vector3D,
-                attachRotation: Vector3D
+                attachRotation: Vector3D,
+                private val asyncExecutor: AsyncExecutor
         ) : Attached(offset = offset, attachRotation = attachRotation), HasPlayer {
 
             override val entityAngle: Float
-                get() = player.angle
+                get() = asyncExecutor.computeOnMainThread { player.angle }.get()
 
             override val entityCoordinates: Vector3D
-                get() = player.coordinates
+                get() = asyncExecutor.computeOnMainThread { player.coordinates }.get()
 
             override fun attach(playerMapObject: PlayerMapObject) {
                 playerMapObject.attachTo(player, offset, attachRotation)

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
+import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
@@ -10,7 +11,11 @@ import javax.inject.Inject
 
 internal class StreamableMapObjectStateFactory
 @Inject
-constructor(private val timeProvider: TimeProvider, private val timerExecutor: TimerExecutor) {
+constructor(
+        private val timeProvider: TimeProvider,
+        private val timerExecutor: TimerExecutor,
+        private val asyncExecutor: AsyncExecutor
+) {
 
     fun createFixedCoordinates(coordinates: Vector3D, rotation: Vector3D): StreamableMapObjectState.FixedCoordinates =
             StreamableMapObjectState.FixedCoordinates(
@@ -45,7 +50,8 @@ constructor(private val timeProvider: TimeProvider, private val timerExecutor: T
             StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
                     offset = offset,
-                    attachRotation = attachRotation
+                    attachRotation = attachRotation,
+                    asyncExecutor = asyncExecutor
             )
 
     fun createAttachedToPlayer(
@@ -56,7 +62,8 @@ constructor(private val timeProvider: TimeProvider, private val timerExecutor: T
             StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
                     offset = offset,
-                    attachRotation = attachRotation
+                    attachRotation = attachRotation,
+                    asyncExecutor = asyncExecutor
             )
 
 }
