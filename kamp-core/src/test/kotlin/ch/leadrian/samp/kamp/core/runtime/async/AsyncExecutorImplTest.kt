@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.async
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.exception.UncaughtExceptionNotifier
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import io.mockk.Called
@@ -158,6 +159,33 @@ internal class AsyncExecutorImplTest {
                 action3.invoke()
             }
         }
+
+        @Test
+        fun givenExceptionIsThrownItShouldCallUncaughtExceptionNotifier() {
+            every { serverService.isOnMainThread() } returns false
+            val uncaughtExceptionNotifier = mockk<UncaughtExceptionNotifier> {
+                every { notify(any()) } just Runs
+            }
+            asyncExecutor.uncaughtExceptionNotifier = uncaughtExceptionNotifier
+            val exception = Exception()
+            asyncExecutor.executeOnMainThread { throw exception }
+
+            catchThrowable { asyncExecutor.onProcessTick() }
+
+            verify { uncaughtExceptionNotifier.notify(exception) }
+        }
+
+        @Test
+        fun givenExceptionIsThrownWithoutUncaughtExceptionNotifierItShouldCatchException() {
+            every { serverService.isOnMainThread() } returns false
+            val exception = Exception()
+            asyncExecutor.executeOnMainThread { throw exception }
+
+            val caughtThrowable = catchThrowable { asyncExecutor.onProcessTick() }
+
+            assertThat(caughtThrowable)
+                    .isNull()
+        }
     }
 
     @Nested
@@ -265,7 +293,12 @@ internal class AsyncExecutorImplTest {
         }
 
         @Test
-        fun givenExceptionItButNoOnFailureItShouldNotDoAnything() {
+        fun givenExceptionItButNoOnFailureItShouldCallUncaughtExceptionNotifier() {
+            every { serverService.isOnMainThread() } returns false
+            val uncaughtExceptionNotifier = mockk<UncaughtExceptionNotifier> {
+                every { notify(any()) } just Runs
+            }
+            asyncExecutor.uncaughtExceptionNotifier = uncaughtExceptionNotifier
             val onSuccess = mockk<() -> Unit> {
                 every { this@mockk.invoke() } just Runs
             }
@@ -280,6 +313,7 @@ internal class AsyncExecutorImplTest {
             verify {
                 action.invoke(asyncExecutor)
                 onSuccess wasNot Called
+                uncaughtExceptionNotifier.notify(exception)
             }
         }
 
@@ -377,7 +411,8 @@ internal class AsyncExecutorImplTest {
         }
 
         @Test
-        fun givenExceptionItButNoOnFailureItShouldNotDoAnything() {
+        fun givenExceptionItButNoOnFailureItShouldCallUncaughtExceptionNotifier() {
+            every { serverService.isOnMainThread() } returns false
             val onSuccess = mockk<(String) -> Unit> {
                 every { this@mockk.invoke(any()) } just Runs
             }
@@ -385,6 +420,10 @@ internal class AsyncExecutorImplTest {
             val action = mockk<AsyncExecutor.() -> String> {
                 every { this@mockk.invoke(asyncExecutor) } throws exception
             }
+            val uncaughtExceptionNotifier = mockk<UncaughtExceptionNotifier> {
+                every { notify(any()) } just Runs
+            }
+            asyncExecutor.uncaughtExceptionNotifier = uncaughtExceptionNotifier
             asyncExecutor.executeWithResult(onSuccess = onSuccess, action = action)
 
             asyncExecutor.onProcessTick()
@@ -392,6 +431,7 @@ internal class AsyncExecutorImplTest {
             verify {
                 action.invoke(asyncExecutor)
                 onSuccess wasNot Called
+                uncaughtExceptionNotifier.notify(exception)
             }
         }
 
