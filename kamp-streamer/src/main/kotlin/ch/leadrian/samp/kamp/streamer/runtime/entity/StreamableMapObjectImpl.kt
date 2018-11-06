@@ -79,7 +79,7 @@ constructor(
         if (playerMapObjectsByPlayer.contains(forPlayer)) {
             throw IllegalStateException("Streamable map object is already streamed in")
         }
-        playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer).apply(this::initializePlayerMapObject)
+        playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer)
         onStreamInHandlers.forEach { it.invoke(this, forPlayer) }
         onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(this, forPlayer)
     }
@@ -95,7 +95,7 @@ constructor(
                     coordinates = coordinates,
                     rotation = rotation,
                     drawDistance = streamDistance
-            )
+            ).apply(this::initializePlayerMapObject)
 
     private fun initializePlayerMapObject(playerMapObject: PlayerMapObject) {
         materialsByIndex.forEach { _, material -> material.apply(playerMapObject) }
@@ -131,13 +131,11 @@ constructor(
         stateMachine.onStateChange(onStateChange)
     }
 
-    internal fun forceStreamOut() {
-        destroyPlayerMapObjects()
-    }
-
-    private fun destroyPlayerMapObjects() {
-        playerMapObjectsByPlayer.values.forEach { it.destroy() }
-        playerMapObjectsByPlayer.clear()
+    internal fun refresh() {
+        playerMapObjectsByPlayer.replaceAll { player, playerMapObject ->
+            playerMapObject.destroy()
+            createPlayerMapObject(player)
+        }
     }
 
     override var coordinates: Vector3D
@@ -368,7 +366,8 @@ constructor(
         }
 
         onDestroyHandlers.forEach { it.invoke(this) }
-        destroyPlayerMapObjects()
+        playerMapObjectsByPlayer.values.forEach { it.destroy() }
+        playerMapObjectsByPlayer.clear()
         isDestroyed = true
     }
 

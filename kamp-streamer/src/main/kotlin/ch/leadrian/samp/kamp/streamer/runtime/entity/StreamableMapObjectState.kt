@@ -166,7 +166,7 @@ internal sealed class StreamableMapObjectState {
         }
 
         override fun onLeave(streamableMapObject: StreamableMapObjectImpl) {
-            streamableMapObject.forceStreamOut()
+            streamableMapObject.refresh()
         }
 
         protected abstract fun attach(playerMapObject: PlayerMapObject)

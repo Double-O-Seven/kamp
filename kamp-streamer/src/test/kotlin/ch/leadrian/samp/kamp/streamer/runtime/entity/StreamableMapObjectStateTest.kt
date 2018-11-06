@@ -587,7 +587,7 @@ internal class StreamableMapObjectStateTest {
         @Test
         fun shouldDestroyPlayerMapObjectsOnLeave() {
             val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                every { forceStreamOut() } just Runs
+                every { refresh() } just Runs
             }
             val state = StreamableMapObjectState.Attached.ToPlayer(
                     player = player,
@@ -598,7 +598,7 @@ internal class StreamableMapObjectStateTest {
 
             state.onLeave(streamableMapObject)
 
-            verify { streamableMapObject.forceStreamOut() }
+            verify { streamableMapObject.refresh() }
         }
     }
 
@@ -769,7 +769,7 @@ internal class StreamableMapObjectStateTest {
         @Test
         fun shouldDestroyPlayerMapObjectsOnLeave() {
             val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                every { forceStreamOut() } just Runs
+                every { refresh() } just Runs
             }
             val state = StreamableMapObjectState.Attached.ToVehicle(
                     vehicle = vehicle,
@@ -780,7 +780,7 @@ internal class StreamableMapObjectStateTest {
 
             state.onLeave(streamableMapObject)
 
-            verify { streamableMapObject.forceStreamOut() }
+            verify { streamableMapObject.refresh() }
         }
     }
 

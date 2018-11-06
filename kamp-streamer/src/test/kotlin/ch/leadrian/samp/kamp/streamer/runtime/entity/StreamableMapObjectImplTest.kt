@@ -26,6 +26,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStre
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
+import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
@@ -103,12 +104,9 @@ internal class StreamableMapObjectImplTest {
     inner class OnStreamInTests {
 
         private val player = mockk<Player>()
-        private val currentState = mockk<StreamableMapObjectState>()
 
         @BeforeEach
         fun setUp() {
-            every { streamableMapObjectStateMachine.currentState } returns currentState
-            every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
             every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         }
@@ -404,6 +402,226 @@ internal class StreamableMapObjectImplTest {
 
             assertThat(isStreamedIn)
                     .isTrue()
+        }
+    }
+
+    @Nested
+    inner class RefreshTests {
+
+        private val player = mockk<Player>()
+        private lateinit var currentState: StreamableMapObjectState
+        private val oldPlayerMapObject = mockk<PlayerMapObject>(relaxed = true)
+
+        @BeforeEach
+        fun setUp() {
+            currentState = mockk {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            every { oldPlayerMapObject.destroy() } just Runs
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            every { currentState.onStreamIn(any()) } just Runs
+            every { playerMapObject.player } returns player
+            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns oldPlayerMapObject
+            streamableMapObject.onStreamIn(player)
+            clearMocks(playerMapObjectService)
+        }
+
+        @Test
+        fun shouldBeRecreated() {
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+
+            streamableMapObject.refresh()
+
+            verify {
+                playerMapObjectService.createPlayerMapObject(
+                        player = player,
+                        modelId = modelId,
+                        coordinates = vector3DOf(1f, 2f, 3f),
+                        rotation = vector3DOf(4f, 5f, 6f),
+                        drawDistance = streamDistance
+                )
+            }
+        }
+
+        @Test
+        fun givenMaterialTextItShouldSetIt() {
+            every { player.locale } returns Locale.GERMANY
+            every {
+                playerMapObject.setMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } just Runs
+            streamableMapObject.setMaterialText(
+                    text = "Hi there",
+                    size = ObjectMaterialSize.SIZE_128X128,
+                    index = 1,
+                    backColor = Colors.BLUE,
+                    fontColor = Colors.RED,
+                    isBold = true,
+                    fontFace = "Comic Sans",
+                    textAlignment = ObjectMaterialTextAlignment.LEFT,
+                    fontSize = 24
+            )
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+
+            streamableMapObject.refresh()
+
+            verify {
+                playerMapObject.setMaterialText(
+                        text = "Hi there",
+                        size = ObjectMaterialSize.SIZE_128X128,
+                        index = 1,
+                        backColor = Colors.BLUE,
+                        fontColor = Colors.RED,
+                        isBold = true,
+                        fontFace = "Comic Sans",
+                        textAlignment = ObjectMaterialTextAlignment.LEFT,
+                        fontSize = 24
+                )
+            }
+        }
+
+        @Test
+        fun givenMaterialItShouldSetIt() {
+            every { player.locale } returns Locale.GERMANY
+            every {
+                playerMapObject.setMaterial(any(), any(), any(), any(), any())
+            } just Runs
+            streamableMapObject.setMaterial(
+                    index = 1,
+                    modelId = 815,
+                    color = Colors.RED,
+                    txdName = "txd",
+                    textureName = "texture"
+            )
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+
+            streamableMapObject.refresh()
+
+            verify {
+                playerMapObject.setMaterial(
+                        index = 1,
+                        modelId = 815,
+                        color = Colors.RED,
+                        txdName = "txd",
+                        textureName = "texture"
+                )
+            }
+        }
+
+        @Test
+        fun givenCameraCollisionIsDisabledItShouldDisableItOnPlayerMapObject() {
+            every { playerMapObject.disableCameraCollision() } just Runs
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            streamableMapObject.disableCameraCollision()
+
+            streamableMapObject.refresh()
+
+            verify { playerMapObject.disableCameraCollision() }
+        }
+
+        @Test
+        fun givenOnEditHandlersItShouldRegisterThem() {
+            val onEdit = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
+            every {
+                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any())
+            } just Runs
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            streamableMapObject.onEdit(onEdit)
+
+            streamableMapObject.refresh()
+
+            val slot = slot<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>()
+            verify { playerMapObject.onEdit(capture(slot)) }
+            slot.captured.invoke(
+                    playerMapObject,
+                    ObjectEditResponse.UPDATE,
+                    vector3DOf(1f, 2f, 3f),
+                    vector3DOf(4f, 5f, 6f)
+            )
+            verify {
+                onEdit.invoke(
+                        streamableMapObject,
+                        player,
+                        ObjectEditResponse.UPDATE,
+                        vector3DOf(1f, 2f, 3f),
+                        vector3DOf(4f, 5f, 6f)
+                )
+                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
+                        player,
+                        streamableMapObject,
+                        ObjectEditResponse.UPDATE,
+                        vector3DOf(1f, 2f, 3f),
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
+        }
+
+        @Test
+        fun givenOnSelectHandlersItShouldRegisterThem() {
+            val onSelect = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
+            every {
+                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any())
+            } just Runs
+            every {
+                playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
+            } returns playerMapObject
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            streamableMapObject.onSelect(onSelect)
+
+            streamableMapObject.refresh()
+
+            val slot = slot<PlayerMapObject.(Int, Vector3D) -> Unit>()
+            verify { playerMapObject.onSelect(capture(slot)) }
+            slot.captured.invoke(
+                    playerMapObject,
+                    modelId,
+                    vector3DOf(4f, 5f, 6f)
+            )
+            verify {
+                onSelect.invoke(
+                        streamableMapObject,
+                        player,
+                        modelId,
+                        vector3DOf(4f, 5f, 6f)
+                )
+                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(
+                        player,
+                        streamableMapObject,
+                        modelId,
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
         }
     }
 
