@@ -11,6 +11,8 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
 
 internal class ServerServiceTest {
 
@@ -185,6 +187,17 @@ internal class ServerServiceTest {
                     .hasMessage("Invalid animation index: 1337")
         }
 
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun isOnMainThreadShouldReturnExpectedResult(expectedResult: Boolean) {
+        every { nativeFunctionExecutor.isOnMainThread() } returns expectedResult
+
+        val result = serverService.isOnMainThread()
+
+        assertThat(result)
+                .isEqualTo(expectedResult)
     }
 
 }

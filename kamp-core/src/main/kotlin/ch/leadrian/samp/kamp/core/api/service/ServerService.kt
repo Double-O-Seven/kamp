@@ -69,4 +69,6 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
             throw IllegalArgumentException("Invalid animation index: $animationIndex")
         }
     }
+
+    fun isOnMainThread(): Boolean = nativeFunctionExecutor.isOnMainThread()
 }
