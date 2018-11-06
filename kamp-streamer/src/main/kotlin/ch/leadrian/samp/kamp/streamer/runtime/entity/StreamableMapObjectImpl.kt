@@ -131,7 +131,7 @@ constructor(
         stateMachine.onStateChange(onStateChange)
     }
 
-    internal fun refresh() {
+    override fun refresh() {
         playerMapObjectsByPlayer.replaceAll { player, playerMapObject ->
             playerMapObject.destroy()
             createPlayerMapObject(player)

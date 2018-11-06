@@ -32,6 +32,8 @@ interface StreamableMapObject : Destroyable {
     val isMoving: Boolean
 
     val isAttached: Boolean
+    
+    fun refresh()
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
