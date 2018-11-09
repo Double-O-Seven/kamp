@@ -1,15 +1,15 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.service.PlayerService
+import ch.leadrian.samp.kamp.streamer.api.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import java.util.stream.Stream
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -17,16 +17,10 @@ import javax.inject.Singleton
 internal class MapObjectStreamer
 @Inject
 constructor(
-        asyncExecutor: AsyncExecutor,
-        playerService: PlayerService,
-        callbackListenerManager: CallbackListenerManager,
+        private val callbackListenerManager: CallbackListenerManager,
+        private val distanceBasedPlayerStreamerFactory: DistanceBasedPlayerStreamerFactory,
         private val streamableMapObjectFactory: StreamableMapObjectFactory
-) : DistanceBasedPlayerStreamer<StreamableMapObjectImpl>(
-        asyncExecutor = asyncExecutor,
-        playerService = playerService,
-        callbackListenerManager = callbackListenerManager,
-        maxCapacity = SAMPConstants.MAX_OBJECTS - 1
-) {
+) : Streamer, StreamInCandidateSupplier<StreamableMapObjectImpl> {
 
     /*
      * The spatial index and set of createMoving or attached objects may only be accessed during
@@ -38,6 +32,23 @@ constructor(
      * Moving or attached map objects constantly change their location. We don't want to constantly update the spatial index.
      */
     private val movingOrAttachedMapObjects = HashSet<StreamableMapObjectImpl>()
+
+    private lateinit var delegate: DistanceBasedPlayerStreamer<StreamableMapObjectImpl>
+
+    var capacity: Int
+        get() = delegate.capacity
+        set(value) {
+            delegate.capacity = value
+        }
+
+    @PostConstruct
+    fun initialize() {
+        delegate = distanceBasedPlayerStreamerFactory.create(
+                maxCapacity = SAMPConstants.MAX_OBJECTS - 1,
+                streamInCandidateSupplier = this
+        )
+        callbackListenerManager.register(delegate)
+    }
 
     fun createMapObject(
             modelId: Int,
@@ -73,7 +84,7 @@ constructor(
     }
 
     private fun updateSpatialIndex(streamableMapObject: StreamableMapObjectImpl) {
-        beforeStream {
+        delegate.beforeStream {
             if (!movingOrAttachedMapObjects.contains(streamableMapObject)) {
                 spatialIndex.update(streamableMapObject)
             }
@@ -81,7 +92,7 @@ constructor(
     }
 
     private fun enableNonIndexStreaming(streamableMapObject: StreamableMapObjectImpl) {
-        beforeStream {
+        delegate.beforeStream {
             if (movingOrAttachedMapObjects.add(streamableMapObject)) {
                 spatialIndex.remove(streamableMapObject)
             }
@@ -90,15 +101,19 @@ constructor(
 
     private fun add(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.register(streamableMapObject)
-        beforeStream { spatialIndex.add(streamableMapObject) }
+        delegate.beforeStream { spatialIndex.add(streamableMapObject) }
     }
 
     private fun remove(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.unregister(streamableMapObject)
-        beforeStream {
+        delegate.beforeStream {
             movingOrAttachedMapObjects -= streamableMapObject
             spatialIndex.remove(streamableMapObject)
         }
+    }
+
+    override fun stream(streamLocations: List<StreamLocation>) {
+        delegate.stream(streamLocations)
     }
 
     override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<StreamableMapObjectImpl> =

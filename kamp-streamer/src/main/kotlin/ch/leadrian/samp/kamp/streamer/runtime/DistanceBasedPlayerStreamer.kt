@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
-import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.ifNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.streamer.api.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.DistanceBasedPlayerStreamable
@@ -13,14 +13,12 @@ import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.stream.Collectors.toSet
-import java.util.stream.Stream
-import javax.annotation.PostConstruct
 import kotlin.properties.Delegates
 
-abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
+class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         maxCapacity: Int,
         private val asyncExecutor: AsyncExecutor,
-        protected val callbackListenerManager: CallbackListenerManager,
+        private val streamInCandidateSupplier: StreamInCandidateSupplier<T>,
         playerService: PlayerService
 ) : Streamer, OnPlayerDisconnectListener {
 
@@ -35,11 +33,6 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
 
     var capacity: Int by Delegates.vetoable(maxCapacity) { _, _, newCapacity -> newCapacity in 0..maxCapacity }
 
-    @PostConstruct
-    fun initialize() {
-        callbackListenerManager.register(this)
-    }
-
     override fun stream(streamLocations: List<StreamLocation>) {
         beforeStream()
         streamLocations.forEach { streamLocation ->
@@ -48,8 +41,21 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         }
     }
 
+    fun beforeStream(action: () -> Unit) {
+        beforeStreamActions += action
+    }
+
+    fun isStreamedIn(streamable: T, forPlayer: Player): Boolean = streamedInStreamables.containsEntry(forPlayer, streamable)
+
+    private fun beforeStream() {
+        do {
+            val action = beforeStreamActions.poll() ?: break
+            action()
+        } while (true)
+    }
+
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
-        return getStreamInCandidates(streamLocation)
+        return streamInCandidateSupplier.getStreamInCandidates(streamLocation)
                 .filter { !it.isDestroyed }
                 .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
                 .filter { it.distance <= it.streamable.streamDistance }
@@ -62,51 +68,37 @@ abstract class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     private fun streamOnMainThread(player: Player, newStreamables: Set<T>) {
         asyncExecutor.executeOnMainThread {
             if (player.isConnected) {
-                val currentStreamables = streamedInStreamables[player]
-                streamOut(player, currentStreamables, newStreamables)
+                streamOut(player, newStreamables)
                 streamIn(player, newStreamables)
-            }
-        }
-    }
-
-    private fun streamOut(forPlayer: Player, currentStreamables: MutableCollection<T>, newStreamables: Set<T>) {
-        val iterator = currentStreamables.iterator()
-        while (iterator.hasNext()) {
-            val streamable = iterator.next()
-            val isDestroyed = streamable.isDestroyed
-            if (isDestroyed || !newStreamables.contains(streamable)) {
-                iterator.remove()
-                if (!isDestroyed) {
-                    streamedInStreamables.remove(forPlayer, streamable)
-                    streamable.onStreamOut(forPlayer)
-                }
             }
         }
     }
 
     private fun streamIn(forPlayer: Player, newStreamables: Set<T>) {
         newStreamables.forEach {
-            if (it.isDestroyed || it.isStreamedIn(forPlayer)) return@forEach
-            it.onStreamIn(forPlayer)
-            streamedInStreamables.put(forPlayer, it)
+            it.ifNotDestroyed {
+                onStreamIn(forPlayer)
+                streamedInStreamables.put(forPlayer, this)
+            }
+        }
+    }
+
+    private fun streamOut(forPlayer: Player, newStreamables: Set<T>) {
+        val iterator = streamedInStreamables[forPlayer].iterator()
+        while (iterator.hasNext()) {
+            val streamable = iterator.next()
+            val isDestroyed = streamable.isDestroyed
+            if (isDestroyed || !newStreamables.contains(streamable)) {
+                iterator.remove()
+                if (!isDestroyed) {
+                    streamable.onStreamOut(forPlayer)
+                }
+            }
         }
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
         streamedInStreamables.removeAll(player)
-    }
-
-    protected abstract fun getStreamInCandidates(streamLocation: StreamLocation): Stream<T>
-
-    protected fun beforeStream(action: () -> Unit) {
-        beforeStreamActions += action
-    }
-
-    private fun beforeStream() {
-        do {
-            val action = beforeStreamActions.poll() ?: break
-            action()
-        } while (true)
     }
 
     private class StreamingInfo<T : DistanceBasedPlayerStreamable>(val streamable: T, val distance: Float)

@@ -24,6 +24,7 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(OnStreamableMapObjectStreamInHandler::class.java)
             addBinding().to(OnStreamableMapObjectStreamOutHandler::class.java)
         }
+        bind(DistanceBasedPlayerStreamerFactory::class.java)
         bind(MapObjectStreamer::class.java)
         newStreamerSetBinder().apply {
             addBinding().to(MapObjectStreamer::class.java)
