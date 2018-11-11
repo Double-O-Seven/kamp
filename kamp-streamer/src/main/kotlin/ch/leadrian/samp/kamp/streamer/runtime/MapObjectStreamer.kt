@@ -28,6 +28,7 @@ constructor(
      * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
      */
     private val spatialIndex = SpatialIndex3D<StreamableMapObjectImpl>()
+
     /*
      * Moving or attached map objects constantly change their location. We don't want to constantly update the spatial index.
      */
