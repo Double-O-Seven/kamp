@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
+import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.locationOf
@@ -85,6 +86,28 @@ internal class DistanceBasedPlayerStreamerTest {
                 .isTrue()
         assertThat(distanceBasedPlayerStreamer.isStreamedIn(streamable2, player))
                 .isTrue()
+    }
+
+    @Test
+    fun shouldNotBeStreamedInAfterOnPlayerDisconnect() {
+        val player = mockk<Player> {
+            every { isConnected } returns true
+        }
+        val streamable = spyk(TestStreamable(
+                priority = 0,
+                streamDistance = 300f,
+                coordinates = vector3DOf(150f, 100f, 20f)
+        ))
+        val streamLocation = StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))
+        every {
+            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        } returns Stream.of(streamable)
+        distanceBasedPlayerStreamer.stream(listOf(streamLocation))
+
+        distanceBasedPlayerStreamer.onPlayerDisconnect(player, DisconnectReason.QUIT)
+
+        assertThat(distanceBasedPlayerStreamer.isStreamedIn(streamable, player))
+                .isFalse()
     }
 
     @Test

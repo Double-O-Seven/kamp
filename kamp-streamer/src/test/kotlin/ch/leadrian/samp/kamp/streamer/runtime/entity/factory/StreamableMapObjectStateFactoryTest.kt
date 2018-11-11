@@ -75,15 +75,8 @@ internal class StreamableMapObjectStateFactoryTest {
                 attachRotation = vector3DOf(4f, 5f, 6f)
         )
 
-        assertThat(state)
-                .satisfies {
-                    assertThat(it.player)
-                            .isEqualTo(player)
-                    assertThat(it.coordinates)
-                            .isEqualTo(vector3DOf(1f, 2f, 3f))
-                    assertThat(it.rotation)
-                            .isEqualTo(vector3DOf(4f, 5f, 6f))
-                }
+        assertThat(state.player)
+                .isEqualTo(player)
     }
 
     @Test
@@ -99,15 +92,8 @@ internal class StreamableMapObjectStateFactoryTest {
                 attachRotation = vector3DOf(4f, 5f, 6f)
         )
 
-        assertThat(state)
-                .satisfies {
-                    assertThat(it.vehicle)
-                            .isEqualTo(vehicle)
-                    assertThat(it.coordinates)
-                            .isEqualTo(vector3DOf(1f, 2f, 3f))
-                    assertThat(it.rotation)
-                            .isEqualTo(vector3DOf(4f, 5f, 6f))
-                }
+        assertThat(state.vehicle)
+                .isEqualTo(vehicle)
     }
 
 }
