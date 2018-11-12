@@ -24,6 +24,7 @@ import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.EnumSource.Mode
 import org.junit.jupiter.params.provider.ValueSource
 import java.util.concurrent.CompletableFuture
+import java.util.concurrent.CompletableFuture.completedFuture
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.ScheduledFuture
 import java.util.concurrent.TimeUnit
@@ -237,12 +238,10 @@ internal class StreamerExecutorTest {
         }
 
         override fun executeOnMainThread(action: () -> Unit) {
-            action()
-        }
-
-        override fun <T> computeOnMainThread(action: () -> T): CompletableFuture<T> {
             throw UnsupportedOperationException()
         }
+
+        override fun <T> computeOnMainThread(action: () -> T): CompletableFuture<T> = completedFuture(action())
     }
 
 }

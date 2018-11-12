@@ -9,7 +9,6 @@ import ch.leadrian.samp.kamp.streamer.api.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.netflix.governator.annotations.Configuration
 import java.util.*
-import java.util.concurrent.CompletableFuture
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
@@ -78,6 +77,18 @@ constructor(
         }
     }
 
+    private fun getStreamLocations(): List<StreamLocation> {
+        return asyncExecutor.computeOnMainThread {
+            playerService
+                    .getAllPlayers()
+                    .asSequence()
+                    .filter { it.isHuman }
+                    .filter { STREAMABLE_PLAYER_STATES.contains(it.state) }
+                    .map { StreamLocation(it, it.location) }
+                    .toList()
+        }.get()
+    }
+
     private fun stream(streamLocations: List<StreamLocation>) {
         streamers.forEach { streamer ->
             try {
@@ -88,27 +99,6 @@ constructor(
             } catch (e: Exception) {
                 log.error("Exception while streaming with {}", streamer, e)
             }
-        }
-    }
-
-    private fun getStreamLocations(): List<StreamLocation> {
-        val streamLocations = CompletableFuture<List<StreamLocation>>()
-        asyncExecutor.executeOnMainThread { getStreamLocations(streamLocations) }
-        return streamLocations.get()
-    }
-
-    private fun getStreamLocations(result: CompletableFuture<List<StreamLocation>>) {
-        try {
-            val streamLocations = playerService
-                    .getAllPlayers()
-                    .asSequence()
-                    .filter { it.isHuman }
-                    .filter { STREAMABLE_PLAYER_STATES.contains(it.state) }
-                    .map { StreamLocation(it, it.location) }
-                    .toList()
-            result.complete(streamLocations)
-        } catch (e: Exception) {
-            result.completeExceptionally(e)
         }
     }
 
