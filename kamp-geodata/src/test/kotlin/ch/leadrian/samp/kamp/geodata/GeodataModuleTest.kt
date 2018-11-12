@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.geodata
 
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.geodata.hmap.HeightMap
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat

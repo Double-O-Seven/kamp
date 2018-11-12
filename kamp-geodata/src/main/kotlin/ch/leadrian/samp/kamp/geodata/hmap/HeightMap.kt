@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.geodata
+package ch.leadrian.samp.kamp.geodata.hmap
 
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.util.loggerFor

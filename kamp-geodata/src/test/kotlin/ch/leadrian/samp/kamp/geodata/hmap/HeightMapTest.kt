@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.geodata
+package ch.leadrian.samp.kamp.geodata.hmap
 
 import com.google.common.io.Resources
 import org.assertj.core.api.Assertions.assertThat
