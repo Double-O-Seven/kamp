@@ -5,3 +5,5 @@ include ':kamp-streamer'
 include ':examples:lvdm'
 
 rootProject.name = 'kamp'
+include 'kamp-geodata'
+

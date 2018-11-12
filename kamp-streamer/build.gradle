@@ -2,7 +2,7 @@ dependencies {
 
     compile(
             project(':kamp-core'),
-            'com.google.guava:guava:26.0-jre',
+            "com.google.guava:guava:$guavaVersion",
             'com.conversantmedia:rtree:1.0.5'
     )
 
