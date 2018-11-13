@@ -21,7 +21,8 @@ internal class HeightMapTest {
 
         writeImage(map, outputStream)
 
-        val expectedImageBytes = Resources.toByteArray(HeightMap::class.java.getResource("SAfull.png"))
+        val expectedImageBytes = Resources.toByteArray(HeightMapTest::class.java.getResource("SAfull.png"))
+        outputStream.close()
         assertThat(outputStream.toByteArray())
                 .isEqualTo(expectedImageBytes)
     }
