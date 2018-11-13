@@ -142,7 +142,7 @@ task generateSAMPNativeFunctionExecutorImplClass(type: JavaExec) {
 textKeyGenerator {
 
     outputDirectory = generatedSrcJavaDir
-    packageNames.add("ch.leadrian.samp.kamp.core")
+    packageName 'ch.leadrian.samp.kamp.core'
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }
 

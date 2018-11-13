@@ -39,7 +39,7 @@ sourceSets {
 textKeyGenerator {
 
     outputDirectory = generatedSrcJavaDir
-    packageNames.add("ch.leadrian.samp.kamp.examples.lvdm")
+    packageName 'ch.leadrian.samp.kamp.examples.lvdm'
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }
 
@@ -48,8 +48,8 @@ serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
     kampPluginBinaryPath = project(":kamp-plugin").projectDir.toString() + "/src/main/cpp/sampgdk/build/plugins/kamp/Release/kamp.dll"
     rconPassword = "test1234"
-    jvmOptions.add("-Xmx1G")
-    configProperties.put("kamp.streamer.rate.ms", "300")
+    jvmOption '-Xmx1G'
+    configProperty 'kamp.streamer.rate.ms', '300'
 }
 
 configureServer.dependsOn(project(":kamp-plugin").build)
