@@ -77,8 +77,10 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     private fun streamIn(forPlayer: Player, newStreamables: Set<T>) {
         newStreamables.forEach {
             it.ifNotDestroyed {
-                onStreamIn(forPlayer)
-                streamedInStreamables.put(forPlayer, this)
+                if (!isStreamedIn(forPlayer)) {
+                    onStreamIn(forPlayer)
+                    streamedInStreamables.put(forPlayer, this)
+                }
             }
         }
     }
