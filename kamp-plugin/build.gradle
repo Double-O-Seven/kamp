@@ -4,38 +4,42 @@ configurations {
     runtimeCodegen
 }
 
+apply plugin: 'kamp-cpp-codegen'
+
 dependencies {
-    runtimeCodegen(
-            project(':kamp-codegen'),
-            project(':kamp-core')
-    )
+    runtimeCodegen project(':kamp-core')
 }
 
 def runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
-def sampgdkDir = "${projectDir}/src/main/cpp/sampgdk"
+def sampgdkDir = "$projectDir/src/main/cpp/sampgdk"
 
-def idlFilesDir = "${sampgdkDir}/lib/sampgdk"
+def idlFilesDir = "$sampgdkDir/lib/sampgdk"
 
-def actorIDLFile = "${idlFilesDir}/a_actor.idl"
-def objectsIDLFile = "${idlFilesDir}/a_objects.idl"
-def playersIDLFile = "${idlFilesDir}/a_players.idl"
-def sampIDLFile = "${idlFilesDir}/a_samp.idl"
-def vehiclesIDLFile = "${idlFilesDir}/a_vehicles.idl"
+def actorIDLFile = "$idlFilesDir/a_actor.idl"
+def objectsIDLFile = "$idlFilesDir/a_objects.idl"
+def playersIDLFile = "$idlFilesDir/a_players.idl"
+def sampIDLFile = "$idlFilesDir/a_samp.idl"
+def vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
 
-def kampSrcDir = "${sampgdkDir}/plugins/kamp"
+def kampSrcDir = "$sampgdkDir/plugins/kamp"
 
-def sampPluginSdkDir = "${projectDir}/src/main/cpp/samp-plugin-sdk-original"
+def sampPluginSdkDir = "$projectDir/src/main/cpp/samp-plugin-sdk-original"
 
-def sampgdkBuildDir = "${sampgdkDir}/build"
+def sampgdkBuildDir = "$sampgdkDir/build"
 
-def sampNativeFunctionsHeaderFile = "${kampSrcDir}/SAMPNativeFunctions.h"
+def kampCoreMainOutput = project(':kamp-core').sourceSets.main.output
 
-def kampRuntimeMainOutput = project(':kamp-core').sourceSets.main.output
+kampCppCodegen {
+    runtimeJavaPackageName = runtimePackageName
+    outputDirectoryPath = kampSrcDir
+    interfaceDefinitionFiles actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
+}
 
 task generateSAMPNativeFunctionsHeaderFile {
+    def sampNativeFunctionsHeaderFile = "$kampSrcDir/SAMPNativeFunctions.h"
     dependsOn ':kamp-core:classes'
-    inputs.dir kampRuntimeMainOutput
+    inputs.dir kampCoreMainOutput
     outputs.file sampNativeFunctionsHeaderFile
     doLast {
         file(sampNativeFunctionsHeaderFile).parentFile.mkdirs()
@@ -43,7 +47,7 @@ task generateSAMPNativeFunctionsHeaderFile {
             executable Jvm.current().getExecutable('javah')
             args = [
                     "-o", sampNativeFunctionsHeaderFile,
-                    "-classpath", project(':kamp-core').sourceSets.main.output.asPath,
+                    "-classpath", kampCoreMainOutput.asPath,
                     "-jni",
                     "-verbose",
                     "${runtimePackageName}.SAMPNativeFunctions"
@@ -52,85 +56,10 @@ task generateSAMPNativeFunctionsHeaderFile {
     }
 }
 
-def sampNativeFunctionsCppFile = "${kampSrcDir}/SAMPNativeFunctions.cpp"
-
-task generateSAMPNativeFunctionsCppFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
-    main "ch.leadrian.samp.kamp.codegen.SAMPNativeFunctionsCppCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-p", runtimePackageName,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file sampNativeFunctionsCppFile
-}
-
-def sampCallbacksDefFile = "${kampSrcDir}/SAMPCallbacks.def"
-
-task generateSAMPCallbacksDefFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
-    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksDefCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file sampCallbacksDefFile
-}
-
-def sampCallbacksCppFile = "${kampSrcDir}/SAMPCallbacks.cpp"
-
-task generateSAMPCallbacksCppFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:build'
-    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksCppCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file sampCallbacksCppFile
-}
-
-def sampCallbacksMethodCacheHppFile = "${kampSrcDir}/SAMPCallbacksMethodCache.hpp"
-
-task generateSAMPCallbacksMethodCacheHppFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
-    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksMethodCacheHeaderCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file sampCallbacksMethodCacheHppFile
-}
-
-def sampCallbacksMethodCacheCppFile = "${kampSrcDir}/SAMPCallbacksMethodCache.cpp"
-
-task generateSAMPCallbacksMethodCacheCppFile(type: JavaExec) {
-    dependsOn ':kamp-codegen:classes'
-    main "ch.leadrian.samp.kamp.codegen.SAMPCallbacksMethodCacheCppCodeGenerator"
-    classpath configurations.runtimeCodegen
-    args = [
-            "-o", kampSrcDir,
-            "-i", actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile
-    ]
-    inputs.files(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
-    outputs.file sampCallbacksMethodCacheCppFile
-}
-
 task makePlugin {
     dependsOn(
             generateSAMPNativeFunctionsHeaderFile,
-            generateSAMPNativeFunctionsCppFile,
-            generateSAMPCallbacksDefFile,
-            generateSAMPCallbacksMethodCacheHppFile,
-            generateSAMPCallbacksMethodCacheCppFile,
-            generateSAMPCallbacksCppFile
+            generateKampCppFiles
     )
 
     doFirst {
@@ -161,14 +90,8 @@ task makePlugin {
     outputs.dir sampgdkBuildDir
 }
 
-clean {
-    delete += sampgdkBuildDir
-    delete += sampNativeFunctionsHeaderFile
-    delete += sampNativeFunctionsCppFile
-    delete += sampCallbacksDefFile
-    delete += sampCallbacksMethodCacheHppFile
-    delete += sampCallbacksMethodCacheCppFile
-    delete += sampCallbacksCppFile
-}
+clean.dependsOn cleanGenerateKampCppFiles
+clean.dependsOn cleanMakePlugin
+clean.dependsOn cleanGenerateSAMPNativeFunctionsHeaderFile
 
 build.dependsOn makePlugin

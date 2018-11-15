@@ -1,0 +1,45 @@
+buildscript {
+    ext {
+        kotlinVersion = '1.2.71'
+    }
+
+    dependencies {
+        repositories {
+            mavenCentral()
+            maven {
+                url "https://plugins.gradle.org/m2/"
+            }
+        }
+
+        classpath(
+                "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
+        )
+    }
+}
+
+apply plugin: 'kotlin'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+
+sourceCompatibility = 1.8
+
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+
+    compile(
+            "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
+            "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
+            'ch.leadrian.samp.cidl:cidl-kotlin:0.0.3',
+            'com.squareup:javapoet:1.11.1',
+
+            gradleApi()
+    )
+}
