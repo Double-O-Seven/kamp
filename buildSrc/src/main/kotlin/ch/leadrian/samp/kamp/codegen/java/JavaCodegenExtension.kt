@@ -1,6 +1,8 @@
-package ch.leadrian.samp.kamp.codegen.cpp
+package ch.leadrian.samp.kamp.codegen.java
 
-open class CppCodegenExtension {
+open class JavaCodegenExtension {
+
+    var constantsJavaPackageName: String = "ch.leadrian.samp.kamp.core.api.constants"
 
     var runtimeJavaPackageName: String = "ch.leadrian.samp.kamp.core.runtime"
 
