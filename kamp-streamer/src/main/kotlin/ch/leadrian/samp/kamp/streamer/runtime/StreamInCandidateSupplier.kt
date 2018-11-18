@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.Streamable
 import java.util.stream.Stream
 

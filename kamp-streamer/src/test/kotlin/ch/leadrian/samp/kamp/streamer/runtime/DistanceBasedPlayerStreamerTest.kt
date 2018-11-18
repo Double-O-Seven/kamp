@@ -8,13 +8,9 @@ import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
+import ch.leadrian.samp.kamp.streamer.api.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.DistanceBasedPlayerStreamable
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.spyk
-import io.mockk.verify
-import io.mockk.verifyOrder
+import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
