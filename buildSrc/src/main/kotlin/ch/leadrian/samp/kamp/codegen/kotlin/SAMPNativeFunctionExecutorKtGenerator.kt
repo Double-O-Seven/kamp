@@ -6,12 +6,7 @@ import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
-import com.squareup.kotlinpoet.AnnotationSpec
-import com.squareup.kotlinpoet.FileSpec
-import com.squareup.kotlinpoet.FunSpec
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.ParameterSpec
-import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.*
 import java.io.File
 import java.io.Writer
 import java.time.LocalDateTime
@@ -45,8 +40,8 @@ internal class SAMPNativeFunctionExecutorKtGenerator(
     private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
         return addAnnotation(AnnotationSpec
                 .builder(Generated::class)
-                .addMember("value", "%S", this@SAMPNativeFunctionExecutorKtGenerator::class.java.name)
-                .addMember("date", "%S", LocalDateTime.now().toString())
+                .addMember("value = [%S]", this@SAMPNativeFunctionExecutorKtGenerator::class.java.name)
+                .addMember("date = %S", LocalDateTime.now().toString())
                 .build())
     }
 
@@ -81,6 +76,7 @@ internal class SAMPNativeFunctionExecutorKtGenerator(
                 .builder(function.camelCaseName)
                 .addModifiers(KModifier.ABSTRACT, KModifier.PUBLIC)
                 .addFunctionParameters(function.parameters)
+                .returns(getKotlinType(function.type))
                 .build()
         addFunction(funSpec)
     }
