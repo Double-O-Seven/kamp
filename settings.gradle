@@ -1,9 +1,8 @@
 include ':kamp-core'
-include ':kamp-codegen'
 include ':kamp-plugin'
 include ':kamp-streamer'
+include ':kamp-geodata'
 include ':examples:lvdm'
 
 rootProject.name = 'kamp'
-include 'kamp-geodata'
 

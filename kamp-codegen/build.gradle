@@ -1,7 +1,0 @@
-dependencies {
-
-    compile(
-            'commons-cli:commons-cli:1.4',
-            'ch.leadrian.samp.cidl:cidl-kotlin:0.0.3'
-    )
-}
