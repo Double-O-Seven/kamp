@@ -17,9 +17,6 @@ import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.SpecialAction
 import ch.leadrian.samp.kamp.core.api.constants.SpectateType
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
-import ch.leadrian.samp.kamp.core.api.constants.WeaponSkill
-import ch.leadrian.samp.kamp.core.api.constants.WeaponSlot
-import ch.leadrian.samp.kamp.core.api.constants.WeaponState
 import ch.leadrian.samp.kamp.core.api.constants.Weather
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
 import ch.leadrian.samp.kamp.core.api.data.Animation
@@ -32,13 +29,11 @@ import ch.leadrian.samp.kamp.core.api.data.SpawnInfo
 import ch.leadrian.samp.kamp.core.api.data.Sphere
 import ch.leadrian.samp.kamp.core.api.data.Time
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.WeaponData
 import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.timeOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -100,6 +95,8 @@ internal constructor(
     var locale: Locale = Locale.getDefault()
 
     val dialogNavigation: DialogNavigation = DialogNavigation(this)
+
+    val weapons: PlayerWeapons = PlayerWeapons(this, nativeFunctionExecutor)
 
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
@@ -251,16 +248,6 @@ internal constructor(
             nativeFunctionExecutor.setPlayerArmour(playerid = id.value, armour = value)
         }
 
-    fun setAmmo(weaponModel: WeaponModel, ammo: Int) {
-        nativeFunctionExecutor.setPlayerAmmo(playerid = id.value, weaponid = weaponModel.value, ammo = ammo)
-    }
-
-    val ammo: Int
-        get() = nativeFunctionExecutor.getPlayerAmmo(id.value)
-
-    val weaponState: WeaponState
-        get() = nativeFunctionExecutor.getPlayerWeaponState(id.value).let { WeaponState[it] }
-
     val targetPlayer: Player?
         get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry[it] }
 
@@ -296,19 +283,6 @@ internal constructor(
         set(value) {
             nativeFunctionExecutor.setPlayerSkin(playerid = id.value, skinid = value.value)
         }
-
-    var armedWeapon: WeaponModel
-        get() = nativeFunctionExecutor.getPlayerWeapon(id.value).let { WeaponModel[it] }
-        set(value) {
-            nativeFunctionExecutor.setPlayerArmedWeapon(playerid = id.value, weaponid = value.value)
-        }
-
-    fun getWeaponData(slot: WeaponSlot): WeaponData {
-        val weapon = ReferenceInt()
-        val ammo = ReferenceInt()
-        nativeFunctionExecutor.getPlayerWeaponData(playerid = id.value, slot = slot.value, weapon = weapon, ammo = ammo)
-        return weaponDataOf(model = WeaponModel[weapon.value], ammo = ammo.value)
-    }
 
     var money: Int
         get() = nativeFunctionExecutor.getPlayerMoney(id.value)
@@ -457,10 +431,6 @@ internal constructor(
 
     fun setShopName(shopName: ShopName) {
         nativeFunctionExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
-    }
-
-    fun setSkillLevel(skill: WeaponSkill, level: Int) {
-        nativeFunctionExecutor.setPlayerSkillLevel(playerid = id.value, skill = skill.value, level = level)
     }
 
     val surfingVehicle: Vehicle?

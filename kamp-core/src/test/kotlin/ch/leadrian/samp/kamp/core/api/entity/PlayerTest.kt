@@ -18,9 +18,6 @@ import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.SpecialAction
 import ch.leadrian.samp.kamp.core.api.constants.SpectateType
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
-import ch.leadrian.samp.kamp.core.api.constants.WeaponSkill
-import ch.leadrian.samp.kamp.core.api.constants.WeaponSlot
-import ch.leadrian.samp.kamp.core.api.constants.WeaponState
 import ch.leadrian.samp.kamp.core.api.constants.Weather
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
@@ -141,6 +138,12 @@ internal class PlayerTest {
     fun shouldInitializeEntityExtensionContainer() {
         assertThat(player.extensions.entity)
                 .isEqualTo(player)
+    }
+
+    @Test
+    fun shouldInitializePlayerWeapons() {
+        assertThat(player.weapons)
+                .isNotNull
     }
 
     @Test
@@ -537,35 +540,6 @@ internal class PlayerTest {
         }
     }
 
-    @Test
-    fun shouldSetAmmo() {
-        every { nativeFunctionExecutor.setPlayerAmmo(any(), any(), any()) } returns true
-
-        player.setAmmo(WeaponModel.TEC9, 150)
-
-        verify { nativeFunctionExecutor.setPlayerAmmo(playerid = playerId.value, weaponid = WeaponModel.TEC9.value, ammo = 150) }
-    }
-
-    @Test
-    fun shouldGetAmmo() {
-        every { nativeFunctionExecutor.getPlayerAmmo(playerId.value) } returns 150
-
-        val ammo = player.ammo
-
-        assertThat(ammo)
-                .isEqualTo(150)
-    }
-
-    @Test
-    fun shouldGetWeaponState() {
-        every { nativeFunctionExecutor.getPlayerWeaponState(playerId.value) } returns WeaponState.MORE_BULLETS.value
-
-        val weaponState = player.weaponState
-
-        assertThat(weaponState)
-                .isEqualTo(WeaponState.MORE_BULLETS)
-    }
-
     @Nested
     inner class TargetPlayerTests {
 
@@ -733,43 +707,6 @@ internal class PlayerTest {
 
             verify { nativeFunctionExecutor.setPlayerSkin(playerid = playerId.value, skinid = SkinModel.ARMY.value) }
         }
-    }
-
-    @Nested
-    inner class ArmedWeaponTests {
-
-        @Test
-        fun shouldGetArmedWeapon() {
-            every { nativeFunctionExecutor.getPlayerWeapon(playerId.value) } returns WeaponModel.TEC9.value
-
-            val armedWeapon = player.armedWeapon
-
-            assertThat(armedWeapon)
-                    .isEqualTo(WeaponModel.TEC9)
-        }
-
-        @Test
-        fun shouldSetArmedWeapon() {
-            every { nativeFunctionExecutor.setPlayerArmedWeapon(any(), any()) } returns true
-
-            player.armedWeapon = WeaponModel.TEC9
-
-            verify { nativeFunctionExecutor.setPlayerArmedWeapon(playerid = playerId.value, weaponid = WeaponModel.TEC9.value) }
-        }
-    }
-
-    @Test
-    fun shouldGetWeaponData() {
-        every { nativeFunctionExecutor.getPlayerWeaponData(playerId.value, WeaponSlot.MACHINE_PISTOL.value, any(), any()) } answers {
-            thirdArg<ReferenceInt>().value = WeaponModel.TEC9.value
-            arg<ReferenceInt>(3).value = 150
-            true
-        }
-
-        val weaponData = player.getWeaponData(WeaponSlot.MACHINE_PISTOL)
-
-        assertThat(weaponData)
-                .isEqualTo(weaponDataOf(WeaponModel.TEC9, 150))
     }
 
     @Nested
@@ -1205,21 +1142,6 @@ internal class PlayerTest {
         player.setShopName(ShopName.AMMUN2)
 
         verify { nativeFunctionExecutor.setPlayerShopName(playerid = playerId.value, shopname = ShopName.AMMUN2.value) }
-    }
-
-    @Test
-    fun shouldSetSkillLevel() {
-        every { nativeFunctionExecutor.setPlayerSkillLevel(any(), any(), any()) } returns true
-
-        player.setSkillLevel(WeaponSkill.MICRO_UZI, 456)
-
-        verify {
-            nativeFunctionExecutor.setPlayerSkillLevel(
-                    playerid = playerId.value,
-                    skill = WeaponSkill.MICRO_UZI.value,
-                    level = 456
-            )
-        }
     }
 
     @Nested
