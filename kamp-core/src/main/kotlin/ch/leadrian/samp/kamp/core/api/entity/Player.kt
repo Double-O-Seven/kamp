@@ -481,6 +481,12 @@ internal constructor(
     fun removeFromVehicle(): Boolean =
             nativeFunctionExecutor.removePlayerFromVehicle(id.value)
 
+    fun isInVehicle(vehicle: Vehicle): Boolean =
+            nativeFunctionExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
+
+    val isInAnyVehicle: Boolean
+        get() = nativeFunctionExecutor.isPlayerInAnyVehicle(id.value)
+
     fun toggleControllable(toggle: Boolean) {
         nativeFunctionExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
     }
@@ -521,6 +527,13 @@ internal constructor(
             field = value
         }
 
+    fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
+        return this.checkpoint === checkpoint && isInAnyCheckpoint
+    }
+
+    val isInAnyCheckpoint: Boolean
+        get() = nativeFunctionExecutor.isPlayerInCheckpoint(id.value)
+
     var raceCheckpoint: RaceCheckpoint? = null
         set(value) {
             value?.requireNotDestroyed()
@@ -539,6 +552,15 @@ internal constructor(
                 )
             }
             field = value
+        }
+
+    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
+        return this.raceCheckpoint === raceCheckpoint && isInAnyRaceCheckpoint
+    }
+
+    val isInAnyRaceCheckpoint: Boolean
+        get() {
+            return nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
         }
 
     var worldBounds: Rectangle? = null
@@ -586,28 +608,6 @@ internal constructor(
     private fun destroyMapIcons() {
         mapIconsById.values.forEach { it.destroy() }
     }
-
-    fun isInVehicle(vehicle: Vehicle): Boolean =
-            nativeFunctionExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
-
-    val isInAnyVehicle: Boolean
-        get() = nativeFunctionExecutor.isPlayerInAnyVehicle(id.value)
-
-    fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
-        return this.checkpoint === checkpoint && isInAnyCheckpoint
-    }
-
-    val isInAnyCheckpoint: Boolean
-        get() = nativeFunctionExecutor.isPlayerInCheckpoint(id.value)
-
-    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
-        return this.raceCheckpoint === raceCheckpoint && isInAnyRaceCheckpoint
-    }
-
-    val isInAnyRaceCheckpoint: Boolean
-        get() {
-            return nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
-        }
 
     fun enableStuntBonus() {
         nativeFunctionExecutor.enableStuntBonusForPlayer(id.value, true)
