@@ -65,6 +65,10 @@ internal constructor(
 
     private val onDestroyHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
 
+    val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
+
+    val trailer: VehicleTrailer = VehicleTrailer(this, vehicleRegistry, nativeFunctionExecutor)
+
     override val id: VehicleId
         get() = requireNotDestroyed { field }
 
@@ -298,12 +302,6 @@ internal constructor(
             )
         }
 
-    val components: VehicleComponents =
-            VehicleComponents(
-                    vehicle = this,
-                    nativeFunctionExecutor = nativeFunctionExecutor
-            )
-
     var colors: VehicleColors = colors.toVehicleColors()
         set(value) {
             nativeFunctionExecutor.changeVehicleColor(
@@ -329,12 +327,6 @@ internal constructor(
         set(value) {
             nativeFunctionExecutor.setVehicleHealth(vehicleid = id.value, health = value)
         }
-
-    val trailer: VehicleTrailer = VehicleTrailer(
-            vehicle = this,
-            nativeFunctionExecutor = nativeFunctionExecutor,
-            vehicleRegistry = vehicleRegistry
-    )
 
     var numberPlate: String? = null
         set(value) {
