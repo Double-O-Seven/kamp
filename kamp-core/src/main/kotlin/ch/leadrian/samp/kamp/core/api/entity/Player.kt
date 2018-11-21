@@ -98,6 +98,8 @@ internal constructor(
 
     val camera: PlayerCamera = PlayerCamera(this, nativeFunctionExecutor, mapObjectRegistry, vehicleRegistry, playerRegistry, actorRegistry)
 
+    val audioStream: PlayerAudioStream = PlayerAudioStream(this, nativeFunctionExecutor)
+
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
     }
@@ -398,35 +400,6 @@ internal constructor(
                 crime = crimeReport.value,
                 suspectid = suspect.id.value
         )
-    }
-
-    @JvmOverloads
-    fun playAudioStream(url: String, position: Sphere, usePosition: Boolean = true) {
-        nativeFunctionExecutor.playAudioStreamForPlayer(
-                playerid = id.value,
-                url = url,
-                posX = position.x,
-                posY = position.y,
-                posZ = position.z,
-                distance = position.radius,
-                usepos = usePosition
-        )
-    }
-
-    fun playAudioStream(url: String) {
-        nativeFunctionExecutor.playAudioStreamForPlayer(
-                playerid = id.value,
-                url = url,
-                posX = 0f,
-                posY = 0f,
-                posZ = 0f,
-                distance = 0f,
-                usepos = false
-        )
-    }
-
-    fun stopAudioStream() {
-        nativeFunctionExecutor.stopAudioStreamForPlayer(id.value)
     }
 
     fun setShopName(shopName: ShopName) {

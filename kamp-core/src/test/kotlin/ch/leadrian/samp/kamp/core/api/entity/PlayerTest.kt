@@ -138,14 +138,20 @@ internal class PlayerTest {
 
     @Test
     fun shouldInitializePlayerWeapons() {
-        assertThat(player.weapons)
-                .isNotNull
+        assertThat(player.weapons.player)
+                .isSameAs(player)
     }
 
     @Test
     fun shouldInitializePlayerCamera() {
-        assertThat(player.camera)
-                .isNotNull
+        assertThat(player.camera.player)
+                .isSameAs(player)
+    }
+
+    @Test
+    fun shouldInitializePlayerAudioStream() {
+        assertThat(player.audioStream.player)
+                .isSameAs(player)
     }
 
     @Test
@@ -1080,61 +1086,6 @@ internal class PlayerTest {
                     crime = CrimeReport.CODE_10_17.value
             )
         }
-    }
-
-    @Nested
-    inner class PlayAudioStreamTests {
-
-        @Test
-        fun shouldPlayAudioStream() {
-            every { nativeFunctionExecutor.playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any()) } returns true
-
-            player.playAudioStream(
-                    url = "http://localhost:8080/song/1",
-                    position = sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f),
-                    usePosition = true
-            )
-
-            verify {
-                nativeFunctionExecutor.playAudioStreamForPlayer(
-                        playerid = playerId.value,
-                        url = "http://localhost:8080/song/1",
-                        posX = 1f,
-                        posY = 2f,
-                        posZ = 3f,
-                        distance = 4f,
-                        usepos = true
-                )
-            }
-        }
-
-        @Test
-        fun shouldPlayAudioStreamWithoutPosition() {
-            every { nativeFunctionExecutor.playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any()) } returns true
-
-            player.playAudioStream("http://localhost:8080/song/1")
-
-            verify {
-                nativeFunctionExecutor.playAudioStreamForPlayer(
-                        playerid = playerId.value,
-                        url = "http://localhost:8080/song/1",
-                        posX = 0f,
-                        posY = 0f,
-                        posZ = 0f,
-                        distance = 0f,
-                        usepos = false
-                )
-            }
-        }
-    }
-
-    @Test
-    fun shouldStopAudioStream() {
-        every { nativeFunctionExecutor.stopAudioStreamForPlayer(any()) } returns true
-
-        player.stopAudioStream()
-
-        verify { nativeFunctionExecutor.stopAudioStreamForPlayer(playerId.value) }
     }
 
     @Test
