@@ -17,7 +17,6 @@ import ch.leadrian.samp.kamp.core.api.constants.SpectateType
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.constants.Weather
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
-import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
 import ch.leadrian.samp.kamp.core.api.data.Location
@@ -99,6 +98,8 @@ internal constructor(
     val camera: PlayerCamera = PlayerCamera(this, nativeFunctionExecutor, mapObjectRegistry, vehicleRegistry, playerRegistry, actorRegistry)
 
     val audioStream: PlayerAudioStream = PlayerAudioStream(this, nativeFunctionExecutor)
+
+    val animation: PlayerAnimation = PlayerAnimation(this, nativeFunctionExecutor)
 
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
@@ -493,39 +494,6 @@ internal constructor(
                 z = coordinates.z
         )
     }
-
-    @JvmOverloads
-    fun applyAnimation(
-            animation: Animation,
-            fDelta: Float,
-            loop: Boolean,
-            lockX: Boolean,
-            lockY: Boolean,
-            freeze: Boolean,
-            time: Int,
-            forceSync: Boolean = false
-    ) {
-        nativeFunctionExecutor.applyAnimation(
-                playerid = id.value,
-                animlib = animation.library,
-                animname = animation.animationName,
-                fDelta = fDelta,
-                loop = loop,
-                lockx = lockX,
-                locky = lockY,
-                freeze = freeze,
-                time = time,
-                forcesync = forceSync
-        )
-    }
-
-    @JvmOverloads
-    fun clearAnimation(forceSync: Boolean = false) {
-        nativeFunctionExecutor.clearAnimations(playerid = id.value, forcesync = forceSync)
-    }
-
-    val animationIndex: Int
-        get() = nativeFunctionExecutor.getPlayerAnimationIndex(id.value)
 
     var specialAction: SpecialAction
         get() = nativeFunctionExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }

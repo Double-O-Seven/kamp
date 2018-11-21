@@ -155,6 +155,12 @@ internal class PlayerTest {
     }
 
     @Test
+    fun shouldInitializePlayerAnimation() {
+        assertThat(player.animation.player)
+                .isSameAs(player)
+    }
+
+    @Test
     fun shouldSpawnPlayer() {
         every { nativeFunctionExecutor.spawnPlayer(any()) } returns true
 
@@ -1339,68 +1345,6 @@ internal class PlayerTest {
                     z = 3f
             )
         }
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-            "false, false, false, false, false",
-            "true, true, true, true, true",
-            "true, false, false, false, false",
-            "false, true, false, false, false",
-            "false, false, true, false, false",
-            "false, false, false, true, false",
-            "false, false, false, false, true"
-    )
-    fun shouldApplyAnimation(loop: Boolean, lockX: Boolean, lockY: Boolean, freeze: Boolean, forceSync: Boolean) {
-        every {
-            nativeFunctionExecutor.applyAnimation(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
-        } returns true
-
-        player.applyAnimation(
-                animation = ch.leadrian.samp.kamp.core.api.data.Animation.valueOf(library = "ABC", name = "xyz"),
-                fDelta = 1f,
-                time = 60,
-                loop = loop,
-                lockX = lockX,
-                lockY = lockY,
-                freeze = freeze,
-                forceSync = forceSync
-        )
-
-        verify {
-            nativeFunctionExecutor.applyAnimation(
-                    animlib = "ABC",
-                    animname = "xyz",
-                    playerid = playerId.value,
-                    fDelta = 1f,
-                    time = 60,
-                    loop = loop,
-                    lockx = lockX,
-                    locky = lockY,
-                    freeze = freeze,
-                    forcesync = forceSync
-            )
-        }
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["true", "false"])
-    fun shouldClearAnimation(forceSync: Boolean) {
-        every { nativeFunctionExecutor.clearAnimations(any(), any()) } returns true
-
-        player.clearAnimation(forceSync)
-
-        verify { nativeFunctionExecutor.clearAnimations(playerId.value, forceSync) }
-    }
-
-    @Test
-    fun shouldGetAnimationIndex() {
-        every { nativeFunctionExecutor.getPlayerAnimationIndex(playerId.value) } returns 69
-
-        val animationIndex = player.animationIndex
-
-        assertThat(animationIndex)
-                .isEqualTo(69)
     }
 
     @Nested
