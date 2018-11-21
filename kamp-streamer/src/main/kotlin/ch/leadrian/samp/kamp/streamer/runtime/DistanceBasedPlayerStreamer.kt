@@ -6,8 +6,8 @@ import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.ifNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
-import ch.leadrian.samp.kamp.streamer.api.Streamer
-import ch.leadrian.samp.kamp.streamer.api.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.runtime.entity.Streamer
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.DistanceBasedPlayerStreamable
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap

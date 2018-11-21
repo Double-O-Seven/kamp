@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
-import ch.leadrian.samp.kamp.streamer.api.entity.StreamLocation
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.DistanceBasedPlayerStreamable
 import io.mockk.*
 import org.assertj.core.api.Assertions.assertThat
