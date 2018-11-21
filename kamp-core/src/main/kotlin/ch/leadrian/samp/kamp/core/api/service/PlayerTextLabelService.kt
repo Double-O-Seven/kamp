@@ -27,8 +27,7 @@ internal constructor(
             coordinates: Vector3D,
             drawDistance: Float,
             testLOS: Boolean = false,
-            attachedToPlayer: Player? = null,
-            attachedToVehicle: Vehicle? = null
+            attachedToPlayer: Player? = null
     ): PlayerTextLabel = playerTextLabelFactory.create(
             player = player,
             coordinates = coordinates,
@@ -37,6 +36,25 @@ internal constructor(
             drawDistance = drawDistance,
             testLOS = testLOS,
             attachToPlayer = attachedToPlayer,
+            attachToVehicle = null
+    )
+
+    fun createPlayerTextLabel(
+            player: Player,
+            text: String,
+            color: Color,
+            coordinates: Vector3D,
+            drawDistance: Float,
+            testLOS: Boolean = false,
+            attachedToVehicle: Vehicle
+    ): PlayerTextLabel = playerTextLabelFactory.create(
+            player = player,
+            coordinates = coordinates,
+            text = text,
+            color = color,
+            drawDistance = drawDistance,
+            testLOS = testLOS,
+            attachToPlayer = null,
             attachToVehicle = attachedToVehicle
     )
 
@@ -48,8 +66,7 @@ internal constructor(
             coordinates: Vector3D,
             drawDistance: Float,
             testLOS: Boolean = false,
-            attachedToPlayer: Player? = null,
-            attachedToVehicle: Vehicle? = null
+            attachedToPlayer: Player? = null
     ): PlayerTextLabel {
         val text = textProvider.getText(player.locale, textKey)
         return playerTextLabelFactory.create(
@@ -60,6 +77,28 @@ internal constructor(
                 drawDistance = drawDistance,
                 testLOS = testLOS,
                 attachToPlayer = attachedToPlayer,
+                attachToVehicle = null
+        )
+    }
+
+    fun createPlayerTextLabel(
+            player: Player,
+            textKey: TextKey,
+            color: Color,
+            coordinates: Vector3D,
+            drawDistance: Float,
+            testLOS: Boolean = false,
+            attachedToVehicle: Vehicle
+    ): PlayerTextLabel {
+        val text = textProvider.getText(player.locale, textKey)
+        return playerTextLabelFactory.create(
+                player = player,
+                coordinates = coordinates,
+                text = text,
+                color = color,
+                drawDistance = drawDistance,
+                testLOS = testLOS,
+                attachToPlayer = null,
                 attachToVehicle = attachedToVehicle
         )
     }

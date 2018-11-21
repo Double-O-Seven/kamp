@@ -40,9 +40,8 @@ internal class PlayerTextLabelServiceTest {
     inner class CreatePlayerTextLabelTests {
 
         @Test
-        fun shouldCreatePlayerTextLabelWithString() {
+        fun shouldCreatePlayerTextLabelWithStringAttachedToPlayer() {
             val attachToPlayer = mockk<Player>()
-            val attachToVehicle = mockk<Vehicle>()
             val playerTextLabel = mockk<PlayerTextLabel>()
             every {
                 playerTextLabelFactory.create(
@@ -53,6 +52,37 @@ internal class PlayerTextLabelServiceTest {
                         color = Colors.RED,
                         testLOS = true,
                         attachToPlayer = attachToPlayer,
+                        attachToVehicle = null
+                )
+            } returns playerTextLabel
+
+            val createdPlayerTextLabel = playerTextLabelService.createPlayerTextLabel(
+                    player = player,
+                    text = "Hi there",
+                    color = Colors.RED,
+                    coordinates = vector3DOf(1f, 2f, 3f),
+                    drawDistance = 4f,
+                    testLOS = true,
+                    attachedToPlayer = attachToPlayer
+            )
+
+            assertThat(createdPlayerTextLabel)
+                    .isEqualTo(playerTextLabel)
+        }
+
+        @Test
+        fun shouldCreatePlayerTextLabelWithStringAttachedToVehicle() {
+            val attachToVehicle = mockk<Vehicle>()
+            val playerTextLabel = mockk<PlayerTextLabel>()
+            every {
+                playerTextLabelFactory.create(
+                        player = player,
+                        text = "Hi there",
+                        coordinates = vector3DOf(1f, 2f, 3f),
+                        drawDistance = 4f,
+                        color = Colors.RED,
+                        testLOS = true,
+                        attachToPlayer = null,
                         attachToVehicle = attachToVehicle
                 )
             } returns playerTextLabel
@@ -64,7 +94,6 @@ internal class PlayerTextLabelServiceTest {
                     coordinates = vector3DOf(1f, 2f, 3f),
                     drawDistance = 4f,
                     testLOS = true,
-                    attachedToPlayer = attachToPlayer,
                     attachedToVehicle = attachToVehicle
             )
 
@@ -73,13 +102,12 @@ internal class PlayerTextLabelServiceTest {
         }
 
         @Test
-        fun shouldCreatePlayerTextLabelWithTextKey() {
+        fun shouldCreatePlayerTextLabelWithTextKeyAttachToPlayer() {
             val textKey = TextKey("text.label")
             val locale = Locale.GERMANY
             every { player.locale } returns locale
             every { textProvider.getText(locale, textKey) } returns "Hi there"
             val attachToPlayer = mockk<Player>()
-            val attachToVehicle = mockk<Vehicle>()
             val playerTextLabel = mockk<PlayerTextLabel>()
             every {
                 playerTextLabelFactory.create(
@@ -90,6 +118,41 @@ internal class PlayerTextLabelServiceTest {
                         color = Colors.RED,
                         testLOS = true,
                         attachToPlayer = attachToPlayer,
+                        attachToVehicle = null
+                )
+            } returns playerTextLabel
+
+            val createdPlayerTextLabel = playerTextLabelService.createPlayerTextLabel(
+                    player = player,
+                    textKey = textKey,
+                    color = Colors.RED,
+                    coordinates = vector3DOf(1f, 2f, 3f),
+                    drawDistance = 4f,
+                    testLOS = true,
+                    attachedToPlayer = attachToPlayer
+            )
+
+            assertThat(createdPlayerTextLabel)
+                    .isEqualTo(playerTextLabel)
+        }
+
+        @Test
+        fun shouldCreatePlayerTextLabelWithTextKeyAttachToVehicle() {
+            val textKey = TextKey("text.label")
+            val locale = Locale.GERMANY
+            every { player.locale } returns locale
+            every { textProvider.getText(locale, textKey) } returns "Hi there"
+            val attachToVehicle = mockk<Vehicle>()
+            val playerTextLabel = mockk<PlayerTextLabel>()
+            every {
+                playerTextLabelFactory.create(
+                        player = player,
+                        text = "Hi there",
+                        coordinates = vector3DOf(1f, 2f, 3f),
+                        drawDistance = 4f,
+                        color = Colors.RED,
+                        testLOS = true,
+                        attachToPlayer = null,
                         attachToVehicle = attachToVehicle
                 )
             } returns playerTextLabel
@@ -101,7 +164,6 @@ internal class PlayerTextLabelServiceTest {
                     coordinates = vector3DOf(1f, 2f, 3f),
                     drawDistance = 4f,
                     testLOS = true,
-                    attachedToPlayer = attachToPlayer,
                     attachedToVehicle = attachToVehicle
             )
 
