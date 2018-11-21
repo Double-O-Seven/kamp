@@ -1,7 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.constants.CameraMode
-import ch.leadrian.samp.kamp.core.api.constants.CameraType
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
@@ -97,6 +95,8 @@ internal constructor(
     val dialogNavigation: DialogNavigation = DialogNavigation(this)
 
     val weapons: PlayerWeapons = PlayerWeapons(this, nativeFunctionExecutor)
+
+    val camera: PlayerCamera = PlayerCamera(this, nativeFunctionExecutor, mapObjectRegistry, vehicleRegistry, playerRegistry, actorRegistry)
 
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
@@ -644,107 +644,6 @@ internal constructor(
 
     private fun destroyMapIcons() {
         mapIconsById.values.forEach { it.destroy() }
-    }
-
-    var cameraPosition: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerCameraPos(playerid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerCameraPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-        }
-
-    @JvmOverloads
-    fun setCameraLookAt(coordinates: Vector3D, type: CameraType = CameraType.CUT) {
-        nativeFunctionExecutor.setPlayerCameraLookAt(
-                playerid = id.value,
-                x = coordinates.x,
-                y = coordinates.y,
-                z = coordinates.z,
-                cut = type.value
-        )
-    }
-
-    fun setCameraBehind() {
-        nativeFunctionExecutor.setCameraBehindPlayer(id.value)
-    }
-
-    val cameraFrontVector: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerCameraFrontVector(playerid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-
-    val cameraMode: CameraMode
-        get() = nativeFunctionExecutor.getPlayerCameraMode(id.value).let { CameraMode[it] }
-
-    fun enableCameraTarget(enable: Boolean) {
-        nativeFunctionExecutor.enablePlayerCameraTarget(playerid = id.value, enable = enable)
-    }
-
-    val cameraTargetObject: MapObject?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetObject(id.value).let { mapObjectRegistry[it] }
-
-    val cameraTargetVehicle: Vehicle?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetVehicle(id.value).let { vehicleRegistry[it] }
-
-    val cameraTargetPlayer: Player?
-        get() = nativeFunctionExecutor.getPlayerCameraTargetPlayer(id.value).let { playerRegistry[it] }
-
-    val cameraTargetActor: Actor?
-        get() {
-            return nativeFunctionExecutor.getPlayerCameraTargetActor(id.value).let { actorRegistry[it] }
-        }
-
-    val cameraAspectRatio: Float
-        get() = nativeFunctionExecutor.getPlayerCameraAspectRatio(id.value)
-
-    val cameraZoom: Float
-        get() = nativeFunctionExecutor.getPlayerCameraZoom(id.value)
-
-    fun attachCameraTo(mapObject: MapObject) {
-        nativeFunctionExecutor.attachCameraToObject(playerid = id.value, objectid = mapObject.id.value)
-    }
-
-    fun attachCameraTo(playerMapObject: PlayerMapObject) {
-        nativeFunctionExecutor.attachCameraToPlayerObject(playerid = id.value, playerobjectid = playerMapObject.id.value)
-    }
-
-    @JvmOverloads
-    fun interpolateCameraPosition(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT) {
-        nativeFunctionExecutor.interpolateCameraPos(
-                playerid = id.value,
-                FromX = from.x,
-                FromY = from.y,
-                FromZ = from.z,
-                ToX = to.x,
-                ToY = to.y,
-                ToZ = to.z,
-                time = time,
-                cut = type.value
-        )
-    }
-
-    @JvmOverloads
-    fun interpolateCameraLookAt(from: Vector3D, to: Vector3D, time: Int, type: CameraType = CameraType.CUT) {
-        nativeFunctionExecutor.interpolateCameraLookAt(
-                playerid = id.value,
-                FromX = from.x,
-                FromY = from.y,
-                FromZ = from.z,
-                ToX = to.x,
-                ToY = to.y,
-                ToZ = to.z,
-                time = time,
-                cut = type.value
-        )
     }
 
     fun isInVehicle(vehicle: Vehicle): Boolean =

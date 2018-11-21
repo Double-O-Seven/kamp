@@ -1,7 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.constants.CameraMode
-import ch.leadrian.samp.kamp.core.api.constants.CameraType
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
@@ -33,10 +31,8 @@ import ch.leadrian.samp.kamp.core.api.data.timeOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
-import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
-import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
@@ -143,6 +139,12 @@ internal class PlayerTest {
     @Test
     fun shouldInitializePlayerWeapons() {
         assertThat(player.weapons)
+                .isNotNull
+    }
+
+    @Test
+    fun shouldInitializePlayerCamera() {
+        assertThat(player.camera)
                 .isNotNull
     }
 
@@ -1853,305 +1855,6 @@ internal class PlayerTest {
                     .containsExactlyInAnyOrder(newMapIcon)
             verify { existingMapIcon.destroy() }
             verify(exactly = 0) { newMapIcon.destroy() }
-        }
-    }
-
-    @Nested
-    inner class CameraPositionTests {
-
-        @Test
-        fun shouldGetCameraPosition() {
-            every { nativeFunctionExecutor.getPlayerCameraPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-
-            val cameraPosition = player.cameraPosition
-
-            assertThat(cameraPosition)
-                    .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-        }
-
-        @Test
-        fun shouldSetCameraPosition() {
-            every { nativeFunctionExecutor.setPlayerCameraPos(any(), any(), any(), any()) } returns true
-
-            player.cameraPosition = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-            verify {
-                nativeFunctionExecutor.setPlayerCameraPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
-            }
-        }
-    }
-
-    @Test
-    fun shouldSetCameraLookAt() {
-        every { nativeFunctionExecutor.setPlayerCameraLookAt(any(), any(), any(), any(), any()) } returns true
-
-        player.setCameraLookAt(vector3DOf(x = 1f, y = 2f, z = 3f), CameraType.CUT)
-
-        verify {
-            nativeFunctionExecutor.setPlayerCameraLookAt(
-                    playerid = playerId.value,
-                    x = 1f,
-                    y = 2f,
-                    z = 3f,
-                    cut = CameraType.CUT.value
-            )
-        }
-    }
-
-    @Test
-    fun shouldSetCameraBehindPlayer() {
-        every { nativeFunctionExecutor.setCameraBehindPlayer(any()) } returns true
-
-        player.setCameraBehind()
-
-        verify { nativeFunctionExecutor.setCameraBehindPlayer(playerId.value) }
-    }
-
-    @Test
-    fun shouldGetCameraFrontVector() {
-        every { nativeFunctionExecutor.getPlayerCameraFrontVector(playerId.value, any(), any(), any()) } answers {
-            secondArg<ReferenceFloat>().value = 1f
-            thirdArg<ReferenceFloat>().value = 2f
-            arg<ReferenceFloat>(3).value = 3f
-            true
-        }
-
-        val cameraFrontVector = player.cameraFrontVector
-
-        assertThat(cameraFrontVector)
-                .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-    }
-
-    @Test
-    fun shouldGetCameraMode() {
-        every { nativeFunctionExecutor.getPlayerCameraMode(playerId.value) } returns CameraMode.TRAIN_OR_TRAM.value
-
-        val cameraMode = player.cameraMode
-
-        assertThat(cameraMode)
-                .isEqualTo(CameraMode.TRAIN_OR_TRAM)
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = ["true", "false"])
-    fun shouldEnableCameraTarget(enable: Boolean) {
-        every { nativeFunctionExecutor.enablePlayerCameraTarget(any(), any()) } returns true
-
-        player.enableCameraTarget(enable)
-
-        verify { nativeFunctionExecutor.enablePlayerCameraTarget(playerId.value, enable) }
-    }
-
-    @Nested
-    inner class CameraTargetMapObjectTests {
-
-        @Test
-        fun shouldReturnCameraTargetMapObject() {
-            val mapObjectId = MapObjectId.valueOf(13)
-            val mapObject = mockk<MapObject>()
-            every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns mapObjectId.value
-            every { mapObjectRegistry[mapObjectId.value] } returns mapObject
-
-            val cameraTargetMapObject = player.cameraTargetObject
-
-            assertThat(cameraTargetMapObject)
-                    .isSameAs(mapObject)
-        }
-
-        @Test
-        fun givenNoCameraTargetMapObjectItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns SAMPConstants.INVALID_OBJECT_ID
-            every { mapObjectRegistry[SAMPConstants.INVALID_OBJECT_ID] } returns null
-
-            val cameraTargetMapObject = player.cameraTargetObject
-
-            assertThat(cameraTargetMapObject)
-                    .isNull()
-        }
-    }
-
-    @Nested
-    inner class CameraTargetPlayerTests {
-
-        @Test
-        fun shouldReturnTargetPlayer() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetPlayer(playerId.value) } returns otherPlayerId.value
-            every { playerRegistry[otherPlayerId.value] } returns otherPlayer
-
-            val targetPlayer = player.cameraTargetPlayer
-
-            assertThat(targetPlayer)
-                    .isSameAs(otherPlayer)
-        }
-
-        @Test
-        fun givenNoTargetPlayerItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetPlayer(playerId.value) } returns SAMPConstants.INVALID_PLAYER_ID
-            every { playerRegistry[SAMPConstants.INVALID_PLAYER_ID] } returns null
-
-            val targetPlayer = player.cameraTargetPlayer
-
-            assertThat(targetPlayer)
-                    .isNull()
-        }
-    }
-
-    @Nested
-    inner class CameraTargetVehicleTests {
-
-        @Test
-        fun shouldReturnTargetPlayer() {
-            val vehicleId = VehicleId.valueOf(20)
-            val vehicle = mockk<Vehicle>()
-            every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns vehicleId.value
-            every { vehicleRegistry[vehicleId.value] } returns vehicle
-
-            val targetVehicle = player.cameraTargetVehicle
-
-            assertThat(targetVehicle)
-                    .isSameAs(vehicle)
-        }
-
-        @Test
-        fun givenNoTargetPlayerItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
-            every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
-
-            val targetVehicle = player.cameraTargetVehicle
-
-            assertThat(targetVehicle)
-                    .isNull()
-        }
-    }
-
-    @Nested
-    inner class CameraTargetActorTests {
-
-        @Test
-        fun shouldReturnCameraTargetActor() {
-            val actorId = ActorId.valueOf(13)
-            val actor = mockk<Actor>()
-            every { nativeFunctionExecutor.getPlayerCameraTargetActor(playerId.value) } returns actorId.value
-            every { actorRegistry[actorId.value] } returns actor
-
-            val cameraTargetActor = player.cameraTargetActor
-
-            assertThat(cameraTargetActor)
-                    .isSameAs(actor)
-        }
-
-        @Test
-        fun givenNoCameraTargetActorItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetActor(playerId.value) } returns SAMPConstants.INVALID_ACTOR_ID
-            every { actorRegistry[SAMPConstants.INVALID_ACTOR_ID] } returns null
-
-            val cameraTargetActor = player.cameraTargetActor
-
-            assertThat(cameraTargetActor)
-                    .isNull()
-        }
-    }
-
-    @Test
-    fun shouldGetCameraAspectRatio() {
-        every { nativeFunctionExecutor.getPlayerCameraAspectRatio(playerId.value) } returns 1.234f
-
-        val aspectRatio = player.cameraAspectRatio
-
-        assertThat(aspectRatio)
-                .isEqualTo(1.234f)
-    }
-
-    @Test
-    fun shouldGetCameraZoom() {
-        every { nativeFunctionExecutor.getPlayerCameraZoom(playerId.value) } returns 1.234f
-
-        val zoom = player.cameraZoom
-
-        assertThat(zoom)
-                .isEqualTo(1.234f)
-    }
-
-    @Test
-    fun shouldAttachCameraToObject() {
-        every { nativeFunctionExecutor.attachCameraToObject(any(), any()) } returns true
-        val mapObjectId = MapObjectId.valueOf(13)
-        val mapObject = mockk<MapObject> {
-            every { id } returns mapObjectId
-        }
-
-        player.attachCameraTo(mapObject)
-
-        verify { nativeFunctionExecutor.attachCameraToObject(playerid = playerId.value, objectid = mapObjectId.value) }
-    }
-
-    @Test
-    fun shouldAttachCameraToPlayerObject() {
-        every { nativeFunctionExecutor.attachCameraToPlayerObject(any(), any()) } returns true
-        val playerMapObjectId = PlayerMapObjectId.valueOf(13)
-        val playerMapObject = mockk<PlayerMapObject> {
-            every { id } returns playerMapObjectId
-        }
-
-        player.attachCameraTo(playerMapObject)
-
-        verify { nativeFunctionExecutor.attachCameraToPlayerObject(playerid = playerId.value, playerobjectid = playerMapObjectId.value) }
-    }
-
-    @Test
-    fun shouldInterpolateCameraPosition() {
-        every { nativeFunctionExecutor.interpolateCameraPos(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
-
-        player.interpolateCameraPosition(
-                from = vector3DOf(x = 1f, y = 2f, z = 3f),
-                to = vector3DOf(x = 4f, y = 5f, z = 6f),
-                type = CameraType.CUT,
-                time = 150
-        )
-
-        verify {
-            nativeFunctionExecutor.interpolateCameraPos(
-                    playerid = playerId.value,
-                    FromX = 1f,
-                    FromY = 2f,
-                    FromZ = 3f,
-                    ToX = 4f,
-                    ToY = 5f,
-                    ToZ = 6f,
-                    cut = CameraType.CUT.value,
-                    time = 150
-            )
-        }
-    }
-
-    @Test
-    fun shouldInterpolateCameraLookAt() {
-        every { nativeFunctionExecutor.interpolateCameraLookAt(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
-
-        player.interpolateCameraLookAt(
-                from = vector3DOf(x = 1f, y = 2f, z = 3f),
-                to = vector3DOf(x = 4f, y = 5f, z = 6f),
-                type = CameraType.CUT,
-                time = 150
-        )
-
-        verify {
-            nativeFunctionExecutor.interpolateCameraLookAt(
-                    playerid = playerId.value,
-                    FromX = 1f,
-                    FromY = 2f,
-                    FromZ = 3f,
-                    ToX = 4f,
-                    ToY = 5f,
-                    ToZ = 6f,
-                    cut = CameraType.CUT.value,
-                    time = 150
-            )
         }
     }
 
