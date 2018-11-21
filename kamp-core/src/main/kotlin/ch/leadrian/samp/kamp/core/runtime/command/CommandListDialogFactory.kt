@@ -63,22 +63,30 @@ constructor(private val dialogService: DialogService) {
     }
 
     private fun TabListDialogBuilder<String>.buildItems(definitions: List<CommandDefinition>) {
-        definitions.forEach { definition ->
-            item {
-                value(definition.name)
-                tabbedContent(
-                        { definition.name },
-                        { player ->
-                            StringBuilder().apply {
-                                definition.parameters.forEach {
-                                    append('[')
-                                    append(it.getName(player.locale))
-                                    append("] ")
-                                }
-                            }.toString()
+        definitions.forEach { definition -> buildItem(definition) }
+    }
+
+    private fun TabListDialogBuilder<String>.buildItem(definition: CommandDefinition) {
+        item {
+            value(definition.name)
+            tabbedContent(
+                    {
+                        val groupName = definition.groupName
+                        when {
+                            groupName != null -> "$groupName ${definition.name}"
+                            else -> definition.name
                         }
-                )
-            }
+                    },
+                    { player ->
+                        StringBuilder().apply {
+                            definition.parameters.forEach {
+                                append('[')
+                                append(it.getName(player.locale))
+                                append("] ")
+                            }
+                        }.toString()
+                    }
+            )
         }
     }
 

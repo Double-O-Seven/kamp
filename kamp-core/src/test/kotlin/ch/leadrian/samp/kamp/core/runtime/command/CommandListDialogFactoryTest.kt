@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
+import ch.leadrian.samp.kamp.core.api.command.annotation.CommandGroup
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
@@ -40,6 +41,7 @@ internal class CommandListDialogFactoryTest {
 
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private lateinit var commands: TestCommands
+    private lateinit var groupedCommands: TestGroupedCommands
 
     @BeforeEach
     fun setUp() {
@@ -58,6 +60,7 @@ internal class CommandListDialogFactoryTest {
         lifecycleManager.start()
         commandListDialogFactory = injector.getInstance()
         commands = injector.getInstance()
+        groupedCommands = injector.getInstance()
     }
 
     @Nested
@@ -98,6 +101,34 @@ internal class CommandListDialogFactoryTest {
                                 "baz\t[Bla] [Blub] \n" +
                                 "foo\t\n" +
                                 "qux\t[String] [Param 2] \n"
+                )
+            }
+        }
+
+        @Test
+        fun givenCommandGroupItShouldShowDialog() {
+            every {
+                nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
+            } returns true
+            val player = mockk<Player> {
+                every { locale } returns Locale.GERMANY
+                every { id } returns PlayerId.valueOf(69)
+            }
+            val dialog = commandListDialogFactory.create(groupedCommands, 10)
+
+            dialog.show(player)
+
+            verify {
+                nativeFunctionExecutor.showPlayerDialog(
+                        dialogid = 1,
+                        playerid = 69,
+                        button1 = "Schliessen",
+                        button2 = "",
+                        style = DialogStyle.TABLIST_HEADERS.value,
+                        caption = "Befehle",
+                        info = "Befehl\tParameter\n" +
+                                "funny haha\t[int] [String] [List] \n" +
+                                "funny lol\t\n"
                 )
             }
         }
@@ -229,14 +260,32 @@ internal class CommandListDialogFactoryTest {
 
     }
 
+
+    @Suppress("unused", "UNUSED_PARAMETER")
+    @Singleton
+    @CommandGroup("funny")
+    private class TestGroupedCommands : Commands() {
+
+        @Command
+        fun lol(player: Player) {
+        }
+
+        @Command
+        fun haha(player: Player, intParam: Int, stringParam: String, listParam: List<String>) {
+        }
+
+    }
+
     private inner class TestModule : KampModule() {
 
         override fun configure() {
             bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
             bind(Server::class.java).toInstance(mockk())
             bind(TestCommands::class.java)
+            bind(TestGroupedCommands::class.java)
             newCommandsSetBinder().apply {
                 addBinding().to(TestCommands::class.java)
+                addBinding().to(TestGroupedCommands::class.java)
             }
         }
 
