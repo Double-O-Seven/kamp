@@ -1,8 +1,17 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
+import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
+import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Position
@@ -207,13 +216,13 @@ internal constructor(
                     doors = doors
             )
             return vehicleParametersOf(
-                    engine = ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState[engine.value],
-                    objective = ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState[objective.value],
-                    boot = ch.leadrian.samp.kamp.core.api.constants.VehicleBootState[boot.value],
-                    bonnet = ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState[bonnet.value],
-                    lights = ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState[lights.value],
-                    alarm = ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState[alarm.value],
-                    doorLock = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState[doors.value]
+                    engine = VehicleEngineState[engine.value],
+                    objective = VehicleObjectiveState[objective.value],
+                    boot = VehicleBootState[boot.value],
+                    bonnet = VehicleBonnetState[bonnet.value],
+                    lights = VehicleLightsState[lights.value],
+                    alarm = VehicleAlarmState[alarm.value],
+                    doorLock = VehicleDoorLockState[doors.value]
             )
         }
         set(value) {
@@ -243,10 +252,10 @@ internal constructor(
                     backright = backRight
             )
             return vehicleDoorStatesOf(
-                    driver = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState[driver.value],
-                    passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState[passenger.value],
-                    backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState[backLeft.value],
-                    backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState[backRight.value]
+                    driver = VehicleDoorState[driver.value],
+                    passenger = VehicleDoorState[passenger.value],
+                    backLeft = VehicleDoorState[backLeft.value],
+                    backRight = VehicleDoorState[backRight.value]
             )
         }
         set(value) {
@@ -273,10 +282,10 @@ internal constructor(
                     backright = backRight
             )
             return vehicleWindowStatesOf(
-                    driver = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState[driver.value],
-                    passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState[passenger.value],
-                    backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState[backLeft.value],
-                    backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState[backRight.value]
+                    driver = VehicleWindowState[driver.value],
+                    passenger = VehicleWindowState[passenger.value],
+                    backLeft = VehicleWindowState[backLeft.value],
+                    backRight = VehicleWindowState[backRight.value]
             )
         }
         set(value) {

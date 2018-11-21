@@ -24,8 +24,10 @@ constructor(private val callbackListenerManager: CallbackListenerManager) : OnPl
         player.apply {
             interiorId = 14
             position = positionOf(258.4893f, -41.4008f, 1002.0234f, 270f)
-            cameraPosition = vector3DOf(256.0815f, -43.0475f, 1004.0234f)
-            setCameraLookAt(vector3DOf(258.4893f, -41.4008f, 1002.0234f))
+        }
+        player.camera.apply {
+            coordinates = vector3DOf(256.0815f, -43.0475f, 1004.0234f)
+            lookAt(vector3DOf(258.4893f, -41.4008f, 1002.0234f))
         }
         return OnPlayerRequestClassListener.Result.Allow
     }

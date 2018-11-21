@@ -22,5 +22,5 @@ internal constructor(
             nativeFunctionExecutor
                     .getVehicleComponentInSlot(vehicleid = vehicle.id.value, slot = slot.value)
                     .takeIf { it != 0 }
-                    ?.let { ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel[it] }
+                    ?.let { VehicleComponentModel[it] }
 }
