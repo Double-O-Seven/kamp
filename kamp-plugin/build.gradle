@@ -24,11 +24,9 @@ def vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
 
 def kampSrcDir = "$sampgdkDir/plugins/kamp"
 
+def sampgdkBuildDir = "$buildDir/sampgdk"
+
 def sampPluginSdkDir = "$projectDir/src/main/cpp/samp-plugin-sdk-original"
-
-def sampgdkBuildDir = "$sampgdkDir/build"
-
-def kampCoreMainOutput = project(':kamp-core').sourceSets.main.output
 
 kampCppCodegen {
     runtimeJavaPackageName = runtimePackageName
@@ -37,6 +35,7 @@ kampCppCodegen {
 }
 
 task generateSAMPNativeFunctionsHeaderFile {
+    def kampCoreMainOutput = project.project(':kamp-core').sourceSets.main.output
     def sampNativeFunctionsHeaderFile = "$kampSrcDir/SAMPNativeFunctions.h"
     dependsOn ':kamp-core:classes'
     inputs.dir kampCoreMainOutput
@@ -68,25 +67,28 @@ task makePlugin {
 
     doLast {
         exec {
-            workingDir sampgdkBuildDir
+            workingDir = sampgdkBuildDir
+            def command = "cmake \"$sampgdkDir\" -DSAMP_SDK_ROOT=\"$sampPluginSdkDir\" -DSAMPGDK_STATIC=ON -DSAMPGDK_BUILD_PLUGINS=ON"
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                commandLine 'cmd', '/c', "cmake .. -DSAMP_SDK_ROOT=${sampPluginSdkDir} -DSAMPGDK_STATIC=ON -DSAMPGDK_BUILD_PLUGINS=ON"
+                commandLine 'cmd', '/c', command
             } else {
-                commandLine "cmake .. -DSAMP_SDK_ROOT=${sampgdkBuildDir}"
+                commandLine command
             }
         }
 
         exec {
-            workingDir sampgdkBuildDir
+            workingDir = sampgdkBuildDir
+            def command = 'cmake --build . --config Release'
             if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                commandLine 'cmd', '/c', 'cmake --build . --config Release'
+                commandLine 'cmd', '/c', command
             } else {
-                commandLine 'cmake --build . --config Release'
+                commandLine command
             }
         }
     }
 
-    inputs.dir kampSrcDir
+    inputs.dir sampgdkDir
+    inputs.dir sampPluginSdkDir
     outputs.dir sampgdkBuildDir
 }
 
