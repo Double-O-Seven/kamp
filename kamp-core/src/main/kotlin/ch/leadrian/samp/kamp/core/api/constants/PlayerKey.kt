@@ -121,8 +121,10 @@ enum class PlayerKey(
             inVehicleTextDrawCode = "VEHICLE_STEERRIGHT"
     );
 
-    val onFootTextDrawCode: String = onFootTextDrawCode?.let { "~k~~$it~" } ?: "???"
+    val onFootTextDrawCode: String = onFootTextDrawCode.toTextDrawCode()
 
-    val inVehicleTextDrawCode: String = inVehicleTextDrawCode?.let { "~k~~$it~" } ?: "???"
+    val inVehicleTextDrawCode: String = inVehicleTextDrawCode.toTextDrawCode()
+
+    private fun String?.toTextDrawCode() = this?.let { "~k~~$it~" } ?: "???"
 
 }
