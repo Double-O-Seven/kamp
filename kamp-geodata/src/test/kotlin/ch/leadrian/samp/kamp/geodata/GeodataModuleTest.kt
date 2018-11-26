@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.geodata
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.geodata.hmap.HeightMap
 import ch.leadrian.samp.kamp.geodata.node.PathNodeService
+import ch.leadrian.samp.kamp.geodata.vegetation.VegetationLoader
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
@@ -52,6 +53,15 @@ internal class GeodataModuleTest {
             assertThat(pathNodeService)
                     .isNotNull
                     .isSameAs(injector.getInstance<PathNodeService>())
+        }
+
+        @Test
+        fun shouldInjectVegetationLoader() {
+            val vegetationLoader = injector.getInstance<VegetationLoader>()
+
+            assertThat(vegetationLoader)
+                    .isNotNull
+                    .isSameAs(injector.getInstance<VegetationLoader>())
         }
     }
 
