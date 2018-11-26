@@ -21,6 +21,7 @@ dependencies {
     compile(
             project(':kamp-core'),
             project(':kamp-streamer'),
+            project(':kamp-geodata'),
             'org.slf4j:slf4j-simple:1.7.25',
     )
 
