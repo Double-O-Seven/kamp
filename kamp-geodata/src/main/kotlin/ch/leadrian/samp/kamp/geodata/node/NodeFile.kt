@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.geodata.node
 
 import com.google.common.io.LittleEndianDataInputStream
-import java.io.BufferedInputStream
 import java.io.InputStream
 
 internal data class NodeFile(
@@ -15,7 +14,7 @@ internal data class NodeFile(
         private const val FILLER_SIZE = 768
 
         fun parse(inputStream: InputStream): NodeFile {
-            LittleEndianDataInputStream(BufferedInputStream(inputStream)).use { it ->
+            LittleEndianDataInputStream(inputStream).use { it ->
                 val pathNodes = mutableListOf<PathNode>()
                 val naviNodes = mutableListOf<NaviNode>()
                 val links = mutableListOf<Link>()

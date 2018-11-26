@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.geodata.node
 
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import com.google.common.collect.HashBasedTable
 import com.google.common.collect.Table
 import javax.annotation.PostConstruct
@@ -14,6 +15,8 @@ internal constructor() {
     private companion object {
 
         const val NODE_FILE_FORMAT = "nodes%d.dat"
+
+        val log = loggerFor<PathNodeService>()
     }
 
     private lateinit var nodeFiles: List<NodeFile>
@@ -24,9 +27,11 @@ internal constructor() {
 
     @PostConstruct
     internal fun initialize() {
+        log.info("Loading path nodes...")
         loadNodeFiles()
         createPathNodeIndex()
         createLinks()
+        log.info("Path nodes loaded")
     }
 
     fun getPathNodes(): List<PathNode> = pathNodeIndex.values().toList()
@@ -35,9 +40,17 @@ internal constructor() {
         nodeFiles = (0 until 64)
                 .asSequence()
                 .map { String.format(NODE_FILE_FORMAT, it) }
-                .map { javaClass.getResourceAsStream(it) }
-                .map { NodeFile.parse(it) }
+                .map { parseNodeFile(it) }
                 .toList()
+    }
+
+    private fun parseNodeFile(fileName: String): NodeFile {
+        try {
+            return NodeFile.parse(this@PathNodeService.javaClass.getResourceAsStream(fileName))
+        } catch (e: Exception) {
+            log.error("Failed to parse {}: ", fileName, e)
+            throw e
+        }
     }
 
     private fun createPathNodeIndex() {
@@ -47,6 +60,7 @@ internal constructor() {
                 .map { it.pathNodes }
                 .flatMap { it.asSequence() }
                 .forEach { addPathNodeToIndex(it) }
+
     }
 
     private fun addPathNodeToIndex(pathNode: PathNode) {

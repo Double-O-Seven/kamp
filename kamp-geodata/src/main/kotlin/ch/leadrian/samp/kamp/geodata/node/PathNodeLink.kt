@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.geodata.node
 
-data class PathNodeLink(
+class PathNodeLink(
         val pathNode: PathNode,
         val length: Int
 )
