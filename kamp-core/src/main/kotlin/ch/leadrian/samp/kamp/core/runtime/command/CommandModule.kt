@@ -16,6 +16,7 @@ internal class CommandModule : KampModule() {
         bind(CommandParametersResolver::class.java)
         bind(CommandExecutor::class.java)
         bind(CommandParameterResolverRegistry::class.java)
+        bind(CommandParameterResolverFactory::class.java)
         bind(CommandDefinitionLoader::class.java)
         bind(DefaultUnknownCommandHandler::class.java)
         bind(DefaultCommandErrorHandler::class.java)
