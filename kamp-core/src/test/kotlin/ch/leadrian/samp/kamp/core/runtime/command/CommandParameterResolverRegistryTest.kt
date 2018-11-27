@@ -4,7 +4,6 @@ import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import com.google.inject.Guice
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
 
 
@@ -21,13 +20,14 @@ internal class CommandParameterResolverRegistryTest {
     }
 
     @Test
-    fun givenNoResolverForParameterTypeItShouldException() {
-        val commandParameterResolverRegistry = CommandParameterResolverRegistry(setOf(StringParameterResolver))
+    fun shouldRegisterResolver() {
+        val commandParameterResolverRegistry = CommandParameterResolverRegistry(setOf())
 
-        val caughtThrowable = catchThrowable { commandParameterResolverRegistry.getResolver(Int::class.java) }
+        commandParameterResolverRegistry.register(StringParameterResolver)
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(NoSuchElementException::class.java)
+        val resolver = commandParameterResolverRegistry.getResolver(String::class.java)
+        assertThat(resolver)
+                .isEqualTo(StringParameterResolver)
     }
 
     @Test

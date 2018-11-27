@@ -46,18 +46,18 @@ class CommandDefinitionLoaderTest {
 
     private lateinit var injector: Injector
     private val textProvider = mockk<TextProvider>()
-    private val commandParameterResolverRegistry = mockk<CommandParameterResolverRegistry>()
+    private val commandParameterResolverFactory = mockk<CommandParameterResolverFactory>()
 
     @BeforeEach
     fun setUp() {
-        every { commandParameterResolverRegistry.getResolver(Int::class.javaPrimitiveType!!) } returns PrimitiveIntParameterResolver
-        every { commandParameterResolverRegistry.getResolver(Int::class.javaObjectType) } returns IntParameterResolver
-        every { commandParameterResolverRegistry.getResolver(String::class.java) } returns StringParameterResolver
+        every { commandParameterResolverFactory.getResolver(Int::class.javaPrimitiveType!!) } returns PrimitiveIntParameterResolver
+        every { commandParameterResolverFactory.getResolver(Int::class.javaObjectType) } returns IntParameterResolver
+        every { commandParameterResolverFactory.getResolver(String::class.java) } returns StringParameterResolver
         injector = Guice.createInjector(TestModule())
         commandDefinitionLoader = CommandDefinitionLoader(
                 injector = injector,
                 textProvider = textProvider,
-                commandParameterResolverRegistry = commandParameterResolverRegistry
+                commandParameterResolverFactory = commandParameterResolverFactory
         )
     }
 

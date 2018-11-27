@@ -34,7 +34,7 @@ internal class CommandDefinitionLoader
 constructor(
         private val injector: Injector,
         private val textProvider: TextProvider,
-        private val commandParameterResolverRegistry: CommandParameterResolverRegistry
+        private val commandParameterResolverFactory: CommandParameterResolverFactory
 ) {
 
     private val allowedReturnTypes = setOf(
@@ -175,12 +175,12 @@ constructor(
                 }
                 val typeArgument = parameterizedType.actualTypeArguments.first()
                 if (typeArgument is Class<*>) {
-                    return commandParameterResolverRegistry.getResolver(typeArgument)
+                    return commandParameterResolverFactory.getResolver(typeArgument)
                 }
             }
             throw CommandDefinitionLoaderException("Cannot resolve type of parameter $parameter")
         } else {
-            return commandParameterResolverRegistry.getResolver(parameter.type)
+            return commandParameterResolverFactory.getResolver(parameter.type)
         }
     }
 

@@ -16,7 +16,11 @@ constructor() {
             commandDefinition.method.returnType == Void::class.javaPrimitiveType -> OnPlayerCommandTextListener.Result.Processed
             result is OnPlayerCommandTextListener.Result -> result
             result is Boolean || commandDefinition.method.returnType == Boolean::class.javaObjectType -> {
-                if ((result as Boolean?) == true) OnPlayerCommandTextListener.Result.Processed else OnPlayerCommandTextListener.Result.UnknownCommand
+                if ((result as Boolean?) == true) {
+                    OnPlayerCommandTextListener.Result.Processed
+                } else {
+                    OnPlayerCommandTextListener.Result.UnknownCommand
+                }
             }
             else -> OnPlayerCommandTextListener.Result.Processed
         }

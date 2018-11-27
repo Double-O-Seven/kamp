@@ -9,12 +9,15 @@ internal class CommandParameterResolverRegistry
 @Inject
 constructor(resolvers: Set<@JvmSuppressWildcards CommandParameterResolver<*>>) {
 
-    private val resolversByParameterType: Map<Class<*>, CommandParameterResolver<*>> = resolvers.associateBy { it.parameterType }
+    private val resolversByParameterType: MutableMap<Class<*>, CommandParameterResolver<*>> = resolvers.associateBy { it.parameterType }.toMutableMap()
 
-    fun <T : Any> getResolver(parameterType: Class<T>): CommandParameterResolver<out T> {
+    fun <T : Any> getResolver(parameterType: Class<T>): CommandParameterResolver<out T>? {
         @Suppress("UNCHECKED_CAST")
-        val resolver = resolversByParameterType[parameterType] as CommandParameterResolver<out T>?
-        return resolver ?: throw NoSuchElementException("No resolver for type $parameterType registered")
+        return resolversByParameterType[parameterType] as CommandParameterResolver<out T>?
+    }
+
+    fun register(resolver: CommandParameterResolver<*>) {
+        resolversByParameterType[resolver.parameterType] = resolver
     }
 
 }
