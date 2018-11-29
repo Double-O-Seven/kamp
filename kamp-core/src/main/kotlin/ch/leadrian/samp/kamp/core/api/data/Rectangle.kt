@@ -10,6 +10,10 @@ interface Rectangle : Shape2D {
 
     val maxY: Float
 
+    val width: Float
+
+    val height: Float
+
     fun toRectangle(): Rectangle
 
     fun toMutableRectangle(): MutableRectangle

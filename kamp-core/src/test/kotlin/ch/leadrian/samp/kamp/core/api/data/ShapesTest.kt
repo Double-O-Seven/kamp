@@ -28,6 +28,28 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(RectangleFactoryArgumentsProvider::class)
+        fun shouldHaveExpectedWidth(factory: (Float, Float, Float, Float) -> Rectangle) {
+            val rectangle = factory(-1f, 2f, 5f, 10f)
+
+            val width = rectangle.width
+
+            assertThat(width)
+                    .isCloseTo(3f, withPercentage(0.0001))
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(RectangleFactoryArgumentsProvider::class)
+        fun shouldHaveExpectedHeight(factory: (Float, Float, Float, Float) -> Rectangle) {
+            val rectangle = factory(-1f, 2f, 5f, 10f)
+
+            val height = rectangle.height
+
+            assertThat(height)
+                    .isCloseTo(5f, withPercentage(0.0001))
+        }
+
+        @ParameterizedTest
+        @ArgumentsSource(RectangleFactoryArgumentsProvider::class)
         fun toRectangleShouldReturnImmutableRectangle(factory: (Float, Float, Float, Float) -> Rectangle) {
             val minX = -1f
             val maxX = 2f
