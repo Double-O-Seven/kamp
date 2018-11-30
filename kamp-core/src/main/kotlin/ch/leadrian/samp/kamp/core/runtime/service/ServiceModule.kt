@@ -11,9 +11,11 @@ import ch.leadrian.samp.kamp.core.api.service.PickupService
 import ch.leadrian.samp.kamp.core.api.service.PlayerClassService
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
+import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextLabelService
 import ch.leadrian.samp.kamp.core.api.service.RaceCheckpointService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
+import ch.leadrian.samp.kamp.core.api.service.TextDrawService
 import ch.leadrian.samp.kamp.core.api.service.TextLabelService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.service.WorldService
@@ -31,9 +33,11 @@ internal class ServiceModule : KampModule() {
         bind(PlayerClassService::class.java)
         bind(PlayerMapObjectService::class.java)
         bind(PlayerService::class.java)
+        bind(PlayerTextDrawService::class.java)
         bind(PlayerTextLabelService::class.java)
         bind(RaceCheckpointService::class.java)
         bind(ServerService::class.java)
+        bind(TextDrawService::class.java)
         bind(TextLabelService::class.java)
         bind(VehicleService::class.java)
         bind(WorldService::class.java)

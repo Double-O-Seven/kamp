@@ -10,9 +10,11 @@ import ch.leadrian.samp.kamp.core.api.service.PickupService
 import ch.leadrian.samp.kamp.core.api.service.PlayerClassService
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
+import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextLabelService
 import ch.leadrian.samp.kamp.core.api.service.RaceCheckpointService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
+import ch.leadrian.samp.kamp.core.api.service.TextDrawService
 import ch.leadrian.samp.kamp.core.api.service.TextLabelService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.service.WorldService
@@ -140,6 +142,14 @@ internal class ServiceModuleTest {
         }
 
         @Test
+        fun shouldInjectPlayerTextDrawService() {
+            val playerTextDrawService = injector.getInstance<PlayerTextDrawService>()
+
+            assertThat(playerTextDrawService)
+                    .isNotNull
+        }
+
+        @Test
         fun shouldInjectPlayerTextLabelService() {
             val playerTextLabelService = injector.getInstance<PlayerTextLabelService>()
 
@@ -160,6 +170,14 @@ internal class ServiceModuleTest {
             val serverService = injector.getInstance<ServerService>()
 
             assertThat(serverService)
+                    .isNotNull
+        }
+
+        @Test
+        fun shouldInjectTextDrawService() {
+            val textDrawService = injector.getInstance<TextDrawService>()
+
+            assertThat(textDrawService)
                     .isNotNull
         }
 
