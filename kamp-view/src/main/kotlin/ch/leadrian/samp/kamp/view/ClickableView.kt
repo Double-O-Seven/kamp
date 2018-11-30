@@ -9,6 +9,7 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
     private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
 
     var isEnabled: Boolean = true
+        private set
 
     fun click(): OnPlayerClickPlayerTextDrawListener.Result {
         if (isEnabled) {
@@ -25,6 +26,28 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
     fun removeOnClickListener(listener: OnClickViewListener) {
         onClickListeners -= listener
     }
+
+    fun enable() {
+        if (isEnabled) {
+            return
+        }
+
+        isEnabled = true
+        onEnable()
+    }
+
+    protected abstract fun onEnable()
+
+    fun disable() {
+        if (!isEnabled) {
+            return
+        }
+
+        isEnabled = false
+        onDisable()
+    }
+
+    protected abstract fun onDisable()
 
 }
 
