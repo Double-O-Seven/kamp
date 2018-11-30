@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import io.mockk.Called
@@ -60,6 +61,24 @@ internal class ClickableViewTest {
         view.click()
 
         verify { clicked(view) }
+    }
+
+    @Test
+    fun givenViewIsEnabledClickShouldReturnProcessedAsResult() {
+        val result = view.click()
+
+        assertThat(result)
+                .isEqualTo(OnPlayerClickPlayerTextDrawListener.Result.Processed)
+    }
+
+    @Test
+    fun givenViewIsNotEnabledClickShouldReturnNotFoundAsResult() {
+        view.isEnabled = false
+
+        val result = view.click()
+
+        assertThat(result)
+                .isEqualTo(OnPlayerClickPlayerTextDrawListener.Result.NotFound)
     }
 
     @Test

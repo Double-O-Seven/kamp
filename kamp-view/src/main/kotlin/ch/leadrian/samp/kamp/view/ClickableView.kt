@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import kotlin.reflect.full.cast
 
@@ -9,10 +10,12 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
 
     var isEnabled: Boolean = true
 
-    fun click() {
+    fun click(): OnPlayerClickPlayerTextDrawListener.Result {
         if (isEnabled) {
             onClickListeners.forEach { it.onClick(this) }
+            return OnPlayerClickPlayerTextDrawListener.Result.Processed
         }
+        return OnPlayerClickPlayerTextDrawListener.Result.NotFound
     }
 
     fun addOnClickListener(listener: OnClickViewListener) {
