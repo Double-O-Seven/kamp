@@ -7,9 +7,9 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
 
     private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
 
-    val isEnabled: Boolean = true
+    var isEnabled: Boolean = true
 
-    protected fun click() {
+    fun click() {
         if (isEnabled) {
             onClickListeners.forEach { it.onClick(this) }
         }
