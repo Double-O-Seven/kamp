@@ -3,18 +3,11 @@ package ch.leadrian.samp.kamp.view
 import ch.leadrian.samp.kamp.core.api.data.MutableRectangle
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.data.mutableRectangleOf
-import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import javax.inject.Inject
 
 class ViewLayoutCalculator
 @Inject
 constructor() {
-
-    companion object {
-
-        val SCREEN_LAYOUT = rectangleOf(minX = 0f, maxX = 640f, minY = 0f, maxY = 480f)
-
-    }
 
     fun calculate(view: View): MutableRectangle {
         val dimensions = calculateDimensionValues(view)

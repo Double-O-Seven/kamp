@@ -16,7 +16,8 @@ abstract class View(
 
     private val _children: LinkedHashSet<View> = LinkedHashSet()
 
-    lateinit var layout: Rectangle
+    var layout: Rectangle = SCREEN_LAYOUT
+        private set
 
     var parent: View? = null
         private set

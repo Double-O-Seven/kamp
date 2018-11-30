@@ -634,7 +634,7 @@ internal class ViewLayoutCalculatorTest {
         }
         spyk(TestView(player, layoutCalculator)).apply {
             addChild(parentView)
-            every { layout } returns ViewLayoutCalculator.SCREEN_LAYOUT
+            every { layout } returns SCREEN_LAYOUT
         }
         val layout = layoutCalculator.calculate(view)
 
