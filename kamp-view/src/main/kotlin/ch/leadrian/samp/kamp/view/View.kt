@@ -11,12 +11,12 @@ import java.util.Collections.unmodifiableSet
 
 abstract class View(
         override val player: Player,
-        private val layoutCalculator: ViewLayoutCalculator
+        private val areaCalculator: ViewAreaCalculator
 ) : AbstractDestroyable(), HasPlayer {
 
     private val _children: LinkedHashSet<View> = LinkedHashSet()
 
-    var layout: Rectangle = SCREEN_LAYOUT
+    var area: Rectangle = SCREEN_AREA
         private set
 
     var parent: View? = null
@@ -105,19 +105,19 @@ abstract class View(
         if (isInvalidated) {
             measure()
         }
-        draw(layout)
+        onDraw()
         isInvalidated = false
     }
 
-    protected abstract fun draw(layout: Rectangle)
+    protected abstract fun onDraw()
 
     private fun measure() {
-        val newLayout = layoutCalculator.calculate(this)
-        onMeasure(newLayout)
-        layout = newLayout.toRectangle()
+        val calculatedArea = areaCalculator.calculate(this)
+        onMeasure(calculatedArea)
+        area = calculatedArea.toRectangle()
     }
 
-    protected open fun onMeasure(layout: MutableRectangle) {}
+    protected open fun onMeasure(calculatedArea: MutableRectangle) {}
 
     fun invalidate() {
         requireNotDestroyed()

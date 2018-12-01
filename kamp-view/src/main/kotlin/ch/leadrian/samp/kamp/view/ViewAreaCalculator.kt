@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.data.mutableRectangleOf
 import javax.inject.Inject
 
-class ViewLayoutCalculator
+class ViewAreaCalculator
 @Inject
 constructor() {
 
@@ -26,14 +26,14 @@ constructor() {
     private fun calculateWidth(dimensionValues: ViewDimensionValues): Float = with(dimensionValues) {
         when {
             width != null -> width
-            else -> parentLayout.width - marginLeft - marginRight
+            else -> parentArea.width - marginLeft - marginRight
         }
     }
 
     private fun calculateHeight(dimensionValues: ViewDimensionValues): Float = with(dimensionValues) {
         when {
             height != null -> height
-            else -> parentLayout.height - marginTop - marginBottom
+            else -> parentArea.height - marginTop - marginBottom
         }
     }
 
@@ -41,10 +41,10 @@ constructor() {
         return with(dimensionValues) {
             val relativeX = when {
                 left != null -> left + marginLeft
-                right != null -> parentLayout.width - right - width - marginRight
+                right != null -> parentArea.width - right - width - marginRight
                 else -> marginLeft
             }
-            relativeX + parentLayout.minX
+            relativeX + parentArea.minX
         }
     }
 
@@ -52,42 +52,42 @@ constructor() {
         return with(dimensionValues) {
             val relativeY = when {
                 top != null -> top + marginTop
-                bottom != null -> parentLayout.height - bottom - height - marginBottom
+                bottom != null -> parentArea.height - bottom - height - marginBottom
                 else -> marginTop
             }
-            relativeY + parentLayout.minY
+            relativeY + parentArea.minY
         }
     }
 
     private fun calculateDimensionValues(view: View): ViewDimensionValues {
-        val parentOfParentLayout: Rectangle = view.parent?.parent?.layout ?: SCREEN_LAYOUT
-        val paddingLeft = view.parent?.paddingLeft?.getValue(parentOfParentLayout.width) ?: 0f
-        val paddingRight = view.parent?.paddingRight?.getValue(parentOfParentLayout.width) ?: 0f
-        val paddingTop = view.parent?.paddingTop?.getValue(parentOfParentLayout.height) ?: 0f
-        val paddingBottom = view.parent?.paddingBottom?.getValue(parentOfParentLayout.height) ?: 0f
-        val parentLayout = (view.parent?.layout ?: SCREEN_LAYOUT).toMutableRectangle().apply {
+        val parentOfParentArea: Rectangle = view.parent?.parent?.area ?: SCREEN_AREA
+        val paddingLeft = view.parent?.paddingLeft?.getValue(parentOfParentArea.width) ?: 0f
+        val paddingRight = view.parent?.paddingRight?.getValue(parentOfParentArea.width) ?: 0f
+        val paddingTop = view.parent?.paddingTop?.getValue(parentOfParentArea.height) ?: 0f
+        val paddingBottom = view.parent?.paddingBottom?.getValue(parentOfParentArea.height) ?: 0f
+        val parentArea = (view.parent?.area ?: SCREEN_AREA).toMutableRectangle().apply {
             minX += paddingLeft
             maxX -= paddingRight
             minY += paddingTop
             maxY -= paddingBottom
         }
         return ViewDimensionValues(
-                parentLayout = parentLayout,
-                width = view.width?.getValue(parentLayout.width),
-                height = view.height?.getValue(parentLayout.height),
-                left = view.left?.getValue(parentLayout.width),
-                right = view.right?.getValue(parentLayout.width),
-                top = view.top?.getValue(parentLayout.height),
-                bottom = view.bottom?.getValue(parentLayout.height),
-                marginLeft = view.marginLeft.getValue(parentLayout.width),
-                marginRight = view.marginRight.getValue(parentLayout.width),
-                marginTop = view.marginTop.getValue(parentLayout.height),
-                marginBottom = view.marginBottom.getValue(parentLayout.height)
+                parentArea = parentArea,
+                width = view.width?.getValue(parentArea.width),
+                height = view.height?.getValue(parentArea.height),
+                left = view.left?.getValue(parentArea.width),
+                right = view.right?.getValue(parentArea.width),
+                top = view.top?.getValue(parentArea.height),
+                bottom = view.bottom?.getValue(parentArea.height),
+                marginLeft = view.marginLeft.getValue(parentArea.width),
+                marginRight = view.marginRight.getValue(parentArea.width),
+                marginTop = view.marginTop.getValue(parentArea.height),
+                marginBottom = view.marginBottom.getValue(parentArea.height)
         )
     }
 
     private class ViewDimensionValues(
-            val parentLayout: Rectangle,
+            val parentArea: Rectangle,
             val width: Float?,
             val height: Float?,
             val left: Float?,

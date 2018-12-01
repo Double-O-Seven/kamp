@@ -14,7 +14,7 @@ interface TextViewInstantiationScope : ViewInstantiationScope {
     val playerTextDrawService: PlayerTextDrawService
 
     fun textView(player: Player, buildingBlock: TextView.() -> Unit): TextView {
-        val textView = TextView(player, viewLayoutCalculator, textProvider, textFormatter, playerTextDrawService)
+        val textView = TextView(player, viewAreaCalculator, textProvider, textFormatter, playerTextDrawService)
         buildingBlock(textView)
         return textView
     }

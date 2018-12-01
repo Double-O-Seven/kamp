@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListen
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import kotlin.reflect.full.cast
 
-abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalculator) : View(player, layoutCalculator) {
+abstract class ClickableView(player: Player, areaCalculator: ViewAreaCalculator) : View(player, areaCalculator) {
 
     private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
 
@@ -36,7 +36,7 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
         onEnable()
     }
 
-    protected fun onEnable() {}
+    protected open fun onEnable() {}
 
     fun disable() {
         if (!isEnabled) {

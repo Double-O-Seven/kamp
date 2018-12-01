@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
-import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import io.mockk.Called
 import io.mockk.mockk
@@ -154,16 +153,12 @@ internal class ClickableViewTest {
 
     private class TestClickableView(
             player: Player,
-            viewLayoutCalculator: ViewLayoutCalculator,
+            viewAreaCalculator: ViewAreaCalculator,
             private val onEnable: TestClickableView.() -> Unit = {},
             private val onDisable: TestClickableView.() -> Unit = {}
-    ) : ClickableView(player, viewLayoutCalculator) {
+    ) : ClickableView(player, viewAreaCalculator) {
 
-        override fun draw(layout: Rectangle) {}
-
-        override fun onShow() {}
-
-        override fun onHide() {}
+        override fun onDraw() {}
 
         override fun onEnable() {
             onEnable.invoke(this)
