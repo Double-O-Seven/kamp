@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
-interface ViewBuilderScope {
+interface ViewInstantiationScope {
 
     val viewLayoutCalculator: ViewLayoutCalculator
 

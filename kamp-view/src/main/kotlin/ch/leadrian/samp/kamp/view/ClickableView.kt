@@ -36,7 +36,7 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
         onEnable()
     }
 
-    protected abstract fun onEnable()
+    protected fun onEnable() {}
 
     fun disable() {
         if (!isEnabled) {
@@ -47,7 +47,7 @@ abstract class ClickableView(player: Player, layoutCalculator: ViewLayoutCalcula
         onDisable()
     }
 
-    protected abstract fun onDisable()
+    protected open fun onDisable() {}
 
 }
 

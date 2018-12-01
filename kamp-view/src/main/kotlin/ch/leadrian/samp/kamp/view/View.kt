@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.view
 
 import ch.leadrian.samp.kamp.core.api.data.MutableRectangle
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
-import ch.leadrian.samp.kamp.core.api.entity.Destroyable
+import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
@@ -12,7 +12,7 @@ import java.util.Collections.unmodifiableSet
 abstract class View(
         override val player: Player,
         private val layoutCalculator: ViewLayoutCalculator
-) : HasPlayer, Destroyable {
+) : AbstractDestroyable(), HasPlayer {
 
     private val _children: LinkedHashSet<View> = LinkedHashSet()
 
@@ -140,7 +140,7 @@ abstract class View(
         _children.forEach { it.show(draw, invalidate) }
     }
 
-    protected abstract fun onShow()
+    protected open fun onShow() {}
 
     fun hide() {
         requireNotDestroyed()
@@ -151,7 +151,7 @@ abstract class View(
         _children.forEach { it.hide() }
     }
 
-    protected abstract fun onHide()
+    protected open fun onHide() {}
 
     fun addChild(view: View) {
         requireNotDestroyed()
