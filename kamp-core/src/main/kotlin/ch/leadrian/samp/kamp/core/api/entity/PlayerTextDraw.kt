@@ -110,7 +110,7 @@ internal constructor(
                     text = id.value,
                     color = value.value
             )
-            field = value
+            field = value.toColor()
         }
 
     var shadowSize: Int = 1
@@ -140,7 +140,7 @@ internal constructor(
                     text = id.value,
                     color = value.value
             )
-            field = value
+            field = value.toColor()
         }
 
     var font: TextDrawFont = TextDrawFont.FONT2
