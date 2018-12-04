@@ -16,7 +16,7 @@ internal class ViewModule : KampModule() {
         bind(ViewFactory::class.java).to(DefaultViewFactory::class.java)
         bind(ViewNavigationElementFactory::class.java)
         newPlayerExtensionFactorySetBinder().apply {
-            bind(ViewNavigationFactory::class.java)
+            addBinding().to(ViewNavigationFactory::class.java)
         }
     }
 
