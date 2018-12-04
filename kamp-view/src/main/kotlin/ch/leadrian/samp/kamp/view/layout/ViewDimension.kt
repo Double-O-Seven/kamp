@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
 interface ViewDimension {
 

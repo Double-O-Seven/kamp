@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf

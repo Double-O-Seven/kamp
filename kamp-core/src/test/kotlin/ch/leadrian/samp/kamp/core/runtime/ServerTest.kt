@@ -31,7 +31,7 @@ internal class ServerTest {
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
     private val configProperties = Properties()
-    private val dataDirectory = Paths.get(".", "Kamp", "data")
+    private val dataDirectory = Paths.get(".", "Kamp", "layout")
 
     @BeforeEach
     fun setUp() {

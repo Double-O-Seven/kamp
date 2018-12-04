@@ -7,6 +7,9 @@ import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
+import ch.leadrian.samp.kamp.view.layout.ViewDimension
+import ch.leadrian.samp.kamp.view.layout.ViewLayout
+import ch.leadrian.samp.kamp.view.layout.pixels
 import java.util.*
 import java.util.Collections.unmodifiableSet
 

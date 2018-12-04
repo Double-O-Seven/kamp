@@ -10,6 +10,9 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.view.factory.DefaultViewFactory
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
+import ch.leadrian.samp.kamp.view.layout.AbsoluteViewDimensionsCalculator
+import ch.leadrian.samp.kamp.view.layout.ViewAreaCalculator
+import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationElementFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigator

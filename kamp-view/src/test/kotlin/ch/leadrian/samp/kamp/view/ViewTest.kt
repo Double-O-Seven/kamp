@@ -3,6 +3,9 @@ package ch.leadrian.samp.kamp.view
 
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.layout.ViewLayout
+import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
+import ch.leadrian.samp.kamp.view.layout.pixels
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk

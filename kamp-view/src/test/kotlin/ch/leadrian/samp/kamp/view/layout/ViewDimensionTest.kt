@@ -1,5 +1,7 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
+import ch.leadrian.samp.kamp.view.layout.percent
+import ch.leadrian.samp.kamp.view.layout.pixels
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 

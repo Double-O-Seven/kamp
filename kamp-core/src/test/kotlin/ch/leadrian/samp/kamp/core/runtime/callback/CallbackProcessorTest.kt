@@ -143,7 +143,7 @@ internal class CallbackProcessorTest {
     private lateinit var uncaughtExceptionNotifier: UncaughtExceptionNotifier
 
     private val configProperties = Properties()
-    private val dataDirectory = Paths.get(".", "Kamp", "data")
+    private val dataDirectory = Paths.get(".", "Kamp", "layout")
 
     @BeforeEach
     fun setUp() {

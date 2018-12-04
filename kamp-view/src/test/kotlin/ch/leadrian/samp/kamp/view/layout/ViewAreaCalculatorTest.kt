@@ -1,6 +1,8 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
+import ch.leadrian.samp.kamp.view.layout.AbsoluteViewDimensions
+import ch.leadrian.samp.kamp.view.layout.ViewAreaCalculator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test

@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.geodata.vegetation.VegetationLoader
 internal class GeodataModule : KampModule() {
 
     override fun configure() {
-        // Need to load data on start up since it is computationally intensive
+        // Need to load layout on start up since it is computationally intensive
         bind(HeightMap::class.java).asEagerSingleton()
         bind(PathNodeService::class.java).asEagerSingleton()
         bind(VegetationLoader::class.java)

@@ -14,6 +14,9 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.MAX_TEXT_DRAW_STRING_LENGTH
+import ch.leadrian.samp.kamp.view.layout.ViewDimension
+import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.layout.pixelsToLetterSize
 import java.util.*
 
 open class TextView(

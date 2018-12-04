@@ -1,6 +1,7 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
+import ch.leadrian.samp.kamp.view.View
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.spyk

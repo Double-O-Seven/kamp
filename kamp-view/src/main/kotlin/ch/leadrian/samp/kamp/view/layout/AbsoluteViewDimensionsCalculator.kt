@@ -1,5 +1,6 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.layout
 
+import ch.leadrian.samp.kamp.view.View
 import javax.inject.Inject
 
 internal class AbsoluteViewDimensionsCalculator
