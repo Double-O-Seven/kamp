@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
+import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
@@ -37,7 +38,7 @@ open class TextView(
 
     var letterHeight: ViewDimension = 32.pixels()
 
-    var letterWidth: ViewDimension = pixels { letterHeight.getValue(contentArea.height) / font.idealHeightToWidthRatio }
+    var letterWidth: ViewDimension = pixels { letterHeight.getValue(paddingArea.height) / font.idealHeightToWidthRatio }
 
     var color: Color = Colors.WHITE
 
@@ -79,23 +80,23 @@ open class TextView(
 
     override fun onDraw() {
         if (textDraw == null || isInvalidated) {
-            replaceTextDraw()
+            replaceTextDraw(paddingArea)
         } else {
             updateTextDraw()
         }
     }
 
-    private fun replaceTextDraw() {
+    private fun replaceTextDraw(area: Rectangle) {
         textDraw?.destroy()
-        textDraw = createTextDraw().apply {
+        textDraw = createTextDraw(area).apply {
             outlineSize = this@TextView.outlineSize
             shadowSize = this@TextView.shadowSize
             isProportional = this@TextView.isProportional
             isSelectable = isEnabled
             font = this@TextView.font
             letterSize = vector2DOf(
-                    x = pixelsToLetterSize(this@TextView.letterWidth.getValue(contentArea.width)),
-                    y = pixelsToLetterSize(this@TextView.letterHeight.getValue(contentArea.height))
+                    x = pixelsToLetterSize(this@TextView.letterWidth.getValue(area.width)),
+                    y = pixelsToLetterSize(this@TextView.letterHeight.getValue(area.height))
             )
             alignment = this@TextView.alignment
             backgroundColor = this@TextView.backgroundColor
@@ -138,42 +139,42 @@ open class TextView(
         }
     }
 
-    private fun createTextDraw(): PlayerTextDraw {
+    private fun createTextDraw(area: Rectangle): PlayerTextDraw {
         return when (alignment) {
-            TextDrawAlignment.CENTERED -> createCenteredTextDraw()
-            TextDrawAlignment.LEFT -> createLeftAlignedTextDraw()
-            TextDrawAlignment.RIGHT -> createRightAlignedTextDraw()
+            TextDrawAlignment.CENTERED -> createCenteredTextDraw(area)
+            TextDrawAlignment.LEFT -> createLeftAlignedTextDraw(area)
+            TextDrawAlignment.RIGHT -> createRightAlignedTextDraw(area)
         }
     }
 
-    private fun createCenteredTextDraw(): PlayerTextDraw {
+    private fun createCenteredTextDraw(area: Rectangle): PlayerTextDraw {
         val position = vector2DOf(
-                x = contentArea.minX + (TEXT_DRAW_OFFSET_LEFT_SIDE + contentArea.width) / 2f,
-                y = contentArea.minY
+                x = area.minX + (TEXT_DRAW_OFFSET_LEFT_SIDE + area.width) / 2f,
+                y = area.minY
         )
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
             // This weird thing is correct, x and y are switched
-            textSize = vector2DOf(x = contentArea.height, y = contentArea.width)
+            textSize = vector2DOf(x = area.height, y = area.width)
         }
     }
 
-    private fun createLeftAlignedTextDraw(): PlayerTextDraw {
+    private fun createLeftAlignedTextDraw(area: Rectangle): PlayerTextDraw {
         val position = vector2DOf(
-                x = contentArea.minX + TEXT_DRAW_OFFSET_LEFT_SIDE,
-                y = contentArea.minY
+                x = area.minX + TEXT_DRAW_OFFSET_LEFT_SIDE,
+                y = area.minY
         )
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
-            textSize = vector2DOf(x = contentArea.minX + contentArea.width, y = contentArea.height)
+            textSize = vector2DOf(x = area.minX + area.width, y = area.height)
         }
     }
 
-    private fun createRightAlignedTextDraw(): PlayerTextDraw {
+    private fun createRightAlignedTextDraw(area: Rectangle): PlayerTextDraw {
         val position = vector2DOf(
-                x = contentArea.minX + contentArea.width,
-                y = contentArea.minY
+                x = area.minX + area.width,
+                y = area.minY
         )
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
-            textSize = vector2DOf(x = contentArea.minX, y = contentArea.height)
+            textSize = vector2DOf(x = area.minX, y = area.height)
         }
     }
 
