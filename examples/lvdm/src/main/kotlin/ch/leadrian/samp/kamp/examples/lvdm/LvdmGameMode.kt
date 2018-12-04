@@ -20,6 +20,7 @@ import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.geodata.GeodataPlugin
 import ch.leadrian.samp.kamp.streamer.api.StreamerPlugin
+import ch.leadrian.samp.kamp.view.ViewPlugin
 import com.google.inject.Module
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -305,5 +306,5 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
 
     override fun getModules(): List<Module> = listOf(LvdmModule())
 
-    override fun getPlugins(): List<Plugin> = listOf(StreamerPlugin(), GeodataPlugin())
+    override fun getPlugins(): List<Plugin> = listOf(StreamerPlugin(), GeodataPlugin(), ViewPlugin())
 }

@@ -12,6 +12,7 @@ class LvdmModule : KampModule() {
         newCommandsSetBinder().apply {
             addBinding().to(LvdmCommands::class.java)
             addBinding().to(AdminCommands::class.java)
+            addBinding().to(DebugCommands::class.java)
         }
     }
 }

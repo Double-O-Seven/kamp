@@ -8,7 +8,7 @@ abstract class ClickableView(player: Player, viewContext: ViewContext) : View(pl
 
     private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
 
-    var isEnabled: Boolean = true
+    var isEnabled: Boolean = false
         private set
 
     fun click(): OnPlayerClickPlayerTextDrawListener.Result {

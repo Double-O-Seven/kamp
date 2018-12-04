@@ -34,10 +34,10 @@ open class BackgroundView(
         textDraw = playerTextDrawService.createPlayerTextDraw(
                 player,
                 TextDrawCodes.EMPTY_TEXT,
-                vector2DOf(x = area.minX + TEXT_DRAW_OFFSET_LEFT_SIDE, y = area.minY)
+                vector2DOf(x = area.minX, y = area.minY)
         ).apply {
-            textSize = vector2DOf(x = area.minX + area.width, y = area.height)
-            letterSize = vector2DOf(x = 0f, y = pixelsToLetterSize(area.height))
+            textSize = vector2DOf(x = area.minX + area.width + TEXT_DRAW_OFFSET_LEFT_SIDE, y = area.height)
+            letterSize = vector2DOf(x = 0f, y = pixelsToLetterSize(area.height) - 3.6f)
             useBox = true
             boxColor = this@BackgroundView.color
             isSelectable = this@BackgroundView.isEnabled

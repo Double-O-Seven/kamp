@@ -93,13 +93,13 @@ internal class ClickableViewTest {
     inner class EnableTests {
 
         @Test
-        fun shouldInitiallyBeEnabled() {
+        fun shouldInitiallyBeDisabled() {
             val view = TestClickableView(mockk(), mockk())
 
             val isEnabled = view.isEnabled
 
             assertThat(isEnabled)
-                    .isTrue()
+                    .isFalse()
         }
 
         @Test

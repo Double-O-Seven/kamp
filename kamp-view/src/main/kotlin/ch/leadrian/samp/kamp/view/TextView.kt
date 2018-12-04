@@ -15,6 +15,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.MAX_TEXT_DRAW_STRING_LENGTH
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
+import ch.leadrian.samp.kamp.view.layout.letterSizeToPixels
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.layout.pixelsToLetterSize
 import java.util.*
@@ -41,11 +42,14 @@ open class TextView(
 
     var letterHeight: ViewDimension = 32.pixels()
 
-    var letterWidth: ViewDimension = pixels { letterHeight.getValue(paddingArea.height) / font.idealHeightToWidthRatio }
+    var letterWidth: ViewDimension = pixels { parentValue ->
+        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentValue)) / font.idealHeightToWidthRatio
+        letterSizeToPixels(letterSize)
+    }
 
     var color: Color = Colors.WHITE
 
-    var backgroundColor: Color = Colors.TRANSPARENT
+    var backgroundColor: Color = Colors.BLACK
 
     private var textSupplier: (Locale) -> String = { "_" }
 
