@@ -92,7 +92,7 @@ open class TextView(
             outlineSize = this@TextView.outlineSize
             shadowSize = this@TextView.shadowSize
             isProportional = this@TextView.isProportional
-            isSelectable = isEnabled
+            isSelectable = this@TextView.isEnabled
             font = this@TextView.font
             letterSize = vector2DOf(
                     x = pixelsToLetterSize(this@TextView.letterWidth.getValue(area.width)),
@@ -105,8 +105,6 @@ open class TextView(
             show()
         }
     }
-
-    private fun pixelsToLetterSize(pixels: Float): Float = (pixels - 3.6f) / 9.0f
 
     private fun updateTextDraw() {
         textDraw?.apply {

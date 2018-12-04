@@ -4,10 +4,9 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.view.AbsoluteViewDimensionsCalculator
+import ch.leadrian.samp.kamp.view.BackgroundView
 import ch.leadrian.samp.kamp.view.TextView
 import ch.leadrian.samp.kamp.view.View
-import ch.leadrian.samp.kamp.view.ViewAreaCalculator
 import ch.leadrian.samp.kamp.view.ViewContext
 
 interface ViewFactory {
@@ -42,6 +41,18 @@ interface ViewFactory {
         val textView = textView(player, buildingBlock)
         addChild(textView)
         return textView
+    }
+
+    fun backgroundView(player: Player, buildingBlock: BackgroundView.() -> Unit): BackgroundView {
+        val backgroundView = BackgroundView(player, viewContext, playerTextDrawService)
+        buildingBlock(backgroundView)
+        return backgroundView
+    }
+
+    fun View.backgroundView(buildingBlock: BackgroundView.() -> Unit): BackgroundView {
+        val backgroundView = backgroundView(player, buildingBlock)
+        addChild(backgroundView)
+        return backgroundView
     }
 
 }
