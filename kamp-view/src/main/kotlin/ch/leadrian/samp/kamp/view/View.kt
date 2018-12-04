@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.view
 
-import ch.leadrian.samp.kamp.core.api.data.MutableRectangle
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
@@ -9,15 +8,26 @@ import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import java.util.*
 import java.util.Collections.unmodifiableSet
 
-abstract class View(
+open class View(
         override val player: Player,
-        private val areaCalculator: ViewAreaCalculator
+        private val viewContext: ViewContext
 ) : AbstractDestroyable(), HasPlayer {
 
     private val _children: LinkedHashSet<View> = LinkedHashSet()
 
-    var area: Rectangle = SCREEN_AREA
-        private set
+    private lateinit var layout: ViewLayout
+
+    val parentArea: Rectangle
+        get() = parent?.contentArea ?: SCREEN_AREA
+
+    val marginArea: Rectangle
+        get() = layout.marginArea
+
+    val paddingArea: Rectangle
+        get() = layout.paddingArea
+
+    val contentArea: Rectangle
+        get() = layout.contentArea
 
     var parent: View? = null
         private set
@@ -103,21 +113,17 @@ abstract class View(
 
     private fun drawNonRecursive() {
         if (isInvalidated) {
-            measure()
+            calculateLayout()
         }
         onDraw()
         isInvalidated = false
     }
 
-    protected abstract fun onDraw()
+    protected open fun onDraw() {}
 
-    private fun measure() {
-        val calculatedArea = areaCalculator.calculate(this)
-        onMeasure(calculatedArea)
-        area = calculatedArea.toRectangle()
+    private fun calculateLayout() {
+        layout = viewContext.viewLayoutCalculator.calculate(this)
     }
-
-    protected open fun onMeasure(calculatedArea: MutableRectangle) {}
 
     fun invalidate() {
         requireNotDestroyed()
@@ -137,7 +143,7 @@ abstract class View(
                 drawNonRecursive()
             }
         }
-        _children.forEach { it.show(draw, invalidate) }
+        _children.forEach { it.show(draw = draw, invalidate = invalidate) }
     }
 
     protected open fun onShow() {}

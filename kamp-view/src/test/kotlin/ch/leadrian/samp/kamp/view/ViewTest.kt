@@ -1,27 +1,63 @@
 package ch.leadrian.samp.kamp.view
 
-import ch.leadrian.samp.kamp.core.api.data.MutableRectangle
-import ch.leadrian.samp.kamp.core.api.data.Rectangle
-import ch.leadrian.samp.kamp.core.api.data.mutableRectangleOf
+
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.spyk
 import io.mockk.verify
 import io.mockk.verifyOrder
 import io.mockk.verifySequence
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+
 
 internal class ViewTest {
 
     private val player = mockk<Player>()
-    private val areaCalculator = mockk<ViewAreaCalculator>()
+    private val viewContext = mockk<ViewContext>()
+    private val viewLayoutCalculator = mockk<ViewLayoutCalculator>()
+
+    @BeforeEach
+    fun setUp() {
+        every { viewContext.viewLayoutCalculator } returns viewLayoutCalculator
+    }
+
+    @Nested
+    inner class ParentAreaTests {
+
+        @Test
+        fun givenNoParentItShouldReturnScreenArea() {
+            val view = TestView(player, viewContext)
+            val parentArea = view.parentArea
+
+            assertThat(parentArea)
+                    .isEqualTo(rectangleOf(0f, 640f, 0f, 480f))
+        }
+
+        @Test
+        fun givenParentItShouldReturnContentAreaOfParent() {
+            val expectedParentArea = rectangleOf(13f, 37f, 0.8f, 15f)
+            val parentView = spyk(TestView(player, viewContext)) {
+                every { contentArea } returns expectedParentArea
+            }
+            val view = TestView(player, viewContext)
+            parentView.addChild(view)
+            val parentArea = view.parentArea
+
+            assertThat(parentArea)
+                    .isEqualTo(expectedParentArea)
+        }
+
+    }
 
     @Test
     fun shouldSetPadding() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setPadding(10.pixels())
 
@@ -40,7 +76,7 @@ internal class ViewTest {
 
     @Test
     fun shouldSetHorizontalPadding() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setHorizontalPadding(10.pixels())
 
@@ -59,7 +95,7 @@ internal class ViewTest {
 
     @Test
     fun shouldSetVerticalPadding() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setVerticalPadding(10.pixels())
 
@@ -78,7 +114,7 @@ internal class ViewTest {
 
     @Test
     fun shouldSetMargin() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setMargin(10.pixels())
 
@@ -97,7 +133,7 @@ internal class ViewTest {
 
     @Test
     fun shouldSetHorizontalMargin() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setHorizontalMargin(10.pixels())
 
@@ -116,7 +152,7 @@ internal class ViewTest {
 
     @Test
     fun shouldSetVerticalMargin() {
-        val view = TestView(player, areaCalculator)
+        val view = TestView(player, viewContext)
 
         view.setVerticalMargin(10.pixels())
 
@@ -136,11 +172,11 @@ internal class ViewTest {
     @Nested
     inner class AddChildTests {
 
-        private val parentView = TestView(player, areaCalculator)
+        private val parentView = TestView(player, viewContext)
 
         @Test
         fun shouldAddChild() {
-            val childView = TestView(player, areaCalculator)
+            val childView = TestView(player, viewContext)
 
             parentView.addChild(childView)
 
@@ -150,8 +186,8 @@ internal class ViewTest {
 
         @Test
         fun shouldAddChildrenFromIterable() {
-            val childView1 = TestView(player, areaCalculator)
-            val childView2 = TestView(player, areaCalculator)
+            val childView1 = TestView(player, viewContext)
+            val childView2 = TestView(player, viewContext)
 
             parentView.addChildren(listOf(childView1, childView2))
 
@@ -161,8 +197,8 @@ internal class ViewTest {
 
         @Test
         fun shouldAddChildrenFromVarargs() {
-            val childView1 = TestView(player, areaCalculator)
-            val childView2 = TestView(player, areaCalculator)
+            val childView1 = TestView(player, viewContext)
+            val childView2 = TestView(player, viewContext)
 
             parentView.addChildren(childView1, childView2)
 
@@ -172,7 +208,7 @@ internal class ViewTest {
 
         @Test
         fun shouldSetViewAsParentOfChild() {
-            val childView = TestView(player, areaCalculator)
+            val childView = TestView(player, viewContext)
 
             parentView.addChild(childView)
 
@@ -182,8 +218,8 @@ internal class ViewTest {
 
         @Test
         fun givenChildViewAlreadyHasParentItShouldAddChild() {
-            val childView = TestView(player, areaCalculator)
-            TestView(player, areaCalculator).apply {
+            val childView = TestView(player, viewContext)
+            TestView(player, viewContext).apply {
                 addChild(childView)
             }
 
@@ -195,8 +231,8 @@ internal class ViewTest {
 
         @Test
         fun givenChildViewAlreadyHasParentItShouldRemoveChildFromOldParent() {
-            val childView = TestView(player, areaCalculator)
-            val otherParentView = TestView(player, areaCalculator).apply {
+            val childView = TestView(player, viewContext)
+            val otherParentView = TestView(player, viewContext).apply {
                 addChild(childView)
             }
 
@@ -208,8 +244,8 @@ internal class ViewTest {
 
         @Test
         fun givenChildViewAlreadyHasParentItShouldChangeParent() {
-            val childView = TestView(player, areaCalculator)
-            TestView(player, areaCalculator).apply {
+            val childView = TestView(player, viewContext)
+            TestView(player, viewContext).apply {
                 addChild(childView)
             }
 
@@ -226,9 +262,9 @@ internal class ViewTest {
 
         @Test
         fun shouldRemoveChild() {
-            val parentView = TestView(player, areaCalculator)
-            val childView1 = TestView(player, areaCalculator)
-            val childView2 = TestView(player, areaCalculator)
+            val parentView = TestView(player, viewContext)
+            val childView1 = TestView(player, viewContext)
+            val childView2 = TestView(player, viewContext)
             parentView.addChildren(childView1, childView2)
 
             parentView.removeChild(childView1)
@@ -239,8 +275,8 @@ internal class ViewTest {
 
         @Test
         fun shouldSetParentToNull() {
-            val parentView = TestView(player, areaCalculator)
-            val childView = TestView(player, areaCalculator)
+            val parentView = TestView(player, viewContext)
+            val childView = TestView(player, viewContext)
             parentView.addChildren(childView)
 
             parentView.removeChild(childView)
@@ -255,7 +291,7 @@ internal class ViewTest {
 
         @Test
         fun shouldInitiallyNotBeDestroyed() {
-            val view = TestView(player, areaCalculator)
+            val view = TestView(player, viewContext)
 
             val isDestroyed = view.isDestroyed
 
@@ -266,7 +302,7 @@ internal class ViewTest {
         @Test
         fun shouldCallOnDestroy() {
             val onDestroy = mockk<TestView.() -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, onDestroy = onDestroy)
+            val view = TestView(player, viewContext, onDestroy = onDestroy)
 
             view.destroy()
 
@@ -276,11 +312,11 @@ internal class ViewTest {
         @Test
         fun shouldDestroyChildren() {
             val onDestroy = mockk<TestView.() -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView2 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView3 = TestView(player, areaCalculator, onDestroy = onDestroy)
+            val childView1 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView2 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView3 = TestView(player, viewContext, onDestroy = onDestroy)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, onDestroy = onDestroy).apply {
+            val view = TestView(player, viewContext, onDestroy = onDestroy).apply {
                 addChildren(childView1, childView2)
             }
 
@@ -297,11 +333,11 @@ internal class ViewTest {
         @Test
         fun shouldClearChildren() {
             val onDestroy = mockk<TestView.() -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView2 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView3 = TestView(player, areaCalculator, onDestroy = onDestroy)
+            val childView1 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView2 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView3 = TestView(player, viewContext, onDestroy = onDestroy)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, onDestroy = onDestroy).apply {
+            val view = TestView(player, viewContext, onDestroy = onDestroy).apply {
                 addChildren(childView1, childView2)
             }
 
@@ -316,11 +352,11 @@ internal class ViewTest {
         @Test
         fun shouldCallOnDestroyForChildren() {
             val onDestroy = mockk<TestView.() -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView2 = TestView(player, areaCalculator, onDestroy = onDestroy)
-            val childView3 = TestView(player, areaCalculator, onDestroy = onDestroy)
+            val childView1 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView2 = TestView(player, viewContext, onDestroy = onDestroy)
+            val childView3 = TestView(player, viewContext, onDestroy = onDestroy)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, onDestroy = onDestroy).apply {
+            val view = TestView(player, viewContext, onDestroy = onDestroy).apply {
                 addChildren(childView1, childView2)
             }
 
@@ -337,7 +373,7 @@ internal class ViewTest {
         @Test
         fun shouldNotCallOnDestroyTwice() {
             val onDestroy = mockk<TestView.() -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, onDestroy = onDestroy)
+            val view = TestView(player, viewContext, onDestroy = onDestroy)
 
             view.destroy()
             view.destroy()
@@ -347,7 +383,7 @@ internal class ViewTest {
 
         @Test
         fun shouldBeDestroyed() {
-            val view = TestView(player, areaCalculator)
+            val view = TestView(player, viewContext)
 
             view.destroy()
 
@@ -362,7 +398,7 @@ internal class ViewTest {
 
         @Test
         fun shouldInitiallyBeInvalidated() {
-            val view = TestView(player, areaCalculator)
+            val view = TestView(player, viewContext)
 
             val isInvalidated = view.isInvalidated
 
@@ -372,13 +408,13 @@ internal class ViewTest {
 
         @Test
         fun shouldInvalidate() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, draw = draw)
-            val childView2 = TestView(player, areaCalculator, draw = draw)
-            val childView3 = TestView(player, areaCalculator, draw = draw)
+            every { viewLayoutCalculator.calculate(any()) } returns mockk()
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val childView1 = TestView(player, viewContext, draw = draw)
+            val childView2 = TestView(player, viewContext, draw = draw)
+            val childView3 = TestView(player, viewContext, draw = draw)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, draw = draw).apply {
+            val view = TestView(player, viewContext, draw = draw).apply {
                 addChildren(childView1, childView2)
             }
             view.draw()
@@ -400,56 +436,93 @@ internal class ViewTest {
     @Nested
     inner class DrawTests {
 
+        private val viewLayout = ViewLayout(
+                marginArea = rectangleOf(0f, 640f, 0f, 480f),
+                paddingArea = rectangleOf(10f, 630f, 20f, 460f),
+                contentArea = rectangleOf(30f, 590f, 40f, 420f)
+        )
+
+        @BeforeEach
+        fun setUp() {
+            every { viewLayoutCalculator.calculate(any()) } returns viewLayout
+        }
+
         @Test
         fun shouldDrawView() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
 
             view.draw()
 
-            verify { draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f)) }
+            verify { draw.invoke(view) }
+        }
+
+        @Test
+        fun shouldCalculateContentArea() {
+            val view = TestView(player, viewContext)
+
+            view.draw()
+
+            assertThat(view.contentArea)
+                    .isEqualTo(rectangleOf(30f, 590f, 40f, 420f))
+        }
+
+        @Test
+        fun shouldCalculatePaddingArea() {
+            val view = TestView(player, viewContext)
+
+            view.draw()
+
+            assertThat(view.paddingArea)
+                    .isEqualTo(rectangleOf(10f, 630f, 20f, 460f))
+        }
+
+        @Test
+        fun shouldCalculateMarginArea() {
+            val view = TestView(player, viewContext)
+
+            view.draw()
+
+            assertThat(view.marginArea)
+                    .isEqualTo(rectangleOf(0f, 640f, 0f, 480f))
         }
 
         @Test
         fun givenViewIsInvalidatedItShouldCalculateAreaAndThenDrawView() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.invalidate()
 
             view.draw()
 
             verifyOrder {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
             }
         }
 
         @Test
         fun givenViewIsHiddenItShouldNotDrawAndMeasure() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.hide()
 
             view.draw()
 
-            verify(exactly = 0) {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
+            verify {
+                viewLayoutCalculator wasNot Called
+                draw wasNot Called
             }
         }
 
         @Test
         fun shouldNoLongerBeInvalidatedAfterDrawing() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, draw = draw)
-            val childView2 = TestView(player, areaCalculator, draw = draw)
-            val childView3 = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val childView1 = TestView(player, viewContext, draw = draw)
+            val childView2 = TestView(player, viewContext, draw = draw)
+            val childView3 = TestView(player, viewContext, draw = draw)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, draw = draw).apply {
+            val view = TestView(player, viewContext, draw = draw).apply {
                 addChildren(childView1, childView2)
             }
             view.invalidate()
@@ -468,53 +541,52 @@ internal class ViewTest {
 
         @Test
         fun givenViewWasNotInvalidatedAfterFirstDrawingItShouldNotCalculateAreaAgain() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.invalidate()
 
             view.draw()
             view.draw()
 
-            verify(exactly = 1) { areaCalculator.calculate(any()) }
+            verify(exactly = 1) {
+                viewLayoutCalculator.calculate(any())
+            }
             verifyOrder {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
+                draw.invoke(view)
             }
         }
 
         @Test
         fun shouldDrawChildren() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, draw = draw)
-            val childView2 = TestView(player, areaCalculator, draw = draw)
-            val childView3 = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val childView1 = TestView(player, viewContext, draw = draw)
+            val childView2 = TestView(player, viewContext, draw = draw)
+            val childView3 = TestView(player, viewContext, draw = draw)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, draw = draw).apply {
+            val view = TestView(player, viewContext, draw = draw).apply {
                 addChildren(childView1, childView2)
             }
 
             view.draw()
 
             verifyOrder {
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-                draw.invoke(childView1, rectangleOf(0f, 640f, 0f, 480f))
-                draw.invoke(childView3, rectangleOf(0f, 640f, 0f, 480f))
-                draw.invoke(childView2, rectangleOf(0f, 640f, 0f, 480f))
+                draw.invoke(view)
+                draw.invoke(childView1)
+                draw.invoke(childView3)
+                draw.invoke(childView2)
             }
         }
 
         @Test
         fun givenViewIsInvalidatedItShouldCalculateAreaAndThenDrawChildren() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, draw = draw)
-            val childView2 = TestView(player, areaCalculator, draw = draw)
-            val childView3 = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val childView1 = TestView(player, viewContext, draw = draw)
+            val childView2 = TestView(player, viewContext, draw = draw)
+            val childView3 = TestView(player, viewContext, draw = draw)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, draw = draw).apply {
+            val view = TestView(player, viewContext, draw = draw).apply {
                 addChildren(childView1, childView2)
             }
             view.invalidate()
@@ -522,14 +594,14 @@ internal class ViewTest {
             view.draw()
 
             verifyOrder {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-                areaCalculator.calculate(childView1)
-                draw.invoke(childView1, rectangleOf(0f, 640f, 0f, 480f))
-                areaCalculator.calculate(childView3)
-                draw.invoke(childView3, rectangleOf(0f, 640f, 0f, 480f))
-                areaCalculator.calculate(childView2)
-                draw.invoke(childView2, rectangleOf(0f, 640f, 0f, 480f))
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
+                viewLayoutCalculator.calculate(childView1)
+                draw.invoke(childView1)
+                viewLayoutCalculator.calculate(childView3)
+                draw.invoke(childView3)
+                viewLayoutCalculator.calculate(childView2)
+                draw.invoke(childView2)
             }
         }
     }
@@ -539,7 +611,7 @@ internal class ViewTest {
 
         @Test
         fun shouldInitiallyNotBeHidden() {
-            val view = TestView(player, areaCalculator)
+            val view = TestView(player, viewContext)
 
             val isHidden = view.isHidden
 
@@ -549,12 +621,11 @@ internal class ViewTest {
 
         @Test
         fun shouldBeHidden() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val childView1 = TestView(player, areaCalculator)
-            val childView2 = TestView(player, areaCalculator)
-            val childView3 = TestView(player, areaCalculator)
+            val childView1 = TestView(player, viewContext)
+            val childView2 = TestView(player, viewContext)
+            val childView3 = TestView(player, viewContext)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator).apply {
+            val view = TestView(player, viewContext).apply {
                 addChildren(childView1, childView2)
             }
 
@@ -572,13 +643,12 @@ internal class ViewTest {
 
         @Test
         fun shouldCallOnHide() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
             val onHide = mockk<TestView.() -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, onHide = onHide)
-            val childView2 = TestView(player, areaCalculator, onHide = onHide)
-            val childView3 = TestView(player, areaCalculator, onHide = onHide)
+            val childView1 = TestView(player, viewContext, onHide = onHide)
+            val childView2 = TestView(player, viewContext, onHide = onHide)
+            val childView3 = TestView(player, viewContext, onHide = onHide)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, onHide = onHide).apply {
+            val view = TestView(player, viewContext, onHide = onHide).apply {
                 addChildren(childView1, childView2)
             }
 
@@ -595,7 +665,7 @@ internal class ViewTest {
         @Test
         fun givenViewIsAlreadyHiddenItShouldNotCallOnHide() {
             val onHide = mockk<TestView.() -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, onHide = onHide)
+            val view = TestView(player, viewContext, onHide = onHide)
             view.hide()
 
             view.hide()
@@ -608,15 +678,25 @@ internal class ViewTest {
     @Nested
     inner class ShowTests {
 
+        private val viewLayout = ViewLayout(
+                marginArea = rectangleOf(0f, 640f, 0f, 480f),
+                paddingArea = rectangleOf(10f, 630f, 20f, 460f),
+                contentArea = rectangleOf(30f, 590f, 40f, 420f)
+        )
+
+        @BeforeEach
+        fun setUp() {
+            every { viewLayoutCalculator.calculate(any()) } returns viewLayout
+        }
+
         @Test
         fun shouldCallOnShow() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
             val onShow = mockk<TestView.() -> Unit>(relaxed = true)
-            val childView1 = TestView(player, areaCalculator, onShow = onShow)
-            val childView2 = TestView(player, areaCalculator, onShow = onShow)
-            val childView3 = TestView(player, areaCalculator, onShow = onShow)
+            val childView1 = TestView(player, viewContext, onShow = onShow)
+            val childView2 = TestView(player, viewContext, onShow = onShow)
+            val childView3 = TestView(player, viewContext, onShow = onShow)
             childView1.addChild(childView3)
-            val view = TestView(player, areaCalculator, onShow = onShow).apply {
+            val view = TestView(player, viewContext, onShow = onShow).apply {
                 addChildren(childView1, childView2)
             }
             view.hide()
@@ -633,9 +713,8 @@ internal class ViewTest {
 
         @Test
         fun givenViewIsAlreadyShownItShouldNotCallOnShow() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
             val onShow = mockk<TestView.() -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, onShow = onShow)
+            val view = TestView(player, viewContext, onShow = onShow)
             view.hide()
             view.show()
 
@@ -646,39 +725,37 @@ internal class ViewTest {
 
         @Test
         fun shouldInvalidateAndDrawByDefault() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.draw()
             view.hide()
 
             view.show()
 
             verifyOrder {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
             }
         }
 
         @Test
         fun shouldNotInvalidate() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.draw()
             view.hide()
 
             view.show(invalidate = false)
 
-            verifyOrder {
-                areaCalculator.calculate(view)
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
-            }
             verify(exactly = 1) {
-                areaCalculator.calculate(any())
+                viewLayoutCalculator.calculate(any())
+            }
+            verifyOrder {
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
+                draw.invoke(view)
             }
             assertThat(view.isInvalidated)
                     .isFalse()
@@ -686,17 +763,16 @@ internal class ViewTest {
 
         @Test
         fun shouldNotDraw() {
-            every { areaCalculator.calculate(any()) } returns mutableRectangleOf(0f, 640f, 0f, 480f)
-            val draw = mockk<TestView.(Rectangle) -> Unit>(relaxed = true)
-            val view = TestView(player, areaCalculator, draw = draw)
+            val draw = mockk<TestView.() -> Unit>(relaxed = true)
+            val view = TestView(player, viewContext, draw = draw)
             view.draw()
             view.hide()
 
             view.show(draw = false)
 
             verify(exactly = 1) {
-                areaCalculator.calculate(any())
-                draw.invoke(view, rectangleOf(0f, 640f, 0f, 480f))
+                viewLayoutCalculator.calculate(view)
+                draw.invoke(view)
             }
         }
 
@@ -704,16 +780,15 @@ internal class ViewTest {
 
     private class TestView(
             player: Player,
-            viewAreaCalculator: ViewAreaCalculator,
-            private val draw: TestView.(Rectangle) -> Unit = {},
+            viewContext: ViewContext,
+            private val draw: TestView.() -> Unit = {},
             private val onShow: TestView.() -> Unit = {},
             private val onHide: TestView.() -> Unit = {},
-            private val onDestroy: TestView.() -> Unit = {},
-            private val onMeasure: TestView.(MutableRectangle) -> Unit = {}
-    ) : View(player, viewAreaCalculator) {
+            private val onDestroy: TestView.() -> Unit = {}
+    ) : View(player, viewContext) {
 
         override fun onDraw() {
-            draw.invoke(this, area)
+            draw.invoke(this)
         }
 
         override fun onShow() {
@@ -726,10 +801,6 @@ internal class ViewTest {
 
         override fun onDestroy() {
             onDestroy.invoke(this)
-        }
-
-        override fun onMeasure(calculatedArea: MutableRectangle) {
-            onMeasure.invoke(this, calculatedArea)
         }
 
     }

@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListen
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import kotlin.reflect.full.cast
 
-abstract class ClickableView(player: Player, areaCalculator: ViewAreaCalculator) : View(player, areaCalculator) {
+abstract class ClickableView(player: Player, viewContext: ViewContext) : View(player, viewContext) {
 
     private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
 

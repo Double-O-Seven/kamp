@@ -131,7 +131,7 @@ internal class ClickableViewTest {
         @Test
         fun shouldCallOnDisable() {
             val onDisable = mockk<TestClickableView.() -> Unit>(relaxed = true)
-            val view = TestClickableView(mockk(), mockk(), onDisable = onDisable)
+            val view = TestClickableView(mockk(), mockk(), mockk(), onDisable = onDisable)
 
             view.disable()
 
@@ -141,7 +141,7 @@ internal class ClickableViewTest {
         @Test
         fun givenViewIsDisabledItShouldNotCallOnDisableAgain() {
             val onDisable = mockk<TestClickableView.() -> Unit>(relaxed = true)
-            val view = TestClickableView(mockk(), mockk(), onDisable = onDisable)
+            val view = TestClickableView(mockk(), mockk(), mockk(), onDisable = onDisable)
             view.disable()
 
             view.disable()
@@ -153,12 +153,10 @@ internal class ClickableViewTest {
 
     private class TestClickableView(
             player: Player,
-            viewAreaCalculator: ViewAreaCalculator,
+            viewContext: ViewContext,
             private val onEnable: TestClickableView.() -> Unit = {},
             private val onDisable: TestClickableView.() -> Unit = {}
-    ) : ClickableView(player, viewAreaCalculator) {
-
-        override fun onDraw() {}
+    ) : ClickableView(player, viewContext) {
 
         override fun onEnable() {
             onEnable.invoke(this)
