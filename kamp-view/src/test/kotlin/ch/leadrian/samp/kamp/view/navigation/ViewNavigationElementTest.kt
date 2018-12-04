@@ -25,10 +25,9 @@ internal class ViewNavigationElementTest {
             }
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
-                    isManualNavigationAllowed = false,
+                    allowManualNavigation = false,
                     useMouse = false,
-                    destroyOnPop = true,
-                    hoverColor = Colors.RED
+                    destroyOnPop = true
             )
 
             viewNavigationElement.navigateTo()
@@ -48,13 +47,13 @@ internal class ViewNavigationElementTest {
                 every { show(any(), any()) } just Runs
                 every { draw() } just Runs
                 every { this@mockk.player } returns player
+                every { hoverColor } returns Colors.RED
             }
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
-                    isManualNavigationAllowed = false,
+                    allowManualNavigation = false,
                     useMouse = true,
-                    destroyOnPop = true,
-                    hoverColor = Colors.RED
+                    destroyOnPop = true
             )
 
             viewNavigationElement.navigateTo()
@@ -73,10 +72,9 @@ internal class ViewNavigationElementTest {
             }
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
-                    isManualNavigationAllowed = false,
+                    allowManualNavigation = false,
                     useMouse = false,
-                    destroyOnPop = true,
-                    hoverColor = Colors.RED
+                    destroyOnPop = true
             )
 
             viewNavigationElement.onPop()
@@ -91,10 +89,9 @@ internal class ViewNavigationElementTest {
             }
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
-                    isManualNavigationAllowed = false,
+                    allowManualNavigation = false,
                     useMouse = false,
-                    destroyOnPop = false,
-                    hoverColor = Colors.RED
+                    destroyOnPop = false
             )
 
             viewNavigationElement.onPop()

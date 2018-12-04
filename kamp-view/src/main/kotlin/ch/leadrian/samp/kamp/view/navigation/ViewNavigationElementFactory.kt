@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.view.navigation
 
-import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.view.View
 import javax.inject.Inject
 
@@ -12,13 +11,11 @@ constructor() {
             view: View,
             allowManualNavigation: Boolean,
             useMouse: Boolean,
-            destroyOnPop: Boolean,
-            hoverColor: Color
+            destroyOnPop: Boolean
     ): ViewNavigationElement = ViewNavigationElement(
             view = view,
-            isManualNavigationAllowed = allowManualNavigation,
+            allowManualNavigation = allowManualNavigation,
             useMouse = useMouse,
-            hoverColor = hoverColor,
             destroyOnPop = destroyOnPop
     )
 

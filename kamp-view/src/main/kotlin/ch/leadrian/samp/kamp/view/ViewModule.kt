@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.view.factory.DefaultViewFactory
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationElementFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationFactory
+import ch.leadrian.samp.kamp.view.navigation.ViewNavigator
 
 internal class ViewModule : KampModule() {
 
@@ -15,6 +16,7 @@ internal class ViewModule : KampModule() {
         bind(AbsoluteViewDimensionsCalculator::class.java)
         bind(ViewFactory::class.java).to(DefaultViewFactory::class.java)
         bind(ViewNavigationElementFactory::class.java)
+        bind(ViewNavigator::class.java).asEagerSingleton()
         newPlayerExtensionFactorySetBinder().apply {
             addBinding().to(ViewNavigationFactory::class.java)
         }

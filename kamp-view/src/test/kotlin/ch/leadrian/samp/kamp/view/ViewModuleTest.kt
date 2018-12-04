@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
@@ -11,6 +12,7 @@ import ch.leadrian.samp.kamp.view.factory.DefaultViewFactory
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationElementFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationFactory
+import ch.leadrian.samp.kamp.view.navigation.ViewNavigator
 import com.google.inject.Guice
 import com.google.inject.Injector
 import io.mockk.mockk
@@ -109,6 +111,16 @@ internal class ViewModuleTest {
                                 .isInstanceOf(ViewNavigationFactory::class.java)
                     }
         }
+
+        @Test
+        fun shouldInjectViewNavigator() {
+            val viewNavigator = injector.getInstance<ViewNavigator>()
+
+            assertThat(viewNavigator)
+                    .isNotNull
+                    .isInstanceOf(ViewNavigator::class.java)
+                    .isSameAs(injector.getInstance<ViewNavigator>())
+        }
     }
 
     private class FooService
@@ -121,6 +133,7 @@ internal class ViewModuleTest {
             bind(TextProvider::class.java).toInstance(mockk())
             bind(TextFormatter::class.java).toInstance(mockk())
             bind(PlayerTextDrawService::class.java).toInstance(mockk())
+            bind(CallbackListenerManager::class.java).toInstance(mockk())
         }
 
     }

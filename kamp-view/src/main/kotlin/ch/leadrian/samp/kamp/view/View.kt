@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.view
 
+import ch.leadrian.samp.kamp.core.api.data.Color
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
@@ -67,6 +69,8 @@ open class View(
     var marginTop: ViewDimension = 0.pixels()
 
     var marginBottom: ViewDimension = 0.pixels()
+
+    var hoverColor: Color = Colors.CYAN
 
     fun setPadding(value: ViewDimension) {
         paddingLeft = value

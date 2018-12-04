@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.view.navigation
 
-import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.view.View
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -23,17 +22,15 @@ internal class ViewNavigationElementFactoryTest {
                 view = view,
                 allowManualNavigation = allowManualNavigation,
                 useMouse = useMouse,
-                destroyOnPop = destroyOnPop,
-                hoverColor = Colors.RED
+                destroyOnPop = destroyOnPop
         )
 
         assertThat(element)
                 .isEqualTo(ViewNavigationElement(
                         view = view,
-                        isManualNavigationAllowed = allowManualNavigation,
+                        allowManualNavigation = allowManualNavigation,
                         useMouse = useMouse,
-                        destroyOnPop = destroyOnPop,
-                        hoverColor = Colors.RED
+                        destroyOnPop = destroyOnPop
                 ))
     }
 
