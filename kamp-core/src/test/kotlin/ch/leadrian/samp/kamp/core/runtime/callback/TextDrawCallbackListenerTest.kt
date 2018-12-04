@@ -59,6 +59,16 @@ internal class TextDrawCallbackListenerTest {
             assertThat(result)
                     .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
         }
+
+        @Test
+        fun givenNullReferenceItShouldReturnNotFound() {
+            every { textDraw.onClick(player) } returns OnPlayerClickTextDrawListener.Result.NotFound
+
+            val result = textDrawCallbackListener.onPlayerClickTextDraw(player, null)
+
+            assertThat(result)
+                    .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
+        }
     }
 
 }

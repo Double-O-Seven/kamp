@@ -3803,20 +3803,14 @@ internal class CallbackProcessorTest {
         }
 
         @Test
-        fun givenInvalidPlayerTextDrawIdItShouldThrowAndCatchException() {
+        fun givenInvalidPlayerTextDrawIdItShouldCallOnPlayerClickTextDraw() {
             val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
             callbackListenerManager.register(onPlayerClickTextDrawListener)
 
-            val result = callbackProcessor.onPlayerClickTextDraw(playerId, 500)
+            callbackProcessor.onPlayerClickTextDraw(playerId, 500)
 
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickTextDrawListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid text draw ID 500")
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify { onPlayerClickTextDrawListener.onPlayerClickTextDraw(player, null) }
         }
 
         @Test

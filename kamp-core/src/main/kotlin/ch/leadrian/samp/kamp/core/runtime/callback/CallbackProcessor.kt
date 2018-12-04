@@ -191,8 +191,7 @@ constructor(
             actorRegistry[this] ?: throw IllegalArgumentException("Invalid actor ID $this")
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toTextDraw(): TextDraw =
-            textDrawRegistry[this] ?: throw IllegalArgumentException("Invalid text draw ID $this")
+    private inline fun Int.toTextDrawOrNull(): TextDraw? = textDrawRegistry[this]
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.toPlayerTextDraw(player: Player): PlayerTextDraw =
@@ -594,7 +593,7 @@ constructor(
 
     override fun onPlayerClickTextDraw(playerid: Int, clickedid: Int): Boolean {
         val result = tryAndCatch {
-            onPlayerClickTextDrawHandler.onPlayerClickTextDraw(playerid.toPlayer(), clickedid.toTextDraw())
+            onPlayerClickTextDrawHandler.onPlayerClickTextDraw(playerid.toPlayer(), clickedid.toTextDrawOrNull())
         } ?: OnPlayerClickTextDrawListener.Result.NotFound
         return result.value
     }

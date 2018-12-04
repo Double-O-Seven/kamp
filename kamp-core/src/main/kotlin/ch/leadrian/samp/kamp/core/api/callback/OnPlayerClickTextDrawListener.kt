@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.core.api.entity.TextDraw
 
 interface OnPlayerClickTextDrawListener {
 
-    fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): Result
+    fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): Result
 
     sealed class Result(val value: Boolean) {
 

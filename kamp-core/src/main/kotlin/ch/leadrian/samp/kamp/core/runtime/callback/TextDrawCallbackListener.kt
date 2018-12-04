@@ -20,6 +20,6 @@ constructor(
         callbackListenerManager.register(this)
     }
 
-    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): OnPlayerClickTextDrawListener.Result =
-            textDraw.onClick(player)
+    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): OnPlayerClickTextDrawListener.Result =
+            textDraw?.onClick(player) ?: OnPlayerClickTextDrawListener.Result.NotFound
 }

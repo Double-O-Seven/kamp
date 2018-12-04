@@ -13,7 +13,7 @@ internal class OnPlayerClickTextDrawHandler
 @Inject
 constructor() : CallbackListenerRegistry<OnPlayerClickTextDrawListener>(OnPlayerClickTextDrawListener::class), OnPlayerClickTextDrawListener {
 
-    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): Result {
+    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): Result {
         return listeners.map {
             it.onPlayerClickTextDraw(player, textDraw)
         }.firstOrNull { it == Result.Processed } ?: Result.NotFound
