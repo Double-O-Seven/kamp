@@ -21,6 +21,9 @@ open class BackgroundView(
     private var textDraw: PlayerTextDraw? = null
 
     var color: Color = colorOf(0x00000080)
+        set(value) {
+            field = value.toColor()
+        }
 
     override fun onDraw() {
         if (isInvalidated) {
@@ -37,37 +40,37 @@ open class BackgroundView(
                 player,
                 TextDrawCodes.EMPTY_TEXT,
                 vector2DOf(x = area.minX, y = screenYCoordinateToTextDrawBoxY(area.minY))
-        ).apply {
-            alignment = TextDrawAlignment.LEFT
-            textSize = vector2DOf(
+        ).also {
+            it.alignment = TextDrawAlignment.LEFT
+            it.textSize = vector2DOf(
                     x = area.minX + area.width - TEXT_DRAW_OFFSET_LEFT / 2f,
                     y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
             )
-            letterSize = vector2DOf(x = 0f, y = screenHeightToTextDrawBoxHeight(area.height))
-            useBox = true
-            boxColor = this@BackgroundView.color
-            isSelectable = this@BackgroundView.isEnabled
-            onClick { click() }
-            show()
+            it.letterSize = vector2DOf(x = 0f, y = screenHeightToTextDrawBoxHeight(area.height))
+            it.useBox = true
+            it.boxColor = color
+            it.isSelectable = isEnabled
+            it.onClick { click() }
+            it.show()
         }
     }
 
     private fun updateTextDraw() {
-        textDraw?.apply {
+        textDraw?.also {
             var show = false
 
-            if (boxColor != this@BackgroundView.color) {
-                boxColor = this@BackgroundView.color
+            if (it.boxColor != color) {
+                it.boxColor = color
                 show = true
             }
 
-            if (isSelectable != this@BackgroundView.isEnabled) {
-                isSelectable = this@BackgroundView.isEnabled
+            if (it.isSelectable != isEnabled) {
+                it.isSelectable = isEnabled
                 show = true
             }
 
             if (show) {
-                show()
+                it.show()
             }
         }
     }

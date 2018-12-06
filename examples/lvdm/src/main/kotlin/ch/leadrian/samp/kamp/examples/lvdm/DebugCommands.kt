@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
@@ -111,6 +112,28 @@ constructor(
             messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
         }
         messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
+    }
+
+    @Command
+    fun modelview(player: Player) {
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    val bullet = modelView {
+                        modelId = 541
+                        vehicleColors = vehicleColorsOf(3, 6)
+                        height = 50.percent()
+                    }
+                    modelView {
+                        topToBottomOf(bullet)
+                        modelId = 128
+                        color = Colors.RED
+                    }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
     }
 
     @Command

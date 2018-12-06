@@ -57,8 +57,14 @@ open class TextView(
     }
 
     var color: Color = Colors.WHITE
+        set(value) {
+            field = value.toColor()
+        }
 
     var backgroundColor: Color = Colors.BLACK
+        set(value) {
+            field = value.toColor()
+        }
 
     private var textSupplier: (Locale) -> String = { "_" }
 
@@ -122,36 +128,37 @@ open class TextView(
     }
 
     private fun updateTextDraw() {
-        textDraw?.apply {
+        textDraw?.also {
             var show = false
 
-            if (color != this@TextView.color) {
-                color = this@TextView.color
+            if (it.color != color) {
+                it.color = color
                 show = true
             }
 
-            if (backgroundColor != this@TextView.backgroundColor) {
-                backgroundColor = this@TextView.backgroundColor
+            if (it.backgroundColor != backgroundColor) {
+                it.backgroundColor = backgroundColor
                 show = true
             }
 
-            if (isSelectable != this@TextView.isEnabled) {
-                isSelectable = this@TextView.isEnabled
+            if (it.isSelectable != isEnabled) {
+                it.isSelectable = isEnabled
                 show = true
 
-                if (isSelectable && alignment == TextDrawAlignment.RIGHT) {
+                if (it.isSelectable && it.alignment == TextDrawAlignment.RIGHT) {
                     log.warn("Right aligned text draws do not wrap text and do not allow text draw selection")
                 }
             }
 
             // Text is supplied, don't get it twice
-            this@TextView.text.takeIf { it != text }?.let {
-                text = it
+            val text = this.text
+            if (it.text != text) {
                 // No need to show again, text onDraw will update automatically
+                it.text = text
             }
 
             if (show) {
-                show()
+                it.show()
             }
         }
     }

@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.BackgroundView
+import ch.leadrian.samp.kamp.view.ModelView
 import ch.leadrian.samp.kamp.view.TextView
 import ch.leadrian.samp.kamp.view.View
 import ch.leadrian.samp.kamp.view.ViewContext
@@ -53,6 +54,18 @@ interface ViewFactory {
         val backgroundView = backgroundView(player, buildingBlock)
         addChild(backgroundView)
         return backgroundView
+    }
+
+    fun modelView(player: Player, buildingBlock: ModelView.() -> Unit): ModelView {
+        val modelView = ModelView(player, viewContext, playerTextDrawService)
+        buildingBlock(modelView)
+        return modelView
+    }
+
+    fun View.modelView(buildingBlock: ModelView.() -> Unit): ModelView {
+        val modelView = modelView(player, buildingBlock)
+        addChild(modelView)
+        return modelView
     }
 
 }
