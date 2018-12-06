@@ -115,6 +115,34 @@ constructor(
     }
 
     @Command
+    fun spriteview(player: Player) {
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    view {
+                        left = 50.percent()
+                        width = 50.percent()
+                        spriteView {
+                            setMargin(8.pixels())
+                            spriteName = "loadsc12:loadsc12"
+                        }
+                    }
+                    view {
+                        right = 50.percent()
+                        width = 50.percent()
+                        spriteView {
+                            setMargin(8.pixels())
+                            spriteName = "loadsc13:loadsc13"
+                        }
+                    }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
     fun modelview(player: Player) {
         with(viewFactory) {
             val view = view(player) {

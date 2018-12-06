@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.BackgroundView
 import ch.leadrian.samp.kamp.view.ModelView
+import ch.leadrian.samp.kamp.view.SpriteView
 import ch.leadrian.samp.kamp.view.TextView
 import ch.leadrian.samp.kamp.view.View
 import ch.leadrian.samp.kamp.view.ViewContext
@@ -66,6 +67,18 @@ interface ViewFactory {
         val modelView = modelView(player, buildingBlock)
         addChild(modelView)
         return modelView
+    }
+
+    fun spriteView(player: Player, buildingBlock: SpriteView.() -> Unit): SpriteView {
+        val spriteView = SpriteView(player, viewContext, playerTextDrawService)
+        buildingBlock(spriteView)
+        return spriteView
+    }
+
+    fun View.spriteView(buildingBlock: SpriteView.() -> Unit): SpriteView {
+        val spriteView = spriteView(player, buildingBlock)
+        addChild(spriteView)
+        return spriteView
     }
 
 }
