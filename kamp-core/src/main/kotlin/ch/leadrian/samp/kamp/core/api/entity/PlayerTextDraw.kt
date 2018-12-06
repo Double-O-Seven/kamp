@@ -10,7 +10,6 @@ import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerTextDrawId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
@@ -26,7 +25,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val textProvider: TextProvider,
         private val textFormatter: TextFormatter
-) : Entity<PlayerTextDrawId>, HasPlayer, AbstractDestroyable() {
+) : Entity<PlayerTextDrawId>, HasPlayer, AbstractDestroyable(), TextDrawBase {
 
     private val onClickHandlers: MutableList<PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result> = mutableListOf()
 
@@ -50,9 +49,9 @@ internal constructor(
         id = PlayerTextDrawId.valueOf(playerTextDrawId)
     }
 
-    val position: Vector2D = position.toVector2D()
+    override val position: Vector2D = position.toVector2D()
 
-    var letterSize: Vector2D = vector2DOf(1f, 1f)
+    override var letterSize: Vector2D = vector2DOf(1f, 1f)
         set(value) {
             nativeFunctionExecutor.playerTextDrawLetterSize(
                     playerid = player.id.value,
@@ -63,7 +62,7 @@ internal constructor(
             field = value.toVector2D()
         }
 
-    var textSize: Vector2D = vector2DOf(0f, 0f)
+    override var textSize: Vector2D = vector2DOf(0f, 0f)
         set(value) {
             nativeFunctionExecutor.playerTextDrawTextSize(
                     playerid = player.id.value,
@@ -74,7 +73,7 @@ internal constructor(
             field = value.toVector2D()
         }
 
-    var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
+    override var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
         set(value) {
             nativeFunctionExecutor.playerTextDrawAlignment(
                     playerid = player.id.value,
@@ -84,7 +83,7 @@ internal constructor(
             field = value
         }
 
-    var color: Color = Colors.WHITE
+    override var color: Color = Colors.WHITE
         set(value) {
             nativeFunctionExecutor.playerTextDrawColor(
                     playerid = player.id.value,
@@ -94,7 +93,7 @@ internal constructor(
             field = value.toColor()
         }
 
-    var useBox: Boolean = false
+    override var useBox: Boolean = false
         set(value) {
             nativeFunctionExecutor.playerTextDrawUseBox(
                     playerid = player.id.value,
@@ -104,7 +103,7 @@ internal constructor(
             field = value
         }
 
-    var boxColor: Color = Colors.TRANSPARENT
+    override var boxColor: Color = Colors.TRANSPARENT
         set(value) {
             nativeFunctionExecutor.playerTextDrawBoxColor(
                     playerid = player.id.value,
@@ -114,7 +113,7 @@ internal constructor(
             field = value.toColor()
         }
 
-    var shadowSize: Int = 1
+    override var shadowSize: Int = 1
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetShadow(
                     playerid = player.id.value,
@@ -124,7 +123,7 @@ internal constructor(
             field = value
         }
 
-    var outlineSize: Int = 0
+    override var outlineSize: Int = 0
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetOutline(
                     playerid = player.id.value,
@@ -134,7 +133,7 @@ internal constructor(
             field = value
         }
 
-    var backgroundColor: Color = Colors.BLACK
+    override var backgroundColor: Color = Colors.BLACK
         set(value) {
             nativeFunctionExecutor.playerTextDrawBackgroundColor(
                     playerid = player.id.value,
@@ -144,7 +143,7 @@ internal constructor(
             field = value.toColor()
         }
 
-    var font: TextDrawFont = TextDrawFont.FONT2
+    override var font: TextDrawFont = TextDrawFont.FONT2
         set(value) {
             nativeFunctionExecutor.playerTextDrawFont(
                     playerid = player.id.value,
@@ -154,7 +153,7 @@ internal constructor(
             field = value
         }
 
-    var isProportional: Boolean = false
+    override var isProportional: Boolean = false
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetProportional(
                     playerid = player.id.value,
@@ -164,7 +163,7 @@ internal constructor(
             field = value
         }
 
-    var isSelectable: Boolean = false
+    override var isSelectable: Boolean = false
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetSelectable(
                     playerid = player.id.value,
@@ -182,7 +181,7 @@ internal constructor(
         nativeFunctionExecutor.playerTextDrawHide(playerid = player.id.value, text = id.value)
     }
 
-    var text: String = text
+    override var text: String = text
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetString(
                     playerid = player.id.value,
@@ -192,20 +191,20 @@ internal constructor(
             field = value
         }
 
-    fun setText(text: String, vararg args: Any) {
+    override fun setText(text: String, vararg args: Any) {
         this.text = textFormatter.format(player.locale, text, *args)
     }
 
-    fun setText(textKey: TextKey) {
+    override fun setText(textKey: TextKey) {
         text = textProvider.getText(player.locale, textKey)
     }
 
-    fun setText(textKey: TextKey, vararg args: Any) {
+    override fun setText(textKey: TextKey, vararg args: Any) {
         val unformattedText = textProvider.getText(player.locale, textKey)
         text = textFormatter.format(player.locale, unformattedText, *args)
     }
 
-    var previewModel: Int? = null
+    override var previewModel: Int? = null
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetPreviewModel(
                     playerid = player.id.value,
@@ -215,15 +214,15 @@ internal constructor(
             field = value
         }
 
-    var previewModelRotation: Vector3D = vector3DOf(0f, 0f, 0f)
+    override var previewModelRotation: Vector3D? = null
         private set(value) {
-            field = value.toVector3D()
+            field = value?.toVector3D()
         }
 
-    var previewModelZoom: Float = 1f
+    override var previewModelZoom: Float? = null
         private set
 
-    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float = 1f) {
+    override fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
         nativeFunctionExecutor.playerTextDrawSetPreviewRot(
                 playerid = player.id.value,
                 text = id.value,
@@ -236,7 +235,7 @@ internal constructor(
         previewModelZoom = zoom
     }
 
-    var previewModelVehicleColors: VehicleColors? = null
+    override var previewModelVehicleColors: VehicleColors? = null
         set(value) {
             if (value == null) {
                 return

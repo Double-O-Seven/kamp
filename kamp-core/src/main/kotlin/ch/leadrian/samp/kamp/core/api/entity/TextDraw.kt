@@ -10,7 +10,6 @@ import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.TextDrawId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
@@ -27,7 +26,7 @@ internal constructor(
         private val textProvider: TextProvider,
         private val textFormatter: TextFormatter,
         var locale: Locale
-) : Entity<TextDrawId>, AbstractDestroyable() {
+) : Entity<TextDrawId>, AbstractDestroyable(), TextDrawBase {
 
     private val onClickHandlers: MutableList<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> = mutableListOf()
 
@@ -50,9 +49,9 @@ internal constructor(
         id = TextDrawId.valueOf(textDrawId)
     }
 
-    val position: Vector2D = position.toVector2D()
+    override val position: Vector2D = position.toVector2D()
 
-    var letterSize: Vector2D = vector2DOf(1f, 1f)
+    override var letterSize: Vector2D = vector2DOf(1f, 1f)
         set(value) {
             nativeFunctionExecutor.textDrawLetterSize(
                     text = id.value,
@@ -62,7 +61,7 @@ internal constructor(
             field = value.toVector2D()
         }
 
-    var textSize: Vector2D = vector2DOf(0f, 0f)
+    override var textSize: Vector2D = vector2DOf(0f, 0f)
         set(value) {
             nativeFunctionExecutor.textDrawTextSize(
                     text = id.value,
@@ -72,7 +71,7 @@ internal constructor(
             field = value.toVector2D()
         }
 
-    var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
+    override var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
         set(value) {
             nativeFunctionExecutor.textDrawAlignment(
                     text = id.value,
@@ -81,7 +80,7 @@ internal constructor(
             field = value
         }
 
-    var color: Color = Colors.WHITE
+    override var color: Color = Colors.WHITE
         set(value) {
             nativeFunctionExecutor.textDrawColor(
                     text = id.value,
@@ -90,7 +89,7 @@ internal constructor(
             field = value.toColor()
         }
 
-    var useBox: Boolean = false
+    override var useBox: Boolean = false
         set(value) {
             nativeFunctionExecutor.textDrawUseBox(
                     text = id.value,
@@ -99,7 +98,7 @@ internal constructor(
             field = value
         }
 
-    var boxColor: Color = Colors.TRANSPARENT
+    override var boxColor: Color = Colors.TRANSPARENT
         set(value) {
             nativeFunctionExecutor.textDrawBoxColor(
                     text = id.value,
@@ -108,7 +107,7 @@ internal constructor(
             field = value
         }
 
-    var shadowSize: Int = 1
+    override var shadowSize: Int = 1
         set(value) {
             nativeFunctionExecutor.textDrawSetShadow(
                     text = id.value,
@@ -117,31 +116,31 @@ internal constructor(
             field = value
         }
 
-    var outlineSize: Int = 0
+    override var outlineSize: Int = 0
         set(value) {
             nativeFunctionExecutor.textDrawSetOutline(text = id.value, size = value)
             field = value
         }
 
-    var backgroundColor: Color = Colors.BLACK
+    override var backgroundColor: Color = Colors.BLACK
         set(value) {
             nativeFunctionExecutor.textDrawBackgroundColor(text = id.value, color = value.value)
             field = value
         }
 
-    var font: TextDrawFont = TextDrawFont.FONT2
+    override var font: TextDrawFont = TextDrawFont.FONT2
         set(value) {
             nativeFunctionExecutor.textDrawFont(text = id.value, font = value.value)
             field = value
         }
 
-    var isProportional: Boolean = false
+    override var isProportional: Boolean = false
         set(value) {
             nativeFunctionExecutor.textDrawSetProportional(text = id.value, set = value)
             field = value
         }
 
-    var isSelectable: Boolean = false
+    override var isSelectable: Boolean = false
         set(value) {
             nativeFunctionExecutor.textDrawSetSelectable(text = id.value, set = value)
             field = value
@@ -163,40 +162,40 @@ internal constructor(
         nativeFunctionExecutor.textDrawHideForAll(id.value)
     }
 
-    var text: String = text
+    override var text: String = text
         set(value) {
             nativeFunctionExecutor.textDrawSetString(text = id.value, string = value)
             field = value
         }
 
-    fun setText(text: String, vararg args: Any) {
+    override fun setText(text: String, vararg args: Any) {
         this.text = textFormatter.format(locale, text, *args)
     }
 
-    fun setText(textKey: TextKey) {
+    override fun setText(textKey: TextKey) {
         text = textProvider.getText(locale, textKey)
     }
 
-    fun setText(textKey: TextKey, vararg args: Any) {
+    override fun setText(textKey: TextKey, vararg args: Any) {
         val unformattedText = textProvider.getText(locale, textKey)
         text = textFormatter.format(locale, unformattedText, *args)
     }
 
-    var previewModel: Int? = null
+    override var previewModel: Int? = null
         set(value) {
             nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
             field = value
         }
 
-    var previewModelRotation: Vector3D = vector3DOf(0f, 0f, 0f)
+    override var previewModelRotation: Vector3D? = null
         private set(value) {
-            field = value.toVector3D()
+            field = value?.toVector3D()
         }
 
-    var previewModelZoom: Float = 1f
+    override var previewModelZoom: Float? = null
         private set
 
-    fun setPreviewModelRotation(rotation: Vector3D, zoom: Float = 1.0f) {
+    override fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
         nativeFunctionExecutor.textDrawSetPreviewRot(
                 text = id.value,
                 fRotX = rotation.x,
@@ -208,7 +207,7 @@ internal constructor(
         previewModelZoom = zoom
     }
 
-    var previewModelVehicleColors: VehicleColors? = null
+    override var previewModelVehicleColors: VehicleColors? = null
         set(value) {
             if (value == null) {
                 return
