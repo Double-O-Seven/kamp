@@ -181,7 +181,7 @@ internal constructor(
         text = textFormatter.format(locale, unformattedText, *args)
     }
 
-    override var previewModel: Int? = null
+    override var previewModelId: Int? = null
         set(value) {
             nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
             field = value

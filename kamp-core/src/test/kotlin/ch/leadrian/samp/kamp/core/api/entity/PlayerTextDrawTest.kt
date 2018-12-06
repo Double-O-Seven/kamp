@@ -601,7 +601,7 @@ internal class PlayerTextDrawTest {
 
             @Test
             fun shouldInitializePreviewModel() {
-                val previewModel = playerTextDraw.previewModel
+                val previewModel = playerTextDraw.previewModelId
 
                 assertThat(previewModel)
                         .isNull()
@@ -613,7 +613,7 @@ internal class PlayerTextDrawTest {
                 // IntelliJ doesn't like direct assignment
                 val previewModel: Int? = 4
 
-                playerTextDraw.previewModel = previewModel
+                playerTextDraw.previewModelId = previewModel
 
                 verify {
                     nativeFunctionExecutor.playerTextDrawSetPreviewModel(
@@ -622,7 +622,7 @@ internal class PlayerTextDrawTest {
                             modelindex = 4
                     )
                 }
-                assertThat(playerTextDraw.previewModel)
+                assertThat(playerTextDraw.previewModelId)
                         .isEqualTo(4)
             }
 
@@ -632,7 +632,7 @@ internal class PlayerTextDrawTest {
                 // IntelliJ doesn't like direct assignment
                 val previewModel: Int? = null
 
-                playerTextDraw.previewModel = previewModel
+                playerTextDraw.previewModelId = previewModel
 
                 verify {
                     nativeFunctionExecutor.playerTextDrawSetPreviewModel(
@@ -641,7 +641,7 @@ internal class PlayerTextDrawTest {
                             modelindex = -1
                     )
                 }
-                assertThat(playerTextDraw.previewModel)
+                assertThat(playerTextDraw.previewModelId)
                         .isNull()
             }
         }

@@ -38,7 +38,7 @@ interface TextDrawBase : Destroyable {
 
     var text: String
 
-    var previewModel: Int?
+    var previewModelId: Int?
 
     val previewModelRotation: Vector3D?
 

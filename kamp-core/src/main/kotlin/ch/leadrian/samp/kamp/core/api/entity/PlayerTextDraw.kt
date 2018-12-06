@@ -204,7 +204,7 @@ internal constructor(
         text = textFormatter.format(player.locale, unformattedText, *args)
     }
 
-    override var previewModel: Int? = null
+    override var previewModelId: Int? = null
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetPreviewModel(
                     playerid = player.id.value,
