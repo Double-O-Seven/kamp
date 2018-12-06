@@ -75,6 +75,38 @@ open class View(
 
     var hoverColor: Color = Colors.CYAN
 
+    infix fun leftToLeftOf(view: View) {
+        left = pixels { view.marginArea.minX - this.parentArea.minX }
+    }
+
+    infix fun leftToRightOf(view: View) {
+        left = pixels { view.marginArea.maxX - this.parentArea.minX }
+    }
+
+    infix fun rightToLeftOf(view: View) {
+        right = pixels { this.parentArea.maxX - view.marginArea.minX }
+    }
+
+    infix fun rightToRightOf(view: View) {
+        right = pixels { this.parentArea.maxX - view.marginArea.maxX }
+    }
+
+    infix fun topToTopOf(view: View) {
+        top = pixels { view.marginArea.minY - this.parentArea.minY }
+    }
+
+    infix fun topToBottomOf(view: View) {
+        top = pixels { view.marginArea.maxY - this.parentArea.minY }
+    }
+
+    infix fun bottomToTopOf(view: View) {
+        bottom = pixels { this.parentArea.maxY - view.marginArea.minY }
+    }
+
+    infix fun bottomToBottomOf(view: View) {
+        bottom = pixels { this.parentArea.maxY - view.marginArea.maxY }
+    }
+
     fun setPadding(value: ViewDimension) {
         paddingLeft = value
         paddingRight = value

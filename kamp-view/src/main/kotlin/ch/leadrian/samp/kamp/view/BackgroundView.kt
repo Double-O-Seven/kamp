@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view
 
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
@@ -8,7 +9,8 @@ import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
-import ch.leadrian.samp.kamp.view.layout.pixelsToLetterSize
+import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
+import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 
 open class BackgroundView(
         player: Player,
@@ -34,10 +36,14 @@ open class BackgroundView(
         textDraw = playerTextDrawService.createPlayerTextDraw(
                 player,
                 TextDrawCodes.EMPTY_TEXT,
-                vector2DOf(x = area.minX, y = area.minY)
+                vector2DOf(x = area.minX, y = screenYCoordinateToTextDrawBoxY(area.minY))
         ).apply {
-            textSize = vector2DOf(x = area.minX + area.width + TEXT_DRAW_OFFSET_LEFT_SIDE, y = area.height)
-            letterSize = vector2DOf(x = 0f, y = pixelsToLetterSize(area.height) - 3.6f)
+            alignment = TextDrawAlignment.LEFT
+            textSize = vector2DOf(
+                    x = area.minX + area.width - TEXT_DRAW_OFFSET_LEFT / 2f,
+                    y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
+            )
+            letterSize = vector2DOf(x = 0f, y = screenHeightToTextDrawBoxHeight(area.height))
             useBox = true
             boxColor = this@BackgroundView.color
             isSelectable = this@BackgroundView.isEnabled

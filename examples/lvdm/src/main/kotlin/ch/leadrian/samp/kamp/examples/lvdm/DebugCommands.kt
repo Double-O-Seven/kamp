@@ -5,6 +5,8 @@ import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -112,25 +114,140 @@ constructor(
     }
 
     @Command
-    fun testview(player: Player, inputText: String, margin: Float, padding: Float) {
+    fun textview(player: Player) {
         with(viewFactory) {
             val view = view(player) {
+                setPadding(100.pixels())
                 backgroundView {
-                    setMargin(margin.pixels())
-                    setPadding(padding.pixels())
-
-
-                    color = colorOf(0xFF, 0, 0, 0x80)
-
-                    textView {
-                        text { inputText }
-                        height = 25.percent()
-                        letterHeight = 32.pixels()
-                        enable()
-                        onClick { messageSender.sendMessageToPlayer(player, Colors.PINK, "Clicked TextView: $inputText") }
+                    val leftAligned = view {
+                        width = 33.33f.percent()
+                        height = 64.pixels()
+                        left = 0.pixels()
+                        top = 0.pixels()
+                        backgroundView {
+                            setMargin(8.pixels())
+                            color = colorOf(0xDDDDDD80)
+                            textView {
+                                text { "Left aligned: x x x x x x x x x x" }
+                                alignment = TextDrawAlignment.LEFT
+                                enable()
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Left aligned clicked") }
+                            }
+                        }
                     }
+                    val centerAligned = view {
+                        width = 33.33f.percent()
+                        height = 64.pixels()
+                        leftToRightOf(leftAligned)
+                        top = 0.pixels()
+                        backgroundView {
+                            setMargin(8.pixels())
+                            color = colorOf(0xDDDDDD80)
+                            textView {
+                                text { "Center aligned: x x x x x x x x x x" }
+                                alignment = TextDrawAlignment.CENTERED
+                                enable()
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Center aligned clicked") }
+                            }
+                        }
+                    }
+                    view {
+                        width = 33.33f.percent()
+                        height = 64.pixels()
+                        leftToRightOf(centerAligned)
+                        top = 0.pixels()
+                        backgroundView {
+                            setMargin(8.pixels())
+                            color = colorOf(0xDDDDDD80)
+                            textView {
+                                text { "Right aligned: x x x x x x x x x x" }
+                                alignment = TextDrawAlignment.RIGHT
+                                enable()
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Right aligned clicked") }
+                            }
+                        }
+                    }
+                    val font2 = textView {
+                        topToBottomOf(leftAligned)
+                        width = 25f.percent()
+                        height = 64.pixels()
+                        font = TextDrawFont.FONT2
+                        text { "Font 2" }
+                    }
+                    val pricedown = textView {
+                        topToBottomOf(leftAligned)
+                        leftToRightOf(font2)
+                        width = 25f.percent()
+                        height = 64.pixels()
+                        font = TextDrawFont.PRICEDOWN
+                        text { "Pricedown" }
+                    }
+                    val diploma = textView {
+                        topToBottomOf(leftAligned)
+                        leftToRightOf(pricedown)
+                        width = 25f.percent()
+                        height = 64.pixels()
+                        font = TextDrawFont.DIPLOMA
+                        text { "Diploma" }
+                    }
+                    textView {
+                        topToBottomOf(leftAligned)
+                        leftToRightOf(diploma)
+                        width = 25f.percent()
+                        height = 64.pixels()
+                        font = TextDrawFont.BANK_GOTHIC
+                        text { "Bank Gothic" }
+                    }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
+    fun backgroundview(player: Player) {
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                val center = backgroundView {
                     enable()
-                    onClick { messageSender.sendMessageToPlayer(player, Colors.PINK, "Clicked BackgroundView: $inputText") }
+                    onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Center clicked") }
+                }
+                backgroundView {
+                    color = Colors.RED.toMutableColor().apply { a = 0x80 }
+                    topToTopOf(center)
+                    bottomToBottomOf(center)
+                    rightToLeftOf(center)
+                    width = 64.pixels()
+                    enable()
+                    onClick { messageSender.sendMessageToPlayer(player, Colors.RED, "Left clicked") }
+                }
+                backgroundView {
+                    color = Colors.GREEN.toMutableColor().apply { a = 0x80 }
+                    topToTopOf(center)
+                    bottomToBottomOf(center)
+                    leftToRightOf(center)
+                    width = 64.pixels()
+                    enable()
+                    onClick { messageSender.sendMessageToPlayer(player, Colors.GREEN, "Right clicked") }
+                }
+                backgroundView {
+                    color = Colors.BLUE.toMutableColor().apply { a = 0x80 }
+                    leftToLeftOf(center)
+                    rightToRightOf(center)
+                    topToBottomOf(center)
+                    height = 64.pixels()
+                    enable()
+                    onClick { messageSender.sendMessageToPlayer(player, Colors.BLUE, "Bottom clicked") }
+                }
+                backgroundView {
+                    color = Colors.YELLOW.toMutableColor().apply { a = 0x80 }
+                    leftToLeftOf(center)
+                    rightToRightOf(center)
+                    bottomToTopOf(center)
+                    height = 64.pixels()
+                    enable()
+                    onClick { messageSender.sendMessageToPlayer(player, Colors.YELLOW, "Top clicked") }
                 }
             }
             player.viewNavigation.push(view)

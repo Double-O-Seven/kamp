@@ -14,10 +14,13 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.MAX_TEXT_DRAW_STRING_LENGTH
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.letterSizeToPixels
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.layout.pixelsToLetterSize
+import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
+import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 import java.util.*
 
 open class TextView(
@@ -27,6 +30,12 @@ open class TextView(
         protected val textFormatter: TextFormatter,
         protected val playerTextDrawService: PlayerTextDrawService
 ) : ClickableView(player, viewContext) {
+
+    private companion object {
+
+        val log = loggerFor<TextView>()
+
+    }
 
     private var textDraw: PlayerTextDraw? = null
 
@@ -40,10 +49,10 @@ open class TextView(
 
     var alignment: TextDrawAlignment = TextDrawAlignment.LEFT
 
-    var letterHeight: ViewDimension = 32.pixels()
+    var letterHeight: ViewDimension = 16.pixels()
 
-    var letterWidth: ViewDimension = pixels { parentValue ->
-        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentValue)) / font.idealHeightToWidthRatio
+    var letterWidth: ViewDimension = pixels {
+        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentArea.height)) / font.idealHeightToWidthRatio
         letterSizeToPixels(letterSize)
     }
 
@@ -103,9 +112,8 @@ open class TextView(
             font = this@TextView.font
             letterSize = vector2DOf(
                     x = pixelsToLetterSize(this@TextView.letterWidth.getValue(area.width)),
-                    y = pixelsToLetterSize(this@TextView.letterHeight.getValue(area.height))
+                    y = screenHeightToTextDrawBoxHeight(this@TextView.letterHeight.getValue(area.height))
             )
-            alignment = this@TextView.alignment
             backgroundColor = this@TextView.backgroundColor
             color = this@TextView.color
             onClick { click() }
@@ -130,6 +138,10 @@ open class TextView(
             if (isSelectable != this@TextView.isEnabled) {
                 isSelectable = this@TextView.isEnabled
                 show = true
+
+                if (isSelectable && alignment == TextDrawAlignment.RIGHT) {
+                    log.warn("Right aligned text draws do not wrap text and do not allow text draw selection")
+                }
             }
 
             // Text is supplied, don't get it twice
@@ -152,34 +164,38 @@ open class TextView(
         }
     }
 
-    private fun createCenteredTextDraw(area: Rectangle): PlayerTextDraw {
-        val position = vector2DOf(
-                x = area.minX + (TEXT_DRAW_OFFSET_LEFT_SIDE + area.width) / 2f,
-                y = area.minY
-        )
+    private fun createLeftAlignedTextDraw(area: Rectangle): PlayerTextDraw {
+        val position = vector2DOf(x = area.minX, y = screenYCoordinateToTextDrawBoxY(area.minY))
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
-            // This weird thing is correct, x and y are switched
-            textSize = vector2DOf(x = area.height, y = area.width)
+            alignment = TextDrawAlignment.LEFT
+            textSize = vector2DOf(
+                    x = area.minX + area.width - TEXT_DRAW_OFFSET_LEFT / 2f,
+                    y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
+            )
         }
     }
 
-    private fun createLeftAlignedTextDraw(area: Rectangle): PlayerTextDraw {
-        val position = vector2DOf(
-                x = area.minX + TEXT_DRAW_OFFSET_LEFT_SIDE,
-                y = area.minY
-        )
+    private fun createCenteredTextDraw(area: Rectangle): PlayerTextDraw {
+        val position = vector2DOf(x = area.minX + area.width / 2f + TEXT_DRAW_OFFSET_LEFT / 4f, y = screenYCoordinateToTextDrawBoxY(area.minY))
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
-            textSize = vector2DOf(x = area.minX + area.width, y = area.height)
+            alignment = TextDrawAlignment.CENTERED
+            // This weird thing is correct, x and y are switched
+            textSize = vector2DOf(
+                    x = screenHeightToTextDrawBoxHeight(area.height) / 0.135f,
+                    y = area.width
+            )
         }
     }
 
     private fun createRightAlignedTextDraw(area: Rectangle): PlayerTextDraw {
-        val position = vector2DOf(
-                x = area.minX + area.width,
-                y = area.minY
-        )
+        val position = vector2DOf(x = area.minX + area.width - TEXT_DRAW_OFFSET_LEFT / 2f, y = screenYCoordinateToTextDrawBoxY(area.minY))
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
-            textSize = vector2DOf(x = area.minX, y = area.height)
+            alignment = TextDrawAlignment.RIGHT
+            // Doesn't seem to have any effect
+            textSize = vector2DOf(
+                    x = area.minY,
+                    y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
+            )
         }
     }
 
