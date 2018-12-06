@@ -236,14 +236,19 @@ internal constructor(
         previewModelZoom = zoom
     }
 
-    fun setPreviewModelVehicleColors(vehicleColors: VehicleColors) {
-        nativeFunctionExecutor.playerTextDrawSetPreviewVehCol(
-                playerid = player.id.value,
-                text = id.value,
-                color1 = vehicleColors.color1.value,
-                color2 = vehicleColors.color2.value
-        )
-    }
+    var previewModelVehicleColors: VehicleColors? = null
+        set(value) {
+            if (value == null) {
+                return
+            }
+            nativeFunctionExecutor.playerTextDrawSetPreviewVehCol(
+                    playerid = player.id.value,
+                    text = id.value,
+                    color1 = value.color1.value,
+                    color2 = value.color2.value
+            )
+            field = value.toVehicleColors()
+        }
 
     fun onClick(onClick: PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result) {
         onClickHandlers += onClick

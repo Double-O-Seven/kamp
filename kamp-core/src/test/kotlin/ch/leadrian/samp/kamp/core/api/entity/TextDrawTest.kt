@@ -6,7 +6,9 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.data.Colors
+import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.mutableVector2DOf
+import ch.leadrian.samp.kamp.core.api.data.mutableVehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -677,21 +679,49 @@ internal class TextDrawTest {
             }
         }
 
-        @Test
-        fun shouldSetPreviewModelVehicleColors() {
-            every { nativeFunctionExecutor.textDrawSetPreviewVehCol(any(), any(), any()) } returns true
+        @Nested
+        inner class PreviewModelVehicleColors {
 
-            textDraw.setPreviewModelVehicleColors(vehicleColorsOf(
-                    color1 = VehicleColor[3],
-                    color2 = VehicleColor[6]
-            ))
+            @Test
+            fun shouldSetPreviewModelVehicleColors() {
+                every { nativeFunctionExecutor.textDrawSetPreviewVehCol(any(), any(), any()) } returns true
 
-            verify {
-                nativeFunctionExecutor.textDrawSetPreviewVehCol(
-                        text = textDrawId.value,
-                        color1 = 3,
-                        color2 = 6
+                textDraw.previewModelVehicleColors = mutableVehicleColorsOf(
+                        color1 = VehicleColor[3],
+                        color2 = VehicleColor[6]
                 )
+
+                verify {
+                    nativeFunctionExecutor.textDrawSetPreviewVehCol(
+                            text = textDrawId.value,
+                            color1 = 3,
+                            color2 = 6
+                    )
+                }
+                assertThat(textDraw.previewModelVehicleColors)
+                        .isEqualTo(vehicleColorsOf(
+                                color1 = VehicleColor[3],
+                                color2 = VehicleColor[6]
+                        ))
+            }
+
+            @Test
+            fun givenValueIsSetToNullItShouldDoNothing() {
+                every { nativeFunctionExecutor.textDrawSetPreviewVehCol(any(), any(), any()) } returns true
+                textDraw.previewModelVehicleColors = mutableVehicleColorsOf(
+                        color1 = VehicleColor[3],
+                        color2 = VehicleColor[6]
+                )
+
+                val vehicleColors: VehicleColors? = null
+                textDraw.previewModelVehicleColors = vehicleColors
+
+                verify(exactly = 1) { nativeFunctionExecutor.textDrawSetPreviewVehCol(any(), any(), any()) }
+                assertThat(textDraw.previewModelVehicleColors)
+                        .isEqualTo(vehicleColorsOf(
+                                color1 = VehicleColor[3],
+                                color2 = VehicleColor[6]
+                        ))
             }
         }
 
