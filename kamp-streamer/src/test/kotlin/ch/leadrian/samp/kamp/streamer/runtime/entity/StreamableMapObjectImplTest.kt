@@ -120,6 +120,14 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
+        fun shouldDrawDistanceShouldReturnStreamDistance() {
+            val drawDistance = streamableMapObject.drawDistance
+
+            assertThat(drawDistance)
+                    .isEqualTo(streamDistance)
+        }
+
+        @Test
         fun shouldStreamIn() {
             val coordinates = vector3DOf(1f, 2f, 3f)
             val rotation = vector3DOf(4f, 5f, 6f)
@@ -1012,12 +1020,15 @@ internal class StreamableMapObjectImplTest {
                 every { coordinates } returns vector3DOf(1f, 2f, 3f)
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
-            every { streamableMapObjectStateMachine.currentState } returns currentState
+            val moving = mockk<StreamableMapObjectState.Moving> {
+                every { duration } returns 1337L
+            }
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, moving)
 
             streamableMapObject.moveTo(
-                    destination = vector3DOf(123f, 456f, 789f),
+                    coordinates = vector3DOf(123f, 456f, 789f),
                     speed = 7f,
-                    targetRotation = vector3DOf(8f, 9f, 10f)
+                    rotation = vector3DOf(8f, 9f, 10f)
             )
 
             verify {
@@ -1029,6 +1040,28 @@ internal class StreamableMapObjectImplTest {
                         speed = 7f
                 )
             }
+        }
+
+        @Test
+        fun shouldReturnMovementDuration() {
+            val currentState = mockk<StreamableMapObjectState> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+            }
+            val moving = mockk<StreamableMapObjectState.Moving> {
+                every { duration } returns 1337L
+            }
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, moving)
+
+            val duration = streamableMapObject.moveTo(
+                    coordinates = vector3DOf(123f, 456f, 789f),
+                    speed = 7f,
+                    rotation = vector3DOf(8f, 9f, 10f)
+            )
+
+            assertThat(duration)
+                    .isEqualTo(1337)
         }
 
     }

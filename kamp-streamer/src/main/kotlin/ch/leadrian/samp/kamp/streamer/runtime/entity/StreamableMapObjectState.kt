@@ -66,7 +66,7 @@ internal sealed class StreamableMapObjectState {
 
         private val distanceToMove = origin.distanceTo(destination)
 
-        private val duration: Long = Math.round((distanceToMove / speed) * 1000f).toLong()
+        val duration: Long = Math.round((distanceToMove / speed) * 1000f).toLong()
 
         private val timer: Timer
 

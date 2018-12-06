@@ -74,6 +74,8 @@ constructor(
 
     override val self: StreamableMapObjectImpl = this
 
+    override val drawDistance: Float = streamDistance
+
     override fun onStreamIn(forPlayer: Player) {
         requireNotDestroyed()
         if (playerMapObjectsByPlayer.contains(forPlayer)) {
@@ -172,19 +174,16 @@ constructor(
         }
     }
 
-    override fun moveTo(
-            destination: Vector3D,
-            speed: Float,
-            targetRotation: Vector3D?
-    ) {
+    override fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D?): Int {
         requireNotDestroyed()
         stateMachine.transitionToMoving(
-                origin = coordinates,
-                destination = destination,
-                startRotation = rotation,
-                targetRotation = targetRotation,
+                origin = this.coordinates,
+                destination = coordinates,
+                startRotation = this.rotation,
+                targetRotation = rotation,
                 speed = speed
         )
+        return (stateMachine.currentState as StreamableMapObjectState.Moving).duration.toInt()
     }
 
     override fun stop() {
