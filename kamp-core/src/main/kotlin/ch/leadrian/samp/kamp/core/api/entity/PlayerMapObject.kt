@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Color
-import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
@@ -16,12 +15,12 @@ import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 class PlayerMapObject
 internal constructor(
         override val player: Player,
-        val model: Int,
-        val drawDistance: Float,
+        override val model: Int,
+        override val drawDistance: Float,
         coordinates: Vector3D,
         rotation: Vector3D,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Entity<PlayerMapObjectId>, HasPlayer, AbstractDestroyable() {
+) : Entity<PlayerMapObjectId>, HasPlayer, AbstractDestroyable(), MapObjectBase {
 
     private val onMovedHandlers: MutableList<PlayerMapObject.() -> Unit> = mutableListOf()
 
@@ -54,7 +53,7 @@ internal constructor(
         id = PlayerMapObjectId.valueOf(playerMapObjectId)
     }
 
-    fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         nativeFunctionExecutor.attachPlayerObjectToPlayer(
                 objectid = id.value,
                 objectplayer = this.player.id.value,
@@ -72,7 +71,7 @@ internal constructor(
         nativeFunctionExecutor.editPlayerObject(playerid = player.id.value, objectid = id.value)
     }
 
-    fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         nativeFunctionExecutor.attachPlayerObjectToVehicle(
                 playerid = player.id.value,
                 objectid = id.value,
@@ -86,7 +85,7 @@ internal constructor(
         )
     }
 
-    var coordinates: Vector3D
+    override var coordinates: Vector3D
         get() {
             val x = ReferenceFloat()
             val y = ReferenceFloat()
@@ -110,7 +109,7 @@ internal constructor(
             )
         }
 
-    var rotation: Vector3D
+    override var rotation: Vector3D
         get() {
             val x = ReferenceFloat()
             val y = ReferenceFloat()
@@ -134,35 +133,32 @@ internal constructor(
             )
         }
 
-    fun disableCameraCollision() {
+    override fun disableCameraCollision() {
         nativeFunctionExecutor.setPlayerObjectNoCameraCol(playerid = player.id.value, objectid = id.value)
     }
 
-    @JvmOverloads
-    fun moveTo(
-            coordinates: Vector3D,
-            speed: Float,
-            rotation: Vector3D? = null
-    ): Int = nativeFunctionExecutor.movePlayerObject(
-            playerid = player.id.value,
-            objectid = id.value,
-            x = coordinates.x,
-            y = coordinates.y,
-            z = coordinates.z,
-            Speed = speed,
-            RotX = rotation?.x ?: -1000f,
-            RotY = rotation?.y ?: -1000f,
-            RotZ = rotation?.z ?: -1000f
-    )
+    override fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D?): Int {
+        return nativeFunctionExecutor.movePlayerObject(
+                playerid = player.id.value,
+                objectid = id.value,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z,
+                Speed = speed,
+                RotX = rotation?.x ?: -1000f,
+                RotY = rotation?.y ?: -1000f,
+                RotZ = rotation?.z ?: -1000f
+        )
+    }
 
-    fun stop() {
+    override fun stop() {
         nativeFunctionExecutor.stopPlayerObject(playerid = player.id.value, objectid = id.value)
     }
 
-    val isMoving: Boolean
+    override val isMoving: Boolean
         get() = nativeFunctionExecutor.isPlayerObjectMoving(playerid = player.id.value, objectid = id.value)
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
+    override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
         nativeFunctionExecutor.setPlayerObjectMaterial(
                 playerid = player.id.value,
                 objectid = id.value,
@@ -174,17 +170,16 @@ internal constructor(
         )
     }
 
-    @JvmOverloads
-    fun setMaterialText(
+    override fun setMaterialText(
             text: String,
-            index: Int = 0,
-            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
-            fontFace: String = "Arial",
-            fontSize: Int = 24,
-            isBold: Boolean = true,
-            fontColor: Color = Colors.WHITE,
-            backColor: Color = Colors.TRANSPARENT,
-            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
     ) {
         nativeFunctionExecutor.setPlayerObjectMaterialText(
                 playerid = player.id.value,

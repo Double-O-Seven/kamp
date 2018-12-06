@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Color
-import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
@@ -15,12 +14,12 @@ import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class MapObject
 internal constructor(
-        val model: Int,
+        override val model: Int,
         coordinates: Vector3D,
         rotation: Vector3D,
-        val drawDistance: Float,
+        override val drawDistance: Float,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Entity<MapObjectId>, AbstractDestroyable() {
+) : Entity<MapObjectId>, AbstractDestroyable(), MapObjectBase {
 
     private val onMovedHandlers: MutableList<MapObject.() -> Unit> = mutableListOf()
 
@@ -56,7 +55,7 @@ internal constructor(
         nativeFunctionExecutor.editObject(playerid = player.id.value, objectid = id.value)
     }
 
-    fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         nativeFunctionExecutor.attachObjectToPlayer(
                 objectid = id.value,
                 playerid = player.id.value,
@@ -84,7 +83,7 @@ internal constructor(
         )
     }
 
-    fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
+    override fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         nativeFunctionExecutor.attachObjectToVehicle(
                 objectid = id.value,
                 vehicleid = vehicle.id.value,
@@ -97,7 +96,7 @@ internal constructor(
         )
     }
 
-    var coordinates: Vector3D
+    override var coordinates: Vector3D
         get() {
             val x = ReferenceFloat()
             val y = ReferenceFloat()
@@ -119,7 +118,7 @@ internal constructor(
             )
         }
 
-    var rotation: Vector3D
+    override var rotation: Vector3D
         get() {
             val x = ReferenceFloat()
             val y = ReferenceFloat()
@@ -141,15 +140,14 @@ internal constructor(
             )
         }
 
-    fun disableCameraCollision() {
+    override fun disableCameraCollision() {
         nativeFunctionExecutor.setObjectNoCameraCol(id.value)
     }
 
-    @JvmOverloads
-    fun moveTo(
+    override fun moveTo(
             coordinates: Vector3D,
             speed: Float,
-            rotation: Vector3D? = null
+            rotation: Vector3D?
     ): Int = nativeFunctionExecutor.moveObject(
             objectid = id.value,
             X = coordinates.x,
@@ -161,14 +159,14 @@ internal constructor(
             RotZ = rotation?.z ?: -1000f
     )
 
-    fun stop() {
+    override fun stop() {
         nativeFunctionExecutor.stopObject(id.value)
     }
 
-    val isMoving: Boolean
+    override val isMoving: Boolean
         get() = nativeFunctionExecutor.isObjectMoving(id.value)
 
-    fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
+    override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
         nativeFunctionExecutor.setObjectMaterial(
                 objectid = id.value,
                 materialindex = index,
@@ -179,17 +177,16 @@ internal constructor(
         )
     }
 
-    @JvmOverloads
-    fun setMaterialText(
+    override fun setMaterialText(
             text: String,
-            index: Int = 0,
-            size: ObjectMaterialSize = ObjectMaterialSize.SIZE_256X128,
-            fontFace: String = "Arial",
-            fontSize: Int = 24,
-            isBold: Boolean = true,
-            fontColor: Color = Colors.WHITE,
-            backColor: Color = Colors.TRANSPARENT,
-            textAlignment: ObjectMaterialTextAlignment = ObjectMaterialTextAlignment.LEFT
+            index: Int,
+            size: ObjectMaterialSize,
+            fontFace: String,
+            fontSize: Int,
+            isBold: Boolean,
+            fontColor: Color,
+            backColor: Color,
+            textAlignment: ObjectMaterialTextAlignment
     ) {
         nativeFunctionExecutor.setObjectMaterialText(
                 objectid = id.value,
