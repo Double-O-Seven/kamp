@@ -12,13 +12,13 @@ internal constructor(
         coordinates: Vector3D,
         text: String,
         color: Color,
-        val drawDistance: Float,
-        val testLOS: Boolean,
+        override val drawDistance: Float,
+        override val testLOS: Boolean,
         override val player: Player,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         attachToPlayer: Player?,
         attachToVehicle: Vehicle?
-) : Entity<PlayerTextLabelId>, HasPlayer, AbstractDestroyable() {
+) : Entity<PlayerTextLabelId>, HasPlayer, AbstractDestroyable(), TextLabelBase {
 
     private val onDestroyHandlers: MutableList<PlayerTextLabel.() -> Unit> = mutableListOf()
 
@@ -48,7 +48,7 @@ internal constructor(
 
     private var _text: String = text
 
-    var text: String
+    override var text: String
         get() = _text
         set(value) {
             nativeFunctionExecutor.updatePlayer3DTextLabelText(
@@ -62,7 +62,7 @@ internal constructor(
 
     private var _color: Color = color.toColor()
 
-    var color: Color
+    override var color: Color
         get() = _color
         set(value) {
             nativeFunctionExecutor.updatePlayer3DTextLabelText(
@@ -74,9 +74,9 @@ internal constructor(
             _color = value
         }
 
-    val coordinates: Vector3D = coordinates.toVector3D()
+    override val coordinates: Vector3D = coordinates.toVector3D()
 
-    fun update(text: String, color: Color) {
+    override fun update(text: String, color: Color) {
         nativeFunctionExecutor.updatePlayer3DTextLabelText(
                 playerid = player.id.value,
                 id = id.value,
