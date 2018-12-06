@@ -644,23 +644,51 @@ internal class PlayerTextDrawTest {
             }
         }
 
-        @Test
-        fun shouldSetPreviewModelRotation() {
-            every {
-                nativeFunctionExecutor.playerTextDrawSetPreviewRot(any(), any(), any(), any(), any(), any())
-            } returns true
+        @Nested
+        inner class SetPreviewModelRotationTests {
 
-            playerTextDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 1.5f)
+            @Test
+            fun shouldCallNativeFunctionExecutor() {
+                every {
+                    nativeFunctionExecutor.playerTextDrawSetPreviewRot(any(), any(), any(), any(), any(), any())
+                } returns true
 
-            verify {
-                nativeFunctionExecutor.playerTextDrawSetPreviewRot(
-                        playerid = playerId.value,
-                        text = playerTextDrawId.value,
-                        fRotX = 45f,
-                        fRotY = 60f,
-                        fRotZ = 15f,
-                        fZoom = 1.5f
-                )
+                playerTextDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 1.5f)
+
+                verify {
+                    nativeFunctionExecutor.playerTextDrawSetPreviewRot(
+                            playerid = playerId.value,
+                            text = playerTextDrawId.value,
+                            fRotX = 45f,
+                            fRotY = 60f,
+                            fRotZ = 15f,
+                            fZoom = 1.5f
+                    )
+                }
+            }
+
+            @Test
+            fun shouldSetZoom() {
+                every {
+                    nativeFunctionExecutor.playerTextDrawSetPreviewRot(any(), any(), any(), any(), any(), any())
+                } returns true
+
+                playerTextDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 13.37f)
+
+                assertThat(playerTextDraw.previewModelZoom)
+                        .isEqualTo(13.37f)
+            }
+
+            @Test
+            fun shouldSetPreviewModelRotationProperty() {
+                every {
+                    nativeFunctionExecutor.playerTextDrawSetPreviewRot(any(), any(), any(), any(), any(), any())
+                } returns true
+
+                playerTextDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 13.37f)
+
+                assertThat(playerTextDraw.previewModelRotation)
+                        .isEqualTo(vector3DOf(x = 45f, y = 60f, z = 15f))
             }
         }
 

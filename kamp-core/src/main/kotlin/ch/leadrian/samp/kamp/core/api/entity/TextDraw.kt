@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
+import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.TextDrawId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
@@ -187,7 +188,14 @@ internal constructor(
             field = value
         }
 
-    @JvmOverloads
+    var previewModelRotation: Vector3D = vector3DOf(0f, 0f, 0f)
+        private set(value) {
+            field = value.toVector3D()
+        }
+
+    var previewModelZoom: Float = 1f
+        private set
+
     fun setPreviewModelRotation(rotation: Vector3D, zoom: Float = 1.0f) {
         nativeFunctionExecutor.textDrawSetPreviewRot(
                 text = id.value,
@@ -196,6 +204,8 @@ internal constructor(
                 fRotZ = rotation.z,
                 fZoom = zoom
         )
+        previewModelRotation = rotation
+        previewModelZoom = zoom
     }
 
     fun setPreviewModelVehicleColors(vehicleColors: VehicleColors) {

@@ -629,22 +629,51 @@ internal class TextDrawTest {
             }
         }
 
-        @Test
-        fun shouldSetPreviewModelRotation() {
-            every {
-                nativeFunctionExecutor.textDrawSetPreviewRot(any(), any(), any(), any(), any())
-            } returns true
 
-            textDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 1.5f)
+        @Nested
+        inner class SetPreviewModelRotationTests {
 
-            verify {
-                nativeFunctionExecutor.textDrawSetPreviewRot(
-                        text = textDrawId.value,
-                        fRotX = 45f,
-                        fRotY = 60f,
-                        fRotZ = 15f,
-                        fZoom = 1.5f
-                )
+            @Test
+            fun shouldCallNativeFunctionExecutor() {
+                every {
+                    nativeFunctionExecutor.textDrawSetPreviewRot(any(), any(), any(), any(), any())
+                } returns true
+
+                textDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 1.5f)
+
+                verify {
+                    nativeFunctionExecutor.textDrawSetPreviewRot(
+                            text = textDrawId.value,
+                            fRotX = 45f,
+                            fRotY = 60f,
+                            fRotZ = 15f,
+                            fZoom = 1.5f
+                    )
+                }
+            }
+
+            @Test
+            fun shouldSetZoom() {
+                every {
+                    nativeFunctionExecutor.textDrawSetPreviewRot(any(), any(), any(), any(), any())
+                } returns true
+
+                textDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 13.37f)
+
+                assertThat(textDraw.previewModelZoom)
+                        .isEqualTo(13.37f)
+            }
+
+            @Test
+            fun shouldSetPreviewModelRotationProperty() {
+                every {
+                    nativeFunctionExecutor.textDrawSetPreviewRot(any(), any(), any(), any(), any())
+                } returns true
+
+                textDraw.setPreviewModelRotation(vector3DOf(x = 45f, y = 60f, z = 15f), 13.37f)
+
+                assertThat(textDraw.previewModelRotation)
+                        .isEqualTo(vector3DOf(x = 45f, y = 60f, z = 15f))
             }
         }
 
