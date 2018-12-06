@@ -19,7 +19,7 @@ constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
     ): PlayerMapObject {
         val playerMapObject = PlayerMapObject(
                 player = player,
-                model = modelId,
+                modelId = modelId,
                 coordinates = coordinates,
                 rotation = rotation,
                 drawDistance = drawDistance,

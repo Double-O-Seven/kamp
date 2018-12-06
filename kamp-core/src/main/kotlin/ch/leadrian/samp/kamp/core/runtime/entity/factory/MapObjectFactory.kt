@@ -15,7 +15,7 @@ constructor(
 
     fun create(model: Int, coordinates: Vector3D, rotation: Vector3D, drawDistance: Float): MapObject {
         val mapObject = MapObject(
-                model = model,
+                modelId = model,
                 coordinates = coordinates,
                 rotation = rotation,
                 drawDistance = drawDistance,

@@ -45,7 +45,7 @@ constructor(
     fun createobj(
             player: Player,
             @Parameter("name") name: String,
-            @Parameter("model ID") modelId: Int
+            @Parameter("modelId ID") modelId: Int
     ) {
         val coordinates = player.coordinates
         val mapObject = mapObjectService.createMapObject(modelId, coordinates, vector3DOf(0f, 0f, 0f))

@@ -14,7 +14,7 @@ import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class MapObject
 internal constructor(
-        override val model: Int,
+        override val modelId: Int,
         coordinates: Vector3D,
         rotation: Vector3D,
         override val drawDistance: Float,
@@ -34,7 +34,7 @@ internal constructor(
 
     init {
         val mapObjectId = nativeFunctionExecutor.createObject(
-                modelid = model,
+                modelid = modelId,
                 x = coordinates.x,
                 y = coordinates.y,
                 z = coordinates.z,

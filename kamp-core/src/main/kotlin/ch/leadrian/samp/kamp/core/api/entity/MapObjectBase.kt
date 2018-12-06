@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 
 interface MapObjectBase : Destroyable {
 
-    val model: Int
+    val modelId: Int
 
     val drawDistance: Float
 

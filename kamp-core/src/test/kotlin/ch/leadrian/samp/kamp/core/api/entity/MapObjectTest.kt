@@ -47,7 +47,7 @@ internal class MapObjectTest {
             }
 
             val mapObject = MapObject(
-                    model = 1337,
+                    modelId = 1337,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
@@ -77,7 +77,7 @@ internal class MapObjectTest {
 
             val caughtThrowable = catchThrowable {
                 MapObject(
-                        model = 1337,
+                        modelId = 1337,
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                         rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                         drawDistance = 7f,
@@ -104,7 +104,7 @@ internal class MapObjectTest {
                 nativeFunctionExecutor.createObject(any(), any(), any(), any(), any(), any(), any(), any())
             } returns mapObjectId.value
             mapObject = MapObject(
-                    model = 1337,
+                    modelId = 1337,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
