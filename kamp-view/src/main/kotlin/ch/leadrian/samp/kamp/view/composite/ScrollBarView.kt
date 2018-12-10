@@ -7,10 +7,9 @@ import ch.leadrian.samp.kamp.view.base.View
 
 abstract class ScrollBarView(
         player: Player,
-        viewContext: ViewContext
+        viewContext: ViewContext,
+        protected val adapter: ScrollBarAdapter
 ) : View(player, viewContext) {
-
-    lateinit var scrollBarAdapter: ScrollBarAdapter
 
     var currentPosition: Int = 0
         private set
@@ -24,7 +23,7 @@ abstract class ScrollBarView(
         currentPosition += ticks
         adjustCurrentPosition()
         onScroll()
-        scrollBarAdapter.onScroll(view = this, oldPosition = oldPosition, newPosition = currentPosition)
+        adapter.onScroll(view = this, oldPosition = oldPosition, newPosition = currentPosition)
     }
 
     override fun onDraw() {
@@ -32,7 +31,7 @@ abstract class ScrollBarView(
     }
 
     private fun adjustCurrentPosition() {
-        currentPosition = currentPosition.coerceIn(0, Math.max(0, scrollBarAdapter.numberOfTicks - scrollBarAdapter.windowSize))
+        currentPosition = currentPosition.coerceIn(0, Math.max(0, adapter.numberOfTicks - adapter.windowSize))
     }
 
     protected abstract fun onScroll()

@@ -14,8 +14,9 @@ import ch.leadrian.samp.kamp.view.layout.pixels
 open class VerticalScrollBarView(
         player: Player,
         viewContext: ViewContext,
-        viewFactory: ViewFactory
-) : ScrollBarView(player, viewContext) {
+        viewFactory: ViewFactory,
+        adapter: ScrollBarAdapter
+) : ScrollBarView(player, viewContext, adapter) {
 
     private lateinit var backgroundView: BackgroundView
 
@@ -69,15 +70,15 @@ open class VerticalScrollBarView(
                     scrollingBarView = backgroundView {
                         color = this@VerticalScrollBarView.color
                         top = percent {
-                            val numberOfTicks = scrollBarAdapter.numberOfTicks
+                            val numberOfTicks = adapter.numberOfTicks
                             when (numberOfTicks) {
                                 0 -> 0f
                                 else -> 100f * (currentPosition.toFloat() / numberOfTicks.toFloat())
                             }
                         }
                         height = percent {
-                            val windowSize = scrollBarAdapter.windowSize
-                            100f * (windowSize.toFloat() / Math.max(windowSize, scrollBarAdapter.numberOfTicks).toFloat())
+                            val windowSize = adapter.windowSize
+                            100f * (windowSize.toFloat() / Math.max(windowSize, adapter.numberOfTicks).toFloat())
                         }
                     }
                 }

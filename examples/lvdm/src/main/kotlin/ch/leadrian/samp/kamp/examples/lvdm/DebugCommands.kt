@@ -133,19 +133,17 @@ constructor(
             val view = view(player) {
                 setPadding(100.pixels())
                 backgroundView {
-                    val verticalScrollBar = verticalScrollBarView {
+                    val verticalScrollBar = verticalScrollBarView(adapter) {
                         top = 0.pixels()
                         bottom = 0.pixels()
                         left = 0.pixels()
                         width = 12.pixels()
-                        scrollBarAdapter = adapter
                     }
-                    horizontalScrollBarView {
+                    horizontalScrollBarView(adapter) {
                         leftToRightOf(verticalScrollBar)
                         bottom = 0.pixels()
                         right = 0.pixels()
                         height = 16.pixels()
-                        scrollBarAdapter = adapter
                     }
                 }
             }
