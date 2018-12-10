@@ -56,17 +56,33 @@ open class TextView(
         letterSizeToPixels(letterSize)
     }
 
-    var color: Color = Colors.WHITE
+    private var colorSupplier: () -> Color = { Colors.WHITE }
+
+    var color: Color
+        get() = colorSupplier()
         set(value) {
-            field = value.toColor()
+            val color = value.toColor()
+            colorSupplier = { color }
         }
 
-    var backgroundColor: Color = Colors.BLACK
+    fun color(colorSupplier: () -> Color) {
+        this.colorSupplier = colorSupplier
+    }
+
+    private var backgroundColorSupplier: () -> Color = { Colors.BLACK }
+
+    var backgroundColor: Color
+        get() = backgroundColorSupplier()
         set(value) {
-            field = value.toColor()
+            val backgroundColor = value.toColor()
+            backgroundColorSupplier = { backgroundColor }
         }
 
-    private var textSupplier: (Locale) -> String = { "_" }
+    fun backgroundColor(backgroundColorSupplier: () -> Color) {
+        this.backgroundColorSupplier = backgroundColorSupplier
+    }
+
+    private var textSupplier: (Locale) -> String = { TextDrawCodes.EMPTY_TEXT }
 
     var text: String
         set(value) {
@@ -183,13 +199,13 @@ open class TextView(
     }
 
     private fun createCenteredTextDraw(area: Rectangle): PlayerTextDraw {
-        val position = vector2DOf(x = area.minX + area.width / 2f + TEXT_DRAW_OFFSET_LEFT / 4f, y = screenYCoordinateToTextDrawBoxY(area.minY))
+        val position = vector2DOf(x = area.minX + (area.width - TEXT_DRAW_OFFSET_LEFT / 2f) / 2f, y = screenYCoordinateToTextDrawBoxY(area.minY))
         return playerTextDrawService.createPlayerTextDraw(player, text, position).apply {
             alignment = TextDrawAlignment.CENTERED
             // This weird thing is correct, x and y are switched
             textSize = vector2DOf(
                     x = screenHeightToTextDrawBoxHeight(area.height) / 0.135f,
-                    y = area.width
+                    y = area.width - TEXT_DRAW_OFFSET_LEFT / 2f
             )
         }
     }

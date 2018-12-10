@@ -20,10 +20,18 @@ open class BackgroundView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    var color: Color = colorOf(0x00000080)
+    private var colorSupplier: () -> Color = { colorOf(0x00000080) }
+
+    var color: Color
+        get() = colorSupplier()
         set(value) {
-            field = value.toColor()
+            val color = value.toColor()
+            colorSupplier = { color }
         }
+
+    fun color(colorSupplier: () -> Color) {
+        this.colorSupplier = colorSupplier
+    }
 
     override fun onDraw() {
         if (isInvalidated) {

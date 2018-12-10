@@ -26,4 +26,12 @@ object TextDrawCodes {
 
     const val EMPTY_TEXT = "_"
 
+    const val UP = "~u~"
+
+    const val DOWN = "~d~"
+
+    const val LEFT = "~<~"
+
+    const val RIGHT = "~>~"
+
 }

@@ -5,9 +5,12 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.BackgroundView
+import ch.leadrian.samp.kamp.view.ButtonView
+import ch.leadrian.samp.kamp.view.HorizontalScrollBarView
 import ch.leadrian.samp.kamp.view.ModelView
 import ch.leadrian.samp.kamp.view.SpriteView
 import ch.leadrian.samp.kamp.view.TextView
+import ch.leadrian.samp.kamp.view.VerticalScrollBarView
 import ch.leadrian.samp.kamp.view.View
 import ch.leadrian.samp.kamp.view.ViewContext
 
@@ -79,6 +82,42 @@ interface ViewFactory {
         val spriteView = spriteView(player, buildingBlock)
         addChild(spriteView)
         return spriteView
+    }
+
+    fun buttonView(player: Player, buildingBlock: ButtonView.() -> Unit): ButtonView {
+        val buttonView = ButtonView(player, viewContext, this)
+        buildingBlock(buttonView)
+        return buttonView
+    }
+
+    fun View.buttonView(buildingBlock: ButtonView.() -> Unit): ButtonView {
+        val buttonView = buttonView(player, buildingBlock)
+        addChild(buttonView)
+        return buttonView
+    }
+
+    fun verticalScrollBarView(player: Player, buildingBlock: VerticalScrollBarView.() -> Unit): VerticalScrollBarView {
+        val verticalScrollBarView = VerticalScrollBarView(player, viewContext, this)
+        buildingBlock(verticalScrollBarView)
+        return verticalScrollBarView
+    }
+
+    fun View.verticalScrollBarView(buildingBlock: VerticalScrollBarView.() -> Unit): VerticalScrollBarView {
+        val verticalScrollBarView = verticalScrollBarView(player, buildingBlock)
+        addChild(verticalScrollBarView)
+        return verticalScrollBarView
+    }
+
+    fun horizontalScrollBarView(player: Player, buildingBlock: HorizontalScrollBarView.() -> Unit): HorizontalScrollBarView {
+        val horizontalScrollBarView = HorizontalScrollBarView(player, viewContext, this)
+        buildingBlock(horizontalScrollBarView)
+        return horizontalScrollBarView
+    }
+
+    fun View.horizontalScrollBarView(buildingBlock: HorizontalScrollBarView.() -> Unit): HorizontalScrollBarView {
+        val horizontalScrollBarView = horizontalScrollBarView(player, buildingBlock)
+        addChild(horizontalScrollBarView)
+        return horizontalScrollBarView
     }
 
 }

@@ -24,7 +24,18 @@ open class ModelView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    var color: Color = Colors.WHITE
+    private var colorSupplier: () -> Color = { Colors.WHITE }
+
+    var color: Color
+        get() = colorSupplier()
+        set(value) {
+            val color = value.toColor()
+            colorSupplier = { color }
+        }
+
+    fun color(colorSupplier: () -> Color) {
+        this.colorSupplier = colorSupplier
+    }
 
     var modelId: Int = 18750
 

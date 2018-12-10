@@ -16,6 +16,8 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.view.ScrollBarAdapter
+import ch.leadrian.samp.kamp.view.ScrollBarView
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
@@ -112,6 +114,43 @@ constructor(
             messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
         }
         messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
+    }
+
+    @Command
+    fun scrollbarview(player: Player, numberOfTicks: Int, windowSize: Int) {
+        val adapter = object : ScrollBarAdapter {
+
+            override val numberOfTicks: Int = numberOfTicks
+
+            override val windowSize: Int = windowSize
+
+            override fun onScroll(view: ScrollBarView, oldPosition: Int, newPosition: Int) {
+                messageSender.sendMessageToPlayer(player, Colors.PINK, "Scroll to $newPosition/$numberOfTicks")
+            }
+
+        }
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    val verticalScrollBar = verticalScrollBarView {
+                        top = 0.pixels()
+                        bottom = 0.pixels()
+                        left = 0.pixels()
+                        width = 12.pixels()
+                        scrollBarAdapter = adapter
+                    }
+                    horizontalScrollBarView {
+                        leftToRightOf(verticalScrollBar)
+                        bottom = 0.pixels()
+                        right = 0.pixels()
+                        height = 16.pixels()
+                        scrollBarAdapter = adapter
+                    }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
     }
 
     @Command

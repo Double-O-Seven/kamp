@@ -29,6 +29,6 @@ fun Number.percent(): ViewDimension = RelativeToParent(this.toFloat())
 
 inline fun percent(crossinline computation: (Float) -> Float): ViewDimension = object : ViewDimension {
 
-    override fun getValue(parentValue: Float): Float = computation(parentValue) * parentValue / 100f
+    override fun getValue(parentValue: Float): Float = (computation(parentValue) / 100f) * parentValue
 
 }
