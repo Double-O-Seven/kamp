@@ -11,20 +11,20 @@ internal constructor(
         type: RaceCheckpointType,
         nextCoordinates: Vector3D?,
         private val playerRegistry: PlayerRegistry
-) : Destroyable {
+) : CheckpointBase {
 
     private val onEnterHandlers: MutableList<RaceCheckpoint.(Player) -> Unit> = mutableListOf()
 
     private val onLeaveHandlers: MutableList<RaceCheckpoint.(Player) -> Unit> = mutableListOf()
 
-    var coordinates: Vector3D = coordinates.toVector3D()
+    override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
             requireNotDestroyed()
             field = value.toVector3D()
             update()
         }
 
-    var size: Float = size
+    override var size: Float = size
         set(value) {
             requireNotDestroyed()
             field = value
@@ -45,7 +45,7 @@ internal constructor(
             update()
         }
 
-    operator fun contains(player: Player): Boolean = player.isInRaceCheckpoint(this)
+    override fun contains(player: Player): Boolean = player.isInRaceCheckpoint(this)
 
     private fun update() {
         playerRegistry.getAll().filter { it.raceCheckpoint === this }.forEach {
