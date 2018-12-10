@@ -12,7 +12,9 @@ import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.composite.ButtonView
 import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
+import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
+import ch.leadrian.samp.kamp.view.composite.VerticalListView
 import ch.leadrian.samp.kamp.view.composite.VerticalScrollBarView
 
 interface ViewFactory {
@@ -119,6 +121,18 @@ interface ViewFactory {
         val horizontalScrollBarView = horizontalScrollBarView(player, adapter, buildingBlock)
         addChild(horizontalScrollBarView)
         return horizontalScrollBarView
+    }
+
+    fun <T> verticalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit): VerticalListView<T> {
+        val verticalListView = VerticalListView(player, viewContext, this, adapter)
+        buildingBlock(verticalListView)
+        return verticalListView
+    }
+
+    fun <T> View.verticalListView(adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit): VerticalListView<T> {
+        val verticalListView = verticalListView(player, adapter, buildingBlock)
+        addChild(verticalListView)
+        return verticalListView
     }
 
 }

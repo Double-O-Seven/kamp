@@ -101,7 +101,7 @@ open class TextView(
         }
 
     fun setText(text: String, vararg args: Any) {
-        textSupplier = { locale -> textFormatter.format(locale, text, args) }
+        textSupplier = { locale -> textFormatter.format(locale, text, *args) }
     }
 
     fun setText(textKey: TextKey) {
@@ -111,7 +111,7 @@ open class TextView(
     fun setText(textKey: TextKey, vararg args: Any) {
         textSupplier = { locale ->
             val text = textProvider.getText(locale, textKey)
-            textFormatter.format(locale, text, args)
+            textFormatter.format(locale, text, *args)
         }
     }
 
@@ -172,7 +172,7 @@ open class TextView(
             // Text is supplied, don't get it twice
             val text = this.text
             if (it.text != text) {
-                // No need to show again, text onDraw will update automatically
+                // No need to show again, text onDraw will setItem automatically
                 it.text = text
             }
 

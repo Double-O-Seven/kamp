@@ -38,16 +38,61 @@ open class ModelView(
         this.colorSupplier = colorSupplier
     }
 
-    var modelId: Int = 18750
+    private var modelIdSupplier: () -> Int = { 18750 }
 
-    var rotation: Vector3D = vector3DOf(-16.0f, 0.0f, -55.0f)
+    var modelId: Int
+        get() = modelIdSupplier()
         set(value) {
-            field = value.toVector3D()
+            modelIdSupplier = { value }
         }
 
-    val zoom: Float = 1f
+    fun modelId(modelIdSupplier: () -> Int) {
+        this.modelIdSupplier = modelIdSupplier
+    }
 
-    var vehicleColors: VehicleColors? = null
+    private var rotationSupplier: () -> Vector3D = { vector3DOf(-16.0f, 0.0f, -55.0f) }
+
+    var rotation: Vector3D
+        get() = rotationSupplier()
+        set(value) {
+            val immutableVector3D = value.toVector3D()
+            rotationSupplier = { immutableVector3D }
+        }
+
+    fun rotation(rotationSupplier: () -> Vector3D) {
+        this.rotationSupplier = rotationSupplier
+    }
+
+    private var zoomSupplier: () -> Float = { 1f }
+
+    var zoom: Float
+        get() = zoomSupplier()
+        set(value) {
+            zoomSupplier = { value }
+        }
+
+    fun zoom(zoomSupplier: () -> Float) {
+        this.zoomSupplier = zoomSupplier
+    }
+
+    private var vehicleColorsSupplier: (() -> VehicleColors?)? = null
+
+    var vehicleColors: VehicleColors?
+        get() = vehicleColorsSupplier?.invoke()
+        set(value) {
+            vehicleColorsSupplier = when {
+                value != null -> {
+                    { value }
+                }
+                else -> null
+            }
+
+        }
+
+    fun vehicleColors(vehicleColorsSupplier: () -> VehicleColors?) {
+        this.vehicleColorsSupplier = vehicleColorsSupplier
+    }
+
 
     private fun Rectangle.transformToCenteredSquare(): Rectangle {
         return if (width > height) {

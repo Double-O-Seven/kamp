@@ -5,7 +5,9 @@ import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
+import ch.leadrian.samp.kamp.core.api.constants.SanAndreasZone
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.colorOf
@@ -13,10 +15,18 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
+import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
+import ch.leadrian.samp.kamp.core.api.text.translateForText
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.base.ModelView
+import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.onClick
+import ch.leadrian.samp.kamp.view.composite.ListItemView
+import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarView
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
@@ -33,7 +43,8 @@ constructor(
         private val messageSender: MessageSender,
         private val mapObjectService: MapObjectService,
         private val streamerService: StreamerService,
-        private val viewFactory: ViewFactory
+        private val viewFactory: ViewFactory,
+        private val vehicleService: VehicleService
 ) : Commands() {
 
     private val objectsByName: MutableMap<String, MapObject> = mutableMapOf()
@@ -114,6 +125,92 @@ constructor(
             messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
         }
         messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
+    }
+
+    @Command
+    fun vehiclelistview(player: Player) {
+        val adapter = object : ListViewAdapter<Vehicle> {
+
+            override val numberOfItems: Int = vehicleService.getAllVehicles().size
+
+            override val numberOfDisplayedItems: Int = 5
+
+            override fun getItem(position: Int): Vehicle {
+                return vehicleService.getAllVehicles()[position]
+            }
+
+            override fun createView(player: Player): ListItemView<Vehicle> = with(viewFactory) {
+                VehicleListItemView(player, viewContext, this)
+            }
+
+        }
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    verticalListView(adapter) {}
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    private class VehicleListItemView(
+            player: Player,
+            viewContext: ViewContext,
+            viewFactory: ViewFactory
+    ) : ListItemView<Vehicle>(player, viewContext) {
+
+        private lateinit var modelView: ModelView
+
+        private lateinit var nameTextView: TextView
+
+        private lateinit var detailsTextView: TextView
+
+        private lateinit var vehicle: Vehicle
+
+        init {
+            setPadding(4.pixels())
+            with(viewFactory) {
+                this@VehicleListItemView.backgroundView {
+                    color = Colors.GREY.toMutableColor().apply { a = 0x80 }
+                    modelView = modelView {
+                        left = 0.pixels()
+                        width = pixels { parentArea.height }
+                        modelId { vehicle.model.value }
+                        vehicleColors { vehicle.colors }
+                    }
+                    nameTextView = textView {
+                        leftToRightOf(modelView)
+                        top = 0.pixels()
+                        height = 33.33f.percent()
+                        letterHeight = 100.percent()
+                        outlineSize = 1
+                        font = TextDrawFont.BANK_GOTHIC
+                        color { vehicle.colors.color1.color }
+                        text { vehicle.model.modelName }
+                    }
+                    detailsTextView = textView {
+                        bottom = 0.pixels()
+                        letterHeight = 50.percent()
+                        leftToRightOf(modelView)
+                        topToBottomOf(nameTextView)
+                        setText(
+                                "Vehicle ID: {0}${TextDrawCodes.NEW_LINE}Location: {1}",
+                                translateForText { vehicle.id.value.toString() },
+                                translateForText { SanAndreasZone.getZone(vehicle.coordinates)?.name ?: "San Andreas" }
+                        )
+                    }
+                    enable()
+                    onClick { player.putInVehicle(vehicle, 0) }
+                }
+            }
+        }
+
+        override fun setItem(position: Int, item: Vehicle) {
+            this.vehicle = item
+        }
+
     }
 
     @Command

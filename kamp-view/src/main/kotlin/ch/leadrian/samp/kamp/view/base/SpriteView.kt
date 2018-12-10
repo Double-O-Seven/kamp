@@ -21,7 +21,17 @@ open class SpriteView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    var spriteName: String = "LD_SPAC:white"
+    private var spriteNameSupplier: () -> String = { "LD_SPAC:white" }
+
+    var spriteName: String
+        get() = spriteNameSupplier()
+        set(value) {
+            spriteNameSupplier = { value }
+        }
+
+    fun spriteName(spriteNameSupplier: () -> String) {
+        this.spriteNameSupplier = spriteNameSupplier
+    }
 
     private var colorSupplier: () -> Color = { Colors.WHITE }
 
