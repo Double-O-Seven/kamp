@@ -9,6 +9,7 @@ import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
 import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
@@ -21,29 +22,20 @@ open class SpriteView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var spriteNameSupplier: () -> String = { "LD_SPAC:white" }
+    private var spriteNameSupplier: ValueSupplier<String> = ValueSupplier("LD_SPAC:white")
 
-    var spriteName: String
-        get() = spriteNameSupplier()
-        set(value) {
-            spriteNameSupplier = { value }
-        }
+    var spriteName: String by spriteNameSupplier
 
     fun spriteName(spriteNameSupplier: () -> String) {
-        this.spriteNameSupplier = spriteNameSupplier
+        this.spriteNameSupplier.value(spriteNameSupplier)
     }
 
-    private var colorSupplier: () -> Color = { Colors.WHITE }
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
-    var color: Color
-        get() = colorSupplier()
-        set(value) {
-            val color = value.toColor()
-            colorSupplier = { color }
-        }
+    var color: Color by colorSupplier
 
     fun color(colorSupplier: () -> Color) {
-        this.colorSupplier = colorSupplier
+        this.colorSupplier.value(colorSupplier)
     }
 
     override fun onDraw() {

@@ -16,6 +16,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.MAX_TEXT_DRAW_STRING_LENGTH
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.view.TEXT_DRAW_OFFSET_LEFT
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.letterSizeToPixels
@@ -59,30 +60,20 @@ open class TextView(
         letterSizeToPixels(letterSize)
     }
 
-    private var colorSupplier: () -> Color = { Colors.WHITE }
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
-    var color: Color
-        get() = colorSupplier()
-        set(value) {
-            val color = value.toColor()
-            colorSupplier = { color }
-        }
+    var color: Color by colorSupplier
 
     fun color(colorSupplier: () -> Color) {
-        this.colorSupplier = colorSupplier
+        this.colorSupplier.value(colorSupplier)
     }
 
-    private var backgroundColorSupplier: () -> Color = { Colors.BLACK }
+    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
-    var backgroundColor: Color
-        get() = backgroundColorSupplier()
-        set(value) {
-            val backgroundColor = value.toColor()
-            backgroundColorSupplier = { backgroundColor }
-        }
+    var backgroundColor: Color by backgroundColorSupplier
 
     fun backgroundColor(backgroundColorSupplier: () -> Color) {
-        this.backgroundColorSupplier = backgroundColorSupplier
+        this.backgroundColorSupplier.value(backgroundColorSupplier)
     }
 
     private var textSupplier: (Locale) -> String = { TextDrawCodes.EMPTY_TEXT }

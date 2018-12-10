@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.view.TEXT_DRAW_OFFSET_LEFT
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
 import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
@@ -22,17 +23,12 @@ open class BackgroundView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var colorSupplier: () -> Color = { colorOf(0x00000080) }
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(colorOf(0x00000080))
 
-    var color: Color
-        get() = colorSupplier()
-        set(value) {
-            val color = value.toColor()
-            colorSupplier = { color }
-        }
+    var color: Color by colorSupplier
 
     fun color(colorSupplier: () -> Color) {
-        this.colorSupplier = colorSupplier
+        this.colorSupplier.value(colorSupplier)
     }
 
     override fun onDraw() {

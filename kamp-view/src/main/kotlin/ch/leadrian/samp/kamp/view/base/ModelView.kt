@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
 import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
@@ -25,72 +26,44 @@ open class ModelView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var colorSupplier: () -> Color = { Colors.WHITE }
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
-    var color: Color
-        get() = colorSupplier()
-        set(value) {
-            val color = value.toColor()
-            colorSupplier = { color }
-        }
+    var color: Color by colorSupplier
 
     fun color(colorSupplier: () -> Color) {
-        this.colorSupplier = colorSupplier
+        this.colorSupplier.value(colorSupplier)
     }
 
-    private var modelIdSupplier: () -> Int = { 18750 }
+    private var modelIdSupplier: ValueSupplier<Int> = ValueSupplier(18750)
 
-    var modelId: Int
-        get() = modelIdSupplier()
-        set(value) {
-            modelIdSupplier = { value }
-        }
+    var modelId: Int by modelIdSupplier
 
     fun modelId(modelIdSupplier: () -> Int) {
-        this.modelIdSupplier = modelIdSupplier
+        this.modelIdSupplier.value(modelIdSupplier)
     }
 
-    private var rotationSupplier: () -> Vector3D = { vector3DOf(-16.0f, 0.0f, -55.0f) }
+    private var rotationSupplier: ValueSupplier<Vector3D> = ValueSupplier(vector3DOf(-16.0f, 0.0f, -55.0f))
 
-    var rotation: Vector3D
-        get() = rotationSupplier()
-        set(value) {
-            val immutableVector3D = value.toVector3D()
-            rotationSupplier = { immutableVector3D }
-        }
+    var rotation: Vector3D by rotationSupplier
 
     fun rotation(rotationSupplier: () -> Vector3D) {
-        this.rotationSupplier = rotationSupplier
+        this.rotationSupplier.value(rotationSupplier)
     }
 
-    private var zoomSupplier: () -> Float = { 1f }
+    private var zoomSupplier: ValueSupplier<Float> = ValueSupplier(1f)
 
-    var zoom: Float
-        get() = zoomSupplier()
-        set(value) {
-            zoomSupplier = { value }
-        }
+    var zoom: Float by zoomSupplier
 
     fun zoom(zoomSupplier: () -> Float) {
-        this.zoomSupplier = zoomSupplier
+        this.zoomSupplier.value(zoomSupplier)
     }
 
-    private var vehicleColorsSupplier: (() -> VehicleColors?)? = null
+    private var vehicleColorsSupplier: ValueSupplier<VehicleColors?> = ValueSupplier(null as VehicleColors?)
 
-    var vehicleColors: VehicleColors?
-        get() = vehicleColorsSupplier?.invoke()
-        set(value) {
-            vehicleColorsSupplier = when {
-                value != null -> {
-                    { value }
-                }
-                else -> null
-            }
-
-        }
+    var vehicleColors: VehicleColors? by vehicleColorsSupplier
 
     fun vehicleColors(vehicleColorsSupplier: () -> VehicleColors?) {
-        this.vehicleColorsSupplier = vehicleColorsSupplier
+        this.vehicleColorsSupplier.value(vehicleColorsSupplier)
     }
 
 
