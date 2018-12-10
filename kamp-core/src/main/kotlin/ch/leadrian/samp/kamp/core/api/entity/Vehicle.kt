@@ -391,6 +391,8 @@ internal constructor(
             )
         }
 
+    operator fun contains(player: Player): Boolean = player.isInVehicle(this)
+
     fun onSpawn(onSpawn: Vehicle.() -> Unit) {
         onSpawnHandlers += onSpawn
     }

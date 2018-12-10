@@ -28,6 +28,8 @@ internal constructor(
             update()
         }
 
+    operator fun contains(player: Player): Boolean = player.isInCheckpoint(this)
+
     private fun update() {
         playerRegistry.getAll().filter { it.checkpoint === this }.forEach {
             it.checkpoint = this

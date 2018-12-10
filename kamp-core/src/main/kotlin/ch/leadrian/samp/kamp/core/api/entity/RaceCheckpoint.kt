@@ -45,6 +45,8 @@ internal constructor(
             update()
         }
 
+    operator fun contains(player: Player): Boolean = player.isInRaceCheckpoint(this)
+
     private fun update() {
         playerRegistry.getAll().filter { it.raceCheckpoint === this }.forEach {
             it.raceCheckpoint = this

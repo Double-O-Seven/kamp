@@ -464,6 +464,17 @@ internal class VehicleTest {
                     .isEqualTo(VehicleSirenState.ON)
         }
 
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun containsShouldReturnTrueIfAndOnlyIfPlayerIsInVehicle(isInVehicle: Boolean) {
+            every { player.isInVehicle(vehicle) } returns isInVehicle
+
+            val containsPlayer = player in vehicle
+
+            assertThat(containsPlayer)
+                    .isEqualTo(isInVehicle)
+        }
+
         @Nested
         inner class ParametersTests {
 
