@@ -78,7 +78,7 @@ open class ModelView(
             val d = (height - width) / 2f
             toMutableRectangle().apply {
                 minY += d
-                maxX -= d
+                maxY -= d
             }
         }
     }

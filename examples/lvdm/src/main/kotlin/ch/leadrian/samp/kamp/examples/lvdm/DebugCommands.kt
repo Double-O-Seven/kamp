@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.SanAndreasZone
+import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
@@ -22,8 +23,6 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.translateForText
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
 import ch.leadrian.samp.kamp.view.ViewContext
-import ch.leadrian.samp.kamp.view.base.ModelView
-import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.onClick
 import ch.leadrian.samp.kamp.view.composite.ListItemView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
@@ -128,6 +127,69 @@ constructor(
     }
 
     @Command
+    fun skinlistview(player: Player) {
+        val adapter = object : ListViewAdapter<SkinModel> {
+
+            override val numberOfItems: Int = SkinModel.values().size
+
+            override val numberOfDisplayedItems: Int = 5
+
+            override fun getItem(position: Int): SkinModel = SkinModel.values()[position]
+
+            override fun createView(player: Player): ListItemView<SkinModel> = with(viewFactory) {
+                SkinModelListItemView(player, viewContext, this)
+            }
+
+        }
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    horizontalListView(adapter)
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    private class SkinModelListItemView(
+            player: Player,
+            viewContext: ViewContext,
+            viewFactory: ViewFactory
+    ) : ListItemView<SkinModel>(player, viewContext) {
+
+        private lateinit var skinModel: SkinModel
+
+        init {
+            setPadding(4.pixels())
+            with(viewFactory) {
+                this@SkinModelListItemView.backgroundView {
+                    color = Colors.GREY.toMutableColor().apply { a = 0x80 }
+                    val modelView = modelView {
+                        bottom = 64.pixels()
+                        modelId { skinModel.value }
+                    }
+                    textView {
+                        topToBottomOf(modelView)
+                        letterHeight = 16.pixels()
+                        bottom = 0.pixels()
+                        font = TextDrawFont.PRICEDOWN
+                        alignment = TextDrawAlignment.CENTERED
+                        text { skinModel.description }
+                    }
+                    enable()
+                    onClick { player.skin = skinModel }
+                }
+            }
+        }
+
+        override fun setItem(position: Int, item: SkinModel) {
+            skinModel = item
+        }
+
+    }
+
+    @Command
     fun vehiclelistview(player: Player) {
         val adapter = object : ListViewAdapter<Vehicle> {
 
@@ -135,9 +197,7 @@ constructor(
 
             override val numberOfDisplayedItems: Int = 5
 
-            override fun getItem(position: Int): Vehicle {
-                return vehicleService.getAllVehicles()[position]
-            }
+            override fun getItem(position: Int): Vehicle = vehicleService.getAllVehicles()[position]
 
             override fun createView(player: Player): ListItemView<Vehicle> = with(viewFactory) {
                 VehicleListItemView(player, viewContext, this)
@@ -148,7 +208,7 @@ constructor(
             val view = view(player) {
                 setPadding(100.pixels())
                 backgroundView {
-                    verticalListView(adapter) {}
+                    verticalListView(adapter)
                 }
             }
             player.viewNavigation.push(view)
@@ -161,12 +221,6 @@ constructor(
             viewFactory: ViewFactory
     ) : ListItemView<Vehicle>(player, viewContext) {
 
-        private lateinit var modelView: ModelView
-
-        private lateinit var nameTextView: TextView
-
-        private lateinit var detailsTextView: TextView
-
         private lateinit var vehicle: Vehicle
 
         init {
@@ -174,13 +228,13 @@ constructor(
             with(viewFactory) {
                 this@VehicleListItemView.backgroundView {
                     color = Colors.GREY.toMutableColor().apply { a = 0x80 }
-                    modelView = modelView {
+                    val modelView = modelView {
                         left = 0.pixels()
                         width = pixels { parentArea.height }
                         modelId { vehicle.model.value }
                         vehicleColors { vehicle.colors }
                     }
-                    nameTextView = textView {
+                    val nameTextView = textView {
                         leftToRightOf(modelView)
                         top = 0.pixels()
                         height = 33.33f.percent()
@@ -190,7 +244,7 @@ constructor(
                         color { vehicle.colors.color1.color }
                         text { vehicle.model.modelName }
                     }
-                    detailsTextView = textView {
+                    textView {
                         bottom = 0.pixels()
                         letterHeight = 50.percent()
                         leftToRightOf(modelView)

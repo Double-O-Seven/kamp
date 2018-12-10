@@ -11,6 +11,7 @@ import ch.leadrian.samp.kamp.view.base.SpriteView
 import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.composite.ButtonView
+import ch.leadrian.samp.kamp.view.composite.HorizontalListView
 import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
@@ -123,16 +124,28 @@ interface ViewFactory {
         return horizontalScrollBarView
     }
 
-    fun <T> verticalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit): VerticalListView<T> {
+    fun <T> verticalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit = {}): VerticalListView<T> {
         val verticalListView = VerticalListView(player, viewContext, this, adapter)
         buildingBlock(verticalListView)
         return verticalListView
     }
 
-    fun <T> View.verticalListView(adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit): VerticalListView<T> {
+    fun <T> View.verticalListView(adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit = {}): VerticalListView<T> {
         val verticalListView = verticalListView(player, adapter, buildingBlock)
         addChild(verticalListView)
         return verticalListView
+    }
+
+    fun <T> horizontalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: HorizontalListView<T>.() -> Unit = {}): HorizontalListView<T> {
+        val horizontalListView = HorizontalListView(player, viewContext, this, adapter)
+        buildingBlock(horizontalListView)
+        return horizontalListView
+    }
+
+    fun <T> View.horizontalListView(adapter: ListViewAdapter<T>, buildingBlock: HorizontalListView<T>.() -> Unit = {}): HorizontalListView<T> {
+        val horizontalListView = horizontalListView(player, adapter, buildingBlock)
+        addChild(horizontalListView)
+        return horizontalListView
     }
 
 }
