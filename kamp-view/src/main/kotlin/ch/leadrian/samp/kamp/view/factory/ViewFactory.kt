@@ -4,15 +4,15 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.view.BackgroundView
-import ch.leadrian.samp.kamp.view.ButtonView
-import ch.leadrian.samp.kamp.view.HorizontalScrollBarView
-import ch.leadrian.samp.kamp.view.ModelView
-import ch.leadrian.samp.kamp.view.SpriteView
-import ch.leadrian.samp.kamp.view.TextView
-import ch.leadrian.samp.kamp.view.VerticalScrollBarView
-import ch.leadrian.samp.kamp.view.View
 import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.base.BackgroundView
+import ch.leadrian.samp.kamp.view.base.ModelView
+import ch.leadrian.samp.kamp.view.base.SpriteView
+import ch.leadrian.samp.kamp.view.base.TextView
+import ch.leadrian.samp.kamp.view.base.View
+import ch.leadrian.samp.kamp.view.composite.ButtonView
+import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
+import ch.leadrian.samp.kamp.view.composite.VerticalScrollBarView
 
 interface ViewFactory {
 

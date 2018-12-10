@@ -1,7 +1,8 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.base
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ViewContext
 import kotlin.reflect.full.cast
 
 abstract class ClickableView(player: Player, viewContext: ViewContext) : View(player, viewContext) {

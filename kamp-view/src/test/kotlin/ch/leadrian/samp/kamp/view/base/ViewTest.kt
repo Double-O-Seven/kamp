@@ -1,8 +1,9 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.base
 
 
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewLayout
 import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
 import ch.leadrian.samp.kamp.view.layout.pixels

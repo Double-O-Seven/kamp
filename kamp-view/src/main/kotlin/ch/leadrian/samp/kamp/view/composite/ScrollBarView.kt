@@ -1,7 +1,9 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.composite
 
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.base.View
 
 abstract class ScrollBarView(
         player: Player,

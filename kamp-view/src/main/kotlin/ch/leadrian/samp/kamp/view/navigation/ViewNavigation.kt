@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.view.navigation
 import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
-import ch.leadrian.samp.kamp.view.View
+import ch.leadrian.samp.kamp.view.base.View
 import java.util.*
 
 class ViewNavigation

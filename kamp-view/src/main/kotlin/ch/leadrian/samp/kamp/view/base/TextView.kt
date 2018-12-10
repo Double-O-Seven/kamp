@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.base
 
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
@@ -15,8 +15,11 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.MAX_TEXT_DRAW_STRING_LENGTH
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
+import ch.leadrian.samp.kamp.view.TEXT_DRAW_OFFSET_LEFT
+import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.letterSizeToPixels
+import ch.leadrian.samp.kamp.view.layout.optimalHeightToWidthRatio
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.layout.pixelsToLetterSize
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
@@ -52,7 +55,7 @@ open class TextView(
     var letterHeight: ViewDimension = 16.pixels()
 
     var letterWidth: ViewDimension = pixels {
-        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentArea.height)) / font.idealHeightToWidthRatio
+        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentArea.height)) / font.optimalHeightToWidthRatio
         letterSizeToPixels(letterSize)
     }
 
@@ -236,10 +239,3 @@ open class TextView(
     }
 
 }
-
-val TextDrawFont.idealHeightToWidthRatio: Float
-    get() = when (this) {
-        TextDrawFont.BANK_GOTHIC, TextDrawFont.FONT2 -> 5.5f
-        TextDrawFont.DIPLOMA, TextDrawFont.PRICEDOWN -> 4.0f
-        else -> 1f
-    }

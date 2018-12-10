@@ -1,7 +1,8 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.base
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ViewContext
 import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify

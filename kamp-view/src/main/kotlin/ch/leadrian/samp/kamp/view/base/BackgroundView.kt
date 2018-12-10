@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.view
+package ch.leadrian.samp.kamp.view.base
 
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
@@ -9,6 +9,8 @@ import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
+import ch.leadrian.samp.kamp.view.TEXT_DRAW_OFFSET_LEFT
+import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
 import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 

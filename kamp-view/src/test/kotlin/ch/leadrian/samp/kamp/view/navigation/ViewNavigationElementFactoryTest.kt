@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view.navigation
 
-import ch.leadrian.samp.kamp.view.View
+import ch.leadrian.samp.kamp.view.base.View
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.params.ParameterizedTest

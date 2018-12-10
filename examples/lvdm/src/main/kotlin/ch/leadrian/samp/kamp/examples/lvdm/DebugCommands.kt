@@ -16,13 +16,13 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
-import ch.leadrian.samp.kamp.view.ScrollBarAdapter
-import ch.leadrian.samp.kamp.view.ScrollBarView
+import ch.leadrian.samp.kamp.view.base.onClick
+import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
+import ch.leadrian.samp.kamp.view.composite.ScrollBarView
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.navigation.viewNavigation
-import ch.leadrian.samp.kamp.view.onClick
 import javax.inject.Inject
 import javax.inject.Singleton
 

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view.navigation
 
-import ch.leadrian.samp.kamp.view.View
+import ch.leadrian.samp.kamp.view.base.View
 
 internal data class ViewNavigationElement(
         val view: View,
