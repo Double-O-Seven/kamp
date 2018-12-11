@@ -1,11 +1,10 @@
 package ch.leadrian.samp.kamp.view.composite
 
-import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
-import ch.leadrian.samp.kamp.view.base.BackgroundView
 import ch.leadrian.samp.kamp.view.base.onClick
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
@@ -18,57 +17,52 @@ open class VerticalScrollBarView(
         adapter: ScrollBarAdapter
 ) : ScrollBarView(player, viewContext, adapter) {
 
-    private lateinit var backgroundView: BackgroundView
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
-    private lateinit var scrollUpButtonView: ButtonView
+    override var color: Color by colorSupplier
 
-    private lateinit var scrollDownButtonView: ButtonView
+    fun color(colorSupplier: () -> Color) {
+        this.colorSupplier.value(colorSupplier)
+    }
 
-    private lateinit var scrollingBarView: BackgroundView
+    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
 
-    override var color: Color = Colors.GREY
-        set(value) {
-            field = value.toColor()
-            scrollUpButtonView.backgroundColor = field
-            scrollDownButtonView.backgroundColor = field
-            scrollingBarView.color = field
-        }
+    override var backgroundColor: Color by backgroundColorSupplier
 
-    override var backgroundColor: Color = Colors.LIGHT_GRAY
-        set(value) {
-            field = value.toColor()
-            backgroundView.color = field
-        }
+    fun backgroundColor(backgroundColorSupplier: () -> Color) {
+        this.backgroundColorSupplier.value(backgroundColorSupplier)
+    }
 
     init {
         with(viewFactory) {
-            backgroundView = this@VerticalScrollBarView.backgroundView {
-                color = this@VerticalScrollBarView.backgroundColor
-                scrollUpButtonView = buttonView {
+            this@VerticalScrollBarView.backgroundView {
+                color { this@VerticalScrollBarView.backgroundColor }
+                val scrollUpView = backgroundView {
                     top = 0.pixels()
-                    backgroundColor = this@VerticalScrollBarView.color
                     height = pixels { parentArea.width }
-                    text = TextDrawCodes.UP
-                    textPadding = 5.percent()
-                    onClick {
-                        scroll(-1)
+                    color { this@VerticalScrollBarView.color }
+                    spriteView {
+                        setMargin(5.percent())
+                        spriteName = "ld_beat:up"
+                        enable()
+                        onClick { scroll(-1) }
                     }
                 }
-                scrollDownButtonView = buttonView {
+                val scrollDownView = backgroundView {
                     bottom = 0.pixels()
-                    backgroundColor = this@VerticalScrollBarView.color
                     height = pixels { parentArea.width }
-                    text = TextDrawCodes.DOWN
-                    textPadding = 5.percent()
-                    onClick {
-                        scroll(+1)
+                    color { this@VerticalScrollBarView.color }
+                    spriteView {
+                        setMargin(5.percent())
+                        spriteName = "ld_beat:down"
+                        enable()
+                        onClick { scroll(+1) }
                     }
                 }
                 view {
-                    topToBottomOf(scrollUpButtonView)
-                    bottomToTopOf(scrollDownButtonView)
-                    scrollingBarView = backgroundView {
-                        color = this@VerticalScrollBarView.color
+                    topToBottomOf(scrollUpView)
+                    bottomToTopOf(scrollDownView)
+                    backgroundView {
                         top = percent {
                             val numberOfTicks = adapter.numberOfTicks
                             when (numberOfTicks) {
@@ -80,6 +74,7 @@ open class VerticalScrollBarView(
                             val windowSize = adapter.windowSize
                             100f * (windowSize.toFloat() / Math.max(windowSize, adapter.numberOfTicks).toFloat())
                         }
+                        color { this@VerticalScrollBarView.color }
                     }
                 }
             }

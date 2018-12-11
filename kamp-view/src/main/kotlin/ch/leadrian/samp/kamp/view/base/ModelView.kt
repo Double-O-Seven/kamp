@@ -15,8 +15,6 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
-import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
-import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 
 open class ModelView(
         player: Player,
@@ -94,16 +92,21 @@ open class ModelView(
     private fun replaceTextDraw(area: Rectangle) {
         textDraw?.destroy()
 
-        val textDrawBoxHeight = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
-        val delta = area.height - textDrawBoxHeight
         textDraw = playerTextDrawService.createPlayerTextDraw(
                 player,
                 TextDrawCodes.EMPTY_TEXT,
-                vector2DOf(x = area.minX + delta / 2f, y = screenYCoordinateToTextDrawBoxY(area.minY))
+                vector2DOf(
+                        x = area.minX,
+                        y = screenMinYToTextDrawMinY(area.minY, offset = 0f)
+                )
         ).also {
             it.alignment = TextDrawAlignment.LEFT
-            it.textSize = vector2DOf(x = area.width - delta, y = textDrawBoxHeight)
+            it.textSize = vector2DOf(
+                    x = area.width,
+                    y = screenHeightToTextDrawHeight(area.height, offset = 0f)
+            )
             it.font = TextDrawFont.MODEL_PREVIEW
+            it.isSelectable = isEnabled
             it.previewModelId = modelId
             it.backgroundColor = Colors.TRANSPARENT
             it.color = color
@@ -125,6 +128,11 @@ open class ModelView(
 
             if (it.previewModelVehicleColors != vehicleColors) {
                 it.previewModelVehicleColors = vehicleColors
+                show = true
+            }
+
+            if (it.isSelectable != isEnabled) {
+                it.isSelectable = isEnabled
                 show = true
             }
 

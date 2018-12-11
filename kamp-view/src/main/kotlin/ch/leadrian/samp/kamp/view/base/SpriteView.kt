@@ -11,8 +11,6 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
-import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
-import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 
 open class SpriteView(
         player: Player,
@@ -52,10 +50,17 @@ open class SpriteView(
         textDraw = playerTextDrawService.createPlayerTextDraw(
                 player,
                 spriteName,
-                vector2DOf(x = area.minX, y = screenYCoordinateToTextDrawBoxY(area.minY))
+                vector2DOf(
+                        x = area.minX,
+                        y = screenMinYToTextDrawMinY(area.minY, offset = 0f)
+                )
         ).also {
             it.alignment = TextDrawAlignment.CENTERED
-            it.textSize = vector2DOf(x = area.width, y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f)
+            it.textSize = vector2DOf(
+                    x = area.width,
+                    y = screenHeightToTextDrawHeight(area.height, offset = 0f)
+            )
+            it.isSelectable = isEnabled
             it.font = TextDrawFont.SPRITE_DRAW
             it.backgroundColor = Colors.TRANSPARENT
             it.color = color
@@ -71,6 +76,11 @@ open class SpriteView(
             if (it.text != spriteName) {
                 it.text = spriteName
                 show = false
+            }
+
+            if (it.isSelectable != isEnabled) {
+                it.isSelectable = isEnabled
+                show = true
             }
 
             if (it.color != color) {

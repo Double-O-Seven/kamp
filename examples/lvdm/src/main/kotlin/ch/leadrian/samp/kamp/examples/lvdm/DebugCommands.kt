@@ -51,12 +51,12 @@ constructor(
 
     @Unlisted
     @Command
-    fun debugcmds(player: Player) {
+    fun debugCmds(player: Player) {
         showCommandList(player)
     }
 
     @Command
-    fun createobj(
+    fun createObj(
             player: Player,
             @Parameter("name") name: String,
             @Parameter("modelId ID") modelId: Int
@@ -71,7 +71,7 @@ constructor(
     }
 
     @Command
-    fun moveobj(
+    fun moveObj(
             player: Player,
             @Parameter("name") name: String,
             @Parameter("x") x: Float,
@@ -84,13 +84,13 @@ constructor(
     }
 
     @Command
-    fun stopobj(player: Player, name: String) {
+    fun stopObj(player: Player, name: String) {
         val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.stop()
     }
 
     @Command
-    fun objpos(
+    fun objPos(
             player: Player,
             @Parameter("name") name: String,
             @Parameter("x") x: Float,
@@ -102,7 +102,7 @@ constructor(
     }
 
     @Command
-    fun attachobj(player: Player, @Parameter("name") name: String) {
+    fun attachObj(player: Player, @Parameter("name") name: String) {
         val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.attachTo(player, vector3DOf(0f, 0f, 0f), vector3DOf(0f, 0f, 0f))
     }
@@ -128,15 +128,12 @@ constructor(
     }
 
     @Command
-    fun screenRes(player: Player, w: Int, h: Int) {
-        player.screenResolution.apply {
-            width = w
-            height = h
-        }
+    fun screenRes(player: Player) {
+        player.screenResolution.showSelectionDialog()
     }
 
     @Command
-    fun skinlistview(player: Player) {
+    fun skinListView(player: Player) {
         val adapter = object : ListViewAdapter<SkinModel> {
 
             override val numberOfItems: Int = SkinModel.values().size
@@ -199,7 +196,7 @@ constructor(
     }
 
     @Command
-    fun vehiclelistview(player: Player) {
+    fun vehicleListView(player: Player) {
         val adapter = object : ListViewAdapter<Vehicle> {
 
             override val numberOfItems: Int = vehicleService.getAllVehicles().size
@@ -277,7 +274,7 @@ constructor(
     }
 
     @Command
-    fun scrollbarview(player: Player, numberOfTicks: Int, windowSize: Int) {
+    fun scrollBarView(player: Player, numberOfTicks: Int, windowSize: Int) {
         val adapter = object : ScrollBarAdapter {
 
             override val numberOfTicks: Int = numberOfTicks
@@ -312,7 +309,7 @@ constructor(
     }
 
     @Command
-    fun spriteview(player: Player) {
+    fun spriteView(player: Player) {
         with(viewFactory) {
             val view = view(player) {
                 setPadding(100.pixels())
@@ -323,6 +320,8 @@ constructor(
                         spriteView {
                             setMargin(8.pixels())
                             spriteName = "loadsc12:loadsc12"
+                            enable()
+                            onClick { messageSender.sendMessageToPlayer(player, Colors.BLUE, "Left sprite clicked") }
                         }
                     }
                     view {
@@ -331,6 +330,8 @@ constructor(
                         spriteView {
                             setMargin(8.pixels())
                             spriteName = "loadsc13:loadsc13"
+                            enable()
+                            onClick { messageSender.sendMessageToPlayer(player, Colors.BLUE, "Right sprite clicked") }
                         }
                     }
                 }
@@ -340,7 +341,7 @@ constructor(
     }
 
     @Command
-    fun modelview(player: Player) {
+    fun modelView(player: Player) {
         with(viewFactory) {
             val view = view(player) {
                 setPadding(100.pixels())
@@ -349,11 +350,15 @@ constructor(
                         modelId = 541
                         vehicleColors = vehicleColorsOf(3, 6)
                         height = 50.percent()
+                        enable()
+                        onClick { messageSender.sendMessageToPlayer(player, Colors.BLUE, "Bullet clicked") }
                     }
                     modelView {
                         topToBottomOf(bullet)
                         modelId = 128
                         color = Colors.RED
+                        enable()
+                        onClick { messageSender.sendMessageToPlayer(player, Colors.BLUE, "Person clicked") }
                     }
                 }
             }
@@ -362,7 +367,7 @@ constructor(
     }
 
     @Command
-    fun textview(player: Player) {
+    fun textView(player: Player) {
         with(viewFactory) {
             val view = view(player) {
                 setPadding(100.pixels())
@@ -453,7 +458,7 @@ constructor(
     }
 
     @Command
-    fun backgroundview(player: Player) {
+    fun backgroundView(player: Player) {
         with(viewFactory) {
             val view = view(player) {
                 setPadding(100.pixels())

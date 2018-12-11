@@ -1,11 +1,10 @@
 package ch.leadrian.samp.kamp.view.composite
 
-import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
-import ch.leadrian.samp.kamp.view.base.BackgroundView
 import ch.leadrian.samp.kamp.view.base.onClick
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
@@ -18,57 +17,53 @@ open class HorizontalScrollBarView(
         adapter: ScrollBarAdapter
 ) : ScrollBarView(player, viewContext, adapter) {
 
-    private lateinit var backgroundView: BackgroundView
+    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
-    private lateinit var scrollLeftButtonView: ButtonView
+    override var color: Color by colorSupplier
 
-    private lateinit var scrollRightButtonView: ButtonView
+    fun color(colorSupplier: () -> Color) {
+        this.colorSupplier.value(colorSupplier)
+    }
 
-    private lateinit var scrollingBarView: BackgroundView
+    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
 
-    override var color: Color = Colors.GREY
-        set(value) {
-            field = value.toColor()
-            scrollLeftButtonView.backgroundColor = field
-            scrollRightButtonView.backgroundColor = field
-            scrollingBarView.color = field
-        }
+    override var backgroundColor: Color by backgroundColorSupplier
 
-    override var backgroundColor: Color = Colors.LIGHT_GRAY
-        set(value) {
-            field = value.toColor()
-            backgroundView.color = field
-        }
+    fun backgroundColor(backgroundColorSupplier: () -> Color) {
+        this.backgroundColorSupplier.value(backgroundColorSupplier)
+    }
 
     init {
         with(viewFactory) {
-            backgroundView = this@HorizontalScrollBarView.backgroundView {
-                color = this@HorizontalScrollBarView.backgroundColor
-                scrollLeftButtonView = buttonView {
+            this@HorizontalScrollBarView.backgroundView {
+                color { this@HorizontalScrollBarView.backgroundColor }
+                val scrollLeftView = backgroundView {
                     left = 0.pixels()
-                    backgroundColor = this@HorizontalScrollBarView.color
                     width = pixels { parentArea.height }
-                    text = TextDrawCodes.LEFT
-                    textPadding = 5.percent()
-                    onClick {
-                        scroll(-1)
+                    color { this@HorizontalScrollBarView.color }
+                    spriteView {
+                        setMargin(5.percent())
+                        spriteName = "ld_beat:left"
+                        enable()
+                        onClick { scroll(-1) }
                     }
                 }
-                scrollRightButtonView = buttonView {
+                val scrollRightView = backgroundView {
                     right = 0.pixels()
-                    backgroundColor = this@HorizontalScrollBarView.color
                     width = pixels { parentArea.height }
-                    text = TextDrawCodes.RIGHT
-                    textPadding = 5.percent()
-                    onClick {
-                        scroll(+1)
+                    color { this@HorizontalScrollBarView.color }
+                    spriteView {
+                        setMargin(5.percent())
+                        spriteName = "ld_beat:right"
+                        enable()
+                        onClick { scroll(+1) }
                     }
                 }
                 view {
-                    leftToRightOf(scrollLeftButtonView)
-                    rightToLeftOf(scrollRightButtonView)
-                    scrollingBarView = backgroundView {
-                        color = this@HorizontalScrollBarView.color
+                    leftToRightOf(scrollLeftView)
+                    rightToLeftOf(scrollRightView)
+                    backgroundView {
+                        color { this@HorizontalScrollBarView.color }
                         left = percent {
                             val numberOfTicks = adapter.numberOfTicks
                             when (numberOfTicks) {

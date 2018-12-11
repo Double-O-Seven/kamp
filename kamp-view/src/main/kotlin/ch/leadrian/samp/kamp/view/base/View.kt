@@ -12,11 +12,12 @@ import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.ViewLayout
 import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
 import java.util.*
 import java.util.Collections.unmodifiableSet
 
 open class View(
-        override val player: Player,
+        final override val player: Player,
         private val viewContext: ViewContext
 ) : AbstractDestroyable(), HasPlayer {
 
@@ -244,5 +245,29 @@ open class View(
     }
 
     protected open fun onDestroy() {}
+
+    private val magicNumber: Float = Math.pow(4.0 / 3.0, 1.0 / 4.0).toFloat()
+
+    protected val verticalTextDrawBoxOffset: Float
+        get() = 4f * 480f / playerScreenResolution.height.toFloat()
+
+    protected val horizontalTextDrawBoxOffset: Float
+        get() = 4f * 640f / playerScreenResolution.width.toFloat()
+
+    protected val playerScreenResolution = player.screenResolution
+
+    protected fun screenMinXToTextDrawMinX(minX: Float): Float = minX + horizontalTextDrawBoxOffset
+
+    protected fun screenMinXAndWidthToTextDrawMaxX(minX: Float, width: Float): Float = minX + width - horizontalTextDrawBoxOffset
+
+    protected fun screenWidthToTextDrawWidth(width: Float): Float = width - horizontalTextDrawBoxOffset
+
+    protected fun screenMinYToTextDrawMinY(y: Float, offset: Float = verticalTextDrawBoxOffset): Float = (y + offset) / magicNumber
+
+    protected fun screenHeightToTextDrawHeight(height: Float, offset: Float = verticalTextDrawBoxOffset): Float = (height - offset) / magicNumber
+
+    protected fun screenHeightToTextDrawHeightByLetterSize(height: Float): Float = screenHeightToLetterSizeY(height) / 0.135f
+
+    protected fun screenHeightToLetterSizeY(height: Float): Float = (height - 4.3373f) / 9.6386f
 
 }

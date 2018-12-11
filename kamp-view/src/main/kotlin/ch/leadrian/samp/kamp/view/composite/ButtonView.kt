@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
+import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.BackgroundView
 import ch.leadrian.samp.kamp.view.base.ClickableView
@@ -33,13 +34,37 @@ open class ButtonView(
             backgroundView.setPadding(value)
         }
 
-    var backgroundColor: Color = Colors.GREY
+    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
-    var disabledBackgroundColor: Color = Colors.LIGHT_GRAY
+    var backgroundColor: Color by backgroundColorSupplier
 
-    var textColor: Color = Colors.BLACK
+    fun backgroundColor(backgroundColorSupplier: () -> Color) {
+        this.backgroundColorSupplier.value(backgroundColorSupplier)
+    }
 
-    var disabledTextColor: Color = Colors.DARK_GRAY
+    private var disabledBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
+
+    var disabledBackgroundColor: Color by disabledBackgroundColorSupplier
+
+    fun disabledBackgroundColor(disabledBackgroundColorSupplier: () -> Color) {
+        this.disabledBackgroundColorSupplier.value(disabledBackgroundColorSupplier)
+    }
+
+    private var textColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+
+    var textColor: Color by textColorSupplier
+
+    fun textColor(textColorSupplier: () -> Color) {
+        this.textColorSupplier.value(textColorSupplier)
+    }
+
+    private var disabledTextColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
+
+    var disabledTextColor: Color by disabledTextColorSupplier
+
+    fun disabledTextColor(disabledTextColorSupplier: () -> Color) {
+        this.disabledTextColorSupplier.value(disabledTextColorSupplier)
+    }
 
     var font: TextDrawFont
         get() = textView.font
