@@ -1,7 +1,26 @@
+apply plugin: 'kamp-textkeygen'
+
 dependencies {
 
     compile(
             project(':kamp-core')
     )
 
+}
+
+def generatedSrcJavaDir = "${buildDir}/generated-src/main/java"
+
+sourceSets {
+    main {
+        java {
+            srcDir generatedSrcJavaDir
+        }
+    }
+}
+
+textKeyGenerator {
+
+    outputDirectory = generatedSrcJavaDir
+    packageName 'ch.leadrian.samp.kamp.view'
+    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }

@@ -9,6 +9,8 @@ import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationElementFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigator
+import ch.leadrian.samp.kamp.view.screenresolution.PlayerScreenResolutionFactory
+import ch.leadrian.samp.kamp.view.screenresolution.ScreenResolutionDialogProvider
 
 internal class ViewModule : KampModule() {
 
@@ -20,9 +22,10 @@ internal class ViewModule : KampModule() {
         bind(ViewFactory::class.java).to(DefaultViewFactory::class.java)
         bind(ViewNavigationElementFactory::class.java)
         bind(ViewNavigator::class.java).asEagerSingleton()
+        bind(ScreenResolutionDialogProvider::class.java)
         newPlayerExtensionFactorySetBinder().apply {
             addBinding().to(ViewNavigationFactory::class.java)
-            addBinding().to(ScreenResolutionFactory::class.java)
+            addBinding().to(PlayerScreenResolutionFactory::class.java)
         }
     }
 

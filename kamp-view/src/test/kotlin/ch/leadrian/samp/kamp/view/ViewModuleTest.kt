@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
+import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -16,6 +17,8 @@ import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationElementFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigationFactory
 import ch.leadrian.samp.kamp.view.navigation.ViewNavigator
+import ch.leadrian.samp.kamp.view.screenresolution.PlayerScreenResolutionFactory
+import ch.leadrian.samp.kamp.view.screenresolution.ScreenResolutionDialogProvider
 import com.google.inject.Guice
 import com.google.inject.Injector
 import io.mockk.mockk
@@ -107,22 +110,28 @@ internal class ViewModuleTest {
         fun shouldInjectSetOfPlayerExtensionFactories() {
             val fooService = injector.getInstance<FooService>()
 
-            assertThat(fooService.playerExtensionFactories)
-                    .hasSize(1)
-                    .allSatisfy {
-                        assertThat(it)
-                                .isInstanceOf(ViewNavigationFactory::class.java)
-                    }
+            assertThat(fooService.playerExtensionFactories.map { it::class })
+                    .containsExactlyInAnyOrder(ViewNavigationFactory::class, PlayerScreenResolutionFactory::class)
         }
 
         @Test
-        fun shouldInjectViewNavigator() {
+        fun shouldInjectViewNavigatorAsSingleton() {
             val viewNavigator = injector.getInstance<ViewNavigator>()
 
             assertThat(viewNavigator)
                     .isNotNull
                     .isInstanceOf(ViewNavigator::class.java)
                     .isSameAs(injector.getInstance<ViewNavigator>())
+        }
+
+        @Test
+        fun shouldInjectScreenResolutionDialogProviderAsSingleton() {
+            val screenResolutionDialogProvider = injector.getInstance<ScreenResolutionDialogProvider>()
+
+            assertThat(screenResolutionDialogProvider)
+                    .isNotNull
+                    .isInstanceOf(ScreenResolutionDialogProvider::class.java)
+                    .isSameAs(injector.getInstance<ScreenResolutionDialogProvider>())
         }
     }
 
@@ -137,6 +146,7 @@ internal class ViewModuleTest {
             bind(TextFormatter::class.java).toInstance(mockk())
             bind(PlayerTextDrawService::class.java).toInstance(mockk())
             bind(CallbackListenerManager::class.java).toInstance(mockk())
+            bind(DialogService::class.java).toInstance(mockk())
         }
 
     }

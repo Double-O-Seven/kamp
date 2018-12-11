@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.view.layout
 
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.view.screenResolution
+import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
 
 private val MAGIC_NUMBER: Float = Math.pow(4.0 / 3.0, 1.0 / 4.0).toFloat()
 
