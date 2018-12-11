@@ -9,9 +9,9 @@ import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
-import ch.leadrian.samp.kamp.view.TEXT_DRAW_OFFSET_LEFT
 import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.layout.horizontalTextDrawBoxOffset
 import ch.leadrian.samp.kamp.view.layout.screenHeightToTextDrawBoxHeight
 import ch.leadrian.samp.kamp.view.layout.screenYCoordinateToTextDrawBoxY
 
@@ -45,14 +45,11 @@ open class BackgroundView(
         textDraw = playerTextDrawService.createPlayerTextDraw(
                 player,
                 TextDrawCodes.EMPTY_TEXT,
-                vector2DOf(x = area.minX, y = screenYCoordinateToTextDrawBoxY(area.minY))
+                vector2DOf(x = area.minX + player.horizontalTextDrawBoxOffset, y = player.screenYCoordinateToTextDrawBoxY(area.minY))
         ).also {
             it.alignment = TextDrawAlignment.LEFT
-            it.textSize = vector2DOf(
-                    x = area.minX + area.width - TEXT_DRAW_OFFSET_LEFT / 2f,
-                    y = screenHeightToTextDrawBoxHeight(area.height) / 0.135f
-            )
-            it.letterSize = vector2DOf(x = 0f, y = screenHeightToTextDrawBoxHeight(area.height))
+            it.textSize = vector2DOf(x = area.minX + area.width - player.horizontalTextDrawBoxOffset, y = 0f)
+            it.letterSize = vector2DOf(x = 0f, y = player.screenHeightToTextDrawBoxHeight(area.height))
             it.useBox = true
             it.boxColor = color
             it.isSelectable = isEnabled

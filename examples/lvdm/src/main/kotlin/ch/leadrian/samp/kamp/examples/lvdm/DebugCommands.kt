@@ -32,6 +32,7 @@ import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.navigation.viewNavigation
+import ch.leadrian.samp.kamp.view.screenResolution
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -124,6 +125,14 @@ constructor(
             messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
         }
         messageSender.sendMessageToPlayer(player, Colors.GREEN, "Created $numberOfObjects objects")
+    }
+
+    @Command
+    fun screenRes(player: Player, w: Int, h: Int) {
+        player.screenResolution.apply {
+            width = w
+            height = h
+        }
     }
 
     @Command

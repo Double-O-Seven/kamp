@@ -22,6 +22,7 @@ internal class ViewModule : KampModule() {
         bind(ViewNavigator::class.java).asEagerSingleton()
         newPlayerExtensionFactorySetBinder().apply {
             addBinding().to(ViewNavigationFactory::class.java)
+            addBinding().to(ScreenResolutionFactory::class.java)
         }
     }
 
