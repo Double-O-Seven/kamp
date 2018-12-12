@@ -31,10 +31,10 @@ open class VerticalListView<T>(
 
     init {
         with(viewFactory) {
-            scrollBarView = this@VerticalListView.verticalScrollBarView(this@VerticalListView) {
+            scrollBarView = verticalScrollBarView(this@VerticalListView) {
                 width = scrollBarWidth
             }
-            contentView = this@VerticalListView.view {
+            contentView = view {
                 val numberOfDisplayedItems = adapter.numberOfDisplayedItems
                 val height = (100f / numberOfDisplayedItems.toFloat())
                 (0 until numberOfDisplayedItems).forEach { i ->

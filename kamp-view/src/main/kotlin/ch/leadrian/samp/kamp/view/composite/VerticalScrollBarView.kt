@@ -35,7 +35,7 @@ open class VerticalScrollBarView(
 
     init {
         with(viewFactory) {
-            this@VerticalScrollBarView.backgroundView {
+            backgroundView {
                 color { this@VerticalScrollBarView.backgroundColor }
                 val scrollUpView = backgroundView {
                     top = 0.pixels()

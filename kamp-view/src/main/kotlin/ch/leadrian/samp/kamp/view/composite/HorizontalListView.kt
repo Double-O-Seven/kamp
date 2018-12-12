@@ -31,10 +31,10 @@ open class HorizontalListView<T>(
 
     init {
         with(viewFactory) {
-            scrollBarView = this@HorizontalListView.horizontalScrollBarView(this@HorizontalListView) {
+            scrollBarView = horizontalScrollBarView(this@HorizontalListView) {
                 height = scrollBarHeight
             }
-            contentView = this@HorizontalListView.view {
+            contentView = view {
                 val numberOfDisplayedItems = adapter.numberOfDisplayedItems
                 val width = (100f / numberOfDisplayedItems.toFloat())
                 (0 until numberOfDisplayedItems).forEach { i ->

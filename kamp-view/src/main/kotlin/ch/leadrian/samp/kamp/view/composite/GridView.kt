@@ -21,7 +21,7 @@ open class GridView(
         with(viewFactory) {
             (0 until numberOfRows).forEach { row ->
                 (0 until numberOfColumns).forEach { column ->
-                    this@GridView.view {
+                    view {
                         top = (row * cellHeight).percent()
                         left = (column * cellWidth).percent()
                         height = cellHeight.percent()

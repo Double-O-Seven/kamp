@@ -35,7 +35,7 @@ open class HorizontalScrollBarView(
 
     init {
         with(viewFactory) {
-            this@HorizontalScrollBarView.backgroundView {
+            backgroundView {
                 color { this@HorizontalScrollBarView.backgroundColor }
                 val scrollLeftView = backgroundView {
                     left = 0.pixels()
