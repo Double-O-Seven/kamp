@@ -1,7 +1,9 @@
 package ch.leadrian.samp.kamp.view.screenresolution
 
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.service.DialogService
+import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.view.TextKeys
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -9,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 internal class ScreenResolutionDialogProvider
 @Inject
-constructor(dialogService: DialogService) {
+constructor(dialogService: DialogService, messageSender: MessageSender) {
 
     private val allScreenResolutions: List<ScreenResolution> = listOf(
             640 x 480,
@@ -40,10 +42,20 @@ constructor(dialogService: DialogService) {
             allScreenResolutions.forEach {
                 item {
                     value(it)
-                    content("${it.width} x ${it.height}")
+                    content("${it.width}x${it.height}")
                 }
             }
-            onSelectItem { player, listDialogItem, _ -> player.screenResolution.set(listDialogItem.value) }
+            onSelectItem { player, listDialogItem, _ ->
+                val resolution = listDialogItem.value
+                player.screenResolution.set(resolution)
+                messageSender.sendMessageToPlayer(
+                        player,
+                        Colors.GREY,
+                        TextKeys.view.dialog.screen.resolution.message,
+                        resolution.width.toString(),
+                        resolution.height.toString()
+                )
+            }
             leftButton(ch.leadrian.samp.kamp.core.TextKeys.dialog.button.ok)
             rightButton(ch.leadrian.samp.kamp.core.TextKeys.dialog.button.cancel)
         }

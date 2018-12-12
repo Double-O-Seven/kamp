@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
+import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -23,11 +24,15 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.translateForText
 import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
 import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.base.onClick
+import ch.leadrian.samp.kamp.view.composite.GridViewAdapter
+import ch.leadrian.samp.kamp.view.composite.HorizontalListView
 import ch.leadrian.samp.kamp.view.composite.ListItemView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarView
+import ch.leadrian.samp.kamp.view.composite.VerticalListView
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
@@ -133,7 +138,41 @@ constructor(
     }
 
     @Command
-    fun skinListView(player: Player) {
+    fun gridView(player: Player, rows: Int, columns: Int) {
+        val adapter = object : GridViewAdapter {
+
+            override val numberOfRows: Int = rows
+
+            override val numberOfColumns: Int = columns
+
+            override fun createView(player: Player, row: Int, column: Int): View {
+                val colorIndex = row * numberOfColumns + column
+                with(viewFactory) {
+                    return backgroundView(player) {
+                        color = Colors.LIGHT_GRAY
+                        setMargin(4.pixels())
+                        setPadding(4.pixels())
+                        backgroundView {
+                            color = VehicleColor[colorIndex].color
+                        }
+                    }
+                }
+            }
+
+        }
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    gridView(adapter)
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
+    fun skinListView(player: Player, scrollBarPosition: HorizontalListView.ScrollBarPosition) {
         val adapter = object : ListViewAdapter<SkinModel> {
 
             override val numberOfItems: Int = SkinModel.values().size
@@ -151,7 +190,9 @@ constructor(
             val view = view(player) {
                 setPadding(100.pixels())
                 backgroundView {
-                    horizontalListView(adapter)
+                    horizontalListView(adapter) {
+                        this.scrollBarPosition = scrollBarPosition
+                    }
                 }
             }
             player.viewNavigation.push(view)
@@ -196,7 +237,7 @@ constructor(
     }
 
     @Command
-    fun vehicleListView(player: Player) {
+    fun vehicleListView(player: Player, scrollBarPosition: VerticalListView.ScrollBarPosition) {
         val adapter = object : ListViewAdapter<Vehicle> {
 
             override val numberOfItems: Int = vehicleService.getAllVehicles().size
@@ -214,7 +255,9 @@ constructor(
             val view = view(player) {
                 setPadding(100.pixels())
                 backgroundView {
-                    verticalListView(adapter)
+                    verticalListView(adapter) {
+                        this.scrollBarPosition = scrollBarPosition
+                    }
                 }
             }
             player.viewNavigation.push(view)
