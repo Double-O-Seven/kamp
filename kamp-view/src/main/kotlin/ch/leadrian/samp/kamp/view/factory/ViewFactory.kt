@@ -11,6 +11,8 @@ import ch.leadrian.samp.kamp.view.base.SpriteView
 import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.composite.ButtonView
+import ch.leadrian.samp.kamp.view.composite.GridView
+import ch.leadrian.samp.kamp.view.composite.GridViewAdapter
 import ch.leadrian.samp.kamp.view.composite.HorizontalListView
 import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
@@ -146,6 +148,18 @@ interface ViewFactory {
         val horizontalListView = horizontalListView(player, adapter, buildingBlock)
         addChild(horizontalListView)
         return horizontalListView
+    }
+
+    fun gridView(player: Player, adapter: GridViewAdapter, buildingBlock: GridView.() -> Unit = {}): GridView {
+        val gridView = GridView(player, viewContext, this, adapter)
+        buildingBlock(gridView)
+        return gridView
+    }
+
+    fun View.gridView(adapter: GridViewAdapter, buildingBlock: GridView.() -> Unit = {}): GridView {
+        val gridView = gridView(player, adapter, buildingBlock)
+        addChild(gridView)
+        return gridView
     }
 
 }

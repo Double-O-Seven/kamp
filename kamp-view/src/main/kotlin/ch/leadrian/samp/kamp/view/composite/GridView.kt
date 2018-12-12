@@ -7,10 +7,10 @@ import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.percent
 
 open class GridView(
-        adapter: GridViewAdapter,
         player: Player,
         viewContext: ViewContext,
-        viewFactory: ViewFactory
+        viewFactory: ViewFactory,
+        adapter: GridViewAdapter
 ) : View(player, viewContext) {
 
     init {
