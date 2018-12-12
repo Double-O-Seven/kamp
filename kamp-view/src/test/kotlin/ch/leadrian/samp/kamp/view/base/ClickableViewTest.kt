@@ -16,6 +16,7 @@ internal class ClickableViewTest {
     fun shouldCallOnClickListener() {
         val view = TestClickableView(mockk(), mockk())
         val listener = mockk<OnClickViewListener>(relaxed = true)
+        view.enable()
         view.addOnClickListener(listener)
 
         view.click()
@@ -51,6 +52,7 @@ internal class ClickableViewTest {
     fun shouldCallOnClick() {
         val view = TestClickableView(mockk(), mockk())
         val clicked = mockk<(View) -> Unit>(relaxed = true)
+        view.enable()
         view.onClick { clicked(this) }
 
         view.click()
@@ -61,6 +63,8 @@ internal class ClickableViewTest {
     @Test
     fun givenViewIsEnabledClickShouldReturnProcessedAsResult() {
         val view = TestClickableView(mockk(), mockk())
+        view.enable()
+
         val result = view.click()
 
         assertThat(result)
@@ -118,10 +122,11 @@ internal class ClickableViewTest {
         fun givenViewIsEnabledItShouldNotCallOnEnableAgain() {
             val onEnable = mockk<TestClickableView.() -> Unit>(relaxed = true)
             val view = TestClickableView(mockk(), mockk(), onEnable = onEnable)
+            view.enable()
 
             view.enable()
 
-            verify(exactly = 0) { onEnable.invoke(view) }
+            verify(exactly = 1) { onEnable.invoke(view) }
         }
 
     }
@@ -132,7 +137,8 @@ internal class ClickableViewTest {
         @Test
         fun shouldCallOnDisable() {
             val onDisable = mockk<TestClickableView.() -> Unit>(relaxed = true)
-            val view = TestClickableView(mockk(), mockk(), mockk(), onDisable = onDisable)
+            val view = TestClickableView(mockk(), mockk(), onDisable = onDisable)
+            view.enable()
 
             view.disable()
 
@@ -142,12 +148,11 @@ internal class ClickableViewTest {
         @Test
         fun givenViewIsDisabledItShouldNotCallOnDisableAgain() {
             val onDisable = mockk<TestClickableView.() -> Unit>(relaxed = true)
-            val view = TestClickableView(mockk(), mockk(), mockk(), onDisable = onDisable)
-            view.disable()
+            val view = TestClickableView(mockk(), mockk(), onDisable = onDisable)
 
             view.disable()
 
-            verify(exactly = 1) { onDisable.invoke(view) }
+            verify(exactly = 0) { onDisable.invoke(view) }
         }
 
     }

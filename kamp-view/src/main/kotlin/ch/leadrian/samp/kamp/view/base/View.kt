@@ -238,13 +238,15 @@ open class View(
             return
         }
 
+        onDestroy()
         _children.forEach { it.destroy() }
         _children.clear()
-        onDestroy()
         isDestroyed = true
     }
 
     protected open fun onDestroy() {}
+
+    protected val playerScreenResolution by lazy { player.screenResolution }
 
     private val magicNumber: Float = Math.pow(4.0 / 3.0, 1.0 / 4.0).toFloat()
 
@@ -253,8 +255,6 @@ open class View(
 
     protected val horizontalTextDrawBoxOffset: Float
         get() = 4f * 640f / playerScreenResolution.width.toFloat()
-
-    protected val playerScreenResolution = player.screenResolution
 
     protected fun screenMinXToTextDrawMinX(minX: Float): Float = minX + horizontalTextDrawBoxOffset
 

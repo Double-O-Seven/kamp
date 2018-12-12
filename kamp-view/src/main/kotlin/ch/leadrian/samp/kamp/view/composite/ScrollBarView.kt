@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.view.base.View
 abstract class ScrollBarView(
         player: Player,
         viewContext: ViewContext,
-        protected val adapter: ScrollBarAdapter
+        private val adapter: ScrollBarAdapter
 ) : View(player, viewContext) {
 
     var currentPosition: Int = 0

@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.view.base.View
 abstract class ListView<T>(
         player: Player,
         viewContext: ViewContext,
-        protected val adapter: ListViewAdapter<T>
+        private val adapter: ListViewAdapter<T>
 ) : View(player, viewContext), ScrollBarAdapter {
 
     final override val numberOfTicks: Int

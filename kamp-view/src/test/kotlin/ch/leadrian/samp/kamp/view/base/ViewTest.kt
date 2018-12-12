@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test
 
 internal class ViewTest {
 
-    private val player = mockk<Player>()
+    private val player = mockk<Player>(relaxed = true)
     private val viewContext = mockk<ViewContext>()
     private val viewLayoutCalculator = mockk<ViewLayoutCalculator>()
 
@@ -176,7 +176,12 @@ internal class ViewTest {
     @Nested
     inner class AddChildTests {
 
-        private val parentView = TestView(player, viewContext)
+        private lateinit var parentView: TestView
+
+        @BeforeEach
+        fun setUp() {
+            parentView = TestView(player, viewContext)
+        }
 
         @Test
         fun shouldAddChild() {
@@ -367,10 +372,10 @@ internal class ViewTest {
             view.destroy()
 
             verifySequence {
-                onDestroy.invoke(childView3)
-                onDestroy.invoke(childView1)
-                onDestroy.invoke(childView2)
                 onDestroy.invoke(view)
+                onDestroy.invoke(childView1)
+                onDestroy.invoke(childView3)
+                onDestroy.invoke(childView2)
             }
         }
 
