@@ -15,7 +15,7 @@ import ch.leadrian.samp.kamp.view.ViewContext
 open class BackgroundView(
         player: Player,
         viewContext: ViewContext,
-        protected val playerTextDrawService: PlayerTextDrawService
+        private val playerTextDrawService: PlayerTextDrawService
 ) : ClickableView(player, viewContext) {
 
     private var textDraw: PlayerTextDraw? = null

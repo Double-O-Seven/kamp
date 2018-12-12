@@ -24,9 +24,9 @@ import java.util.*
 open class TextView(
         player: Player,
         viewContext: ViewContext,
-        protected val textProvider: TextProvider,
-        protected val textFormatter: TextFormatter,
-        protected val playerTextDrawService: PlayerTextDrawService
+        private val textProvider: TextProvider,
+        private val textFormatter: TextFormatter,
+        private val playerTextDrawService: PlayerTextDrawService
 ) : ClickableView(player, viewContext) {
 
     private companion object {
