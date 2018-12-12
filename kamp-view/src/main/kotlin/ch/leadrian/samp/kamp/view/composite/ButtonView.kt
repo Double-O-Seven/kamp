@@ -76,7 +76,7 @@ open class ButtonView(
         this.textColorSupplier.value(textColorSupplier)
     }
 
-    private var disabledTextColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
+    private var disabledTextColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
 
     var disabledTextColor: Color by disabledTextColorSupplier
 
