@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.view.base
 
-import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
@@ -55,7 +54,6 @@ open class SpriteView(
                         y = screenMinYToTextDrawMinY(area.minY, offset = 0f)
                 )
         ).also {
-            it.alignment = TextDrawAlignment.CENTERED
             it.textSize = vector2DOf(
                     x = area.width,
                     y = screenHeightToTextDrawHeight(area.height, offset = 0f)

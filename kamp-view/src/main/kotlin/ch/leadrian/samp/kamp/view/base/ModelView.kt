@@ -64,7 +64,6 @@ open class ModelView(
         this.vehicleColorsSupplier.value(vehicleColorsSupplier)
     }
 
-
     private fun Rectangle.transformToCenteredSquare(): Rectangle {
         return if (width > height) {
             val d = (width - height) / 2f

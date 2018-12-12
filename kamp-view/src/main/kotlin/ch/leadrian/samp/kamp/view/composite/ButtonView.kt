@@ -28,7 +28,7 @@ open class ButtonView(
 
     private lateinit var textView: TextView
 
-    var textPadding: ViewDimension = 16.pixels()
+    var textPadding: ViewDimension = 0.pixels()
         set(value) {
             field = value
             backgroundView.setPadding(value)

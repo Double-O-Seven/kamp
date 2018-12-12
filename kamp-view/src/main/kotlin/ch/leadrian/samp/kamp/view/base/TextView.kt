@@ -50,7 +50,7 @@ open class TextView(
     var letterHeight: ViewDimension = 16.pixels()
 
     var letterWidth: ViewDimension = pixels {
-        val letterSize = pixelsToLetterSize(letterHeight.getValue(parentArea.height)) / font.optimalHeightToWidthRatio
+        val letterSize = pixelsToLetterSize(letterHeight.getValue(paddingArea.height)) / font.optimalHeightToWidthRatio
         letterSizeToPixels(letterSize)
     }
 

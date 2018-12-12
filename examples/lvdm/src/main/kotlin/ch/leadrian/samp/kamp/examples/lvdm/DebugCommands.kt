@@ -138,6 +138,22 @@ constructor(
     }
 
     @Command
+    fun modelViewerView(player: Player, modelId: Int) {
+        with(viewFactory) {
+            val view = view(player) {
+                setPadding(100.pixels())
+                backgroundView {
+                    modelViewerView {
+                        this.modelId = modelId
+                        buttonSize = 16.pixels()
+                    }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
     fun gridView(player: Player, rows: Int, columns: Int) {
         val adapter = object : GridViewAdapter {
 
