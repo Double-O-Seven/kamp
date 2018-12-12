@@ -4,6 +4,8 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.View
+import ch.leadrian.samp.kamp.view.style.ScrollBarStyle
+import ch.leadrian.samp.kamp.view.style.Style
 
 abstract class ScrollBarView(
         player: Player,
@@ -35,5 +37,14 @@ abstract class ScrollBarView(
     }
 
     protected abstract fun onScroll()
+
+    override fun applyStyle(style: Style): Boolean {
+        super.applyStyle(style)
+        if (style is ScrollBarStyle) {
+            color = style.scrollBarColor
+            backgroundColor = style.scrollBarBackgroundColor
+        }
+        return true
+    }
 
 }

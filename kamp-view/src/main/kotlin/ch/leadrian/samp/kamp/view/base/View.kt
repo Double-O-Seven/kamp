@@ -146,12 +146,18 @@ open class View(
     }
 
     fun style(style: Style) {
-        applyStyle(style)
-        _children.forEach { it.style(style) }
+        val appliedToChildren = applyStyle(style)
+        if (!appliedToChildren) {
+            _children.forEach { it.style(style) }
+        }
     }
 
-    protected open fun applyStyle(style: Style) {
+    /**
+     * @return `true` if the style was already applied to children, else `false`
+     */
+    protected open fun applyStyle(style: Style): Boolean {
         hoverColor = style.hoverColor
+        return false
     }
 
     fun draw() {

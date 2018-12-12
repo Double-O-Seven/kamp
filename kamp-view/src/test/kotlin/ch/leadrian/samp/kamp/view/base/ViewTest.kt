@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.view.base
 
 
+import ch.leadrian.samp.kamp.core.api.data.Color
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.view.ViewContext
@@ -788,25 +790,70 @@ internal class ViewTest {
 
     }
 
-    @Test
-    fun shouldApplyStyle() {
-        val style = object : Style {}
-        val applyStyle = mockk<TestView.(Style) -> Unit>(relaxed = true)
-        val childView1 = TestView(player, viewContext, applyStyle = applyStyle)
-        val childView2 = TestView(player, viewContext, applyStyle = applyStyle)
-        val childView3 = TestView(player, viewContext, applyStyle = applyStyle)
-        childView1.addChild(childView3)
-        val view = TestView(player, viewContext, applyStyle = applyStyle).apply {
-            addChildren(childView1, childView2)
+    @Nested
+    inner class StyleTests {
+
+        @Test
+        fun givenApplyStyleReturnsFalseApplyStyleRecursively() {
+            val style = object : Style {}
+            val applyStyle = mockk<TestView.(Style) -> Boolean> {
+                every { this@mockk.invoke(any(), any()) } returns false
+            }
+            val childView1 = TestView(player, viewContext, applyStyle = applyStyle)
+            val childView2 = TestView(player, viewContext, applyStyle = applyStyle)
+            val childView3 = TestView(player, viewContext, applyStyle = applyStyle)
+            childView1.addChild(childView3)
+            val view = TestView(player, viewContext, applyStyle = applyStyle).apply {
+                addChildren(childView1, childView2)
+            }
+
+            view.style(style)
+
+            verify(exactly = 1) {
+                applyStyle.invoke(view, style)
+                applyStyle.invoke(childView1, style)
+                applyStyle.invoke(childView3, style)
+                applyStyle.invoke(childView2, style)
+            }
         }
 
-        view.style(style)
+        @Test
+        fun givenApplyStyleReturnsTrueItShouldNotApplyStyleToChildren() {
+            val style = object : Style {}
+            val applyStyle = mockk<TestView.(Style) -> Boolean> {
+                every { this@mockk.invoke(any(), any()) } returns true
+            }
+            val childView1 = TestView(player, viewContext, applyStyle = applyStyle)
+            val childView2 = TestView(player, viewContext, applyStyle = applyStyle)
+            val childView3 = TestView(player, viewContext, applyStyle = applyStyle)
+            childView1.addChild(childView3)
+            val view = TestView(player, viewContext, applyStyle = applyStyle).apply {
+                addChildren(childView1, childView2)
+            }
 
-        verify(exactly = 1) {
-            applyStyle.invoke(view, style)
-            applyStyle.invoke(childView1, style)
-            applyStyle.invoke(childView3, style)
-            applyStyle.invoke(childView2, style)
+            view.style(style)
+
+            verify(exactly = 1) {
+                applyStyle.invoke(view, style)
+            }
+            verify(exactly = 0) {
+                applyStyle.invoke(childView1, style)
+                applyStyle.invoke(childView3, style)
+                applyStyle.invoke(childView2, style)
+            }
+        }
+
+        @Test
+        fun shouldSetHoverColorByDefault() {
+            val style = object : Style {
+                override val hoverColor: Color = Colors.PINK
+            }
+            val view = TestView(player, viewContext)
+
+            view.style(style)
+
+            assertThat(view.hoverColor)
+                    .isEqualTo(Colors.PINK)
         }
     }
 
@@ -817,7 +864,7 @@ internal class ViewTest {
             private val onShow: TestView.() -> Unit = {},
             private val onHide: TestView.() -> Unit = {},
             private val onDestroy: TestView.() -> Unit = {},
-            private val applyStyle: TestView.(Style) -> Unit = {}
+            private val applyStyle: TestView.(Style) -> Boolean = { false }
     ) : View(player, viewContext) {
 
         override fun onDraw() {
@@ -836,8 +883,9 @@ internal class ViewTest {
             onDestroy.invoke(this)
         }
 
-        override fun applyStyle(style: Style) {
-            applyStyle.invoke(this, style)
+        override fun applyStyle(style: Style): Boolean {
+            super.applyStyle(style)
+            return applyStyle.invoke(this, style)
         }
 
     }

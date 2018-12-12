@@ -16,6 +16,8 @@ import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.style.ButtonStyle
+import ch.leadrian.samp.kamp.view.style.Style
 import java.util.*
 
 open class ButtonView(
@@ -48,6 +50,22 @@ open class ButtonView(
 
     fun disabledBackgroundColor(disabledBackgroundColorSupplier: () -> Color) {
         this.disabledBackgroundColorSupplier.value(disabledBackgroundColorSupplier)
+    }
+
+    private var textBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+
+    var textBackgroundColor: Color by textBackgroundColorSupplier
+
+    fun textBackgroundColor(textBackgroundColorSupplier: () -> Color) {
+        this.textBackgroundColorSupplier.value(textBackgroundColorSupplier)
+    }
+
+    private var disabledTextBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
+
+    var disabledTextBackgroundColor: Color by disabledTextBackgroundColorSupplier
+
+    fun disabledTextBackgroundColor(disabledTextBackgroundColorSupplier: () -> Color) {
+        this.disabledTextBackgroundColorSupplier.value(disabledTextBackgroundColorSupplier)
     }
 
     private var textColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
@@ -130,6 +148,25 @@ open class ButtonView(
         this.textView.text(textSupplier)
     }
 
+    override fun applyStyle(style: Style): Boolean {
+        super.applyStyle(style)
+        if (style is ButtonStyle) {
+            textPadding = style.buttonTextPadding
+            backgroundColor = style.buttonBackgroundColor
+            disabledBackgroundColor = style.disabledButtonBackgroundColor
+            textColor = style.buttonTextColor
+            disabledTextColor = style.disabledButtonTextColor
+            textBackgroundColor = style.buttonTextBackgroundColor
+            disabledTextBackgroundColor = style.disabledButtonTextBackgroundColor
+            font = style.buttonTextFont
+            outlineSize = style.buttonTextOutlineSize
+            shadowSize = style.buttonTextShadowSize
+            isProportional = style.isButtonTextProportional
+            alignment = style.buttonTextAlignment
+        }
+        return false
+    }
+
     init {
         with(viewFactory) {
             backgroundView = this@ButtonView.backgroundView {
@@ -149,6 +186,13 @@ open class ButtonView(
                             this@ButtonView.textColor
                         } else {
                             this@ButtonView.disabledTextColor
+                        }
+                    }
+                    backgroundColor {
+                        if (this@ButtonView.isEnabled) {
+                            this@ButtonView.textBackgroundColor
+                        } else {
+                            this@ButtonView.disabledTextBackgroundColor
                         }
                     }
                     outlineSize = 0
