@@ -1037,9 +1037,13 @@ internal class VectorsTest {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
                 createArguments { x, y, z, angle -> positionOf(x = x, y = y, z = z, angle = angle) },
+                createArguments { x, y, z, angle -> positionOf(coordinates = vector3DOf(x = x, y = y, z = z), angle = angle) },
                 createArguments { x, y, z, angle -> mutablePositionOf(x = x, y = y, z = z, angle = angle) },
+                createArguments { x, y, z, angle -> mutablePositionOf(coordinates = vector3DOf(x = x, y = y, z = z), angle = angle) },
                 createArguments { x, y, z, angle -> angledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = angle) },
-                createArguments { x, y, z, angle -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = angle) }
+                createArguments { x, y, z, angle -> angledLocationOf(position = positionOf(x = x, y = y, z = z, angle = angle), interiorId = 0, worldId = 0) },
+                createArguments { x, y, z, angle -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = angle) },
+                createArguments { x, y, z, angle -> mutableAngledLocationOf(position = positionOf(x = x, y = y, z = z, angle = angle), interiorId = 0, worldId = 0) }
         )
 
         private fun createArguments(factory: (Float, Float, Float, Float) -> Position): Arguments = Arguments.of(factory)
@@ -1050,9 +1054,15 @@ internal class VectorsTest {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
                 createArguments { x, y, z, interiorId, worldId -> locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId) },
+                createArguments { x, y, z, interiorId, worldId -> locationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId) },
                 createArguments { x, y, z, interiorId, worldId -> mutableLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId) },
+                createArguments { x, y, z, interiorId, worldId -> mutableLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId) },
                 createArguments { x, y, z, interiorId, worldId -> angledLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId, angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId, angle = 0f) }
+                createArguments { x, y, z, interiorId, worldId -> angledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
+                createArguments { x, y, z, interiorId, worldId -> angledLocationOf(location = locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId), angle = 0f) },
+                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
+                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
+                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(location = locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId), angle = 0f) }
         )
 
         private fun createArguments(factory: (Float, Float, Float, Int, Int) -> Location): Arguments = Arguments.of(factory)
