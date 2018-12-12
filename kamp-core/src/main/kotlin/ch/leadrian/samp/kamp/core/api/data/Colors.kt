@@ -13,6 +13,7 @@ fun mutableColorOf(r: Int, g: Int, b: Int, a: Int): MutableColor = MutableColorI
 private fun rgbaValue(r: Int, g: Int, b: Int, a: Int) =
         ((r and 0xFF) shl 24) or ((g and 0xFF) shl 16) or ((b and 0xFF) shl 8) or (a and 0xFF)
 
+@Suppress("unused")
 object Colors {
 
     @JvmStatic
