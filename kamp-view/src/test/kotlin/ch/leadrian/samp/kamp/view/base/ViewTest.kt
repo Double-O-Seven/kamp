@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewLayout
 import ch.leadrian.samp.kamp.view.layout.ViewLayoutCalculator
 import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.style.Style
 import io.mockk.Called
 import io.mockk.every
 import io.mockk.mockk
@@ -787,13 +788,36 @@ internal class ViewTest {
 
     }
 
+    @Test
+    fun shouldApplyStyle() {
+        val style = object : Style {}
+        val applyStyle = mockk<TestView.(Style) -> Unit>(relaxed = true)
+        val childView1 = TestView(player, viewContext, applyStyle = applyStyle)
+        val childView2 = TestView(player, viewContext, applyStyle = applyStyle)
+        val childView3 = TestView(player, viewContext, applyStyle = applyStyle)
+        childView1.addChild(childView3)
+        val view = TestView(player, viewContext, applyStyle = applyStyle).apply {
+            addChildren(childView1, childView2)
+        }
+
+        view.style(style)
+
+        verify(exactly = 1) {
+            applyStyle.invoke(view, style)
+            applyStyle.invoke(childView1, style)
+            applyStyle.invoke(childView3, style)
+            applyStyle.invoke(childView2, style)
+        }
+    }
+
     private class TestView(
             player: Player,
             viewContext: ViewContext,
             private val draw: TestView.() -> Unit = {},
             private val onShow: TestView.() -> Unit = {},
             private val onHide: TestView.() -> Unit = {},
-            private val onDestroy: TestView.() -> Unit = {}
+            private val onDestroy: TestView.() -> Unit = {},
+            private val applyStyle: TestView.(Style) -> Unit = {}
     ) : View(player, viewContext) {
 
         override fun onDraw() {
@@ -810,6 +834,10 @@ internal class ViewTest {
 
         override fun onDestroy() {
             onDestroy.invoke(this)
+        }
+
+        override fun applyStyle(style: Style) {
+            applyStyle.invoke(this, style)
         }
 
     }

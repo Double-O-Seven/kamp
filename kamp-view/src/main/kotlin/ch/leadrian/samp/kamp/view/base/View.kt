@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.ViewLayout
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
+import ch.leadrian.samp.kamp.view.style.Style
 import java.util.*
 import java.util.Collections.unmodifiableSet
 
@@ -142,6 +143,15 @@ open class View(
     fun setVerticalMargin(value: ViewDimension) {
         marginTop = value
         marginBottom = value
+    }
+
+    fun style(style: Style) {
+        applyStyle(style)
+        _children.forEach { it.style(style) }
+    }
+
+    protected open fun applyStyle(style: Style) {
+        hoverColor = style.hoverColor
     }
 
     fun draw() {
