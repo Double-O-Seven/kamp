@@ -72,12 +72,14 @@ open class TextView(
 
     private var textSupplier: (Locale) -> String = { TextDrawCodes.EMPTY_TEXT }
 
+    var textTransformer: TextTransformer? = null
+
     var text: String
         set(value) {
             textSupplier = { value }
         }
         get() {
-            val text = textSupplier(player.locale)
+            val text = textSupplier(player.locale).let { textTransformer?.transform(it, player.locale) ?: it }
             return when {
                 text.isBlank() -> TextDrawCodes.EMPTY_TEXT
                 text.length > MAX_TEXT_DRAW_STRING_LENGTH -> text.substring(0, MAX_TEXT_DRAW_STRING_LENGTH)

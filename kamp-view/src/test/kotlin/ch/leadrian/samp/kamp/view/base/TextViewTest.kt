@@ -155,5 +155,37 @@ internal class TextViewTest {
                     .isEqualTo("Hi there, 1234")
         }
 
+        @Test
+        fun shouldReplaceBlankTextWithEmptyTextDraw() {
+            textView.text = "    \n    "
+
+            val text = textView.text
+
+            assertThat(text)
+                    .isEqualTo("_")
+        }
+
+        @Test
+        fun shouldTrimToMaximumTextDrawTextLength() {
+            textView.text = "x".repeat(2000)
+
+            val text = textView.text
+
+            assertThat(text)
+                    .isEqualToIgnoringCase("x".repeat(1023))
+        }
+
+        @Test
+        fun givenTextTransformerItShouldTransformText() {
+            textView.textTransformer = TextTransformers.toUpperCase()
+            textView.text = "Hi there"
+
+            val text = textView.text
+
+            assertThat(text)
+                    .isEqualTo("HI THERE")
+        }
+
     }
+
 }
