@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
+import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
@@ -147,6 +148,7 @@ internal class ViewModuleTest {
             bind(PlayerTextDrawService::class.java).toInstance(mockk())
             bind(CallbackListenerManager::class.java).toInstance(mockk())
             bind(DialogService::class.java).toInstance(mockk())
+            bind(MessageSender::class.java).toInstance(mockk())
         }
 
     }

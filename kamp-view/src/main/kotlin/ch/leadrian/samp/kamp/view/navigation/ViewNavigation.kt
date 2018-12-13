@@ -27,31 +27,30 @@ internal constructor(private val viewNavigationElementFactory: ViewNavigationEle
         get() = stack.peek()?.useMouse ?: false
 
     @JvmOverloads
-    fun push(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true, destroyOnPop: Boolean = true) {
+    fun push(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true) {
         requireNotDestroyed()
         top?.hide()
         val element = viewNavigationElementFactory.create(
                 view = view,
                 allowManualNavigation = allowManualNavigation,
-                useMouse = useMouse,
-                destroyOnPop = destroyOnPop
+                useMouse = useMouse
         )
         stack.push(element)
         element.navigateTo()
     }
 
     @JvmOverloads
-    fun setRoot(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true, destroyOnPop: Boolean = true) {
+    fun setRoot(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true) {
         requireNotDestroyed()
         clear()
-        push(view = view, allowManualNavigation = allowManualNavigation, useMouse = useMouse, destroyOnPop = destroyOnPop)
+        push(view = view, allowManualNavigation = allowManualNavigation, useMouse = useMouse)
     }
 
     @JvmOverloads
-    fun replaceTop(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true, destroyOnPop: Boolean = true) {
+    fun replaceTop(view: View, allowManualNavigation: Boolean = true, useMouse: Boolean = true) {
         requireNotDestroyed()
         removeTop()
-        push(view = view, allowManualNavigation = allowManualNavigation, useMouse = useMouse, destroyOnPop = destroyOnPop)
+        push(view = view, allowManualNavigation = allowManualNavigation, useMouse = useMouse)
     }
 
     fun pop() {
@@ -62,12 +61,12 @@ internal constructor(private val viewNavigationElementFactory: ViewNavigationEle
 
     private fun removeTop() {
         if (stack.isNotEmpty()) {
-            stack.pop().onPop()
+            stack.pop().view.hide()
         }
     }
 
     fun clear() {
-        stack.reversed().forEach { it.onPop() }
+        stack.reversed().forEach { it.view.hide() }
         stack.clear()
     }
 

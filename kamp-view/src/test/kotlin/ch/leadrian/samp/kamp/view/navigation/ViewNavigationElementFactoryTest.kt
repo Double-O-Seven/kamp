@@ -10,27 +10,24 @@ internal class ViewNavigationElementFactoryTest {
 
     @ParameterizedTest
     @CsvSource(
-            "true, false, false",
-            "false, true, false",
-            "false, false, true"
+            "true, false",
+            "false, true"
     )
-    fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean, destroyOnPop: Boolean) {
+    fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean) {
         val view = mockk<View>()
         val viewNavigationElementFactory = ViewNavigationElementFactory()
 
         val element = viewNavigationElementFactory.create(
                 view = view,
                 allowManualNavigation = allowManualNavigation,
-                useMouse = useMouse,
-                destroyOnPop = destroyOnPop
+                useMouse = useMouse
         )
 
         assertThat(element)
                 .isEqualTo(ViewNavigationElement(
                         view = view,
                         allowManualNavigation = allowManualNavigation,
-                        useMouse = useMouse,
-                        destroyOnPop = destroyOnPop
+                        useMouse = useMouse
                 ))
     }
 

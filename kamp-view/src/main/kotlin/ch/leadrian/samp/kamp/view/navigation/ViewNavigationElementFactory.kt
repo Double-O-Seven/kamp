@@ -7,16 +7,7 @@ internal class ViewNavigationElementFactory
 @Inject
 constructor() {
 
-    fun create(
-            view: View,
-            allowManualNavigation: Boolean,
-            useMouse: Boolean,
-            destroyOnPop: Boolean
-    ): ViewNavigationElement = ViewNavigationElement(
-            view = view,
-            allowManualNavigation = allowManualNavigation,
-            useMouse = useMouse,
-            destroyOnPop = destroyOnPop
-    )
+    fun create(view: View, allowManualNavigation: Boolean, useMouse: Boolean): ViewNavigationElement =
+            ViewNavigationElement(view = view, allowManualNavigation = allowManualNavigation, useMouse = useMouse)
 
 }

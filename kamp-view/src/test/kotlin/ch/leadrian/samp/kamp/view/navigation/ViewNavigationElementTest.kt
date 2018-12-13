@@ -7,7 +7,6 @@ import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.verify
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -18,28 +17,7 @@ internal class ViewNavigationElementTest {
     inner class NavigateToTests {
 
         @Test
-        fun shouldShowView() {
-            val view = mockk<View> {
-                every { show(any(), any()) } just Runs
-                every { draw() } just Runs
-            }
-            val viewNavigationElement = ViewNavigationElement(
-                    view = view,
-                    allowManualNavigation = false,
-                    useMouse = false,
-                    destroyOnPop = true
-            )
-
-            viewNavigationElement.navigateTo()
-
-            verifyOrder {
-                view.show(draw = false, invalidate = true)
-                view.draw()
-            }
-        }
-
-        @Test
-        fun givenMouseIsUsedItShouldEnableTextDrawSelection() {
+        fun givenMouseIsUsedItShouldShowViewWithTextDrawSelectionEnabled() {
             val player = mockk<Player> {
                 every { selectTextDraw(any()) } just Runs
             }
@@ -52,51 +30,41 @@ internal class ViewNavigationElementTest {
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
                     allowManualNavigation = false,
-                    useMouse = true,
-                    destroyOnPop = true
+                    useMouse = true
             )
 
             viewNavigationElement.navigateTo()
 
-            verify { player.selectTextDraw(Colors.RED) }
+            verifyOrder {
+                view.show(draw = false, invalidate = true)
+                player.selectTextDraw(Colors.RED)
+                view.draw()
+            }
         }
-    }
-
-    @Nested
-    inner class OnPopTests {
 
         @Test
-        fun givenDestroyOnPopIsTrueItShouldDestroyView() {
+        fun givenMouseIsNotUsedItShouldShowViewWithTextDrawSelectionDisabled() {
+            val player = mockk<Player> {
+                every { cancelSelectTextDraw() } just Runs
+            }
             val view = mockk<View> {
-                every { destroy() } just Runs
+                every { show(any(), any()) } just Runs
+                every { draw() } just Runs
+                every { this@mockk.player } returns player
             }
             val viewNavigationElement = ViewNavigationElement(
                     view = view,
                     allowManualNavigation = false,
-                    useMouse = false,
-                    destroyOnPop = true
+                    useMouse = false
             )
 
-            viewNavigationElement.onPop()
+            viewNavigationElement.navigateTo()
 
-            verify { view.destroy() }
-        }
-
-        @Test
-        fun givenDestroyOnPopIsFalseItShouldHideView() {
-            val view = mockk<View> {
-                every { hide() } just Runs
+            verifyOrder {
+                view.show(draw = false, invalidate = true)
+                player.cancelSelectTextDraw()
+                view.draw()
             }
-            val viewNavigationElement = ViewNavigationElement(
-                    view = view,
-                    allowManualNavigation = false,
-                    useMouse = false,
-                    destroyOnPop = false
-            )
-
-            viewNavigationElement.onPop()
-
-            verify { view.hide() }
         }
     }
 

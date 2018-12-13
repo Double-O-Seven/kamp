@@ -72,7 +72,7 @@ internal class ViewNavigationTest {
                 every { allowManualNavigation } returns expectedIsManualNavigationAllowed
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
             viewNavigation.push(view)
 
             val isManualNavigationAllowed = viewNavigation.isManualNavigationAllowed
@@ -101,7 +101,7 @@ internal class ViewNavigationTest {
                 every { useMouse } returns expectedIsMouseUsed
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
             viewNavigation.push(view)
 
             val isMouseUsed = viewNavigation.isMouseUsed
@@ -116,30 +116,27 @@ internal class ViewNavigationTest {
 
         @ParameterizedTest
         @CsvSource(
-                "true, false, false",
-                "false, true, false",
-                "false, false, true"
+                "true, false",
+                "false, true"
         )
-        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean, destroyOnPop: Boolean) {
+        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean) {
             val view = mockk<View>()
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.push(
                     view = view,
                     allowManualNavigation = allowManualNavigation,
-                    useMouse = useMouse,
-                    destroyOnPop = destroyOnPop
+                    useMouse = useMouse
             )
 
             verify {
                 viewNavigationElementFactory.create(
                         view = view,
                         allowManualNavigation = allowManualNavigation,
-                        useMouse = useMouse,
-                        destroyOnPop = destroyOnPop
+                        useMouse = useMouse
                 )
             }
         }
@@ -150,7 +147,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.push(view)
 
@@ -164,7 +161,7 @@ internal class ViewNavigationTest {
                 every { navigateTo() } just Runs
                 every { this@mockk.view } returns view
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.push(view)
 
@@ -178,7 +175,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.push(view)
 
@@ -192,7 +189,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.push(view)
 
@@ -214,7 +211,7 @@ internal class ViewNavigationTest {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
 
@@ -241,7 +238,7 @@ internal class ViewNavigationTest {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
 
@@ -266,7 +263,7 @@ internal class ViewNavigationTest {
                 every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
 
@@ -282,30 +279,27 @@ internal class ViewNavigationTest {
 
         @ParameterizedTest
         @CsvSource(
-                "true, false, false",
-                "false, true, false",
-                "false, false, true"
+                "true, false",
+                "false, true"
         )
-        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean, destroyOnPop: Boolean) {
+        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean) {
             val view = mockk<View>()
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.replaceTop(
                     view = view,
                     allowManualNavigation = allowManualNavigation,
-                    useMouse = useMouse,
-                    destroyOnPop = destroyOnPop
+                    useMouse = useMouse
             )
 
             verify {
                 viewNavigationElementFactory.create(
                         view = view,
                         allowManualNavigation = allowManualNavigation,
-                        useMouse = useMouse,
-                        destroyOnPop = destroyOnPop
+                        useMouse = useMouse
                 )
             }
         }
@@ -316,7 +310,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.replaceTop(view)
 
@@ -330,7 +324,7 @@ internal class ViewNavigationTest {
                 every { navigateTo() } just Runs
                 every { this@mockk.view } returns view
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.replaceTop(view)
 
@@ -344,7 +338,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.replaceTop(view)
 
@@ -358,7 +352,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.replaceTop(view)
 
@@ -368,17 +362,19 @@ internal class ViewNavigationTest {
 
         @Test
         fun givenNonEmptyNavigationItShouldPopTop() {
-            val view1 = mockk<View>()
+            val view1 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view2 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
 
@@ -386,24 +382,26 @@ internal class ViewNavigationTest {
 
             verifyOrder {
                 viewNavigationElement1.navigateTo()
-                viewNavigationElement1.onPop()
+                view1.hide()
                 viewNavigationElement2.navigateTo()
             }
         }
 
         @Test
         fun givenNonEmptyNavigationItShouldKeepSizeOfOne() {
-            val view1 = mockk<View>()
+            val view1 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view2 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
 
@@ -415,18 +413,20 @@ internal class ViewNavigationTest {
 
         @Test
         fun givenNonEmptyNavigationItShouldReplaceTopView() {
-            val view1 = mockk<View>()
+            val view1 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view2 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
                 every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.replaceTop(view1)
 
@@ -442,30 +442,27 @@ internal class ViewNavigationTest {
 
         @ParameterizedTest
         @CsvSource(
-                "true, false, false",
-                "false, true, false",
-                "false, false, true"
+                "true, false",
+                "false, true"
         )
-        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean, destroyOnPop: Boolean) {
+        fun shouldCreateViewNavigationElement(allowManualNavigation: Boolean, useMouse: Boolean) {
             val view = mockk<View>()
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.setRoot(
                     view = view,
                     allowManualNavigation = allowManualNavigation,
-                    useMouse = useMouse,
-                    destroyOnPop = destroyOnPop
+                    useMouse = useMouse
             )
 
             verify {
                 viewNavigationElementFactory.create(
                         view = view,
                         allowManualNavigation = allowManualNavigation,
-                        useMouse = useMouse,
-                        destroyOnPop = destroyOnPop
+                        useMouse = useMouse
                 )
             }
         }
@@ -476,7 +473,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.setRoot(view)
 
@@ -490,7 +487,7 @@ internal class ViewNavigationTest {
                 every { navigateTo() } just Runs
                 every { this@mockk.view } returns view
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.setRoot(view)
 
@@ -504,7 +501,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.setRoot(view)
 
@@ -518,7 +515,7 @@ internal class ViewNavigationTest {
             val viewNavigationElement = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
-            every { viewNavigationElementFactory.create(any(), any(), any(), any()) } returns viewNavigationElement
+            every { viewNavigationElementFactory.create(any(), any(), any()) } returns viewNavigationElement
 
             viewNavigation.setRoot(view)
 
@@ -531,22 +528,23 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view3 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             val viewNavigationElement3 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2, viewNavigationElement3)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -557,8 +555,8 @@ internal class ViewNavigationTest {
                 viewNavigationElement1.navigateTo()
                 view1.hide()
                 viewNavigationElement2.navigateTo()
-                viewNavigationElement1.onPop()
-                viewNavigationElement2.onPop()
+                view1.hide()
+                view2.hide()
                 viewNavigationElement3.navigateTo()
             }
         }
@@ -568,22 +566,23 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view3 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             val viewNavigationElement3 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2, viewNavigationElement3)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -599,23 +598,24 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val view3 = mockk<View>()
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             val viewNavigationElement3 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
                 every { this@mockk.view } returns view3
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2, viewNavigationElement3)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -643,25 +643,26 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
 
             viewNavigation.pop()
 
-            verify { viewNavigationElement2.onPop() }
+            verify { view2.hide() }
         }
 
         @Test
@@ -669,18 +670,19 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -696,18 +698,19 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
-                every { this@mockk.view } returns view1
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -728,18 +731,19 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { this@mockk.view } returns view1
-                every { onPop() } just Runs
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -747,8 +751,8 @@ internal class ViewNavigationTest {
             viewNavigation.clear()
 
             verify {
-                viewNavigationElement1.onPop()
-                viewNavigationElement2.onPop()
+                view1.hide()
+                view2.hide()
             }
         }
 
@@ -757,18 +761,19 @@ internal class ViewNavigationTest {
             val view1 = mockk<View> {
                 every { hide() } just Runs
             }
-            val view2 = mockk<View>()
+            val view2 = mockk<View> {
+                every { hide() } just Runs
+            }
             val viewNavigationElement1 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { this@mockk.view } returns view1
-                every { onPop() } just Runs
+                every { view } returns view1
             }
             val viewNavigationElement2 = mockk<ViewNavigationElement> {
                 every { navigateTo() } just Runs
-                every { onPop() } just Runs
+                every { view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
@@ -812,7 +817,7 @@ internal class ViewNavigationTest {
                 every { this@mockk.view } returns view2
             }
             every {
-                viewNavigationElementFactory.create(any(), any(), any(), any())
+                viewNavigationElementFactory.create(any(), any(), any())
             } returnsMany listOf(viewNavigationElement1, viewNavigationElement2)
             viewNavigation.push(view1)
             viewNavigation.push(view2)
