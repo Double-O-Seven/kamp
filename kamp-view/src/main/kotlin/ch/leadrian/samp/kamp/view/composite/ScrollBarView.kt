@@ -18,7 +18,15 @@ abstract class ScrollBarView(
 
     abstract var color: Color
 
+    abstract fun color(colorSupplier: () -> Color)
+
     abstract var backgroundColor: Color
+
+    abstract fun backgroundColor(backgroundColorSupplier: () -> Color)
+
+    abstract var buttonColor: Color
+
+    abstract fun buttonColor(buttonColorSupplier: () -> Color)
 
     fun scroll(ticks: Int) {
         val oldPosition = currentPosition
@@ -43,6 +51,7 @@ abstract class ScrollBarView(
         if (style is ScrollBarStyle) {
             color = style.scrollBarColor
             backgroundColor = style.scrollBarBackgroundColor
+            buttonColor = style.scrollBarButtonColor
         }
         return true
     }

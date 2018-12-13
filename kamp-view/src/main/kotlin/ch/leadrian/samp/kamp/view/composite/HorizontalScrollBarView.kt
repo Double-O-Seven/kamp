@@ -21,7 +21,7 @@ open class HorizontalScrollBarView(
 
     override var color: Color by colorSupplier
 
-    fun color(colorSupplier: () -> Color) {
+    override fun color(colorSupplier: () -> Color) {
         this.colorSupplier.value(colorSupplier)
     }
 
@@ -29,8 +29,16 @@ open class HorizontalScrollBarView(
 
     override var backgroundColor: Color by backgroundColorSupplier
 
-    fun backgroundColor(backgroundColorSupplier: () -> Color) {
+    override fun backgroundColor(backgroundColorSupplier: () -> Color) {
         this.backgroundColorSupplier.value(backgroundColorSupplier)
+    }
+
+    private var buttonColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+
+    override var buttonColor: Color by buttonColorSupplier
+
+    override fun buttonColor(buttonColorSupplier: () -> Color) {
+        this.buttonColorSupplier.value(buttonColorSupplier)
     }
 
     init {
@@ -44,6 +52,7 @@ open class HorizontalScrollBarView(
                     spriteView {
                         setMargin(5.percent())
                         spriteName = "ld_beat:left"
+                        color { buttonColor }
                         enable()
                         onClick { scroll(-1) }
                     }
@@ -55,6 +64,7 @@ open class HorizontalScrollBarView(
                     spriteView {
                         setMargin(5.percent())
                         spriteName = "ld_beat:right"
+                        color { buttonColor }
                         enable()
                         onClick { scroll(+1) }
                     }

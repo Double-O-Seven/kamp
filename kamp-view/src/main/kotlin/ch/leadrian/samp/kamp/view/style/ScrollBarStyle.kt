@@ -13,4 +13,8 @@ interface ScrollBarStyle : Style {
     val scrollBarBackgroundColor: Color
         get() = Colors.LIGHT_GRAY
 
+    @JvmDefault
+    val scrollBarButtonColor: Color
+        get() = Colors.BLACK
+
 }
