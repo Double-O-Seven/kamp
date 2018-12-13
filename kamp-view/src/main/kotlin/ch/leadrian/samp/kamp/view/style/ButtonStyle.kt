@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
+import ch.leadrian.samp.kamp.view.base.TextTransformer
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.pixels
 
@@ -50,10 +51,10 @@ interface ButtonStyle : Style {
         get() = 0
 
     @JvmDefault
-    val isButtonTextProportional: Boolean
-        get() = true
-
-    @JvmDefault
     val buttonTextAlignment: TextDrawAlignment
         get() = TextDrawAlignment.LEFT
+
+    @JvmDefault
+    val buttonTextTransformer: TextTransformer?
+        get() = null
 }

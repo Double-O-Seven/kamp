@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.BackgroundView
 import ch.leadrian.samp.kamp.view.base.ClickableView
+import ch.leadrian.samp.kamp.view.base.TextTransformer
 import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.onClick
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
@@ -102,34 +103,22 @@ open class ButtonView(
             textView.shadowSize = value
         }
 
-    var isProportional: Boolean
-        get() = textView.isProportional
-        set(value) {
-            textView.isProportional = value
-        }
-
     var alignment: TextDrawAlignment
         get() = textView.alignment
         set(value) {
             textView.alignment = value
         }
 
-    var letterHeight: ViewDimension
-        get() = textView.letterHeight
-        set(value) {
-            textView.letterHeight = value
-        }
-
-    var letterWidth: ViewDimension
-        get() = textView.letterWidth
-        set(value) {
-            textView.letterWidth = value
-        }
-
     var text: String
         get() = textView.text
         set(value) {
             textView.text = value
+        }
+
+    var textTransformer: TextTransformer?
+        get() = textView.textTransformer
+        set(value) {
+            textView.textTransformer = value
         }
 
     fun setText(text: String, vararg args: Any) {
@@ -161,8 +150,8 @@ open class ButtonView(
             font = style.buttonTextFont
             outlineSize = style.buttonTextOutlineSize
             shadowSize = style.buttonTextShadowSize
-            isProportional = style.isButtonTextProportional
             alignment = style.buttonTextAlignment
+            textTransformer = style.buttonTextTransformer
         }
         return false
     }
@@ -180,7 +169,6 @@ open class ButtonView(
                 setPadding(textPadding)
                 onClick { this@ButtonView.click() }
                 textView = textView {
-                    alignment = TextDrawAlignment.CENTERED
                     color {
                         if (this@ButtonView.isEnabled) {
                             this@ButtonView.textColor
@@ -195,6 +183,8 @@ open class ButtonView(
                             this@ButtonView.disabledTextBackgroundColor
                         }
                     }
+                    alignment = TextDrawAlignment.CENTERED
+                    font = TextDrawFont.FONT2
                     outlineSize = 0
                     shadowSize = 0
                     letterHeight = 100.percent()
