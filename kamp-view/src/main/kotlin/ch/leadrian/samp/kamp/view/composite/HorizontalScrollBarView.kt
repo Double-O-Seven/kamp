@@ -91,9 +91,4 @@ open class HorizontalScrollBarView(
         }
     }
 
-    override fun onScroll() {
-        invalidate()
-        draw()
-    }
-
 }

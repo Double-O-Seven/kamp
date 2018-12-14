@@ -36,6 +36,11 @@ abstract class ScrollBarView(
         adapter.onScroll(view = this, oldPosition = oldPosition, newPosition = currentPosition)
     }
 
+    protected open fun onScroll() {
+        invalidate()
+        draw()
+    }
+
     override fun onDraw() {
         adjustCurrentPosition()
     }
@@ -43,8 +48,6 @@ abstract class ScrollBarView(
     private fun adjustCurrentPosition() {
         currentPosition = currentPosition.coerceIn(0, Math.max(0, adapter.numberOfTicks - adapter.windowSize))
     }
-
-    protected abstract fun onScroll()
 
     override fun applyStyle(style: Style): Boolean {
         super.applyStyle(style)

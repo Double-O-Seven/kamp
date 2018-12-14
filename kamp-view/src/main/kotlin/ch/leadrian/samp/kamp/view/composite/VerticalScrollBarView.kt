@@ -91,9 +91,4 @@ open class VerticalScrollBarView(
         }
     }
 
-    override fun onScroll() {
-        invalidate()
-        draw()
-    }
-
 }
