@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view.factory
 
+import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -12,5 +13,6 @@ constructor(
         override val viewContext: ViewContext,
         override val textProvider: TextProvider,
         override val textFormatter: TextFormatter,
-        override val playerTextDrawService: PlayerTextDrawService
+        override val playerTextDrawService: PlayerTextDrawService,
+        override val dialogService: DialogService
 ) : ViewFactory

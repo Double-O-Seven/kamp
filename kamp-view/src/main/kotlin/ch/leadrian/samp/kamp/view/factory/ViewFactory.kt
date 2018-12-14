@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.view.factory
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -30,6 +31,8 @@ interface ViewFactory {
     val textFormatter: TextFormatter
 
     val playerTextDrawService: PlayerTextDrawService
+
+    val dialogService: DialogService
 
     @JvmDefault
     fun view(player: Player, buildingBlock: View.() -> Unit): View {
