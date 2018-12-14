@@ -264,11 +264,26 @@ open class View(
 
     protected val playerScreenResolution by lazy { player.screenResolution }
 
+    /**
+     * I don't know why this number leads to the perfect Y coordinate, like WTF, R*?
+     */
     private val magicNumber: Float = Math.pow(4.0 / 3.0, 1.0 / 4.0).toFloat()
 
+    /**
+     * Same shit here, why does it lead to the perfect letter size?
+     */
+    private val olgasNumber: Float = 29f / 3f
+
+    /**
+     * Offset to the left scaled by 480px to actual height.
+     * I guess it was scaled like this to achieve the same distance to the screen edges on all resolutions.
+     */
     protected val verticalTextDrawBoxOffset: Float
         get() = 4f * 480f / playerScreenResolution.height.toFloat()
 
+    /**
+     * Same logic as with [verticalTextDrawBoxOffset].
+     */
     protected val horizontalTextDrawBoxOffset: Float
         get() = 4f * 640f / playerScreenResolution.width.toFloat()
 
@@ -284,6 +299,6 @@ open class View(
 
     protected fun screenHeightToTextDrawHeightByLetterSize(height: Float): Float = screenHeightToLetterSizeY(height) / 0.135f
 
-    protected fun screenHeightToLetterSizeY(height: Float): Float = (height - 4.3373f) / 9.6386f
+    protected fun screenHeightToLetterSizeY(height: Float): Float = (height - 2f * verticalTextDrawBoxOffset) / olgasNumber
 
 }
