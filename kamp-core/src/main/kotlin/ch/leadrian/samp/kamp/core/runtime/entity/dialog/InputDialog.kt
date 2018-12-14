@@ -69,7 +69,7 @@ internal class InputDialog(
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<InputDialogBuilder>(textProvider), InputDialogBuilder {
 
-        private lateinit var messageTextSupplier: DialogTextSupplier
+        private var messageTextSupplier: DialogTextSupplier = StringDialogTextSupplier("")
 
         private var isPasswordInput: Dialog.(Player) -> Boolean = { false }
 

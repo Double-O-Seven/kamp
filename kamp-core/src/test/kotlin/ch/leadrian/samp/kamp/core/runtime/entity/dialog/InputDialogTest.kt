@@ -218,6 +218,29 @@ internal class InputDialogTest {
                 )
             }
         }
+
+        @Test
+        fun givenNoMessageItShouldShowWithEmptyMessageAsString() {
+            val inputDialog = builder.apply {
+                caption("Hi there")
+                leftButton("OK")
+                rightButton("Cancel")
+            }.build()
+
+            inputDialog.show(player)
+
+            verify {
+                nativeFunctionExecutor.showPlayerDialog(
+                        dialogid = dialogId.value,
+                        playerid = playerId.value,
+                        style = DialogStyle.INPUT.value,
+                        button1 = "OK",
+                        button2 = "Cancel",
+                        caption = "Hi there",
+                        info = ""
+                )
+            }
+        }
     }
 
     @Nested
