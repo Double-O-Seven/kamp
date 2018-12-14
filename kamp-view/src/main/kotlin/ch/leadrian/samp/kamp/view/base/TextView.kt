@@ -54,7 +54,7 @@ open class TextView(
         letterSizeToPixels(letterSize)
     }
 
-    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
+    private val colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
     var color: Color by colorSupplier
 
@@ -62,7 +62,7 @@ open class TextView(
         this.colorSupplier.value(colorSupplier)
     }
 
-    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     var backgroundColor: Color by backgroundColorSupplier
 

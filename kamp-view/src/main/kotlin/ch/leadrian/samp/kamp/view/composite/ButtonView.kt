@@ -37,7 +37,7 @@ open class ButtonView(
             backgroundView.setPadding(value)
         }
 
-    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
+    private val backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
     var backgroundColor: Color by backgroundColorSupplier
 
@@ -45,7 +45,7 @@ open class ButtonView(
         this.backgroundColorSupplier.value(backgroundColorSupplier)
     }
 
-    private var disabledBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
+    private val disabledBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
 
     var disabledBackgroundColor: Color by disabledBackgroundColorSupplier
 
@@ -53,7 +53,7 @@ open class ButtonView(
         this.disabledBackgroundColorSupplier.value(disabledBackgroundColorSupplier)
     }
 
-    private var textBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val textBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     var textBackgroundColor: Color by textBackgroundColorSupplier
 
@@ -61,7 +61,7 @@ open class ButtonView(
         this.textBackgroundColorSupplier.value(textBackgroundColorSupplier)
     }
 
-    private var disabledTextBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
+    private val disabledTextBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
 
     var disabledTextBackgroundColor: Color by disabledTextBackgroundColorSupplier
 
@@ -69,7 +69,7 @@ open class ButtonView(
         this.disabledTextBackgroundColorSupplier.value(disabledTextBackgroundColorSupplier)
     }
 
-    private var textColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val textColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     var textColor: Color by textColorSupplier
 
@@ -77,7 +77,7 @@ open class ButtonView(
         this.textColorSupplier.value(textColorSupplier)
     }
 
-    private var disabledTextColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
+    private val disabledTextColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.DARK_GRAY)
 
     var disabledTextColor: Color by disabledTextColorSupplier
 

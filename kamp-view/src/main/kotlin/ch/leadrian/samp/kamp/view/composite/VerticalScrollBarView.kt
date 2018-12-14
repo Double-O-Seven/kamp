@@ -17,7 +17,7 @@ open class VerticalScrollBarView(
         adapter: ScrollBarAdapter
 ) : ScrollBarView(player, viewContext, adapter) {
 
-    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
+    private val colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
     override var color: Color by colorSupplier
 
@@ -25,7 +25,7 @@ open class VerticalScrollBarView(
         this.colorSupplier.value(colorSupplier)
     }
 
-    private var backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
+    private val backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
 
     override var backgroundColor: Color by backgroundColorSupplier
 
@@ -33,7 +33,7 @@ open class VerticalScrollBarView(
         this.backgroundColorSupplier.value(backgroundColorSupplier)
     }
 
-    private var buttonColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val buttonColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     override var buttonColor: Color by buttonColorSupplier
 

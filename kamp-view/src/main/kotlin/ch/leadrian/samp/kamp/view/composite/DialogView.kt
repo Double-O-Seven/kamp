@@ -45,7 +45,7 @@ open class DialogView(
 
     var isNavigable: Boolean = true
 
-    private var titleBarColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
+    private val titleBarColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.GREY)
 
     var titleBarColor: Color by titleBarColorSupplier
 
@@ -53,7 +53,7 @@ open class DialogView(
         this.titleBarColorSupplier.value(titleBarColorSupplier)
     }
 
-    private var titleColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val titleColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     var titleColor: Color by titleColorSupplier
 
@@ -61,7 +61,7 @@ open class DialogView(
         this.titleColorSupplier.value(titleColorSupplier)
     }
 
-    private var titleBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
+    private val titleBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.BLACK)
 
     var titleBackgroundColor: Color by titleBackgroundColorSupplier
 
@@ -69,7 +69,7 @@ open class DialogView(
         this.titleBackgroundColorSupplier.value(titleBackgroundColorSupplier)
     }
 
-    private var contentBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(colorOf(0x00000080))
+    private val contentBackgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(colorOf(0x00000080))
 
     var contentBackgroundColor: Color by contentBackgroundColorSupplier
 

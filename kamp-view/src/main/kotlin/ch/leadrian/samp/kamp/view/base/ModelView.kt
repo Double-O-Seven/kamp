@@ -24,7 +24,7 @@ open class ModelView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
+    private val colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
     var color: Color by colorSupplier
 
@@ -32,7 +32,7 @@ open class ModelView(
         this.colorSupplier.value(colorSupplier)
     }
 
-    private var modelIdSupplier: ValueSupplier<Int> = ValueSupplier(18750)
+    private val modelIdSupplier: ValueSupplier<Int> = ValueSupplier(18750)
 
     var modelId: Int by modelIdSupplier
 
@@ -40,7 +40,7 @@ open class ModelView(
         this.modelIdSupplier.value(modelIdSupplier)
     }
 
-    private var rotationSupplier: ValueSupplier<Vector3D> = ValueSupplier(vector3DOf(-16.0f, 0.0f, -55.0f))
+    private val rotationSupplier: ValueSupplier<Vector3D> = ValueSupplier(vector3DOf(-16.0f, 0.0f, -55.0f))
 
     var rotation: Vector3D by rotationSupplier
 
@@ -48,7 +48,7 @@ open class ModelView(
         this.rotationSupplier.value(rotationSupplier)
     }
 
-    private var zoomSupplier: ValueSupplier<Float> = ValueSupplier(1f)
+    private val zoomSupplier: ValueSupplier<Float> = ValueSupplier(1f)
 
     var zoom: Float by zoomSupplier
 
@@ -56,7 +56,7 @@ open class ModelView(
         this.zoomSupplier.value(zoomSupplier)
     }
 
-    private var vehicleColorsSupplier: ValueSupplier<VehicleColors?> = ValueSupplier(null as VehicleColors?)
+    private val vehicleColorsSupplier: ValueSupplier<VehicleColors?> = ValueSupplier(null as VehicleColors?)
 
     var vehicleColors: VehicleColors? by vehicleColorsSupplier
 

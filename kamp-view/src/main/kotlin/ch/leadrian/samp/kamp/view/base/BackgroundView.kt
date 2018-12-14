@@ -20,7 +20,7 @@ open class BackgroundView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(colorOf(0x00000080))
+    private val colorSupplier: ValueSupplier<Color> = ValueSupplier(colorOf(0x00000080))
 
     var color: Color by colorSupplier
 

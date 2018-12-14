@@ -19,7 +19,7 @@ open class SpriteView(
 
     private var textDraw: PlayerTextDraw? = null
 
-    private var spriteNameSupplier: ValueSupplier<String> = ValueSupplier("LD_SPAC:white")
+    private val spriteNameSupplier: ValueSupplier<String> = ValueSupplier("LD_SPAC:white")
 
     var spriteName: String by spriteNameSupplier
 
@@ -27,7 +27,7 @@ open class SpriteView(
         this.spriteNameSupplier.value(spriteNameSupplier)
     }
 
-    private var colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
+    private val colorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
     var color: Color by colorSupplier
 
