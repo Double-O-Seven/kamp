@@ -1,6 +1,9 @@
 package ch.leadrian.samp.kamp.view.composite
 
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
+import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
@@ -8,14 +11,21 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.ViewContext
+import ch.leadrian.samp.kamp.view.base.TextTransformer
+import ch.leadrian.samp.kamp.view.base.TextTransformers
 import ch.leadrian.samp.kamp.view.factory.DefaultViewFactory
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
+import ch.leadrian.samp.kamp.view.layout.ViewDimension
+import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.style.ButtonStyle
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.EnumSource
 import java.util.*
 
 internal class ButtonViewTest {
@@ -275,6 +285,112 @@ internal class ButtonViewTest {
                     .isEqualTo("Hi there, 1234")
         }
 
+        @Test
+        fun givenTextTransformerItShouldTransformText() {
+            buttonView.textTransformer = TextTransformers.toUpperCase()
+            buttonView.text = "Hi there"
+
+            val text = buttonView.text
+
+            assertThat(text)
+                    .isEqualTo("HI THERE")
+        }
+
+    }
+
+    @ParameterizedTest
+    @EnumSource(TextDrawFont::class)
+    fun shouldSetFont(font: TextDrawFont) {
+        buttonView.font = font
+
+        assertThat(buttonView.font)
+                .isEqualTo(font)
+    }
+
+    @Test
+    fun shouldSetOutlineSize() {
+        buttonView.outlineSize = 69
+
+        assertThat(buttonView.outlineSize)
+                .isEqualTo(69)
+    }
+
+    @Test
+    fun shouldSetShadowSize() {
+        buttonView.shadowSize = 69
+
+        assertThat(buttonView.shadowSize)
+                .isEqualTo(69)
+    }
+
+    @ParameterizedTest
+    @EnumSource(TextDrawAlignment::class)
+    fun shouldSetAlignment(alignment: TextDrawAlignment) {
+        buttonView.alignment = alignment
+
+        assertThat(buttonView.alignment)
+                .isEqualTo(alignment)
+    }
+
+    @Test
+    fun shouldApplyButtonStyle() {
+        val textTransformer = TextTransformers.formatAtSign()
+        val buttonStyle = object : ButtonStyle {
+            override val buttonBackgroundColor: Color
+                get() = Colors.PINK
+            override val disabledButtonBackgroundColor: Color
+                get() = Colors.LIGHT_PINK
+            override val buttonTextAlignment: TextDrawAlignment
+                get() = TextDrawAlignment.RIGHT
+            override val buttonTextBackgroundColor: Color
+                get() = Colors.BLUE
+            override val disabledButtonTextBackgroundColor: Color
+                get() = Colors.LIGHT_BLUE
+            override val buttonTextColor: Color
+                get() = Colors.YELLOW
+            override val disabledButtonTextColor: Color
+                get() = Colors.LIGHT_YELLOW
+            override val buttonTextFont: TextDrawFont
+                get() = TextDrawFont.DIPLOMA
+            override val buttonTextOutlineSize: Int
+                get() = 69
+            override val buttonTextShadowSize: Int
+                get() = 13
+            override val buttonTextPadding: ViewDimension
+                get() = 187.pixels()
+            override val buttonTextTransformer: TextTransformer?
+                get() = textTransformer
+        }
+
+        buttonView.style(buttonStyle)
+
+        assertThat(buttonView)
+                .satisfies {
+                    assertThat(it.backgroundColor)
+                            .isEqualTo(Colors.PINK)
+                    assertThat(it.disabledBackgroundColor)
+                            .isEqualTo(Colors.LIGHT_PINK)
+                    assertThat(it.alignment)
+                            .isEqualTo(TextDrawAlignment.RIGHT)
+                    assertThat(it.textBackgroundColor)
+                            .isEqualTo(Colors.BLUE)
+                    assertThat(it.disabledTextBackgroundColor)
+                            .isEqualTo(Colors.LIGHT_BLUE)
+                    assertThat(it.textColor)
+                            .isEqualTo(Colors.YELLOW)
+                    assertThat(it.disabledTextColor)
+                            .isEqualTo(Colors.LIGHT_YELLOW)
+                    assertThat(it.font)
+                            .isEqualTo(TextDrawFont.DIPLOMA)
+                    assertThat(it.outlineSize)
+                            .isEqualTo(69)
+                    assertThat(it.shadowSize)
+                            .isEqualTo(13)
+                    assertThat(it.textPadding)
+                            .isEqualTo(187.pixels())
+                    assertThat(it.textTransformer)
+                            .isEqualTo(textTransformer)
+                }
     }
 
 }

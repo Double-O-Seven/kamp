@@ -229,7 +229,7 @@ internal class DialogViewTest {
     }
 
     @Nested
-    inner class ApplyStyleTests {
+    inner class StyleTests {
 
         @Test
         fun shouldNotApplyStyleToChildren() {
