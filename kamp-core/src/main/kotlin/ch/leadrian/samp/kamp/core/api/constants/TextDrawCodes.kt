@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("unused")
 object TextDrawCodes {
 
     const val NEW_LINE = "~n~"
