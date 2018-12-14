@@ -596,9 +596,11 @@ internal class ShapesTest {
                         create { x, y, z, radius -> sphereOf(x = x, y = y, z = z, radius = radius) },
                         create { x, y, z, radius -> sphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
                         create { x, y, z, radius -> sphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) },
+                        create { x, y, z, radius -> circleOf(x = x, y = y, radius = radius).toSphere(z) },
                         create { x, y, z, radius -> mutableSphereOf(x = x, y = y, z = z, radius = radius) },
                         create { x, y, z, radius -> mutableSphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
-                        create { x, y, z, radius -> mutableSphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) }
+                        create { x, y, z, radius -> mutableSphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) },
+                        create { x, y, z, radius -> circleOf(x = x, y = y, radius = radius).toMutableSphere(z) }
                 )
 
         fun create(factory: (Float, Float, Float, Float) -> Sphere): Arguments = Arguments.of(factory)

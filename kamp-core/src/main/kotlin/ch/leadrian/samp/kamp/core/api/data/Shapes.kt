@@ -84,6 +84,8 @@ fun sphereOf(circle: Circle, z: Float): Sphere = SphereImpl(
         radius = circle.radius
 )
 
+fun Circle.toSphere(z: Float): Sphere = sphereOf(this, z)
+
 fun mutableSphereOf(x: Float, y: Float, z: Float, radius: Float): MutableSphere = MutableSphereImpl(
         x = x,
         y = y,
@@ -104,3 +106,5 @@ fun mutableSphereOf(circle: Circle, z: Float): MutableSphere = MutableSphereImpl
         z = z,
         radius = circle.radius
 )
+
+fun Circle.toMutableSphere(z: Float): MutableSphere = mutableSphereOf(this, z)
