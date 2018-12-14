@@ -216,7 +216,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(CircleFactoryArgumentsProvider::class)
-        fun shouldHaveExpectedArea(factory: (Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Circle) {
+        fun shouldHaveExpectedArea(factory: (Float, Float, Float) -> Circle) {
             val circle = factory(2f, 5f, 3.5f)
 
             val area = circle.area
@@ -227,13 +227,13 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(CircleFactoryArgumentsProvider::class)
-        fun toCircleShouldReturnImmutableCircle(factory: (Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Circle) {
+        fun toCircleShouldReturnImmutableCircle(factory: (Float, Float, Float) -> Circle) {
             val x = 2f
             val y = 5f
             val radius = 3.5f
             val circle = factory(x, y, radius)
 
-            val immutableCircle: ch.leadrian.samp.kamp.core.api.data.Circle = circle.toCircle()
+            val immutableCircle: Circle = circle.toCircle()
 
             assertThat(immutableCircle)
                     .isNotInstanceOf(MutableCircle::class.java)
@@ -249,7 +249,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(CircleFactoryArgumentsProvider::class)
-        fun toMutableCircleShouldReturnMutableCircle(factory: (Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Circle) {
+        fun toMutableCircleShouldReturnMutableCircle(factory: (Float, Float, Float) -> Circle) {
             val x = 2f
             val y = 5f
             val radius = 3.5f
@@ -270,7 +270,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(CircleContainsArgumentsProvider::class)
-        fun shouldContainCoordinates(circle: ch.leadrian.samp.kamp.core.api.data.Circle, coordinates: Vector2D) {
+        fun shouldContainCoordinates(circle: Circle, coordinates: Vector2D) {
             val contains = circle.contains(coordinates)
 
             assertThat(contains)
@@ -279,7 +279,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(CircleDoesNotContainArgumentsProvider::class)
-        fun shouldNotContainCoordinates(circle: ch.leadrian.samp.kamp.core.api.data.Circle, coordinates: Vector2D) {
+        fun shouldNotContainCoordinates(circle: Circle, coordinates: Vector2D) {
             val contains = circle.contains(coordinates)
 
             assertThat(contains)
@@ -524,10 +524,12 @@ internal class ShapesTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         create { x, y, radius -> circleOf(x = x, y = y, radius = radius) },
-                        create { x, y, radius -> mutableCircleOf(x = x, y = y, radius = radius) }
+                        create { x, y, radius -> circleOf(coordinates = vector2DOf(x = x, y = y), radius = radius) },
+                        create { x, y, radius -> mutableCircleOf(x = x, y = y, radius = radius) },
+                        create { x, y, radius -> mutableCircleOf(coordinates = vector2DOf(x = x, y = y), radius = radius) }
                 )
 
-        fun create(factory: (Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Circle): Arguments = Arguments.of(factory)
+        fun create(factory: (Float, Float, Float) -> Circle): Arguments = Arguments.of(factory)
 
     }
 
@@ -592,7 +594,11 @@ internal class ShapesTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         create { x, y, z, radius -> sphereOf(x = x, y = y, z = z, radius = radius) },
-                        create { x, y, z, radius -> mutableSphereOf(x = x, y = y, z = z, radius = radius) }
+                        create { x, y, z, radius -> sphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
+                        create { x, y, z, radius -> sphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) },
+                        create { x, y, z, radius -> mutableSphereOf(x = x, y = y, z = z, radius = radius) },
+                        create { x, y, z, radius -> mutableSphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
+                        create { x, y, z, radius -> mutableSphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) }
                 )
 
         fun create(factory: (Float, Float, Float, Float) -> Sphere): Arguments = Arguments.of(factory)
