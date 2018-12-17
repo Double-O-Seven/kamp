@@ -28,8 +28,6 @@ internal constructor(
 
     private val onSelectHandlers: MutableList<PlayerMapObject.(Int, Vector3D) -> Unit> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<PlayerMapObject.() -> Unit> = mutableListOf()
-
     override val id: PlayerMapObjectId
         get() = requireNotDestroyed { field }
 
@@ -220,19 +218,10 @@ internal constructor(
         onSelectHandlers.forEach { it.invoke(this, modelId, offset) }
     }
 
-    fun onDestroy(onDestroy: PlayerMapObject.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
     override var isDestroyed: Boolean = false
-        private set
         get() = field || !player.isConnected
 
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.destroyPlayerObject(playerid = player.id.value, objectid = id.value)
-        isDestroyed = true
     }
 }

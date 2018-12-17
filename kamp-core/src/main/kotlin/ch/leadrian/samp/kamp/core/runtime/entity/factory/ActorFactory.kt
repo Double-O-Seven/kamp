@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Actor
+import ch.leadrian.samp.kamp.core.api.entity.onDestroy
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import javax.inject.Inject

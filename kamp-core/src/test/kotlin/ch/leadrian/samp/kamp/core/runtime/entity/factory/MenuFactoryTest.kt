@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
-import ch.leadrian.samp.kamp.core.api.entity.Menu
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -29,7 +28,6 @@ internal class MenuFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.createMenu(any(), any(), any(), any(), any(), any()) } returns 0
         every { menuRegistry.register(any()) } just Runs
-        every { menuRegistry.unregister(any()) } just Runs
         menuFactory = MenuFactory(menuRegistry, nativeFunctionExecutor, textProvider, textFormatter)
     }
 
@@ -71,6 +69,7 @@ internal class MenuFactoryTest {
 
         @Test
         fun shouldUnregisterMenuOnDestroy() {
+            every { menuRegistry.unregister(any()) } just Runs
             every { nativeFunctionExecutor.destroyMenu(any()) } returns true
             val menu = menuFactory.create(
                     title = "Test",
@@ -78,12 +77,10 @@ internal class MenuFactoryTest {
                     position = vector2DOf(x = 1f, y = 2f),
                     columnWidth = 3f
             )
-            val onDestroy = mockk<Menu.() -> Unit>(relaxed = true)
-            menu.onDestroy(onDestroy)
 
             menu.destroy()
 
-            verify { onDestroy.invoke(menu) }
+            verify { menuRegistry.unregister(menu) }
         }
 
     }
@@ -128,6 +125,7 @@ internal class MenuFactoryTest {
 
         @Test
         fun shouldUnregisterMenuOnDestroy() {
+            every { menuRegistry.unregister(any()) } just Runs
             every { nativeFunctionExecutor.destroyMenu(any()) } returns true
             val menu = menuFactory.create(
                     title = "Test",
@@ -136,12 +134,10 @@ internal class MenuFactoryTest {
                     columnWidth1 = 3f,
                     columnWidth2 = 4f
             )
-            val onDestroy = mockk<Menu.() -> Unit>(relaxed = true)
-            menu.onDestroy(onDestroy)
 
             menu.destroy()
 
-            verify { onDestroy.invoke(menu) }
+            verify { menuRegistry.unregister(menu) }
         }
 
     }

@@ -4,12 +4,18 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectState
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
-import io.mockk.*
+import io.mockk.Runs
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.slot
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -103,7 +109,7 @@ internal class MapObjectStreamerTest {
             @Test
             fun shouldCreateStreamableMapObject() {
                 val expectedStreamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                 }
@@ -136,7 +142,7 @@ internal class MapObjectStreamerTest {
             @Test
             fun shouldRegisterCreatedMapObjectAsCallbackListener() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                 }
@@ -161,7 +167,7 @@ internal class MapObjectStreamerTest {
             fun onDestroyShouldUnregisterCreatedMapObjectAsCallbackListener() {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                 }
@@ -179,9 +185,9 @@ internal class MapObjectStreamerTest {
                         virtualWorldIds = mutableSetOf()
                 )
 
-                val slot = slot<StreamableMapObjectImpl.() -> Unit>()
-                verify { streamableMapObject.onDestroy(capture(slot)) }
-                slot.captured.invoke(streamableMapObject)
+                val slot = slot<OnDestroyListener>()
+                verify { streamableMapObject.addOnDestroyListener(capture(slot)) }
+                slot.captured.onDestroy(streamableMapObject)
                 verify { callbackListenerManager.unregister(streamableMapObject) }
             }
 
@@ -212,14 +218,14 @@ internal class MapObjectStreamerTest {
             @Test
             fun shouldReturnStreamInCandidates() {
                 val streamableMapObject1 = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } just Runs
                     every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
                 val streamableMapObject2 = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } just Runs
@@ -258,7 +264,7 @@ internal class MapObjectStreamerTest {
             fun givenStreamableMapObjectIsDestroyedItShouldNotBeReturnedAsStreamInCandidate() {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
@@ -278,9 +284,9 @@ internal class MapObjectStreamerTest {
                         interiorIds = mutableSetOf(),
                         virtualWorldIds = mutableSetOf()
                 )
-                val slot = slot<StreamableMapObjectImpl.() -> Unit>()
-                verify { streamableMapObject.onDestroy(capture(slot)) }
-                slot.captured.invoke(streamableMapObject)
+                val slot = slot<OnDestroyListener>()
+                verify { streamableMapObject.addOnDestroyListener(capture(slot)) }
+                slot.captured.onDestroy(streamableMapObject)
                 val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
 
                 val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
@@ -299,7 +305,7 @@ internal class MapObjectStreamerTest {
             fun givenStreamableMapObjectIsDestroyedAfterStateChangeItShouldNotBeReturnedAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
@@ -324,9 +330,9 @@ internal class MapObjectStreamerTest {
                 val onStateChangeSlot = slot<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>()
                 verify { streamableMapObject.onStateChange(capture(onStateChangeSlot)) }
                 onStateChangeSlot.captured.invoke(streamableMapObject, mockk(), mockk())
-                val onDestroySlot = slot<StreamableMapObjectImpl.() -> Unit>()
-                verify { streamableMapObject.onDestroy(capture(onDestroySlot)) }
-                onDestroySlot.captured.invoke(streamableMapObject)
+                val onDestroySlot = slot<OnDestroyListener>()
+                verify { streamableMapObject.addOnDestroyListener(capture(onDestroySlot)) }
+                onDestroySlot.captured.onDestroy(streamableMapObject)
                 val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
 
                 val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
@@ -345,7 +351,7 @@ internal class MapObjectStreamerTest {
             fun givenStateChangesItShouldBeReturnAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
@@ -381,7 +387,7 @@ internal class MapObjectStreamerTest {
             @Test
             fun givenBoundingBoxChangedAndStreamLocationIsWithinNewBoundingBoxItShouldReturnCandidate() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
@@ -418,7 +424,7 @@ internal class MapObjectStreamerTest {
             @Test
             fun givenBoundingBoxChangedAndStreamLocationIsWithinOldBoundingBoxItShouldNotReturnCandidate() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { onDestroy(any()) } just Runs
+                    every { addOnDestroyListener(any()) } just Runs
                     every { onBoundingBoxChanged(any()) } just Runs
                     every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {

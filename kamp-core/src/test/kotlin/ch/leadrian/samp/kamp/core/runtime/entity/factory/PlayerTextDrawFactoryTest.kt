@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -31,7 +30,6 @@ internal class PlayerTextDrawFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.createPlayerTextDraw(any(), any(), any(), any()) } returns 0
         every { playerTextDrawRegistry.register(any()) } just Runs
-        every { playerTextDrawRegistry.unregister(any()) } just Runs
         playerTextDrawFactory = PlayerTextDrawFactory(nativeFunctionExecutor, textProvider, textFormatter)
         player = mockk {
             every { this@mockk.playerTextDrawRegistry } returns this@PlayerTextDrawFactoryTest.playerTextDrawRegistry
@@ -70,6 +68,7 @@ internal class PlayerTextDrawFactoryTest {
 
     @Test
     fun shouldUnregisterPlayerTextDrawOnDestroy() {
+        every { playerTextDrawRegistry.unregister(any()) } just Runs
         every { player.isConnected } returns true
         every { nativeFunctionExecutor.playerTextDrawDestroy(any(), any()) } returns true
         val playerTextDraw = playerTextDrawFactory.create(
@@ -77,12 +76,10 @@ internal class PlayerTextDrawFactoryTest {
                 position = vector2DOf(x = 1f, y = 2f),
                 text = "Test"
         )
-        val onDestroy = mockk<PlayerTextDraw.() -> Unit>(relaxed = true)
-        playerTextDraw.onDestroy(onDestroy)
 
         playerTextDraw.destroy()
 
-        verify { onDestroy.invoke(playerTextDraw) }
+        verify { playerTextDrawRegistry.unregister(playerTextDraw) }
     }
 
 }

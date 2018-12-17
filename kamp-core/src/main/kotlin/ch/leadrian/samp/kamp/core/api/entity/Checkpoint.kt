@@ -8,7 +8,7 @@ internal constructor(
         coordinates: Vector3D,
         size: Float,
         private val playerRegistry: PlayerRegistry
-) : CheckpointBase {
+) : CheckpointBase, AbstractDestroyable() {
 
     private val onEnterHandlers: MutableList<Checkpoint.(Player) -> Unit> = mutableListOf()
 
@@ -54,18 +54,12 @@ internal constructor(
         onLeaveHandlers.forEach { it.invoke(this, player) }
     }
 
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
+    override fun onDestroy() {
         playerRegistry.getAll().forEach {
             if (it.isInCheckpoint(this)) {
                 onLeave(it)
                 it.checkpoint = null
             }
         }
-        isDestroyed = true
     }
 }

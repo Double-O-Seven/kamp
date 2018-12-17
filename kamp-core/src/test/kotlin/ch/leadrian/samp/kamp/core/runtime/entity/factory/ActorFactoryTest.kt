@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import io.mockk.Runs
@@ -23,7 +22,6 @@ internal class ActorFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.createActor(any(), any(), any(), any(), any()) } returns 0
         every { actorRegistry.register(any()) } just Runs
-        every { actorRegistry.unregister(any()) } just Runs
         actorFactory = ActorFactory(actorRegistry, nativeFunctionExecutor)
     }
 
@@ -59,18 +57,17 @@ internal class ActorFactoryTest {
 
     @Test
     fun shouldUnregisterActorOnDestroy() {
+        every { actorRegistry.unregister(any()) } just Runs
         every { nativeFunctionExecutor.destroyActor(any()) } returns true
         val actor = actorFactory.create(
                 model = ch.leadrian.samp.kamp.core.api.constants.SkinModel.ARMY,
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f
         )
-        val onDestroy = mockk<Actor.() -> Unit>(relaxed = true)
-        actor.onDestroy(onDestroy)
 
         actor.destroy()
 
-        verify { onDestroy.invoke(actor) }
+        verify { actorRegistry.unregister(actor) }
     }
 
 }

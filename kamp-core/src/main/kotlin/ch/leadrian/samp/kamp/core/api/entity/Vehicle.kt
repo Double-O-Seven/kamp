@@ -63,8 +63,6 @@ internal constructor(
 
     private val onStreamOutHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
-
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 
     val trailer: VehicleTrailer = VehicleTrailer(this, vehicleRegistry, nativeFunctionExecutor)
@@ -441,18 +439,7 @@ internal constructor(
         onStreamOutHandlers.forEach { it.invoke(this, player) }
     }
 
-    fun onDestroy(onDestroy: Vehicle.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.destroyVehicle(id.value)
-        isDestroyed = true
     }
 }

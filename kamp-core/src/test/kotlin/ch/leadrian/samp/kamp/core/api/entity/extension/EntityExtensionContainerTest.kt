@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.extension
 
-import ch.leadrian.samp.kamp.core.api.entity.Destroyable
+import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.exception.EntityExtensionAlreadyInstalledException
 import ch.leadrian.samp.kamp.core.api.exception.NoSuchEntityExtensionException
 import io.mockk.every
@@ -165,25 +165,15 @@ internal class EntityExtensionContainerTest {
 
     private class FooExtension
 
-    private class BarExtension : Destroyable {
+    private class BarExtension : AbstractDestroyable() {
 
-        override var isDestroyed: Boolean = false
-            private set
-
-        override fun destroy() {
-            isDestroyed = true
-        }
+        override fun onDestroy() {}
 
     }
 
-    private class QuxExtension : Destroyable {
+    private class QuxExtension : AbstractDestroyable() {
 
-        override var isDestroyed: Boolean = false
-            private set
-
-        override fun destroy() {
-            isDestroyed = true
-        }
+        override fun onDestroy() {}
 
     }
 

@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.entity.TextLabel
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -28,7 +27,6 @@ internal class TextLabelFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.create3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
         every { textLabelRegistry.register(any()) } just Runs
-        every { textLabelRegistry.unregister(any()) } just Runs
         textLabelFactory = TextLabelFactory(nativeFunctionExecutor, textLabelRegistry, textProvider, textFormatter)
     }
 
@@ -72,7 +70,8 @@ internal class TextLabelFactoryTest {
     }
 
     @Test
-    fun shouldUnregisterTextLabelOnDestroy() {
+    fun shouldDeleteTextLabelOnDestroy() {
+        every { textLabelRegistry.unregister(any()) } just Runs
         every { nativeFunctionExecutor.delete3DTextLabel(any()) } returns true
         val textLabel = textLabelFactory.create(
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
@@ -82,12 +81,9 @@ internal class TextLabelFactoryTest {
                 drawDistance = 4f,
                 virtualWorldId = 69
         )
-        val onDestroy = mockk<TextLabel.() -> Unit>(relaxed = true)
-        textLabel.onDestroy(onDestroy)
-
         textLabel.destroy()
 
-        verify { onDestroy.invoke(textLabel) }
+        verify { textLabelRegistry.unregister(textLabel) }
     }
 
 }

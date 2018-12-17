@@ -28,10 +28,8 @@ internal class SpatialIndex2DTest {
             get() = throw UnsupportedOperationException()
         override val priority: Int
             get() = throw UnsupportedOperationException()
-        override val isDestroyed: Boolean
-            get() = throw UnsupportedOperationException()
 
-        override fun destroy() {}
+        override fun onDestroy() {}
 
     }
 

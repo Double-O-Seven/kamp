@@ -3,7 +3,6 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
@@ -36,7 +35,6 @@ internal class PlayerTextLabelFactoryTest {
         every { attachToVehicle.id } returns attachToVehicleId
         every { nativeFunctionExecutor.createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
         every { playerTextLabelRegistry.register(any()) } just Runs
-        every { playerTextLabelRegistry.unregister(any()) } just Runs
         playerTextLabelFactory = PlayerTextLabelFactory(nativeFunctionExecutor)
         player = mockk {
             every { this@mockk.playerTextLabelRegistry } returns this@PlayerTextLabelFactoryTest.playerTextLabelRegistry
@@ -91,6 +89,7 @@ internal class PlayerTextLabelFactoryTest {
 
     @Test
     fun shouldUnregisterPlayerTextLabelOnDestroy() {
+        every { playerTextLabelRegistry.unregister(any()) } just Runs
         every { player.isConnected } returns true
         every { nativeFunctionExecutor.deletePlayer3DTextLabel(any(), any()) } returns true
         val playerTextLabel = playerTextLabelFactory.create(
@@ -103,12 +102,10 @@ internal class PlayerTextLabelFactoryTest {
                 attachToPlayer = attachToPlayer,
                 attachToVehicle = attachToVehicle
         )
-        val onDestroy = mockk<PlayerTextLabel.() -> Unit>(relaxed = true)
-        playerTextLabel.onDestroy(onDestroy)
 
         playerTextLabel.destroy()
 
-        verify { onDestroy.invoke(playerTextLabel) }
+        verify { playerTextLabelRegistry.unregister(playerTextLabel) }
     }
 
 }

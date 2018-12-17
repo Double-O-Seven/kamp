@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
-import ch.leadrian.samp.kamp.core.api.entity.TextDraw
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -29,7 +28,6 @@ internal class TextDrawFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.textDrawCreate(any(), any(), any()) } returns 0
         every { textDrawRegistry.register(any()) } just Runs
-        every { textDrawRegistry.unregister(any()) } just Runs
         textDrawFactory = TextDrawFactory(nativeFunctionExecutor, textDrawRegistry, textProvider, textFormatter)
     }
 
@@ -63,18 +61,17 @@ internal class TextDrawFactoryTest {
 
     @Test
     fun shouldUnregisterTextDrawOnDestroy() {
+        every { textDrawRegistry.unregister(any()) } just Runs
         every { nativeFunctionExecutor.textDrawDestroy(any()) } returns true
         val textDraw = textDrawFactory.create(
                 position = vector2DOf(x = 1f, y = 2f),
                 text = "Test",
                 locale = locale
         )
-        val onDestroy = mockk<TextDraw.() -> Unit>(relaxed = true)
-        textDraw.onDestroy(onDestroy)
 
         textDraw.destroy()
 
-        verify { onDestroy.invoke(textDraw) }
+        verify { textDrawRegistry.unregister(textDraw) }
     }
 
 }

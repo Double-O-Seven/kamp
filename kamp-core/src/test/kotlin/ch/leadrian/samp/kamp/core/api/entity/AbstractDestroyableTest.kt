@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import io.mockk.mockk
+import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,28 +14,91 @@ internal class AbstractDestroyableTest {
         destroyable.finalize()
 
         assertThat(destroyable.numberOfDestroyCalls)
-                .isEqualTo(1)
+                .isOne()
+    }
+
+    @Test
+    fun isDestroyedShouldInitiallyBeFalse() {
+        val destroyable = TestDestroyable()
+
+        val isDestroyed = destroyable.isDestroyed
+
+        assertThat(isDestroyed)
+                .isFalse()
+    }
+
+    @Test
+    fun isDestroyedShouldBeTrueAfterDestroyCall() {
+        val destroyable = TestDestroyable()
+
+        destroyable.destroy()
+
+        assertThat(destroyable.isDestroyed)
+                .isTrue()
+    }
+
+    @Test
+    fun shouldCallOnDestroyOnlyOnce() {
+        val destroyable = TestDestroyable()
+
+        destroyable.destroy()
+        destroyable.destroy()
+
+        assertThat(destroyable.numberOfDestroyCalls)
+                .isOne()
     }
 
     @Test
     fun givenDestroyableIsDestroyedFinalizeShouldNotCallDestroy() {
         val destroyable = TestDestroyable()
-        destroyable.isDestroyed = true
+        destroyable.destroy()
 
         destroyable.finalize()
 
         assertThat(destroyable.numberOfDestroyCalls)
-                .isEqualTo(0)
+                .isOne()
+    }
+
+    @Test
+    fun shouldCallOnDestroyListener() {
+        val destroyable = TestDestroyable()
+        val listener = mockk<OnDestroyListener>(relaxed = true)
+        destroyable.addOnDestroyListener(listener)
+
+        destroyable.destroy()
+
+        verify { listener.onDestroy(destroyable) }
+    }
+
+    @Test
+    fun shouldCallOnDestroyListenerOnlyTwice() {
+        val destroyable = TestDestroyable()
+        val listener = mockk<OnDestroyListener>(relaxed = true)
+        destroyable.addOnDestroyListener(listener)
+
+        destroyable.destroy()
+        destroyable.destroy()
+
+        verify(exactly = 1) { listener.onDestroy(destroyable) }
+    }
+
+    @Test
+    fun shouldNotCallRemovedOnDestroyListener() {
+        val destroyable = TestDestroyable()
+        val listener = mockk<OnDestroyListener>(relaxed = true)
+        destroyable.addOnDestroyListener(listener)
+        destroyable.removeOnDestroyListener(listener)
+
+        destroyable.destroy()
+
+        verify(exactly = 0) { listener.onDestroy(destroyable) }
     }
 
     private class TestDestroyable : AbstractDestroyable() {
 
         var numberOfDestroyCalls = 0
 
-        override var isDestroyed: Boolean = false
-
-        override fun destroy() {
-            isDestroyed = true
+        override fun onDestroy() {
             numberOfDestroyCalls++
         }
 

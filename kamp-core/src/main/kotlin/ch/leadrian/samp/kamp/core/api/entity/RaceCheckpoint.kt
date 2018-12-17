@@ -11,7 +11,7 @@ internal constructor(
         type: RaceCheckpointType,
         nextCoordinates: Vector3D?,
         private val playerRegistry: PlayerRegistry
-) : CheckpointBase {
+) : CheckpointBase, AbstractDestroyable() {
 
     private val onEnterHandlers: MutableList<RaceCheckpoint.(Player) -> Unit> = mutableListOf()
 
@@ -71,18 +71,12 @@ internal constructor(
         onLeaveHandlers.forEach { it.invoke(this, player) }
     }
 
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
+    override fun onDestroy() {
         playerRegistry.getAll().forEach {
             if (it.isInRaceCheckpoint(this)) {
                 onLeave(it)
                 it.raceCheckpoint = null
             }
         }
-        isDestroyed = true
     }
 }

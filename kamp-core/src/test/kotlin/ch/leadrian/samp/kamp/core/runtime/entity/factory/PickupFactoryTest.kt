@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.entity.Pickup
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PickupRegistry
 import io.mockk.Runs
@@ -23,7 +22,6 @@ internal class PickupFactoryTest {
     fun setUp() {
         every { nativeFunctionExecutor.createPickup(any(), any(), any(), any(), any(), any()) } returns 0
         every { pickupRegistry.register(any()) } just Runs
-        every { pickupRegistry.unregister(any()) } just Runs
         pickupFactory = PickupFactory(pickupRegistry, nativeFunctionExecutor)
     }
 
@@ -62,6 +60,7 @@ internal class PickupFactoryTest {
 
     @Test
     fun shouldUnregisterPickupOnDestroy() {
+        every { pickupRegistry.unregister(any()) } just Runs
         every { nativeFunctionExecutor.destroyPickup(any()) } returns true
         val pickup = pickupFactory.create(
                 modelId = 1337,
@@ -69,12 +68,10 @@ internal class PickupFactoryTest {
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 virtualWorldId = 10
         )
-        val onDestroy = mockk<Pickup.() -> Unit>(relaxed = true)
-        pickup.onDestroy(onDestroy)
 
         pickup.destroy()
 
-        verify { onDestroy.invoke(pickup) }
+        verify { pickupRegistry.unregister(pickup) }
     }
 
 }

@@ -1,12 +1,17 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
+import kotlin.reflect.full.cast
 
 interface Destroyable {
 
     val isDestroyed: Boolean
 
     fun destroy()
+
+    fun addOnDestroyListener(listener: OnDestroyListener)
+
+    fun removeOnDestroyListener(listener: OnDestroyListener)
 
 }
 
@@ -27,4 +32,14 @@ inline fun <T : Destroyable, U : Any?> T.ifNotDestroyed(action: T.() -> U): U? {
         return null
     }
     return action.invoke(this)
+}
+
+inline fun <reified T : Destroyable> T.onDestroy(crossinline action: T.() -> Unit): OnDestroyListener {
+    val listener = object : OnDestroyListener {
+        override fun onDestroy(destroyable: Destroyable) {
+            action(T::class.cast(destroyable))
+        }
+    }
+    addOnDestroyListener(listener)
+    return listener
 }

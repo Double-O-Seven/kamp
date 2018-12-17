@@ -13,8 +13,6 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<GangZoneId>, AbstractDestroyable() {
 
-    private val onDestroyHandlers: MutableList<GangZone.() -> Unit> = mutableListOf()
-
     override val id: GangZoneId
         get() = requireNotDestroyed { field }
 
@@ -75,18 +73,7 @@ internal constructor(
         nativeFunctionExecutor.gangZoneStopFlashForAll(id.value)
     }
 
-    fun onDestroy(onDestroy: GangZone.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.gangZoneDestroy(id.value)
-        isDestroyed = true
     }
 }

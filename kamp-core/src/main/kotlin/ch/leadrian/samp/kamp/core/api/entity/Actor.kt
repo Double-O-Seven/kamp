@@ -20,8 +20,6 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<ActorId>, AbstractDestroyable() {
 
-    private val onDestroyHandlers: MutableList<Actor.() -> Unit> = mutableListOf()
-
     private val onStreamInHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
 
     private val onStreamOutHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
@@ -147,18 +145,7 @@ internal constructor(
         onStreamOutHandlers.forEach { it.invoke(this, player) }
     }
 
-    fun onDestroy(onDestroy: Actor.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.destroyActor(id.value)
-        isDestroyed = true
     }
 }

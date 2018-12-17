@@ -57,8 +57,6 @@ constructor(
 
     private val onSelectHandlers: MutableList<StreamableMapObjectImpl.(Player, Int, Vector3D) -> Unit> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<StreamableMapObjectImpl.() -> Unit> = mutableListOf()
-
     private val onStreamInHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
 
     private val onStreamOutHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
@@ -352,22 +350,9 @@ constructor(
         }
     }
 
-    fun onDestroy(onDestroy: StreamableMapObjectImpl.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) {
-            return
-        }
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         playerMapObjectsByPlayer.values.forEach { it.destroy() }
         playerMapObjectsByPlayer.clear()
-        isDestroyed = true
     }
 
     override fun getBoundingBox(): Rect3d {

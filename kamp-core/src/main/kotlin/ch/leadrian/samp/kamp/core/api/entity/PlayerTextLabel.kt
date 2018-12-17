@@ -20,8 +20,6 @@ internal constructor(
         attachToVehicle: Vehicle?
 ) : Entity<PlayerTextLabelId>, HasPlayer, AbstractDestroyable(), TextLabelBase {
 
-    private val onDestroyHandlers: MutableList<PlayerTextLabel.() -> Unit> = mutableListOf()
-
     override val id: PlayerTextLabelId
         get() = requireNotDestroyed { field }
 
@@ -87,19 +85,10 @@ internal constructor(
         _text = text
     }
 
-    fun onDestroy(onDestroy: PlayerTextLabel.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
     override var isDestroyed: Boolean = false
-        private set
         get() = field || !player.isConnected
 
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.deletePlayer3DTextLabel(playerid = player.id.value, id = id.value)
-        isDestroyed = true
     }
 }

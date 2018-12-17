@@ -30,8 +30,6 @@ internal constructor(
 
     private val onClickHandlers: MutableList<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<TextDraw.() -> Unit> = mutableListOf()
-
     override val id: TextDrawId
         get() = requireNotDestroyed { field }
 
@@ -231,18 +229,7 @@ internal constructor(
                     .firstOrNull { it == OnPlayerClickTextDrawListener.Result.Processed }
                     ?: OnPlayerClickTextDrawListener.Result.NotFound
 
-    fun onDestroy(onDestroy: TextDraw.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.textDrawDestroy(id.value)
-        isDestroyed = true
     }
 }

@@ -18,8 +18,6 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<TextLabelId>, AbstractDestroyable(), TextLabelBase {
 
-    private val onDestroyHandlers: MutableList<TextLabel.() -> Unit> = mutableListOf()
-
     override val id: TextLabelId
         get() = requireNotDestroyed { field }
 
@@ -100,18 +98,7 @@ internal constructor(
         )
     }
 
-    fun onDestroy(onDestroy: TextLabel.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.delete3DTextLabel(id.value)
-        isDestroyed = true
     }
 }

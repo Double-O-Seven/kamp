@@ -154,17 +154,9 @@ internal class StreamableTextLabelImpl(
         )
     }
 
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) {
-            return
-        }
-
+    override fun onDestroy() {
         playerTextLabelsByPlayer.values.forEach { it.destroy() }
         playerTextLabelsByPlayer.clear()
-        isDestroyed = true
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {

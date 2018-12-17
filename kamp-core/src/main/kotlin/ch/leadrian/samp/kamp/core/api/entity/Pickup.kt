@@ -16,8 +16,6 @@ internal constructor(
 
     private val onPickUpHandlers: MutableList<Pickup.(Player) -> Unit> = mutableListOf()
 
-    private val onDestroyHandlers: MutableList<Pickup.() -> Unit> = mutableListOf()
-
     override val id: PickupId
         get() = requireNotDestroyed { field }
 
@@ -48,19 +46,8 @@ internal constructor(
         onPickUpHandlers.forEach { it.invoke(this, player) }
     }
 
-    fun onDestroy(onDestroy: Pickup.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.destroyPickup(id.value)
-        isDestroyed = true
     }
 
 }

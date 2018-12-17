@@ -23,8 +23,6 @@ internal constructor(
         private val textFormatter: TextFormatter
 ) : Entity<MenuId>, AbstractDestroyable() {
 
-    private val onDestroyHandlers: MutableList<Menu.() -> Unit> = mutableListOf()
-
     private val onSelectedMenuRowHandlers: MutableList<Menu.(Player, MenuRow) -> Unit> = mutableListOf()
 
     private val onExitHandlers: MutableList<Menu.(Player) -> Unit> = mutableListOf()
@@ -135,19 +133,8 @@ internal constructor(
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
-    fun onDestroy(onDestroy: Menu.() -> Unit) {
-        onDestroyHandlers += onDestroy
-    }
-
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        onDestroyHandlers.forEach { it.invoke(this) }
+    override fun onDestroy() {
         nativeFunctionExecutor.destroyMenu(id.value)
-        isDestroyed = true
     }
 
     private fun checkColumn(column: Int) {

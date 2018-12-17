@@ -2,7 +2,9 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -100,6 +102,34 @@ internal class DestroyableTest {
                     .isNull()
         }
 
+    }
+
+    @Nested
+    inner class OnDestroyTests {
+
+        @Test
+        fun shouldAddOnDestroyListener() {
+            val destroyable = mockk<Destroyable> {
+                every { addOnDestroyListener(any()) } just Runs
+            }
+
+            val listener = destroyable.onDestroy {}
+
+            verify { destroyable.addOnDestroyListener(listener) }
+        }
+
+        @Test
+        fun listenerShouldCallAction() {
+            val action = mockk<Destroyable.() -> Unit>(relaxed = true)
+            val destroyable = mockk<Destroyable> {
+                every { addOnDestroyListener(any()) } just Runs
+            }
+            val listener = destroyable.onDestroy(action)
+
+            listener.onDestroy(destroyable)
+
+            verify(exactly = 1) { action.invoke(destroyable) }
+        }
     }
 
 }

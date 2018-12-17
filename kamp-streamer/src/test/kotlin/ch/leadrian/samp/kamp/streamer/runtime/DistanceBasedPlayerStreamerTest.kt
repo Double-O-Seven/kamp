@@ -6,11 +6,16 @@ import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.DistanceBasedPlayerStreamable
-import io.mockk.*
+import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
+import io.mockk.every
+import io.mockk.mockk
+import io.mockk.spyk
+import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -303,9 +308,9 @@ internal class DistanceBasedPlayerStreamerTest {
             private val coordinates: Vector3D,
             override val streamDistance: Float,
             override val priority: Int,
-            isDestroyed: Boolean = false,
+            override var isDestroyed: Boolean = false,
             vararg streamedInForPlayers: Player
-    ) : DistanceBasedPlayerStreamable {
+    ) : DistanceBasedPlayerStreamable, AbstractDestroyable() {
 
         private val isStreamedIn: MutableMap<Player, Boolean> = mutableMapOf()
 
@@ -317,13 +322,6 @@ internal class DistanceBasedPlayerStreamerTest {
 
         override fun distanceTo(location: Location): Float = coordinates.distanceTo(location.toLocation())
 
-        override var isDestroyed: Boolean = isDestroyed
-            private set
-
-        override fun destroy() {
-            isDestroyed = true
-        }
-
         override fun onStreamIn(forPlayer: Player) {
             isStreamedIn[forPlayer] = true
         }
@@ -333,6 +331,8 @@ internal class DistanceBasedPlayerStreamerTest {
         }
 
         override fun isStreamedIn(forPlayer: Player): Boolean = isStreamedIn[forPlayer] ?: false
+
+        override fun onDestroy() {}
 
     }
 

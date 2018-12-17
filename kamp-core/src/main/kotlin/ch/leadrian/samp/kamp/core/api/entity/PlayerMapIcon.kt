@@ -16,7 +16,7 @@ internal constructor(
         type: MapIconType,
         color: Color,
         style: MapIconStyle
-) : Entity<PlayerMapIconId>, HasPlayer, Destroyable {
+) : Entity<PlayerMapIconId>, HasPlayer, AbstractDestroyable() {
 
     var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
@@ -63,13 +63,7 @@ internal constructor(
         )
     }
 
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) return
-
-        isDestroyed = true
+    override fun onDestroy() {
         player.unregisterMapIcon(this)
         if (player.isConnected) {
             nativeFunctionExecutor.removePlayerMapIcon(playerid = player.id.value, iconid = id.value)
