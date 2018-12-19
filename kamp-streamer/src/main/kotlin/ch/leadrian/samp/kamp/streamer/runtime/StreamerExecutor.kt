@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.core.api.constants.PlayerState
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
-import ch.leadrian.samp.kamp.streamer.runtime.entity.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.netflix.governator.annotations.Configuration
 import java.util.*

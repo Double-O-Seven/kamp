@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.streamer.runtime.entity
+package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 

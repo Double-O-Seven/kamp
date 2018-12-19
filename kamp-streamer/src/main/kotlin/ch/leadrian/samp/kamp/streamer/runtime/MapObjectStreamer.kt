@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.onDestroy
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
-import ch.leadrian.samp.kamp.streamer.runtime.entity.Streamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import java.util.stream.Stream
