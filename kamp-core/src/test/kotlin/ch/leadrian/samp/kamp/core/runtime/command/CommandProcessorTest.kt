@@ -154,14 +154,14 @@ internal class CommandProcessorTest {
             every {
                 commandParametersResolver.resolve(player, commandDefinition, listOf("123"))
             } returns CommandParametersResolver.Result.ParameterValues(arrayOf(player, 123))
-            every { commandExecutor.execute(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every { commandExecutor.invoke(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
             assertThat(result)
                     .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
             verify {
-                commandExecutor.execute(commandDefinition, arrayOf(player, 123))
+                commandExecutor.invoke(commandDefinition, arrayOf(player, 123))
             }
         }
 
@@ -183,7 +183,7 @@ internal class CommandProcessorTest {
             every {
                 commandParametersResolver.resolve(player, commandDefinition, listOf("123"))
             } returns CommandParametersResolver.Result.Error(OnPlayerCommandTextListener.Result.Processed)
-            every { commandExecutor.execute(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every { commandExecutor.invoke(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
@@ -214,7 +214,7 @@ internal class CommandProcessorTest {
                 commandParametersResolver.resolve(player, commandDefinition, listOf("123"))
             } returns CommandParametersResolver.Result.ParameterValues(arrayOf(player, 123))
             val exception = Exception("shit happened")
-            every { commandExecutor.execute(any(), any()) } throws exception
+            every { commandExecutor.invoke(any(), any()) } throws exception
             every {
                 defaultCommandErrorHandler.handle(any(), any(), any())
             } returns OnPlayerCommandTextListener.Result.Processed
@@ -271,14 +271,14 @@ internal class CommandProcessorTest {
             every {
                 commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
             } returns CommandParametersResolver.Result.ParameterValues(parameterValues)
-            every { commandExecutor.execute(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every { commandExecutor.invoke(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
             assertThat(result)
                     .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
             verify {
-                commandExecutor.execute(commandDefinition, parameterValues)
+                commandExecutor.invoke(commandDefinition, parameterValues)
             }
         }
 
@@ -300,7 +300,7 @@ internal class CommandProcessorTest {
             every {
                 commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
             } returns CommandParametersResolver.Result.Error(OnPlayerCommandTextListener.Result.Processed)
-            every { commandExecutor.execute(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every { commandExecutor.invoke(any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
@@ -331,7 +331,7 @@ internal class CommandProcessorTest {
                 commandParametersResolver.resolve(player, commandDefinition, listOf("there", "123"))
             } returns CommandParametersResolver.Result.ParameterValues(arrayOf(player, "there", 123))
             val exception = Exception("shit happened")
-            every { commandExecutor.execute(any(), any()) } throws exception
+            every { commandExecutor.invoke(any(), any()) } throws exception
             every {
                 defaultCommandErrorHandler.handle(any(), any(), any())
             } returns OnPlayerCommandTextListener.Result.Processed

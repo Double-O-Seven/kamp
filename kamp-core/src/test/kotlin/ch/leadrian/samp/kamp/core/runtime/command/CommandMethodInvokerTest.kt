@@ -33,7 +33,7 @@ internal class CommandMethodInvokerTest {
         )
         val parameterValues = arrayOf(player, 1337)
 
-        val result = commandExecutor.execute(commandDefinition, parameterValues)
+        val result = commandExecutor.invoke(commandDefinition, parameterValues)
 
         assertThat(result)
                 .isEqualTo(expectedResult)

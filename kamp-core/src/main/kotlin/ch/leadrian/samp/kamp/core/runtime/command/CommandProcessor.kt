@@ -83,7 +83,7 @@ constructor(
         }
         val result = commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
         return when (result) {
-            is CommandParametersResolver.Result.ParameterValues -> commandMethodInvoker.execute(commandDefinition, result.parameterValues)
+            is CommandParametersResolver.Result.ParameterValues -> commandMethodInvoker.invoke(commandDefinition, result.parameterValues)
             is CommandParametersResolver.Result.Error -> result.returnValue
         }
     }
