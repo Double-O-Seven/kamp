@@ -15,9 +15,9 @@ import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.stream.Stream
 
-internal class CommandExecutorTest {
+internal class CommandMethodInvokerTest {
 
-    private val commandExecutor = CommandExecutor()
+    private val commandExecutor = CommandMethodInvoker()
 
     private val player = mockk<Player>()
     private val testService = mockk<TestService>(relaxed = true)

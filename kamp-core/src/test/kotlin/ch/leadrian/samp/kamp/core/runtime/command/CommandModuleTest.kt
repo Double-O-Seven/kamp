@@ -110,7 +110,7 @@ internal class CommandModuleTest {
 
         @Test
         fun shouldInjectCommandExecutor() {
-            val commandExecutor = injector.getInstance<CommandExecutor>()
+            val commandExecutor = injector.getInstance<CommandMethodInvoker>()
 
             assertThat(commandExecutor)
                     .isNotNull

@@ -21,7 +21,7 @@ constructor(
         private val commandRegistry: CommandRegistry,
         private val commandAccessCheckExecutor: CommandAccessCheckExecutor,
         private val commandParametersResolver: CommandParametersResolver,
-        private val commandExecutor: CommandExecutor,
+        private val commandMethodInvoker: CommandMethodInvoker,
         private val callbackListenerManager: CallbackListenerManager,
         defaultUnknownCommandHandler: DefaultUnknownCommandHandler,
         defaultCommandErrorHandler: DefaultCommandErrorHandler
@@ -83,7 +83,7 @@ constructor(
         }
         val result = commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
         return when (result) {
-            is CommandParametersResolver.Result.ParameterValues -> commandExecutor.execute(commandDefinition, result.parameterValues)
+            is CommandParametersResolver.Result.ParameterValues -> commandMethodInvoker.execute(commandDefinition, result.parameterValues)
             is CommandParametersResolver.Result.Error -> result.returnValue
         }
     }

@@ -26,7 +26,7 @@ internal class CommandProcessorTest {
     private val commandRegistry = mockk<CommandRegistry>()
     private val commandAccessCheckExecutor = mockk<CommandAccessCheckExecutor>()
     private val commandParametersResolver = mockk<CommandParametersResolver>()
-    private val commandExecutor = mockk<CommandExecutor>()
+    private val commandExecutor = mockk<CommandMethodInvoker>()
     private val unknownCommandHandler = mockk<DefaultUnknownCommandHandler>()
     private val defaultCommandErrorHandler = mockk<DefaultCommandErrorHandler>()
     private val callbackListenerManager = mockk<CallbackListenerManager>()
@@ -40,7 +40,7 @@ internal class CommandProcessorTest {
                 commandRegistry = commandRegistry,
                 commandAccessCheckExecutor = commandAccessCheckExecutor,
                 commandParametersResolver = commandParametersResolver,
-                commandExecutor = commandExecutor,
+                commandMethodInvoker = commandExecutor,
                 defaultUnknownCommandHandler = unknownCommandHandler,
                 defaultCommandErrorHandler = defaultCommandErrorHandler,
                 callbackListenerManager = callbackListenerManager
