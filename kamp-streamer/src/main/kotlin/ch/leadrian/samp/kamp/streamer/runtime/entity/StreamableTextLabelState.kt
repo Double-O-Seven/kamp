@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextLabelService
 
-internal sealed class StreamableTextLabelState(protected val streamableTextLabelImpl: StreamableTextLabelImpl) {
+internal sealed class StreamableTextLabelState(protected val streamableTextLabel: StreamableTextLabelImpl) {
 
     abstract val coordinates: Vector3D
 
@@ -24,11 +24,11 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabelImpl.getText(player),
-                        color = streamableTextLabelImpl.color,
+                        text = streamableTextLabel.getText(player),
+                        color = streamableTextLabel.color,
                         coordinates = coordinates,
-                        drawDistance = streamableTextLabelImpl.streamDistance,
-                        testLOS = streamableTextLabelImpl.testLOS
+                        drawDistance = streamableTextLabel.streamDistance,
+                        testLOS = streamableTextLabel.testLOS
                 )
 
     }
@@ -49,11 +49,11 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabelImpl.getText(player),
-                        color = streamableTextLabelImpl.color,
+                        text = streamableTextLabel.getText(player),
+                        color = streamableTextLabel.color,
                         coordinates = offset,
-                        drawDistance = streamableTextLabelImpl.streamDistance,
-                        testLOS = streamableTextLabelImpl.testLOS,
+                        drawDistance = streamableTextLabel.streamDistance,
+                        testLOS = streamableTextLabel.testLOS,
                         attachedToVehicle = attachedToVehicle
                 )
 
@@ -75,11 +75,11 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabelImpl.getText(player),
-                        color = streamableTextLabelImpl.color,
+                        text = streamableTextLabel.getText(player),
+                        color = streamableTextLabel.color,
                         coordinates = offset,
-                        drawDistance = streamableTextLabelImpl.streamDistance,
-                        testLOS = streamableTextLabelImpl.testLOS,
+                        drawDistance = streamableTextLabel.streamDistance,
+                        testLOS = streamableTextLabel.testLOS,
                         attachedToPlayer = attachedToPlayer
                 )
 
