@@ -1,12 +1,12 @@
 package ch.leadrian.samp.kamp.streamer.api.entity
 
 import ch.leadrian.samp.kamp.core.api.data.Color
-import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.entity.Destroyable
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.TextLabelBase
 import ch.leadrian.samp.kamp.core.api.text.TextKey
+import java.util.*
 
-interface StreamableTextLabel : Destroyable {
+interface StreamableTextLabel : TextLabelBase {
 
     val streamDistance: Float
 
@@ -14,25 +14,15 @@ interface StreamableTextLabel : Destroyable {
 
     var virtualWorldIds: MutableSet<Int>
 
-    var testLOS: Boolean
-
-    var color: Color
-
-    var coordinates: Vector3D
-
-    fun getText(player: Player): String
+    fun getText(locale: Locale): String
 
     fun setText(textKey: TextKey)
 
-    fun setText(text: String)
-
-    fun text(textSupplier: (Player) -> String)
-
-    fun update(text: String, color: Color)
+    fun text(textSupplier: (Locale) -> String)
 
     fun update(textKey: TextKey, color: Color)
 
-    fun update(color: Color, textSupplier: (Player) -> String)
+    fun update(color: Color, textSupplier: (Locale) -> String)
 
     fun onStreamIn(onStreamIn: StreamableTextLabel.(Player) -> Unit)
 

@@ -14,6 +14,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableTextLabel
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
+import java.util.*
 
 internal class StreamableTextLabelImpl(
         coordinates: Vector3D,
@@ -34,7 +35,7 @@ internal class StreamableTextLabelImpl(
 
     private val playerTextLabelsByPlayer: MutableMap<Player, PlayerTextLabel> = mutableMapOf()
 
-    private var textSupplier: (Player) -> String = { text }
+    private var textSupplier: (Locale) -> String = { text }
 
     private var state: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates)
 
@@ -44,6 +45,8 @@ internal class StreamableTextLabelImpl(
         set(value) {
             field = value.toColor()
         }
+
+    override val drawDistance: Float = streamDistance
 
     override var color: Color
         get() = _color
@@ -71,24 +74,26 @@ internal class StreamableTextLabelImpl(
         onStateChangeHandlers += onStateChange
     }
 
-    override fun getText(player: Player): String = textSupplier(player)
+    override var text: String
+        get() = textSupplier(Locale.getDefault())
+        set(value) {
+            setTextSupplier { value }
+        }
+
+    override fun getText(locale: Locale): String = textSupplier(locale)
 
     override fun setText(textKey: TextKey) {
-        setTextSupplier { player -> textProvider.getText(player.locale, textKey) }
+        setTextSupplier { locale -> textProvider.getText(locale, textKey) }
     }
 
-    override fun setText(text: String) {
-        setTextSupplier { text }
-    }
-
-    override fun text(textSupplier: (Player) -> String) {
+    override fun text(textSupplier: (Locale) -> String) {
         setTextSupplier(textSupplier)
     }
 
-    private fun setTextSupplier(textSupplier: (Player) -> String) {
+    private fun setTextSupplier(textSupplier: (Locale) -> String) {
         this.textSupplier = textSupplier
         playerTextLabelsByPlayer.forEach { player, playerTextLabel ->
-            playerTextLabel.text = textSupplier(player)
+            playerTextLabel.text = textSupplier(player.locale)
         }
     }
 
@@ -97,14 +102,14 @@ internal class StreamableTextLabelImpl(
     }
 
     override fun update(textKey: TextKey, color: Color) {
-        update(color) { player -> textProvider.getText(player.locale, textKey) }
+        update(color) { locale -> textProvider.getText(locale, textKey) }
     }
 
-    override fun update(color: Color, textSupplier: (Player) -> String) {
+    override fun update(color: Color, textSupplier: (Locale) -> String) {
         _color = color
         this.textSupplier = textSupplier
         playerTextLabelsByPlayer.forEach { player, playerTextLabel ->
-            playerTextLabel.update(textSupplier(player), color)
+            playerTextLabel.update(textSupplier(player.locale), color)
         }
     }
 
