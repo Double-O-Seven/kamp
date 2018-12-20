@@ -19,6 +19,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -57,6 +58,7 @@ internal class StreamableMapObjectImplTest {
     private val onStreamMapObjectStreamInHandler = mockk<OnStreamableMapObjectStreamInHandler>()
     private val onStreamMapObjectStreamOutHandler = mockk<OnStreamableMapObjectStreamOutHandler>()
     private val textProvider = mockk<TextProvider>()
+    private val mapObjectStreamer = mockk<MapObjectStreamer>()
     private val streamableMapObjectStateMachineFactory = mockk<StreamableMapObjectStateMachineFactory>()
     private val playerId = PlayerId.valueOf(69)
     private lateinit var player: Player
@@ -71,7 +73,7 @@ internal class StreamableMapObjectImplTest {
     @BeforeEach
     fun setUp() {
         every {
-            streamableMapObjectStateMachineFactory.create(any(), initialCoordinates, initialRotation)
+            streamableMapObjectStateMachineFactory.create(any(), mapObjectStreamer, initialCoordinates, initialRotation)
         } returns streamableMapObjectStateMachine
         player = mockk {
             every { id } returns playerId
@@ -97,6 +99,7 @@ internal class StreamableMapObjectImplTest {
                 onStreamableMapObjectStreamOutHandler = onStreamMapObjectStreamOutHandler,
                 playerMapObjectService = playerMapObjectService,
                 textProvider = textProvider,
+                mapObjectStreamer = mapObjectStreamer,
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
     }
@@ -756,6 +759,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun setShouldTransitionToFixedCoordinatesState() {
+            every { mapObjectStreamer.onBoundingBoxChange(any()) } just Runs
             val newCoordinates = vector3DOf(123f, 456f, 789f)
             val rotation = vector3DOf(4f, 5f, 6f)
             val currentState = mockk<StreamableMapObjectState> {
@@ -774,24 +778,20 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
-        fun setShouldCallOnBoundingBoxChanged() {
+        fun setShouldCallOnBoundingBoxChangeOnMapObjectStreamer() {
+            every { mapObjectStreamer.onBoundingBoxChange(any()) } just Runs
             every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
             val newCoordinates = vector3DOf(100f, 200f, 300f)
             val currentState = mockk<StreamableMapObjectState> {
                 every { onStreamIn(any()) } just Runs
-                every { this@mockk.coordinates } returns newCoordinates
+                every { coordinates } returns newCoordinates
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            val onBoundingBoxChanged = mockk<StreamableMapObjectImpl.(Rect3d) -> Unit>(relaxed = true)
-            streamableMapObject.onBoundingBoxChanged(onBoundingBoxChanged)
 
             streamableMapObject.coordinates = newCoordinates
 
-            val slot = slot<Rect3d>()
-            verify { onBoundingBoxChanged.invoke(streamableMapObject, capture(slot)) }
-            assertThat(slot.captured)
-                    .isEqualTo(Rect3d(25.0, 125.0, 225.0, 175.0, 275.0, 375.0))
+            verify { mapObjectStreamer.onBoundingBoxChange(streamableMapObject) }
         }
     }
 

@@ -17,6 +17,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -42,6 +43,7 @@ constructor(
         private val onStreamableMapObjectStreamInHandler: OnStreamableMapObjectStreamInHandler,
         private val onStreamableMapObjectStreamOutHandler: OnStreamableMapObjectStreamOutHandler,
         private val textProvider: TextProvider,
+        private val mapObjectStreamer: MapObjectStreamer,
         streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) : DistanceBasedPlayerStreamable,
         SpatiallyIndexedStreamable<StreamableMapObjectImpl, Rect3d>(),
@@ -61,7 +63,12 @@ constructor(
 
     private val onStreamOutHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
 
-    private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(this, coordinates, rotation)
+    private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(
+            streamableMapObject = this,
+            mapObjectStreamer = mapObjectStreamer,
+            coordinates = coordinates,
+            rotation = rotation
+    )
 
     private val materialsByIndex: MutableMap<Int, Material> = mutableMapOf()
 
@@ -127,10 +134,6 @@ constructor(
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjectsByPlayer.contains(forPlayer)
 
-    internal fun onStateChange(onStateChange: StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
-        stateMachine.onStateChange(onStateChange)
-    }
-
     override fun refresh() {
         playerMapObjectsByPlayer.replaceAll { player, playerMapObject ->
             playerMapObject.destroy()
@@ -143,7 +146,7 @@ constructor(
         set(value) {
             requireNotDestroyed()
             stateMachine.transitionToFixedCoordinates(coordinates = value, rotation = rotation)
-            onBoundingBoxChanged()
+            mapObjectStreamer.onBoundingBoxChange(this)
         }
 
     override var rotation: Vector3D

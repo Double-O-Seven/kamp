@@ -24,7 +24,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabel.getText(player),
+                        text = streamableTextLabel.getText(player.locale),
                         color = streamableTextLabel.color,
                         coordinates = coordinates,
                         drawDistance = streamableTextLabel.streamDistance,
@@ -49,7 +49,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabel.getText(player),
+                        text = streamableTextLabel.getText(player.locale),
                         color = streamableTextLabel.color,
                         coordinates = offset,
                         drawDistance = streamableTextLabel.streamDistance,
@@ -75,7 +75,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
                         player = player,
-                        text = streamableTextLabel.getText(player),
+                        text = streamableTextLabel.getText(player.locale),
                         color = streamableTextLabel.color,
                         coordinates = offset,
                         drawDistance = streamableTextLabel.streamDistance,

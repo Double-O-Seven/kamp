@@ -7,7 +7,6 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
-import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectState
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
@@ -110,8 +109,6 @@ internal class MapObjectStreamerTest {
             fun shouldCreateStreamableMapObject() {
                 val expectedStreamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                 }
                 every {
                     streamableMapObjectFactory.create(
@@ -121,7 +118,8 @@ internal class MapObjectStreamerTest {
                             coordinates = vector3DOf(150f, 100f, 20f),
                             rotation = vector3DOf(1f, 2f, 3f),
                             interiorIds = mutableSetOf(123),
-                            virtualWorldIds = mutableSetOf(456)
+                            virtualWorldIds = mutableSetOf(456),
+                            mapObjectStreamer = mapObjectStreamer
                     )
                 } returns expectedStreamableMapObject
 
@@ -143,11 +141,9 @@ internal class MapObjectStreamerTest {
             fun shouldRegisterCreatedMapObjectAsCallbackListener() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
 
                 mapObjectStreamer.createMapObject(
@@ -168,11 +164,9 @@ internal class MapObjectStreamerTest {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
 
                 mapObjectStreamer.createMapObject(
@@ -219,20 +213,16 @@ internal class MapObjectStreamerTest {
             fun shouldReturnStreamInCandidates() {
                 val streamableMapObject1 = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } just Runs
                     every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
                 val streamableMapObject2 = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } just Runs
                     every { getBoundingBox() } returns Rect3d(-20.0, 10.0, -100.0, 101.0, 201.0, 303.0)
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject1, streamableMapObject2)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -265,15 +255,13 @@ internal class MapObjectStreamerTest {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
                         every { spatialIndexEntry } returns firstArg()
                     }
                     every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -306,8 +294,6 @@ internal class MapObjectStreamerTest {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
                         every { spatialIndexEntry } returns firstArg()
                     }
@@ -316,7 +302,7 @@ internal class MapObjectStreamerTest {
                     every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -327,9 +313,7 @@ internal class MapObjectStreamerTest {
                         interiorIds = mutableSetOf(),
                         virtualWorldIds = mutableSetOf()
                 )
-                val onStateChangeSlot = slot<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>()
-                verify { streamableMapObject.onStateChange(capture(onStateChangeSlot)) }
-                onStateChangeSlot.captured.invoke(streamableMapObject, mockk(), mockk())
+                mapObjectStreamer.onStateChange(streamableMapObject)
                 val onDestroySlot = slot<OnDestroyListener>()
                 verify { streamableMapObject.addOnDestroyListener(capture(onDestroySlot)) }
                 onDestroySlot.captured.onDestroy(streamableMapObject)
@@ -348,12 +332,10 @@ internal class MapObjectStreamerTest {
                     "true, true",
                     "false, false"
             )
-            fun givenStateChangesItShouldBeReturnAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
+            fun givenOnStateChangeWasCalledItShouldBeReturnAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
                 every { callbackListenerManager.unregister(any()) } just Runs
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
                         every { spatialIndexEntry } returns firstArg()
                     }
@@ -362,7 +344,7 @@ internal class MapObjectStreamerTest {
                     every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -373,9 +355,7 @@ internal class MapObjectStreamerTest {
                         interiorIds = mutableSetOf(),
                         virtualWorldIds = mutableSetOf()
                 )
-                val slot = slot<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>()
-                verify { streamableMapObject.onStateChange(capture(slot)) }
-                slot.captured.invoke(streamableMapObject, mockk(), mockk())
+                mapObjectStreamer.onStateChange(streamableMapObject)
                 val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
 
                 val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
@@ -385,11 +365,9 @@ internal class MapObjectStreamerTest {
             }
 
             @Test
-            fun givenBoundingBoxChangedAndStreamLocationIsWithinNewBoundingBoxItShouldReturnCandidate() {
+            fun givenOnBoundingBoxChangeWasCalledAndStreamLocationIsWithinNewBoundingBoxItShouldReturnCandidate() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
                         every { spatialIndexEntry } returns firstArg()
                     }
@@ -399,7 +377,7 @@ internal class MapObjectStreamerTest {
                     )
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -410,9 +388,7 @@ internal class MapObjectStreamerTest {
                         interiorIds = mutableSetOf(),
                         virtualWorldIds = mutableSetOf()
                 )
-                val slot = slot<StreamableMapObjectImpl.(Rect3d) -> Unit>()
-                verify { streamableMapObject.onBoundingBoxChanged(capture(slot)) }
-                slot.captured.invoke(streamableMapObject, mockk())
+                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
                 val streamLocation = StreamLocation(mockk(), locationOf(1100f, 1200f, 1300f, 4, 5))
 
                 val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
@@ -425,8 +401,6 @@ internal class MapObjectStreamerTest {
             fun givenBoundingBoxChangedAndStreamLocationIsWithinOldBoundingBoxItShouldNotReturnCandidate() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
                     every { addOnDestroyListener(any()) } just Runs
-                    every { onBoundingBoxChanged(any()) } just Runs
-                    every { onStateChange(any()) } just Runs
                     every { spatialIndexEntry = any() } answers {
                         every { spatialIndexEntry } returns firstArg()
                     }
@@ -436,7 +410,7 @@ internal class MapObjectStreamerTest {
                     )
                 }
                 every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any())
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returnsMany listOf(streamableMapObject)
                 mapObjectStreamer.createMapObject(
                         modelId = 1337,
@@ -447,9 +421,7 @@ internal class MapObjectStreamerTest {
                         interiorIds = mutableSetOf(),
                         virtualWorldIds = mutableSetOf()
                 )
-                val slot = slot<StreamableMapObjectImpl.(Rect3d) -> Unit>()
-                verify { streamableMapObject.onBoundingBoxChanged(capture(slot)) }
-                slot.captured.invoke(streamableMapObject, mockk())
+                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
                 val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
 
                 val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)

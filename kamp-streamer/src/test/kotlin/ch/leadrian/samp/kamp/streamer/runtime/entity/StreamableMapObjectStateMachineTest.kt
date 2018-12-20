@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateFactory
 import io.mockk.Runs
 import io.mockk.every
@@ -20,6 +21,7 @@ internal class StreamableMapObjectStateMachineTest {
 
     private val streamableMapObject = mockk<StreamableMapObjectImpl>()
     private val streamableMapObjectStateFactory = mockk<StreamableMapObjectStateFactory>()
+    private val mapObjectStreamer = mockk<MapObjectStreamer>()
 
     @Nested
     inner class FixedCoordinatesTests {
@@ -43,12 +45,15 @@ internal class StreamableMapObjectStateMachineTest {
             streamableMapObjectStateMachine = StreamableMapObjectStateMachine(
                     initialState = initialState,
                     streamableMapObject = streamableMapObject,
-                    streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                    streamableMapObjectStateFactory = streamableMapObjectStateFactory,
+                    mapObjectStreamer = mapObjectStreamer
             )
         }
 
         @Test
         fun shouldCallOnLeaveAndThenOnEnter() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToFixedCoordinates(
                     coordinates = coordinates,
                     rotation = rotation
@@ -62,6 +67,8 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldUpdateCurrentState() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToFixedCoordinates(
                     coordinates = coordinates,
                     rotation = rotation
@@ -72,21 +79,15 @@ internal class StreamableMapObjectStateMachineTest {
         }
 
         @Test
-        fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange2)
+        fun shouldCallOnStateChangeOnMapObjectStreamer() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
 
             streamableMapObjectStateMachine.transitionToFixedCoordinates(
                     coordinates = coordinates,
                     rotation = rotation
             )
 
-            verify {
-                onStateChange1.invoke(streamableMapObject, initialState, fixedCoordinates)
-                onStateChange2.invoke(streamableMapObject, initialState, fixedCoordinates)
-            }
+            verify { mapObjectStreamer.onStateChange(streamableMapObject) }
         }
     }
 
@@ -118,12 +119,15 @@ internal class StreamableMapObjectStateMachineTest {
             streamableMapObjectStateMachine = StreamableMapObjectStateMachine(
                     initialState = initialState,
                     streamableMapObject = streamableMapObject,
-                    streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                    streamableMapObjectStateFactory = streamableMapObjectStateFactory,
+                    mapObjectStreamer = mapObjectStreamer
             )
         }
 
         @Test
         fun shouldCallOnLeaveAndThenOnEnter() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToMoving(
                     origin = origin,
                     destination = destination,
@@ -140,6 +144,8 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldUpdateCurrentState() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToMoving(
                     origin = origin,
                     destination = destination,
@@ -153,11 +159,8 @@ internal class StreamableMapObjectStateMachineTest {
         }
 
         @Test
-        fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange2)
+        fun shouldCallOnStateChangeOnMapObjectStreamer() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
 
             streamableMapObjectStateMachine.transitionToMoving(
                     origin = origin,
@@ -167,14 +170,13 @@ internal class StreamableMapObjectStateMachineTest {
                     speed = 13f
             )
 
-            verify {
-                onStateChange1.invoke(streamableMapObject, initialState, moving)
-                onStateChange2.invoke(streamableMapObject, initialState, moving)
-            }
+            verify { mapObjectStreamer.onStateChange(streamableMapObject) }
         }
 
         @Test
         fun shouldSetStreamableMapObjectOnMovedAsOnMoved() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             every { streamableMapObject.onMoved() } just Runs
 
             streamableMapObjectStateMachine.transitionToMoving(
@@ -225,12 +227,15 @@ internal class StreamableMapObjectStateMachineTest {
             streamableMapObjectStateMachine = StreamableMapObjectStateMachine(
                     initialState = initialState,
                     streamableMapObject = streamableMapObject,
-                    streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                    streamableMapObjectStateFactory = streamableMapObjectStateFactory,
+                    mapObjectStreamer = mapObjectStreamer
             )
         }
 
         @Test
         fun shouldCallOnLeaveAndThenOnEnter() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToAttachedToPlayer(
                     player = player,
                     offset = offset,
@@ -245,6 +250,8 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldUpdateCurrentState() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToAttachedToPlayer(
                     player = player,
                     offset = offset,
@@ -256,11 +263,8 @@ internal class StreamableMapObjectStateMachineTest {
         }
 
         @Test
-        fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange2)
+        fun shouldCallOnStateChangeOnMapObjectStreamer() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
 
             streamableMapObjectStateMachine.transitionToAttachedToPlayer(
                     player = player,
@@ -268,10 +272,7 @@ internal class StreamableMapObjectStateMachineTest {
                     rotation = attachRotation
             )
 
-            verify {
-                onStateChange1.invoke(streamableMapObject, initialState, attachedToPlayer)
-                onStateChange2.invoke(streamableMapObject, initialState, attachedToPlayer)
-            }
+            verify { mapObjectStreamer.onStateChange(streamableMapObject) }
         }
     }
 
@@ -299,12 +300,15 @@ internal class StreamableMapObjectStateMachineTest {
             streamableMapObjectStateMachine = StreamableMapObjectStateMachine(
                     initialState = initialState,
                     streamableMapObject = streamableMapObject,
-                    streamableMapObjectStateFactory = streamableMapObjectStateFactory
+                    streamableMapObjectStateFactory = streamableMapObjectStateFactory,
+                    mapObjectStreamer = mapObjectStreamer
             )
         }
 
         @Test
         fun shouldCallOnLeaveAndThenOnEnter() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToAttachedToVehicle(
                     vehicle = vehicle,
                     offset = offset,
@@ -319,6 +323,8 @@ internal class StreamableMapObjectStateMachineTest {
 
         @Test
         fun shouldUpdateCurrentState() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
+
             streamableMapObjectStateMachine.transitionToAttachedToVehicle(
                     vehicle = vehicle,
                     offset = offset,
@@ -330,11 +336,8 @@ internal class StreamableMapObjectStateMachineTest {
         }
 
         @Test
-        fun shouldCallOnStateChangeHandlers() {
-            val onStateChange1 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange1)
-            val onStateChange2 = mockk<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit>(relaxed = true)
-            streamableMapObjectStateMachine.onStateChange(onStateChange2)
+        fun shouldCallOnStateChangeOnMapObjectStreamer() {
+            every { mapObjectStreamer.onStateChange(any()) } just Runs
 
             streamableMapObjectStateMachine.transitionToAttachedToVehicle(
                     vehicle = vehicle,
@@ -342,11 +345,9 @@ internal class StreamableMapObjectStateMachineTest {
                     rotation = attachRotation
             )
 
-            verify {
-                onStateChange1.invoke(streamableMapObject, initialState, attachedToVehicle)
-                onStateChange2.invoke(streamableMapObject, initialState, attachedToVehicle)
-            }
+            verify { mapObjectStreamer.onStateChange(streamableMapObject) }
         }
+
     }
 
 }

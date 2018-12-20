@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -31,7 +32,8 @@ constructor(
             coordinates: Vector3D,
             rotation: Vector3D,
             interiorIds: MutableSet<Int>,
-            virtualWorldIds: MutableSet<Int>
+            virtualWorldIds: MutableSet<Int>,
+            mapObjectStreamer: MapObjectStreamer
     ): StreamableMapObjectImpl {
         return StreamableMapObjectImpl(
                 modelId = modelId,
@@ -48,6 +50,7 @@ constructor(
                 onStreamableMapObjectStreamInHandler = onStreamableMapObjectStreamInHandler,
                 onStreamableMapObjectStreamOutHandler = onStreamableMapObjectStreamOutHandler,
                 textProvider = textProvider,
+                mapObjectStreamer = mapObjectStreamer,
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
     }

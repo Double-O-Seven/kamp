@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectStateMachine
 import io.mockk.every
 import io.mockk.mockk
@@ -13,6 +14,7 @@ internal class StreamableMapObjectFactoryTest {
     private lateinit var streamableMapObjectFactory: StreamableMapObjectFactory
     private val streamableMapObjectStateMachineFactory = mockk<StreamableMapObjectStateMachineFactory>()
     private val streamableMapObjectStateMachine = mockk<StreamableMapObjectStateMachine>(relaxed = true)
+    private val mapObjectStreamer = mockk<MapObjectStreamer>()
 
     @BeforeEach
     fun setUp() {
@@ -26,7 +28,7 @@ internal class StreamableMapObjectFactoryTest {
                 textProvider = mockk(),
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
-        every { streamableMapObjectStateMachineFactory.create(any(), any(), any()) } returns streamableMapObjectStateMachine
+        every { streamableMapObjectStateMachineFactory.create(any(), any(), any(), any()) } returns streamableMapObjectStateMachine
     }
 
     @Test
@@ -38,7 +40,8 @@ internal class StreamableMapObjectFactoryTest {
                 coordinates = mutableVector3DOf(1f, 2f, 3f),
                 rotation = mutableVector3DOf(4f, 5f, 6f),
                 interiorIds = mutableSetOf(12, 34),
-                virtualWorldIds = mutableSetOf(56, 78, 90)
+                virtualWorldIds = mutableSetOf(56, 78, 90),
+                mapObjectStreamer = mapObjectStreamer
         )
 
         assertThat(streamableMapObject)

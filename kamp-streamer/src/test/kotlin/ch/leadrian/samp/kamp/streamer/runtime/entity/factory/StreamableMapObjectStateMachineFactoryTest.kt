@@ -24,7 +24,8 @@ internal class StreamableMapObjectStateMachineFactoryTest {
         val streamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(
                 streamableMapObject = streamableMapObject,
                 coordinates = vector3DOf(1f, 2f, 3f),
-                rotation = vector3DOf(4f, 5f, 6f)
+                rotation = vector3DOf(4f, 5f, 6f),
+                mapObjectStreamer = mockk()
         )
 
         assertThat(streamableMapObjectStateMachine.currentState)

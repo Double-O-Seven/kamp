@@ -67,20 +67,21 @@ constructor(
                 coordinates = coordinates,
                 rotation = rotation,
                 interiorIds = interiorIds,
-                virtualWorldIds = virtualWorldIds
+                virtualWorldIds = virtualWorldIds,
+                mapObjectStreamer = this
         )
         add(streamableMapObject)
-        registerCallbackHandlers(streamableMapObject)
+        streamableMapObject.onDestroy { remove(this) }
         return streamableMapObject
     }
 
-    private fun registerCallbackHandlers(streamableMapObject: StreamableMapObjectImpl) {
-        streamableMapObject.onDestroy { remove(this) }
-        streamableMapObject.onBoundingBoxChanged { updateSpatialIndex(this) }
-        streamableMapObject.onStateChange { _, _ ->
-            if (isMoving || isAttached) {
-                enableNonIndexStreaming(this)
-            }
+    fun onBoundingBoxChange(streamableMapObject: StreamableMapObjectImpl) {
+        updateSpatialIndex(streamableMapObject)
+    }
+
+    fun onStateChange(streamableMapObject: StreamableMapObjectImpl) {
+        if (streamableMapObject.isMoving || streamableMapObject.isAttached) {
+            enableNonIndexStreaming(streamableMapObject)
         }
     }
 

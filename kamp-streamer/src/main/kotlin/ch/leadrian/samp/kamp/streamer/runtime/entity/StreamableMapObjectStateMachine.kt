@@ -3,18 +3,18 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateFactory
 
 internal class StreamableMapObjectStateMachine(
         initialState: StreamableMapObjectState,
         private val streamableMapObject: StreamableMapObjectImpl,
-        private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory
+        private val streamableMapObjectStateFactory: StreamableMapObjectStateFactory,
+        private val mapObjectStreamer: MapObjectStreamer
 ) {
 
     var currentState: StreamableMapObjectState = initialState
         private set
-
-    private val onStateChangeHandlers: MutableList<StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit> = mutableListOf()
 
     fun transitionToFixedCoordinates(coordinates: Vector3D, rotation: Vector3D) {
         val fixedCoordinates = streamableMapObjectStateFactory.createFixedCoordinates(
@@ -66,15 +66,7 @@ internal class StreamableMapObjectStateMachine(
         oldState.onLeave(streamableMapObject)
         newState.onEnter(streamableMapObject)
         currentState = newState
-        onStateChange(oldState, newState)
-    }
-
-    private fun onStateChange(oldState: StreamableMapObjectState, newState: StreamableMapObjectState) {
-        onStateChangeHandlers.forEach { it.invoke(streamableMapObject, oldState, newState) }
-    }
-
-    internal fun onStateChange(onStateChange: StreamableMapObjectImpl.(StreamableMapObjectState, StreamableMapObjectState) -> Unit) {
-        onStateChangeHandlers += onStateChange
+        mapObjectStreamer.onStateChange(streamableMapObject)
     }
 
 }
