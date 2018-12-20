@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class DistanceBasedPlayerStreamerFactory
 @Inject
-constructor(
+internal constructor(
         private val asyncExecutor: AsyncExecutor,
         private val playerService: PlayerService
 ) {
