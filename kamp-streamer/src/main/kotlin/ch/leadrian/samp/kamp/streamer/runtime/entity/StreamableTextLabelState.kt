@@ -2,6 +2,8 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
+import ch.leadrian.samp.kamp.core.api.entity.HasVehicle
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
@@ -35,16 +37,16 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
 
     internal class AttachedToVehicle(
             streamableTextLabelImpl: StreamableTextLabelImpl,
-            private val attachedToVehicle: Vehicle,
+            override val vehicle: Vehicle,
             offset: Vector3D,
             private val playerTextLabelService: PlayerTextLabelService,
             private val asyncExecutor: AsyncExecutor
-    ) : StreamableTextLabelState(streamableTextLabelImpl) {
+    ) : StreamableTextLabelState(streamableTextLabelImpl), HasVehicle {
 
         private val offset = offset.toVector3D()
 
         override val coordinates: Vector3D
-            get() = asyncExecutor.computeOnMainThread { attachedToVehicle.coordinates }.get()
+            get() = asyncExecutor.computeOnMainThread { vehicle.coordinates }.get()
 
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
@@ -54,23 +56,23 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
                         coordinates = offset,
                         drawDistance = streamableTextLabel.streamDistance,
                         testLOS = streamableTextLabel.testLOS,
-                        attachedToVehicle = attachedToVehicle
+                        attachedToVehicle = vehicle
                 )
 
     }
 
     internal class AttachedToPlayer(
             streamableTextLabelImpl: StreamableTextLabelImpl,
-            private val attachedToPlayer: Player,
+            override val player: Player,
             offset: Vector3D,
             private val playerTextLabelService: PlayerTextLabelService,
             private val asyncExecutor: AsyncExecutor
-    ) : StreamableTextLabelState(streamableTextLabelImpl) {
+    ) : StreamableTextLabelState(streamableTextLabelImpl), HasPlayer {
 
         private val offset = offset.toVector3D()
 
         override val coordinates: Vector3D
-            get() = asyncExecutor.computeOnMainThread { attachedToPlayer.coordinates }.get()
+            get() = asyncExecutor.computeOnMainThread { player.coordinates }.get()
 
         override fun createPlayerTextLabel(player: Player): PlayerTextLabel =
                 playerTextLabelService.createPlayerTextLabel(
@@ -80,7 +82,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
                         coordinates = offset,
                         drawDistance = streamableTextLabel.streamDistance,
                         testLOS = streamableTextLabel.testLOS,
-                        attachedToPlayer = attachedToPlayer
+                        attachedToPlayer = this.player
                 )
 
     }

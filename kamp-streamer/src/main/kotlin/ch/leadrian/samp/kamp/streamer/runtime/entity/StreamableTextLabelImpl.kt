@@ -12,6 +12,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableTextLabel
+import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.*
@@ -26,6 +27,7 @@ internal class StreamableTextLabelImpl(
         override var virtualWorldIds: MutableSet<Int>,
         override var testLOS: Boolean,
         private val textProvider: TextProvider,
+        private val textLabelStreamer: TextLabelStreamer,
         private val streamableTextLabelStateFactory: StreamableTextLabelStateFactory
 ) : DistanceBasedPlayerStreamable,
         SpatiallyIndexedStreamable<StreamableTextLabelImpl, Rect3d>(),
@@ -39,11 +41,15 @@ internal class StreamableTextLabelImpl(
 
     private var state: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates)
 
-    private val onStateChangeHandlers: MutableList<StreamableTextLabelImpl.(StreamableTextLabelState, StreamableTextLabelState) -> Unit> = mutableListOf()
-
     private var _color: Color = color.toColor()
         set(value) {
             field = value.toColor()
+        }
+
+    val isAttached: Boolean
+        get() = when (state) {
+            is StreamableTextLabelState.AttachedToPlayer, is StreamableTextLabelState.AttachedToVehicle -> true
+            is StreamableTextLabelState.FixedCoordinates -> false
         }
 
     override val drawDistance: Float = streamDistance
@@ -57,21 +63,21 @@ internal class StreamableTextLabelImpl(
     override var coordinates: Vector3D
         get() = state.coordinates
         set(value) {
-            transitionToState(streamableTextLabelStateFactory.createFixedCoordinates(this, value))
+            transitionToFixedCoordinates(value)
         }
 
     private fun transitionToState(newState: StreamableTextLabelState) {
-        val oldState = this.state
-        this.state = newState
+        state = newState
         playerTextLabelsByPlayer.replaceAll { player, playerTextLabel ->
             playerTextLabel.destroy()
             newState.createPlayerTextLabel(player)
         }
-        onStateChangeHandlers.forEach { it.invoke(this, oldState, newState) }
+        textLabelStreamer.onStateChange(this)
     }
 
-    internal fun onStateChange(onStateChange: StreamableTextLabelImpl.(StreamableTextLabelState, StreamableTextLabelState) -> Unit) {
-        onStateChangeHandlers += onStateChange
+    private fun transitionToFixedCoordinates(coordinates: Vector3D) {
+        transitionToState(streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates))
+        textLabelStreamer.onBoundingBoxChange(this)
     }
 
     override var text: String
@@ -165,11 +171,17 @@ internal class StreamableTextLabelImpl(
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val currentState = state
+        if (currentState is StreamableTextLabelState.AttachedToPlayer && player == currentState.player) {
+            transitionToFixedCoordinates(coordinates)
+        }
     }
 
     override fun onVehicleDestruction(vehicle: Vehicle) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val currentState = state
+        if (currentState is StreamableTextLabelState.AttachedToVehicle && vehicle == currentState.vehicle) {
+            transitionToFixedCoordinates(coordinates)
+        }
     }
 
 }

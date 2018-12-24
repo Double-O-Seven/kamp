@@ -23,7 +23,7 @@ constructor(
 ) : Streamer, StreamInCandidateSupplier<StreamableMapObjectImpl> {
 
     /*
-     * The spatial index and set of createMoving or attached objects may only be accessed during
+     * The spatial index and set of moving or attached objects may only be accessed during
      * streaming to avoid any race conditions and expensive synchronization.
      * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
      */
@@ -71,7 +71,6 @@ constructor(
                 mapObjectStreamer = this
         )
         add(streamableMapObject)
-        streamableMapObject.onDestroy { remove(this) }
         return streamableMapObject
     }
 
@@ -104,6 +103,7 @@ constructor(
     private fun add(streamableMapObject: StreamableMapObjectImpl) {
         callbackListenerManager.register(streamableMapObject)
         delegate.beforeStream { spatialIndex.add(streamableMapObject) }
+        streamableMapObject.onDestroy { remove(this) }
     }
 
     private fun remove(streamableMapObject: StreamableMapObjectImpl) {
