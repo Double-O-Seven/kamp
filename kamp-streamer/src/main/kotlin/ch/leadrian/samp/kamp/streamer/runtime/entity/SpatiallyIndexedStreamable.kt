@@ -7,8 +7,6 @@ abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, 
 
     abstract fun getBoundingBox(): T
 
-    protected abstract val self: S
-
     internal lateinit var spatialIndexEntry: SpatialIndex.Entry<S, T>
 
 }

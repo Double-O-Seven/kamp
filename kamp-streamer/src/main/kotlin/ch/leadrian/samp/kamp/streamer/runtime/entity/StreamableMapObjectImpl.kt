@@ -77,8 +77,6 @@ constructor(
     internal val playerMapObjects: Collection<PlayerMapObject>
         get() = playerMapObjectsByPlayer.values
 
-    override val self: StreamableMapObjectImpl = this
-
     override val drawDistance: Float = streamDistance
 
     override fun onStreamIn(forPlayer: Player) {

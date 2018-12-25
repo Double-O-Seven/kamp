@@ -119,8 +119,6 @@ internal class StreamableTextLabelImpl(
         }
     }
 
-    override val self: StreamableTextLabelImpl = this
-
     override fun distanceTo(location: Location): Float =
             when {
                 interiorIds.isNotEmpty() && !interiorIds.contains(location.interiorId) -> Float.MAX_VALUE
