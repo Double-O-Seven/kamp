@@ -4,16 +4,15 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
+import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -27,19 +26,19 @@ internal class MapObjectStreamerTest {
     private lateinit var mapObjectStreamer: MapObjectStreamer
 
     private val callbackListenerManager = mockk<CallbackListenerManager>()
-    private val distanceBasedPlayerStreamerFactory = mockk<DistanceBasedPlayerStreamerFactory>()
-    private val distanceBasedPlayerStreamer = mockk<DistanceBasedPlayerStreamer<StreamableMapObjectImpl>>()
+    private val coordinatesBasedPlayerStreamerFactory = mockk<CoordinatesBasedPlayerStreamerFactory>()
+    private val coordinatesBasedPlayerStreamer = mockk<CoordinatesBasedPlayerStreamer<StreamableMapObjectImpl, Rect3d>>()
     private val streamableMapObjectFactory = mockk<StreamableMapObjectFactory>()
 
     @BeforeEach
     fun setUp() {
         every {
-            distanceBasedPlayerStreamerFactory.create<StreamableMapObjectImpl>(any(), any())
-        } returns distanceBasedPlayerStreamer
+            coordinatesBasedPlayerStreamerFactory.create<StreamableMapObjectImpl, Rect3d>(any(), any(), any())
+        } returns coordinatesBasedPlayerStreamer
         every { callbackListenerManager.register(any()) } just Runs
         mapObjectStreamer = MapObjectStreamer(
                 callbackListenerManager,
-                distanceBasedPlayerStreamerFactory,
+                coordinatesBasedPlayerStreamerFactory,
                 streamableMapObjectFactory
         )
     }
@@ -48,11 +47,11 @@ internal class MapObjectStreamerTest {
     inner class InitializeTests {
 
         @Test
-        fun shouldCreateDistanceBasedPlayerStreamer() {
+        fun shouldCreateCoordinatesBasedPlayerStreamer() {
             mapObjectStreamer.initialize()
 
             verify {
-                distanceBasedPlayerStreamerFactory.create(SAMPConstants.MAX_OBJECTS - 1, mapObjectStreamer)
+                coordinatesBasedPlayerStreamerFactory.create(any<SpatialIndex3D<StreamableMapObjectImpl>>(), SAMPConstants.MAX_OBJECTS - 1)
             }
         }
 
@@ -60,7 +59,7 @@ internal class MapObjectStreamerTest {
         fun initializeShouldRegisterAsCallbackListener() {
             mapObjectStreamer.initialize()
 
-            verify { callbackListenerManager.register(distanceBasedPlayerStreamer) }
+            verify { callbackListenerManager.register(coordinatesBasedPlayerStreamer) }
         }
 
     }
@@ -78,16 +77,16 @@ internal class MapObjectStreamerTest {
 
             @Test
             fun shouldSetCapacity() {
-                every { distanceBasedPlayerStreamer.capacity = any() } just Runs
+                every { coordinatesBasedPlayerStreamer.capacity = any() } just Runs
 
                 mapObjectStreamer.capacity = 69
 
-                verify { distanceBasedPlayerStreamer.capacity = 69 }
+                verify { coordinatesBasedPlayerStreamer.capacity = 69 }
             }
 
             @Test
             fun shouldReturnCapacity() {
-                every { distanceBasedPlayerStreamer.capacity } returns 187
+                every { coordinatesBasedPlayerStreamer.capacity } returns 187
 
                 val capacity = mapObjectStreamer.capacity
 
@@ -102,14 +101,13 @@ internal class MapObjectStreamerTest {
 
             @BeforeEach
             fun setUp() {
-                every { distanceBasedPlayerStreamer.beforeStream(any()) } just Runs
+                every { callbackListenerManager.register(any()) } just Runs
+                every { coordinatesBasedPlayerStreamer.add(any()) } just Runs
             }
 
             @Test
             fun shouldCreateStreamableMapObject() {
-                val expectedStreamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                }
+                val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
                 every {
                     streamableMapObjectFactory.create(
                             modelId = 1337,
@@ -139,9 +137,7 @@ internal class MapObjectStreamerTest {
 
             @Test
             fun shouldRegisterCreatedMapObjectAsCallbackListener() {
-                val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                }
+                val streamableMapObject = mockk<StreamableMapObjectImpl>()
                 every {
                     streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
@@ -160,11 +156,8 @@ internal class MapObjectStreamerTest {
             }
 
             @Test
-            fun onDestroyShouldUnregisterCreatedMapObjectAsCallbackListener() {
-                every { callbackListenerManager.unregister(any()) } just Runs
-                val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                }
+            fun shouldAddCreatedMapObjectToCoordinatesBasedStreamer() {
+                val streamableMapObject = mockk<StreamableMapObjectImpl>()
                 every {
                     streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
@@ -179,257 +172,69 @@ internal class MapObjectStreamerTest {
                         virtualWorldIds = mutableSetOf()
                 )
 
-                val slot = slot<OnDestroyListener>()
-                verify { streamableMapObject.addOnDestroyListener(capture(slot)) }
-                slot.captured.onDestroy(streamableMapObject)
-                verify { callbackListenerManager.unregister(streamableMapObject) }
+                verify { coordinatesBasedPlayerStreamer.add(streamableMapObject) }
             }
 
         }
 
         @Test
         fun shouldDelegateStream() {
-            every { distanceBasedPlayerStreamer.stream(any()) } just Runs
+            every { coordinatesBasedPlayerStreamer.stream(any()) } just Runs
             val streamLocation1 = StreamLocation(mockk(), locationOf(1f, 2f, 3f, 4, 5))
             val streamLocation2 = StreamLocation(mockk(), locationOf(6f, 7f, 8f, 9, 10))
             val streamLocations = listOf(streamLocation1, streamLocation2)
 
             mapObjectStreamer.stream(streamLocations)
 
-            verify { distanceBasedPlayerStreamer.stream(streamLocations) }
+            verify { coordinatesBasedPlayerStreamer.stream(streamLocations) }
+        }
+
+        @Test
+        fun shouldDelegateOnBoundingBoxChange() {
+            val streamableMapObject = mockk<StreamableMapObjectImpl>()
+            every { coordinatesBasedPlayerStreamer.onBoundingBoxChange(any()) } just Runs
+
+            mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
+
+            verify { coordinatesBasedPlayerStreamer.onBoundingBoxChange(streamableMapObject) }
         }
 
         @Nested
-        inner class GetStreamInCandidatesTests {
+        inner class OnStateChangeTests {
 
             @BeforeEach
             fun setUp() {
-                every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                    firstArg<() -> Unit>().invoke()
-                }
-            }
-
-            @Test
-            fun shouldReturnStreamInCandidates() {
-                val streamableMapObject1 = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } just Runs
-                    every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
-                }
-                val streamableMapObject2 = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } just Runs
-                    every { getBoundingBox() } returns Rect3d(-20.0, 10.0, -100.0, 101.0, 201.0, 303.0)
-                }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject1, streamableMapObject2)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
-
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
-
-                assertThat(candidates)
-                        .containsExactlyInAnyOrder(streamableMapObject1, streamableMapObject2)
-            }
-
-            @Test
-            fun givenStreamableMapObjectIsDestroyedItShouldNotBeReturnedAsStreamInCandidate() {
-                every { callbackListenerManager.unregister(any()) } just Runs
-                val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } answers {
-                        every { spatialIndexEntry } returns firstArg()
-                    }
-                    every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
-                }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                val slot = slot<OnDestroyListener>()
-                verify { streamableMapObject.addOnDestroyListener(capture(slot)) }
-                slot.captured.onDestroy(streamableMapObject)
-                val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
-
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
-
-                assertThat(candidates)
-                        .isEmpty()
+                every { coordinatesBasedPlayerStreamer.removeFromSpatialIndex(any()) } just Runs
             }
 
             @ParameterizedTest
             @CsvSource(
                     "true, false",
                     "false, true",
-                    "true, true",
-                    "false, false"
+                    "true, true"
             )
-            fun givenStreamableMapObjectIsDestroyedAfterStateChangeItShouldNotBeReturnedAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
-                every { callbackListenerManager.unregister(any()) } just Runs
+            fun givenObjectIsMovingOrAttachedItShouldCallDelegate(isMoving: Boolean, isAttached: Boolean) {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } answers {
-                        every { spatialIndexEntry } returns firstArg()
-                    }
-                    every { this@mockk.isAttached } returns isAttached
                     every { this@mockk.isMoving } returns isMoving
-                    every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
-                }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                mapObjectStreamer.onStateChange(streamableMapObject)
-                val onDestroySlot = slot<OnDestroyListener>()
-                verify { streamableMapObject.addOnDestroyListener(capture(onDestroySlot)) }
-                onDestroySlot.captured.onDestroy(streamableMapObject)
-                val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
-
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
-
-                assertThat(candidates)
-                        .isEmpty()
-            }
-
-            @ParameterizedTest
-            @CsvSource(
-                    "true, false",
-                    "false, true",
-                    "true, true",
-                    "false, false"
-            )
-            fun givenOnStateChangeWasCalledItShouldBeReturnAsStreamInCandidate(isAttached: Boolean, isMoving: Boolean) {
-                every { callbackListenerManager.unregister(any()) } just Runs
-                val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } answers {
-                        every { spatialIndexEntry } returns firstArg()
-                    }
                     every { this@mockk.isAttached } returns isAttached
-                    every { this@mockk.isMoving } returns isMoving
-                    every { getBoundingBox() } returns Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0)
                 }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
+
                 mapObjectStreamer.onStateChange(streamableMapObject)
-                val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
 
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
-
-                assertThat(candidates)
-                        .containsExactlyInAnyOrder(streamableMapObject)
+                verify { coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamableMapObject) }
             }
 
             @Test
-            fun givenOnBoundingBoxChangeWasCalledAndStreamLocationIsWithinNewBoundingBoxItShouldReturnCandidate() {
+            fun givenObjectIsNeitherMovingNorAttachedItShouldNotCallDelegate() {
                 val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } answers {
-                        every { spatialIndexEntry } returns firstArg()
-                    }
-                    every { getBoundingBox() } returnsMany listOf(
-                            Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0),
-                            Rect3d(1075.0, 1175.0, 1275.0, 1140.0, 1240.0, 1340.0)
-                    )
+                    every { isMoving } returns false
+                    every { isAttached } returns false
                 }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
-                val streamLocation = StreamLocation(mockk(), locationOf(1100f, 1200f, 1300f, 4, 5))
 
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
+                mapObjectStreamer.onStateChange(streamableMapObject)
 
-                assertThat(candidates)
-                        .containsExactlyInAnyOrder(streamableMapObject)
+                verify(exactly = 0) { coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamableMapObject) }
             }
-
-            @Test
-            fun givenBoundingBoxChangedAndStreamLocationIsWithinOldBoundingBoxItShouldNotReturnCandidate() {
-                val streamableMapObject = mockk<StreamableMapObjectImpl> {
-                    every { addOnDestroyListener(any()) } just Runs
-                    every { spatialIndexEntry = any() } answers {
-                        every { spatialIndexEntry } returns firstArg()
-                    }
-                    every { getBoundingBox() } returnsMany listOf(
-                            Rect3d(75.0, 175.0, 275.0, 140.0, 240.0, 340.0),
-                            Rect3d(1075.0, 1175.0, 1275.0, 1140.0, 1240.0, 1340.0)
-                    )
-                }
-                every {
-                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
-                } returnsMany listOf(streamableMapObject)
-                mapObjectStreamer.createMapObject(
-                        modelId = 1337,
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        rotation = vector3DOf(1f, 2f, 3f),
-                        interiorIds = mutableSetOf(),
-                        virtualWorldIds = mutableSetOf()
-                )
-                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
-                val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 300f, 4, 5))
-
-                val candidates = mapObjectStreamer.getStreamInCandidates(streamLocation)
-
-                assertThat(candidates)
-                        .isEmpty()
-            }
-
         }
 
     }

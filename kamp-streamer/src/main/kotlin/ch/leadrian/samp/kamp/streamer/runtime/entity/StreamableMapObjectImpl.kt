@@ -45,8 +45,7 @@ constructor(
         private val textProvider: TextProvider,
         private val mapObjectStreamer: MapObjectStreamer,
         streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
-) : DistanceBasedPlayerStreamable,
-        SpatiallyIndexedStreamable<StreamableMapObjectImpl, Rect3d>(),
+) : CoordinatesBasedPlayerStreamable<StreamableMapObjectImpl, Rect3d>(),
         OnPlayerDisconnectListener,
         OnVehicleDestructionListener,
         StreamableMapObject {
