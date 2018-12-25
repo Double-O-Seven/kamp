@@ -17,6 +17,8 @@ internal class StreamerModule : AbstractStreamerModule() {
         bind(OnStreamableMapObjectMovedHandler::class.java)
         bind(OnPlayerEditStreamableMapObjectHandler::class.java)
         bind(OnPlayerSelectStreamableMapObjectHandler::class.java)
+        bind(OnStreamableMapObjectStreamInHandler::class.java)
+        bind(OnStreamableMapObjectStreamOutHandler::class.java)
         newCallbackListenerRegistrySetBinder().apply {
             addBinding().to(OnStreamableMapObjectMovedHandler::class.java)
             addBinding().to(OnPlayerEditStreamableMapObjectHandler::class.java)
@@ -25,9 +27,12 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(OnStreamableMapObjectStreamOutHandler::class.java)
         }
         bind(DistanceBasedPlayerStreamerFactory::class.java)
+        bind(CoordinatesBasedPlayerStreamerFactory::class.java)
         bind(MapObjectStreamer::class.java)
+        bind(TextLabelStreamer::class.java)
         newStreamerSetBinder().apply {
             addBinding().to(MapObjectStreamer::class.java)
+            addBinding().to(TextLabelStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
         bind(StreamerService::class.java)
