@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -35,7 +35,7 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(TextLabelStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
-        bind(StreamerService::class.java)
+        bind(StreamableMapObjectService::class.java)
         bind(StreamableMapObjectFactory::class.java)
         bind(StreamableMapObjectStateFactory::class.java)
         bind(StreamableMapObjectStateMachineFactory::class.java)

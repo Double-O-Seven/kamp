@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import javax.inject.Inject
 
-class StreamerService
+class StreamableMapObjectService
 @Inject
 internal constructor(
         private val mapObjectStreamer: MapObjectStreamer

@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.examples.lvdm
 import ch.leadrian.samp.kamp.geodata.vegetation.VegetationLoader
 import ch.leadrian.samp.kamp.geodata.vegetation.VegetationObject
 import ch.leadrian.samp.kamp.geodata.vegetation.VegetationProcessor
-import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 internal class MapLoader
 @Inject
 constructor(
-        private val streamerService: StreamerService,
+        private val streamableMapObjectService: StreamableMapObjectService,
         private val vegetationLoader: VegetationLoader
 ) : VegetationProcessor {
 
@@ -22,7 +22,7 @@ constructor(
     }
 
     override fun process(vegetationObject: VegetationObject) {
-        streamerService.createStreamableMapObject(
+        streamableMapObjectService.createStreamableMapObject(
                 modelId = vegetationObject.modelId,
                 priority = 0,
                 streamDistance = 300f,

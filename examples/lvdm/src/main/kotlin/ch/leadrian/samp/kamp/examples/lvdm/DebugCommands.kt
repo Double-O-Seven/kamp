@@ -22,7 +22,7 @@ import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.translateForText
-import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.base.onClick
@@ -47,7 +47,7 @@ class DebugCommands
 constructor(
         private val messageSender: MessageSender,
         private val mapObjectService: MapObjectService,
-        private val streamerService: StreamerService,
+        private val streamableMapObjectService: StreamableMapObjectService,
         private val viewFactory: ViewFactory,
         private val vehicleService: VehicleService
 ) : Commands() {
@@ -84,13 +84,15 @@ constructor(
             @Parameter("z") z: Float,
             @Parameter("speed") speed: Float
     ) {
-        val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
+        val mapObject = objectsByName[name]
+                ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.moveTo(vector3DOf(x, y, z), speed)
     }
 
     @Command
     fun stopObj(player: Player, name: String) {
-        val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
+        val mapObject = objectsByName[name]
+                ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.stop()
     }
 
@@ -102,13 +104,15 @@ constructor(
             @Parameter("y") y: Float,
             @Parameter("z") z: Float
     ) {
-        val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
+        val mapObject = objectsByName[name]
+                ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.coordinates = vector3DOf(x, y, z)
     }
 
     @Command
     fun attachObj(player: Player, @Parameter("name") name: String) {
-        val mapObject = objectsByName[name] ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
+        val mapObject = objectsByName[name]
+                ?: return messageSender.sendMessageToPlayer(player, Colors.RED, "No such object")
         mapObject.attachTo(player, vector3DOf(0f, 0f, 0f), vector3DOf(0f, 0f, 0f))
     }
 
@@ -118,7 +122,7 @@ constructor(
         var numberOfObjects = 0
         for (x: Int in (-3000..3000) step offset) {
             for (y: Int in (-3000..3000) step offset) {
-                streamerService.createStreamableMapObject(
+                streamableMapObjectService.createStreamableMapObject(
                         modelId = 16442,
                         priority = 0,
                         streamDistance = 100f,

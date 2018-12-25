@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerTextLabelService
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.streamer.api.service.StreamerService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -54,10 +54,10 @@ internal class StreamerModuleTest {
         }
 
         @Test
-        fun shouldInjectStreamerService() {
-            val streamerService = injector.getInstance<StreamerService>()
+        fun shouldInjectStreamableMapObjectService() {
+            val streamableMapObjectService = injector.getInstance<StreamableMapObjectService>()
 
-            assertThat(streamerService)
+            assertThat(streamableMapObjectService)
                     .isNotNull
         }
 

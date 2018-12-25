@@ -13,14 +13,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class StreamerServiceTest {
+internal class StreamableMapObjectServiceTest {
 
-    private lateinit var streamerService: StreamerService
+    private lateinit var streamableMapObjectService: StreamableMapObjectService
     private val mapObjectStreamer = mockk<MapObjectStreamer>()
 
     @BeforeEach
     fun setUp() {
-        streamerService = StreamerService(
+        streamableMapObjectService = StreamableMapObjectService(
                 mapObjectStreamer = mapObjectStreamer
         )
     }
@@ -43,7 +43,7 @@ internal class StreamerServiceTest {
                 )
             } returns expectedStreamableMapObject
 
-            val streamableMapObject = streamerService.createStreamableMapObject(
+            val streamableMapObject = streamableMapObjectService.createStreamableMapObject(
                     modelId = 1337,
                     priority = 69,
                     streamDistance = 187f,
@@ -70,7 +70,7 @@ internal class StreamerServiceTest {
                 )
             } returns expectedStreamableMapObject
 
-            val streamableMapObject = streamerService.createStreamableMapObject(
+            val streamableMapObject = streamableMapObjectService.createStreamableMapObject(
                     modelId = 1337,
                     priority = 69,
                     streamDistance = 187f,
@@ -99,7 +99,7 @@ internal class StreamerServiceTest {
                 )
             } returns expectedStreamableMapObject
 
-            val streamableMapObject = streamerService.createStreamableMapObject(
+            val streamableMapObject = streamableMapObjectService.createStreamableMapObject(
                     modelId = 1337,
                     priority = 69,
                     streamDistance = 187f,
@@ -128,7 +128,7 @@ internal class StreamerServiceTest {
                 )
             } returns expectedStreamableMapObject
 
-            val streamableMapObject = streamerService.createStreamableMapObject(
+            val streamableMapObject = streamableMapObjectService.createStreamableMapObject(
                     modelId = 1337,
                     priority = 69,
                     streamDistance = 187f,
@@ -146,7 +146,7 @@ internal class StreamerServiceTest {
     fun shouldSetMaxStreamedInMapObjects() {
         every { mapObjectStreamer.capacity = any() } just Runs
 
-        streamerService.setMaxStreamedInMapObjects(500)
+        streamableMapObjectService.setMaxStreamedInMapObjects(500)
 
         verify { mapObjectStreamer.capacity = 500 }
     }
