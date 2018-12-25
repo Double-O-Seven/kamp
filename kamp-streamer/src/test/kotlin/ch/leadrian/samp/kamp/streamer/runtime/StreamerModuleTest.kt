@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.timer.TimerExecutor
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -18,6 +19,8 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStre
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateFactory
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import ch.leadrian.samp.kamp.streamer.runtime.util.TimeProvider
 import com.google.inject.Guice
 import com.google.inject.Injector
@@ -51,14 +54,6 @@ internal class StreamerModuleTest {
         @BeforeEach
         fun setUp() {
             injector = Guice.createInjector(*modules)
-        }
-
-        @Test
-        fun shouldInjectStreamableMapObjectService() {
-            val streamableMapObjectService = injector.getInstance<StreamableMapObjectService>()
-
-            assertThat(streamableMapObjectService)
-                    .isNotNull
         }
 
         @Test
@@ -173,6 +168,14 @@ internal class StreamerModuleTest {
         }
 
         @Test
+        fun shouldInjectStreamableMapObjectService() {
+            val streamableMapObjectService = injector.getInstance<StreamableMapObjectService>()
+
+            assertThat(streamableMapObjectService)
+                    .isNotNull
+        }
+
+        @Test
         fun shouldInjectStreamableMapObjectFactory() {
             val streamableMapObjectFactory = injector.getInstance<StreamableMapObjectFactory>()
 
@@ -185,6 +188,30 @@ internal class StreamerModuleTest {
             val streamableMapObjectStateFactory = injector.getInstance<StreamableMapObjectStateFactory>()
 
             assertThat(streamableMapObjectStateFactory)
+                    .isNotNull
+        }
+
+        @Test
+        fun shouldInjectStreamableTextLabelService() {
+            val streamableTextLabelService = injector.getInstance<StreamableTextLabelService>()
+
+            assertThat(streamableTextLabelService)
+                    .isNotNull
+        }
+
+        @Test
+        fun shouldInjectStreamableTextLabelFactory() {
+            val streamableTextLabelFactory = injector.getInstance<StreamableTextLabelFactory>()
+
+            assertThat(streamableTextLabelFactory)
+                    .isNotNull
+        }
+
+        @Test
+        fun shouldInjectStreamableTextLabelStateFactory() {
+            val streamableTextLabelStateFactory = injector.getInstance<StreamableTextLabelStateFactory>()
+
+            assertThat(streamableTextLabelStateFactory)
                     .isNotNull
         }
 

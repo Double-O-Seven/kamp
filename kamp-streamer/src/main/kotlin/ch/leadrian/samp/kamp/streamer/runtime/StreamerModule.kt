@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -9,6 +10,8 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStre
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateFactory
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelFactory
+import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import ch.leadrian.samp.kamp.streamer.runtime.util.TimeProvider
 
 internal class StreamerModule : AbstractStreamerModule() {
@@ -39,6 +42,9 @@ internal class StreamerModule : AbstractStreamerModule() {
         bind(StreamableMapObjectFactory::class.java)
         bind(StreamableMapObjectStateFactory::class.java)
         bind(StreamableMapObjectStateMachineFactory::class.java)
+        bind(StreamableTextLabelService::class.java)
+        bind(StreamableTextLabelFactory::class.java)
+        bind(StreamableTextLabelStateFactory::class.java)
         bind(TimeProvider::class.java)
     }
 
