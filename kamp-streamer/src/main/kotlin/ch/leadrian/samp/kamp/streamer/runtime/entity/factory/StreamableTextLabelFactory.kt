@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableTextLabelImpl
+import java.util.*
 import javax.inject.Inject
 
 internal class StreamableTextLabelFactory
@@ -16,7 +17,7 @@ constructor(
 
     fun create(
             coordinates: Vector3D,
-            text: String,
+            textSupplier: (Locale) -> String,
             color: Color,
             streamDistance: Float,
             priority: Int,
@@ -27,7 +28,7 @@ constructor(
     ): StreamableTextLabelImpl {
         return StreamableTextLabelImpl(
                 coordinates = coordinates,
-                text = text,
+                textSupplier = textSupplier,
                 color = color,
                 streamDistance = streamDistance,
                 priority = priority,

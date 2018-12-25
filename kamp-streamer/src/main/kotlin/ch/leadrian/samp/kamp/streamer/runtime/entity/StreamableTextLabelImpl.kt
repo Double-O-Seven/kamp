@@ -19,8 +19,8 @@ import java.util.*
 
 internal class StreamableTextLabelImpl(
         coordinates: Vector3D,
-        text: String,
         color: Color,
+        private var textSupplier: (Locale) -> String,
         override val streamDistance: Float,
         override val priority: Int,
         override var interiorIds: MutableSet<Int>,
@@ -29,15 +29,12 @@ internal class StreamableTextLabelImpl(
         private val textProvider: TextProvider,
         private val textLabelStreamer: TextLabelStreamer,
         private val streamableTextLabelStateFactory: StreamableTextLabelStateFactory
-) : DistanceBasedPlayerStreamable,
-        SpatiallyIndexedStreamable<StreamableTextLabelImpl, Rect3d>(),
+) : CoordinatesBasedPlayerStreamable<StreamableTextLabelImpl, Rect3d>(),
         OnPlayerDisconnectListener,
         OnVehicleDestructionListener,
         StreamableTextLabel {
 
     private val playerTextLabelsByPlayer: MutableMap<Player, PlayerTextLabel> = mutableMapOf()
-
-    private var textSupplier: (Locale) -> String = { text }
 
     private var state: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates)
 
