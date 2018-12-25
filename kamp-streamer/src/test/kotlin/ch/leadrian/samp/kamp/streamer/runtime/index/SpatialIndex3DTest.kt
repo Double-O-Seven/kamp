@@ -24,8 +24,6 @@ internal class SpatialIndex3DTest {
             throw UnsupportedOperationException()
         }
 
-        override val self: TestStreamable
-            get() = throw UnsupportedOperationException()
         override val priority: Int
             get() = throw UnsupportedOperationException()
 

@@ -26,7 +26,7 @@ internal constructor(
      * streaming to avoid any race conditions and expensive synchronization.
      * It is less expensive to simple queue some indexing tasks and then execute them on the streaming thread.
      */
-    private val movingStreamables = HashSet<S>()
+    private val nonIndexedStreamables = HashSet<S>()
 
     private val delegate: DistanceBasedPlayerStreamer<S> = distanceBasedPlayerStreamerFactory.create(
             maxCapacity = maxCapacity,
@@ -39,36 +39,43 @@ internal constructor(
             delegate.capacity = value
         }
 
-    fun onBoundingBoxChange(streamable: S) {
-        delegate.beforeStream {
-            if (!movingStreamables.contains(streamable)) {
-                spatialIndex.update(streamable)
-            }
-        }
-    }
-
-    fun onStateChange(streamable: S) {
-        if (streamable.isMoving) {
-            delegate.beforeStream {
-                if (movingStreamables.add(streamable)) {
-                    spatialIndex.remove(streamable)
-                }
-            }
-        }
-    }
-
-    fun add(streamable: S) {
+    @JvmOverloads
+    fun add(streamable: S, addToSpatialIndex: Boolean = true) {
         streamable.addOnDestroyListener(this)
         delegate.beforeStream {
-            spatialIndex.add(streamable)
+            if (addToSpatialIndex) {
+                spatialIndex.add(streamable)
+            } else {
+                nonIndexedStreamables.add(streamable)
+            }
         }
     }
 
     fun remove(streamable: S) {
         streamable.removeOnDestroyListener(this)
         delegate.beforeStream {
-            movingStreamables -= streamable
-            spatialIndex.remove(streamable)
+            val removed = nonIndexedStreamables.remove(streamable)
+            if (!removed) {
+                spatialIndex.remove(streamable)
+            }
+        }
+    }
+
+    fun removeFromSpatialIndex(streamable: S) {
+        delegate.beforeStream {
+            val added = nonIndexedStreamables.add(streamable)
+            if (added) {
+                spatialIndex.remove(streamable)
+            }
+        }
+    }
+
+    fun onBoundingBoxChange(streamable: S) {
+        delegate.beforeStream {
+            val isIndexed = !nonIndexedStreamables.contains(streamable)
+            if (isIndexed) {
+                spatialIndex.update(streamable)
+            }
         }
     }
 
@@ -79,7 +86,7 @@ internal constructor(
     override fun getStreamInCandidates(streamLocation: StreamLocation): Stream<S> =
             Stream.concat(
                     spatialIndex.getIntersections(streamLocation.location).stream(),
-                    movingStreamables.stream()
+                    nonIndexedStreamables.stream()
             )
 
     override fun onDestroy(destroyable: Destroyable) {

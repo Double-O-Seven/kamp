@@ -54,6 +54,7 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     }
 
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
+        // TODO Not thread safe, race conditions with isDestroyed
         return streamInCandidateSupplier.getStreamInCandidates(streamLocation)
                 .filter { !it.isDestroyed }
                 .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
