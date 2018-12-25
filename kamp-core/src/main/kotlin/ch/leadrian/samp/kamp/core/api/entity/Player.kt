@@ -559,9 +559,7 @@ internal constructor(
     }
 
     val isInAnyRaceCheckpoint: Boolean
-        get() {
-            return nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
-        }
+        get() = nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
 
     var worldBounds: Rectangle? = null
         set(value) {

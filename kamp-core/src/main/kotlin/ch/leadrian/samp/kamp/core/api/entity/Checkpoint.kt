@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterCheckpointListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveCheckpointListener
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 
@@ -10,9 +12,9 @@ internal constructor(
         private val playerRegistry: PlayerRegistry
 ) : CheckpointBase, AbstractDestroyable() {
 
-    private val onEnterHandlers: MutableList<Checkpoint.(Player) -> Unit> = mutableListOf()
+    private val onPlayerEnterCheckpointListeners: MutableList<OnPlayerEnterCheckpointListener> = mutableListOf()
 
-    private val onLeaveHandlers: MutableList<Checkpoint.(Player) -> Unit> = mutableListOf()
+    private val onPlayerLeaveCheckpointListeners: MutableList<OnPlayerLeaveCheckpointListener> = mutableListOf()
 
     override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
@@ -36,22 +38,50 @@ internal constructor(
         }
     }
 
-    fun onEnter(onEnter: Checkpoint.(Player) -> Unit) {
-        onEnterHandlers += onEnter
+    fun addOnPlayerEnterCheckpointListener(listener: OnPlayerEnterCheckpointListener) {
+        onPlayerEnterCheckpointListeners += listener
+    }
+
+    fun removeOnPlayerEnterCheckpointListener(listener: OnPlayerEnterCheckpointListener) {
+        onPlayerEnterCheckpointListeners -= listener
+    }
+
+    inline fun onEnter(crossinline onEnter: Checkpoint.(Player) -> Unit): OnPlayerEnterCheckpointListener {
+        val listener = object : OnPlayerEnterCheckpointListener {
+
+            override fun onPlayerEnterCheckpoint(player: Player) {
+                onEnter.invoke(this@Checkpoint, player)
+            }
+        }
+        addOnPlayerEnterCheckpointListener(listener)
+        return listener
     }
 
     internal fun onEnter(player: Player) {
-        requireNotDestroyed()
-        onEnterHandlers.forEach { it.invoke(this, player) }
+        onPlayerEnterCheckpointListeners.forEach { it.onPlayerEnterCheckpoint(player) }
     }
 
-    fun onLeave(onLeave: Checkpoint.(Player) -> Unit) {
-        onLeaveHandlers += onLeave
+    fun addOnPlayerLeaveCheckpointListener(listener: OnPlayerLeaveCheckpointListener) {
+        onPlayerLeaveCheckpointListeners += listener
+    }
+
+    fun removeOnPlayerLeaveCheckpointListener(listener: OnPlayerLeaveCheckpointListener) {
+        onPlayerLeaveCheckpointListeners -= listener
+    }
+
+    inline fun onLeave(crossinline onLeave: Checkpoint.(Player) -> Unit): OnPlayerLeaveCheckpointListener {
+        val listener = object : OnPlayerLeaveCheckpointListener {
+
+            override fun onPlayerLeaveCheckpoint(player: Player) {
+                onLeave.invoke(this@Checkpoint, player)
+            }
+        }
+        addOnPlayerLeaveCheckpointListener(listener)
+        return listener
     }
 
     internal fun onLeave(player: Player) {
-        requireNotDestroyed()
-        onLeaveHandlers.forEach { it.invoke(this, player) }
+        onPlayerLeaveCheckpointListeners.forEach { it.onPlayerLeaveCheckpoint(player) }
     }
 
     override fun onDestroy() {

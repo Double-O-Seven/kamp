@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterCheckpointListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveCheckpointListener
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
@@ -116,26 +118,106 @@ internal class CheckpointTest {
                 .isEqualTo(isInCheckpoint)
     }
 
-    @Test
-    fun shouldExecuteOnEnterHandlers() {
-        val player = mockk<Player>()
-        val onEnter = mockk<Checkpoint.(Player?) -> Unit>(relaxed = true)
-        checkpoint.onEnter(onEnter)
+    @Nested
+    inner class OnPlayerEnterCheckpointListenersTests {
 
-        checkpoint.onEnter(player)
+        @Test
+        fun shouldCallAddedListener() {
+            val player = mockk<Player>()
+            val listener = mockk<OnPlayerEnterCheckpointListener>(relaxed = true)
+            checkpoint.addOnPlayerEnterCheckpointListener(listener)
 
-        verify { onEnter.invoke(checkpoint, player) }
+            checkpoint.onEnter(player)
+
+            verify { listener.onPlayerEnterCheckpoint(player) }
+        }
+
+        @Test
+        fun shouldNotCallRemovedListener() {
+            val player = mockk<Player>()
+            val listener = mockk<OnPlayerEnterCheckpointListener>(relaxed = true)
+            checkpoint.addOnPlayerEnterCheckpointListener(listener)
+            checkpoint.removeOnPlayerEnterCheckpointListener(listener)
+
+            checkpoint.onEnter(player)
+
+            verify(exactly = 0) { listener.onPlayerEnterCheckpoint(any()) }
+        }
+
+        @Test
+        fun shouldCallInlinedListener() {
+            val player = mockk<Player>()
+            val onEnter = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
+            checkpoint.onEnter(onEnter)
+
+            checkpoint.onEnter(player)
+
+            verify { onEnter.invoke(checkpoint, player) }
+        }
+
+        @Test
+        fun shouldNotCallRemovedInlinedListener() {
+            val player = mockk<Player>()
+            val onEnter = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
+            val listener = checkpoint.onEnter(onEnter)
+            checkpoint.removeOnPlayerEnterCheckpointListener(listener)
+
+            checkpoint.onEnter(player)
+
+            verify(exactly = 0) { onEnter.invoke(any(), any()) }
+        }
+
     }
 
-    @Test
-    fun shouldExecuteOnLeaveHandlers() {
-        val player = mockk<Player>()
-        val onLeave = mockk<Checkpoint.(Player?) -> Unit>(relaxed = true)
-        checkpoint.onLeave(onLeave)
+    @Nested
+    inner class OnPlayerLeaveCheckpointListenersTests {
 
-        checkpoint.onLeave(player)
+        @Test
+        fun shouldCallAddedListener() {
+            val player = mockk<Player>()
+            val listener = mockk<OnPlayerLeaveCheckpointListener>(relaxed = true)
+            checkpoint.addOnPlayerLeaveCheckpointListener(listener)
 
-        verify { onLeave.invoke(checkpoint, player) }
+            checkpoint.onLeave(player)
+
+            verify { listener.onPlayerLeaveCheckpoint(player) }
+        }
+
+        @Test
+        fun shouldNotCallRemovedListener() {
+            val player = mockk<Player>()
+            val listener = mockk<OnPlayerLeaveCheckpointListener>(relaxed = true)
+            checkpoint.addOnPlayerLeaveCheckpointListener(listener)
+            checkpoint.removeOnPlayerLeaveCheckpointListener(listener)
+
+            checkpoint.onLeave(player)
+
+            verify(exactly = 0) { listener.onPlayerLeaveCheckpoint(any()) }
+        }
+
+        @Test
+        fun shouldCallInlinedListener() {
+            val player = mockk<Player>()
+            val onLeave = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
+            checkpoint.onLeave(onLeave)
+
+            checkpoint.onLeave(player)
+
+            verify { onLeave.invoke(checkpoint, player) }
+        }
+
+        @Test
+        fun shouldNotCallRemovedInlinedListener() {
+            val player = mockk<Player>()
+            val onLeave = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
+            val listener = checkpoint.onLeave(onLeave)
+            checkpoint.removeOnPlayerLeaveCheckpointListener(listener)
+
+            checkpoint.onLeave(player)
+
+            verify(exactly = 0) { onLeave.invoke(any(), any()) }
+        }
+
     }
 
     @Nested
