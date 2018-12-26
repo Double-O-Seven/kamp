@@ -1,9 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.Bone
 import ch.leadrian.samp.kamp.core.api.data.Colors
-import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -13,7 +11,6 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 
 internal class AttachedObjectSlotTest {
@@ -177,38 +174,6 @@ internal class AttachedObjectSlotTest {
 
         assertThat(attachedObjectSlot.attachedObject)
                 .isNull()
-    }
-
-    @ParameterizedTest
-    @EnumSource(AttachedObjectEditResponse::class)
-    fun shouldCallOnEditHandler(response: AttachedObjectEditResponse) {
-        val playerId = 50
-        val player = mockk<Player> {
-            every { id } returns PlayerId.valueOf(playerId)
-            every { isConnected } returns true
-        }
-        val index = 5
-        val offset = vector3DOf(x = 1f, y = 2f, z = 3f)
-        val rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
-        val scale = vector3DOf(x = 7f, y = 8f, z = 9f)
-        val onEdit = mockk<AttachedObjectSlot.(AttachedObjectEditResponse, Int, Bone, Vector3D, Vector3D, Vector3D) -> Boolean>(relaxed = true)
-        val attachedObjectSlot = AttachedObjectSlot(
-                player = player,
-                index = index,
-                nativeFunctionExecutor = mockk()
-        )
-        attachedObjectSlot.onEdit(onEdit)
-
-        attachedObjectSlot.onEdit(
-                response = response,
-                modelId = 15,
-                bone = Bone.CALF_LEFT,
-                offset = offset,
-                rotation = rotation,
-                scale = scale
-        )
-
-        verify { onEdit.invoke(attachedObjectSlot, response, 15, Bone.CALF_LEFT, offset, rotation, scale) }
     }
 
 }

@@ -115,15 +115,6 @@ internal class CallbackModuleTest {
         }
 
         @Test
-        fun shouldInjectPlayerCallbackListenerAsSingleton() {
-            val playerCallbackListener = injector.getInstance<PlayerCallbackListener>()
-
-            assertThat(playerCallbackListener)
-                    .isNotNull
-                    .isSameAs(injector.getInstance<PlayerCallbackListener>())
-        }
-
-        @Test
         fun shouldInjectRaceCheckpointCallbackListenerAsSingleton() {
             val raceCheckpointCallbackListener = injector.getInstance<RaceCheckpointCallbackListener>()
 
