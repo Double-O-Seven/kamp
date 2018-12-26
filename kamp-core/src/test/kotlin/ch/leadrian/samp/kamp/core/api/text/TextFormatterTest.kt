@@ -16,7 +16,7 @@ internal class TextFormatterTest {
         val hasTextKey = mockk<HasTextKey> {
             every { this@mockk.textKey } returns textKey1
         }
-        val translatable = translateForText { "Hi there" }
+        val translatable = TextArguments.translate { "Hi there" }
         val textProvider = mockk<TextProvider> {
             every { getText(locale, textKey1) } returns "Hallo"
             every { getText(locale, textKey2) } returns "Bonjour"
@@ -45,7 +45,7 @@ internal class TextFormatterTest {
                 locale,
                 "A: {0}, B: {1}",
                 "Hi",
-                translateForText { throw RuntimeException("fail") }
+                TextArguments.translate { throw RuntimeException("fail") }
         )
 
         assertThat(formattedMessage)
