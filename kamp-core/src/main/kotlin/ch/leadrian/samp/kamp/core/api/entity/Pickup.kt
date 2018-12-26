@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
@@ -14,7 +15,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<PickupId>, AbstractDestroyable() {
 
-    private val onPickUpHandlers: MutableList<Pickup.(Player) -> Unit> = mutableListOf()
+    private val onPlayerPickUpPickupListeners: MutableList<OnPlayerPickUpPickupListener> = mutableListOf()
 
     override val id: PickupId
         get() = requireNotDestroyed { field }
@@ -38,12 +39,27 @@ internal constructor(
 
     val coordinates: Vector3D = coordinates.toVector3D()
 
-    fun onPickUp(onPickUp: Pickup.(Player) -> Unit) {
-        onPickUpHandlers += onPickUp
+    fun addOnPlayerPickUpPickupListener(listener: OnPlayerPickUpPickupListener) {
+        onPlayerPickUpPickupListeners += listener
+    }
+
+    fun removeOnPlayerPickUpPickupListener(listener: OnPlayerPickUpPickupListener) {
+        onPlayerPickUpPickupListeners -= listener
+    }
+
+    inline fun onPickUp(crossinline onPickUp: Pickup.(Player) -> Unit): OnPlayerPickUpPickupListener {
+        val listener = object : OnPlayerPickUpPickupListener {
+
+            override fun onPlayerPickUpPickup(player: Player, pickup: Pickup) {
+                onPickUp.invoke(pickup, player)
+            }
+        }
+        addOnPlayerPickUpPickupListener(listener)
+        return listener
     }
 
     internal fun onPickUp(player: Player) {
-        onPickUpHandlers.forEach { it.invoke(this, player) }
+        onPlayerPickUpPickupListeners.forEach { it.onPlayerPickUpPickup(player, this) }
     }
 
     override fun onDestroy() {

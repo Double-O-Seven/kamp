@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -139,15 +140,55 @@ internal class PickupTest {
                     .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
         }
 
-        @Test
-        fun shouldExecuteOnPickUpHandlers() {
-            val player = mockk<Player>()
-            val onPickUp = mockk<Pickup.(Player) -> Unit>(relaxed = true)
-            pickup.onPickUp(onPickUp)
+        @Nested
+        inner class OnPlayerPickUpPickupListenersTests {
 
-            pickup.onPickUp(player)
+            @Test
+            fun shouldCallAddedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
+                pickup.addOnPlayerPickUpPickupListener(listener)
 
-            verify { onPickUp.invoke(pickup, player) }
+                pickup.onPickUp(player)
+
+                verify { listener.onPlayerPickUpPickup(player, pickup) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
+                pickup.addOnPlayerPickUpPickupListener(listener)
+                pickup.removeOnPlayerPickUpPickupListener(listener)
+
+                pickup.onPickUp(player)
+
+                verify(exactly = 0) { listener.onPlayerPickUpPickup(any(), any()) }
+            }
+
+            @Test
+            fun shouldCallInlinedListener() {
+                val player = mockk<Player>()
+                val onPickUp = mockk<Pickup.(Player) -> Unit>(relaxed = true)
+                pickup.onPickUp(onPickUp)
+
+                pickup.onPickUp(player)
+
+                verify { onPickUp.invoke(pickup, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedInlinedListener() {
+                val player = mockk<Player>()
+                val onPickUp = mockk<Pickup.(Player) -> Unit>(relaxed = true)
+                val listener = pickup.onPickUp(onPickUp)
+                pickup.removeOnPlayerPickUpPickupListener(listener)
+
+                pickup.onPickUp(player)
+
+                verify(exactly = 0) { onPickUp.invoke(any(), any()) }
+            }
+
         }
 
         @Nested
