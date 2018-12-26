@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
@@ -1049,24 +1051,106 @@ internal class VehicleTest {
                 verify { onExit.invoke(vehicle, player) }
             }
 
-            @Test
-            fun shouldExecuteOnStreamInHandlers() {
-                val onStreamIn = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
-                vehicle.onStreamIn(onStreamIn)
+            @Nested
+            inner class OnVehicleStreamInListenersTests {
 
-                vehicle.onStreamIn(player)
+                @Test
+                fun shouldCallAddedListener() {
+                    val player = mockk<Player>()
+                    val listener = mockk<OnVehicleStreamInListener>(relaxed = true)
+                    vehicle.addOnVehicleStreamInListener(listener)
 
-                verify { onStreamIn.invoke(vehicle, player) }
+                    vehicle.onStreamIn(player)
+
+                    verify { listener.onVehicleStreamIn(vehicle, player) }
+                }
+
+                @Test
+                fun shouldNotCallRemovedListener() {
+                    val player = mockk<Player>()
+                    val listener = mockk<OnVehicleStreamInListener>(relaxed = true)
+                    vehicle.addOnVehicleStreamInListener(listener)
+                    vehicle.removeOnVehicleStreamInListener(listener)
+
+                    vehicle.onStreamIn(player)
+
+                    verify(exactly = 0) { listener.onVehicleStreamIn(any(), any()) }
+                }
+
+                @Test
+                fun shouldCallInlinedListener() {
+                    val player = mockk<Player>()
+                    val onStreamIn = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                    vehicle.onStreamIn(onStreamIn)
+
+                    vehicle.onStreamIn(player)
+
+                    verify { onStreamIn.invoke(vehicle, player) }
+                }
+
+                @Test
+                fun shouldNotCallRemovedInlinedListener() {
+                    val player = mockk<Player>()
+                    val onStreamIn = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                    val listener = vehicle.onStreamIn(onStreamIn)
+                    vehicle.removeOnVehicleStreamInListener(listener)
+
+                    vehicle.onStreamIn(player)
+
+                    verify(exactly = 0) { onStreamIn.invoke(any(), any()) }
+                }
+
             }
 
-            @Test
-            fun shouldExecuteOnStreamOutHandlers() {
-                val onStreamOut = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
-                vehicle.onStreamOut(onStreamOut)
+            @Nested
+            inner class OnVehicleStreamOutListenersTests {
 
-                vehicle.onStreamOut(player)
+                @Test
+                fun shouldCallAddedListener() {
+                    val player = mockk<Player>()
+                    val listener = mockk<OnVehicleStreamOutListener>(relaxed = true)
+                    vehicle.addOnVehicleStreamOutListener(listener)
 
-                verify { onStreamOut.invoke(vehicle, player) }
+                    vehicle.onStreamOut(player)
+
+                    verify { listener.onVehicleStreamOut(vehicle, player) }
+                }
+
+                @Test
+                fun shouldNotCallRemovedListener() {
+                    val player = mockk<Player>()
+                    val listener = mockk<OnVehicleStreamOutListener>(relaxed = true)
+                    vehicle.addOnVehicleStreamOutListener(listener)
+                    vehicle.removeOnVehicleStreamOutListener(listener)
+
+                    vehicle.onStreamOut(player)
+
+                    verify(exactly = 0) { listener.onVehicleStreamOut(any(), any()) }
+                }
+
+                @Test
+                fun shouldCallInlinedListener() {
+                    val player = mockk<Player>()
+                    val onStreamOut = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                    vehicle.onStreamOut(onStreamOut)
+
+                    vehicle.onStreamOut(player)
+
+                    verify { onStreamOut.invoke(vehicle, player) }
+                }
+
+                @Test
+                fun shouldNotCallRemovedInlinedListener() {
+                    val player = mockk<Player>()
+                    val onStreamOut = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
+                    val listener = vehicle.onStreamOut(onStreamOut)
+                    vehicle.removeOnVehicleStreamOutListener(listener)
+
+                    vehicle.onStreamOut(player)
+
+                    verify(exactly = 0) { onStreamOut.invoke(any(), any()) }
+                }
+
             }
         }
     }

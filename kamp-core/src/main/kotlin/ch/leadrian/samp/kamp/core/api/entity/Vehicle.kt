@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
@@ -59,9 +61,9 @@ internal constructor(
 
     private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
 
-    private val onStreamInHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+    private val onVehicleStreamInListeners: MutableList<OnVehicleStreamInListener> = mutableListOf()
 
-    private val onStreamOutHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+    private val onVehicleStreamOutListeners: MutableList<OnVehicleStreamOutListener> = mutableListOf()
 
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 
@@ -423,20 +425,50 @@ internal constructor(
         onExitHandlers.forEach { it.invoke(this, player) }
     }
 
-    fun onStreamIn(onStreamIn: Vehicle.(Player) -> Unit) {
-        onStreamInHandlers += onStreamIn
+    fun addOnVehicleStreamInListener(listener: OnVehicleStreamInListener) {
+        onVehicleStreamInListeners += listener
+    }
+
+    fun removeOnVehicleStreamInListener(listener: OnVehicleStreamInListener) {
+        onVehicleStreamInListeners -= listener
+    }
+
+    inline fun onStreamIn(crossinline onStreamIn: Vehicle.(Player) -> Unit): OnVehicleStreamInListener {
+        val listener = object : OnVehicleStreamInListener {
+
+            override fun onVehicleStreamIn(vehicle: Vehicle, forPlayer: Player) {
+                onStreamIn.invoke(vehicle, forPlayer)
+            }
+        }
+        addOnVehicleStreamInListener(listener)
+        return listener
     }
 
     internal fun onStreamIn(player: Player) {
-        onStreamInHandlers.forEach { it.invoke(this, player) }
+        onVehicleStreamInListeners.forEach { it.onVehicleStreamIn(this, player) }
     }
 
-    fun onStreamOut(onStreamOut: Vehicle.(Player) -> Unit) {
-        onStreamOutHandlers += onStreamOut
+    fun addOnVehicleStreamOutListener(listener: OnVehicleStreamOutListener) {
+        onVehicleStreamOutListeners += listener
+    }
+
+    fun removeOnVehicleStreamOutListener(listener: OnVehicleStreamOutListener) {
+        onVehicleStreamOutListeners -= listener
+    }
+
+    inline fun onStreamOut(crossinline onStreamOut: Vehicle.(Player) -> Unit): OnVehicleStreamOutListener {
+        val listener = object : OnVehicleStreamOutListener {
+
+            override fun onVehicleStreamOut(vehicle: Vehicle, forPlayer: Player) {
+                onStreamOut.invoke(vehicle, forPlayer)
+            }
+        }
+        addOnVehicleStreamOutListener(listener)
+        return listener
     }
 
     internal fun onStreamOut(player: Player) {
-        onStreamOutHandlers.forEach { it.invoke(this, player) }
+        onVehicleStreamOutListeners.forEach { it.onVehicleStreamOut(this, player) }
     }
 
     override fun onDestroy() {
