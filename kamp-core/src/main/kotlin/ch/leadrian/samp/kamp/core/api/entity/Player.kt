@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
 import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
 import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
@@ -39,6 +38,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -62,16 +62,9 @@ internal constructor(
         private val mapObjectRegistry: MapObjectRegistry,
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val onPlayerNameChangeHandler: OnPlayerNameChangeHandler
 ) : Entity<PlayerId> {
-
-    private val onNameChangeHandlers: MutableList<Player.(String, String) -> Unit> = mutableListOf()
-
-    private val onSpawnHandlers: MutableList<Player.() -> Unit> = mutableListOf()
-
-    private val onDeathHandlers: MutableList<Player.(Player?, WeaponModel) -> Unit> = mutableListOf()
-
-    private val onDisconnectHandlers: MutableList<Player.(DisconnectReason) -> Unit> = mutableListOf()
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
@@ -333,7 +326,7 @@ internal constructor(
                 -1 -> throw InvalidPlayerNameException(name = value, message = "Name is already in use, too long or invalid")
                 else -> field = value
             }
-            onNameChange(oldName, value)
+            onPlayerNameChangeHandler.onPlayerNameChange(this, oldName, value)
         }
 
     val state: PlayerState
@@ -751,40 +744,10 @@ internal constructor(
         )
     }
 
-    fun onSpawn(onSpawn: Player.() -> Unit) {
-        onSpawnHandlers += onSpawn
-    }
-
-    internal fun onSpawn() {
-        onSpawnHandlers.forEach { it.invoke(this) }
-    }
-
-    fun onDeath(onDeath: Player.(Player?, WeaponModel) -> Unit) {
-        onDeathHandlers += onDeath
-    }
-
-    internal fun onDeath(killer: Player?, weapon: WeaponModel) {
-        onDeathHandlers.forEach { it.invoke(this, killer, weapon) }
-    }
-
-    fun onDisconnect(onDisconnect: Player.(DisconnectReason) -> Unit) {
-        onDisconnectHandlers += onDisconnect
-    }
-
-    fun onNameChange(onNameChange: Player.(String, String) -> Unit) {
-        onNameChangeHandlers += onNameChange
-    }
-
-    private fun onNameChange(oldName: String, newName: String) {
-        onNameChangeHandlers.forEach { it.invoke(this, oldName, newName) }
-    }
-
-    internal fun onDisconnect(reason: DisconnectReason) {
+    internal fun onDisconnect() {
         if (!isConnected) {
             return
         }
-
-        onDisconnectHandlers.forEach { it.invoke(this, reason) }
 
         extensions.destroy()
         isConnected = false

@@ -1,51 +1,56 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.registry
 
+import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import io.mockk.Runs
 import io.mockk.every
-import io.mockk.invoke
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.CsvSource
 
 internal class PlayerSearchIndexTest {
 
-    private val playerSearchIndex = PlayerSearchIndex()
+    private val callbackListenerManager = mockk<CallbackListenerManager>()
+    private lateinit var playerSearchIndex: PlayerSearchIndex
 
-    @Test
-    fun shouldIndexPlayer() {
-        val player = mockk<Player> {
-            every { requireConnected() } returns this
-            every { name } returns "hans.wurst"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
-        }
-
-        playerSearchIndex.index(player)
-
-        assertThat(playerSearchIndex.getPlayer("hans.wurst"))
-                .isSameAs(player)
+    @BeforeEach
+    fun setUp() {
+        playerSearchIndex = PlayerSearchIndex(callbackListenerManager)
     }
 
     @Test
-    fun shouldIndexPlayerCaseInsensitive() {
+    fun initializeShouldCallCallbackListenerManager() {
+        every { callbackListenerManager.register(any()) } just Runs
+
+        playerSearchIndex.initialize()
+
+        verify { callbackListenerManager.register(playerSearchIndex) }
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+            "hans.wurst, hans.wurst",
+            "Hans.Wurst, hans.wurst",
+            "hans.wurst, HANS.WURST"
+    )
+    fun shouldIndexPlayerCaseInsensitive(playerName: String, searchName: String) {
         val player = mockk<Player> {
             every { requireConnected() } returns this
-            every { name } returns "Hans.WURST"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
+            every { name } returns playerName
         }
 
-        playerSearchIndex.index(player)
+        playerSearchIndex.onPlayerConnect(player)
 
-        assertThat(playerSearchIndex.getPlayer("hans.wurst"))
+        assertThat(playerSearchIndex.getPlayer(searchName))
                 .isSameAs(player)
     }
 
@@ -62,25 +67,19 @@ internal class PlayerSearchIndexTest {
         val player1 = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "hans.wurst"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
         val player2 = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "john.sausage"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
         val player3 = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "Hanspeter"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
         playerSearchIndex.apply {
-            index(player1)
-            index(player2)
-            index(player3)
+            onPlayerConnect(player1)
+            onPlayerConnect(player2)
+            onPlayerConnect(player3)
         }
 
         val players = playerSearchIndex.findPlayers("hans")
@@ -94,18 +93,14 @@ internal class PlayerSearchIndexTest {
         val player1 = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "hans.wurst"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
         val player2 = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "john.sausage"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
         playerSearchIndex.apply {
-            index(player1)
-            index(player2)
+            onPlayerConnect(player1)
+            onPlayerConnect(player2)
         }
 
         val players = playerSearchIndex.findPlayers("lol")
@@ -120,14 +115,10 @@ internal class PlayerSearchIndexTest {
         val player = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns playerName
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
-        playerSearchIndex.index(player)
-        val slot = slot<Player.(DisconnectReason) -> Unit>()
-        verify { player.onDisconnect(capture(slot)) }
+        playerSearchIndex.onPlayerConnect(player)
 
-        slot.invoke(player, DisconnectReason.QUIT)
+        playerSearchIndex.onPlayerDisconnect(player, DisconnectReason.QUIT)
 
         assertThat(playerSearchIndex.getPlayer(playerName))
                 .isNull()
@@ -141,14 +132,10 @@ internal class PlayerSearchIndexTest {
         val player = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns oldName
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
-        playerSearchIndex.index(player)
-        val slot = slot<Player.(String, String) -> Unit>()
-        verify { player.onNameChange(capture(slot)) }
+        playerSearchIndex.onPlayerConnect(player)
 
-        slot.invoke(player, oldName, newName)
+        playerSearchIndex.onPlayerNameChange(player, oldName, newName)
 
         assertThat(playerSearchIndex.getPlayer(oldName))
                 .isNull()
@@ -161,12 +148,10 @@ internal class PlayerSearchIndexTest {
         val player = mockk<Player> {
             every { requireConnected() } returns this
             every { name } returns "hans.wurst"
-            every { onNameChange(any()) } just Runs
-            every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
         }
-        playerSearchIndex.index(player)
+        playerSearchIndex.onPlayerConnect(player)
 
-        val caughtThrowable = catchThrowable { playerSearchIndex.index(player) }
+        val caughtThrowable = catchThrowable { playerSearchIndex.onPlayerConnect(player) }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
@@ -180,11 +165,9 @@ internal class PlayerSearchIndexTest {
             val player = mockk<Player> {
                 every { requireConnected() } returns this
                 every { name } returns "hans.wurst"
-                every { onNameChange(any()) } just Runs
-                every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
             }
 
-            playerSearchIndex.index(player)
+            playerSearchIndex.onPlayerConnect(player)
 
             verify { player.requireConnected() }
         }
@@ -195,11 +178,9 @@ internal class PlayerSearchIndexTest {
             val player = mockk<Player> {
                 every { requireConnected() } throws PlayerOfflineException("test")
                 every { name } returns playerName
-                every { onNameChange(any()) } just Runs
-                every { onDisconnect(any<Player.(DisconnectReason) -> Unit>()) } just Runs
             }
 
-            catchThrowable { playerSearchIndex.index(player) }
+            catchThrowable { playerSearchIndex.onPlayerConnect(player) }
 
             assertThat(playerSearchIndex.getPlayer(playerName))
                     .isNull()

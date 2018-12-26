@@ -326,6 +326,16 @@ internal class CallbackProcessorTest {
         }
 
         @Test
+        fun shouldDisconnectThePlayer() {
+            callbackProcessor.onPlayerDisconnect(playerId, DisconnectReason.QUIT.value)
+
+            val isConnected = player.isConnected
+
+            assertThat(isConnected)
+                    .isFalse()
+        }
+
+        @Test
         fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
             val onPlayerDisconnectListener = mockk<OnPlayerDisconnectListener>(relaxed = true)
             callbackListenerManager.register(onPlayerDisconnectListener)

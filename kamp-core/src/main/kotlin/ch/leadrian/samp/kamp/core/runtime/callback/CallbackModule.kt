@@ -82,6 +82,7 @@ internal class CallbackModule : KampModule() {
         bind(OnVehicleStreamInHandler::class.java)
         bind(OnVehicleStreamOutHandler::class.java)
         bind(OnVehicleDestructionHandler::class.java)
+        bind(OnPlayerNameChangeHandler::class.java)
 
         newCallbackListenerRegistrySetBinder().apply {
             addBinding().to(OnActorStreamInHandler::class.java)
@@ -144,6 +145,7 @@ internal class CallbackModule : KampModule() {
             addBinding().to(OnVehicleStreamInHandler::class.java)
             addBinding().to(OnVehicleStreamOutHandler::class.java)
             addBinding().to(OnVehicleDestructionHandler::class.java)
+            addBinding().to(OnPlayerNameChangeHandler::class.java)
         }
     }
 }

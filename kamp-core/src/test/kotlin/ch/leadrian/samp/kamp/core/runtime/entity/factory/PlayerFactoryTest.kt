@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason.QUIT
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
@@ -31,6 +31,7 @@ internal class PlayerFactoryTest {
     private val menuRegistry = mockk<MenuRegistry>()
     private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
+    private val onPlayerNameChangeHandler = mockk<OnPlayerNameChangeHandler>()
     private val playerExtensionFactory = mockk<EntityExtensionFactory<Player, FooExtension>>()
     private val fooExtension = FooExtension()
 
@@ -47,7 +48,8 @@ internal class PlayerFactoryTest {
                 playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry,
                 nativeFunctionExecutor = nativeFunctionExecutor,
-                playerExtensionFactories = setOf(playerExtensionFactory)
+                playerExtensionFactories = setOf(playerExtensionFactory),
+                onPlayerNameChangeHandler = onPlayerNameChangeHandler
         )
     }
 
@@ -64,16 +66,6 @@ internal class PlayerFactoryTest {
         val player = playerFactory.create(playerId)
 
         verify { playerRegistry.register(player) }
-    }
-
-    @Test
-    fun shouldUnregisterPlayerOnDisconnect() {
-        every { playerRegistry.unregister(any()) } just Runs
-        val player = playerFactory.create(playerId)
-
-        player.onDisconnect(QUIT)
-
-        verify { playerRegistry.unregister(player) }
     }
 
     @Test

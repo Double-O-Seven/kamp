@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
-import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
 import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
 import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
@@ -39,6 +38,7 @@ import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -83,6 +83,7 @@ internal class PlayerTest {
     private val menuRegistry = mockk<MenuRegistry>()
     private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
+    private val onPlayerNameChangeHandler = mockk<OnPlayerNameChangeHandler>()
 
     @BeforeEach
     fun setUp() {
@@ -94,7 +95,8 @@ internal class PlayerTest {
                 mapObjectRegistry = mapObjectRegistry,
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
-                vehicleRegistry = vehicleRegistry
+                vehicleRegistry = vehicleRegistry,
+                onPlayerNameChangeHandler = onPlayerNameChangeHandler
         )
     }
 
@@ -827,6 +829,11 @@ internal class PlayerTest {
     @Nested
     inner class NameTests {
 
+        @BeforeEach
+        fun setUp() {
+            every { onPlayerNameChangeHandler.onPlayerNameChange(any(), any(), any()) } just Runs
+        }
+
         @Test
         fun givenWasNotYetSetItShouldGetPlayerName() {
             every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
@@ -884,19 +891,16 @@ internal class PlayerTest {
         }
 
         @Test
-        fun shouldExecuteOnChangeHandlers() {
+        fun shouldCallOnPlayerNameChangeHandler() {
             every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
             every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
                 secondArg<ReferenceString>().value = "hans.wurst"
                 0
             }
-            val onNameChange = mockk<Player.(String, String) -> Unit>(relaxed = true)
-            player.onNameChange(onNameChange)
-
 
             player.name = "John.Sausage"
 
-            verify { onNameChange.invoke(player, "hans.wurst", "John.Sausage") }
+            verify { onPlayerNameChangeHandler.onPlayerNameChange(player, "hans.wurst", "John.Sausage") }
         }
 
         @Test
@@ -2428,42 +2432,12 @@ internal class PlayerTest {
         }
     }
 
-    @Test
-    fun shouldExecuteOnSpawnHandlers() {
-        val onSpawn = mockk<Player.() -> Unit>(relaxed = true)
-        player.onSpawn(onSpawn)
-
-        player.onSpawn()
-
-        verify { onSpawn.invoke(player) }
-    }
-
-    @Test
-    fun shouldExecuteOnDeathHandlers() {
-        val onDeath = mockk<Player.(Player?, WeaponModel) -> Unit>(relaxed = true)
-        player.onDeath(onDeath)
-
-        player.onDeath(killer = otherPlayer, weapon = WeaponModel.TEC9)
-
-        verify { onDeath.invoke(player, otherPlayer, WeaponModel.TEC9) }
-    }
-
     @Nested
     inner class OnDisconnectTests {
 
         @Test
-        fun shouldExecuteOnDisconnectHandlers() {
-            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
-            player.onDisconnect(onDisconnect)
-
-            player.onDisconnect(DisconnectReason.QUIT)
-
-            verify { onDisconnect.invoke(player, DisconnectReason.QUIT) }
-        }
-
-        @Test
         fun shouldSetIsConnectedToFalse() {
-            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect()
 
             assertThat(player.isConnected)
                     .isFalse()
@@ -2497,7 +2471,7 @@ internal class PlayerTest {
                     style = MapIconStyle.LOCAL
             )
 
-            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect()
 
             verify {
                 mapIcon1.destroy()
@@ -2506,21 +2480,8 @@ internal class PlayerTest {
         }
 
         @Test
-        fun shouldNotExecuteTwice() {
-            val onDisconnect = mockk<Player.(DisconnectReason) -> Unit>(relaxed = true)
-            player.onDisconnect(onDisconnect)
-
-            player.onDisconnect(DisconnectReason.QUIT)
-            player.onDisconnect(DisconnectReason.QUIT)
-
-            verify(exactly = 1) {
-                onDisconnect.invoke(player, DisconnectReason.QUIT)
-            }
-        }
-
-        @Test
         fun givenPlayerDisconnectedIdShouldThrowException() {
-            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect()
 
             val caughtThrowable = catchThrowable { player.id }
 
@@ -2530,7 +2491,7 @@ internal class PlayerTest {
 
         @Test
         fun shouldDestroyExtensions() {
-            player.onDisconnect(DisconnectReason.QUIT)
+            player.onDisconnect()
 
             val isDestroyed = player.extensions.isDestroyed
 
@@ -2546,7 +2507,7 @@ internal class PlayerTest {
 
                 @Test
                 fun givenPlayerIsOfflineItShouldThrowAnException() {
-                    player.onDisconnect(DisconnectReason.QUIT)
+                    player.onDisconnect()
 
                     val caughtThrowable = catchThrowable { player.requireConnected() }
 
@@ -2569,7 +2530,7 @@ internal class PlayerTest {
                 @Test
                 fun givenPlayerIsOfflineItShouldThrowAnException() {
                     val block = mockk<Player.() -> Unit>(relaxed = true)
-                    player.onDisconnect(DisconnectReason.QUIT)
+                    player.onDisconnect()
 
                     val caughtThrowable = catchThrowable { player.requireConnected(block) }
 
@@ -2605,7 +2566,7 @@ internal class PlayerTest {
 
             @Test
             fun givenPlayerIsOfflineItShouldReturnNull() {
-                player.onDisconnect(DisconnectReason.QUIT)
+                player.onDisconnect()
 
                 val result = player.ifConnected { 1337 }
 

@@ -195,7 +195,8 @@ constructor(
 
     @Suppress("NOTHING_TO_INLINE")
     private inline fun Int.toPlayerTextDraw(player: Player): PlayerTextDraw =
-            player.playerTextDrawRegistry[this] ?: throw IllegalArgumentException("Invalid player text draw ID $this for player ID ${player.id.value}")
+            player.playerTextDrawRegistry[this]
+                    ?: throw IllegalArgumentException("Invalid player text draw ID $this for player ID ${player.id.value}")
 
     override fun onProcessTick() {
         tryAndCatch {
@@ -230,7 +231,9 @@ constructor(
 
     override fun onPlayerDisconnect(playerid: Int, reason: Int): Boolean {
         tryAndCatch {
-            onPlayerDisconnectHandler.onPlayerDisconnect(playerid.toPlayer(), DisconnectReason[reason])
+            val player = playerid.toPlayer()
+            onPlayerDisconnectHandler.onPlayerDisconnect(player, DisconnectReason[reason])
+            player.onDisconnect()
         }
         return true
     }

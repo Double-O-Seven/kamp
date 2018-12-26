@@ -768,6 +768,16 @@ internal class CallbackModuleTest {
                     .contains(onVehicleDestructionHandler)
         }
 
+        @Test
+        fun shouldInjectOnPlayerNameChangeHandlerAsSingleton() {
+            val onPlayerNameChangeHandler = injector.getInstance<OnPlayerNameChangeHandler>()
+
+            assertThat(onPlayerNameChangeHandler)
+                    .isNotNull
+            assertThat(testService.handlers)
+                    .contains(onPlayerNameChangeHandler)
+        }
+
     }
 
     private class TestService

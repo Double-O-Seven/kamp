@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.TestModule
+import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.google.inject.Guice
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test
 
 internal class EntityFactoryModuleTest {
 
-    private val modules = arrayOf(EntityFactoryModule(), TextModule(), EntityRegistryModule(), TestModule())
+    private val modules = arrayOf(EntityFactoryModule(), TextModule(), EntityRegistryModule(), CallbackModule(), TestModule())
 
     @Test
     fun shouldCreateInjector() {

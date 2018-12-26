@@ -10,6 +10,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextPreparer
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.TestModule
+import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
 import com.google.inject.Guice
 import com.google.inject.Injector
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +22,7 @@ import org.junit.jupiter.api.Test
 
 internal class TextModuleTest {
 
-    private val modules = arrayOf(TestModule(), TextModule())
+    private val modules = arrayOf(TestModule(), TextModule(), CallbackModule(), EntityFactoryModule())
 
     @Test
     fun shouldCreateInjector() {
