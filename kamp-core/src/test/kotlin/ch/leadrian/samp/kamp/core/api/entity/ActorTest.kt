@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.positionOf
@@ -332,6 +334,108 @@ internal class ActorTest {
         }
 
         @Nested
+        inner class OnActorStreamInListenersTests {
+
+            @Test
+            fun shouldCallAddedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnActorStreamInListener>(relaxed = true)
+                actor.addOnActorStreamInListener(listener)
+
+                actor.onStreamIn(player)
+
+                verify { listener.onActorStreamIn(actor, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnActorStreamInListener>(relaxed = true)
+                actor.addOnActorStreamInListener(listener)
+                actor.removeOnActorStreamInListener(listener)
+
+                actor.onStreamIn(player)
+
+                verify(exactly = 0) { listener.onActorStreamIn(any(), any()) }
+            }
+
+            @Test
+            fun shouldCallInlinedListener() {
+                val player = mockk<Player>()
+                val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
+                actor.onStreamIn(onStreamIn)
+
+                actor.onStreamIn(player)
+
+                verify { onStreamIn.invoke(actor, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedInlinedListener() {
+                val player = mockk<Player>()
+                val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
+                val listener = actor.onStreamIn(onStreamIn)
+                actor.removeOnActorStreamInListener(listener)
+
+                actor.onStreamIn(player)
+
+                verify(exactly = 0) { onStreamIn.invoke(any(), any()) }
+            }
+
+        }
+
+        @Nested
+        inner class OnActorStreamOutListenersTests {
+
+            @Test
+            fun shouldCallAddedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnActorStreamOutListener>(relaxed = true)
+                actor.addOnActorStreamOutListener(listener)
+
+                actor.onStreamOut(player)
+
+                verify { listener.onActorStreamOut(actor, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnActorStreamOutListener>(relaxed = true)
+                actor.addOnActorStreamOutListener(listener)
+                actor.removeOnActorStreamOutListener(listener)
+
+                actor.onStreamOut(player)
+
+                verify(exactly = 0) { listener.onActorStreamOut(any(), any()) }
+            }
+
+            @Test
+            fun shouldCallInlinedListener() {
+                val player = mockk<Player>()
+                val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
+                actor.onStreamOut(onStreamOut)
+
+                actor.onStreamOut(player)
+
+                verify { onStreamOut.invoke(actor, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedInlinedListener() {
+                val player = mockk<Player>()
+                val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
+                val listener = actor.onStreamOut(onStreamOut)
+                actor.removeOnActorStreamOutListener(listener)
+
+                actor.onStreamOut(player)
+
+                verify(exactly = 0) { onStreamOut.invoke(any(), any()) }
+            }
+
+        }
+
+        @Nested
         inner class DestroyTests {
 
             @BeforeEach
@@ -385,28 +489,6 @@ internal class ActorTest {
                 assertThat(caughtThrowable)
                         .isInstanceOf(AlreadyDestroyedException::class.java)
             }
-        }
-
-        @Test
-        fun shouldExecuteOnStreamInHandlers() {
-            val player = mockk<Player>()
-            val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
-            actor.onStreamIn(onStreamIn)
-
-            actor.onStreamIn(player)
-
-            verify { onStreamIn.invoke(actor, player) }
-        }
-
-        @Test
-        fun shouldExecuteOnStreamOutHandlers() {
-            val player = mockk<Player>()
-            val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
-            actor.onStreamOut(onStreamOut)
-
-            actor.onStreamOut(player)
-
-            verify { onStreamOut.invoke(actor, player) }
         }
     }
 

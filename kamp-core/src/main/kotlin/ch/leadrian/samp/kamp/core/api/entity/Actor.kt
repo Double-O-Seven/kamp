@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
@@ -20,9 +22,9 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<ActorId>, AbstractDestroyable() {
 
-    private val onStreamInHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
+    private val onActorStreamInListeners: MutableList<OnActorStreamInListener> = mutableListOf()
 
-    private val onStreamOutHandlers: MutableList<Actor.(Player) -> Unit> = mutableListOf()
+    private val onActorStreamOutListeners: MutableList<OnActorStreamOutListener> = mutableListOf()
 
     override val id: ActorId
         get() = requireNotDestroyed { field }
@@ -129,20 +131,50 @@ internal constructor(
             nativeFunctionExecutor.setActorInvulnerable(id.value, value)
         }
 
-    fun onStreamIn(onStreamIn: Actor.(Player) -> Unit) {
-        onStreamInHandlers += onStreamIn
+    fun addOnActorStreamInListener(listener: OnActorStreamInListener) {
+        onActorStreamInListeners += listener
+    }
+
+    fun removeOnActorStreamInListener(listener: OnActorStreamInListener) {
+        onActorStreamInListeners -= listener
+    }
+
+    inline fun onStreamIn(crossinline onStreamIn: Actor.(Player) -> Unit): OnActorStreamInListener {
+        val listener = object : OnActorStreamInListener {
+
+            override fun onActorStreamIn(actor: Actor, forPlayer: Player) {
+                onStreamIn.invoke(actor, forPlayer)
+            }
+        }
+        addOnActorStreamInListener(listener)
+        return listener
     }
 
     internal fun onStreamIn(player: Player) {
-        onStreamInHandlers.forEach { it.invoke(this, player) }
+        onActorStreamInListeners.forEach { it.onActorStreamIn(this, player) }
     }
 
-    fun onStreamOut(onStreamOut: Actor.(Player) -> Unit) {
-        onStreamOutHandlers += onStreamOut
+    fun addOnActorStreamOutListener(listener: OnActorStreamOutListener) {
+        onActorStreamOutListeners += listener
+    }
+
+    fun removeOnActorStreamOutListener(listener: OnActorStreamOutListener) {
+        onActorStreamOutListeners -= listener
+    }
+
+    inline fun onStreamOut(crossinline onStreamOut: Actor.(Player) -> Unit): OnActorStreamOutListener {
+        val listener = object : OnActorStreamOutListener {
+
+            override fun onActorStreamOut(actor: Actor, forPlayer: Player) {
+                onStreamOut.invoke(actor, forPlayer)
+            }
+        }
+        addOnActorStreamOutListener(listener)
+        return listener
     }
 
     internal fun onStreamOut(player: Player) {
-        onStreamOutHandlers.forEach { it.invoke(this, player) }
+        onActorStreamOutListeners.forEach { it.onActorStreamOut(this, player) }
     }
 
     override fun onDestroy() {
