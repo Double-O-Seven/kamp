@@ -1,5 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterVehicleListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitVehicleListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDeathListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
@@ -53,13 +57,13 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<VehicleId>, AbstractDestroyable() {
 
-    private val onSpawnHandlers: MutableList<Vehicle.() -> Unit> = mutableListOf()
+    private val onVehicleSpawnListeners: MutableList<OnVehicleSpawnListener> = mutableListOf()
 
-    private val onDeathHandlers: MutableList<Vehicle.(Player?) -> Unit> = mutableListOf()
+    private val onVehicleDeathListeners: MutableList<OnVehicleDeathListener> = mutableListOf()
 
-    private val onEnterHandlers: MutableList<Vehicle.(Player, Boolean) -> Unit> = mutableListOf()
+    private val onPlayerEnterVehicleListeners: MutableList<OnPlayerEnterVehicleListener> = mutableListOf()
 
-    private val onExitHandlers: MutableList<Vehicle.(Player) -> Unit> = mutableListOf()
+    private val onPlayerExitVehicleListeners: MutableList<OnPlayerExitVehicleListener> = mutableListOf()
 
     private val onVehicleStreamInListeners: MutableList<OnVehicleStreamInListener> = mutableListOf()
 
@@ -393,36 +397,96 @@ internal constructor(
 
     operator fun contains(player: Player): Boolean = player.isInVehicle(this)
 
-    fun onSpawn(onSpawn: Vehicle.() -> Unit) {
-        onSpawnHandlers += onSpawn
+    fun addOnVehicleSpawnListener(listener: OnVehicleSpawnListener) {
+        onVehicleSpawnListeners += listener
+    }
+
+    fun removeOnVehicleSpawnListener(listener: OnVehicleSpawnListener) {
+        onVehicleSpawnListeners -= listener
+    }
+
+    inline fun onSpawn(crossinline onSpawn: Vehicle.() -> Unit): OnVehicleSpawnListener {
+        val listener = object : OnVehicleSpawnListener {
+
+            override fun onVehicleSpawn(vehicle: Vehicle) {
+                onSpawn.invoke(vehicle)
+            }
+        }
+        addOnVehicleSpawnListener(listener)
+        return listener
     }
 
     internal fun onSpawn() {
-        onSpawnHandlers.forEach { it.invoke(this) }
+        onVehicleSpawnListeners.forEach { it.onVehicleSpawn(this) }
     }
 
-    fun onDeath(onDeath: Vehicle.(Player?) -> Unit) {
-        onDeathHandlers += onDeath
+    fun addOnPlayerEnterVehicleListener(listener: OnPlayerEnterVehicleListener) {
+        onPlayerEnterVehicleListeners += listener
     }
 
-    internal fun onDeath(killer: Player?) {
-        onDeathHandlers.forEach { it.invoke(this, killer) }
+    fun removeOnPlayerEnterVehicleListener(listener: OnPlayerEnterVehicleListener) {
+        onPlayerEnterVehicleListeners -= listener
     }
 
-    fun onEnter(onEnter: Vehicle.(Player, Boolean) -> Unit) {
-        onEnterHandlers += onEnter
+    inline fun onEnter(crossinline onEnter: Vehicle.(Player, Boolean) -> Unit): OnPlayerEnterVehicleListener {
+        val listener = object : OnPlayerEnterVehicleListener {
+
+            override fun onPlayerEnterVehicle(player: Player, vehicle: Vehicle, isPassenger: Boolean) {
+                onEnter.invoke(vehicle, player, isPassenger)
+            }
+        }
+        addOnPlayerEnterVehicleListener(listener)
+        return listener
     }
 
     internal fun onEnter(player: Player, isPassenger: Boolean) {
-        onEnterHandlers.forEach { it.invoke(this, player, isPassenger) }
+        onPlayerEnterVehicleListeners.forEach { it.onPlayerEnterVehicle(player, this, isPassenger) }
     }
 
-    fun onExit(onExit: Vehicle.(Player) -> Unit) {
-        onExitHandlers += onExit
+    fun addOnPlayerExitVehicleListener(listener: OnPlayerExitVehicleListener) {
+        onPlayerExitVehicleListeners += listener
+    }
+
+    fun removeOnPlayerExitVehicleListener(listener: OnPlayerExitVehicleListener) {
+        onPlayerExitVehicleListeners -= listener
+    }
+
+    inline fun onExit(crossinline onExit: Vehicle.(Player) -> Unit): OnPlayerExitVehicleListener {
+        val listener = object : OnPlayerExitVehicleListener {
+
+            override fun onPlayerExitVehicle(player: Player, vehicle: Vehicle) {
+                onExit.invoke(vehicle, player)
+            }
+        }
+        addOnPlayerExitVehicleListener(listener)
+        return listener
     }
 
     internal fun onExit(player: Player) {
-        onExitHandlers.forEach { it.invoke(this, player) }
+        onPlayerExitVehicleListeners.forEach { it.onPlayerExitVehicle(player, this) }
+    }
+
+    fun addOnVehicleDeathListener(listener: OnVehicleDeathListener) {
+        onVehicleDeathListeners += listener
+    }
+
+    fun removeOnVehicleDeathListener(listener: OnVehicleDeathListener) {
+        onVehicleDeathListeners -= listener
+    }
+
+    inline fun onDeath(crossinline onDeath: Vehicle.(Player?) -> Unit): OnVehicleDeathListener {
+        val listener = object : OnVehicleDeathListener {
+
+            override fun onVehicleDeath(vehicle: Vehicle, killer: Player?) {
+                onDeath.invoke(vehicle, killer)
+            }
+        }
+        addOnVehicleDeathListener(listener)
+        return listener
+    }
+
+    internal fun onDeath(killer: Player?) {
+        onVehicleDeathListeners.forEach { it.onVehicleDeath(this, killer) }
     }
 
     fun addOnVehicleStreamInListener(listener: OnVehicleStreamInListener) {
