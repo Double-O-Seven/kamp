@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterRaceCheckpointListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveRaceCheckpointListener
 import ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
@@ -13,9 +15,9 @@ internal constructor(
         private val playerRegistry: PlayerRegistry
 ) : CheckpointBase, AbstractDestroyable() {
 
-    private val onEnterHandlers: MutableList<RaceCheckpoint.(Player) -> Unit> = mutableListOf()
+    private val onPlayerEnterRaceCheckpointListeners: MutableList<OnPlayerEnterRaceCheckpointListener> = mutableListOf()
 
-    private val onLeaveHandlers: MutableList<RaceCheckpoint.(Player) -> Unit> = mutableListOf()
+    private val onPlayerLeaveRaceCheckpointListeners: MutableList<OnPlayerLeaveRaceCheckpointListener> = mutableListOf()
 
     override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
@@ -53,22 +55,50 @@ internal constructor(
         }
     }
 
-    fun onEnter(onEnter: RaceCheckpoint.(Player) -> Unit) {
-        onEnterHandlers += onEnter
+    fun addOnPlayerEnterRaceCheckpointListener(listener: OnPlayerEnterRaceCheckpointListener) {
+        onPlayerEnterRaceCheckpointListeners += listener
+    }
+
+    fun removeOnPlayerEnterRaceCheckpointListener(listener: OnPlayerEnterRaceCheckpointListener) {
+        onPlayerEnterRaceCheckpointListeners -= listener
+    }
+
+    inline fun onEnter(crossinline onEnter: RaceCheckpoint.(Player) -> Unit): OnPlayerEnterRaceCheckpointListener {
+        val listener = object : OnPlayerEnterRaceCheckpointListener {
+
+            override fun onPlayerEnterRaceCheckpoint(player: Player) {
+                onEnter.invoke(this@RaceCheckpoint, player)
+            }
+        }
+        addOnPlayerEnterRaceCheckpointListener(listener)
+        return listener
     }
 
     internal fun onEnter(player: Player) {
-        requireNotDestroyed()
-        onEnterHandlers.forEach { it.invoke(this, player) }
+        onPlayerEnterRaceCheckpointListeners.forEach { it.onPlayerEnterRaceCheckpoint(player) }
     }
 
-    fun onLeave(onLeave: RaceCheckpoint.(Player) -> Unit) {
-        onLeaveHandlers += onLeave
+    fun addOnPlayerLeaveRaceCheckpointListener(listener: OnPlayerLeaveRaceCheckpointListener) {
+        onPlayerLeaveRaceCheckpointListeners += listener
+    }
+
+    fun removeOnPlayerLeaveRaceCheckpointListener(listener: OnPlayerLeaveRaceCheckpointListener) {
+        onPlayerLeaveRaceCheckpointListeners -= listener
+    }
+
+    inline fun onLeave(crossinline onLeave: RaceCheckpoint.(Player) -> Unit): OnPlayerLeaveRaceCheckpointListener {
+        val listener = object : OnPlayerLeaveRaceCheckpointListener {
+
+            override fun onPlayerLeaveRaceCheckpoint(player: Player) {
+                onLeave.invoke(this@RaceCheckpoint, player)
+            }
+        }
+        addOnPlayerLeaveRaceCheckpointListener(listener)
+        return listener
     }
 
     internal fun onLeave(player: Player) {
-        requireNotDestroyed()
-        onLeaveHandlers.forEach { it.invoke(this, player) }
+        onPlayerLeaveRaceCheckpointListeners.forEach { it.onPlayerLeaveRaceCheckpoint(player) }
     }
 
     override fun onDestroy() {
