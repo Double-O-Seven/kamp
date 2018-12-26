@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.entity.id.MenuId
@@ -23,7 +24,7 @@ internal constructor(
         private val textFormatter: TextFormatter
 ) : Entity<MenuId>, AbstractDestroyable() {
 
-    private val onExitHandlers: MutableList<Menu.(Player) -> Unit> = mutableListOf()
+    private val onPlayerExitedMenuListeners: MutableList<OnPlayerExitedMenuListener> = mutableListOf()
 
     override val id: MenuId
         get() = requireNotDestroyed { field }
@@ -50,8 +51,7 @@ internal constructor(
 
     private val _rows: MutableList<MenuRow> = mutableListOf()
 
-    val rows: List<MenuRow>
-        get() = _rows.toList()
+    val rows: List<MenuRow> = Collections.unmodifiableList(_rows)
 
     fun addItem(column: Int, text: String): MenuRow {
         checkColumn(column)
@@ -113,12 +113,27 @@ internal constructor(
         nativeFunctionExecutor.hideMenuForPlayer(menuid = id.value, playerid = forPlayer.id.value)
     }
 
-    fun onExit(onExit: Menu.(Player) -> Unit) {
-        onExitHandlers += onExit
+    fun addOnPlayerExitedMenuListener(listener: OnPlayerExitedMenuListener) {
+        onPlayerExitedMenuListeners += listener
+    }
+
+    fun removeOnPlayerExitedMenuListener(listener: OnPlayerExitedMenuListener) {
+        onPlayerExitedMenuListeners -= listener
+    }
+
+    inline fun onExit(crossinline onExit: Menu.(Player) -> Unit): OnPlayerExitedMenuListener {
+        val listener = object : OnPlayerExitedMenuListener {
+
+            override fun onPlayerExitedMenu(player: Player) {
+                player.menu?.let { onExit.invoke(it, player) }
+            }
+        }
+        addOnPlayerExitedMenuListener(listener)
+        return listener
     }
 
     internal fun onExit(player: Player) {
-        onExitHandlers.forEach { it.invoke(this, player) }
+        onPlayerExitedMenuListeners.forEach { it.onPlayerExitedMenu(player) }
     }
 
     override fun onDestroy() {
