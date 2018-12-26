@@ -14,14 +14,14 @@ private class ColoredPlayerName(
         "${player.color.toEmbeddedString()}${player.name}"
     }
 
-    override fun get(locale: Locale, color: Color): String = "$coloredName${color.toEmbeddedString()}"
+    override fun getText(locale: Locale, color: Color): String = "$coloredName${color.toEmbeddedString()}"
 }
 
 fun coloredNameOf(player: Player): MessageArgument = ColoredPlayerName(player)
 
 private class MessageTranslatable(private val translator: (Locale) -> String) : MessageArgument {
 
-    override fun get(locale: Locale, color: Color): String = translator(locale)
+    override fun getText(locale: Locale, color: Color): String = translator(locale)
 
 }
 

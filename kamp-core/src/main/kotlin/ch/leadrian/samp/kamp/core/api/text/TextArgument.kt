@@ -4,6 +4,6 @@ import java.util.*
 
 interface TextArgument {
 
-    fun get(locale: Locale): String
+    fun getText(locale: Locale): String
 
 }

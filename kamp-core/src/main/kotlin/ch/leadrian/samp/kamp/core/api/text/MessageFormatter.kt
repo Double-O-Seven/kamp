@@ -20,7 +20,7 @@ internal constructor(private val textProvider: TextProvider) {
             val formattedArgs = arrayOfNulls<Any?>(args.size)
             args.forEachIndexed { i, arg ->
                 formattedArgs[i] = when (arg) {
-                    is MessageArgument -> arg.get(locale, color)
+                    is MessageArgument -> arg.getText(locale, color)
                     is Color -> arg.toEmbeddedString()
                     is HasTextKey -> textProvider.getText(locale, arg.textKey)
                     is TextKey -> textProvider.getText(locale, arg)

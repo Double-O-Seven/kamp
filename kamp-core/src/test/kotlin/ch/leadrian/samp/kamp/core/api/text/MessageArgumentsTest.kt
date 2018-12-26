@@ -21,7 +21,7 @@ internal class MessageArgumentsTest {
         }
         val embeddedPlayerName = coloredNameOf(player)
 
-        val text = embeddedPlayerName.get(Locale.GERMANY, colorOf(0x33CC33FF))
+        val text = embeddedPlayerName.getText(Locale.GERMANY, colorOf(0x33CC33FF))
 
         assertThat(text)
                 .isEqualTo("{00ff00}hans_wurst{33cc33}")
@@ -41,7 +41,7 @@ internal class MessageArgumentsTest {
         )
         val messageArgument = translateForMessage { locale -> translations[locale]!! }
 
-        val text = messageArgument.get(Locale(language, country), Colors.WHITE)
+        val text = messageArgument.getText(Locale(language, country), Colors.WHITE)
 
         assertThat(text)
                 .isEqualTo(expectedText)

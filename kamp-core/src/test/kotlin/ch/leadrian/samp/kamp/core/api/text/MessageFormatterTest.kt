@@ -17,7 +17,7 @@ internal class MessageFormatterTest {
         val textKey1 = TextKey("test.key.abc")
         val textKey2 = TextKey("test.key.def")
         val messageArgument = mockk<MessageArgument> {
-            every { get(locale, color) } returns "Hi there"
+            every { getText(locale, color) } returns "Hi there"
         }
         val hasTextKey = mockk<HasTextKey> {
             every { this@mockk.textKey } returns textKey1

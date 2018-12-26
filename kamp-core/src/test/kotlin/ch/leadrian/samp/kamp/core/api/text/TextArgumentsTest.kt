@@ -21,7 +21,7 @@ internal class TextArgumentsTest {
         )
         val textArgument = translateForText { locale -> translations[locale]!! }
 
-        val text = textArgument.get(Locale(language, country))
+        val text = textArgument.getText(Locale(language, country))
 
         Assertions.assertThat(text)
                 .isEqualTo(expectedText)
