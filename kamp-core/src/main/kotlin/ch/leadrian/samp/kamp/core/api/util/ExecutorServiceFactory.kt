@@ -10,6 +10,6 @@ constructor() {
 
     fun createSingleThreadExecutor(): ExecutorService = Executors.newSingleThreadExecutor()
 
-    fun createSingleThreadScheduledExecutor() = Executors.newSingleThreadScheduledExecutor()
+    fun createSingleThreadScheduledExecutor(): ExecutorService = Executors.newSingleThreadScheduledExecutor()
 
 }
