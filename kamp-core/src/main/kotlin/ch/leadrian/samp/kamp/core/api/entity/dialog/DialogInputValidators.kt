@@ -7,31 +7,50 @@ import java.util.regex.Pattern
 
 object DialogInputValidators {
 
+    @JvmOverloads
+    @JvmStatic
     fun notBlank(errorMessage: String? = null): DialogInputValidator = NotBlank(errorMessage = errorMessage)
 
+    @JvmStatic
     fun notBlank(errorMessageTextKey: TextKey): DialogInputValidator = NotBlank(errorMessageTextKey = errorMessageTextKey)
 
+    @JvmOverloads
+    @JvmStatic
     fun notEmpty(errorMessage: String? = null): DialogInputValidator = NotEmpty(errorMessage = errorMessage)
 
+    @JvmStatic
     fun notEmpty(errorMessageTextKey: TextKey): DialogInputValidator = NotEmpty(errorMessageTextKey = errorMessageTextKey)
 
+    @JvmOverloads
+    @JvmStatic
     fun pattern(regex: String, errorMessage: String? = null): DialogInputValidator =
             PatternMatch(errorMessage = errorMessage, regex = regex)
 
+    @JvmStatic
     fun pattern(regex: String, errorMessageTextKey: TextKey): DialogInputValidator =
             PatternMatch(errorMessageTextKey = errorMessageTextKey, regex = regex)
 
+    @JvmOverloads
+    @JvmStatic
     fun floatValue(errorMessage: String? = null): DialogInputValidator = FloatValue(errorMessage = errorMessage)
 
+    @JvmStatic
     fun floatValue(errorMessageTextKey: TextKey): DialogInputValidator = FloatValue(errorMessageTextKey = errorMessageTextKey)
 
+    @JvmOverloads
+    @JvmStatic
     fun intValue(errorMessage: String? = null): DialogInputValidator = IntValue(errorMessage = errorMessage)
 
+    @JvmStatic
     fun intValue(errorMessageTextKey: TextKey): DialogInputValidator = IntValue(errorMessageTextKey = errorMessageTextKey)
 
+    @JvmOverloads
+    @JvmStatic
     fun containedIn(vararg allowedValues: String, ignoreCase: Boolean = true, errorMessage: String? = null): DialogInputValidator =
             ContainedIn(ignoreCase = ignoreCase, errorMessage = errorMessage, allowedValues = *allowedValues)
 
+    @JvmOverloads
+    @JvmStatic
     fun containedIn(vararg allowedValues: String, ignoreCase: Boolean = true, errorMessageTextKey: TextKey): DialogInputValidator =
             ContainedIn(ignoreCase = ignoreCase, errorMessageTextKey = errorMessageTextKey, allowedValues = *allowedValues)
 
