@@ -102,10 +102,10 @@ internal constructor(
     }
 
     override fun onDestroy() {
-        playerRegistry.getAll().forEach {
-            if (it.isInRaceCheckpoint(this)) {
-                onLeave(it)
-                it.raceCheckpoint = null
+        playerRegistry.getAll().forEach { player ->
+            if (player in this) {
+                onLeave(player)
+                player.raceCheckpoint = null
             }
         }
     }
