@@ -50,7 +50,7 @@ internal constructor(
         val listener = object : OnPlayerEnterCheckpointListener {
 
             override fun onPlayerEnterCheckpoint(player: Player) {
-                onEnter.invoke(this@Checkpoint, player)
+                player.checkpoint?.let { onEnter.invoke(it, player) }
             }
         }
         addOnPlayerEnterCheckpointListener(listener)
@@ -73,7 +73,7 @@ internal constructor(
         val listener = object : OnPlayerLeaveCheckpointListener {
 
             override fun onPlayerLeaveCheckpoint(player: Player) {
-                onLeave.invoke(this@Checkpoint, player)
+                player.checkpoint?.let { onLeave.invoke(it, player) }
             }
         }
         addOnPlayerLeaveCheckpointListener(listener)
@@ -85,10 +85,10 @@ internal constructor(
     }
 
     override fun onDestroy() {
-        playerRegistry.getAll().forEach {
-            if (it.isInCheckpoint(this)) {
-                onLeave(it)
-                it.checkpoint = null
+        playerRegistry.getAll().forEach { player ->
+            if (player in this) {
+                onLeave(player)
+                player.checkpoint = null
             }
         }
     }

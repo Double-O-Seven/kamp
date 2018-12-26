@@ -146,7 +146,9 @@ internal class CheckpointTest {
 
         @Test
         fun shouldCallInlinedListener() {
-            val player = mockk<Player>()
+            val player = mockk<Player> {
+                every { this@mockk.checkpoint } returns this@CheckpointTest.checkpoint
+            }
             val onEnter = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
             checkpoint.onEnter(onEnter)
 
@@ -197,7 +199,9 @@ internal class CheckpointTest {
 
         @Test
         fun shouldCallInlinedListener() {
-            val player = mockk<Player>()
+            val player = mockk<Player> {
+                every { this@mockk.checkpoint } returns this@CheckpointTest.checkpoint
+            }
             val onLeave = mockk<Checkpoint.(Player) -> Unit>(relaxed = true)
             checkpoint.onLeave(onLeave)
 
@@ -231,9 +235,11 @@ internal class CheckpointTest {
         fun setUp() {
             every { player1.isInCheckpoint(this@CheckpointTest.checkpoint) } returns true
             every { player1.checkpoint = any() } just Runs
+            every { player1.checkpoint } returns checkpoint
             every { player2.isInCheckpoint(this@CheckpointTest.checkpoint) } returns false
             every { player3.isInCheckpoint(this@CheckpointTest.checkpoint) } returns true
             every { player3.checkpoint = any() } just Runs
+            every { player3.checkpoint } returns checkpoint
             every { playerRegistry.getAll() } returns listOf(player1, player2, player3)
         }
 

@@ -67,7 +67,7 @@ internal constructor(
         val listener = object : OnPlayerEnterRaceCheckpointListener {
 
             override fun onPlayerEnterRaceCheckpoint(player: Player) {
-                onEnter.invoke(this@RaceCheckpoint, player)
+                player.raceCheckpoint?.let { onEnter.invoke(it, player) }
             }
         }
         addOnPlayerEnterRaceCheckpointListener(listener)
@@ -90,7 +90,7 @@ internal constructor(
         val listener = object : OnPlayerLeaveRaceCheckpointListener {
 
             override fun onPlayerLeaveRaceCheckpoint(player: Player) {
-                onLeave.invoke(this@RaceCheckpoint, player)
+                player.raceCheckpoint?.let { onLeave.invoke(it, player) }
             }
         }
         addOnPlayerLeaveRaceCheckpointListener(listener)
