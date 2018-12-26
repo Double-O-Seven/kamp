@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.text
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -19,7 +20,7 @@ internal class MessageArgumentsTest {
             every { color } returns colorOf(0x00FF00FF)
             every { name } returns "hans_wurst"
         }
-        val embeddedPlayerName = coloredNameOf(player)
+        val embeddedPlayerName = MessageArguments.coloredNameOf(player)
 
         val text = embeddedPlayerName.getText(Locale.GERMANY, colorOf(0x33CC33FF))
 
@@ -39,12 +40,26 @@ internal class MessageArgumentsTest {
                 Locale.FRANCE to "Bonjour",
                 Locale.ITALY to "Ciao"
         )
-        val messageArgument = translateForMessage { locale -> translations[locale]!! }
+        val messageArgument = MessageArguments.translate { locale -> translations[locale]!! }
 
         val text = messageArgument.getText(Locale(language, country), Colors.WHITE)
 
         assertThat(text)
                 .isEqualTo(expectedText)
+    }
+
+    @Test
+    fun shouldReturnPlayerNameAndId() {
+        val player = mockk<Player> {
+            every { name } returns "hans_wurst"
+            every { id } returns PlayerId.valueOf(1337)
+        }
+        val nameAndIdOf = MessageArguments.nameAndIdOf(player)
+
+        val text = nameAndIdOf.getText(Locale.GERMANY, colorOf(0x33CC33FF))
+
+        assertThat(text)
+                .isEqualTo("hans_wurst (1337)")
     }
 
 }

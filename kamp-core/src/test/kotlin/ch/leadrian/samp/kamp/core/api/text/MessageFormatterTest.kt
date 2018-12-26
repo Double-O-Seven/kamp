@@ -54,7 +54,7 @@ internal class MessageFormatterTest {
                 color,
                 "A: {0}, B: {1}",
                 "Hi",
-                translateForMessage { throw RuntimeException("fail") }
+                MessageArguments.translate { throw RuntimeException("fail") }
         )
 
         assertThat(formattedMessage)

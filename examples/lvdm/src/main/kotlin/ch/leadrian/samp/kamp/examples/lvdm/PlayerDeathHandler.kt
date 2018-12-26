@@ -6,8 +6,8 @@ import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
+import ch.leadrian.samp.kamp.core.api.text.MessageArguments.coloredNameOf
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
-import ch.leadrian.samp.kamp.core.api.text.coloredNameOf
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
