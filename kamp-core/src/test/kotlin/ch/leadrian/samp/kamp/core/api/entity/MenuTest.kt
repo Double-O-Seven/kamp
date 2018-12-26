@@ -407,38 +407,6 @@ internal class MenuTest {
         }
 
         @Nested
-        inner class OnSelectedMenuRowTests {
-
-            @Test
-            fun shouldExecuteOnSelectedMenuRowHandlers() {
-                every { nativeFunctionExecutor.addMenuItem(any(), any(), any()) } returns 0
-                val menuRow = menu.addItem(0, "Hi there")
-                val player = mockk<Player>()
-                val onSelectedMenuRow = mockk<Menu.(Player, MenuRow) -> Unit>(relaxed = true)
-                menu.onSelectedMenuRow(onSelectedMenuRow)
-
-                menu.onSelectedMenuRow(player = player, rowIndex = 0)
-
-                verify { onSelectedMenuRow.invoke(menu, player, menuRow) }
-            }
-
-            @Test
-            fun shouldExecuteMenuRowOnSelectedHandlers() {
-                every { nativeFunctionExecutor.addMenuItem(any(), any(), any()) } returns 0
-                val menuRow = menu.addItem(0, "Hi there")
-                val player = mockk<Player>()
-                val onSelected = mockk<MenuRow.(Player) -> Unit>(relaxed = true)
-                menuRow.onSelected(onSelected)
-
-                menu.onSelectedMenuRow(player = player, rowIndex = 0)
-
-                verify { onSelected.invoke(menuRow, player) }
-            }
-
-        }
-
-
-        @Nested
         inner class DestroyTests {
 
             @BeforeEach

@@ -80,6 +80,8 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
+import ch.leadrian.samp.kamp.core.api.entity.Menu
+import ch.leadrian.samp.kamp.core.api.entity.MenuRow
 import ch.leadrian.samp.kamp.core.api.entity.Pickup
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerClass
@@ -91,6 +93,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
+import ch.leadrian.samp.kamp.core.api.entity.id.MenuId
 import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerClassId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -108,6 +111,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PickupRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerClassRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
@@ -141,6 +145,7 @@ internal class CallbackProcessorTest {
     private lateinit var callbackListenerManager: CallbackListenerManager
     private lateinit var server: Server
     private lateinit var uncaughtExceptionNotifier: UncaughtExceptionNotifier
+    private lateinit var nativeFunctionExecutor: SAMPNativeFunctionExecutor
 
     private val configProperties = Properties()
     private val dataDirectory = Paths.get(".", "Kamp", "layout")
@@ -150,7 +155,7 @@ internal class CallbackProcessorTest {
         configProperties["kamp.gamemode.class.name"] = "ch.leadrian.samp.kamp.core.runtime.callback.CallbackProcessorTest\$TestGameMode"
         configProperties["test.value.foo"] = "Foobar"
         configProperties["test.value.bar"] = "1337"
-        val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>(relaxed = true) {
+        nativeFunctionExecutor = mockk(relaxed = true) {
             every { getMaxPlayers() } returns 1000
         }
         server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
@@ -2301,22 +2306,56 @@ internal class CallbackProcessorTest {
     inner class OnPlayerSelectedMenuRowTests {
 
         private lateinit var player: Player
+        private val menu = mockk<Menu>()
         private val playerId = 69
+        private val menuId = 13
 
         @BeforeEach
         fun setUp() {
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { menu.id } returns MenuId.valueOf(menuId)
+            server.injector.getInstance<MenuRegistry>().register(menu)
         }
 
         @Test
         fun shouldCallOnPlayerSelectedMenuRow() {
+            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
+            every { menu.numberOfColumns } returns 4
+            val menuRow = MenuRow(menu, 2, nativeFunctionExecutor)
+            every { menu.rows } returns mutableListOf(mockk(), mockk(), menuRow, mockk())
+            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
+            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
+
+            callbackProcessor.onPlayerSelectedMenuRow(playerId, 2)
+
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, menuRow) }
+        }
+
+        @Test
+        fun givenNoMenuItShouldNotCallOnPlayerSelectedMenuRow() {
+            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns SAMPConstants.INVALID_MENU
             val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
             callbackListenerManager.register(onPlayerSelectedMenuRowListener)
 
             callbackProcessor.onPlayerSelectedMenuRow(playerId, 5)
 
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, 5) }
+            verify { onPlayerSelectedMenuRowListener wasNot Called }
+        }
+
+        @Test
+        fun givenNoMenuRowForIndexItShouldNotCallOnPlayerSelectedMenuRow() {
+            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
+            every { menu.rows } returns mutableListOf(mockk())
+            every { menu.numberOfColumns } returns 1
+            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
+            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
+
+            callbackProcessor.onPlayerSelectedMenuRow(playerId, 5)
+
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify { onPlayerSelectedMenuRowListener wasNot Called }
         }
 
         @Test
@@ -2340,6 +2379,10 @@ internal class CallbackProcessorTest {
 
         @Test
         fun shouldCatchException() {
+            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
+            every { menu.numberOfColumns } returns 4
+            val menuRow = MenuRow(menu, 2, nativeFunctionExecutor)
+            every { menu.rows } returns mutableListOf(mockk(), mockk(), menuRow, mockk())
             val exception = RuntimeException("test")
             val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener> {
                 every { onPlayerSelectedMenuRow(any(), any()) } throws exception
@@ -2347,13 +2390,13 @@ internal class CallbackProcessorTest {
             callbackListenerManager.register(onPlayerSelectedMenuRowListener)
 
             val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerSelectedMenuRow(playerId, 5)
+                callbackProcessor.onPlayerSelectedMenuRow(playerId, 2)
             }
 
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, 5) }
+            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, menuRow) }
         }
 
     }

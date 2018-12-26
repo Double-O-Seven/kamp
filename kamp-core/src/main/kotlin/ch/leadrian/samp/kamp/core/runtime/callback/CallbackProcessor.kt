@@ -445,7 +445,11 @@ constructor(
 
     override fun onPlayerSelectedMenuRow(playerid: Int, row: Int): Boolean {
         tryAndCatch {
-            onPlayerSelectedMenuRowHandler.onPlayerSelectedMenuRow(playerid.toPlayer(), row)
+            val player = playerid.toPlayer()
+            val menuRow = player.menu?.rows?.getOrNull(row)
+            if (menuRow != null) {
+                onPlayerSelectedMenuRowHandler.onPlayerSelectedMenuRow(player, menuRow)
+            }
         }
         return true
     }

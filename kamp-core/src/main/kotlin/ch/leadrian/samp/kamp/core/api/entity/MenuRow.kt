@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectedMenuRowListener
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 
 class MenuRow
@@ -9,7 +10,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
-    private val onSelectedHandlers: MutableList<MenuRow.(Player) -> Unit> = mutableListOf()
+    private val onPlayerSelectedMenuRowListeners: MutableList<OnPlayerSelectedMenuRowListener> = mutableListOf()
 
     private val columnTexts: Array<String?> = arrayOfNulls(menu.numberOfColumns)
 
@@ -27,12 +28,27 @@ internal constructor(
         columnTexts[column] = text
     }
 
-    fun onSelected(onSelected: MenuRow.(Player) -> Unit) {
-        onSelectedHandlers += onSelected
+    fun addOnPlayerSelectedMenuRowListener(listener: OnPlayerSelectedMenuRowListener) {
+        onPlayerSelectedMenuRowListeners += listener
+    }
+
+    fun removeOnPlayerSelectedMenuRowListener(listener: OnPlayerSelectedMenuRowListener) {
+        onPlayerSelectedMenuRowListeners -= listener
+    }
+
+    inline fun onSelected(crossinline onSelected: MenuRow.(Player) -> Unit): OnPlayerSelectedMenuRowListener {
+        val listener = object : OnPlayerSelectedMenuRowListener {
+
+            override fun onPlayerSelectedMenuRow(player: Player, row: MenuRow) {
+                onSelected.invoke(row, player)
+            }
+        }
+        addOnPlayerSelectedMenuRowListener(listener)
+        return listener
     }
 
     internal fun onSelected(player: Player) {
-        onSelectedHandlers.forEach { it.invoke(this, player) }
+        onPlayerSelectedMenuRowListeners.forEach { it.onPlayerSelectedMenuRow(player, this) }
     }
 
     private fun checkColumn(column: Int) {

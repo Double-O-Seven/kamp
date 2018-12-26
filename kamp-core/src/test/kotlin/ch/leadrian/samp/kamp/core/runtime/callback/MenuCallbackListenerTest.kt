@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.entity.Menu
+import ch.leadrian.samp.kamp.core.api.entity.MenuRow
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import io.mockk.Runs
 import io.mockk.every
@@ -62,33 +63,15 @@ internal class MenuCallbackListenerTest {
 
     }
 
-    @Nested
-    inner class OnPlayerSelectedMenuRowTests {
-
-        @Test
-        fun givenPlayerHasMenuItShouldReturnExecuteOnExit() {
-            val menu = mockk<Menu> {
-                every { onSelectedMenuRow(any(), any()) } just Runs
-            }
-            every { player.menu } returns menu
-
-            menuCallbackListener.onPlayerSelectedMenuRow(player, 13)
-
-            verify(exactly = 1) { menu.onSelectedMenuRow(player, 13) }
+    @Test
+    fun shouldCallOnSelectedOnMenuRow() {
+        val menuRow = mockk<MenuRow> {
+            every { onSelected(any<Player>()) } just Runs
         }
 
-        @Test
-        fun givenPlayerHasNoMenuItShouldNotDoAnything() {
-            every { player.menu } returns null
+        menuCallbackListener.onPlayerSelectedMenuRow(player, menuRow)
 
-            val caughtThrowable = catchThrowable {
-                menuCallbackListener.onPlayerSelectedMenuRow(player, 13)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-        }
-
+        verify(exactly = 1) { menuRow.onSelected(player) }
     }
 
 }
