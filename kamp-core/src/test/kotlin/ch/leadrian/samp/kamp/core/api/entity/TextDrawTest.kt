@@ -731,6 +731,53 @@ internal class TextDrawTest {
             private val player = mockk<Player>()
 
             @Test
+            fun shouldCallAddedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
+                textDraw.addOnPlayerClickTextDrawListener(listener)
+
+                textDraw.onClick(player)
+
+                verify { listener.onPlayerClickTextDraw(player, textDraw) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedListener() {
+                val player = mockk<Player>()
+                val listener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
+                textDraw.addOnPlayerClickTextDrawListener(listener)
+                textDraw.removeOnPlayerClickTextDrawListener(listener)
+
+                textDraw.onClick(player)
+
+                verify(exactly = 0) { listener.onPlayerClickTextDraw(any(), any()) }
+            }
+
+            @Test
+            fun shouldCallInlinedListener() {
+                val onClick = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
+                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
+                }
+                textDraw.onClick(onClick)
+
+                textDraw.onClick(player)
+
+                verify { onClick.invoke(textDraw, player) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedInlinedListener() {
+                val player = mockk<Player>()
+                val onClick = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result>(relaxed = true)
+                val listener = textDraw.onClick(onClick)
+                textDraw.removeOnPlayerClickTextDrawListener(listener)
+
+                textDraw.onClick(player)
+
+                verify(exactly = 0) { onClick.invoke(any(), any()) }
+            }
+
+            @Test
             fun givenEveryOnClickHandlerReturnsNotFoundItShouldReturnNotFound() {
                 val onClick1 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
                     every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound

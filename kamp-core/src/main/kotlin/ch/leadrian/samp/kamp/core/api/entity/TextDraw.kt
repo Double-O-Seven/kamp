@@ -28,7 +28,7 @@ internal constructor(
         var locale: Locale
 ) : Entity<TextDrawId>, AbstractDestroyable(), TextDrawBase {
 
-    private val onClickHandlers: MutableList<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> = mutableListOf()
+    private val onPlayerClickTextDrawListeners: MutableList<OnPlayerClickTextDrawListener> = mutableListOf()
 
     override val id: TextDrawId
         get() = requireNotDestroyed { field }
@@ -218,16 +218,31 @@ internal constructor(
             field = value.toVehicleColors()
         }
 
-    fun onClick(onClick: TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result) {
-        onClickHandlers += onClick
+    fun addOnPlayerClickTextDrawListener(listener: OnPlayerClickTextDrawListener) {
+        onPlayerClickTextDrawListeners += listener
     }
 
-    internal fun onClick(player: Player): OnPlayerClickTextDrawListener.Result =
-            onClickHandlers
-                    .asSequence()
-                    .map { it.invoke(this, player) }
-                    .firstOrNull { it == OnPlayerClickTextDrawListener.Result.Processed }
-                    ?: OnPlayerClickTextDrawListener.Result.NotFound
+    fun removeOnPlayerClickTextDrawListener(listener: OnPlayerClickTextDrawListener) {
+        onPlayerClickTextDrawListeners -= listener
+    }
+
+    inline fun onClick(crossinline onClick: TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result): OnPlayerClickTextDrawListener {
+        val listener = object : OnPlayerClickTextDrawListener {
+
+            override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): OnPlayerClickTextDrawListener.Result =
+                    textDraw?.let { onClick.invoke(it, player) } ?: OnPlayerClickTextDrawListener.Result.NotFound
+        }
+        addOnPlayerClickTextDrawListener(listener)
+        return listener
+    }
+
+    internal fun onClick(player: Player): OnPlayerClickTextDrawListener.Result {
+        return onPlayerClickTextDrawListeners
+                .asSequence()
+                .map { it.onPlayerClickTextDraw(player, this) }
+                .firstOrNull { it == OnPlayerClickTextDrawListener.Result.Processed }
+                ?: OnPlayerClickTextDrawListener.Result.NotFound
+    }
 
     override fun onDestroy() {
         nativeFunctionExecutor.textDrawDestroy(id.value)

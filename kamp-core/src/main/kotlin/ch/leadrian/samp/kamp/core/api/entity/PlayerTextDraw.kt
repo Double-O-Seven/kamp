@@ -27,7 +27,7 @@ internal constructor(
         private val textFormatter: TextFormatter
 ) : Entity<PlayerTextDrawId>, HasPlayer, AbstractDestroyable(), TextDrawBase {
 
-    private val onClickHandlers: MutableList<PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result> = mutableListOf()
+    private val onPlayerClickPlayerTextDrawListeners: MutableList<OnPlayerClickPlayerTextDrawListener> = mutableListOf()
 
     override val id: PlayerTextDrawId
         get() = requireNotDestroyed { field }
@@ -247,16 +247,30 @@ internal constructor(
             field = value.toVehicleColors()
         }
 
-    fun onClick(onClick: PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result) {
-        onClickHandlers += onClick
+    fun addOnPlayerClickPlayerTextDrawListener(listener: OnPlayerClickPlayerTextDrawListener) {
+        onPlayerClickPlayerTextDrawListeners += listener
     }
 
-    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result =
-            onClickHandlers
-                    .asSequence()
-                    .map { it.invoke(this) }
-                    .firstOrNull { it == OnPlayerClickPlayerTextDrawListener.Result.Processed }
-                    ?: OnPlayerClickPlayerTextDrawListener.Result.NotFound
+    fun removeOnPlayerClickPlayerTextDrawListener(listener: OnPlayerClickPlayerTextDrawListener) {
+        onPlayerClickPlayerTextDrawListeners -= listener
+    }
+
+    inline fun onClick(crossinline onClick: PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result): OnPlayerClickPlayerTextDrawListener {
+        val listener = object : OnPlayerClickPlayerTextDrawListener {
+
+            override fun onPlayerClickPlayerTextDraw(textDraw: PlayerTextDraw): OnPlayerClickPlayerTextDrawListener.Result = onClick.invoke(this@PlayerTextDraw)
+        }
+        addOnPlayerClickPlayerTextDrawListener(listener)
+        return listener
+    }
+
+    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result {
+        return onPlayerClickPlayerTextDrawListeners
+                .asSequence()
+                .map { it.onPlayerClickPlayerTextDraw(this) }
+                .firstOrNull { it == OnPlayerClickPlayerTextDrawListener.Result.Processed }
+                ?: OnPlayerClickPlayerTextDrawListener.Result.NotFound
+    }
 
     override var isDestroyed: Boolean = false
         get() = field || !player.isConnected

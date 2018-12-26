@@ -746,6 +746,50 @@ internal class PlayerTextDrawTest {
         inner class OnClickTests {
 
             @Test
+            fun shouldCallAddedListener() {
+                val listener = mockk<OnPlayerClickPlayerTextDrawListener>(relaxed = true)
+                playerTextDraw.addOnPlayerClickPlayerTextDrawListener(listener)
+
+                playerTextDraw.onClick()
+
+                verify { listener.onPlayerClickPlayerTextDraw(playerTextDraw) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedListener() {
+                val listener = mockk<OnPlayerClickPlayerTextDrawListener>(relaxed = true)
+                playerTextDraw.addOnPlayerClickPlayerTextDrawListener(listener)
+                playerTextDraw.removeOnPlayerClickPlayerTextDrawListener(listener)
+
+                playerTextDraw.onClick()
+
+                verify(exactly = 0) { listener.onPlayerClickPlayerTextDraw(any()) }
+            }
+
+            @Test
+            fun shouldCallInlinedListener() {
+                val onClick = mockk<PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result> {
+                    every { this@mockk.invoke(any()) } returns OnPlayerClickPlayerTextDrawListener.Result.Processed
+                }
+                playerTextDraw.onClick(onClick)
+
+                playerTextDraw.onClick()
+
+                verify { onClick.invoke(playerTextDraw) }
+            }
+
+            @Test
+            fun shouldNotCallRemovedInlinedListener() {
+                val onClick = mockk<PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result>(relaxed = true)
+                val listener = playerTextDraw.onClick(onClick)
+                playerTextDraw.removeOnPlayerClickPlayerTextDrawListener(listener)
+
+                playerTextDraw.onClick()
+
+                verify(exactly = 0) { onClick.invoke(any()) }
+            }
+
+            @Test
             fun givenEveryOnClickHandlerReturnsNotFoundItShouldReturnNotFound() {
                 val onClick1 = mockk<PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result> {
                     every { this@mockk.invoke(any()) } returns OnPlayerClickPlayerTextDrawListener.Result.NotFound
