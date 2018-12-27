@@ -8,6 +8,7 @@ import org.apache.commons.collections4.trie.PatriciaTrie
 /**
  * Base damage and range taken from https://github.com/oscar-broman/samp-weapon-config
  */
+@Suppress("unused")
 enum class WeaponModel(
         override val value: Int,
         override val textKey: TextKey,
