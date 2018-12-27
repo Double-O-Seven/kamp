@@ -1015,46 +1015,6 @@ internal class VehicleTest {
                 }
             }
 
-            @Test
-            fun shouldExecuteOnSpawnHandlers() {
-                val onSpawn = mockk<Vehicle.() -> Unit>(relaxed = true)
-                vehicle.onSpawn(onSpawn)
-
-                vehicle.onSpawn()
-
-                verify { onSpawn.invoke(vehicle) }
-            }
-
-            @Test
-            fun shouldExecuteOnDeathHandlers() {
-                val onDeath = mockk<Vehicle.(Player?) -> Unit>(relaxed = true)
-                vehicle.onDeath(onDeath)
-
-                vehicle.onDeath(player)
-
-                verify { onDeath.invoke(vehicle, player) }
-            }
-
-            @Test
-            fun shouldExecuteOnEnterHandlers() {
-                val onEnter = mockk<Vehicle.(Player, Boolean) -> Unit>(relaxed = true)
-                vehicle.onEnter(onEnter)
-
-                vehicle.onEnter(player, true)
-
-                verify { onEnter.invoke(vehicle, player, true) }
-            }
-
-            @Test
-            fun shouldExecuteOnExitHandlers() {
-                val onExit = mockk<Vehicle.(Player) -> Unit>(relaxed = true)
-                vehicle.onExit(onExit)
-
-                vehicle.onExit(player)
-
-                verify { onExit.invoke(vehicle, player) }
-            }
-
             @Nested
             inner class OnVehicleSpawnListenersTests {
 
