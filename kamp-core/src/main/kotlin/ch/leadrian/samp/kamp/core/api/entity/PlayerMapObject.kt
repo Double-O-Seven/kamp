@@ -1,5 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
@@ -22,11 +25,11 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<PlayerMapObjectId>, HasPlayer, AbstractDestroyable(), MapObjectBase {
 
-    private val onMovedHandlers: MutableList<PlayerMapObject.() -> Unit> = mutableListOf()
+    private val onPlayerObjectMovedListeners: MutableList<OnPlayerObjectMovedListener> = mutableListOf()
 
-    private val onEditHandlers: MutableList<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
+    private val onPlayerEditPlayerMapObjectListeners: MutableList<OnPlayerEditPlayerMapObjectListener> = mutableListOf()
 
-    private val onSelectHandlers: MutableList<PlayerMapObject.(Int, Vector3D) -> Unit> = mutableListOf()
+    private val onPlayerSelectPlayerMapObjectListeners: MutableList<OnPlayerSelectPlayerMapObjectListener> = mutableListOf()
 
     override val id: PlayerMapObjectId
         get() = requireNotDestroyed { field }
@@ -194,28 +197,73 @@ internal constructor(
         )
     }
 
-    fun onMoved(onMoved: PlayerMapObject.() -> Unit) {
-        onMovedHandlers += onMoved
+    fun addOnPlayerObjectMovedListener(listener: OnPlayerObjectMovedListener) {
+        onPlayerObjectMovedListeners += listener
+    }
+
+    fun removeOnPlayerObjectMovedListener(listener: OnPlayerObjectMovedListener) {
+        onPlayerObjectMovedListeners -= listener
+    }
+
+    inline fun onMoved(crossinline onMoved: PlayerMapObject.() -> Unit): OnPlayerObjectMovedListener {
+        val listener = object : OnPlayerObjectMovedListener {
+
+            override fun onPlayerObjectMoved(playerMapObject: PlayerMapObject) {
+                onMoved.invoke(playerMapObject)
+            }
+        }
+        addOnPlayerObjectMovedListener(listener)
+        return listener
     }
 
     internal fun onMoved() {
-        onMovedHandlers.forEach { it.invoke(this) }
+        onPlayerObjectMovedListeners.forEach { it.onPlayerObjectMoved(this) }
     }
 
-    fun onEdit(onEdit: PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
-        onEditHandlers += onEdit
+    fun addOnPlayerEditPlayerMapObjectListener(listener: OnPlayerEditPlayerMapObjectListener) {
+        onPlayerEditPlayerMapObjectListeners += listener
+    }
+
+    fun removeOnPlayerEditPlayerMapObjectListener(listener: OnPlayerEditPlayerMapObjectListener) {
+        onPlayerEditPlayerMapObjectListeners -= listener
+    }
+
+    inline fun onEdit(crossinline onEdit: PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit): OnPlayerEditPlayerMapObjectListener {
+        val listener = object : OnPlayerEditPlayerMapObjectListener {
+
+            override fun onPlayerEditPlayerMapObject(playerMapObject: PlayerMapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+                onEdit.invoke(this@PlayerMapObject, response, offset, rotation)
+            }
+        }
+        addOnPlayerEditPlayerMapObjectListener(listener)
+        return listener
     }
 
     internal fun onEdit(response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
-        onEditHandlers.forEach { it.invoke(this, response, offset, rotation) }
+        onPlayerEditPlayerMapObjectListeners.forEach { it.onPlayerEditPlayerMapObject(this, response, offset, rotation) }
     }
 
-    fun onSelect(onSelect: PlayerMapObject.(Int, Vector3D) -> Unit) {
-        onSelectHandlers += onSelect
+    fun addOnPlayerSelectPlayerMapObjectListener(listener: OnPlayerSelectPlayerMapObjectListener) {
+        onPlayerSelectPlayerMapObjectListeners += listener
     }
 
-    internal fun onSelect(modelId: Int, offset: Vector3D) {
-        onSelectHandlers.forEach { it.invoke(this, modelId, offset) }
+    fun removeOnPlayerSelectPlayerMapObjectListener(listener: OnPlayerSelectPlayerMapObjectListener) {
+        onPlayerSelectPlayerMapObjectListeners -= listener
+    }
+
+    inline fun onSelect(crossinline onSelect: PlayerMapObject.(Int, Vector3D) -> Unit): OnPlayerSelectPlayerMapObjectListener {
+        val listener = object : OnPlayerSelectPlayerMapObjectListener {
+
+            override fun onPlayerSelectPlayerMapObject(playerMapObject: PlayerMapObject, modelId: Int, coordinates: Vector3D) {
+                onSelect.invoke(this@PlayerMapObject, modelId, coordinates)
+            }
+        }
+        addOnPlayerSelectPlayerMapObjectListener(listener)
+        return listener
+    }
+
+    internal fun onSelect(modelId: Int, coordinates: Vector3D) {
+        onPlayerSelectPlayerMapObjectListeners.forEach { it.onPlayerSelectPlayerMapObject(this, modelId, coordinates) }
     }
 
     override var isDestroyed: Boolean = false
