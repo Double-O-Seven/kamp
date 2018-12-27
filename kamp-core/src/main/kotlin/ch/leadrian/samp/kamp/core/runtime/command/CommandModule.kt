@@ -44,6 +44,7 @@ internal class CommandModule : KampModule() {
             addBinding().to(VehicleCommandParameterResolver::class.java)
             addBinding().to(VehicleModelCommandParameterResolver::class.java)
             addBinding().to(WeaponModelCommandParameterResolver::class.java)
+            addBinding().to(SkinModelCommandParameterResolver::class.java)
         }
     }
 

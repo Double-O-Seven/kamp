@@ -174,7 +174,8 @@ internal class CommandModuleTest {
                             TextLabelCommandParameterResolver::class.java,
                             VehicleCommandParameterResolver::class.java,
                             VehicleModelCommandParameterResolver::class.java,
-                            WeaponModelCommandParameterResolver::class.java
+                            WeaponModelCommandParameterResolver::class.java,
+                            SkinModelCommandParameterResolver::class.java
                     )
         }
 

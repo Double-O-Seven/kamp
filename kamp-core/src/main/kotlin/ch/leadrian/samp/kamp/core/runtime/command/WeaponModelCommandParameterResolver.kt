@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 
-class WeaponModelCommandParameterResolver : CommandParameterResolver<WeaponModel> {
+internal class WeaponModelCommandParameterResolver : CommandParameterResolver<WeaponModel> {
 
     override val parameterType: Class<WeaponModel> = WeaponModel::class.java
 

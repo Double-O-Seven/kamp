@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 
-class VehicleModelCommandParameterResolver : CommandParameterResolver<VehicleModel> {
+internal class VehicleModelCommandParameterResolver : CommandParameterResolver<VehicleModel> {
 
     override val parameterType: Class<VehicleModel> = VehicleModel::class.java
 

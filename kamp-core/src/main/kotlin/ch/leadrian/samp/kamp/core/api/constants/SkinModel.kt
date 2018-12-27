@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import org.apache.commons.collections4.trie.PatriciaTrie
+
 enum class SkinModel(
         override val value: Int,
         val description: String,
@@ -330,5 +332,30 @@ enum class SkinModel(
         ASIAN
     }
 
-    companion object : ConstantValueRegistry<Int, SkinModel>(*SkinModel.values())
+    companion object : ConstantValueRegistry<Int, SkinModel>(*SkinModel.values()) {
+
+        private val skinModelsByName = PatriciaTrie<SkinModel>()
+
+        init {
+            // Only index models with unique names
+            SkinModel
+                    .values()
+                    .groupBy { it.description.toLowerCase() }
+                    .values
+                    .filter { it.size == 1 }
+                    .map { it.first() }
+                    .forEach {
+                        skinModelsByName[it.description.toLowerCase()] = it
+                    }
+        }
+
+        operator fun get(modelName: String): SkinModel? {
+            val models = skinModelsByName.prefixMap(modelName.toLowerCase()).values
+            return when {
+                models.size == 1 -> models.first()
+                else -> null
+            }
+        }
+
+    }
 }
