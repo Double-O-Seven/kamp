@@ -750,16 +750,6 @@ internal class CallbackModuleTest {
         }
 
         @Test
-        fun shouldInjectOnVehicleDestructionHandlerAsSingleton() {
-            val onVehicleDestructionHandler = injector.getInstance<OnVehicleDestructionHandler>()
-
-            assertThat(onVehicleDestructionHandler)
-                    .isNotNull
-            assertThat(testService.handlers)
-                    .contains(onVehicleDestructionHandler)
-        }
-
-        @Test
         fun shouldInjectOnPlayerNameChangeHandlerAsSingleton() {
             val onPlayerNameChangeHandler = injector.getInstance<OnPlayerNameChangeHandler>()
 

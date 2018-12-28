@@ -1083,7 +1083,9 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldAttachToVehicle() {
-        val vehicle = mockk<Vehicle>()
+        val vehicle = mockk<Vehicle> {
+            every { addOnDestroyListener(any()) } just Runs
+        }
         every { streamableMapObjectStateMachine.transitionToAttachedToVehicle(any(), any(), any()) } just Runs
         val offset = vector3DOf(1f, 2f, 3f)
         val rotation = vector3DOf(4f, 5f, 6f)
@@ -1099,6 +1101,7 @@ internal class StreamableMapObjectImplTest {
                     offset = offset,
                     rotation = rotation
             )
+            vehicle.addOnDestroyListener(streamableMapObject)
         }
     }
 
@@ -1273,7 +1276,7 @@ internal class StreamableMapObjectImplTest {
     }
 
     @Nested
-    inner class OnVehicleDestructionTests {
+    inner class OnDestroyTests {
 
         private val vehicle = mockk<Vehicle>()
 
@@ -1285,12 +1288,12 @@ internal class StreamableMapObjectImplTest {
                 every { onStreamIn(any()) } just Runs
                 every { this@mockk.coordinates } returns newCoordinates
                 every { this@mockk.rotation } returns rotation
-                every { this@mockk.vehicle } returns this@OnVehicleDestructionTests.vehicle
+                every { this@mockk.vehicle } returns this@OnDestroyTests.vehicle
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
 
-            streamableMapObject.onVehicleDestruction(vehicle)
+            streamableMapObject.onDestroy(vehicle)
 
             verify {
                 streamableMapObjectStateMachine.transitionToFixedCoordinates(newCoordinates, rotation)
@@ -1311,7 +1314,7 @@ internal class StreamableMapObjectImplTest {
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
 
-            streamableMapObject.onVehicleDestruction(vehicle)
+            streamableMapObject.onDestroy(vehicle)
 
             verify(exactly = 0) {
                 streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any())

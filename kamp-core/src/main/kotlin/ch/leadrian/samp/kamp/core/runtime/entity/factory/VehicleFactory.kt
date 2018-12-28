@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.onDestroy
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDestructionHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import javax.inject.Inject
 
@@ -14,7 +13,6 @@ internal class VehicleFactory
 @Inject
 constructor(
         private val vehicleRegistry: VehicleRegistry,
-        private val onVehicleDestructionHandler: OnVehicleDestructionHandler,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
@@ -38,7 +36,6 @@ constructor(
         )
         vehicleRegistry.register(vehicle)
         vehicle.onDestroy {
-            onVehicleDestructionHandler.onVehicleDestruction(this)
             vehicleRegistry.unregister(this)
         }
         return vehicle

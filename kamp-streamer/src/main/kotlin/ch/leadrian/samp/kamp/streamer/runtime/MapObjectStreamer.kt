@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Destroyable
@@ -61,7 +60,6 @@ constructor(
         )
         delegate.add(streamableMapObject)
         callbackListenerManager.registerOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
-        callbackListenerManager.registerOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
         streamableMapObject.addOnDestroyListener(this)
         return streamableMapObject
     }
@@ -83,7 +81,6 @@ constructor(
     override fun onDestroy(destroyable: Destroyable) {
         StreamableMapObjectImpl::class.safeCast(destroyable)?.let {
             callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(it)
-            callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(it)
         }
     }
 }

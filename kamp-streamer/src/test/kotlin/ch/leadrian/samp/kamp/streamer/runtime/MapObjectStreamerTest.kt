@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -162,7 +161,6 @@ internal class MapObjectStreamerTest {
 
                 verify {
                     callbackListenerManager.registerOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
-                    callbackListenerManager.registerOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
                 }
             }
 
@@ -290,7 +288,6 @@ internal class MapObjectStreamerTest {
 
                 verify {
                     callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
-                    callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
                 }
             }
 
@@ -302,7 +299,6 @@ internal class MapObjectStreamerTest {
 
                 verify(exactly = 0) {
                     callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(any())
-                    callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(any())
                 }
             }
         }

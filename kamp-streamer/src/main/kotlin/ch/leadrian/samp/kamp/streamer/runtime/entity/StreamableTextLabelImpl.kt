@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Location
@@ -31,7 +30,6 @@ internal class StreamableTextLabelImpl(
         private val streamableTextLabelStateFactory: StreamableTextLabelStateFactory
 ) : CoordinatesBasedPlayerStreamable<StreamableTextLabelImpl, Rect3d>(),
         OnPlayerDisconnectListener,
-        OnVehicleDestructionListener,
         StreamableTextLabel {
 
     private val playerTextLabelsByPlayer: MutableMap<Player, PlayerTextLabel> = mutableMapOf()
@@ -172,7 +170,7 @@ internal class StreamableTextLabelImpl(
         }
     }
 
-    override fun onVehicleDestruction(vehicle: Vehicle) {
+    private fun onVehicleDestruction(vehicle: Vehicle) {
         val currentState = state
         if (currentState is StreamableTextLabelState.AttachedToVehicle && vehicle == currentState.vehicle) {
             transitionToFixedCoordinates(coordinates)

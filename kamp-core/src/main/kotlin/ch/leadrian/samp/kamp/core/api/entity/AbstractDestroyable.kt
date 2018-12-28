@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 abstract class AbstractDestroyable : Destroyable {
 
-    private var onDestroyListeners: LinkedHashSet<OnDestroyListener> = LinkedHashSet()
+    private val onDestroyListeners = LinkedHashSet<OnDestroyListener>()
 
     override var isDestroyed: Boolean = false
         protected set

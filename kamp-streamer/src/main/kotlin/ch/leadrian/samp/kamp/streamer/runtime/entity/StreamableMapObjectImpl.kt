@@ -3,7 +3,6 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
@@ -11,6 +10,8 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.Destroyable
+import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
@@ -49,7 +50,7 @@ constructor(
         streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
 ) : CoordinatesBasedPlayerStreamable<StreamableMapObjectImpl, Rect3d>(),
         OnPlayerDisconnectListener,
-        OnVehicleDestructionListener,
+        OnDestroyListener,
         OnPlayerEditPlayerMapObjectListener,
         OnPlayerSelectPlayerMapObjectListener,
         StreamableMapObject {
@@ -284,6 +285,8 @@ constructor(
                 offset = offset,
                 rotation = rotation
         )
+        // TODO unregister somewhere
+        vehicle.addOnDestroyListener(this)
     }
 
     override fun detach() {
@@ -346,9 +349,9 @@ constructor(
         }
     }
 
-    override fun onVehicleDestruction(vehicle: Vehicle) {
+    override fun onDestroy(destroyable: Destroyable) {
         val currentState = stateMachine.currentState
-        if (currentState is StreamableMapObjectState.Attached.ToVehicle && currentState.vehicle == vehicle) {
+        if (currentState is StreamableMapObjectState.Attached.ToVehicle && currentState.vehicle == destroyable) {
             fixCoordinates()
         }
     }
