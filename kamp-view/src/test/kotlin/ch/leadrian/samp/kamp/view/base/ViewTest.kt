@@ -879,7 +879,7 @@ internal class ViewTest {
             onHide.invoke(this)
         }
 
-        override fun onDestroy() {
+        override fun destroyContent() {
             onDestroy.invoke(this)
         }
 

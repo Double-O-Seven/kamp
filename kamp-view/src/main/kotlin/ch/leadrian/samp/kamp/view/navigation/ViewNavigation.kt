@@ -70,17 +70,9 @@ internal constructor(private val viewNavigationElementFactory: ViewNavigationEle
         stack.clear()
     }
 
-    override var isDestroyed: Boolean = false
-        private set
-
-    override fun destroy() {
-        if (isDestroyed) {
-            return
-        }
-
+    override fun onDestroy() {
         stack.forEach { it.view.destroy() }
         stack.clear()
-        isDestroyed = true
     }
 
 }

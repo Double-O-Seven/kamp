@@ -96,7 +96,7 @@ open class SpriteView(
         destroyTextDraw()
     }
 
-    override fun onDestroy() {
+    override fun destroyContent() {
         destroyTextDraw()
     }
 

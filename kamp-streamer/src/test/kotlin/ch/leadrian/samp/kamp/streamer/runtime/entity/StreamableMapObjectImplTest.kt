@@ -32,7 +32,6 @@ import io.mockk.clearMocks
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
@@ -45,6 +44,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
+import org.junit.jupiter.params.provider.EnumSource
 import java.util.*
 import java.util.stream.Stream
 
@@ -80,8 +80,8 @@ internal class StreamableMapObjectImplTest {
         }
         playerMapObject = mockk {
             every { id } returns playerMapObjectId
-            every { onEdit(any()) } just Runs
-            every { onSelect(any()) } just Runs
+            every { addOnPlayerEditPlayerMapObjectListener(any()) } just Runs
+            every { addOnPlayerSelectPlayerMapObjectListener(any()) } just Runs
             every { this@mockk.player } returns this@StreamableMapObjectImplTest.player
         }
         streamableMapObject = StreamableMapObjectImpl(
@@ -112,6 +112,8 @@ internal class StreamableMapObjectImplTest {
         @BeforeEach
         fun setUp() {
             every { playerMapObject.player } returns player
+            every { playerMapObject.addOnPlayerEditPlayerMapObjectListener(any()) } just Runs
+            every { playerMapObject.addOnPlayerSelectPlayerMapObjectListener(any()) } just Runs
             every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         }
 
@@ -311,11 +313,7 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
-        fun givenOnEditHandlersItShouldRegisterThem() {
-            val onEdit = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-            every {
-                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any())
-            } just Runs
+        fun shouldRegisterAsOnPlayerEditPlayerMapObjectListener() {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -325,42 +323,14 @@ internal class StreamableMapObjectImplTest {
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            streamableMapObject.onEdit(onEdit)
 
             streamableMapObject.onStreamIn(player)
 
-            val slot = slot<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>()
-            verify { playerMapObject.onEdit(capture(slot)) }
-            slot.captured.invoke(
-                    playerMapObject,
-                    ObjectEditResponse.UPDATE,
-                    vector3DOf(1f, 2f, 3f),
-                    vector3DOf(4f, 5f, 6f)
-            )
-            verify {
-                onEdit.invoke(
-                        streamableMapObject,
-                        player,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
-                        player,
-                        streamableMapObject,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
-                )
-            }
+            verify { playerMapObject.addOnPlayerEditPlayerMapObjectListener(streamableMapObject) }
         }
 
         @Test
-        fun givenOnSelectHandlersItShouldRegisterThem() {
-            val onSelect = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
-            every {
-                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any())
-            } just Runs
+        fun shouldRegisterAsOnPlayerSelectPlayerMapObjectListener() {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -370,31 +340,10 @@ internal class StreamableMapObjectImplTest {
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            streamableMapObject.onSelect(onSelect)
 
             streamableMapObject.onStreamIn(player)
 
-            val slot = slot<PlayerMapObject.(Int, Vector3D) -> Unit>()
-            verify { playerMapObject.onSelect(capture(slot)) }
-            slot.captured.invoke(
-                    playerMapObject,
-                    modelId,
-                    vector3DOf(4f, 5f, 6f)
-            )
-            verify {
-                onSelect.invoke(
-                        streamableMapObject,
-                        player,
-                        modelId,
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(
-                        player,
-                        streamableMapObject,
-                        modelId,
-                        vector3DOf(4f, 5f, 6f)
-                )
-            }
+            verify { playerMapObject.addOnPlayerSelectPlayerMapObjectListener(streamableMapObject) }
         }
 
         @Test
@@ -435,6 +384,8 @@ internal class StreamableMapObjectImplTest {
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
+            every { playerMapObject.addOnPlayerEditPlayerMapObjectListener(any()) } just Runs
+            every { playerMapObject.addOnPlayerSelectPlayerMapObjectListener(any()) } just Runs
             every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -550,11 +501,7 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
-        fun givenOnEditHandlersItShouldRegisterThem() {
-            val onEdit = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-            every {
-                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any())
-            } just Runs
+        fun shouldRegisterAsOnPlayerEditPlayerMapObjectListener() {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -564,42 +511,16 @@ internal class StreamableMapObjectImplTest {
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            streamableMapObject.onEdit(onEdit)
 
             streamableMapObject.refresh()
 
-            val slot = slot<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>()
-            verify { playerMapObject.onEdit(capture(slot)) }
-            slot.captured.invoke(
-                    playerMapObject,
-                    ObjectEditResponse.UPDATE,
-                    vector3DOf(1f, 2f, 3f),
-                    vector3DOf(4f, 5f, 6f)
-            )
             verify {
-                onEdit.invoke(
-                        streamableMapObject,
-                        player,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
-                        player,
-                        streamableMapObject,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
-                )
+                playerMapObject.addOnPlayerEditPlayerMapObjectListener(streamableMapObject)
             }
         }
 
         @Test
-        fun givenOnSelectHandlersItShouldRegisterThem() {
-            val onSelect = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
-            every {
-                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any())
-            } just Runs
+        fun shouldRegisterAsOnPlayerSelectPlayerMapObjectListener() {
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -609,30 +530,11 @@ internal class StreamableMapObjectImplTest {
                 every { rotation } returns vector3DOf(4f, 5f, 6f)
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
-            streamableMapObject.onSelect(onSelect)
 
             streamableMapObject.refresh()
 
-            val slot = slot<PlayerMapObject.(Int, Vector3D) -> Unit>()
-            verify { playerMapObject.onSelect(capture(slot)) }
-            slot.captured.invoke(
-                    playerMapObject,
-                    modelId,
-                    vector3DOf(4f, 5f, 6f)
-            )
             verify {
-                onSelect.invoke(
-                        streamableMapObject,
-                        player,
-                        modelId,
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(
-                        player,
-                        streamableMapObject,
-                        modelId,
-                        vector3DOf(4f, 5f, 6f)
-                )
+                playerMapObject.addOnPlayerSelectPlayerMapObjectListener(streamableMapObject)
             }
         }
     }
@@ -1499,6 +1401,168 @@ internal class StreamableMapObjectImplTest {
 
         assertThat(boundingBox)
                 .isEqualTo(Rect3d(125.0, 225.0, 325.0, 275.0, 375.0, 475.0))
+    }
+
+    @Nested
+    inner class OnPlayerEditPlayerMapObjectTests {
+
+        @BeforeEach
+        fun setUp() {
+            every { onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any()) } just Runs
+        }
+
+        @Test
+        fun givenResponseIsFinalItShouldUpdateCoordinatesAndRotation() {
+            every { mapObjectStreamer.onBoundingBoxChange(any()) } just Runs
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
+
+            streamableMapObject.onPlayerEditPlayerMapObject(
+                    playerMapObject,
+                    ObjectEditResponse.FINAL,
+                    vector3DOf(11f, 22f, 33f),
+                    vector3DOf(44f, 55f, 66f)
+            )
+
+            verify {
+                streamableMapObjectStateMachine.transitionToFixedCoordinates(
+                        coordinates = vector3DOf(11f, 22f, 33f),
+                        rotation = vector3DOf(44f, 55f, 66f)
+                )
+                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
+            }
+        }
+
+        @ParameterizedTest
+        @EnumSource(ObjectEditResponse::class, mode = EnumSource.Mode.EXCLUDE, names = ["FINAL"])
+        fun givenResponseIsNotFinalItShouldNotUpdateCoordinatesAndRotation(response: ObjectEditResponse) {
+            every { mapObjectStreamer.onBoundingBoxChange(any()) } just Runs
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
+
+            streamableMapObject.onPlayerEditPlayerMapObject(
+                    playerMapObject,
+                    response,
+                    vector3DOf(11f, 22f, 33f),
+                    vector3DOf(44f, 55f, 66f)
+            )
+
+            verify(exactly = 0) {
+                streamableMapObjectStateMachine.transitionToFixedCoordinates(
+                        coordinates = vector3DOf(11f, 22f, 33f),
+                        rotation = vector3DOf(44f, 55f, 66f)
+                )
+                mapObjectStreamer.onBoundingBoxChange(streamableMapObject)
+            }
+        }
+
+        @Test
+        fun shouldCallOnPlayerEditStreamableMapObjectHandler() {
+            streamableMapObject.onPlayerEditPlayerMapObject(
+                    playerMapObject,
+                    ObjectEditResponse.UPDATE,
+                    vector3DOf(1f, 2f, 3f),
+                    vector3DOf(4f, 5f, 6f)
+            )
+
+            verify {
+                onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
+                        player,
+                        streamableMapObject,
+                        ObjectEditResponse.UPDATE,
+                        vector3DOf(1f, 2f, 3f),
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
+        }
+
+        @Test
+        fun shouldInvokeOnPlayerEditPlayerMapObjectListeners() {
+            val onEdit1 = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
+            val onEdit2 = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
+            streamableMapObject.onEdit(onEdit1)
+            streamableMapObject.onEdit(onEdit2)
+
+            streamableMapObject.onPlayerEditPlayerMapObject(
+                    playerMapObject,
+                    ObjectEditResponse.UPDATE,
+                    vector3DOf(1f, 2f, 3f),
+                    vector3DOf(4f, 5f, 6f)
+            )
+
+            verify {
+                onEdit1(
+                        streamableMapObject,
+                        player,
+                        ObjectEditResponse.UPDATE,
+                        vector3DOf(1f, 2f, 3f),
+                        vector3DOf(4f, 5f, 6f)
+                )
+                onEdit2(
+                        streamableMapObject,
+                        player,
+                        ObjectEditResponse.UPDATE,
+                        vector3DOf(1f, 2f, 3f),
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
+        }
+
+    }
+
+    @Nested
+    inner class OnPlayerSelectPlayerMapObjectTests {
+
+        @BeforeEach
+        fun setUp() {
+            every { onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any()) } just Runs
+        }
+
+        @Test
+        fun shouldCallOnPlayerSelectStreamableMapObjectHandler() {
+            streamableMapObject.onPlayerSelectPlayerMapObject(
+                    playerMapObject,
+                    1337,
+                    vector3DOf(4f, 5f, 6f)
+            )
+
+            verify {
+                onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(
+                        player,
+                        streamableMapObject,
+                        1337,
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
+        }
+
+        @Test
+        fun shouldInvokeOnPlayerSelectPlayerMapObjectListeners() {
+            val onSelect1 = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
+            val onSelect2 = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
+            streamableMapObject.onSelect(onSelect1)
+            streamableMapObject.onSelect(onSelect2)
+
+            streamableMapObject.onPlayerSelectPlayerMapObject(
+                    playerMapObject,
+                    1337,
+                    vector3DOf(4f, 5f, 6f)
+            )
+
+            verify {
+                onSelect1(
+                        streamableMapObject,
+                        player,
+                        1337,
+                        vector3DOf(4f, 5f, 6f)
+                )
+                onSelect2(
+                        streamableMapObject,
+                        player,
+                        1337,
+                        vector3DOf(4f, 5f, 6f)
+                )
+            }
+        }
+
     }
 
     private class NonMovingStateProvider : ArgumentsProvider {

@@ -222,7 +222,7 @@ open class TextView(
         destroyTextDraw()
     }
 
-    override fun onDestroy() {
+    override fun destroyContent() {
         destroyTextDraw()
     }
 

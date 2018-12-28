@@ -246,21 +246,13 @@ open class View(
         view.parent = null
     }
 
-    final override var isDestroyed: Boolean = false
-        private set
-
-    final override fun destroy() {
-        if (isDestroyed) {
-            return
-        }
-
-        onDestroy()
+    final override fun onDestroy() {
+        destroyContent()
         _children.forEach { it.destroy() }
         _children.clear()
-        isDestroyed = true
     }
 
-    protected open fun onDestroy() {}
+    protected open fun destroyContent() {}
 
     protected val playerScreenResolution by lazy { player.screenResolution }
 

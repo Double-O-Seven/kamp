@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
@@ -36,11 +37,12 @@ internal class ButtonViewTest {
     private val textProvider = mockk<TextProvider>()
     private val textFormatter = mockk<TextFormatter>()
     private val playerTextDrawService = mockk<PlayerTextDrawService>()
+    private val dialogService = mockk<DialogService>()
     private lateinit var viewFactory: ViewFactory
 
     @BeforeEach
     fun setUp() {
-        viewFactory = DefaultViewFactory(viewContext, textProvider, textFormatter, playerTextDrawService)
+        viewFactory = DefaultViewFactory(viewContext, textProvider, textFormatter, playerTextDrawService, dialogService)
         buttonView = ButtonView(player, viewContext, viewFactory)
     }
 

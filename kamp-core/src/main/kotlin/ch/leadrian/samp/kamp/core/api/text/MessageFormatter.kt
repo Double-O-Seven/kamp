@@ -15,6 +15,11 @@ internal constructor(private val textProvider: TextProvider) {
         val log = loggerFor<MessageFormatter>()
     }
 
+    fun format(locale: Locale, color: Color, textKey: TextKey, vararg args: Any): String {
+        val message = textProvider.getText(locale, textKey)
+        return format(locale, color, message, *args)
+    }
+
     fun format(locale: Locale, color: Color, message: String, vararg args: Any): String {
         try {
             val formattedArgs = arrayOfNulls<Any?>(args.size)

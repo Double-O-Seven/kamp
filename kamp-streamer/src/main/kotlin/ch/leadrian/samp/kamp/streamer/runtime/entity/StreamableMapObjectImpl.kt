@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
@@ -48,6 +50,8 @@ constructor(
 ) : CoordinatesBasedPlayerStreamable<StreamableMapObjectImpl, Rect3d>(),
         OnPlayerDisconnectListener,
         OnVehicleDestructionListener,
+        OnPlayerEditPlayerMapObjectListener,
+        OnPlayerSelectPlayerMapObjectListener,
         StreamableMapObject {
 
     private val playerMapObjectsByPlayer: MutableMap<Player, PlayerMapObject> = mutableMapOf()
@@ -108,12 +112,8 @@ constructor(
         if (isCameraCollisionDisabled) {
             playerMapObject.disableCameraCollision()
         }
-        playerMapObject.onEdit { objectEditResponse, offset, rotation ->
-            this@StreamableMapObjectImpl.onEdit(this.player, objectEditResponse, offset, rotation)
-        }
-        playerMapObject.onSelect { modelId, offset ->
-            this@StreamableMapObjectImpl.onSelect(this.player, modelId, offset)
-        }
+        playerMapObject.addOnPlayerEditPlayerMapObjectListener(this)
+        playerMapObject.addOnPlayerSelectPlayerMapObjectListener(this)
     }
 
     override fun onStreamOut(forPlayer: Player) {
@@ -311,11 +311,13 @@ constructor(
         onEditHandlers += onEdit
     }
 
-    private fun onEdit(player: Player, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+    override fun onPlayerEditPlayerMapObject(playerMapObject: PlayerMapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+        requireNotDestroyed()
         if (response == ObjectEditResponse.FINAL) {
-            coordinates = offset
-            this.rotation = rotation
+            stateMachine.transitionToFixedCoordinates(coordinates = offset, rotation = rotation)
+            mapObjectStreamer.onBoundingBoxChange(this)
         }
+        val player = playerMapObject.player
         onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
         onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
                 player = player,
@@ -330,9 +332,10 @@ constructor(
         onSelectHandlers += onSelect
     }
 
-    private fun onSelect(player: Player, modelId: Int, offset: Vector3D) {
-        onSelectHandlers.forEach { it.invoke(this, player, modelId, offset) }
-        onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, offset)
+    override fun onPlayerSelectPlayerMapObject(playerMapObject: PlayerMapObject, modelId: Int, coordinates: Vector3D) {
+        val player = playerMapObject.player
+        onSelectHandlers.forEach { it.invoke(this, player, modelId, coordinates) }
+        onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {

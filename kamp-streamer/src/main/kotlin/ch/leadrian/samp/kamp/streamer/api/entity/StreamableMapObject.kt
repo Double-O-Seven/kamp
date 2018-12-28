@@ -30,13 +30,7 @@ interface StreamableMapObject : MapObjectBase {
 
     fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit)
 
-    override fun disableCameraCollision()
-
-    override fun stop()
-
     fun onMoved(onMoved: StreamableMapObject.() -> Unit)
-
-    override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color)
 
     fun setMaterialText(
             textKey: TextKey,

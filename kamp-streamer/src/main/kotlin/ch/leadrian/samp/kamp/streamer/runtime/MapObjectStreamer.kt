@@ -1,8 +1,12 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.Destroyable
+import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
@@ -11,6 +15,7 @@ import com.conversantmedia.util.collection.geometry.Rect3d
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.reflect.full.safeCast
 
 @Singleton
 internal class MapObjectStreamer
@@ -19,7 +24,7 @@ constructor(
         private val callbackListenerManager: CallbackListenerManager,
         private val coordinatesBasedPlayerStreamerFactory: CoordinatesBasedPlayerStreamerFactory,
         private val streamableMapObjectFactory: StreamableMapObjectFactory
-) : Streamer {
+) : Streamer, OnDestroyListener {
 
     private lateinit var delegate: CoordinatesBasedPlayerStreamer<StreamableMapObjectImpl, Rect3d>
 
@@ -55,7 +60,9 @@ constructor(
                 mapObjectStreamer = this
         )
         delegate.add(streamableMapObject)
-        callbackListenerManager.register(streamableMapObject)
+        callbackListenerManager.registerOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
+        callbackListenerManager.registerOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
+        streamableMapObject.addOnDestroyListener(this)
         return streamableMapObject
     }
 
@@ -71,5 +78,12 @@ constructor(
 
     override fun stream(streamLocations: List<StreamLocation>) {
         delegate.stream(streamLocations)
+    }
+
+    override fun onDestroy(destroyable: Destroyable) {
+        StreamableMapObjectImpl::class.safeCast(destroyable)?.let {
+            callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(it)
+            callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(it)
+        }
     }
 }

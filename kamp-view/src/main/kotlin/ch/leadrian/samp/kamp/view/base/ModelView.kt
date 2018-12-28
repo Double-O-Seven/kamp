@@ -155,7 +155,7 @@ open class ModelView(
         destroyTextDraw()
     }
 
-    override fun onDestroy() {
+    override fun destroyContent() {
         destroyTextDraw()
     }
 

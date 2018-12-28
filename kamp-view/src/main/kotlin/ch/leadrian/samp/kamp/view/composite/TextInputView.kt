@@ -143,7 +143,7 @@ open class TextInputView(
         inputTextView.disable()
     }
 
-    override fun onDestroy() {
+    override fun destroyContent() {
         dialog = null
     }
 

@@ -37,6 +37,36 @@ internal class TextFormatterTest {
     }
 
     @Test
+    fun shouldFormatProvidedText() {
+        val locale = Locale.GERMANY
+        val textTextKey = TextKey("test.text")
+        val textKey1 = TextKey("test.key.abc")
+        val textKey2 = TextKey("test.key.def")
+        val hasTextKey = mockk<HasTextKey> {
+            every { this@mockk.textKey } returns textKey1
+        }
+        val translatable = TextArguments.translate { "Hi there" }
+        val textProvider = mockk<TextProvider> {
+            every { getText(locale, textTextKey) } returns "A: {0}, B: {1}, C: {2}, D: {3}"
+            every { getText(locale, textKey1) } returns "Hallo"
+            every { getText(locale, textKey2) } returns "Bonjour"
+        }
+        val textFormatter = TextFormatter(textProvider)
+
+        val formattedText = textFormatter.format(
+                locale,
+                textTextKey,
+                1337,
+                hasTextKey,
+                textKey2,
+                translatable
+        )
+
+        assertThat(formattedText)
+                .isEqualTo("A: 1.337, B: Hallo, C: Bonjour, D: Hi there")
+    }
+
+    @Test
     fun givenFormattingThrowsExceptionItShouldReturnUnformattedMessage() {
         val locale = Locale.GERMANY
         val messageFormatter = TextFormatter(mockk())

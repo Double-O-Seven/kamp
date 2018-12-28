@@ -85,7 +85,7 @@ open class BackgroundView(
         destroyTextDraw()
     }
 
-    override fun onDestroy() {
+    override fun destroyContent() {
         destroyTextDraw()
     }
 

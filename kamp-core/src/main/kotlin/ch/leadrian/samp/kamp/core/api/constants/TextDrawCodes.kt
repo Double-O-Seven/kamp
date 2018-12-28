@@ -3,36 +3,52 @@ package ch.leadrian.samp.kamp.core.api.constants
 @Suppress("unused")
 object TextDrawCodes {
 
-    const val NEW_LINE = "~n~"
+    @JvmStatic
+    val NEW_LINE = "~n~"
 
-    const val RED = "~r~"
+    @JvmStatic
+    val RED = "~r~"
 
-    const val GREEN = "~g~"
+    @JvmStatic
+    val GREEN = "~g~"
 
-    const val BLUE = "~b~"
+    @JvmStatic
+    val BLUE = "~b~"
 
-    const val WHITE = "~w~"
+    @JvmStatic
+    val WHITE = "~w~"
 
-    const val WHITE_2 = "~s~"
+    @JvmStatic
+    val WHITE_2 = "~s~"
 
-    const val YELLOW = "~y~"
+    @JvmStatic
+    val YELLOW = "~y~"
 
-    const val PURPLE = "~p~"
+    @JvmStatic
+    val PURPLE = "~p~"
 
-    const val BLACK = "~l~"
+    @JvmStatic
+    val BLACK = "~l~"
 
-    const val LIGHTER = "~h~"
+    @JvmStatic
+    val LIGHTER = "~h~"
 
-    const val STAR = "]"
+    @JvmStatic
+    val STAR = "]"
 
-    const val EMPTY_TEXT = "_"
+    @JvmStatic
+    val EMPTY_TEXT = "_"
 
-    const val UP = "~u~"
+    @JvmStatic
+    val UP = "~u~"
 
-    const val DOWN = "~d~"
+    @JvmStatic
+    val DOWN = "~d~"
 
-    const val LEFT = "~<~"
+    @JvmStatic
+    val LEFT = "~<~"
 
-    const val RIGHT = "~>~"
+    @JvmStatic
+    val RIGHT = "~>~"
 
 }

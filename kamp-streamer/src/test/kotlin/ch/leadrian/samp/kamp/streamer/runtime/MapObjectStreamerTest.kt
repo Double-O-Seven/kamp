@@ -1,9 +1,12 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDestructionListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.Destroyable
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableMapObjectImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectFactory
@@ -20,6 +23,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
+import kotlin.reflect.KClass
 
 internal class MapObjectStreamerTest {
 
@@ -101,13 +105,15 @@ internal class MapObjectStreamerTest {
 
             @BeforeEach
             fun setUp() {
-                every { callbackListenerManager.register(any()) } just Runs
+                every { callbackListenerManager.registerOnlyAs(any<KClass<*>>(), any(), any()) } just Runs
                 every { coordinatesBasedPlayerStreamer.add(any()) } just Runs
             }
 
             @Test
             fun shouldCreateStreamableMapObject() {
-                val expectedStreamableMapObject = mockk<StreamableMapObjectImpl>()
+                val expectedStreamableMapObject = mockk<StreamableMapObjectImpl> {
+                    every { addOnDestroyListener(any()) } just Runs
+                }
                 every {
                     streamableMapObjectFactory.create(
                             modelId = 1337,
@@ -137,7 +143,9 @@ internal class MapObjectStreamerTest {
 
             @Test
             fun shouldRegisterCreatedMapObjectAsCallbackListener() {
-                val streamableMapObject = mockk<StreamableMapObjectImpl>()
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
+                    every { addOnDestroyListener(any()) } just Runs
+                }
                 every {
                     streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
@@ -152,12 +160,41 @@ internal class MapObjectStreamerTest {
                         virtualWorldIds = mutableSetOf()
                 )
 
-                verify { callbackListenerManager.register(streamableMapObject) }
+                verify {
+                    callbackListenerManager.registerOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
+                    callbackListenerManager.registerOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
+                }
+            }
+
+            @Test
+            fun shouldRegisterOnDestroyListener() {
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
+                    every { addOnDestroyListener(any()) } just Runs
+                }
+                every {
+                    streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
+                } returns streamableMapObject
+
+                mapObjectStreamer.createMapObject(
+                        modelId = 1337,
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(150f, 100f, 20f),
+                        rotation = vector3DOf(1f, 2f, 3f),
+                        interiorIds = mutableSetOf(),
+                        virtualWorldIds = mutableSetOf()
+                )
+
+                verify {
+                    streamableMapObject.addOnDestroyListener(mapObjectStreamer)
+                }
             }
 
             @Test
             fun shouldAddCreatedMapObjectToCoordinatesBasedStreamer() {
-                val streamableMapObject = mockk<StreamableMapObjectImpl>()
+                val streamableMapObject = mockk<StreamableMapObjectImpl> {
+                    every { addOnDestroyListener(any()) } just Runs
+                }
                 every {
                     streamableMapObjectFactory.create(any(), any(), any(), any(), any(), any(), any(), any())
                 } returns streamableMapObject
@@ -234,6 +271,39 @@ internal class MapObjectStreamerTest {
                 mapObjectStreamer.onStateChange(streamableMapObject)
 
                 verify(exactly = 0) { coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamableMapObject) }
+            }
+        }
+
+        @Nested
+        inner class OnDestroyTests {
+
+            @BeforeEach
+            fun setUp() {
+                every { callbackListenerManager.unregisterOnlyAs(any<KClass<*>>(), any()) } just Runs
+            }
+
+            @Test
+            fun shouldUnregisterStreamableMapObjectAsCallbackListener() {
+                val streamableMapObject = mockk<StreamableMapObjectImpl>()
+
+                mapObjectStreamer.onDestroy(streamableMapObject)
+
+                verify {
+                    callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(streamableMapObject)
+                    callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(streamableMapObject)
+                }
+            }
+
+            @Test
+            fun givenDestroyableIsNotInstanceOfStreamableMapObjectImplItShouldDoNothing() {
+                val destroyable = mockk<Destroyable>()
+
+                mapObjectStreamer.onDestroy(destroyable)
+
+                verify(exactly = 0) {
+                    callbackListenerManager.unregisterOnlyAs<OnPlayerDisconnectListener>(any())
+                    callbackListenerManager.unregisterOnlyAs<OnVehicleDestructionListener>(any())
+                }
             }
         }
 

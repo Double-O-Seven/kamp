@@ -61,7 +61,6 @@ internal class GeodataModuleTest {
 
             assertThat(vegetationLoader)
                     .isNotNull
-                    .isSameAs(injector.getInstance<VegetationLoader>())
         }
     }
 

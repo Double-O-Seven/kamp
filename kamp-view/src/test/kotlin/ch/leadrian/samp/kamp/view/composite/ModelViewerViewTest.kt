@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.view.composite
 
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -22,11 +23,12 @@ internal class ModelViewerViewTest {
     private val textProvider = mockk<TextProvider>()
     private val textFormatter = mockk<TextFormatter>()
     private val playerTextDrawService = mockk<PlayerTextDrawService>()
+    private val dialogService = mockk<DialogService>()
     private lateinit var viewFactory: ViewFactory
 
     @BeforeEach
     fun setUp() {
-        viewFactory = DefaultViewFactory(viewContext, textProvider, textFormatter, playerTextDrawService)
+        viewFactory = DefaultViewFactory(viewContext, textProvider, textFormatter, playerTextDrawService, dialogService)
         modelViewerView = ModelViewerView(player, viewContext, viewFactory)
     }
 
