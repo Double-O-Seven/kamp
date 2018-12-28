@@ -27,7 +27,7 @@ internal constructor(
         private val textFormatter: TextFormatter
 ) : Entity<PlayerTextDrawId>, HasPlayer, AbstractDestroyable(), TextDrawBase {
 
-    private val onPlayerClickPlayerTextDrawListeners: MutableList<OnPlayerClickPlayerTextDrawListener> = mutableListOf()
+    private val onPlayerClickPlayerTextDrawListeners = LinkedHashSet<OnPlayerClickPlayerTextDrawListener>()
 
     override val id: PlayerTextDrawId
         get() = requireNotDestroyed { field }

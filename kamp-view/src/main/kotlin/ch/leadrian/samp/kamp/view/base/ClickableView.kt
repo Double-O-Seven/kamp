@@ -7,7 +7,7 @@ import kotlin.reflect.full.cast
 
 abstract class ClickableView(player: Player, viewContext: ViewContext) : View(player, viewContext) {
 
-    private val onClickListeners: MutableList<OnClickViewListener> = mutableListOf()
+    private val onClickListeners = LinkedHashSet<OnClickViewListener>()
 
     var isEnabled: Boolean = false
         private set

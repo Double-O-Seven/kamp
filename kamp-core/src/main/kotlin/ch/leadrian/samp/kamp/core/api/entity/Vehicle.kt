@@ -57,17 +57,17 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<VehicleId>, AbstractDestroyable() {
 
-    private val onVehicleSpawnListeners: MutableList<OnVehicleSpawnListener> = mutableListOf()
+    private val onVehicleSpawnListeners = LinkedHashSet<OnVehicleSpawnListener>()
 
-    private val onVehicleDeathListeners: MutableList<OnVehicleDeathListener> = mutableListOf()
+    private val onVehicleDeathListeners = LinkedHashSet<OnVehicleDeathListener>()
 
-    private val onPlayerEnterVehicleListeners: MutableList<OnPlayerEnterVehicleListener> = mutableListOf()
+    private val onPlayerEnterVehicleListeners = LinkedHashSet<OnPlayerEnterVehicleListener>()
 
-    private val onPlayerExitVehicleListeners: MutableList<OnPlayerExitVehicleListener> = mutableListOf()
+    private val onPlayerExitVehicleListeners = LinkedHashSet<OnPlayerExitVehicleListener>()
 
-    private val onVehicleStreamInListeners: MutableList<OnVehicleStreamInListener> = mutableListOf()
+    private val onVehicleStreamInListeners = LinkedHashSet<OnVehicleStreamInListener>()
 
-    private val onVehicleStreamOutListeners: MutableList<OnVehicleStreamOutListener> = mutableListOf()
+    private val onVehicleStreamOutListeners = LinkedHashSet<OnVehicleStreamOutListener>()
 
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 

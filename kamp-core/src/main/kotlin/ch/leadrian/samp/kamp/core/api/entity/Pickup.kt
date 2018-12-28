@@ -15,7 +15,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<PickupId>, AbstractDestroyable() {
 
-    private val onPlayerPickUpPickupListeners: MutableList<OnPlayerPickUpPickupListener> = mutableListOf()
+    private val onPlayerPickUpPickupListeners = LinkedHashSet<OnPlayerPickUpPickupListener>()
 
     override val id: PickupId
         get() = requireNotDestroyed { field }

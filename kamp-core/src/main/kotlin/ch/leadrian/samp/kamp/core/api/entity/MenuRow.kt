@@ -10,7 +10,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) {
 
-    private val onPlayerSelectedMenuRowListeners: MutableList<OnPlayerSelectedMenuRowListener> = mutableListOf()
+    private val onPlayerSelectedMenuRowListeners = LinkedHashSet<OnPlayerSelectedMenuRowListener>()
 
     private val columnTexts: Array<String?> = arrayOfNulls(menu.numberOfColumns)
 

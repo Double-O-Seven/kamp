@@ -22,9 +22,9 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<ActorId>, AbstractDestroyable() {
 
-    private val onActorStreamInListeners: MutableList<OnActorStreamInListener> = mutableListOf()
+    private val onActorStreamInListeners = LinkedHashSet<OnActorStreamInListener>()
 
-    private val onActorStreamOutListeners: MutableList<OnActorStreamOutListener> = mutableListOf()
+    private val onActorStreamOutListeners = LinkedHashSet<OnActorStreamOutListener>()
 
     override val id: ActorId
         get() = requireNotDestroyed { field }

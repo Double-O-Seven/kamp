@@ -24,7 +24,7 @@ internal constructor(
         private val textFormatter: TextFormatter
 ) : Entity<MenuId>, AbstractDestroyable() {
 
-    private val onPlayerExitedMenuListeners: MutableList<OnPlayerExitedMenuListener> = mutableListOf()
+    private val onPlayerExitedMenuListeners = LinkedHashSet<OnPlayerExitedMenuListener>()
 
     override val id: MenuId
         get() = requireNotDestroyed { field }

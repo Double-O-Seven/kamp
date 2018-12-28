@@ -25,11 +25,11 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<PlayerMapObjectId>, HasPlayer, AbstractDestroyable(), MapObjectBase {
 
-    private val onPlayerObjectMovedListeners: MutableList<OnPlayerObjectMovedListener> = mutableListOf()
+    private val onPlayerObjectMovedListeners = LinkedHashSet<OnPlayerObjectMovedListener>()
 
-    private val onPlayerEditPlayerMapObjectListeners: MutableList<OnPlayerEditPlayerMapObjectListener> = mutableListOf()
+    private val onPlayerEditPlayerMapObjectListeners = LinkedHashSet<OnPlayerEditPlayerMapObjectListener>()
 
-    private val onPlayerSelectPlayerMapObjectListeners: MutableList<OnPlayerSelectPlayerMapObjectListener> = mutableListOf()
+    private val onPlayerSelectPlayerMapObjectListeners = LinkedHashSet<OnPlayerSelectPlayerMapObjectListener>()
 
     override val id: PlayerMapObjectId
         get() = requireNotDestroyed { field }

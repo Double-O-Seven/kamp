@@ -28,7 +28,7 @@ internal constructor(
         var locale: Locale
 ) : Entity<TextDrawId>, AbstractDestroyable(), TextDrawBase {
 
-    private val onPlayerClickTextDrawListeners: MutableList<OnPlayerClickTextDrawListener> = mutableListOf()
+    private val onPlayerClickTextDrawListeners = LinkedHashSet<OnPlayerClickTextDrawListener>()
 
     override val id: TextDrawId
         get() = requireNotDestroyed { field }

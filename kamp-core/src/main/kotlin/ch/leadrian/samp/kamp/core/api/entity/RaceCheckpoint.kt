@@ -15,9 +15,9 @@ internal constructor(
         private val playerRegistry: PlayerRegistry
 ) : CheckpointBase, AbstractDestroyable() {
 
-    private val onPlayerEnterRaceCheckpointListeners: MutableList<OnPlayerEnterRaceCheckpointListener> = mutableListOf()
+    private val onPlayerEnterRaceCheckpointListeners = LinkedHashSet<OnPlayerEnterRaceCheckpointListener>()
 
-    private val onPlayerLeaveRaceCheckpointListeners: MutableList<OnPlayerLeaveRaceCheckpointListener> = mutableListOf()
+    private val onPlayerLeaveRaceCheckpointListeners = LinkedHashSet<OnPlayerLeaveRaceCheckpointListener>()
 
     override var coordinates: Vector3D = coordinates.toVector3D()
         set(value) {
