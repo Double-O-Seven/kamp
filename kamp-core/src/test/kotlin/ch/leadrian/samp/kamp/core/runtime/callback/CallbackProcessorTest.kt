@@ -10,7 +10,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnEnterExitModShopListener
 import ch.leadrian.samp.kamp.core.api.callback.OnGameModeExitListener
 import ch.leadrian.samp.kamp.core.api.callback.OnGameModeInitListener
 import ch.leadrian.samp.kamp.core.api.callback.OnIncomingConnectionListener
-import ch.leadrian.samp.kamp.core.api.callback.OnObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickMapListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
@@ -1513,18 +1513,18 @@ internal class CallbackProcessorTest {
 
         @Test
         fun shouldCallOnMapObjectMoved() {
-            val onMapObjectMovedListener = mockk<OnObjectMovedListener>(relaxed = true)
+            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener>(relaxed = true)
             callbackListenerManager.register(onMapObjectMovedListener)
 
             callbackProcessor.onObjectMoved(mapObjectId)
 
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onMapObjectMovedListener.onObjectMoved(mapObject) }
+            verify { onMapObjectMovedListener.onMapObjectMoved(mapObject) }
         }
 
         @Test
         fun givenInvalidMapObjectIdItShouldThrowAndCatchException() {
-            val onMapObjectMovedListener = mockk<OnObjectMovedListener>(relaxed = true)
+            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener>(relaxed = true)
             callbackListenerManager.register(onMapObjectMovedListener)
 
             val caughtThrowable = catchThrowable {
@@ -1544,8 +1544,8 @@ internal class CallbackProcessorTest {
         @Test
         fun shouldCatchException() {
             val exception = RuntimeException("test")
-            val onMapObjectMovedListener = mockk<OnObjectMovedListener> {
-                every { onObjectMoved(any()) } throws exception
+            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener> {
+                every { onMapObjectMoved(any()) } throws exception
             }
             callbackListenerManager.register(onMapObjectMovedListener)
 
@@ -1556,7 +1556,7 @@ internal class CallbackProcessorTest {
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onMapObjectMovedListener.onObjectMoved(mapObject) }
+            verify { onMapObjectMovedListener.onMapObjectMoved(mapObject) }
         }
 
     }

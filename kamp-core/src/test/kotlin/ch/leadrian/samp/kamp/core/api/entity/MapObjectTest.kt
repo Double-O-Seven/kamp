@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditMapObjectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectMapObjectListener
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
@@ -419,27 +419,27 @@ internal class MapObjectTest {
         }
 
         @Nested
-        inner class OnObjectMovedListenersTests {
+        inner class OnMapObjectMovedListenersTests {
 
             @Test
             fun shouldCallAddedListener() {
-                val listener = mockk<OnObjectMovedListener>(relaxed = true)
+                val listener = mockk<OnMapObjectMovedListener>(relaxed = true)
                 mapObject.addOnObjectMovedListener(listener)
 
                 mapObject.onMoved()
 
-                verify { listener.onObjectMoved(mapObject) }
+                verify { listener.onMapObjectMoved(mapObject) }
             }
 
             @Test
             fun shouldNotCallRemovedListener() {
-                val listener = mockk<OnObjectMovedListener>(relaxed = true)
+                val listener = mockk<OnMapObjectMovedListener>(relaxed = true)
                 mapObject.addOnObjectMovedListener(listener)
                 mapObject.removeOnObjectMovedListener(listener)
 
                 mapObject.onMoved()
 
-                verify(exactly = 0) { listener.onObjectMoved(any()) }
+                verify(exactly = 0) { listener.onMapObjectMoved(any()) }
             }
 
             @Test

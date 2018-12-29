@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditMapObjectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectMapObjectListener
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
@@ -24,7 +24,7 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Entity<MapObjectId>, AbstractDestroyable(), MapObjectBase {
 
-    private val onObjectMovedListeners = LinkedHashSet<OnObjectMovedListener>()
+    private val onObjectMovedListeners = LinkedHashSet<OnMapObjectMovedListener>()
 
     private val onPlayerEditMapObjectListeners = LinkedHashSet<OnPlayerEditMapObjectListener>()
 
@@ -203,18 +203,18 @@ internal constructor(
         )
     }
 
-    fun addOnObjectMovedListener(listener: OnObjectMovedListener) {
+    fun addOnObjectMovedListener(listener: OnMapObjectMovedListener) {
         onObjectMovedListeners += listener
     }
 
-    fun removeOnObjectMovedListener(listener: OnObjectMovedListener) {
+    fun removeOnObjectMovedListener(listener: OnMapObjectMovedListener) {
         onObjectMovedListeners -= listener
     }
 
-    inline fun onMoved(crossinline onMoved: MapObject.() -> Unit): OnObjectMovedListener {
-        val listener = object : OnObjectMovedListener {
+    inline fun onMoved(crossinline onMoved: MapObject.() -> Unit): OnMapObjectMovedListener {
+        val listener = object : OnMapObjectMovedListener {
 
-            override fun onObjectMoved(mapObject: MapObject) {
+            override fun onMapObjectMoved(mapObject: MapObject) {
                 onMoved.invoke(mapObject)
             }
         }
@@ -223,7 +223,7 @@ internal constructor(
     }
 
     internal fun onMoved() {
-        onObjectMovedListeners.forEach { it.onObjectMoved(this) }
+        onObjectMovedListeners.forEach { it.onMapObjectMoved(this) }
     }
 
     fun addOnPlayerEditMapObjectListener(listener: OnPlayerEditMapObjectListener) {

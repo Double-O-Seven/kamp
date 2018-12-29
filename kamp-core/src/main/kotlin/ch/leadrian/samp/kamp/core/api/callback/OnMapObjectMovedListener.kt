@@ -2,8 +2,8 @@ package ch.leadrian.samp.kamp.core.api.callback
 
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
 
-interface OnObjectMovedListener {
+interface OnMapObjectMovedListener {
 
-    fun onObjectMoved(mapObject: MapObject)
+    fun onMapObjectMoved(mapObject: MapObject)
 
 }

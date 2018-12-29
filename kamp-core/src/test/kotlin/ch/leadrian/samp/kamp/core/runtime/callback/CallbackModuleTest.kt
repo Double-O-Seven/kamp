@@ -231,7 +231,7 @@ internal class CallbackModuleTest {
 
         @Test
         fun shouldInjectOnObjectMovedHandlerAsSingleton() {
-            val onObjectMovedHandler = injector.getInstance<OnObjectMovedHandler>()
+            val onObjectMovedHandler = injector.getInstance<OnMapObjectMovedHandler>()
 
             assertThat(onObjectMovedHandler)
                     .isNotNull

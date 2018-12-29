@@ -78,7 +78,7 @@ constructor(
         private val onGameModeExitHandler: OnGameModeExitHandler,
         private val onGameModeInitHandler: OnGameModeInitHandler,
         private val onIncomingConnectionHandler: OnIncomingConnectionHandler,
-        private val onObjectMovedHandler: OnObjectMovedHandler,
+        private val onMapObjectMovedHandler: OnMapObjectMovedHandler,
         private val onPlayerClickMapHandler: OnPlayerClickMapHandler,
         private val onPlayerClickPlayerHandler: OnPlayerClickPlayerHandler,
         private val onPlayerClickPlayerTextDrawHandler: OnPlayerClickPlayerTextDrawHandler,
@@ -361,7 +361,7 @@ constructor(
 
     override fun onObjectMoved(objectid: Int): Boolean {
         tryAndCatch {
-            onObjectMovedHandler.onObjectMoved(objectid.toMapObject())
+            onMapObjectMovedHandler.onMapObjectMoved(objectid.toMapObject())
         }
         return true
     }
