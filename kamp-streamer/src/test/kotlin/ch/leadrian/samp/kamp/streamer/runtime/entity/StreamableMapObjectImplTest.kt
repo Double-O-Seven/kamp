@@ -926,7 +926,7 @@ internal class StreamableMapObjectImplTest {
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { duration } returns 1337L
             }
-            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, moving)
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
 
             streamableMapObject.moveTo(
                     coordinates = vector3DOf(123f, 456f, 789f),
@@ -955,7 +955,7 @@ internal class StreamableMapObjectImplTest {
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { duration } returns 1337L
             }
-            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, moving)
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
 
             val duration = streamableMapObject.moveTo(
                     coordinates = vector3DOf(123f, 456f, 789f),
@@ -965,6 +965,31 @@ internal class StreamableMapObjectImplTest {
 
             assertThat(duration)
                     .isEqualTo(1337)
+        }
+
+        @Test
+        fun givenCurrentStateIsAttachedToVehicleItShouldRemoveOnDestroyListener() {
+            val vehicle = mockk<Vehicle> {
+                every { removeOnDestroyListener(any()) } just Runs
+            }
+            val currentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+                every { onStreamIn(any()) } just Runs
+                every { coordinates } returns vector3DOf(1f, 2f, 3f)
+                every { rotation } returns vector3DOf(4f, 5f, 6f)
+                every { this@mockk.vehicle } returns vehicle
+            }
+            val moving = mockk<StreamableMapObjectState.Moving> {
+                every { duration } returns 1337L
+            }
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
+
+            streamableMapObject.moveTo(
+                    coordinates = vector3DOf(123f, 456f, 789f),
+                    speed = 7f,
+                    rotation = vector3DOf(8f, 9f, 10f)
+            )
+
+            verify { vehicle.removeOnDestroyListener(streamableMapObject) }
         }
 
     }
@@ -1062,10 +1087,18 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldAttachToPlayer() {
+        val vehicle = mockk<Vehicle> {
+            every { removeOnDestroyListener(any()) } just Runs
+        }
+        val currentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+            every { this@mockk.vehicle } returns vehicle
+        }
+        every { streamableMapObjectStateMachine.currentState } returns currentState
         val player = mockk<Player>()
         every { streamableMapObjectStateMachine.transitionToAttachedToPlayer(any(), any(), any()) } just Runs
         val offset = vector3DOf(1f, 2f, 3f)
         val rotation = vector3DOf(4f, 5f, 6f)
+
         streamableMapObject.attachTo(
                 player = player,
                 offset = offset,
@@ -1073,6 +1106,7 @@ internal class StreamableMapObjectImplTest {
         )
 
         verify {
+            vehicle.removeOnDestroyListener(streamableMapObject)
             streamableMapObjectStateMachine.transitionToAttachedToPlayer(
                     player = player,
                     offset = offset,
@@ -1083,25 +1117,32 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldAttachToVehicle() {
-        val vehicle = mockk<Vehicle> {
+        val oldVehicle = mockk<Vehicle> {
+            every { removeOnDestroyListener(any()) } just Runs
+        }
+        val oldCurrentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+            every { vehicle } returns oldVehicle
+        }
+        every { streamableMapObjectStateMachine.currentState } returns oldCurrentState
+        val newVehicle = mockk<Vehicle> {
             every { addOnDestroyListener(any()) } just Runs
         }
         every { streamableMapObjectStateMachine.transitionToAttachedToVehicle(any(), any(), any()) } just Runs
         val offset = vector3DOf(1f, 2f, 3f)
         val rotation = vector3DOf(4f, 5f, 6f)
         streamableMapObject.attachTo(
-                vehicle = vehicle,
+                vehicle = newVehicle,
                 offset = offset,
                 rotation = rotation
         )
 
         verify {
             streamableMapObjectStateMachine.transitionToAttachedToVehicle(
-                    vehicle = vehicle,
+                    vehicle = newVehicle,
                     offset = offset,
                     rotation = rotation
             )
-            vehicle.addOnDestroyListener(streamableMapObject)
+            newVehicle.addOnDestroyListener(streamableMapObject)
         }
     }
 
@@ -1282,6 +1323,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun givenCurrentStateIsAttachedToVehicleItShouldTransitionToFixedCoordinates() {
+            every { this@OnDestroyTests.vehicle.removeOnDestroyListener(any()) } just Runs
             val newCoordinates = vector3DOf(123f, 456f, 789f)
             val rotation = vector3DOf(4f, 5f, 6f)
             val currentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
@@ -1297,6 +1339,28 @@ internal class StreamableMapObjectImplTest {
 
             verify {
                 streamableMapObjectStateMachine.transitionToFixedCoordinates(newCoordinates, rotation)
+            }
+        }
+
+        @Test
+        fun givenCurrentStateIsAttachedToVehicleItUnregisterAsVehicleOnDestroyListener() {
+            every { this@OnDestroyTests.vehicle.removeOnDestroyListener(any()) } just Runs
+            val newCoordinates = vector3DOf(123f, 456f, 789f)
+            val rotation = vector3DOf(4f, 5f, 6f)
+            val currentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+                every { onStreamIn(any()) } just Runs
+                every { this@mockk.coordinates } returns newCoordinates
+                every { this@mockk.rotation } returns rotation
+                every { this@mockk.vehicle } returns this@OnDestroyTests.vehicle
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
+            every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
+
+            streamableMapObject.onDestroy(vehicle)
+
+            verify {
+                streamableMapObjectStateMachine.transitionToFixedCoordinates(newCoordinates, rotation)
+                this@OnDestroyTests.vehicle.removeOnDestroyListener(streamableMapObject)
             }
         }
 
@@ -1349,6 +1413,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldCallOnDestroyHandlers() {
+            every { streamableMapObjectStateMachine.currentState } returns mockk()
             val onDestroy = mockk<StreamableMapObjectImpl.() -> Unit>(relaxed = true)
             streamableMapObject.onDestroy(onDestroy)
 
@@ -1359,6 +1424,7 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun givenStreamableMapObjectIsDestroyedItShouldCallOnDestroyHandlersOnlyOnce() {
+            every { streamableMapObjectStateMachine.currentState } returns mockk()
             val onDestroy = mockk<StreamableMapObjectImpl.() -> Unit>(relaxed = true)
             streamableMapObject.onDestroy(onDestroy)
 
@@ -1366,6 +1432,21 @@ internal class StreamableMapObjectImplTest {
             streamableMapObject.destroy()
 
             verify(exactly = 1) { onDestroy.invoke(streamableMapObject) }
+        }
+
+        @Test
+        fun givenCurrentStateIsAttachedToVehicleItShouldRemoveOnDestroyListeners() {
+            val vehicle = mockk<Vehicle> {
+                every { removeOnDestroyListener(any()) } just Runs
+            }
+            val state = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+                every { this@mockk.vehicle } returns vehicle
+            }
+            every { streamableMapObjectStateMachine.currentState } returns state
+
+            streamableMapObject.destroy()
+
+            verify { vehicle.removeOnDestroyListener(streamableMapObject) }
         }
 
     }
@@ -1383,6 +1464,8 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun givenDestroyWasCalledItShouldReturnTrue() {
+            every { streamableMapObjectStateMachine.currentState } returns mockk()
+
             streamableMapObject.destroy()
 
             val isDestroyed = streamableMapObject.isDestroyed
@@ -1416,6 +1499,13 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun givenResponseIsFinalItShouldUpdateCoordinatesAndRotation() {
+            val vehicle = mockk<Vehicle> {
+                every { removeOnDestroyListener(any()) } just Runs
+            }
+            val currentState = mockk<StreamableMapObjectState.Attached.ToVehicle> {
+                every { this@mockk.vehicle } returns vehicle
+            }
+            every { streamableMapObjectStateMachine.currentState } returns currentState
             every { mapObjectStreamer.onBoundingBoxChange(any()) } just Runs
             every { streamableMapObjectStateMachine.transitionToFixedCoordinates(any(), any()) } just Runs
 
@@ -1427,6 +1517,7 @@ internal class StreamableMapObjectImplTest {
             )
 
             verify {
+                vehicle.removeOnDestroyListener(streamableMapObject)
                 streamableMapObjectStateMachine.transitionToFixedCoordinates(
                         coordinates = vector3DOf(11f, 22f, 33f),
                         rotation = vector3DOf(44f, 55f, 66f)

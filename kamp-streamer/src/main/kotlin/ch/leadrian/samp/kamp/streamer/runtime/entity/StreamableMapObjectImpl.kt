@@ -143,6 +143,7 @@ constructor(
         get() = stateMachine.currentState.coordinates
         set(value) {
             requireNotDestroyed()
+            removeOnDestroyListener()
             stateMachine.transitionToFixedCoordinates(coordinates = value, rotation = rotation)
             mapObjectStreamer.onBoundingBoxChange(this)
         }
@@ -151,10 +152,12 @@ constructor(
         get() = stateMachine.currentState.rotation
         set(value) {
             requireNotDestroyed()
+            removeOnDestroyListener()
             stateMachine.transitionToFixedCoordinates(coordinates = coordinates, rotation = value)
         }
 
     private fun fixCoordinates() {
+        removeOnDestroyListener()
         stateMachine.transitionToFixedCoordinates(
                 coordinates = coordinates,
                 rotation = rotation
@@ -175,6 +178,7 @@ constructor(
 
     override fun moveTo(coordinates: Vector3D, speed: Float, rotation: Vector3D?): Int {
         requireNotDestroyed()
+        removeOnDestroyListener()
         stateMachine.transitionToMoving(
                 origin = this.coordinates,
                 destination = coordinates,
@@ -271,6 +275,7 @@ constructor(
 
     override fun attachTo(player: Player, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
+        removeOnDestroyListener()
         stateMachine.transitionToAttachedToPlayer(
                 player = player,
                 offset = offset,
@@ -280,6 +285,7 @@ constructor(
 
     override fun attachTo(vehicle: Vehicle, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
+        removeOnDestroyListener()
         stateMachine.transitionToAttachedToVehicle(
                 vehicle = vehicle,
                 offset = offset,
@@ -317,6 +323,7 @@ constructor(
     override fun onPlayerEditPlayerMapObject(playerMapObject: PlayerMapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         if (response == ObjectEditResponse.FINAL) {
+            removeOnDestroyListener()
             stateMachine.transitionToFixedCoordinates(coordinates = offset, rotation = rotation)
             mapObjectStreamer.onBoundingBoxChange(this)
         }
@@ -357,8 +364,16 @@ constructor(
     }
 
     override fun onDestroy() {
+        removeOnDestroyListener()
         playerMapObjectsByPlayer.values.forEach { it.destroy() }
         playerMapObjectsByPlayer.clear()
+    }
+
+    private fun removeOnDestroyListener() {
+        val currentState = stateMachine.currentState
+        if (currentState is StreamableMapObjectState.Attached.ToVehicle) {
+            currentState.vehicle.removeOnDestroyListener(this)
+        }
     }
 
     override fun getBoundingBox(): Rect3d {
