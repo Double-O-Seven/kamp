@@ -1,8 +1,3 @@
 dependencies {
-
-    compile(
-            project(':kamp-core'),
-            "com.google.guava:guava:$guavaVersion"
-    )
-
+    api(project(':kamp-core'))
 }

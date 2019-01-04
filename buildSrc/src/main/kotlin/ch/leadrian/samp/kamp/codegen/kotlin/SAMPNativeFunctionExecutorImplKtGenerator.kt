@@ -6,7 +6,16 @@ import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.LambdaTypeName
+import com.squareup.kotlinpoet.ParameterSpec
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.TypeVariableName
 import java.io.File
 import java.io.Writer
 import java.time.LocalDateTime
@@ -119,8 +128,8 @@ internal class SAMPNativeFunctionExecutorImplKtGenerator(
                 .addModifiers(KModifier.OVERRIDE)
                 .addFunctionParameters(function.parameters)
                 .returns(getKotlinType(function.type))
-                .beginControlFlow("return %N", requireOnMainThreadFunSpec)
-                .addStatement("SAMPNativeFunctions.${function.camelCaseName}($parameters)")
+                .beginControlFlow("%N", requireOnMainThreadFunSpec)
+                .addStatement("return SAMPNativeFunctions.${function.camelCaseName}($parameters)")
                 .endControlFlow()
                 .build()
         addFunction(funSpec)

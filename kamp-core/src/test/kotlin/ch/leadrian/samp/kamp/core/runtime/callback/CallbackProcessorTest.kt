@@ -2180,7 +2180,11 @@ internal class CallbackProcessorTest {
 
         @Test
         fun shouldCallOnUnoccupiedVehicleUpdate() {
-            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener>(relaxed = true)
+            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener> {
+                every {
+                    onUnoccupiedVehicleUpdate(any(), any(), any(), any(), any())
+                } returns OnUnoccupiedVehicleUpdateListener.Result.Sync
+            }
             callbackListenerManager.register(onUnoccupiedVehicleUpdateListener)
 
             val result = callbackProcessor.onUnoccupiedVehicleUpdate(
@@ -3217,7 +3221,7 @@ internal class CallbackProcessorTest {
         private lateinit var player: Player
         private val playerId = 69
         private lateinit var dialog: AbstractDialog
-        private var dialogId: Int = 0
+        private var dialogId: Int = 1337
 
         @BeforeEach
         fun setUp() {
@@ -3234,7 +3238,8 @@ internal class CallbackProcessorTest {
             val onDialogResponseListener = mockk<OnDialogResponseListener> {
                 every { onDialogResponse(any(), any(), any(), any(), any()) } returns OnDialogResponseListener.Result.Processed
             }
-            callbackListenerManager.register(onDialogResponseListener)
+            // Priority required due to DialogCallbackListener and the mocked dialog
+            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = playerId,
@@ -3263,7 +3268,8 @@ internal class CallbackProcessorTest {
             val onDialogResponseListener = mockk<OnDialogResponseListener> {
                 every { onDialogResponse(any(), any(), any(), any(), any()) } returns OnDialogResponseListener.Result.Ignored
             }
-            callbackListenerManager.register(onDialogResponseListener)
+            // Priority required due to DialogCallbackListener and the mocked dialog
+            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = playerId,
@@ -3290,7 +3296,8 @@ internal class CallbackProcessorTest {
         @Test
         fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
             val onDialogResponseListener = mockk<OnDialogResponseListener>(relaxed = true)
-            callbackListenerManager.register(onDialogResponseListener)
+            // Priority required due to DialogCallbackListener and the mocked dialog
+            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = 500,
@@ -3316,7 +3323,8 @@ internal class CallbackProcessorTest {
             val onDialogResponseListener = mockk<OnDialogResponseListener> {
                 every { onDialogResponse(any(), any(), any(), any(), any()) } throws exception
             }
-            callbackListenerManager.register(onDialogResponseListener)
+            // Priority required due to DialogCallbackListener and the mocked dialog
+            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = playerId,
@@ -4036,7 +4044,9 @@ internal class CallbackProcessorTest {
 
         @Test
         fun shouldCallOnTrailerUpdate() {
-            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener>(relaxed = true)
+            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener> {
+                every { onTrailerUpdate(any(), any()) } returns OnTrailerUpdateListener.Result.Sync
+            }
             callbackListenerManager.register(onTrailerUpdateListener)
 
             val result = callbackProcessor.onTrailerUpdate(playerId, vehicleId)

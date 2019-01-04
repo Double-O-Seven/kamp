@@ -1,23 +1,20 @@
+apply plugin: 'kotlin-kapt'
 apply plugin: 'maven'
 apply plugin: 'kamp-textkeygen'
 apply plugin: 'kamp-java-codegen'
 apply plugin: 'kamp-kotlin-codegen'
 
 dependencies {
+    compileOnly(project(':kamp-annotations'))
 
-    compile(
-            'org.slf4j:slf4j-api:1.7.25',
+    implementation(
             'org.codehaus.plexus:plexus-utils:3.1.0',
-            'org.apache.commons:commons-collections4:4.2',
-            "com.google.inject:guice:$guiceVersion",
-            "com.netflix.governator:governator:$governatorVersion"
+            'org.apache.commons:commons-collections4:4.2'
     )
 
-    testCompile(
-            "com.google.inject:guice:$guiceVersion",
-            "com.netflix.governator:governator:$governatorVersion"
-    )
+    kapt(project(':kamp-annotation-processor'))
 
+    testCompileOnly(project(':kamp-annotations'))
 }
 
 def generatedSrcJavaDir = "$buildDir/generated-src/main/java"

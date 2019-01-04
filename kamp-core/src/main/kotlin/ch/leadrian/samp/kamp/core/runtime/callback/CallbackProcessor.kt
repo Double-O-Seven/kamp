@@ -600,7 +600,8 @@ constructor(
 
     override fun onPlayerClickTextDraw(playerid: Int, clickedid: Int): Boolean {
         val result = tryAndCatch {
-            onPlayerClickTextDrawHandler.onPlayerClickTextDraw(playerid.toPlayer(), clickedid.toTextDrawOrNull())
+            val textDraw = clickedid.toTextDrawOrNull()
+            onPlayerClickTextDrawHandler.onPlayerClickTextDraw(playerid.toPlayer(), textDraw)
         } ?: OnPlayerClickTextDrawListener.Result.NotFound
         return result.value
     }

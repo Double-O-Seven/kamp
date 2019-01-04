@@ -2,15 +2,13 @@ apply plugin: 'kamp-textkeygen'
 apply plugin: 'kamp-serverstarter'
 
 dependencies {
-
-    compile(
+    implementation(
             project(':kamp-core'),
             project(':kamp-streamer'),
             project(':kamp-geodata'),
             project(':kamp-view'),
             'org.slf4j:slf4j-simple:1.7.25',
     )
-
 }
 
 def generatedSrcJavaDir = "${buildDir}/generated-src/main/java"
@@ -24,14 +22,12 @@ sourceSets {
 }
 
 textKeyGenerator {
-
     outputDirectory = generatedSrcJavaDir
-    packageName 'ch.leadrian.samp.kamp.examples.lvdm'
+    packageName('ch.leadrian.samp.kamp.examples.lvdm')
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }
 
 serverStarter {
-
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
     kampPluginBinaryPath = project(":kamp-plugin").buildDir.toString() + "/sampgdk/plugins/kamp/Release/kamp.dll"
     rconPassword = "test1234"

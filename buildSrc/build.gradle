@@ -34,14 +34,12 @@ compileKotlin {
 }
 
 dependencies {
-
-    compile(
+    implementation(
             "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion",
             "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion",
             'ch.leadrian.samp.cidl:cidl-kotlin:0.0.3',
             'com.squareup:javapoet:1.11.1',
-            'com.squareup:kotlinpoet:1.0.0-RC2',
-
+            'com.squareup:kotlinpoet:1.0.0',
             gradleApi()
     )
 }

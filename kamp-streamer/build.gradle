@@ -1,9 +1,11 @@
+apply plugin: 'kotlin-kapt'
+
 dependencies {
+    compileOnly(project(':kamp-annotations'))
 
-    compile(
-            project(':kamp-core'),
-            "com.google.guava:guava:$guavaVersion",
-            'com.conversantmedia:rtree:1.0.5'
-    )
+    implementation('com.conversantmedia:rtree:1.0.5')
 
+    api(project(':kamp-core'))
+
+    kapt(project(':kamp-annotation-processor'))
 }

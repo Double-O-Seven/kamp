@@ -21,7 +21,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
-import ch.leadrian.samp.kamp.core.api.text.translateForText
+import ch.leadrian.samp.kamp.core.api.text.TextArguments
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.View
@@ -320,8 +320,8 @@ constructor(
                         topToBottomOf(nameTextView)
                         setText(
                                 "Vehicle ID: {0}${TextDrawCodes.NEW_LINE}Location: {1}",
-                                translateForText { vehicle.id.value.toString() },
-                                translateForText { SanAndreasZone.getZone(vehicle.coordinates)?.name ?: "San Andreas" }
+                                TextArguments.translate { vehicle.id.value.toString() },
+                                TextArguments.translate { SanAndreasZone.getZone(vehicle.coordinates)?.name ?: "San Andreas" }
                         )
                     }
                     enable()
