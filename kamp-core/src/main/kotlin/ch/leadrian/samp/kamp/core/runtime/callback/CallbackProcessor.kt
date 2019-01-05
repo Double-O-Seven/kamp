@@ -83,6 +83,7 @@ constructor(
         private val onPlayerClickPlayerHandler: OnPlayerClickPlayerHandler,
         private val onPlayerClickPlayerTextDrawHandler: OnPlayerClickPlayerTextDrawHandler,
         private val onPlayerClickTextDrawHandler: OnPlayerClickTextDrawHandler,
+        private val onPlayerCancelTextDrawSelectionHandler: OnPlayerCancelTextDrawSelectionHandler,
         private val onPlayerCommandTextHandler: OnPlayerCommandTextHandler,
         private val onPlayerConnectHandler: OnPlayerConnectHandler,
         private val onPlayerDeathHandler: OnPlayerDeathHandler,
@@ -603,11 +604,15 @@ constructor(
     }
 
     override fun onPlayerClickTextDraw(playerid: Int, clickedid: Int): Boolean {
-        val result = tryAndCatch {
+        return tryAndCatch {
+            val player = playerid.toPlayer()
             val textDraw = clickedid.toTextDrawOrNull()
-            onPlayerClickTextDrawHandler.onPlayerClickTextDraw(playerid.toPlayer(), textDraw)
-        } ?: OnPlayerClickTextDrawListener.Result.NotFound
-        return result.value
+            if (textDraw != null) {
+                onPlayerClickTextDrawHandler.onPlayerClickTextDraw(player, textDraw).value
+            } else {
+                onPlayerCancelTextDrawSelectionHandler.onPlayerCancelTextDrawSelection(player).value
+            }
+        } ?: OnPlayerClickTextDrawListener.Result.NotFound.value
     }
 
     override fun onPlayerClickPlayerTextDraw(playerid: Int, playertextid: Int): Boolean {

@@ -11,6 +11,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnGameModeExitListener
 import ch.leadrian.samp.kamp.core.api.callback.OnGameModeInitListener
 import ch.leadrian.samp.kamp.core.api.callback.OnIncomingConnectionListener
 import ch.leadrian.samp.kamp.core.api.callback.OnMapObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCancelTextDrawSelectionListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickMapListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
@@ -3871,14 +3872,18 @@ internal class CallbackProcessorTest {
         }
 
         @Test
-        fun givenInvalidPlayerTextDrawIdItShouldCallOnPlayerClickTextDraw() {
-            val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickTextDrawListener)
+        fun givenInvalidPlayerTextDrawIdItShouldCallOnPlayerCancelTextDrawSelection() {
+            val onPlayerCancelTextDrawSelectionListener = mockk<OnPlayerCancelTextDrawSelectionListener> {
+                every { onPlayerCancelTextDrawSelection(any()) } returns OnPlayerCancelTextDrawSelectionListener.Result.Processed
+            }
+            callbackListenerManager.register(onPlayerCancelTextDrawSelectionListener)
 
-            callbackProcessor.onPlayerClickTextDraw(playerId, 500)
+            val result = callbackProcessor.onPlayerClickTextDraw(playerId, 500)
 
+            assertThat(result)
+                    .isTrue()
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickTextDrawListener.onPlayerClickTextDraw(player, null) }
+            verify { onPlayerCancelTextDrawSelectionListener.onPlayerCancelTextDrawSelection(player) }
         }
 
         @Test

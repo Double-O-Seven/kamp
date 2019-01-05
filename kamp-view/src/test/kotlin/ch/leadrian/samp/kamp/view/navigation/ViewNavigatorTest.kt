@@ -1,10 +1,9 @@
 package ch.leadrian.samp.kamp.view.navigation
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCancelTextDrawSelectionListener
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.TextDraw
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.view.base.View
 import io.mockk.Runs
@@ -42,23 +41,13 @@ internal class ViewNavigatorTest {
     }
 
     @Test
-    fun givenTextDrawIsNotNullItShouldReturnNotFound() {
-        val textDraw = mockk<TextDraw>()
-
-        val result = viewNavigator.onPlayerClickTextDraw(player, textDraw)
-
-        assertThat(result)
-                .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
-    }
-
-    @Test
     fun givenMouseIsNotUsedItShouldReturnNotFound() {
         every { viewNavigation.isMouseUsed } returns false
 
-        val result = viewNavigator.onPlayerClickTextDraw(player, null)
+        val result = viewNavigator.onPlayerCancelTextDrawSelection(player)
 
         assertThat(result)
-                .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
+                .isEqualTo(OnPlayerCancelTextDrawSelectionListener.Result.Ignored)
     }
 
     @Test
@@ -69,11 +58,11 @@ internal class ViewNavigatorTest {
             every { pop() } just Runs
         }
 
-        val result = viewNavigator.onPlayerClickTextDraw(player, null)
+        val result = viewNavigator.onPlayerCancelTextDrawSelection(player)
 
         verify { viewNavigation.pop() }
         assertThat(result)
-                .isEqualTo(OnPlayerClickTextDrawListener.Result.Processed)
+                .isEqualTo(OnPlayerCancelTextDrawSelectionListener.Result.Processed)
     }
 
     @Test
@@ -88,11 +77,11 @@ internal class ViewNavigatorTest {
         }
         every { player.selectTextDraw(any()) } just Runs
 
-        val result = viewNavigator.onPlayerClickTextDraw(player, null)
+        val result = viewNavigator.onPlayerCancelTextDrawSelection(player)
 
         verify { player.selectTextDraw(Colors.PINK) }
         assertThat(result)
-                .isEqualTo(OnPlayerClickTextDrawListener.Result.Processed)
+                .isEqualTo(OnPlayerCancelTextDrawSelectionListener.Result.Processed)
     }
 
     @Test
@@ -103,10 +92,10 @@ internal class ViewNavigatorTest {
             every { top } returns null
         }
 
-        val result = viewNavigator.onPlayerClickTextDraw(player, null)
+        val result = viewNavigator.onPlayerCancelTextDrawSelection(player)
 
         assertThat(result)
-                .isEqualTo(OnPlayerClickTextDrawListener.Result.Processed)
+                .isEqualTo(OnPlayerCancelTextDrawSelectionListener.Result.Processed)
     }
 
 }

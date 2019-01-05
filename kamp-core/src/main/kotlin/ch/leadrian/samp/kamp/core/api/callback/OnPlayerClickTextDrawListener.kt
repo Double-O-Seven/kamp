@@ -12,7 +12,7 @@ interface OnPlayerClickTextDrawListener {
 
     @InlineCallback("onClick")
     @IgnoredReturnValue(Result.NotFound::class)
-    fun onPlayerClickTextDraw(player: Player, @Receiver textDraw: TextDraw?): Result
+    fun onPlayerClickTextDraw(player: Player, @Receiver textDraw: TextDraw): Result
 
     sealed class Result(val value: Boolean) {
 

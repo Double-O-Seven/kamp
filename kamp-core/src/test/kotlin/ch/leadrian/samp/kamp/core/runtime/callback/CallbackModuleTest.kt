@@ -280,6 +280,16 @@ internal class CallbackModuleTest {
         }
 
         @Test
+        fun shouldInjectOnPlayerCancelTextDrawSelectionHandlerAsSingleton() {
+            val onPlayerCancelTextDrawSelectionHandler = injector.getInstance<OnPlayerCancelTextDrawSelectionHandler>()
+
+            assertThat(onPlayerCancelTextDrawSelectionHandler)
+                    .isNotNull
+            assertThat(testService.handlers)
+                    .contains(onPlayerCancelTextDrawSelectionHandler)
+        }
+
+        @Test
         fun shouldInjectOnPlayerCommandTextHandlerAsSingleton() {
             val onPlayerCommandTextHandler = injector.getInstance<OnPlayerCommandTextHandler>()
 

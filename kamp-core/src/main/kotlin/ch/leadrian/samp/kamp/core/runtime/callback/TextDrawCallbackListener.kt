@@ -11,15 +11,13 @@ import javax.inject.Singleton
 @Singleton
 internal class TextDrawCallbackListener
 @Inject
-constructor(
-        private val callbackListenerManager: CallbackListenerManager
-) : OnPlayerClickTextDrawListener {
+constructor(private val callbackListenerManager: CallbackListenerManager) : OnPlayerClickTextDrawListener {
 
     @PostConstruct
     fun initialize() {
         callbackListenerManager.register(this)
     }
 
-    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): OnPlayerClickTextDrawListener.Result =
-            textDraw?.onClick(player) ?: OnPlayerClickTextDrawListener.Result.NotFound
+    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): OnPlayerClickTextDrawListener.Result = textDraw.onClick(player)
+
 }

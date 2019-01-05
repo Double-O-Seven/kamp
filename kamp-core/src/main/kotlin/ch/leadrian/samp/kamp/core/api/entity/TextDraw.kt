@@ -229,8 +229,8 @@ internal constructor(
     inline fun onClick(crossinline onClick: TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result): OnPlayerClickTextDrawListener {
         val listener = object : OnPlayerClickTextDrawListener {
 
-            override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw?): OnPlayerClickTextDrawListener.Result =
-                    textDraw?.let { onClick.invoke(it, player) } ?: OnPlayerClickTextDrawListener.Result.NotFound
+            override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): OnPlayerClickTextDrawListener.Result = onClick.invoke(textDraw, player)
+
         }
         addOnPlayerClickTextDrawListener(listener)
         return listener
