@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.mutableVector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
@@ -12,7 +12,10 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerExitedMenuReceiverDelegate
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -123,6 +126,7 @@ internal class MenuTest {
         private val menuId = MenuId.valueOf(69)
         private val locale = Locale.GERMANY
         private lateinit var menu: Menu
+        private val onPlayerExitedMenuReceiver = mockk<OnPlayerExitedMenuReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
         private val textProvider = mockk<TextProvider>()
@@ -140,7 +144,8 @@ internal class MenuTest {
                     columnWidth2 = 10f,
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     textFormatter = textFormatter,
-                    textProvider = textProvider
+                    textProvider = textProvider,
+                    onPlayerExitedMenuReceiver = onPlayerExitedMenuReceiver
             )
         }
 
@@ -396,57 +401,14 @@ internal class MenuTest {
             verify { nativeFunctionExecutor.hideMenuForPlayer(menuid = menuId.value, playerid = 69) }
         }
 
-        @Nested
-        inner class OnPlayerExitedMenuListenersTests {
+        @Test
+        fun shouldCallOnPlayerExitedMenuReceiver() {
+            val player = mockk<Player>()
+            every { onPlayerExitedMenuReceiver.onPlayerExitedMenu(any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerExitedMenuListener>(relaxed = true)
-                menu.addOnPlayerExitedMenuListener(listener)
+            menu.onExit(player)
 
-                menu.onExit(player)
-
-                verify { listener.onPlayerExitedMenu(player, menu) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerExitedMenuListener>(relaxed = true)
-                menu.addOnPlayerExitedMenuListener(listener)
-                menu.removeOnPlayerExitedMenuListener(listener)
-
-                menu.onExit(player)
-
-                verify(exactly = 0) { listener.onPlayerExitedMenu(any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val player = mockk<Player> {
-                    every { this@mockk.menu } returns this@PostConstructionsTests.menu
-                }
-                val onExit = mockk<Menu.(Player) -> Unit>(relaxed = true)
-                menu.onExit(onExit)
-
-                menu.onExit(player)
-
-                verify { onExit.invoke(menu, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val player = mockk<Player>()
-                val onExit = mockk<Menu.(Player) -> Unit>(relaxed = true)
-                val listener = menu.onExit(onExit)
-                menu.removeOnPlayerExitedMenuListener(listener)
-
-                menu.onExit(player)
-
-                verify(exactly = 0) { onExit.invoke(any(), any()) }
-            }
-
+            verify { onPlayerExitedMenuReceiver.onPlayerExitedMenu(player, menu) }
         }
 
         @Nested

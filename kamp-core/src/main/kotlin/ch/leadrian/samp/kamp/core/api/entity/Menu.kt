@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.entity.id.MenuId
@@ -9,6 +9,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerExitedMenuReceiverDelegate
 import java.util.*
 
 class Menu
@@ -21,10 +22,11 @@ internal constructor(
         val locale: Locale,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val textProvider: TextProvider,
-        private val textFormatter: TextFormatter
-) : Entity<MenuId>, AbstractDestroyable() {
-
-    private val onPlayerExitedMenuListeners = LinkedHashSet<OnPlayerExitedMenuListener>()
+        private val textFormatter: TextFormatter,
+        private val onPlayerExitedMenuReceiver: OnPlayerExitedMenuReceiverDelegate = OnPlayerExitedMenuReceiverDelegate()
+) : Entity<MenuId>,
+        AbstractDestroyable(),
+        OnPlayerExitedMenuReceiver by onPlayerExitedMenuReceiver {
 
     override val id: MenuId
         get() = requireNotDestroyed { field }
@@ -113,27 +115,8 @@ internal constructor(
         nativeFunctionExecutor.hideMenuForPlayer(menuid = id.value, playerid = forPlayer.id.value)
     }
 
-    fun addOnPlayerExitedMenuListener(listener: OnPlayerExitedMenuListener) {
-        onPlayerExitedMenuListeners += listener
-    }
-
-    fun removeOnPlayerExitedMenuListener(listener: OnPlayerExitedMenuListener) {
-        onPlayerExitedMenuListeners -= listener
-    }
-
-    inline fun onExit(crossinline onExit: Menu.(Player) -> Unit): OnPlayerExitedMenuListener {
-        val listener = object : OnPlayerExitedMenuListener {
-
-            override fun onPlayerExitedMenu(player: Player, menu: Menu) {
-                onExit.invoke(menu, player)
-            }
-        }
-        addOnPlayerExitedMenuListener(listener)
-        return listener
-    }
-
     internal fun onExit(player: Player) {
-        onPlayerExitedMenuListeners.forEach { it.onPlayerExitedMenu(player, this) }
+        onPlayerExitedMenuReceiver.onPlayerExitedMenu(player, this)
     }
 
     override fun onDestroy() {
