@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.callback
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectedMenuRowListener
+import ch.leadrian.samp.kamp.core.api.entity.Menu
 import ch.leadrian.samp.kamp.core.api.entity.MenuRow
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import javax.annotation.PostConstruct
@@ -21,8 +22,8 @@ constructor(
         callbackListenerManager.register(this)
     }
 
-    override fun onPlayerExitedMenu(player: Player) {
-        player.menu?.onExit(player)
+    override fun onPlayerExitedMenu(player: Player, menu: Menu) {
+        menu.onExit(player)
     }
 
     override fun onPlayerSelectedMenuRow(player: Player, row: MenuRow) {

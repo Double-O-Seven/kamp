@@ -124,8 +124,8 @@ internal constructor(
     inline fun onExit(crossinline onExit: Menu.(Player) -> Unit): OnPlayerExitedMenuListener {
         val listener = object : OnPlayerExitedMenuListener {
 
-            override fun onPlayerExitedMenu(player: Player) {
-                player.menu?.let { onExit.invoke(it, player) }
+            override fun onPlayerExitedMenu(player: Player, menu: Menu) {
+                onExit.invoke(menu, player)
             }
         }
         addOnPlayerExitedMenuListener(listener)
@@ -133,7 +133,7 @@ internal constructor(
     }
 
     internal fun onExit(player: Player) {
-        onPlayerExitedMenuListeners.forEach { it.onPlayerExitedMenu(player) }
+        onPlayerExitedMenuListeners.forEach { it.onPlayerExitedMenu(player, this) }
     }
 
     override fun onDestroy() {

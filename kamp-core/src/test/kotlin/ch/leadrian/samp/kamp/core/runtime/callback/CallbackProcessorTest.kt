@@ -76,6 +76,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
@@ -107,6 +108,7 @@ import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
@@ -2410,9 +2412,14 @@ internal class CallbackProcessorTest {
 
         private lateinit var player: Player
         private val playerId = 69
+        private lateinit var menu: Menu
+        private val menuId = 50
 
         @BeforeEach
         fun setUp() {
+            every { nativeFunctionExecutor.createMenu(any(), any(), any(), any(), any(), any()) } returns menuId
+            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
+            menu = server.injector.getInstance<MenuFactory>().create(vector2DOf(0f, 0f), 0f, "Test", Locale.GERMANY)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
         }
 
@@ -2424,7 +2431,7 @@ internal class CallbackProcessorTest {
             callbackProcessor.onPlayerExitedMenu(playerId)
 
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player) }
+            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player, menu) }
         }
 
         @Test
@@ -2450,7 +2457,7 @@ internal class CallbackProcessorTest {
         fun shouldCatchException() {
             val exception = RuntimeException("test")
             val onPlayerExitedMenuListener = mockk<OnPlayerExitedMenuListener> {
-                every { onPlayerExitedMenu(any()) } throws exception
+                every { onPlayerExitedMenu(any(), any()) } throws exception
             }
             callbackListenerManager.register(onPlayerExitedMenuListener)
 
@@ -2461,7 +2468,7 @@ internal class CallbackProcessorTest {
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player) }
+            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player, menu) }
         }
 
     }

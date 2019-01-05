@@ -1,11 +1,15 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
 import ch.leadrian.samp.kamp.annotations.CallbackListener
+import ch.leadrian.samp.kamp.annotations.InlineCallback
+import ch.leadrian.samp.kamp.annotations.Receiver
+import ch.leadrian.samp.kamp.core.api.entity.Menu
 import ch.leadrian.samp.kamp.core.api.entity.Player
 
 @CallbackListener(runtimePackageName = "ch.leadrian.samp.kamp.core.runtime.callback")
 interface OnPlayerExitedMenuListener {
 
-    fun onPlayerExitedMenu(player: Player)
+    @InlineCallback("onExit")
+    fun onPlayerExitedMenu(player: Player, @Receiver menu: Menu)
 
 }

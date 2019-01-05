@@ -407,7 +407,7 @@ internal class MenuTest {
 
                 menu.onExit(player)
 
-                verify { listener.onPlayerExitedMenu(player) }
+                verify { listener.onPlayerExitedMenu(player, menu) }
             }
 
             @Test
@@ -419,7 +419,7 @@ internal class MenuTest {
 
                 menu.onExit(player)
 
-                verify(exactly = 0) { listener.onPlayerExitedMenu(any()) }
+                verify(exactly = 0) { listener.onPlayerExitedMenu(any(), any()) }
             }
 
             @Test

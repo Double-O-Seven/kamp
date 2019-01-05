@@ -456,7 +456,11 @@ constructor(
 
     override fun onPlayerExitedMenu(playerid: Int): Boolean {
         tryAndCatch {
-            onPlayerExitedMenuHandler.onPlayerExitedMenu(playerid.toPlayer())
+            val player = playerid.toPlayer()
+            val menu = player.menu
+            if (menu != null) {
+                onPlayerExitedMenuHandler.onPlayerExitedMenu(player, menu)
+            }
         }
         return true
     }
