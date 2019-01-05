@@ -1,11 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerObjectMovedListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
@@ -14,8 +10,13 @@ import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditPlayerMapObjectReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerObjectMovedReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectPlayerMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -112,6 +113,9 @@ internal class PlayerMapObjectTest {
 
         private val playerMapObjectId = PlayerMapObjectId.valueOf(50)
         private lateinit var playerMapObject: PlayerMapObject
+        private val onPlayerObjectMovedReceiver = mockk<OnPlayerObjectMovedReceiverDelegate>()
+        private val onPlayerEditPlayerMapObjectReceiver = mockk<OnPlayerEditPlayerMapObjectReceiverDelegate>()
+        private val onPlayerSelectPlayerMapObjectReceiver = mockk<OnPlayerSelectPlayerMapObjectReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
@@ -126,7 +130,10 @@ internal class PlayerMapObjectTest {
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    onPlayerObjectMovedReceiver = onPlayerObjectMovedReceiver,
+                    onPlayerEditPlayerMapObjectReceiver = onPlayerEditPlayerMapObjectReceiver,
+                    onPlayerSelectPlayerMapObjectReceiver = onPlayerSelectPlayerMapObjectReceiver
             )
         }
 
@@ -453,199 +460,51 @@ internal class PlayerMapObjectTest {
             }
         }
 
-        @Nested
-        inner class OnPlayerObjectMovedListenersTests {
+        @Test
+        fun shouldCallOnPlayerMapObjectMovedReceiverDelegate() {
+            every { onPlayerObjectMovedReceiver.onPlayerObjectMoved(any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val listener = mockk<OnPlayerObjectMovedListener>(relaxed = true)
-                playerMapObject.addOnPlayerObjectMovedListener(listener)
+            playerMapObject.onMoved()
 
-                playerMapObject.onMoved()
-
-                verify { listener.onPlayerObjectMoved(playerMapObject) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val listener = mockk<OnPlayerObjectMovedListener>(relaxed = true)
-                playerMapObject.addOnPlayerObjectMovedListener(listener)
-                playerMapObject.removeOnPlayerObjectMovedListener(listener)
-
-                playerMapObject.onMoved()
-
-                verify(exactly = 0) { listener.onPlayerObjectMoved(any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val onMoved = mockk<PlayerMapObject.() -> Unit>(relaxed = true)
-                playerMapObject.onMoved(onMoved)
-
-                playerMapObject.onMoved()
-
-                verify { onMoved.invoke(playerMapObject) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val onMoved = mockk<PlayerMapObject.() -> Unit>(relaxed = true)
-                val listener = playerMapObject.onMoved(onMoved)
-                playerMapObject.removeOnPlayerObjectMovedListener(listener)
-
-                playerMapObject.onMoved()
-
-                verify(exactly = 0) { onMoved.invoke(any()) }
-            }
-
+            verify { onPlayerObjectMovedReceiver.onPlayerObjectMoved(playerMapObject) }
         }
 
-        @Nested
-        inner class OnPlayerEditPlayerMapObjectListenersTests {
+        @Test
+        fun shouldCallOnPlayerEditPlayerMapObjectReceiverDelegate() {
+            every { onPlayerEditPlayerMapObjectReceiver.onPlayerEditPlayerMapObject(any(), any(), any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val listener = mockk<OnPlayerEditPlayerMapObjectListener>(relaxed = true)
-                playerMapObject.addOnPlayerEditPlayerMapObjectListener(listener)
+            playerMapObject.onEdit(
+                    response = ObjectEditResponse.UPDATE,
+                    offset = vector3DOf(x = 1f, y = 2f, z = 3f),
+                    rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
+            )
 
-                playerMapObject.onEdit(
+            verify {
+                onPlayerEditPlayerMapObjectReceiver.onPlayerEditPlayerMapObject(
+                        playerMapObject = playerMapObject,
                         response = ObjectEditResponse.UPDATE,
                         offset = vector3DOf(x = 1f, y = 2f, z = 3f),
                         rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
                 )
-
-                verify {
-                    listener.onPlayerEditPlayerMapObject(
-                            playerMapObject,
-                            ObjectEditResponse.UPDATE,
-                            vector3DOf(x = 1f, y = 2f, z = 3f),
-                            vector3DOf(x = 4f, y = 5f, z = 6f)
-                    )
-                }
             }
-
-            @Test
-            fun shouldNotCallReeditListener() {
-                val listener = mockk<OnPlayerEditPlayerMapObjectListener>(relaxed = true)
-                playerMapObject.addOnPlayerEditPlayerMapObjectListener(listener)
-                playerMapObject.removeOnPlayerEditPlayerMapObjectListener(listener)
-
-                playerMapObject.onEdit(
-                        response = ObjectEditResponse.UPDATE,
-                        offset = vector3DOf(x = 1f, y = 2f, z = 3f),
-                        rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify(exactly = 0) { listener.onPlayerEditPlayerMapObject(any(), any(), any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val onEdit = mockk<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-                playerMapObject.onEdit(onEdit)
-
-                playerMapObject.onEdit(
-                        response = ObjectEditResponse.UPDATE,
-                        offset = vector3DOf(x = 1f, y = 2f, z = 3f),
-                        rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify {
-                    onEdit.invoke(
-                            playerMapObject,
-                            ObjectEditResponse.UPDATE,
-                            vector3DOf(x = 1f, y = 2f, z = 3f),
-                            vector3DOf(x = 4f, y = 5f, z = 6f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val onEdit = mockk<PlayerMapObject.(ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-                val listener = playerMapObject.onEdit(onEdit)
-                playerMapObject.removeOnPlayerEditPlayerMapObjectListener(listener)
-
-                playerMapObject.onEdit(
-                        response = ObjectEditResponse.UPDATE,
-                        offset = vector3DOf(x = 1f, y = 2f, z = 3f),
-                        rotation = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify(exactly = 0) { onEdit.invoke(any(), any(), any(), any()) }
-            }
-
         }
 
-        @Nested
-        inner class OnPlayerSelectPlayerMapObjectListenersTests {
+        @Test
+        fun shouldCallOnPlayerSelectPlayerMapObjectReceiverDelegate() {
+            every { onPlayerSelectPlayerMapObjectReceiver.onPlayerSelectPlayerMapObject(any(), any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val listener = mockk<OnPlayerSelectPlayerMapObjectListener>(relaxed = true)
-                playerMapObject.addOnPlayerSelectPlayerMapObjectListener(listener)
+            playerMapObject.onSelect(
+                    modelId = 1337,
+                    coordinates = vector3DOf(x = 4f, y = 5f, z = 6f)
+            )
 
-                playerMapObject.onSelect(
-                        modelId = 1337,
-                        coordinates = vector3DOf(x = 4f, y = 5f, z = 6f)
+            verify {
+                onPlayerSelectPlayerMapObjectReceiver.onPlayerSelectPlayerMapObject(
+                        playerMapObject,
+                        1337,
+                        vector3DOf(x = 4f, y = 5f, z = 6f)
                 )
-
-                verify {
-                    listener.onPlayerSelectPlayerMapObject(
-                            playerMapObject,
-                            1337,
-                            vector3DOf(x = 4f, y = 5f, z = 6f)
-                    )
-                }
             }
-
-            @Test
-            fun shouldNotCallReselectListener() {
-                val listener = mockk<OnPlayerSelectPlayerMapObjectListener>(relaxed = true)
-                playerMapObject.addOnPlayerSelectPlayerMapObjectListener(listener)
-                playerMapObject.removeOnPlayerSelectPlayerMapObjectListener(listener)
-
-                playerMapObject.onSelect(
-                        modelId = 1337,
-                        coordinates = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify(exactly = 0) { listener.onPlayerSelectPlayerMapObject(any(), any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val onSelect = mockk<PlayerMapObject.(Int, Vector3D) -> Unit>(relaxed = true)
-                playerMapObject.onSelect(onSelect)
-
-                playerMapObject.onSelect(
-                        modelId = 1337,
-                        coordinates = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify {
-                    onSelect.invoke(
-                            playerMapObject,
-                            1337,
-                            vector3DOf(x = 4f, y = 5f, z = 6f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val onSelect = mockk<PlayerMapObject.(Int, Vector3D) -> Unit>(relaxed = true)
-                val listener = playerMapObject.onSelect(onSelect)
-                playerMapObject.removeOnPlayerSelectPlayerMapObjectListener(listener)
-
-                playerMapObject.onSelect(
-                        modelId = 1337,
-                        coordinates = vector3DOf(x = 4f, y = 5f, z = 6f)
-                )
-
-                verify(exactly = 0) { onSelect.invoke(any(), any(), any()) }
-            }
-
         }
 
         @Nested

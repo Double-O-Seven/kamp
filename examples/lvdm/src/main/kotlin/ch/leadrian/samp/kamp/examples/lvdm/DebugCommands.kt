@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
+import ch.leadrian.samp.kamp.core.api.callback.onMoved
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
