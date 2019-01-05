@@ -16,16 +16,6 @@ import javax.inject.Singleton
 
 class CallbackHandlerGenerator {
 
-    companion object {
-
-        internal val javaToKotlinTypeMappings = mapOf(
-                "java.lang.String" to ClassName("kotlin", "String"),
-                "java.lang.Integer" to ClassName("kotlin", "Int"),
-                "java.lang.Float" to ClassName("kotlin", "Float")
-        )
-
-    }
-
     fun generate(listenerDefinition: CallbackListenerDefinition, outputDirectory: Path) {
         val className = listenerDefinition.type.simpleName.removeSuffix("Listener") + "Handler"
         val fileSpec = buildFileSpec(className, listenerDefinition)
