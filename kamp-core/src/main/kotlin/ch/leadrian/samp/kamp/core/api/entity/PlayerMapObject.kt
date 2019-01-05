@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectReceiver
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerObjectMovedReceiver
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerMapObjectMovedReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectReceiver
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
@@ -14,7 +14,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditPlayerMapObjectReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerObjectMovedReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectPlayerMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
@@ -26,14 +26,14 @@ internal constructor(
         coordinates: Vector3D,
         rotation: Vector3D,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
-        private val onPlayerObjectMovedReceiver: OnPlayerObjectMovedReceiverDelegate = OnPlayerObjectMovedReceiverDelegate(),
+        private val onPlayerMapObjectMovedReceiver: OnPlayerMapObjectMovedReceiverDelegate = OnPlayerMapObjectMovedReceiverDelegate(),
         private val onPlayerEditPlayerMapObjectReceiver: OnPlayerEditPlayerMapObjectReceiverDelegate = OnPlayerEditPlayerMapObjectReceiverDelegate(),
         private val onPlayerSelectPlayerMapObjectReceiver: OnPlayerSelectPlayerMapObjectReceiverDelegate = OnPlayerSelectPlayerMapObjectReceiverDelegate()
 ) : Entity<PlayerMapObjectId>,
         AbstractDestroyable(),
         HasPlayer,
         MapObjectBase,
-        OnPlayerObjectMovedReceiver by onPlayerObjectMovedReceiver,
+        OnPlayerMapObjectMovedReceiver by onPlayerMapObjectMovedReceiver,
         OnPlayerEditPlayerMapObjectReceiver by onPlayerEditPlayerMapObjectReceiver,
         OnPlayerSelectPlayerMapObjectReceiver by onPlayerSelectPlayerMapObjectReceiver {
 
@@ -204,7 +204,7 @@ internal constructor(
     }
 
     internal fun onMoved() {
-        onPlayerObjectMovedReceiver.onPlayerObjectMoved(this)
+        onPlayerMapObjectMovedReceiver.onPlayerMapObjectMoved(this)
     }
 
     internal fun onEdit(response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {

@@ -41,7 +41,7 @@ internal class PlayerMapObjectCallbackListenerTest {
             every { onMoved() } just Runs
         }
 
-        playerMapObjectCallbackListener.onPlayerObjectMoved(playerMapObject)
+        playerMapObjectCallbackListener.onPlayerMapObjectMoved(playerMapObject)
 
         verify(exactly = 1) { playerMapObject.onMoved() }
     }

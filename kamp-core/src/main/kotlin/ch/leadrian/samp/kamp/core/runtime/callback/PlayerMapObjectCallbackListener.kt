@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -16,7 +16,7 @@ internal class PlayerMapObjectCallbackListener
 @Inject
 constructor(
         private val callbackListenerManager: CallbackListenerManager
-) : OnPlayerObjectMovedListener, OnPlayerEditPlayerMapObjectListener, OnPlayerSelectPlayerMapObjectListener {
+) : OnPlayerMapObjectMovedListener, OnPlayerEditPlayerMapObjectListener, OnPlayerSelectPlayerMapObjectListener {
 
     @PostConstruct
     fun initialize() {
@@ -32,7 +32,7 @@ constructor(
         playerMapObject.onEdit(response = response, offset = offset, rotation = rotation)
     }
 
-    override fun onPlayerObjectMoved(playerMapObject: PlayerMapObject) {
+    override fun onPlayerMapObjectMoved(playerMapObject: PlayerMapObject) {
         playerMapObject.onMoved()
     }
 

@@ -102,7 +102,7 @@ constructor(
         private val onPlayerKeyStateChangeHandler: OnPlayerKeyStateChangeHandler,
         private val onPlayerLeaveCheckpointHandler: OnPlayerLeaveCheckpointHandler,
         private val onPlayerLeaveRaceCheckpointHandler: OnPlayerLeaveRaceCheckpointHandler,
-        private val onPlayerObjectMovedHandler: OnPlayerObjectMovedHandler,
+        private val onPlayerMapObjectMovedHandler: OnPlayerMapObjectMovedHandler,
         private val onPlayerPickUpPickupHandler: OnPlayerPickUpPickupHandler,
         private val onPlayerRequestClassHandler: OnPlayerRequestClassHandler,
         private val onPlayerRequestSpawnHandler: OnPlayerRequestSpawnHandler,
@@ -370,7 +370,7 @@ constructor(
     override fun onPlayerObjectMoved(playerid: Int, objectid: Int): Boolean {
         tryAndCatch {
             val player = playerid.toPlayer()
-            onPlayerObjectMovedHandler.onPlayerObjectMoved(objectid.toPlayerMapObject(player))
+            onPlayerMapObjectMovedHandler.onPlayerMapObjectMoved(objectid.toPlayerMapObject(player))
         }
         return true
     }

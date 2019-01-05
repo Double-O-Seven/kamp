@@ -34,7 +34,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerInteriorChangeListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerKeyStateChangeListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveCheckpointListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveRaceCheckpointListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerObjectMovedListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestClassListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestSpawnListener
@@ -1584,18 +1584,18 @@ internal class CallbackProcessorTest {
 
         @Test
         fun shouldCallOnPlayerMapPlayerObjectMoved() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerObjectMovedListener>(relaxed = true)
+            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
             callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
 
             callbackProcessor.onPlayerObjectMoved(playerId, playerMapObjectId)
 
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerMapPlayerObjectMovedListener.onPlayerObjectMoved(playerMapObject) }
+            verify { onPlayerMapPlayerObjectMovedListener.onPlayerMapObjectMoved(playerMapObject) }
         }
 
         @Test
         fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerObjectMovedListener>(relaxed = true)
+            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
             callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
 
             val caughtThrowable = catchThrowable {
@@ -1614,7 +1614,7 @@ internal class CallbackProcessorTest {
 
         @Test
         fun givenInvalidPlayerMapObjectIdItShouldThrowAndCatchException() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerObjectMovedListener>(relaxed = true)
+            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
             callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
 
             val caughtThrowable = catchThrowable {
@@ -1634,8 +1634,8 @@ internal class CallbackProcessorTest {
         @Test
         fun shouldCatchException() {
             val exception = RuntimeException("test")
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerObjectMovedListener> {
-                every { onPlayerObjectMoved(any()) } throws exception
+            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener> {
+                every { onPlayerMapObjectMoved(any()) } throws exception
             }
             callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
 
@@ -1646,7 +1646,7 @@ internal class CallbackProcessorTest {
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerMapPlayerObjectMovedListener.onPlayerObjectMoved(playerMapObject) }
+            verify { onPlayerMapPlayerObjectMovedListener.onPlayerMapObjectMoved(playerMapObject) }
         }
 
     }

@@ -6,9 +6,9 @@ import ch.leadrian.samp.kamp.annotations.Receiver
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 
 @CallbackListener(runtimePackageName = "ch.leadrian.samp.kamp.core.runtime.callback")
-interface OnPlayerObjectMovedListener {
+interface OnPlayerMapObjectMovedListener {
 
     @InlineCallback("onMoved")
-    fun onPlayerObjectMoved(@Receiver playerMapObject: PlayerMapObject)
+    fun onPlayerMapObjectMoved(@Receiver playerMapObject: PlayerMapObject)
 
 }

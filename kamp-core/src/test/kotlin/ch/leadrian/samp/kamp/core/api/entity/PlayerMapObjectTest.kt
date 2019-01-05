@@ -11,7 +11,7 @@ import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditPlayerMapObjectReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerObjectMovedReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectPlayerMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import io.mockk.Runs
@@ -113,7 +113,7 @@ internal class PlayerMapObjectTest {
 
         private val playerMapObjectId = PlayerMapObjectId.valueOf(50)
         private lateinit var playerMapObject: PlayerMapObject
-        private val onPlayerObjectMovedReceiver = mockk<OnPlayerObjectMovedReceiverDelegate>()
+        private val onPlayerMapObjectMovedReceiver = mockk<OnPlayerMapObjectMovedReceiverDelegate>()
         private val onPlayerEditPlayerMapObjectReceiver = mockk<OnPlayerEditPlayerMapObjectReceiverDelegate>()
         private val onPlayerSelectPlayerMapObjectReceiver = mockk<OnPlayerSelectPlayerMapObjectReceiverDelegate>()
 
@@ -131,7 +131,7 @@ internal class PlayerMapObjectTest {
                     rotation = vector3DOf(x = 4f, y = 5f, z = 6f),
                     drawDistance = 7f,
                     nativeFunctionExecutor = nativeFunctionExecutor,
-                    onPlayerObjectMovedReceiver = onPlayerObjectMovedReceiver,
+                    onPlayerMapObjectMovedReceiver = onPlayerMapObjectMovedReceiver,
                     onPlayerEditPlayerMapObjectReceiver = onPlayerEditPlayerMapObjectReceiver,
                     onPlayerSelectPlayerMapObjectReceiver = onPlayerSelectPlayerMapObjectReceiver
             )
@@ -462,11 +462,11 @@ internal class PlayerMapObjectTest {
 
         @Test
         fun shouldCallOnPlayerMapObjectMovedReceiverDelegate() {
-            every { onPlayerObjectMovedReceiver.onPlayerObjectMoved(any()) } just Runs
+            every { onPlayerMapObjectMovedReceiver.onPlayerMapObjectMoved(any()) } just Runs
 
             playerMapObject.onMoved()
 
-            verify { onPlayerObjectMovedReceiver.onPlayerObjectMoved(playerMapObject) }
+            verify { onPlayerMapObjectMovedReceiver.onPlayerMapObjectMoved(playerMapObject) }
         }
 
         @Test

@@ -470,13 +470,13 @@ internal class CallbackModuleTest {
         }
 
         @Test
-        fun shouldInjectOnPlayerObjectMovedHandlerAsSingleton() {
-            val onPlayerObjectMovedHandler = injector.getInstance<OnPlayerObjectMovedHandler>()
+        fun shouldInjectOnPlayerMapObjectMovedHandlerAsSingleton() {
+            val onPlayerMapObjectMovedHandler = injector.getInstance<OnPlayerMapObjectMovedHandler>()
 
-            assertThat(onPlayerObjectMovedHandler)
+            assertThat(onPlayerMapObjectMovedHandler)
                     .isNotNull
             assertThat(testService.handlers)
-                    .contains(onPlayerObjectMovedHandler)
+                    .contains(onPlayerMapObjectMovedHandler)
         }
 
         @Test
