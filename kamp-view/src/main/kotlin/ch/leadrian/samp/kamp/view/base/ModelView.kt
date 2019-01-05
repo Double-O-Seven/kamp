@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
+import ch.leadrian.samp.kamp.core.api.callback.onClick
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
