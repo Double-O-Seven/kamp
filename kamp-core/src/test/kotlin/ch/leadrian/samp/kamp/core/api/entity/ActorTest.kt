@@ -1,7 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.positionOf
@@ -11,8 +9,12 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamInReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -89,6 +91,8 @@ internal class ActorTest {
 
         private val actorId = ActorId.valueOf(10)
         private lateinit var actor: Actor
+        private val onActorStreamInReceiver = mockk<OnActorStreamInReceiverDelegate>()
+        private val onActorStreamOutReceiver = mockk<OnActorStreamOutReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
@@ -99,7 +103,9 @@ internal class ActorTest {
                     model = SkinModel.BALLAS2,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                     rotation = 4f,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    onActorStreamInReceiver = onActorStreamInReceiver,
+                    onActorStreamOutReceiver = onActorStreamOutReceiver
             )
         }
 
@@ -333,106 +339,24 @@ internal class ActorTest {
 
         }
 
-        @Nested
-        inner class OnActorStreamInListenersTests {
+        @Test
+        fun shouldCallOnActorStreamInReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onActorStreamInReceiver.onActorStreamIn(any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnActorStreamInListener>(relaxed = true)
-                actor.addOnActorStreamInListener(listener)
+            actor.onStreamIn(player)
 
-                actor.onStreamIn(player)
-
-                verify { listener.onActorStreamIn(actor, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnActorStreamInListener>(relaxed = true)
-                actor.addOnActorStreamInListener(listener)
-                actor.removeOnActorStreamInListener(listener)
-
-                actor.onStreamIn(player)
-
-                verify(exactly = 0) { listener.onActorStreamIn(any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val player = mockk<Player>()
-                val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
-                actor.onStreamIn(onStreamIn)
-
-                actor.onStreamIn(player)
-
-                verify { onStreamIn.invoke(actor, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val player = mockk<Player>()
-                val onStreamIn = mockk<Actor.(Player) -> Unit>(relaxed = true)
-                val listener = actor.onStreamIn(onStreamIn)
-                actor.removeOnActorStreamInListener(listener)
-
-                actor.onStreamIn(player)
-
-                verify(exactly = 0) { onStreamIn.invoke(any(), any()) }
-            }
-
+            verify { onActorStreamInReceiver.onActorStreamIn(actor, player) }
         }
 
-        @Nested
-        inner class OnActorStreamOutListenersTests {
+        @Test
+        fun shouldCallOnActorStreamOutReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onActorStreamOutReceiver.onActorStreamOut(any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnActorStreamOutListener>(relaxed = true)
-                actor.addOnActorStreamOutListener(listener)
+            actor.onStreamOut(player)
 
-                actor.onStreamOut(player)
-
-                verify { listener.onActorStreamOut(actor, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnActorStreamOutListener>(relaxed = true)
-                actor.addOnActorStreamOutListener(listener)
-                actor.removeOnActorStreamOutListener(listener)
-
-                actor.onStreamOut(player)
-
-                verify(exactly = 0) { listener.onActorStreamOut(any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val player = mockk<Player>()
-                val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
-                actor.onStreamOut(onStreamOut)
-
-                actor.onStreamOut(player)
-
-                verify { onStreamOut.invoke(actor, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val player = mockk<Player>()
-                val onStreamOut = mockk<Actor.(Player) -> Unit>(relaxed = true)
-                val listener = actor.onStreamOut(onStreamOut)
-                actor.removeOnActorStreamOutListener(listener)
-
-                actor.onStreamOut(player)
-
-                verify(exactly = 0) { onStreamOut.invoke(any(), any()) }
-            }
-
+            verify { onActorStreamOutReceiver.onActorStreamOut(actor, player) }
         }
 
         @Nested

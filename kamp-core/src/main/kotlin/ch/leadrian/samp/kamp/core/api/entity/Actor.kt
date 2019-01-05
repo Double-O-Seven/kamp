@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInReceiver
+import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
@@ -12,6 +12,8 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamInReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class Actor
@@ -19,12 +21,13 @@ internal constructor(
         model: SkinModel,
         coordinates: Vector3D,
         rotation: Float,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Entity<ActorId>, AbstractDestroyable() {
-
-    private val onActorStreamInListeners = LinkedHashSet<OnActorStreamInListener>()
-
-    private val onActorStreamOutListeners = LinkedHashSet<OnActorStreamOutListener>()
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val onActorStreamInReceiver: OnActorStreamInReceiverDelegate = OnActorStreamInReceiverDelegate(),
+        private val onActorStreamOutReceiver: OnActorStreamOutReceiverDelegate = OnActorStreamOutReceiverDelegate()
+) : Entity<ActorId>,
+        AbstractDestroyable(),
+        OnActorStreamInReceiver by onActorStreamInReceiver,
+        OnActorStreamOutReceiver by onActorStreamOutReceiver {
 
     override val id: ActorId
         get() = requireNotDestroyed { field }
@@ -131,50 +134,12 @@ internal constructor(
             nativeFunctionExecutor.setActorInvulnerable(id.value, value)
         }
 
-    fun addOnActorStreamInListener(listener: OnActorStreamInListener) {
-        onActorStreamInListeners += listener
-    }
-
-    fun removeOnActorStreamInListener(listener: OnActorStreamInListener) {
-        onActorStreamInListeners -= listener
-    }
-
-    inline fun onStreamIn(crossinline onStreamIn: Actor.(Player) -> Unit): OnActorStreamInListener {
-        val listener = object : OnActorStreamInListener {
-
-            override fun onActorStreamIn(actor: Actor, forPlayer: Player) {
-                onStreamIn.invoke(actor, forPlayer)
-            }
-        }
-        addOnActorStreamInListener(listener)
-        return listener
-    }
-
     internal fun onStreamIn(player: Player) {
-        onActorStreamInListeners.forEach { it.onActorStreamIn(this, player) }
-    }
-
-    fun addOnActorStreamOutListener(listener: OnActorStreamOutListener) {
-        onActorStreamOutListeners += listener
-    }
-
-    fun removeOnActorStreamOutListener(listener: OnActorStreamOutListener) {
-        onActorStreamOutListeners -= listener
-    }
-
-    inline fun onStreamOut(crossinline onStreamOut: Actor.(Player) -> Unit): OnActorStreamOutListener {
-        val listener = object : OnActorStreamOutListener {
-
-            override fun onActorStreamOut(actor: Actor, forPlayer: Player) {
-                onStreamOut.invoke(actor, forPlayer)
-            }
-        }
-        addOnActorStreamOutListener(listener)
-        return listener
+        onActorStreamInReceiver.onActorStreamIn(this, player)
     }
 
     internal fun onStreamOut(player: Player) {
-        onActorStreamOutListeners.forEach { it.onActorStreamOut(this, player) }
+        onActorStreamOutReceiver.onActorStreamOut(this, player)
     }
 
     override fun onDestroy() {
