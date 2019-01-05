@@ -47,6 +47,7 @@ private constructor(
     private lateinit var plugins: List<Plugin>
 
     lateinit var injector: Injector
+        private set
 
     lateinit var callbackProcessor: CallbackProcessor
         private set
