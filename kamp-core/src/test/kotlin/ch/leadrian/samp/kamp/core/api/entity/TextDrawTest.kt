@@ -20,7 +20,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import io.mockk.Called
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerClickTextDrawReceiverDelegate
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -90,6 +90,7 @@ internal class TextDrawTest {
         private val locale = Locale.GERMANY
         private val textDrawId = TextDrawId.valueOf(69)
         private lateinit var textDraw: TextDraw
+        private val onPlayerClickTextDrawReceiver = mockk<OnPlayerClickTextDrawReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
         private val textFormatter = mockk<TextFormatter>()
@@ -106,7 +107,8 @@ internal class TextDrawTest {
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     textFormatter = textFormatter,
                     textProvider = textProvider,
-                    locale = locale
+                    locale = locale,
+                    onPlayerClickTextDrawReceiver = onPlayerClickTextDrawReceiver
             )
         }
 
@@ -725,119 +727,14 @@ internal class TextDrawTest {
             }
         }
 
-        @Nested
-        inner class OnClickTests {
+        @Test
+        fun shouldCallOnPlayerClickTextDrawReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onPlayerClickTextDrawReceiver.onPlayerClickTextDraw(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
 
-            private val player = mockk<Player>()
+            textDraw.onClick(player)
 
-            @Test
-            fun shouldCallAddedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
-                textDraw.addOnPlayerClickTextDrawListener(listener)
-
-                textDraw.onClick(player)
-
-                verify { listener.onPlayerClickTextDraw(player, textDraw) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
-                textDraw.addOnPlayerClickTextDrawListener(listener)
-                textDraw.removeOnPlayerClickTextDrawListener(listener)
-
-                textDraw.onClick(player)
-
-                verify(exactly = 0) { listener.onPlayerClickTextDraw(any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val onClick = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
-                }
-                textDraw.onClick(onClick)
-
-                textDraw.onClick(player)
-
-                verify { onClick.invoke(textDraw, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val player = mockk<Player>()
-                val onClick = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result>(relaxed = true)
-                val listener = textDraw.onClick(onClick)
-                textDraw.removeOnPlayerClickTextDrawListener(listener)
-
-                textDraw.onClick(player)
-
-                verify(exactly = 0) { onClick.invoke(any(), any()) }
-            }
-
-            @Test
-            fun givenEveryOnClickHandlerReturnsNotFoundItShouldReturnNotFound() {
-                val onClick1 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-                }
-                val onClick2 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-                }
-                val onClick3 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-                }
-                textDraw.apply {
-                    onClick(onClick1)
-                    onClick(onClick2)
-                    onClick(onClick3)
-                }
-
-                val result = textDraw.onClick(player)
-
-                assertThat(result)
-                        .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
-                verifyOrder {
-                    onClick1.invoke(textDraw, player)
-                    onClick2.invoke(textDraw, player)
-                    onClick3.invoke(textDraw, player)
-                }
-            }
-
-            @Test
-            fun givenAnOnClickHandlerReturnsProcessedItShouldNotExecuteTheFollowingOnes() {
-                val onClick1 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-                }
-                val onClick2 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
-                }
-                val onClick3 = mockk<TextDraw.(Player) -> OnPlayerClickTextDrawListener.Result> {
-                    every { this@mockk.invoke(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-                }
-                textDraw.apply {
-                    onClick(onClick1)
-                    onClick(onClick2)
-                    onClick(onClick3)
-                }
-
-                textDraw.onClick(player)
-
-                verify {
-                    onClick1.invoke(textDraw, player)
-                    onClick2.invoke(textDraw, player)
-                    onClick3 wasNot Called
-                }
-            }
-
-            @Test
-            fun givenNoOnClickHandlerItShouldReturnNotFound() {
-                val result = textDraw.onClick(player)
-
-                assertThat(result)
-                        .isEqualTo(OnPlayerClickTextDrawListener.Result.NotFound)
-            }
+            verify { onPlayerClickTextDrawReceiver.onPlayerClickTextDraw(player, textDraw) }
         }
 
         @Nested
