@@ -43,7 +43,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
             private val asyncExecutor: AsyncExecutor
     ) : StreamableTextLabelState(streamableTextLabelImpl), HasVehicle {
 
-        private val offset = offset.toVector3D()
+        val offset = offset.toVector3D()
 
         override val coordinates: Vector3D
             get() = asyncExecutor.computeOnMainThread { vehicle.coordinates }.get()
@@ -69,7 +69,7 @@ internal sealed class StreamableTextLabelState(protected val streamableTextLabel
             private val asyncExecutor: AsyncExecutor
     ) : StreamableTextLabelState(streamableTextLabelImpl), HasPlayer {
 
-        private val offset = offset.toVector3D()
+        val offset = offset.toVector3D()
 
         override val coordinates: Vector3D
             get() = asyncExecutor.computeOnMainThread { player.coordinates }.get()
