@@ -1,9 +1,12 @@
 package ch.leadrian.samp.kamp.annotationprocessor
 
 import ch.leadrian.samp.kamp.annotationprocessor.codegen.CallbackHandlerGenerator
+import ch.leadrian.samp.kamp.annotationprocessor.codegen.CallbackReceiverDelegateGenerator
+import ch.leadrian.samp.kamp.annotationprocessor.codegen.CallbackReceiverGenerator
 import ch.leadrian.samp.kamp.annotationprocessor.model.CallbackListenerDefinition
 import ch.leadrian.samp.kamp.annotations.CallbackListener
 import ch.leadrian.samp.kamp.annotations.IgnoredReturnValue
+import ch.leadrian.samp.kamp.annotations.InlineCallback
 import com.google.auto.service.AutoService
 import com.squareup.kotlinpoet.asClassName
 import com.squareup.kotlinpoet.asTypeName
@@ -31,6 +34,8 @@ import kotlin.reflect.full.safeCast
 class CallbackAnnotationProcessor : AbstractProcessor() {
 
     private val callbackHandlerGenerator = CallbackHandlerGenerator()
+    private val callbackReceiverGenerator = CallbackReceiverGenerator()
+    private val callbackReceiverDelegateGenerator = CallbackReceiverDelegateGenerator()
 
     companion object {
         const val KAPT_KOTLIN_GENERATED_OPTION_NAME = "kapt.kotlin.generated"
@@ -43,15 +48,14 @@ class CallbackAnnotationProcessor : AbstractProcessor() {
     }
 
     override fun process(annotations: MutableSet<out TypeElement>, roundEnv: RoundEnvironment): Boolean {
-        return try {
-            annotations.forEach { annotation ->
+        annotations.forEach { annotation ->
+            try {
                 roundEnv.getElementsAnnotatedWith(annotation).forEach(this::process)
+            } catch (e: CallbackAnnotationProcessorException) {
+                processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, e.message)
             }
-            true
-        } catch (e: CallbackAnnotationProcessorException) {
-            processingEnv.messager.printMessage(Diagnostic.Kind.ERROR, e.message)
-            false
         }
+        return true
     }
 
     private fun process(element: Element) {
@@ -77,6 +81,10 @@ class CallbackAnnotationProcessor : AbstractProcessor() {
                 ignoredReturnValueType = ignoredReturnValueType
         )
         callbackHandlerGenerator.generate(listenerDefinition, kaptOutputDirectory)
+        if (callbackMethodElement.getAnnotation(InlineCallback::class.java) != null) {
+            callbackReceiverGenerator.generate(listenerDefinition, kaptOutputDirectory)
+            callbackReceiverDelegateGenerator.generate(listenerDefinition, kaptOutputDirectory)
+        }
     }
 
     private fun getIgnoredReturnValue(callbackMethodElement: ExecutableElement): TypeMirror =

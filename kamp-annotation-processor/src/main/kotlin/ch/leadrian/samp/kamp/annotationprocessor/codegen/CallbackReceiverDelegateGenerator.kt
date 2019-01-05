@@ -5,21 +5,22 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.ParameterSpec
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
+import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeName
 import com.squareup.kotlinpoet.TypeSpec
+import com.squareup.kotlinpoet.asClassName
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.StandardOpenOption
-import javax.inject.Inject
-import javax.inject.Singleton
 
-class CallbackHandlerGenerator {
+class CallbackReceiverDelegateGenerator {
 
     fun generate(listenerDefinition: CallbackListenerDefinition, outputDirectory: Path) {
         val className = ClassName(
                 packageName = listenerDefinition.runtimePackageName,
-                simpleName = listenerDefinition.type.simpleName.removeSuffix("Listener") + "Handler"
+                simpleName = listenerDefinition.type.simpleName.removeSuffix("Listener") + "ReceiverDelegate"
         )
         val fileSpec = buildFileSpec(className, listenerDefinition)
         writeFile(outputDirectory, className, fileSpec)
@@ -28,7 +29,7 @@ class CallbackHandlerGenerator {
     private fun buildFileSpec(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec {
         return FileSpec
                 .builder(listenerDefinition.runtimePackageName, className.simpleName)
-                .addCallbackHandlerClass(className, listenerDefinition)
+                .addCallbackReceiverDelegateTypeSpec(className, listenerDefinition)
                 .build()
     }
 
@@ -41,24 +42,47 @@ class CallbackHandlerGenerator {
         }
     }
 
-    private fun FileSpec.Builder.addCallbackHandlerClass(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec.Builder {
+    private fun FileSpec.Builder.addCallbackReceiverDelegateTypeSpec(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec.Builder {
+        val listenersPropertySpec = PropertySpec
+                .builder("listeners", LinkedHashSet::class.asClassName().parameterizedBy(listenerDefinition.type))
+                .addModifiers(KModifier.PRIVATE)
+                .mutable(false)
+                .initializer("%T()", LinkedHashSet::class)
+                .build()
+        val receiverClassName = ClassName(
+                packageName = listenerDefinition.apiPackageName,
+                simpleName = listenerDefinition.type.simpleName.removeSuffix("Listener") + "Receiver"
+        )
         val typeSpec = TypeSpec
                 .classBuilder(className)
                 .addModifiers(KModifier.INTERNAL)
-                .addAnnotation(Singleton::class)
-                .primaryConstructor(FunSpec
-                        .constructorBuilder()
-                        .addAnnotation(Inject::class)
-                        .build())
-                .superclass(ClassName(
-                        "ch.leadrian.samp.kamp.core.api.callback",
-                        "CallbackListenerRegistry"
-                ).parameterizedBy(listenerDefinition.type))
-                .addSuperclassConstructorParameter("%T::class", listenerDefinition.type)
+                .addSuperinterface(receiverClassName)
                 .addSuperinterface(listenerDefinition.type)
+                .addProperty(listenersPropertySpec)
+                .addAddListenerFunction(listenerDefinition, listenersPropertySpec)
+                .addRemoveListenerFunction(listenerDefinition, listenersPropertySpec)
                 .addCallbackFunction(listenerDefinition)
                 .build()
-        return addType(typeSpec)
+        addType(typeSpec)
+        return this
+    }
+
+    private fun TypeSpec.Builder.addAddListenerFunction(listenerDefinition: CallbackListenerDefinition, listenersPropertySpec: PropertySpec): TypeSpec.Builder {
+        return addFunction(FunSpec
+                .builder("add${listenerDefinition.type.simpleName}")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                .addStatement("%N += listener", listenersPropertySpec)
+                .build())
+    }
+
+    private fun TypeSpec.Builder.addRemoveListenerFunction(listenerDefinition: CallbackListenerDefinition, listenersPropertySpec: PropertySpec): TypeSpec.Builder {
+        return addFunction(FunSpec
+                .builder("remove${listenerDefinition.type.simpleName}")
+                .addModifiers(KModifier.OVERRIDE)
+                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                .addStatement("%N -= listener", listenersPropertySpec)
+                .build())
     }
 
     private fun TypeSpec.Builder.addCallbackFunction(listenerDefinition: CallbackListenerDefinition): TypeSpec.Builder {
