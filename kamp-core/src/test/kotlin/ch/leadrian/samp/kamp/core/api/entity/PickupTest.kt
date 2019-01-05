@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.data.MutableVector3D
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -8,7 +7,10 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerPickUpPickupReceiverDelegate
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -114,6 +116,7 @@ internal class PickupTest {
 
         private val pickupId = PickupId.valueOf(123)
         private lateinit var pickup: Pickup
+        private val onPlayerPickUpPickupReceiver = mockk<OnPlayerPickUpPickupReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
@@ -127,7 +130,8 @@ internal class PickupTest {
                     coordinates = mutableVector3DOf(x = 1f, y = 2f, z = 3f),
                     type = 13,
                     virtualWorldId = 187,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    nativeFunctionExecutor = nativeFunctionExecutor,
+                    onPlayerPickUpPickupReceiver = onPlayerPickUpPickupReceiver
             )
         }
 
@@ -140,55 +144,14 @@ internal class PickupTest {
                     .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
         }
 
-        @Nested
-        inner class OnPlayerPickUpPickupListenersTests {
+        @Test
+        fun shouldCallOnPlayerPickUpPickupReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onPlayerPickUpPickupReceiver.onPlayerPickUpPickup(any(), any()) } just Runs
 
-            @Test
-            fun shouldCallAddedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
-                pickup.addOnPlayerPickUpPickupListener(listener)
+            pickup.onPickUp(player)
 
-                pickup.onPickUp(player)
-
-                verify { listener.onPlayerPickUpPickup(player, pickup) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedListener() {
-                val player = mockk<Player>()
-                val listener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
-                pickup.addOnPlayerPickUpPickupListener(listener)
-                pickup.removeOnPlayerPickUpPickupListener(listener)
-
-                pickup.onPickUp(player)
-
-                verify(exactly = 0) { listener.onPlayerPickUpPickup(any(), any()) }
-            }
-
-            @Test
-            fun shouldCallInlinedListener() {
-                val player = mockk<Player>()
-                val onPickUp = mockk<Pickup.(Player) -> Unit>(relaxed = true)
-                pickup.onPickUp(onPickUp)
-
-                pickup.onPickUp(player)
-
-                verify { onPickUp.invoke(pickup, player) }
-            }
-
-            @Test
-            fun shouldNotCallRemovedInlinedListener() {
-                val player = mockk<Player>()
-                val onPickUp = mockk<Pickup.(Player) -> Unit>(relaxed = true)
-                val listener = pickup.onPickUp(onPickUp)
-                pickup.removeOnPlayerPickUpPickupListener(listener)
-
-                pickup.onPickUp(player)
-
-                verify(exactly = 0) { onPickUp.invoke(any(), any()) }
-            }
-
+            verify { onPlayerPickUpPickupReceiver.onPlayerPickUpPickup(player, pickup) }
         }
 
         @Nested

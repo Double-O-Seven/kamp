@@ -1,10 +1,11 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupReceiver
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerPickUpPickupReceiverDelegate
 
 class Pickup
 internal constructor(
@@ -12,10 +13,11 @@ internal constructor(
         coordinates: Vector3D,
         val type: Int,
         val virtualWorldId: Int?,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) : Entity<PickupId>, AbstractDestroyable() {
-
-    private val onPlayerPickUpPickupListeners = LinkedHashSet<OnPlayerPickUpPickupListener>()
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val onPlayerPickUpPickupReceiver: OnPlayerPickUpPickupReceiverDelegate = OnPlayerPickUpPickupReceiverDelegate()
+) : Entity<PickupId>,
+        AbstractDestroyable(),
+        OnPlayerPickUpPickupReceiver by onPlayerPickUpPickupReceiver {
 
     override val id: PickupId
         get() = requireNotDestroyed { field }
@@ -39,27 +41,8 @@ internal constructor(
 
     val coordinates: Vector3D = coordinates.toVector3D()
 
-    fun addOnPlayerPickUpPickupListener(listener: OnPlayerPickUpPickupListener) {
-        onPlayerPickUpPickupListeners += listener
-    }
-
-    fun removeOnPlayerPickUpPickupListener(listener: OnPlayerPickUpPickupListener) {
-        onPlayerPickUpPickupListeners -= listener
-    }
-
-    inline fun onPickUp(crossinline onPickUp: Pickup.(Player) -> Unit): OnPlayerPickUpPickupListener {
-        val listener = object : OnPlayerPickUpPickupListener {
-
-            override fun onPlayerPickUpPickup(player: Player, pickup: Pickup) {
-                onPickUp.invoke(pickup, player)
-            }
-        }
-        addOnPlayerPickUpPickupListener(listener)
-        return listener
-    }
-
     internal fun onPickUp(player: Player) {
-        onPlayerPickUpPickupListeners.forEach { it.onPlayerPickUpPickup(player, this) }
+        onPlayerPickUpPickupReceiver.onPlayerPickUpPickup(player, this)
     }
 
     override fun onDestroy() {
