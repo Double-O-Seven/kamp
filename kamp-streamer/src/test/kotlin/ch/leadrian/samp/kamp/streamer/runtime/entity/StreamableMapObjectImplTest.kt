@@ -5,7 +5,6 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Colors
-import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -18,13 +17,17 @@ import ch.leadrian.samp.kamp.core.api.entity.onDestroy
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
@@ -55,8 +58,13 @@ internal class StreamableMapObjectImplTest {
     private val onStreamableMapObjectMovedHandler = mockk<OnStreamableMapObjectMovedHandler>()
     private val onPlayerEditStreamableMapObjectHandler = mockk<OnPlayerEditStreamableMapObjectHandler>()
     private val onPlayerSelectStreamableMapObjectHandler = mockk<OnPlayerSelectStreamableMapObjectHandler>()
-    private val onStreamMapObjectStreamInHandler = mockk<OnStreamableMapObjectStreamInHandler>()
-    private val onStreamMapObjectStreamOutHandler = mockk<OnStreamableMapObjectStreamOutHandler>()
+    private val onStreamableMapObjectStreamInHandler = mockk<OnStreamableMapObjectStreamInHandler>()
+    private val onStreamableMapObjectStreamOutHandler = mockk<OnStreamableMapObjectStreamOutHandler>()
+    private val onStreamableMapObjectMovedReceiver = mockk<OnStreamableMapObjectMovedReceiverDelegate>()
+    private val onPlayerEditStreamableMapObjectReceiver = mockk<OnPlayerEditStreamableMapObjectReceiverDelegate>()
+    private val onPlayerSelectStreamableMapObjectReceiver = mockk<OnPlayerSelectStreamableMapObjectReceiverDelegate>()
+    private val onStreamableMapObjectStreamInReceiver = mockk<OnStreamableMapObjectStreamInReceiverDelegate>()
+    private val onStreamableMapObjectStreamOutReceiver = mockk<OnStreamableMapObjectStreamOutReceiverDelegate>()
     private val textProvider = mockk<TextProvider>()
     private val mapObjectStreamer = mockk<MapObjectStreamer>()
     private val streamableMapObjectStateMachineFactory = mockk<StreamableMapObjectStateMachineFactory>()
@@ -95,12 +103,17 @@ internal class StreamableMapObjectImplTest {
                 onStreamableMapObjectMovedHandler = onStreamableMapObjectMovedHandler,
                 onPlayerSelectStreamableMapObjectHandler = onPlayerSelectStreamableMapObjectHandler,
                 onPlayerEditStreamableMapObjectHandler = onPlayerEditStreamableMapObjectHandler,
-                onStreamableMapObjectStreamInHandler = onStreamMapObjectStreamInHandler,
-                onStreamableMapObjectStreamOutHandler = onStreamMapObjectStreamOutHandler,
+                onStreamableMapObjectStreamInHandler = onStreamableMapObjectStreamInHandler,
+                onStreamableMapObjectStreamOutHandler = onStreamableMapObjectStreamOutHandler,
                 playerMapObjectService = playerMapObjectService,
                 textProvider = textProvider,
                 mapObjectStreamer = mapObjectStreamer,
-                streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
+                streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory,
+                onStreamableMapObjectMovedReceiver = onStreamableMapObjectMovedReceiver,
+                onPlayerEditStreamableMapObjectReceiver = onPlayerEditStreamableMapObjectReceiver,
+                onPlayerSelectStreamableMapObjectReceiver = onPlayerSelectStreamableMapObjectReceiver,
+                onStreamableMapObjectStreamInReceiver = onStreamableMapObjectStreamInReceiver,
+                onStreamableMapObjectStreamOutReceiver = onStreamableMapObjectStreamOutReceiver
         )
     }
 
@@ -114,7 +127,8 @@ internal class StreamableMapObjectImplTest {
             every { playerMapObject.player } returns player
             every { playerMapObject.addOnPlayerEditPlayerMapObjectListener(any()) } just Runs
             every { playerMapObject.addOnPlayerSelectPlayerMapObjectListener(any()) } just Runs
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         }
 
         @Test
@@ -179,17 +193,12 @@ internal class StreamableMapObjectImplTest {
                         drawDistance = streamDistance
                 )
             } returns playerMapObject
-            val onStreamIn1 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
-            val onStreamIn2 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
-            streamableMapObject.onStreamIn(onStreamIn1)
-            streamableMapObject.onStreamIn(onStreamIn2)
 
             streamableMapObject.onStreamIn(player)
 
             verify {
-                onStreamIn1.invoke(streamableMapObject, player)
-                onStreamIn2.invoke(streamableMapObject, player)
-                onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(streamableMapObject, player)
+                onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(streamableMapObject, player)
+                onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(streamableMapObject, player)
             }
         }
 
@@ -386,7 +395,8 @@ internal class StreamableMapObjectImplTest {
             every { playerMapObject.player } returns player
             every { playerMapObject.addOnPlayerEditPlayerMapObjectListener(any()) } just Runs
             every { playerMapObject.addOnPlayerSelectPlayerMapObjectListener(any()) } just Runs
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns oldPlayerMapObject
@@ -550,8 +560,10 @@ internal class StreamableMapObjectImplTest {
             every { streamableMapObjectStateMachine.currentState } returns currentState
             every { currentState.onStreamIn(any()) } just Runs
             every { playerMapObject.player } returns player
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
-            every { onStreamMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamOutReceiver.onStreamableMapObjectStreamOut(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(any(), any()) } just Runs
         }
 
         @Test
@@ -609,17 +621,12 @@ internal class StreamableMapObjectImplTest {
             }
             every { streamableMapObjectStateMachine.currentState } returns currentState
             streamableMapObject.onStreamIn(player)
-            val onStreamOut1 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
-            val onStreamOut2 = mockk<StreamableMapObject.(Player) -> Unit>(relaxed = true)
-            streamableMapObject.onStreamOut(onStreamOut1)
-            streamableMapObject.onStreamOut(onStreamOut2)
 
             streamableMapObject.onStreamOut(player)
 
             verify {
-                onStreamOut1.invoke(streamableMapObject, player)
-                onStreamOut2.invoke(streamableMapObject, player)
-                onStreamMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(streamableMapObject, player)
+                onStreamableMapObjectStreamOutReceiver.onStreamableMapObjectStreamOut(streamableMapObject, player)
+                onStreamableMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(streamableMapObject, player)
             }
         }
     }
@@ -750,7 +757,8 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldDisableCameraCollisionsForPlayerMapObject() {
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { playerMapObject.disableCameraCollision() } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -773,7 +781,8 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldSetMaterial() {
-        every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+        every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+        every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         every {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
         } returns playerMapObject
@@ -794,9 +803,14 @@ internal class StreamableMapObjectImplTest {
     @Nested
     inner class SetMaterialTextTests {
 
+        @BeforeEach
+        fun setUp() {
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+        }
+
         @Test
         fun shouldSetMaterialTextWithSimpleString() {
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { player.locale } returns Locale.GERMANY
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -841,7 +855,6 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldSetMaterialTextWithTextKey() {
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             val locale = Locale.GERMANY
             val textKey = TextKey("hi.there")
             every { textProvider.getText(locale, textKey) } returns "Hi there"
@@ -890,7 +903,8 @@ internal class StreamableMapObjectImplTest {
 
     @Test
     fun shouldEdit() {
-        every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+        every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+        every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
         every { playerMapObject.edit(any()) } just Runs
         every {
             playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
@@ -1026,6 +1040,7 @@ internal class StreamableMapObjectImplTest {
 
         @BeforeEach
         fun setUp() {
+            every { onStreamableMapObjectMovedReceiver.onStreamableMapObjectMoved(any()) } just Runs
             every { onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(any()) } just Runs
         }
 
@@ -1037,13 +1052,10 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
-        fun shouldCallOnMovedHandlers() {
-            val onMoved = mockk<StreamableMapObject.() -> Unit>(relaxed = true)
-            streamableMapObject.onMoved(onMoved)
-
+        fun shouldCallOnStreamableMapObjectMovedReceiver() {
             streamableMapObject.onMoved()
 
-            verify { onMoved.invoke(streamableMapObject) }
+            verify { onStreamableMapObjectMovedReceiver.onStreamableMapObjectMoved(streamableMapObject) }
         }
 
     }
@@ -1256,7 +1268,8 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldNotBeStreamedInForPlayer() {
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every {
                 playerMapObjectService.createPlayerMapObject(any(), any(), any(), any(), any())
             } returns playerMapObject
@@ -1391,7 +1404,8 @@ internal class StreamableMapObjectImplTest {
 
         @Test
         fun shouldDestroyPlayerMapObjects() {
-            every { onStreamMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(any(), any()) } just Runs
+            every { onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(any(), any()) } just Runs
             every { playerMapObject.destroy() } just Runs
             val coordinates = vector3DOf(1f, 2f, 3f)
             val rotation = vector3DOf(4f, 5f, 6f)
@@ -1494,6 +1508,7 @@ internal class StreamableMapObjectImplTest {
 
         @BeforeEach
         fun setUp() {
+            every { onPlayerEditStreamableMapObjectReceiver.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any()) } just Runs
             every { onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any()) } just Runs
         }
 
@@ -1551,51 +1566,39 @@ internal class StreamableMapObjectImplTest {
         @Test
         fun shouldCallOnPlayerEditStreamableMapObjectHandler() {
             streamableMapObject.onPlayerEditPlayerMapObject(
-                    playerMapObject,
-                    ObjectEditResponse.UPDATE,
-                    vector3DOf(1f, 2f, 3f),
-                    vector3DOf(4f, 5f, 6f)
+                    playerMapObject = playerMapObject,
+                    response = ObjectEditResponse.UPDATE,
+                    offset = vector3DOf(1f, 2f, 3f),
+                    rotation = vector3DOf(4f, 5f, 6f)
             )
 
             verify {
                 onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
-                        player,
-                        streamableMapObject,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
+                        player = player,
+                        streamableMapObject = streamableMapObject,
+                        response = ObjectEditResponse.UPDATE,
+                        offset = vector3DOf(1f, 2f, 3f),
+                        rotation = vector3DOf(4f, 5f, 6f)
                 )
             }
         }
 
         @Test
-        fun shouldInvokeOnPlayerEditPlayerMapObjectListeners() {
-            val onEdit1 = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-            val onEdit2 = mockk<StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit>(relaxed = true)
-            streamableMapObject.onEdit(onEdit1)
-            streamableMapObject.onEdit(onEdit2)
-
+        fun shouldCallOnPlayerEditStreamableMapObjectReceiver() {
             streamableMapObject.onPlayerEditPlayerMapObject(
-                    playerMapObject,
-                    ObjectEditResponse.UPDATE,
-                    vector3DOf(1f, 2f, 3f),
-                    vector3DOf(4f, 5f, 6f)
+                    playerMapObject = playerMapObject,
+                    response = ObjectEditResponse.UPDATE,
+                    offset = vector3DOf(1f, 2f, 3f),
+                    rotation = vector3DOf(4f, 5f, 6f)
             )
 
             verify {
-                onEdit1(
-                        streamableMapObject,
-                        player,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onEdit2(
-                        streamableMapObject,
-                        player,
-                        ObjectEditResponse.UPDATE,
-                        vector3DOf(1f, 2f, 3f),
-                        vector3DOf(4f, 5f, 6f)
+                onPlayerEditStreamableMapObjectReceiver.onPlayerEditStreamableMapObject(
+                        player = player,
+                        streamableMapObject = streamableMapObject,
+                        response = ObjectEditResponse.UPDATE,
+                        offset = vector3DOf(1f, 2f, 3f),
+                        rotation = vector3DOf(4f, 5f, 6f)
                 )
             }
         }
@@ -1607,6 +1610,7 @@ internal class StreamableMapObjectImplTest {
 
         @BeforeEach
         fun setUp() {
+            every { onPlayerSelectStreamableMapObjectReceiver.onPlayerSelectStreamableMapObject(any(), any(), any(), any()) } just Runs
             every { onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any()) } just Runs
         }
 
@@ -1629,12 +1633,7 @@ internal class StreamableMapObjectImplTest {
         }
 
         @Test
-        fun shouldInvokeOnPlayerSelectPlayerMapObjectListeners() {
-            val onSelect1 = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
-            val onSelect2 = mockk<StreamableMapObject.(Player, Int, Vector3D) -> Unit>(relaxed = true)
-            streamableMapObject.onSelect(onSelect1)
-            streamableMapObject.onSelect(onSelect2)
-
+        fun shouldCallOnPlayerSelectStreamableMapObjectReceiver() {
             streamableMapObject.onPlayerSelectPlayerMapObject(
                     playerMapObject,
                     1337,
@@ -1642,15 +1641,9 @@ internal class StreamableMapObjectImplTest {
             )
 
             verify {
-                onSelect1(
-                        streamableMapObject,
+                onPlayerSelectStreamableMapObjectReceiver.onPlayerSelectStreamableMapObject(
                         player,
-                        1337,
-                        vector3DOf(4f, 5f, 6f)
-                )
-                onSelect2(
                         streamableMapObject,
-                        player,
                         1337,
                         vector3DOf(4f, 5f, 6f)
                 )

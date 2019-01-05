@@ -19,13 +19,23 @@ import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.PlayerMapObjectService
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamOutReceiver
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapObject
 import ch.leadrian.samp.kamp.streamer.runtime.MapObjectStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.*
@@ -47,25 +57,25 @@ constructor(
         private val onStreamableMapObjectStreamOutHandler: OnStreamableMapObjectStreamOutHandler,
         private val textProvider: TextProvider,
         private val mapObjectStreamer: MapObjectStreamer,
-        streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory
+        streamableMapObjectStateMachineFactory: StreamableMapObjectStateMachineFactory,
+        private val onStreamableMapObjectMovedReceiver: OnStreamableMapObjectMovedReceiverDelegate = OnStreamableMapObjectMovedReceiverDelegate(),
+        private val onPlayerEditStreamableMapObjectReceiver: OnPlayerEditStreamableMapObjectReceiverDelegate = OnPlayerEditStreamableMapObjectReceiverDelegate(),
+        private val onPlayerSelectStreamableMapObjectReceiver: OnPlayerSelectStreamableMapObjectReceiverDelegate = OnPlayerSelectStreamableMapObjectReceiverDelegate(),
+        private val onStreamableMapObjectStreamInReceiver: OnStreamableMapObjectStreamInReceiverDelegate = OnStreamableMapObjectStreamInReceiverDelegate(),
+        private val onStreamableMapObjectStreamOutReceiver: OnStreamableMapObjectStreamOutReceiverDelegate = OnStreamableMapObjectStreamOutReceiverDelegate()
 ) : CoordinatesBasedPlayerStreamable<StreamableMapObjectImpl, Rect3d>(),
         OnPlayerDisconnectListener,
         OnDestroyListener,
         OnPlayerEditPlayerMapObjectListener,
         OnPlayerSelectPlayerMapObjectListener,
-        StreamableMapObject {
+        StreamableMapObject,
+        OnStreamableMapObjectMovedReceiver by onStreamableMapObjectMovedReceiver,
+        OnPlayerEditStreamableMapObjectReceiver by onPlayerEditStreamableMapObjectReceiver,
+        OnPlayerSelectStreamableMapObjectReceiver by onPlayerSelectStreamableMapObjectReceiver,
+        OnStreamableMapObjectStreamInReceiver by onStreamableMapObjectStreamInReceiver,
+        OnStreamableMapObjectStreamOutReceiver by onStreamableMapObjectStreamOutReceiver {
 
     private val playerMapObjectsByPlayer: MutableMap<Player, PlayerMapObject> = mutableMapOf()
-
-    private val onMovedHandlers: MutableList<StreamableMapObjectImpl.() -> Unit> = mutableListOf()
-
-    private val onEditHandlers: MutableList<StreamableMapObjectImpl.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit> = mutableListOf()
-
-    private val onSelectHandlers: MutableList<StreamableMapObjectImpl.(Player, Int, Vector3D) -> Unit> = mutableListOf()
-
-    private val onStreamInHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
-
-    private val onStreamOutHandlers: MutableList<StreamableMapObject.(Player) -> Unit> = mutableListOf()
 
     private val stateMachine: StreamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(
             streamableMapObject = this,
@@ -89,12 +99,8 @@ constructor(
             throw IllegalStateException("Streamable map object is already streamed in")
         }
         playerMapObjectsByPlayer[forPlayer] = createPlayerMapObject(forPlayer)
-        onStreamInHandlers.forEach { it.invoke(this, forPlayer) }
+        onStreamableMapObjectStreamInReceiver.onStreamableMapObjectStreamIn(this, forPlayer)
         onStreamableMapObjectStreamInHandler.onStreamableMapObjectStreamIn(this, forPlayer)
-    }
-
-    override fun onStreamIn(onStreamIn: StreamableMapObject.(Player) -> Unit) {
-        onStreamInHandlers += onStreamIn
     }
 
     private fun createPlayerMapObject(forPlayer: Player): PlayerMapObject =
@@ -122,12 +128,8 @@ constructor(
         val playerMapObject = playerMapObjectsByPlayer.remove(forPlayer)
                 ?: throw IllegalStateException("Streamable player map object was not streamed in")
         playerMapObject.destroy()
-        onStreamOutHandlers.forEach { it.invoke(this, forPlayer) }
+        onStreamableMapObjectStreamOutReceiver.onStreamableMapObjectStreamOut(this, forPlayer)
         onStreamableMapObjectStreamOutHandler.onStreamableMapObjectStreamOut(this, forPlayer)
-    }
-
-    override fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit) {
-        onStreamOutHandlers += onStreamOut
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerMapObjectsByPlayer.contains(forPlayer)
@@ -200,12 +202,8 @@ constructor(
         get() = stateMachine.currentState is StreamableMapObjectState.Moving
 
     internal fun onMoved() {
-        onMovedHandlers.forEach { it.invoke(this) }
+        onStreamableMapObjectMovedReceiver.onStreamableMapObjectMoved(this)
         onStreamableMapObjectMovedHandler.onStreamableMapObjectMoved(this)
-    }
-
-    override fun onMoved(onMoved: StreamableMapObject.() -> Unit) {
-        onMovedHandlers += onMoved
     }
 
     override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
@@ -316,10 +314,6 @@ constructor(
         playerMapObjectsByPlayer[player]?.edit(player)
     }
 
-    override fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit) {
-        onEditHandlers += onEdit
-    }
-
     override fun onPlayerEditPlayerMapObject(playerMapObject: PlayerMapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
         requireNotDestroyed()
         if (response == ObjectEditResponse.FINAL) {
@@ -328,7 +322,13 @@ constructor(
             mapObjectStreamer.onBoundingBoxChange(this)
         }
         val player = playerMapObject.player
-        onEditHandlers.forEach { it.invoke(this, player, response, offset, rotation) }
+        onPlayerEditStreamableMapObjectReceiver.onPlayerEditStreamableMapObject(
+                player = player,
+                streamableMapObject = this,
+                response = response,
+                offset = offset,
+                rotation = rotation
+        )
         onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(
                 player = player,
                 streamableMapObject = this,
@@ -338,13 +338,9 @@ constructor(
         )
     }
 
-    override fun onSelect(onSelect: StreamableMapObject.(Player, Int, Vector3D) -> Unit) {
-        onSelectHandlers += onSelect
-    }
-
     override fun onPlayerSelectPlayerMapObject(playerMapObject: PlayerMapObject, modelId: Int, coordinates: Vector3D) {
         val player = playerMapObject.player
-        onSelectHandlers.forEach { it.invoke(this, player, modelId, coordinates) }
+        onPlayerSelectStreamableMapObjectReceiver.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
         onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(player, this, modelId, coordinates)
     }
 

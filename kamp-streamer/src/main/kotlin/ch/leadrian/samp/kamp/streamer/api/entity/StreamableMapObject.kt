@@ -1,16 +1,24 @@
 package ch.leadrian.samp.kamp.streamer.api.entity
 
-import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
-import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.MapObjectBase
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEditStreamableMapObjectReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerSelectStreamableMapObjectReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectMovedReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamOutReceiver
 
-interface StreamableMapObject : MapObjectBase {
+interface StreamableMapObject : MapObjectBase,
+        OnStreamableMapObjectMovedReceiver,
+        OnPlayerEditStreamableMapObjectReceiver,
+        OnPlayerSelectStreamableMapObjectReceiver,
+        OnStreamableMapObjectStreamInReceiver,
+        OnStreamableMapObjectStreamOutReceiver {
 
     val priority: Int
 
@@ -25,12 +33,6 @@ interface StreamableMapObject : MapObjectBase {
     fun refresh()
 
     fun isStreamedIn(forPlayer: Player): Boolean
-
-    fun onStreamIn(onStreamIn: StreamableMapObject.(Player) -> Unit)
-
-    fun onStreamOut(onStreamOut: StreamableMapObject.(Player) -> Unit)
-
-    fun onMoved(onMoved: StreamableMapObject.() -> Unit)
 
     fun setMaterialText(
             textKey: TextKey,
@@ -48,7 +50,4 @@ interface StreamableMapObject : MapObjectBase {
 
     fun edit(player: Player)
 
-    fun onEdit(onEdit: StreamableMapObject.(Player, ObjectEditResponse, Vector3D, Vector3D) -> Unit)
-
-    fun onSelect(onSelect: StreamableMapObject.(Player, Int, Vector3D) -> Unit)
 }
