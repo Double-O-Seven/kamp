@@ -1,16 +1,16 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectedMenuRowListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectedMenuRowReceiver
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectedMenuRowReceiverDelegate
 
 class MenuRow
 internal constructor(
         val menu: Menu,
         val index: Int,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
-) {
-
-    private val onPlayerSelectedMenuRowListeners = LinkedHashSet<OnPlayerSelectedMenuRowListener>()
+        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+        private val onPlayerSelectedMenuRowReceiver: OnPlayerSelectedMenuRowReceiverDelegate = OnPlayerSelectedMenuRowReceiverDelegate()
+) : OnPlayerSelectedMenuRowReceiver by onPlayerSelectedMenuRowReceiver {
 
     private val columnTexts: Array<String?> = arrayOfNulls(menu.numberOfColumns)
 
@@ -28,27 +28,8 @@ internal constructor(
         columnTexts[column] = text
     }
 
-    fun addOnPlayerSelectedMenuRowListener(listener: OnPlayerSelectedMenuRowListener) {
-        onPlayerSelectedMenuRowListeners += listener
-    }
-
-    fun removeOnPlayerSelectedMenuRowListener(listener: OnPlayerSelectedMenuRowListener) {
-        onPlayerSelectedMenuRowListeners -= listener
-    }
-
-    inline fun onSelected(crossinline onSelected: MenuRow.(Player) -> Unit): OnPlayerSelectedMenuRowListener {
-        val listener = object : OnPlayerSelectedMenuRowListener {
-
-            override fun onPlayerSelectedMenuRow(player: Player, row: MenuRow) {
-                onSelected.invoke(row, player)
-            }
-        }
-        addOnPlayerSelectedMenuRowListener(listener)
-        return listener
-    }
-
     internal fun onSelected(player: Player) {
-        onPlayerSelectedMenuRowListeners.forEach { it.onPlayerSelectedMenuRow(player, this) }
+        onPlayerSelectedMenuRowReceiver.onPlayerSelectedMenuRow(player, this)
     }
 
     private fun checkColumn(column: Int) {

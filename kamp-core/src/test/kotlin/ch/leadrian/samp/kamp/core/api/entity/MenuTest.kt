@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.mutableVector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
@@ -402,7 +401,7 @@ internal class MenuTest {
         }
 
         @Test
-        fun shouldCallOnPlayerExitedMenuReceiver() {
+        fun shouldCallOnPlayerExitedMenuReceiverDelegate() {
             val player = mockk<Player>()
             every { onPlayerExitedMenuReceiver.onPlayerExitedMenu(any(), any()) } just Runs
 
