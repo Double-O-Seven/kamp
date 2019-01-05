@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
@@ -16,6 +17,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerClickPlayerTextDrawReceiverDelegate
 
 class PlayerTextDraw
 internal constructor(
@@ -24,10 +26,13 @@ internal constructor(
         override val player: Player,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val textProvider: TextProvider,
-        private val textFormatter: TextFormatter
-) : Entity<PlayerTextDrawId>, HasPlayer, AbstractDestroyable(), TextDrawBase {
-
-    private val onPlayerClickPlayerTextDrawListeners = LinkedHashSet<OnPlayerClickPlayerTextDrawListener>()
+        private val textFormatter: TextFormatter,
+        private val onPlayerClickPlayerTextDrawReceiver: OnPlayerClickPlayerTextDrawReceiverDelegate = OnPlayerClickPlayerTextDrawReceiverDelegate()
+) : Entity<PlayerTextDrawId>,
+        AbstractDestroyable(),
+        HasPlayer,
+        TextDrawBase,
+        OnPlayerClickPlayerTextDrawReceiver by onPlayerClickPlayerTextDrawReceiver {
 
     override val id: PlayerTextDrawId
         get() = requireNotDestroyed { field }
@@ -247,30 +252,8 @@ internal constructor(
             field = value.toVehicleColors()
         }
 
-    fun addOnPlayerClickPlayerTextDrawListener(listener: OnPlayerClickPlayerTextDrawListener) {
-        onPlayerClickPlayerTextDrawListeners += listener
-    }
-
-    fun removeOnPlayerClickPlayerTextDrawListener(listener: OnPlayerClickPlayerTextDrawListener) {
-        onPlayerClickPlayerTextDrawListeners -= listener
-    }
-
-    inline fun onClick(crossinline onClick: PlayerTextDraw.() -> OnPlayerClickPlayerTextDrawListener.Result): OnPlayerClickPlayerTextDrawListener {
-        val listener = object : OnPlayerClickPlayerTextDrawListener {
-
-            override fun onPlayerClickPlayerTextDraw(textDraw: PlayerTextDraw): OnPlayerClickPlayerTextDrawListener.Result = onClick.invoke(this@PlayerTextDraw)
-        }
-        addOnPlayerClickPlayerTextDrawListener(listener)
-        return listener
-    }
-
-    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result {
-        return onPlayerClickPlayerTextDrawListeners
-                .asSequence()
-                .map { it.onPlayerClickPlayerTextDraw(this) }
-                .firstOrNull { it == OnPlayerClickPlayerTextDrawListener.Result.Processed }
-                ?: OnPlayerClickPlayerTextDrawListener.Result.NotFound
-    }
+    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result =
+            onPlayerClickPlayerTextDrawReceiver.onPlayerClickPlayerTextDraw(this)
 
     override var isDestroyed: Boolean = false
         get() = field || !player.isConnected
