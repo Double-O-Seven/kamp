@@ -3,7 +3,6 @@ package ch.leadrian.samp.kamp.view.base
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.view.ViewContext
-import io.mockk.Called
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -33,7 +32,7 @@ internal class ClickableViewTest {
 
         view.click()
 
-        verify { listener wasNot Called }
+        verify(exactly = 0) { listener.onClick(any()) }
     }
 
     @Test
