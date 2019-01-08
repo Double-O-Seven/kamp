@@ -72,10 +72,10 @@ subprojects {
         implementation(group = "org.slf4j", name = "slf4j-api", version = "1.7.25")
         implementation(group = "com.google.inject", name = "guice", version = "4.2.2")
         implementation(group = "javax.inject", name = "javax.inject", version = "1")
-        implementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = "5.3.2")
-        implementation(group = "io.mockk", name = "mockk", version = "1.9")
-        implementation(group = "org.assertj", name = "assertj-core", version = "3.11.1")
 
+        testImplementation(group = "io.mockk", name = "mockk", version = "1.9")
+        testImplementation(group = "org.assertj", name = "assertj-core", version = "3.11.1")
+        testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = "5.3.2")
         testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "5.3.2")
 
         testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.3.2")
