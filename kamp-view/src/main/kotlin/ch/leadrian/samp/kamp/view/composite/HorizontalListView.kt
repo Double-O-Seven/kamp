@@ -15,9 +15,9 @@ open class HorizontalListView<T>(
         adapter: ListViewAdapter<T>
 ) : ListView<T>(player, viewContext, adapter) {
 
-    private lateinit var scrollBarView: HorizontalScrollBarView
+    private val scrollBarView: HorizontalScrollBarView
 
-    private lateinit var contentView: View
+    private val contentView: View
 
     override val itemViews: MutableList<ListItemView<T>> = mutableListOf()
 

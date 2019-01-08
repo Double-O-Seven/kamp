@@ -1,0 +1,84 @@
+buildscript {
+    dependencies {
+        repositories {
+            mavenCentral()
+            mavenLocal()
+            maven {
+                setUrl("https://plugins.gradle.org/m2/")
+            }
+        }
+
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.11")
+        classpath("org.jetbrains.kotlin:kotlin-noarg:1.3.11")
+        classpath("ch.leadrian.samp.kamp:kamp-gradle-plugins:1.0.0")
+    }
+}
+
+plugins {
+    java
+    kotlin("jvm")
+    jacoco
+}
+
+allprojects {
+    group = "ch.leadrian.samp.kamp"
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply(plugin = "java")
+    apply(plugin = "kotlin")
+    apply(plugin = "jacoco")
+
+    tasks {
+        compileKotlin {
+            sourceCompatibility = "1.8"
+            kotlinOptions {
+                jvmTarget = "1.8"
+                freeCompilerArgs = listOf("-Xjvm-default=compatibility")
+            }
+        }
+
+        compileTestKotlin {
+            sourceCompatibility = "1.8"
+            kotlinOptions {
+                jvmTarget = "1.8"
+                freeCompilerArgs = listOf("-Xjvm-default=compatibility")
+            }
+        }
+
+        test {
+            useJUnitPlatform()
+
+            finalizedBy(jacocoTestReport)
+
+            jacoco {
+                toolVersion = "0.8.2"
+            }
+        }
+    }
+
+    dependencies {
+        api(group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version = "1.3.11")
+
+        implementation(group = "com.netflix.governator", name = "governator", version = "1.17.5")
+        implementation(group = "com.google.guava", name = "guava", version = "27.0.1-jre")
+        implementation(group = "org.jetbrains.kotlin", name = "kotlin-reflect", version = "1.3.11")
+        implementation(group = "org.slf4j", name = "slf4j-api", version = "1.7.25")
+        implementation(group = "com.google.inject", name = "guice", version = "4.2.2")
+        implementation(group = "javax.inject", name = "javax.inject", version = "1")
+        implementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = "5.3.2")
+        implementation(group = "io.mockk", name = "mockk", version = "1.9")
+        implementation(group = "org.assertj", name = "assertj-core", version = "3.11.1")
+
+        testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-api", version = "5.3.2")
+
+        testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.3.2")
+    }
+
+}

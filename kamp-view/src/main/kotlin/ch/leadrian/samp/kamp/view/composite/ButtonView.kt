@@ -27,7 +27,7 @@ open class ButtonView(
         viewFactory: ViewFactory
 ) : ClickableView(player, viewContext) {
 
-    private lateinit var backgroundView: BackgroundView
+    private val backgroundView: BackgroundView
 
     private lateinit var textView: TextView
 
