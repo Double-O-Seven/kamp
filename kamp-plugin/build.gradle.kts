@@ -37,12 +37,10 @@ kampCppCodegen {
 
 tasks {
     val generateSAMPNativeFunctionsHeaderFile: Task by creating {
-        val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets.getByName("main").output
+        val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets["main"].output
         val sampNativeFunctionsHeaderFile = "$kampSrcDir/SAMPNativeFunctions.h"
 
-        kampCoreMainOutput.classesDirs.files.forEach {
-            inputs.dir(it)
-        }
+        kampCoreMainOutput.classesDirs.files.forEach(inputs::dir)
         outputs.file(sampNativeFunctionsHeaderFile)
 
         dependsOn(":kamp-core:classes")
@@ -67,7 +65,7 @@ tasks {
         inputs.dir(sampPluginSdkDir)
         outputs.dir(sampgdkBuildDir)
 
-        dependsOn(generateSAMPNativeFunctionsHeaderFile, "generateKampCppFiles")
+        dependsOn(generateSAMPNativeFunctionsHeaderFile, generateKampCppFiles)
 
         doFirst {
             file(sampgdkBuildDir).mkdirs()
@@ -98,11 +96,11 @@ tasks {
         }
     }
 
-    "clean" {
+    clean {
         dependsOn("cleanGenerateKampCppFiles", "cleanMakePlugin", "cleanGenerateSAMPNativeFunctionsHeaderFile")
     }
 
-    "build" {
+    build {
         dependsOn(makePlugin)
     }
 }
