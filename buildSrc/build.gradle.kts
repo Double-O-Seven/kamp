@@ -9,7 +9,7 @@ buildscript {
             }
         }
 
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
+        classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.3.11")
     }
 }
 

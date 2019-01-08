@@ -8,10 +8,10 @@ buildscript {
             }
         }
 
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.11")
-        classpath("org.jetbrains.kotlin:kotlin-allopen:1.3.11")
-        classpath("org.jetbrains.kotlin:kotlin-noarg:1.3.11")
-        classpath("ch.leadrian.samp.kamp:kamp-gradle-plugins:1.0.0")
+        classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.3.11")
+        classpath(group = "org.jetbrains.kotlin", name = "kotlin-allopen", version = "1.3.11")
+        classpath(group = "org.jetbrains.kotlin", name = "kotlin-noarg", version = "1.3.11")
+        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.0")
     }
 }
 
