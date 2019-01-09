@@ -49,13 +49,7 @@ internal constructor(
     override var text: String
         get() = _text
         set(value) {
-            nativeFunctionExecutor.updatePlayer3DTextLabelText(
-                    playerid = player.id.value,
-                    id = id.value,
-                    text = value,
-                    color = _color.value
-            )
-            _text = value
+            update(value, _color)
         }
 
     private var _color: Color = color.toColor()
@@ -63,13 +57,7 @@ internal constructor(
     override var color: Color
         get() = _color
         set(value) {
-            nativeFunctionExecutor.updatePlayer3DTextLabelText(
-                    playerid = player.id.value,
-                    id = id.value,
-                    text = _text,
-                    color = value.value
-            )
-            _color = value
+            update(_text, value)
         }
 
     override val coordinates: Vector3D = coordinates.toVector3D()

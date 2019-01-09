@@ -55,7 +55,7 @@ internal class StreamableTextLabelImpl(
     override var color: Color
         get() = _color
         set(value) {
-            _color = value
+            update(value, textSupplier)
         }
 
     override var coordinates: Vector3D
@@ -79,26 +79,19 @@ internal class StreamableTextLabelImpl(
     }
 
     override var text: String
-        get() = textSupplier(Locale.getDefault())
+        get() = getText(Locale.getDefault())
         set(value) {
-            setTextSupplier { value }
+            text { value }
         }
 
     override fun getText(locale: Locale): String = textSupplier(locale)
 
     override fun setText(textKey: TextKey) {
-        setTextSupplier { locale -> textProvider.getText(locale, textKey) }
+        text { locale -> textProvider.getText(locale, textKey) }
     }
 
     override fun text(textSupplier: (Locale) -> String) {
-        setTextSupplier(textSupplier)
-    }
-
-    private fun setTextSupplier(textSupplier: (Locale) -> String) {
-        this.textSupplier = textSupplier
-        playerTextLabelsByPlayer.forEach { player, playerTextLabel ->
-            playerTextLabel.text = textSupplier(player.locale)
-        }
+        update(_color, textSupplier)
     }
 
     override fun update(text: String, color: Color) {
@@ -113,7 +106,7 @@ internal class StreamableTextLabelImpl(
         _color = color
         this.textSupplier = textSupplier
         playerTextLabelsByPlayer.forEach { player, playerTextLabel ->
-            playerTextLabel.update(textSupplier(player.locale), color)
+            playerTextLabel.update(textSupplier(player.locale), _color)
         }
     }
 
