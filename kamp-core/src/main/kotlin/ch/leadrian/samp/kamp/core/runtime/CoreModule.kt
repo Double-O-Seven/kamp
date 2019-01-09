@@ -11,6 +11,8 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import ch.leadrian.samp.kamp.core.runtime.timer.TimerModule
+import com.google.inject.multibindings.Multibinder
+import com.google.inject.name.Names.named
 
 internal class CoreModule(
         private val server: Server,
@@ -20,7 +22,23 @@ internal class CoreModule(
         private val plugins: List<Plugin>
 ) : KampModule() {
 
+    companion object {
+
+        const val BASE_NATIVE_FUNCTION_EXECUTOR = "baseNativeFunctionExecutor"
+
+    }
+
     override fun configure() {
+        installModules()
+        bindServer()
+        bindNativeFunctionExecutor()
+        bindGameMode()
+        bindPlugins()
+        bindTextProviderResourcePackages()
+        newSAMPNativeFunctionHookFactorySetBinder()
+    }
+
+    private fun installModules() {
         install(AsyncModule())
         install(CallbackModule())
         install(CommandModule())
@@ -29,20 +47,37 @@ internal class CoreModule(
         install(ServiceModule())
         install(TextModule())
         install(TimerModule())
+    }
 
+    private fun bindServer() {
         bind(Server::class.java).toInstance(server)
-        bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
+    }
+
+    private fun bindNativeFunctionExecutor() {
+        bind(SAMPNativeFunctionExecutor::class.java)
+                .annotatedWith(named(BASE_NATIVE_FUNCTION_EXECUTOR))
+                .toInstance(nativeFunctionExecutor)
+        bind(SAMPNativeFunctionExecutor::class.java).toProvider(SAMPNativeFunctionExecutorProvider::class.java)
+    }
+
+    private fun bindGameMode() {
         bind(GameMode::class.java).toInstance(gameMode)
         bind(gameMode.javaClass).toInstance(gameMode)
+    }
+
+    private fun bindPlugins() {
+        val pluginSetBinder = Multibinder.newSetBinder(binder(), Plugin::class.java)
         plugins.forEach { plugin ->
             bind(plugin.javaClass).toInstance(plugin)
+            pluginSetBinder.addBinding().toInstance(plugin)
         }
+    }
 
+    private fun bindTextProviderResourcePackages() {
         newTextProviderResourceBundlePackagesSetBinder().apply {
             textProviderResourcePackages.forEach {
                 addBinding().toInstance(it)
             }
         }
-
     }
 }

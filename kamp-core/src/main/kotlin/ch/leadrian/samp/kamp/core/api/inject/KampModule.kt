@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.inject
 
+import ch.leadrian.samp.kamp.core.api.SAMPNativeFunctionHookFactory
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
@@ -37,4 +38,7 @@ abstract class KampModule : AbstractModule() {
             Multibinder.newSetBinder(
                     binder(),
                     object : TypeLiteral<@JvmSuppressWildcards EntityExtensionFactory<Player, *>>() {})
+
+    protected fun newSAMPNativeFunctionHookFactorySetBinder(): Multibinder<SAMPNativeFunctionHookFactory> =
+            Multibinder.newSetBinder(binder(), SAMPNativeFunctionHookFactory::class.java)
 }
