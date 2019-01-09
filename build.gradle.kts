@@ -1,3 +1,7 @@
+val version: String by project
+
+setVersion(version)
+
 buildscript {
     dependencies {
         repositories {
