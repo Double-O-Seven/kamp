@@ -290,7 +290,6 @@ internal class CheckpointTest {
                     .isTrue()
         }
 
-
         @Test
         fun shouldNotBeDestroyedTwice() {
             val onLeave = mockk<Checkpoint.(Player?) -> Unit>(relaxed = true)

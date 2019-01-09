@@ -26,7 +26,8 @@ internal class MutableVehicleWindowStatesTest {
                 backLeft = backLeft
         )
 
-        val mutableVehicleWindowStates: VehicleWindowStates = expectedMutableVehicleWindowStates.toMutableVehicleWindowStates()
+        val mutableVehicleWindowStates: VehicleWindowStates = expectedMutableVehicleWindowStates
+                .toMutableVehicleWindowStates()
 
         assertThat(mutableVehicleWindowStates)
                 .isSameAs(expectedMutableVehicleWindowStates)

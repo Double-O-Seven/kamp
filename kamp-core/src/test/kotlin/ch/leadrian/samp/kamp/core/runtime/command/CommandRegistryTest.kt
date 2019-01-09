@@ -139,18 +139,22 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenDuplicateSingleCommandsItShouldThrowException() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }
@@ -162,20 +166,24 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenDuplicateSingleCommandsWithAliasItShouldThrowException() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    aliases = setOf("qux"),
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "bar",
-                    aliases = setOf("foo"),
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            aliases = setOf("qux"),
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "bar",
+                            aliases = setOf("foo"),
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }
@@ -187,19 +195,23 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenSingleCommandIsAlreadyRegisteredAddingCommandGroupShouldThrowException() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "bar",
-                    groupName = "foo",
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "bar",
+                            groupName = "foo",
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }
@@ -211,19 +223,23 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenCommandGroupIsAlreadyRegisteredAddingSingleCommandShouldThrowException() {
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "bar",
-                    groupName = "foo",
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "bar",
+                            groupName = "foo",
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(BarCommands, FooCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }
@@ -235,20 +251,24 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenDuplicateCommandsWithinGroupItShouldThrowException() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    groupName = "bla",
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    groupName = "bla",
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            groupName = "bla",
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            groupName = "bla",
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }
@@ -260,22 +280,26 @@ internal class CommandRegistryTest {
 
         @Test
         fun givenDuplicateCommandsWithAliasesWithinGroupItShouldThrowException() {
-            every { commandDefinitionLoader.load(FooCommands) } returns listOf(CommandDefinition(
-                    name = "foo",
-                    aliases = setOf("qux"),
-                    groupName = "bla",
-                    commandsInstance = FooCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
-            every { commandDefinitionLoader.load(BarCommands) } returns listOf(CommandDefinition(
-                    name = "bar",
-                    aliases = setOf("foo"),
-                    groupName = "bla",
-                    commandsInstance = BarCommands,
-                    parameters = listOf(),
-                    method = method
-            ))
+            every { commandDefinitionLoader.load(FooCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "foo",
+                            aliases = setOf("qux"),
+                            groupName = "bla",
+                            commandsInstance = FooCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
+            every { commandDefinitionLoader.load(BarCommands) } returns listOf(
+                    CommandDefinition(
+                            name = "bar",
+                            aliases = setOf("foo"),
+                            groupName = "bla",
+                            commandsInstance = BarCommands,
+                            parameters = listOf(),
+                            method = method
+                    )
+            )
             val commandRegistry = CommandRegistry(setOf(FooCommands, BarCommands), commandDefinitionLoader)
 
             val caughtThrowable = catchThrowable { commandRegistry.initialize() }

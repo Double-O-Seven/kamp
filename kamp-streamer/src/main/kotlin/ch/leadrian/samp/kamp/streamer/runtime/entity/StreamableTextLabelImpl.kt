@@ -14,7 +14,7 @@ import ch.leadrian.samp.kamp.streamer.api.entity.StreamableTextLabel
 import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
-import java.util.*
+import java.util.Locale
 
 internal class StreamableTextLabelImpl(
         coordinates: Vector3D,
@@ -34,7 +34,8 @@ internal class StreamableTextLabelImpl(
 
     private val playerTextLabelsByPlayer: MutableMap<Player, PlayerTextLabel> = mutableMapOf()
 
-    private var state: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates)
+    private var state: StreamableTextLabelState = streamableTextLabelStateFactory
+            .createFixedCoordinates(this, coordinates)
 
     private var _color: Color = color.toColor()
         set(value) {

@@ -50,7 +50,10 @@ class CommandDefinitionLoaderTest {
 
     @BeforeEach
     fun setUp() {
-        every { commandParameterResolverFactory.getResolver(Int::class.javaPrimitiveType!!) } returns PrimitiveIntParameterResolver
+        every {
+            commandParameterResolverFactory
+                    .getResolver(Int::class.javaPrimitiveType!!)
+        } returns PrimitiveIntParameterResolver
         every { commandParameterResolverFactory.getResolver(Int::class.javaObjectType) } returns IntParameterResolver
         every { commandParameterResolverFactory.getResolver(String::class.java) } returns StringParameterResolver
         injector = Guice.createInjector(TestModule())
@@ -75,11 +78,13 @@ class CommandDefinitionLoaderTest {
                                         Player::class.java,
                                         String::class.java
                                 ),
-                                parameters = listOf(CommandParameterDefinition(
-                                        type = String::class.java,
-                                        resolver = StringParameterResolver,
-                                        textProvider = textProvider
-                                ))
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = String::class.java,
+                                                resolver = StringParameterResolver,
+                                                textProvider = textProvider
+                                        )
+                                )
                         ),
                         CommandDefinition(
                                 name = "setname",
@@ -272,16 +277,18 @@ class CommandDefinitionLoaderTest {
         val commandDefinitions = commandDefinitionLoader.load(CommandsWithAliases)
 
         assertThat(commandDefinitions)
-                .containsExactlyInAnyOrder(CommandDefinition(
-                        name = "foo",
-                        commandsInstance = CommandsWithAliases,
-                        aliases = setOf("f", "bar", "baz"),
-                        method = CommandsWithAliases::class.java.getMethod(
-                                "foo",
-                                Player::class.java
-                        ),
-                        parameters = listOf()
-                ))
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                commandsInstance = CommandsWithAliases,
+                                aliases = setOf("f", "bar", "baz"),
+                                method = CommandsWithAliases::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        )
+                )
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -436,7 +443,10 @@ class CommandDefinitionLoaderTest {
                                 parameters = listOf(),
                                 accessCheckers = listOf(
                                         CommandAccessCheckerGroup(
-                                                accessCheckers = listOf(BazCommandAccessChecker, FoobarCommandAccessChecker),
+                                                accessCheckers = listOf(
+                                                        BazCommandAccessChecker,
+                                                        FoobarCommandAccessChecker
+                                                ),
                                                 accessDeniedHandlers = listOf(BazCommandAccessDeniedHandler),
                                                 errorMessage = "Baz error",
                                                 errorMessageTextKey = TextKey("baz.error"),
@@ -477,17 +487,19 @@ class CommandDefinitionLoaderTest {
             errorMessage = "Foo error",
             errorMessageTextKey = "foo.error"
     )
-    @AccessChecks([
-        AccessCheck(
-                accessCheckers = [BarCommandAccessChecker::class],
-                errorMessageTextKey = "bar.error",
-                accessDeniedHandlers = [BarCommandAccessDeniedHandler::class]
-        ),
-        AccessCheck(
-                accessCheckers = [BatCommandAccessChecker::class],
-                errorMessage = "Bat error"
-        )
-    ])
+    @AccessChecks(
+            [
+                AccessCheck(
+                        accessCheckers = [BarCommandAccessChecker::class],
+                        errorMessageTextKey = "bar.error",
+                        accessDeniedHandlers = [BarCommandAccessDeniedHandler::class]
+                ),
+                AccessCheck(
+                        accessCheckers = [BatCommandAccessChecker::class],
+                        errorMessage = "Bat error"
+                )
+            ]
+    )
     private object CommandsWithAccessCheckers : Commands() {
 
         @Command
@@ -501,12 +513,14 @@ class CommandDefinitionLoaderTest {
                 errorMessage = "Baz error",
                 errorMessageTextKey = "baz.error"
         )
-        @AccessChecks([
-            AccessCheck(
-                    accessCheckers = [QuxCommandAccessChecker::class],
-                    accessDeniedHandlers = [QuxCommandAccessDeniedHandler::class]
-            )
-        ])
+        @AccessChecks(
+                [
+                    AccessCheck(
+                            accessCheckers = [QuxCommandAccessChecker::class],
+                            accessDeniedHandlers = [QuxCommandAccessDeniedHandler::class]
+                    )
+                ]
+        )
         fun baz(player: Player) {
         }
 
@@ -559,34 +573,36 @@ class CommandDefinitionLoaderTest {
         val commandDefinitions = commandDefinitionLoader.load(CommandsWithParameters)
 
         assertThat(commandDefinitions)
-                .containsExactlyInAnyOrder(CommandDefinition(
-                        name = "foo",
-                        commandsInstance = CommandsWithParameters,
-                        method = CommandsWithParameters::class.java.getMethod(
-                                "foo",
-                                Player::class.java,
-                                Int::class.javaPrimitiveType!!,
-                                String::class.java
-                        ),
-                        parameters = listOf(
-                                CommandParameterDefinition(
-                                        type = Int::class.javaPrimitiveType!!,
-                                        name = "foobar",
-                                        nameTextKey = TextKey("foo.bar"),
-                                        description = "Foobar param",
-                                        descriptionTextKey = TextKey("foo.bar.description"),
-                                        textProvider = textProvider,
-                                        resolver = PrimitiveIntParameterResolver,
-                                        invalidCommandParameterValueHandler = BarInvalidParameterValueHandler
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                commandsInstance = CommandsWithParameters,
+                                method = CommandsWithParameters::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java,
+                                        Int::class.javaPrimitiveType!!,
+                                        String::class.java
                                 ),
-                                CommandParameterDefinition(
-                                        type = String::class.java,
-                                        textProvider = textProvider,
-                                        resolver = StringParameterResolver,
-                                        invalidCommandParameterValueHandler = FooInvalidParameterValueHandler
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = Int::class.javaPrimitiveType!!,
+                                                name = "foobar",
+                                                nameTextKey = TextKey("foo.bar"),
+                                                description = "Foobar param",
+                                                descriptionTextKey = TextKey("foo.bar.description"),
+                                                textProvider = textProvider,
+                                                resolver = PrimitiveIntParameterResolver,
+                                                invalidCommandParameterValueHandler = BarInvalidParameterValueHandler
+                                        ),
+                                        CommandParameterDefinition(
+                                                type = String::class.java,
+                                                textProvider = textProvider,
+                                                resolver = StringParameterResolver,
+                                                invalidCommandParameterValueHandler = FooInvalidParameterValueHandler
+                                        )
                                 )
                         )
-                ))
+                )
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -615,15 +631,17 @@ class CommandDefinitionLoaderTest {
         val commandDefinitions = commandDefinitionLoader.load(CommandsWithMissingAnnotations)
 
         assertThat(commandDefinitions)
-                .containsExactlyInAnyOrder(CommandDefinition(
-                        name = "foo",
-                        commandsInstance = CommandsWithMissingAnnotations,
-                        method = CommandsWithMissingAnnotations::class.java.getMethod(
-                                "foo",
-                                Player::class.java
-                        ),
-                        parameters = listOf()
-                ))
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                commandsInstance = CommandsWithMissingAnnotations,
+                                method = CommandsWithMissingAnnotations::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        )
+                )
     }
 
     @Suppress("UNUSED_PARAMETER")
@@ -643,16 +661,18 @@ class CommandDefinitionLoaderTest {
         val commandDefinitions = commandDefinitionLoader.load(commandsInstance)
 
         assertThat(commandDefinitions)
-                .containsExactlyInAnyOrder(CommandDefinition(
-                        name = "foo",
-                        commandsInstance = commandsInstance,
-                        groupName = "test",
-                        method = CommandsWithGroupName::class.java.getMethod(
-                                "foo",
-                                Player::class.java
-                        ),
-                        parameters = listOf()
-                ))
+                .containsExactlyInAnyOrder(
+                        CommandDefinition(
+                                name = "foo",
+                                commandsInstance = commandsInstance,
+                                groupName = "test",
+                                method = CommandsWithGroupName::class.java.getMethod(
+                                        "foo",
+                                        Player::class.java
+                                ),
+                                parameters = listOf()
+                        )
+                )
         assertThat(commandsInstance.groupName)
                 .isEqualTo("test")
     }
@@ -924,11 +944,13 @@ class CommandDefinitionLoaderTest {
                                         Player::class.java,
                                         Iterable::class.java
                                 ),
-                                parameters = listOf(CommandParameterDefinition(
-                                        type = Iterable::class.java,
-                                        resolver = StringParameterResolver,
-                                        textProvider = textProvider
-                                ))
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = Iterable::class.java,
+                                                resolver = StringParameterResolver,
+                                                textProvider = textProvider
+                                        )
+                                )
                         ),
                         CommandDefinition(
                                 name = "bar",
@@ -938,11 +960,13 @@ class CommandDefinitionLoaderTest {
                                         Player::class.java,
                                         Collection::class.java
                                 ),
-                                parameters = listOf(CommandParameterDefinition(
-                                        type = Collection::class.java,
-                                        resolver = StringParameterResolver,
-                                        textProvider = textProvider
-                                ))
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = Collection::class.java,
+                                                resolver = StringParameterResolver,
+                                                textProvider = textProvider
+                                        )
+                                )
                         ),
                         CommandDefinition(
                                 name = "baz",
@@ -952,11 +976,13 @@ class CommandDefinitionLoaderTest {
                                         Player::class.java,
                                         List::class.java
                                 ),
-                                parameters = listOf(CommandParameterDefinition(
-                                        type = List::class.java,
-                                        resolver = StringParameterResolver,
-                                        textProvider = textProvider
-                                ))
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = List::class.java,
+                                                resolver = StringParameterResolver,
+                                                textProvider = textProvider
+                                        )
+                                )
                         ),
                         CommandDefinition(
                                 name = "bat",
@@ -966,11 +992,13 @@ class CommandDefinitionLoaderTest {
                                         Player::class.java,
                                         Set::class.java
                                 ),
-                                parameters = listOf(CommandParameterDefinition(
-                                        type = Set::class.java,
-                                        resolver = StringParameterResolver,
-                                        textProvider = textProvider
-                                ))
+                                parameters = listOf(
+                                        CommandParameterDefinition(
+                                                type = Set::class.java,
+                                                resolver = StringParameterResolver,
+                                                textProvider = textProvider
+                                        )
+                                )
                         )
                 )
     }
@@ -1055,13 +1083,23 @@ class CommandDefinitionLoaderTest {
 
     private object FooInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>,
+                parameterIndex: Int?
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object BarInvalidParameterValueHandler : InvalidCommandParameterValueHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>, parameterIndex: Int?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>,
+                parameterIndex: Int?
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
@@ -1094,73 +1132,121 @@ class CommandDefinitionLoaderTest {
 
     private object FooCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object BarCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object BazCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object BatCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object QuxCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object FoobarCommandAccessChecker : CommandAccessChecker {
 
-        override fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean = true
+        override fun hasAccess(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): Boolean = true
 
     }
 
     private object FooCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object BarCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object BazCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object QuxCommandAccessDeniedHandler : CommandAccessDeniedHandler {
 
-        override fun handle(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandDefinition: CommandDefinition,
+                parameters: List<String>
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object FooCommandErrorHandler : CommandErrorHandler {
 
-        override fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandLine: String,
+                exception: Exception?
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 
     private object BarCommandErrorHandler : CommandErrorHandler {
 
-        override fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
+        override fun handle(
+                player: Player,
+                commandLine: String,
+                exception: Exception?
+        ): OnPlayerCommandTextListener.Result = OnPlayerCommandTextListener.Result.Processed
 
     }
 

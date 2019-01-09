@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.netflix.governator.annotations.Configuration
-import java.util.*
+import java.util.EnumSet
 import java.util.concurrent.ScheduledExecutorService
 import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
@@ -49,7 +49,8 @@ constructor(
     @PostConstruct
     fun initialize() {
         scheduledExecutorService = executorServiceFactory.createSingleThreadScheduledExecutor()
-        scheduledExecutorService.scheduleAtFixedRate(this::execute, streamRateInMs, streamRateInMs, TimeUnit.MILLISECONDS)
+        scheduledExecutorService
+                .scheduleAtFixedRate(this::execute, streamRateInMs, streamRateInMs, TimeUnit.MILLISECONDS)
     }
 
     @PreDestroy

@@ -8,6 +8,7 @@ enum class ShopName(
         val coordinates: Vector3D,
         val interiorId: Int
 ) : ConstantValue<String> {
+
     NONE("", vector3DOf(0f, 0f, 0f), 0),
     FDPIZA("Pizza Stack", vector3DOf(x = 374.0000f, y = -119.6410f, z = 1001.4922f), 5),
     FDBURG("Burger Shot", vector3DOf(x = 375.5660f, y = -68.2220f, z = 1001.5151f), 10),
@@ -17,7 +18,6 @@ enum class ShopName(
     AMMUN3("AmmuNation 3", vector3DOf(x = 290.2011f, y = -109.5698f, z = 1001.5156f), 6),
     AMMUN4("AmmuNation 4", vector3DOf(x = 308.1619f, y = -141.2549f, z = 999.6016f), 7),
     AMMUN5("AmmuNation 5", vector3DOf(x = 312.7883f, y = -166.0069f, z = 999.6010f), 6);
-
 
     override val value: String = name
 

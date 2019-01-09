@@ -47,7 +47,12 @@ internal class InputDialog(
         )
     }
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseListener.Result {
+    override fun onResponse(
+            player: Player,
+            response: DialogResponse,
+            listItem: Int,
+            inputText: String
+    ): OnDialogResponseListener.Result {
         return when (response) {
             DialogResponse.LEFT_BUTTON -> {
                 val validationError = validators.asSequence().mapNotNull {

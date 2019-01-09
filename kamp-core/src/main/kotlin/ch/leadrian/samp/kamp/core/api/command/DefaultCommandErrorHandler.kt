@@ -11,7 +11,11 @@ open class DefaultCommandErrorHandler
 @Inject
 constructor(private val messageSender: MessageSender) : CommandErrorHandler {
 
-    override fun handle(player: Player, commandLine: String, exception: Exception?): OnPlayerCommandTextListener.Result {
+    override fun handle(
+            player: Player,
+            commandLine: String,
+            exception: Exception?
+    ): OnPlayerCommandTextListener.Result {
         when (exception) {
             null -> messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.invalid, commandLine)
             else -> messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.unexpected.error)

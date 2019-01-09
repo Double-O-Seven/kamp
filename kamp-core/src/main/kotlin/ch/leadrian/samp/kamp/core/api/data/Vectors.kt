@@ -80,7 +80,13 @@ fun locationOf(coordinates: Vector3D, interiorId: Int, worldId: Int): Location =
         virtualWorldId = worldId
 )
 
-fun mutableLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int): MutableLocation = MutableLocationImpl(
+fun mutableLocationOf(
+        x: Float,
+        y: Float,
+        z: Float,
+        interiorId: Int,
+        worldId: Int
+): MutableLocation = MutableLocationImpl(
         x = x,
         y = y,
         z = z,
@@ -96,7 +102,14 @@ fun mutableLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int): Mut
         virtualWorldId = worldId
 )
 
-fun angledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int, angle: Float): AngledLocation = AngledLocationImpl(
+fun angledLocationOf(
+        x: Float,
+        y: Float,
+        z: Float,
+        interiorId: Int,
+        worldId: Int,
+        angle: Float
+): AngledLocation = AngledLocationImpl(
         x = x,
         y = y,
         z = z,
@@ -105,7 +118,12 @@ fun angledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int
         angle = angle
 )
 
-fun angledLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int, angle: Float): AngledLocation = AngledLocationImpl(
+fun angledLocationOf(
+        coordinates: Vector3D,
+        interiorId: Int,
+        worldId: Int,
+        angle: Float
+): AngledLocation = AngledLocationImpl(
         x = coordinates.x,
         y = coordinates.y,
         z = coordinates.z,
@@ -132,7 +150,14 @@ fun angledLocationOf(position: Position, interiorId: Int, worldId: Int): AngledL
         angle = position.angle
 )
 
-fun mutableAngledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, worldId: Int, angle: Float): MutableAngledLocation = MutableAngledLocationImpl(
+fun mutableAngledLocationOf(
+        x: Float,
+        y: Float,
+        z: Float,
+        interiorId: Int,
+        worldId: Int,
+        angle: Float
+): MutableAngledLocation = MutableAngledLocationImpl(
         x = x,
         y = y,
         z = z,
@@ -141,7 +166,12 @@ fun mutableAngledLocationOf(x: Float, y: Float, z: Float, interiorId: Int, world
         angle = angle
 )
 
-fun mutableAngledLocationOf(coordinates: Vector3D, interiorId: Int, worldId: Int, angle: Float): MutableAngledLocation = MutableAngledLocationImpl(
+fun mutableAngledLocationOf(
+        coordinates: Vector3D,
+        interiorId: Int,
+        worldId: Int,
+        angle: Float
+): MutableAngledLocation = MutableAngledLocationImpl(
         x = coordinates.x,
         y = coordinates.y,
         z = coordinates.z,
@@ -159,7 +189,11 @@ fun mutableAngledLocationOf(location: Location, angle: Float): MutableAngledLoca
         angle = angle
 )
 
-fun mutableAngledLocationOf(position: Position, interiorId: Int, worldId: Int): MutableAngledLocation = MutableAngledLocationImpl(
+fun mutableAngledLocationOf(
+        position: Position,
+        interiorId: Int,
+        worldId: Int
+): MutableAngledLocation = MutableAngledLocationImpl(
         x = position.x,
         y = position.y,
         z = position.z,

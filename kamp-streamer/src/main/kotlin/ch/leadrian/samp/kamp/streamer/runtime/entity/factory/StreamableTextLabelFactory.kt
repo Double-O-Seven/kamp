@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableTextLabelImpl
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class StreamableTextLabelFactory

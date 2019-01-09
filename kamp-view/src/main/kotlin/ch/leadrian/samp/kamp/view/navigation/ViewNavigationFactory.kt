@@ -7,7 +7,8 @@ import kotlin.reflect.KClass
 
 internal class ViewNavigationFactory
 @Inject
-constructor(private val viewNavigationElementFactory: ViewNavigationElementFactory) : EntityExtensionFactory<Player, ViewNavigation> {
+constructor(private val viewNavigationElementFactory: ViewNavigationElementFactory) :
+        EntityExtensionFactory<Player, ViewNavigation> {
 
     override val extensionClass: KClass<ViewNavigation> = ViewNavigation::class
 

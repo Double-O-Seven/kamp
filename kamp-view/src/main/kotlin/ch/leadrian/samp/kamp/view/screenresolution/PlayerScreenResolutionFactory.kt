@@ -13,6 +13,9 @@ constructor(
 
     override val extensionClass: KClass<PlayerScreenResolution> = PlayerScreenResolution::class
 
-    override fun create(entity: Player): PlayerScreenResolution = PlayerScreenResolution(entity, screenResolutionDialogProvider)
+    override fun create(entity: Player): PlayerScreenResolution = PlayerScreenResolution(
+            entity,
+            screenResolutionDialogProvider
+    )
 
 }

@@ -25,7 +25,8 @@ internal class StreamableTextLabelStateFactoryTest {
 
     @Test
     fun shouldCreateFixedCoordinates() {
-        val fixedCoordinates = streamableTextLabelStateFactory.createFixedCoordinates(streamableTextLabel, vector3DOf(1f, 2f, 3f))
+        val fixedCoordinates = streamableTextLabelStateFactory
+                .createFixedCoordinates(streamableTextLabel, vector3DOf(1f, 2f, 3f))
 
         assertThat(fixedCoordinates.coordinates)
                 .isEqualTo(vector3DOf(1f, 2f, 3f))

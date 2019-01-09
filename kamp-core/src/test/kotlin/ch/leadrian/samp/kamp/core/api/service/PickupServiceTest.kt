@@ -117,5 +117,4 @@ internal class PickupServiceTest {
                 .containsExactly(pickup1, pickup2)
     }
 
-
 }

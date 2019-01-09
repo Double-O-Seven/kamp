@@ -52,7 +52,10 @@ internal class MessageSenderTest {
             val player2 = mockk<Player> {
                 every { id } returns PlayerId.valueOf(75)
             }
-            every { messagePreparer.prepareForAllPlayers(Colors.RED, "Hi %s", arrayOf("there"), any(), any()) } answers {
+            every {
+                messagePreparer
+                        .prepareForAllPlayers(Colors.RED, "Hi %s", arrayOf("there"), any(), any())
+            } answers {
                 arg<(Player, String) -> Unit>(3).invoke(player1, "Hallo")
                 arg<(Player, String) -> Unit>(3).invoke(player2, "Bonjour")
             }
@@ -68,7 +71,10 @@ internal class MessageSenderTest {
         @Test
         fun shouldSendFormattedGameTextToAll() {
             every { nativeFunctionExecutor.sendClientMessageToAll(any(), any()) } returns true
-            every { messagePreparer.prepareForAllPlayers(Colors.RED, "Hi %s", arrayOf("there"), any(), any()) } answers {
+            every {
+                messagePreparer
+                        .prepareForAllPlayers(Colors.RED, "Hi %s", arrayOf("there"), any(), any())
+            } answers {
                 arg<(String) -> Unit>(4).invoke("Hi there")
             }
 
@@ -131,8 +137,10 @@ internal class MessageSenderTest {
             messageSender.sendMessageToAll(Colors.RED, textKey, "SAMP")
 
             verify {
-                nativeFunctionExecutor.sendClientMessage(playerid = 50, color = Colors.RED.value, message = "Hallo SAMP")
-                nativeFunctionExecutor.sendClientMessage(playerid = 75, color = Colors.RED.value, message = "Bonjour SAMP")
+                nativeFunctionExecutor
+                        .sendClientMessage(playerid = 50, color = Colors.RED.value, message = "Hallo SAMP")
+                nativeFunctionExecutor
+                        .sendClientMessage(playerid = 75, color = Colors.RED.value, message = "Bonjour SAMP")
             }
         }
 
@@ -140,7 +148,10 @@ internal class MessageSenderTest {
         fun shouldSendFormattedTranslatedGameTextToAll() {
             val textKey = TextKey("test")
             every { nativeFunctionExecutor.sendClientMessageToAll(any(), any()) } returns true
-            every { messagePreparer.prepareForAllPlayers(Colors.RED, textKey, arrayOf("there"), any(), any()) } answers {
+            every {
+                messagePreparer
+                        .prepareForAllPlayers(Colors.RED, textKey, arrayOf("there"), any(), any())
+            } answers {
                 arg<(String) -> Unit>(4).invoke("Hi there")
             }
 

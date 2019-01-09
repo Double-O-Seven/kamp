@@ -8,6 +8,11 @@ interface TimerExecutor {
 
     fun addRepeatingTimer(interval: Long, timeUnit: TimeUnit = TimeUnit.MILLISECONDS, action: () -> Unit): Timer
 
-    fun addRepeatingTimer(repetitions: Int, interval: Long, timeUnit: TimeUnit = TimeUnit.MILLISECONDS, action: () -> Unit): Timer
+    fun addRepeatingTimer(
+            repetitions: Int,
+            interval: Long,
+            timeUnit: TimeUnit = TimeUnit.MILLISECONDS,
+            action: () -> Unit
+    ): Timer
 
 }

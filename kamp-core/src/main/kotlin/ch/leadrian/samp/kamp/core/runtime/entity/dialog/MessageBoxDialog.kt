@@ -39,13 +39,19 @@ internal class MessageBoxDialog(
         )
     }
 
-    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseListener.Result {
+    override fun onResponse(
+            player: Player,
+            response: DialogResponse,
+            listItem: Int,
+            inputText: String
+    ): OnDialogResponseListener.Result {
         return when (response) {
             DialogResponse.LEFT_BUTTON -> {
                 onClickLeftButton?.invoke(this, player)
                 OnDialogResponseListener.Result.Processed
             }
-            DialogResponse.RIGHT_BUTTON -> onClickRightButton?.invoke(this, player) ?: OnDialogResponseListener.Result.Ignored
+            DialogResponse.RIGHT_BUTTON -> onClickRightButton?.invoke(this, player)
+                    ?: OnDialogResponseListener.Result.Ignored
         }
     }
 

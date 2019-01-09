@@ -71,8 +71,10 @@ class CallbackAnnotationProcessor : AbstractProcessor() {
         }
         val className = typeElement.asClassName()
         val callbackListenerAnnotation = element.getAnnotation(CallbackListener::class.java)
-        val apiPackageName = callbackListenerAnnotation.apiPackageName.takeIf { it.isNotBlank() } ?: className.packageName
-        val runtimePackageName = callbackListenerAnnotation.runtimePackageName.takeIf { it.isNotBlank() } ?: className.packageName
+        val apiPackageName = callbackListenerAnnotation.apiPackageName.takeIf { it.isNotBlank() }
+                ?: className.packageName
+        val runtimePackageName = callbackListenerAnnotation.runtimePackageName.takeIf { it.isNotBlank() }
+                ?: className.packageName
         val listenerDefinition = CallbackListenerDefinition(
                 type = className,
                 method = callbackMethodElement,

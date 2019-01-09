@@ -43,9 +43,11 @@ internal class MutableVehicleColorsTest {
         val mutableVehicleColors = mutableVehicleColorsOf(color1 = 65, color2 = 127)
 
         assertThat(mutableVehicleColors)
-                .isEqualTo(mutableVehicleColorsOf(
-                        color1 = VehicleColor[65],
-                        color2 = VehicleColor[127]
-                ))
+                .isEqualTo(
+                        mutableVehicleColorsOf(
+                                color1 = VehicleColor[65],
+                                color2 = VehicleColor[127]
+                        )
+                )
     }
 }

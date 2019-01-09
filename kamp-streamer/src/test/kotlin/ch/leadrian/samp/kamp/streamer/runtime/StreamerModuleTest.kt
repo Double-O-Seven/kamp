@@ -78,7 +78,8 @@ internal class StreamerModuleTest {
 
         @Test
         fun shouldInjectOnPlayerSelectStreamableMapObjectHandlerAsSingleton() {
-            val onPlayerSelectStreamableMapObjectHandler = injector.getInstance<OnPlayerSelectStreamableMapObjectHandler>()
+            val onPlayerSelectStreamableMapObjectHandler = injector
+                    .getInstance<OnPlayerSelectStreamableMapObjectHandler>()
 
             assertThat(onPlayerSelectStreamableMapObjectHandler)
                     .isNotNull

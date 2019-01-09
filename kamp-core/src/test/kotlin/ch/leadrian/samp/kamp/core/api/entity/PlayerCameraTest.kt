@@ -161,7 +161,10 @@ internal class PlayerCameraTest {
 
         @Test
         fun givenNoTargetMapObjectItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetObject(playerId.value) } returns SAMPConstants.INVALID_OBJECT_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerCameraTargetObject(playerId.value)
+            } returns SAMPConstants.INVALID_OBJECT_ID
             every { mapObjectRegistry[SAMPConstants.INVALID_OBJECT_ID] } returns null
 
             val targetMapObject = playerCamera.targetMapObject
@@ -195,7 +198,10 @@ internal class PlayerCameraTest {
 
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetPlayer(playerId.value) } returns SAMPConstants.INVALID_PLAYER_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerCameraTargetPlayer(playerId.value)
+            } returns SAMPConstants.INVALID_PLAYER_ID
             every { playerRegistry[SAMPConstants.INVALID_PLAYER_ID] } returns null
 
             val targetPlayer = playerCamera.targetPlayer
@@ -223,7 +229,10 @@ internal class PlayerCameraTest {
 
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetVehicle(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerCameraTargetVehicle(playerId.value)
+            } returns SAMPConstants.INVALID_VEHICLE_ID
             every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
 
             val targetVehicle = playerCamera.targetVehicle
@@ -251,7 +260,10 @@ internal class PlayerCameraTest {
 
         @Test
         fun givenNoTargetActorItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerCameraTargetActor(playerId.value) } returns SAMPConstants.INVALID_ACTOR_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerCameraTargetActor(playerId.value)
+            } returns SAMPConstants.INVALID_ACTOR_ID
             every { actorRegistry[SAMPConstants.INVALID_ACTOR_ID] } returns null
 
             val targetActor = playerCamera.targetActor
@@ -304,12 +316,18 @@ internal class PlayerCameraTest {
 
         playerCamera.attachTo(playerMapObject)
 
-        verify { nativeFunctionExecutor.attachCameraToPlayerObject(playerid = playerId.value, playerobjectid = playerMapObjectId.value) }
+        verify {
+            nativeFunctionExecutor
+                    .attachCameraToPlayerObject(playerid = playerId.value, playerobjectid = playerMapObjectId.value)
+        }
     }
 
     @Test
     fun shouldInterpolateCoordinates() {
-        every { nativeFunctionExecutor.interpolateCameraPos(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        every {
+            nativeFunctionExecutor
+                    .interpolateCameraPos(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns true
 
         playerCamera.interpolateCoordinates(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),
@@ -335,7 +353,10 @@ internal class PlayerCameraTest {
 
     @Test
     fun shouldInterpolateLookAt() {
-        every { nativeFunctionExecutor.interpolateCameraLookAt(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        every {
+            nativeFunctionExecutor
+                    .interpolateCameraLookAt(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns true
 
         playerCamera.interpolateLookAt(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),

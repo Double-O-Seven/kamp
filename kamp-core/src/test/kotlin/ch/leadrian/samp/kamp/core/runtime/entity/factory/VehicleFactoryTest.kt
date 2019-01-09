@@ -25,7 +25,10 @@ internal class VehicleFactoryTest {
     @BeforeEach
     fun setUp() {
         every { vehicleRegistry.register(any()) } just Runs
-        every { nativeFunctionExecutor.createVehicle(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns vehicleId
+        every {
+            nativeFunctionExecutor
+                    .createVehicle(any(), any(), any(), any(), any(), any(), any(), any(), any())
+        } returns vehicleId
         vehicleFactory = VehicleFactory(
                 vehicleRegistry = vehicleRegistry,
                 nativeFunctionExecutor = nativeFunctionExecutor
@@ -36,7 +39,10 @@ internal class VehicleFactoryTest {
     fun shouldCreateVehicle() {
         vehicleFactory.create(
                 model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                colors = vehicleColorsOf(
+                        color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3],
+                        color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]
+                ),
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f,
                 addSiren = true,
@@ -62,7 +68,10 @@ internal class VehicleFactoryTest {
     fun shouldReturnVehicleImpl() {
         val vehicle = vehicleFactory.create(
                 model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                colors = vehicleColorsOf(
+                        color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3],
+                        color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]
+                ),
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f,
                 addSiren = true,
@@ -77,7 +86,10 @@ internal class VehicleFactoryTest {
     fun shouldRegisterVehicle() {
         val vehicle = vehicleFactory.create(
                 model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                colors = vehicleColorsOf(
+                        color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3],
+                        color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]
+                ),
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f,
                 addSiren = true,
@@ -93,7 +105,10 @@ internal class VehicleFactoryTest {
         every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
         val vehicle = vehicleFactory.create(
                 model = ch.leadrian.samp.kamp.core.api.constants.VehicleModel.ALPHA,
-                colors = vehicleColorsOf(color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3], color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]),
+                colors = vehicleColorsOf(
+                        color1 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[3],
+                        color2 = ch.leadrian.samp.kamp.core.api.constants.VehicleColor[6]
+                ),
                 coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
                 rotation = 4f,
                 addSiren = true,

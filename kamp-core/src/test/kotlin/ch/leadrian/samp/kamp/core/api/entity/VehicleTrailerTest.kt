@@ -44,7 +44,10 @@ internal class VehicleTrailerTest {
 
         vehicleTrailer.attach(trailer)
 
-        verify { nativeFunctionExecutor.attachTrailerToVehicle(trailerid = trailerVehicleId.value, vehicleid = vehicleId.value) }
+        verify {
+            nativeFunctionExecutor
+                    .attachTrailerToVehicle(trailerid = trailerVehicleId.value, vehicleid = vehicleId.value)
+        }
     }
 
     @Test

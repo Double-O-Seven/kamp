@@ -8,7 +8,8 @@ data class TextDrawId internal constructor(override val value: Int) : EntityId {
 
         val INVALID = TextDrawId(SAMPConstants.INVALID_TEXT_DRAW)
 
-        private val textDrawIds: Array<TextDrawId> = (0 until SAMPConstants.MAX_TEXT_DRAWS).map { TextDrawId(it) }.toTypedArray()
+        private val textDrawIds: Array<TextDrawId> = (0 until SAMPConstants.MAX_TEXT_DRAWS).map { TextDrawId(it) }
+                .toTypedArray()
 
         fun valueOf(value: Int): TextDrawId =
                 when {

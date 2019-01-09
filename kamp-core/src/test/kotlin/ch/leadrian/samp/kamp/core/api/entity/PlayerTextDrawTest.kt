@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.*
+import java.util.Locale
 
 internal class PlayerTextDrawTest {
 
@@ -696,7 +696,6 @@ internal class PlayerTextDrawTest {
             }
         }
 
-
         @Nested
         inner class PreviewModelVehicleColors {
 
@@ -718,10 +717,12 @@ internal class PlayerTextDrawTest {
                     )
                 }
                 assertThat(playerTextDraw.previewModelVehicleColors)
-                        .isEqualTo(vehicleColorsOf(
-                                color1 = VehicleColor[3],
-                                color2 = VehicleColor[6]
-                        ))
+                        .isEqualTo(
+                                vehicleColorsOf(
+                                        color1 = VehicleColor[3],
+                                        color2 = VehicleColor[6]
+                                )
+                        )
             }
 
             @Test
@@ -735,12 +736,17 @@ internal class PlayerTextDrawTest {
                 val vehicleColors: VehicleColors? = null
                 playerTextDraw.previewModelVehicleColors = vehicleColors
 
-                verify(exactly = 1) { nativeFunctionExecutor.playerTextDrawSetPreviewVehCol(any(), any(), any(), any()) }
+                verify(exactly = 1) {
+                    nativeFunctionExecutor
+                            .playerTextDrawSetPreviewVehCol(any(), any(), any(), any())
+                }
                 assertThat(playerTextDraw.previewModelVehicleColors)
-                        .isEqualTo(vehicleColorsOf(
-                                color1 = VehicleColor[3],
-                                color2 = VehicleColor[6]
-                        ))
+                        .isEqualTo(
+                                vehicleColorsOf(
+                                        color1 = VehicleColor[3],
+                                        color2 = VehicleColor[6]
+                                )
+                        )
             }
         }
 
@@ -790,7 +796,8 @@ internal class PlayerTextDrawTest {
 
                 verifyOrder {
                     onDestroy.invoke(playerTextDraw)
-                    nativeFunctionExecutor.playerTextDrawDestroy(playerid = playerId.value, text = playerTextDrawId.value)
+                    nativeFunctionExecutor
+                            .playerTextDrawDestroy(playerid = playerId.value, text = playerTextDrawId.value)
                 }
                 assertThat(playerTextDraw.isDestroyed)
                         .isTrue()
@@ -805,7 +812,8 @@ internal class PlayerTextDrawTest {
                 playerTextDraw.destroy()
 
                 verify(exactly = 1) {
-                    nativeFunctionExecutor.playerTextDrawDestroy(playerid = playerId.value, text = playerTextDrawId.value)
+                    nativeFunctionExecutor
+                            .playerTextDrawDestroy(playerid = playerId.value, text = playerTextDrawId.value)
                     onDestroy.invoke(playerTextDraw)
                 }
             }

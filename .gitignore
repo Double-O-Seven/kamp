@@ -4,5 +4,7 @@ out
 .gradle
 .project
 .classpath
-.idea
+.idea/**
+!.idea/codeStyles/codeStyleConfig.xml
+!.idea/codeStyles/Project.xml
 **/.settings/*

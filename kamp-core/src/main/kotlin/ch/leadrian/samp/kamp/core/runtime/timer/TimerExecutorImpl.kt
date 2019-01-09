@@ -92,7 +92,8 @@ constructor(
 
     }
 
-    private inner class RepeatingTimer(private val maxRepetitions: Int, private val action: () -> Unit) : AbstractTimer() {
+    private inner class RepeatingTimer(private val maxRepetitions: Int, private val action: () -> Unit) :
+            AbstractTimer() {
 
         private var currentRepetition = 0
 

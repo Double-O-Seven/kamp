@@ -13,7 +13,11 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @ParameterizedTest
     @ArgumentsSource(ParameterTypeArgumentProvider::class)
-    fun shouldResolveStringValueWithFactoryMethod(parameterType: Class<*>, stringValue: String, expectedParameterValue: Any) {
+    fun shouldResolveStringValueWithFactoryMethod(
+            parameterType: Class<*>,
+            stringValue: String,
+            expectedParameterValue: Any
+    ) {
         val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(parameterType)!!
 
         val parameterValue = commandParameterResolver.resolve(stringValue)
@@ -24,7 +28,8 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @Test
     fun givenTypeWithoutPublicMethodItShouldReturnNull() {
-        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(TypeWithoutPublicMethod::class.java)
+        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver
+                .forType(TypeWithoutPublicMethod::class.java)
 
         assertThat(commandParameterResolver)
                 .isNull()
@@ -32,7 +37,8 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @Test
     fun givenTypeWithoutStaticMethodItShouldReturnNull() {
-        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(TypeWithoutStaticMethod::class.java)
+        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver
+                .forType(TypeWithoutStaticMethod::class.java)
 
         assertThat(commandParameterResolver)
                 .isNull()
@@ -40,7 +46,8 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @Test
     fun givenTypeWithoutMatchingFactoryMethodReturnTypeItShouldReturnNull() {
-        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(TypeWithoutMatchingFactoryMethodReturnType::class.java)
+        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver
+                .forType(TypeWithoutMatchingFactoryMethodReturnType::class.java)
 
         assertThat(commandParameterResolver)
                 .isNull()
@@ -48,7 +55,8 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @Test
     fun givenTypeWithoutAppropriateFactoryMethodParameterItShouldReturnNull() {
-        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(TypeWithoutAppropriateFactoryMethodParameter::class.java)
+        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver
+                .forType(TypeWithoutAppropriateFactoryMethodParameter::class.java)
 
         assertThat(commandParameterResolver)
                 .isNull()
@@ -56,7 +64,8 @@ internal class FactoryMethodBasedCommandParameterResolverTest {
 
     @Test
     fun givenTypeWithoutAppropriateFactoryMethodItShouldReturnNull() {
-        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver.forType(TypeWithoutAppropriateFactoryMethod::class.java)
+        val commandParameterResolver = FactoryMethodBasedCommandParameterResolver
+                .forType(TypeWithoutAppropriateFactoryMethod::class.java)
 
         assertThat(commandParameterResolver)
                 .isNull()

@@ -7,7 +7,8 @@ import javax.inject.Inject
 
 internal class TextLabelCommandParameterResolver
 @Inject
-constructor(textLabelRegistry: TextLabelRegistry) : EntityCommandParameterResolver<TextLabel, TextLabelId>(textLabelRegistry) {
+constructor(textLabelRegistry: TextLabelRegistry) :
+        EntityCommandParameterResolver<TextLabel, TextLabelId>(textLabelRegistry) {
 
     override val parameterType: Class<TextLabel> = TextLabel::class.java
 

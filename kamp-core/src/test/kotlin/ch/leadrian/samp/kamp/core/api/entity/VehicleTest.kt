@@ -348,7 +348,16 @@ internal class VehicleTest {
                 val angledLocation = vehicle.angledLocation
 
                 assertThat(angledLocation)
-                        .isEqualTo(angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, interiorId = 69, worldId = 1337))
+                        .isEqualTo(
+                                angledLocationOf(
+                                        x = 1f,
+                                        y = 2f,
+                                        z = 3f,
+                                        angle = 4f,
+                                        interiorId = 69,
+                                        worldId = 1337
+                                )
+                        )
             }
 
             @Test
@@ -358,7 +367,14 @@ internal class VehicleTest {
                 every { nativeFunctionExecutor.linkVehicleToInterior(any(), any()) } returns true
                 every { nativeFunctionExecutor.setVehicleVirtualWorld(any(), any()) } returns true
 
-                vehicle.angledLocation = angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, interiorId = 69, worldId = 1337)
+                vehicle.angledLocation = angledLocationOf(
+                        x = 1f,
+                        y = 2f,
+                        z = 3f,
+                        angle = 4f,
+                        interiorId = 69,
+                        worldId = 1337
+                )
 
                 verify {
                     nativeFunctionExecutor.setVehiclePos(vehicleid = vehicleId.value, x = 1f, y = 2f, z = 3f)
@@ -510,7 +526,8 @@ internal class VehicleTest {
                     objective: VehicleObjectiveState
             ) {
                 every {
-                    nativeFunctionExecutor.getVehicleParamsEx(vehicleId.value, any(), any(), any(), any(), any(), any(), any())
+                    nativeFunctionExecutor
+                            .getVehicleParamsEx(vehicleId.value, any(), any(), any(), any(), any(), any(), any())
                 } answers {
                     secondArg<ReferenceInt>().value = engine.value
                     thirdArg<ReferenceInt>().value = lights.value
@@ -525,15 +542,17 @@ internal class VehicleTest {
                 val parameters = vehicle.parameters
 
                 assertThat(parameters)
-                        .isEqualTo(vehicleParametersOf(
-                                engine = engine,
-                                lights = lights,
-                                alarm = alarm,
-                                doorLock = doorLocked,
-                                bonnet = bonnet,
-                                boot = boot,
-                                objective = objective
-                        ))
+                        .isEqualTo(
+                                vehicleParametersOf(
+                                        engine = engine,
+                                        lights = lights,
+                                        alarm = alarm,
+                                        doorLock = doorLocked,
+                                        bonnet = bonnet,
+                                        boot = boot,
+                                        objective = objective
+                                )
+                        )
             }
 
             @ParameterizedTest
@@ -548,7 +567,8 @@ internal class VehicleTest {
                     objective: VehicleObjectiveState
             ) {
                 every {
-                    nativeFunctionExecutor.setVehicleParamsEx(vehicleId.value, any(), any(), any(), any(), any(), any(), any())
+                    nativeFunctionExecutor
+                            .setVehicleParamsEx(vehicleId.value, any(), any(), any(), any(), any(), any(), any())
                 } returns true
 
                 vehicle.parameters = vehicleParametersOf(
@@ -599,12 +619,14 @@ internal class VehicleTest {
                     val doorStates = vehicle.doorStates
 
                     assertThat(doorStates)
-                            .isEqualTo(vehicleDoorStatesOf(
-                                    driver = driver,
-                                    passenger = passenger,
-                                    backLeft = backLeft,
-                                    backRight = backRight
-                            ))
+                            .isEqualTo(
+                                    vehicleDoorStatesOf(
+                                            driver = driver,
+                                            passenger = passenger,
+                                            backLeft = backLeft,
+                                            backRight = backRight
+                                    )
+                            )
                 }
 
                 @ParameterizedTest
@@ -662,12 +684,14 @@ internal class VehicleTest {
                     val windowStates = vehicle.windowStates
 
                     assertThat(windowStates)
-                            .isEqualTo(vehicleWindowStatesOf(
-                                    driver = driver,
-                                    passenger = passenger,
-                                    backLeft = backLeft,
-                                    backRight = backRight
-                            ))
+                            .isEqualTo(
+                                    vehicleWindowStatesOf(
+                                            driver = driver,
+                                            passenger = passenger,
+                                            backLeft = backLeft,
+                                            backRight = backRight
+                                    )
+                            )
                 }
 
                 @ParameterizedTest
@@ -759,7 +783,8 @@ internal class VehicleTest {
                     vehicle.paintjob = paintjob
 
                     verify {
-                        nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = vehicleId.value, paintjobid = paintjob!!)
+                        nativeFunctionExecutor
+                                .changeVehiclePaintjob(vehicleid = vehicleId.value, paintjobid = paintjob!!)
                     }
                     assertThat(vehicle.paintjob)
                             .isEqualTo(paintjob)
@@ -838,7 +863,8 @@ internal class VehicleTest {
                     vehicle.numberPlate = "ABC123"
 
                     verify {
-                        nativeFunctionExecutor.setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "ABC123")
+                        nativeFunctionExecutor
+                                .setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "ABC123")
                     }
                     assertThat(vehicle.numberPlate)
                             .isEqualTo("ABC123")
@@ -909,7 +935,10 @@ internal class VehicleTest {
 
                     vehicle.velocity = vector3DOf(x = 1f, y = 2f, z = 3f)
 
-                    verify { nativeFunctionExecutor.setVehicleVelocity(vehicleid = vehicleId.value, X = 1f, Y = 2f, Z = 3f) }
+                    verify {
+                        nativeFunctionExecutor
+                                .setVehicleVelocity(vehicleid = vehicleId.value, X = 1f, Y = 2f, Z = 3f)
+                    }
                 }
             }
 
@@ -919,7 +948,10 @@ internal class VehicleTest {
 
                 vehicle.setAngularVelocity(vector3DOf(x = 1f, y = 2f, z = 3f))
 
-                verify { nativeFunctionExecutor.setVehicleAngularVelocity(vehicleid = vehicleId.value, X = 1f, Y = 2f, Z = 3f) }
+                verify {
+                    nativeFunctionExecutor
+                            .setVehicleAngularVelocity(vehicleid = vehicleId.value, X = 1f, Y = 2f, Z = 3f)
+                }
             }
 
             @Nested
@@ -940,12 +972,14 @@ internal class VehicleTest {
                     val damageStatus = vehicle.damageStatus
 
                     assertThat(damageStatus)
-                            .isEqualTo(VehicleDamageStatus(
-                                    panels = VehiclePanelDamageStatus(10),
-                                    doors = VehicleDoorsDamageStatus(20),
-                                    lights = VehicleLightsDamageStatus(30),
-                                    tires = VehicleTiresDamageStatus(40)
-                            ))
+                            .isEqualTo(
+                                    VehicleDamageStatus(
+                                            panels = VehiclePanelDamageStatus(10),
+                                            doors = VehicleDoorsDamageStatus(20),
+                                            lights = VehicleLightsDamageStatus(30),
+                                            tires = VehicleTiresDamageStatus(40)
+                                    )
+                            )
                 }
 
                 @Test

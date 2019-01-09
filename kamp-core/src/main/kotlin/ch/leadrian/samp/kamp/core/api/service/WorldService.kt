@@ -30,7 +30,8 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
     fun getGravity(): Float = nativeFunctionExecutor.getGravity()
 
     fun createExplosion(type: ExplosionType, area: Sphere) {
-        nativeFunctionExecutor.createExplosion(x = area.x, y = area.y, z = area.z, radius = area.radius, type = type.value)
+        nativeFunctionExecutor
+                .createExplosion(x = area.x, y = area.y, z = area.z, radius = area.radius, type = type.value)
     }
 
     fun createExplosion(type: ExplosionType, coordinates: Vector3D, radius: Float) {

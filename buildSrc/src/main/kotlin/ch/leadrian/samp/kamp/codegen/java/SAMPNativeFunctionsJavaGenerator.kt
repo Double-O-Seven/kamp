@@ -37,18 +37,22 @@ internal class SAMPNativeFunctionsJavaGenerator(
     }
 
     private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(AnnotationSpec
-                .builder(Generated::class.java)
-                .addMember("value", "\$S", this@SAMPNativeFunctionsJavaGenerator::class.java.name)
-                .addMember("date", "\$S", LocalDateTime.now().toString())
-                .build())
+        return addAnnotation(
+                AnnotationSpec
+                        .builder(Generated::class.java)
+                        .addMember("value", "\$S", this@SAMPNativeFunctionsJavaGenerator::class.java.name)
+                        .addMember("date", "\$S", LocalDateTime.now().toString())
+                        .build()
+        )
     }
 
     private fun TypeSpec.Builder.addPrivateConstructor(): TypeSpec.Builder {
-        return addMethod(MethodSpec
-                .constructorBuilder()
-                .addModifiers(Modifier.PRIVATE)
-                .build())
+        return addMethod(
+                MethodSpec
+                        .constructorBuilder()
+                        .addModifiers(Modifier.PRIVATE)
+                        .build()
+        )
     }
 
     private fun TypeSpec.Builder.addNativeMethods(): TypeSpec.Builder {

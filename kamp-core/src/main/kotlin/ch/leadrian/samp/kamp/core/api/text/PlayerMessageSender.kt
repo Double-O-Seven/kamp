@@ -62,7 +62,12 @@ internal constructor(
     }
 
     fun sendPlayerMessageToPlayer(toPlayer: Player, fromPlayer: Player, message: String) {
-        nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = toPlayer.id.value, senderid = fromPlayer.id.value, message = message)
+        nativeFunctionExecutor
+                .sendPlayerMessageToPlayer(
+                        playerid = toPlayer.id.value,
+                        senderid = fromPlayer.id.value,
+                        message = message
+                )
     }
 
     fun sendPlayerMessageToPlayer(toPlayer: Player, fromPlayer: Player, message: String, vararg args: Any) {

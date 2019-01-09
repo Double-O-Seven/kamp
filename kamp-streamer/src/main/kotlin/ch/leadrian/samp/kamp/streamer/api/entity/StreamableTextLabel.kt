@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.TextLabelBase
 import ch.leadrian.samp.kamp.core.api.text.TextKey
-import java.util.*
+import java.util.Locale
 
 interface StreamableTextLabel : TextLabelBase {
 

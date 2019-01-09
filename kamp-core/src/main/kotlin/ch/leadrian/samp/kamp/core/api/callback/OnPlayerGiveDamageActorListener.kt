@@ -9,6 +9,12 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 @CallbackListener(runtimePackageName = "ch.leadrian.samp.kamp.core.runtime.callback")
 interface OnPlayerGiveDamageActorListener {
 
-    fun onPlayerGiveDamageActor(player: Player, actor: Actor, amount: Float, weaponModel: WeaponModel, bodyPart: BodyPart)
+    fun onPlayerGiveDamageActor(
+            player: Player,
+            actor: Actor,
+            amount: Float,
+            weaponModel: WeaponModel,
+            bodyPart: BodyPart
+    )
 
 }

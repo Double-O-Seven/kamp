@@ -19,7 +19,8 @@ internal class ConstantValueRegistryTest {
         @ParameterizedTest
         @ArgumentsSource(TestConstantValueArgumentsProvider::class)
         fun shouldReturnConstantByValue(expectedConstant: TestConstantValue) {
-            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry(*TestConstantValue.values())
+            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants
+                    .ConstantValueRegistry(*TestConstantValue.values())
 
             val constant = constantValueRegistry[expectedConstant.value]
 
@@ -63,7 +64,8 @@ internal class ConstantValueRegistryTest {
         @ParameterizedTest
         @ArgumentsSource(TestConstantValueArgumentsProvider::class)
         fun givenValueExistsItShouldReturnTrue(expectedConstant: TestConstantValue) {
-            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry(*TestConstantValue.values())
+            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants
+                    .ConstantValueRegistry(*TestConstantValue.values())
 
             val exists = constantValueRegistry.exists(expectedConstant.value)
 
@@ -73,7 +75,8 @@ internal class ConstantValueRegistryTest {
 
         @Test
         fun givenValueDoesNotExistItShouldReturnFalse() {
-            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants.ConstantValueRegistry(*TestConstantValue.values())
+            val constantValueRegistry = ch.leadrian.samp.kamp.core.api.constants
+                    .ConstantValueRegistry(*TestConstantValue.values())
 
             val exists = constantValueRegistry.exists(-999)
 
@@ -82,7 +85,8 @@ internal class ConstantValueRegistryTest {
         }
     }
 
-    sealed class TestConstantValue(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+    sealed class TestConstantValue(override val value: Int) :
+            ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
 
         companion object {
 

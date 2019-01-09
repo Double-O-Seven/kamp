@@ -8,7 +8,8 @@ data class VehicleId internal constructor(override val value: Int) : EntityId {
 
         val INVALID = VehicleId(SAMPConstants.INVALID_VEHICLE_ID)
 
-        private val vehicleIds: Array<VehicleId> = (0 until SAMPConstants.MAX_VEHICLES).map { VehicleId(it) }.toTypedArray()
+        private val vehicleIds: Array<VehicleId> = (0 until SAMPConstants.MAX_VEHICLES).map { VehicleId(it) }
+                .toTypedArray()
 
         fun valueOf(value: Int): VehicleId =
                 when {

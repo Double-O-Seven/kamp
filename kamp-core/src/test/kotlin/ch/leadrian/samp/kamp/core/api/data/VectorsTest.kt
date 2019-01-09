@@ -224,7 +224,6 @@ internal class VectorsTest {
                     .isCloseTo(26.196374f, withPercentage(0.001))
         }
 
-
         @ParameterizedTest
         @ArgumentsSource(Vector2DFactoryArgumentsProvider::class)
         fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float) -> Vector2D) {
@@ -487,7 +486,6 @@ internal class VectorsTest {
                     .isCloseTo(10.246951f, withPercentage(0.001))
         }
 
-
         @ParameterizedTest
         @ArgumentsSource(Vector3DFactoryArgumentsProvider::class)
         fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float, Float) -> Vector3D) {
@@ -596,7 +594,6 @@ internal class VectorsTest {
             assertThat(distance)
                     .isCloseTo(10.246951f, withPercentage(0.001))
         }
-
 
         @ParameterizedTest
         @ArgumentsSource(PositionFactoryArgumentsProvider::class)
@@ -805,7 +802,14 @@ internal class VectorsTest {
             val worldId = 1234
             val angle = 123f
 
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(x, y, z, interiorId, worldId, angle)
+            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+                    x,
+                    y,
+                    z,
+                    interiorId,
+                    worldId,
+                    angle
+            )
 
             assertThat(angledLocation)
                     .satisfies {
@@ -833,7 +837,14 @@ internal class VectorsTest {
             val interiorId = 1337
             val worldId = 1234
             val angle = 123f
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(x, y, z, interiorId, worldId, angle)
+            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+                    x,
+                    y,
+                    z,
+                    interiorId,
+                    worldId,
+                    angle
+            )
 
             val mutableAngledLocation: MutableAngledLocation = angledLocation.toMutableAngledLocation()
 
@@ -863,9 +874,17 @@ internal class VectorsTest {
             val interiorId = 1337
             val worldId = 1234
             val angle = 123f
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(x, y, z, interiorId, worldId, angle)
+            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+                    x,
+                    y,
+                    z,
+                    interiorId,
+                    worldId,
+                    angle
+            )
 
-            val immutableAngledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = angledLocation.toAngledLocation()
+            val immutableAngledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = angledLocation
+                    .toAngledLocation()
 
             assertThat(immutableAngledLocation)
                     .isNotInstanceOf(MutableAngledLocation::class.java)
@@ -889,7 +908,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenInteriorIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 1337, worldId = 1234, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 1337,
+                    worldId = 1234,
+                    angle = 0f
+            )
 
             val distance = angledLocation.distanceTo(otherAngledLocation)
 
@@ -901,7 +927,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenInteriorIdIsNotTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 65536, worldId = 1234, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 65536,
+                    worldId = 1234,
+                    angle = 0f
+            )
 
             val distance = angledLocation.distanceTo(otherAngledLocation)
 
@@ -913,7 +946,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenWorldIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 1337, worldId = 65536, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 1337,
+                    worldId = 65536,
+                    angle = 0f
+            )
 
             val distance = angledLocation.distanceTo(otherAngledLocation)
 
@@ -925,7 +965,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 1337, worldId = 1234, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 1337,
+                    worldId = 1234,
+                    angle = 0f
+            )
 
             val isInRange = angledLocation.isInRange(otherAngledLocation, 11f)
 
@@ -937,7 +984,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenVectorNotInRangeItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 1337, worldId = 1234, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 1337,
+                    worldId = 1234,
+                    angle = 0f
+            )
 
             val isInRange = angledLocation.isInRange(otherAngledLocation, 9f)
 
@@ -949,7 +1003,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenInteriorIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 65536, worldId = 1234, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 65536,
+                    worldId = 1234,
+                    angle = 0f
+            )
 
             val isInRange = angledLocation.isInRange(otherAngledLocation, 9999f)
 
@@ -961,7 +1022,14 @@ internal class VectorsTest {
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
         fun givenWorldIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
             val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
-            val otherAngledLocation = angledLocationOf(x = 17f, y = 6f, z = 2f, interiorId = 1337, worldId = 65536, angle = 0f)
+            val otherAngledLocation = angledLocationOf(
+                    x = 17f,
+                    y = 6f,
+                    z = 2f,
+                    interiorId = 1337,
+                    worldId = 65536,
+                    angle = 0f
+            )
 
             val isInRange = angledLocation.isInRange(otherAngledLocation, 9999f)
 
@@ -981,8 +1049,26 @@ internal class VectorsTest {
                 createArguments { x, y -> mutablePositionOf(x = x, y = y, z = 0f, angle = 0f) },
                 createArguments { x, y -> locationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0) },
                 createArguments { x, y -> mutableLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0) },
-                createArguments { x, y -> angledLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0, angle = 0f) },
-                createArguments { x, y -> mutableAngledLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0, angle = 0f) }
+                createArguments { x, y ->
+                    angledLocationOf(
+                            x = x,
+                            y = y,
+                            z = 0f,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                },
+                createArguments { x, y ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = 0f,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                }
         )
 
         private fun createArguments(factory: (Float, Float) -> Vector2D): Arguments = Arguments.of(factory)
@@ -996,7 +1082,16 @@ internal class VectorsTest {
                 createArguments { x, y -> mutableVector3DOf(x = x, y = y, z = 0f) },
                 createArguments { x, y -> mutablePositionOf(x = x, y = y, z = 0f, angle = 0f) },
                 createArguments { x, y -> mutableLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0) },
-                createArguments { x, y -> mutableAngledLocationOf(x = x, y = y, z = 0f, interiorId = 0, worldId = 0, angle = 0f) }
+                createArguments { x, y ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = 0f,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                }
         )
 
         private fun createArguments(factory: (Float, Float) -> MutableVector2D): Arguments = Arguments.of(factory)
@@ -1012,8 +1107,26 @@ internal class VectorsTest {
                 createArguments { x, y, z -> mutablePositionOf(x = x, y = y, z = z, angle = 0f) },
                 createArguments { x, y, z -> locationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0) },
                 createArguments { x, y, z -> mutableLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0) },
-                createArguments { x, y, z -> angledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = 0f) },
-                createArguments { x, y, z -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = 0f) }
+                createArguments { x, y, z ->
+                    angledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                },
+                createArguments { x, y, z ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                }
         )
 
         private fun createArguments(factory: (Float, Float, Float) -> Vector3D): Arguments = Arguments.of(factory)
@@ -1026,7 +1139,16 @@ internal class VectorsTest {
                 createArguments { x, y, z -> mutableVector3DOf(x = x, y = y, z = z) },
                 createArguments { x, y, z -> mutablePositionOf(x = x, y = y, z = z, angle = 0f) },
                 createArguments { x, y, z -> mutableLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0) },
-                createArguments { x, y, z -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = 0f) }
+                createArguments { x, y, z ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = 0f
+                    )
+                }
         )
 
         private fun createArguments(factory: (Float, Float, Float) -> MutableVector3D): Arguments = Arguments.of(factory)
@@ -1037,13 +1159,59 @@ internal class VectorsTest {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
                 createArguments { x, y, z, angle -> positionOf(x = x, y = y, z = z, angle = angle) },
-                createArguments { x, y, z, angle -> positionOf(coordinates = vector3DOf(x = x, y = y, z = z), angle = angle) },
+                createArguments { x, y, z, angle ->
+                    positionOf(
+                            coordinates = vector3DOf(x = x, y = y, z = z),
+                            angle = angle
+                    )
+                },
                 createArguments { x, y, z, angle -> mutablePositionOf(x = x, y = y, z = z, angle = angle) },
-                createArguments { x, y, z, angle -> mutablePositionOf(coordinates = vector3DOf(x = x, y = y, z = z), angle = angle) },
-                createArguments { x, y, z, angle -> angledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = angle) },
-                createArguments { x, y, z, angle -> angledLocationOf(position = positionOf(x = x, y = y, z = z, angle = angle), interiorId = 0, worldId = 0) },
-                createArguments { x, y, z, angle -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = 0, worldId = 0, angle = angle) },
-                createArguments { x, y, z, angle -> mutableAngledLocationOf(position = positionOf(x = x, y = y, z = z, angle = angle), interiorId = 0, worldId = 0) }
+                createArguments { x, y, z, angle ->
+                    mutablePositionOf(
+                            coordinates = vector3DOf(x = x, y = y, z = z),
+                            angle = angle
+                    )
+                },
+                createArguments { x, y, z, angle ->
+                    angledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = angle
+                    )
+                },
+                createArguments { x, y, z, angle ->
+                    angledLocationOf(
+                            position = positionOf(
+                                    x = x,
+                                    y = y,
+                                    z = z,
+                                    angle = angle
+                            ), interiorId = 0, worldId = 0
+                    )
+                },
+                createArguments { x, y, z, angle ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = 0,
+                            worldId = 0,
+                            angle = angle
+                    )
+                },
+                createArguments { x, y, z, angle ->
+                    mutableAngledLocationOf(
+                            position = positionOf(
+                                    x = x,
+                                    y = y,
+                                    z = z,
+                                    angle = angle
+                            ), interiorId = 0, worldId = 0
+                    )
+                }
         )
 
         private fun createArguments(factory: (Float, Float, Float, Float) -> Position): Arguments = Arguments.of(factory)
@@ -1053,30 +1221,137 @@ internal class VectorsTest {
     private class LocationFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
-                createArguments { x, y, z, interiorId, worldId -> locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId) },
-                createArguments { x, y, z, interiorId, worldId -> locationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId) },
-                createArguments { x, y, z, interiorId, worldId -> mutableLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId) },
-                createArguments { x, y, z, interiorId, worldId -> mutableLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId) },
-                createArguments { x, y, z, interiorId, worldId -> angledLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId, angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> angledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> angledLocationOf(location = locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId), angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(coordinates = vector3DOf(x = x, y = y, z = z), interiorId = interiorId, worldId = worldId, angle = 0f) },
-                createArguments { x, y, z, interiorId, worldId -> mutableAngledLocationOf(location = locationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId), angle = 0f) }
+                createArguments { x, y, z, interiorId, worldId ->
+                    locationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = interiorId,
+                            worldId = worldId
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    locationOf(
+                            coordinates = vector3DOf(
+                                    x = x,
+                                    y = y,
+                                    z = z
+                            ), interiorId = interiorId, worldId = worldId
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    mutableLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = interiorId,
+                            worldId = worldId
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    mutableLocationOf(
+                            coordinates = vector3DOf(
+                                    x = x,
+                                    y = y,
+                                    z = z
+                            ), interiorId = interiorId, worldId = worldId
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    angledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = interiorId,
+                            worldId = worldId,
+                            angle = 0f
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    angledLocationOf(
+                            coordinates = vector3DOf(
+                                    x = x,
+                                    y = y,
+                                    z = z
+                            ), interiorId = interiorId, worldId = worldId, angle = 0f
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    angledLocationOf(
+                            location = locationOf(
+                                    x = x,
+                                    y = y,
+                                    z = z,
+                                    interiorId = interiorId,
+                                    worldId = worldId
+                            ), angle = 0f
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    mutableAngledLocationOf(
+                            coordinates = vector3DOf(
+                                    x = x,
+                                    y = y,
+                                    z = z
+                            ), interiorId = interiorId, worldId = worldId, angle = 0f
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    mutableAngledLocationOf(
+                            coordinates = vector3DOf(
+                                    x = x,
+                                    y = y,
+                                    z = z
+                            ), interiorId = interiorId, worldId = worldId, angle = 0f
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId ->
+                    mutableAngledLocationOf(
+                            location = locationOf(
+                                    x = x,
+                                    y = y,
+                                    z = z,
+                                    interiorId = interiorId,
+                                    worldId = worldId
+                            ), angle = 0f
+                    )
+                }
         )
 
-        private fun createArguments(factory: (Float, Float, Float, Int, Int) -> Location): Arguments = Arguments.of(factory)
+        private fun createArguments(factory: (Float, Float, Float, Int, Int) -> Location): Arguments = Arguments.of(
+                factory
+        )
 
     }
 
     private class AngledLocationFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext?): Stream<out Arguments> = Stream.of(
-                createArguments { x, y, z, interiorId, worldId, angle -> angledLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId, angle = angle) },
-                createArguments { x, y, z, interiorId, worldId, angle -> mutableAngledLocationOf(x = x, y = y, z = z, interiorId = interiorId, worldId = worldId, angle = angle) }
+                createArguments { x, y, z, interiorId, worldId, angle ->
+                    angledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = interiorId,
+                            worldId = worldId,
+                            angle = angle
+                    )
+                },
+                createArguments { x, y, z, interiorId, worldId, angle ->
+                    mutableAngledLocationOf(
+                            x = x,
+                            y = y,
+                            z = z,
+                            interiorId = interiorId,
+                            worldId = worldId,
+                            angle = angle
+                    )
+                }
         )
 
-        private fun createArguments(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation): Arguments = Arguments.of(factory)
+        private fun createArguments(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation): Arguments = Arguments.of(
+                factory
+        )
 
     }
 

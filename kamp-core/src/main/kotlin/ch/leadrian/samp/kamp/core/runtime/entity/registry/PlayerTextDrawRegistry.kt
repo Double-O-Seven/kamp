@@ -4,4 +4,5 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerTextDrawId
 
-internal class PlayerTextDrawRegistry : EntityRegistry<PlayerTextDraw, PlayerTextDrawId>(arrayOfNulls(SAMPConstants.MAX_PLAYER_TEXT_DRAWS))
+internal class PlayerTextDrawRegistry :
+        EntityRegistry<PlayerTextDraw, PlayerTextDrawId>(arrayOfNulls(SAMPConstants.MAX_PLAYER_TEXT_DRAWS))

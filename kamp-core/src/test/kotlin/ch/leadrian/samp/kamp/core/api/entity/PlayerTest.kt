@@ -64,7 +64,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.*
+import java.util.Locale
 
 internal class PlayerTest {
 
@@ -177,17 +177,34 @@ internal class PlayerTest {
         @Test
         fun shouldSetSpawnInfo() {
             every {
-                nativeFunctionExecutor.setSpawnInfo(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor
+                        .setSpawnInfo(
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any()
+                        )
             } returns true
 
-            player.setSpawnInfo(spawnInfoOf(
-                    teamId = TeamId.valueOf(69),
-                    position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
-                    skinModel = SkinModel.ARMY,
-                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
-                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
-                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
-            ))
+            player.setSpawnInfo(
+                    spawnInfoOf(
+                            teamId = TeamId.valueOf(69),
+                            position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
+                            skinModel = SkinModel.ARMY,
+                            weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                            weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                            weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
+                    )
+            )
 
             verify {
                 nativeFunctionExecutor.setSpawnInfo(
@@ -211,16 +228,33 @@ internal class PlayerTest {
         @Test
         fun givenNoTeamItShouldSetSpawnInfo() {
             every {
-                nativeFunctionExecutor.setSpawnInfo(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor
+                        .setSpawnInfo(
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any(),
+                                any()
+                        )
             } returns true
 
-            player.setSpawnInfo(spawnInfoOf(
-                    position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
-                    skinModel = SkinModel.ARMY,
-                    weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
-                    weapon2 = weaponDataOf(WeaponModel.AK47, 300),
-                    weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
-            ))
+            player.setSpawnInfo(
+                    spawnInfoOf(
+                            position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f),
+                            skinModel = SkinModel.ARMY,
+                            weapon1 = weaponDataOf(WeaponModel.TEC9, 150),
+                            weapon2 = weaponDataOf(WeaponModel.AK47, 300),
+                            weapon3 = weaponDataOf(WeaponModel.DESERT_EAGLE, 20)
+                    )
+            )
 
             verify {
                 nativeFunctionExecutor.setSpawnInfo(
@@ -373,7 +407,14 @@ internal class PlayerTest {
             every { nativeFunctionExecutor.setPlayerInterior(any(), any()) } returns true
             every { nativeFunctionExecutor.setPlayerVirtualWorld(any(), any()) } returns true
 
-            player.angledLocation = angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, interiorId = 69, worldId = 1337)
+            player.angledLocation = angledLocationOf(
+                    x = 1f,
+                    y = 2f,
+                    z = 3f,
+                    angle = 4f,
+                    interiorId = 69,
+                    worldId = 1337
+            )
 
             verify {
                 nativeFunctionExecutor.setPlayerPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
@@ -496,7 +537,10 @@ internal class PlayerTest {
     @ParameterizedTest
     @ValueSource(strings = ["true", "false"])
     fun isStreamedInShouldReturnResult(expectedResult: Boolean) {
-        every { nativeFunctionExecutor.isPlayerStreamedIn(playerid = playerId.value, forplayerid = otherPlayerId.value) } returns expectedResult
+        every {
+            nativeFunctionExecutor
+                    .isPlayerStreamedIn(playerid = playerId.value, forplayerid = otherPlayerId.value)
+        } returns expectedResult
 
         val result = player.isStreamedIn(otherPlayer)
 
@@ -572,7 +616,10 @@ internal class PlayerTest {
 
         @Test
         fun givenNoTargetPlayerItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerTargetPlayer(playerId.value) } returns SAMPConstants.INVALID_PLAYER_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerTargetPlayer(playerId.value)
+            } returns SAMPConstants.INVALID_PLAYER_ID
             every { playerRegistry[SAMPConstants.INVALID_PLAYER_ID] } returns null
 
             val targetPlayer = player.targetPlayer
@@ -836,7 +883,10 @@ internal class PlayerTest {
 
         @Test
         fun givenWasNotYetSetItShouldGetPlayerName() {
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } answers {
                 secondArg<ReferenceString>().value = "hans.wurst"
                 0
             }
@@ -849,7 +899,10 @@ internal class PlayerTest {
 
         @Test
         fun givenResultingNameIsNullItShouldReturnEmptyString() {
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } returns 0
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } returns 0
 
             val name = player.name
 
@@ -859,7 +912,10 @@ internal class PlayerTest {
 
         @Test
         fun givenNameWasSetItShouldReturnCachedName() {
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } answers {
                 secondArg<ReferenceString>().value = "John.Sausage"
                 0
             }
@@ -879,7 +935,10 @@ internal class PlayerTest {
 
         @Test
         fun shouldSetPlayerName() {
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } answers {
                 secondArg<ReferenceString>().value = "John.Sausage"
                 0
             }
@@ -893,7 +952,10 @@ internal class PlayerTest {
         @Test
         fun shouldCallOnPlayerNameChangeHandler() {
             every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } answers {
                 secondArg<ReferenceString>().value = "hans.wurst"
                 0
             }
@@ -913,7 +975,10 @@ internal class PlayerTest {
 
         @Test
         fun givenInvalidNameIsSetItShouldThrowAnException() {
-            every { nativeFunctionExecutor.getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME) } answers {
+            every {
+                nativeFunctionExecutor
+                        .getPlayerName(playerId.value, any(), SAMPConstants.MAX_PLAYER_NAME)
+            } answers {
                 secondArg<ReferenceString>().value = "hans.wurst"
                 0
             }
@@ -1015,7 +1080,10 @@ internal class PlayerTest {
 
             player.setWeather(Weather.SUNNY_DESERT)
 
-            verify { nativeFunctionExecutor.setPlayerWeather(playerid = playerId.value, weather = Weather.SUNNY_DESERT.value) }
+            verify {
+                nativeFunctionExecutor
+                        .setPlayerWeather(playerid = playerId.value, weather = Weather.SUNNY_DESERT.value)
+            }
         }
 
         @Test
@@ -1079,7 +1147,10 @@ internal class PlayerTest {
 
             player.fightingStyle = FightingStyle.GRABKICK
 
-            verify { nativeFunctionExecutor.setPlayerFightingStyle(playerid = playerId.value, style = FightingStyle.GRABKICK.value) }
+            verify {
+                nativeFunctionExecutor
+                        .setPlayerFightingStyle(playerid = playerId.value, style = FightingStyle.GRABKICK.value)
+            }
         }
     }
 
@@ -1125,7 +1196,10 @@ internal class PlayerTest {
 
         @Test
         fun givenNoSurfingVehicleItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerSurfingVehicleID(playerId.value) } returns SAMPConstants.INVALID_VEHICLE_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerSurfingVehicleID(playerId.value)
+            } returns SAMPConstants.INVALID_VEHICLE_ID
             every { vehicleRegistry[SAMPConstants.INVALID_VEHICLE_ID] } returns null
 
             val surfingVehicle = player.surfingVehicle
@@ -1153,7 +1227,10 @@ internal class PlayerTest {
 
         @Test
         fun givenNoSurfingMapObjectItShouldReturnNull() {
-            every { nativeFunctionExecutor.getPlayerSurfingObjectID(playerId.value) } returns SAMPConstants.INVALID_OBJECT_ID
+            every {
+                nativeFunctionExecutor
+                        .getPlayerSurfingObjectID(playerId.value)
+            } returns SAMPConstants.INVALID_OBJECT_ID
             every { mapObjectRegistry[SAMPConstants.INVALID_OBJECT_ID] } returns null
 
             val surfingMapObject = player.surfingObject
@@ -1183,7 +1260,10 @@ internal class PlayerTest {
 
     @Test
     fun shouldLastShotVectors() {
-        every { nativeFunctionExecutor.getPlayerLastShotVectors(playerId.value, any(), any(), any(), any(), any(), any()) } answers {
+        every {
+            nativeFunctionExecutor
+                    .getPlayerLastShotVectors(playerId.value, any(), any(), any(), any(), any(), any())
+        } answers {
             secondArg<ReferenceFloat>().value = 1f
             thirdArg<ReferenceFloat>().value = 2f
             arg<ReferenceFloat>(3).value = 3f
@@ -1196,10 +1276,12 @@ internal class PlayerTest {
         val lastShotVectors = player.lastShotVectors
 
         assertThat(lastShotVectors)
-                .isEqualTo(LastShotVectors(
-                        origin = vector3DOf(x = 1f, y = 2f, z = 3f),
-                        hitPosition = vector3DOf(x = 4f, y = 5f, z = 6f)
-                ))
+                .isEqualTo(
+                        LastShotVectors(
+                                origin = vector3DOf(x = 1f, y = 2f, z = 3f),
+                                hitPosition = vector3DOf(x = 4f, y = 5f, z = 6f)
+                        )
+                )
     }
 
     @Test
@@ -1356,7 +1438,10 @@ internal class PlayerTest {
 
         @Test
         fun shouldGetSpecialAction() {
-            every { nativeFunctionExecutor.getPlayerSpecialAction(playerId.value) } returns SpecialAction.USE_JETPACK.value
+            every {
+                nativeFunctionExecutor
+                        .getPlayerSpecialAction(playerId.value)
+            } returns SpecialAction.USE_JETPACK.value
 
             val specialAction = player.specialAction
 
@@ -1443,7 +1528,8 @@ internal class PlayerTest {
         @Test
         fun shouldSetRaceCheckpoint() {
             every {
-                nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor
+                        .setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns true
             val raceCheckpoint = mockk<RaceCheckpoint> {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
@@ -1487,7 +1573,8 @@ internal class PlayerTest {
         @Test
         fun givenNoNextCheckpointItShouldUseCurrentCoordinates() {
             every {
-                nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor
+                        .setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns true
             val raceCheckpoint = mockk<RaceCheckpoint> {
                 every { coordinates } returns vector3DOf(x = 1f, y = 2f, z = 3f)
@@ -1887,7 +1974,10 @@ internal class PlayerTest {
             every {
                 nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
             } returns isInAnyRaceCheckpoint
-            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
             every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
             player.raceCheckpoint = null
 
@@ -1911,7 +2001,10 @@ internal class PlayerTest {
             every {
                 nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
             } returns isInAnyRaceCheckpoint
-            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
             every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
             player.raceCheckpoint = otherRaceCheckpoint
 
@@ -1934,7 +2027,10 @@ internal class PlayerTest {
             every {
                 nativeFunctionExecutor.isPlayerInRaceCheckpoint(playerId.value)
             } returns expectedResult
-            every { nativeFunctionExecutor.setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .setPlayerRaceCheckpoint(any(), any(), any(), any(), any(), any(), any(), any(), any())
+            } returns true
             every { nativeFunctionExecutor.disablePlayerRaceCheckpoint(any()) } returns true
             player.raceCheckpoint = raceCheckpoint
 
@@ -2139,7 +2235,10 @@ internal class PlayerTest {
 
         @Test
         fun shouldCreateExplosionUsingSphere() {
-            every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .createExplosionForPlayer(any(), any(), any(), any(), any(), any())
+            } returns true
 
             player.createExplosion(ExplosionType.NORMAL_3, sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
 
@@ -2157,7 +2256,10 @@ internal class PlayerTest {
 
         @Test
         fun shouldCreateExplosionUsingVector() {
-            every { nativeFunctionExecutor.createExplosionForPlayer(any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .createExplosionForPlayer(any(), any(), any(), any(), any(), any())
+            } returns true
 
             player.createExplosion(ExplosionType.NORMAL_3, vector3DOf(x = 1f, y = 2f, z = 3f), 4f)
 

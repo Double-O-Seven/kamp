@@ -27,13 +27,25 @@ constructor(
             offset: Vector3D,
             vehicle: Vehicle
     ): StreamableTextLabelState.AttachedToVehicle =
-            StreamableTextLabelState.AttachedToVehicle(streamableTextLabel, vehicle, offset, playerTextLabelService, asyncExecutor)
+            StreamableTextLabelState.AttachedToVehicle(
+                    streamableTextLabel,
+                    vehicle,
+                    offset,
+                    playerTextLabelService,
+                    asyncExecutor
+            )
 
     fun createAttachedToPlayer(
             streamableTextLabel: StreamableTextLabelImpl,
             offset: Vector3D,
             Player: Player
     ): StreamableTextLabelState.AttachedToPlayer =
-            StreamableTextLabelState.AttachedToPlayer(streamableTextLabel, Player, offset, playerTextLabelService, asyncExecutor)
+            StreamableTextLabelState.AttachedToPlayer(
+                    streamableTextLabel,
+                    Player,
+                    offset,
+                    playerTextLabelService,
+                    asyncExecutor
+            )
 
 }

@@ -85,7 +85,8 @@ internal class WorldServiceTest {
             worldService.createExplosion(ExplosionType.NORMAL_3, sphereOf(x = 1f, y = 2f, z = 3f, radius = 4f))
 
             verify {
-                nativeFunctionExecutor.createExplosion(x = 1f, y = 2f, z = 3f, type = ExplosionType.NORMAL_3.value, radius = 4f)
+                nativeFunctionExecutor
+                        .createExplosion(x = 1f, y = 2f, z = 3f, type = ExplosionType.NORMAL_3.value, radius = 4f)
             }
         }
 
@@ -96,7 +97,8 @@ internal class WorldServiceTest {
             worldService.createExplosion(ExplosionType.NORMAL_3, vector3DOf(x = 1f, y = 2f, z = 3f), radius = 4f)
 
             verify {
-                nativeFunctionExecutor.createExplosion(x = 1f, y = 2f, z = 3f, type = ExplosionType.NORMAL_3.value, radius = 4f)
+                nativeFunctionExecutor
+                        .createExplosion(x = 1f, y = 2f, z = 3f, type = ExplosionType.NORMAL_3.value, radius = 4f)
             }
         }
 

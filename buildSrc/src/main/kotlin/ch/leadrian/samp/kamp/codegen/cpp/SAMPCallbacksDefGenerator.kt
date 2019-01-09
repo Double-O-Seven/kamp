@@ -26,12 +26,14 @@ internal class SAMPCallbacksDefGenerator(
 
     private fun Writer.writeDefaultFunctions() {
         write("EXPORTS\n")
-        write("""
+        write(
+                """
             |    Supports
             |    Load
             |    Unload
             |    ProcessTick
             |
-        """.trimMargin())
+        """.trimMargin()
+        )
     }
 }

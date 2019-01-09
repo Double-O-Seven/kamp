@@ -32,7 +32,7 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Locale
 import javax.inject.Singleton
 
 internal class CommandListDialogFactoryTest {
@@ -259,7 +259,6 @@ internal class CommandListDialogFactoryTest {
         }
 
     }
-
 
     @Suppress("unused", "UNUSED_PARAMETER")
     @Singleton

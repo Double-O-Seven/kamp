@@ -12,7 +12,7 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Properties
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 
@@ -60,7 +60,6 @@ internal class InjectorFactoryTest {
         }
 
     }
-
 
     private object TestBootstrapModule : BootstrapModule {
 

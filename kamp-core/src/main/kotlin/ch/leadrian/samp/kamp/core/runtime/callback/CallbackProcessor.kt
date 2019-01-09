@@ -384,7 +384,8 @@ constructor(
 
     override fun onVehicleMod(playerid: Int, vehicleid: Int, componentid: Int): Boolean {
         val result = tryAndCatch {
-            onVehicleModHandler.onVehicleMod(playerid.toPlayer(), vehicleid.toVehicle(), VehicleComponentModel[componentid])
+            onVehicleModHandler
+                    .onVehicleMod(playerid.toPlayer(), vehicleid.toVehicle(), VehicleComponentModel[componentid])
         } ?: OnVehicleModListener.Result.Desync
         return result.value
     }
@@ -544,7 +545,13 @@ constructor(
         return true
     }
 
-    override fun onDialogResponse(playerid: Int, dialogid: Int, response: Int, listitem: Int, inputtext: String): Boolean {
+    override fun onDialogResponse(
+            playerid: Int,
+            dialogid: Int,
+            response: Int,
+            listitem: Int,
+            inputtext: String
+    ): Boolean {
         val result = tryAndCatch {
             onDialogResponseHandler.onDialogResponse(
                     playerid.toPlayer(),
@@ -557,7 +564,13 @@ constructor(
         return result.value
     }
 
-    override fun onPlayerTakeDamage(playerid: Int, issuerid: Int, amount: Float, weaponid: Int, bodypart: Int): Boolean {
+    override fun onPlayerTakeDamage(
+            playerid: Int,
+            issuerid: Int,
+            amount: Float,
+            weaponid: Int,
+            bodypart: Int
+    ): Boolean {
         tryAndCatch {
             onPlayerTakeDamageHandler.onPlayerTakeDamage(
                     player = playerid.toPlayer(),
@@ -570,7 +583,13 @@ constructor(
         return true
     }
 
-    override fun onPlayerGiveDamage(playerid: Int, damagedid: Int, amount: Float, weaponid: Int, bodypart: Int): Boolean {
+    override fun onPlayerGiveDamage(
+            playerid: Int,
+            damagedid: Int,
+            amount: Float,
+            weaponid: Int,
+            bodypart: Int
+    ): Boolean {
         tryAndCatch {
             onPlayerGiveDamageHandler.onPlayerGiveDamage(
                     player = playerid.toPlayer(),
@@ -583,7 +602,13 @@ constructor(
         return true
     }
 
-    override fun onPlayerGiveDamageActor(playerid: Int, damaged_actorid: Int, amount: Float, weaponid: Int, bodypart: Int): Boolean {
+    override fun onPlayerGiveDamageActor(
+            playerid: Int,
+            damaged_actorid: Int,
+            amount: Float,
+            weaponid: Int,
+            bodypart: Int
+    ): Boolean {
         tryAndCatch {
             onPlayerGiveDamageActorHandler.onPlayerGiveDamageActor(
                     player = playerid.toPlayer(),
@@ -617,7 +642,8 @@ constructor(
 
     override fun onPlayerClickPlayerTextDraw(playerid: Int, playertextid: Int): Boolean {
         val result = tryAndCatch {
-            onPlayerClickPlayerTextDrawHandler.onPlayerClickPlayerTextDraw(playertextid.toPlayerTextDraw(playerid.toPlayer()))
+            onPlayerClickPlayerTextDrawHandler
+                    .onPlayerClickPlayerTextDraw(playertextid.toPlayerTextDraw(playerid.toPlayer()))
         } ?: OnPlayerClickPlayerTextDrawListener.Result.NotFound
         return result.value
     }
@@ -771,7 +797,11 @@ constructor(
                 BulletHitType.PLAYER -> OnPlayerWeaponShotListener.Target.PlayerTarget(hitid.toPlayer())
                 BulletHitType.VEHICLE -> OnPlayerWeaponShotListener.Target.VehicleTarget(hitid.toVehicle())
                 BulletHitType.OBJECT -> OnPlayerWeaponShotListener.Target.MapObjectTarget(hitid.toMapObject())
-                BulletHitType.PLAYER_OBJECT -> OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(hitid.toPlayerMapObject(player))
+                BulletHitType.PLAYER_OBJECT -> OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(
+                        hitid.toPlayerMapObject(
+                                player
+                        )
+                )
             }
             onPlayerWeaponShotHandler.onPlayerShotWeapon(
                     player,

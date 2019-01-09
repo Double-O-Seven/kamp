@@ -6,7 +6,6 @@ import com.google.inject.Guice
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-
 internal class CommandParameterResolverRegistryTest {
 
     @Test

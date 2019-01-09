@@ -29,7 +29,10 @@ internal class PlayerAudioStreamTest {
 
         @Test
         fun shouldPlayAudioStream() {
-            every { nativeFunctionExecutor.playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any())
+            } returns true
 
             playerAudioStream.play(
                     url = "http://localhost:8080/song/1",
@@ -52,7 +55,10 @@ internal class PlayerAudioStreamTest {
 
         @Test
         fun shouldPlayAudioStreamWithoutPosition() {
-            every { nativeFunctionExecutor.playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor
+                        .playAudioStreamForPlayer(any(), any(), any(), any(), any(), any(), any())
+            } returns true
 
             playerAudioStream.play("http://localhost:8080/song/1")
 

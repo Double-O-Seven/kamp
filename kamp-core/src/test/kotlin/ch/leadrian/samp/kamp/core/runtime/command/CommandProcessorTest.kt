@@ -122,7 +122,10 @@ internal class CommandProcessorTest {
             )
             every { commandParser.parse(commandLine) } returns ParsedCommand("hi", listOf("there", "lol"))
             every { commandRegistry.getCommandDefinition("hi", "there") } returns commandDefinition
-            every { unknownCommandHandler.handle(any(), any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+            every {
+                unknownCommandHandler
+                        .handle(any(), any(), any())
+            } returns OnPlayerCommandTextListener.Result.Processed
             every {
                 commandAccessCheckExecutor.checkAccess(player, commandDefinition, listOf("lol"))
             } returns OnPlayerCommandTextListener.Result.UnknownCommand

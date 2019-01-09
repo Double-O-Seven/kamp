@@ -44,7 +44,8 @@ internal constructor(
     val summaryString: String
         get() {
             val networkStatisticsString = ReferenceString()
-            nativeFunctionExecutor.getPlayerNetworkStats(playerid = player.id.value, retstr = networkStatisticsString, size = 400)
+            nativeFunctionExecutor
+                    .getPlayerNetworkStats(playerid = player.id.value, retstr = networkStatisticsString, size = 400)
             return networkStatisticsString.value ?: ""
         }
 }

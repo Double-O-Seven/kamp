@@ -144,7 +144,8 @@ constructor(
             val name = parameterAnnotation?.name?.takeIf { it.isNotEmpty() }
             val nameTextKey = parameterAnnotation?.nameTextKey?.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
             val description = parameterAnnotation?.description?.takeIf { it.isNotEmpty() }
-            val descriptionTextKey = parameterAnnotation?.descriptionTextKey?.takeIf { it.isNotEmpty() }?.let { TextKey(it) }
+            val descriptionTextKey = parameterAnnotation?.descriptionTextKey?.takeIf { it.isNotEmpty() }
+                    ?.let { TextKey(it) }
             val invalidValueHandler = parameter.getAnnotation(InvalidParameterValueHandler::class.java)?.let {
                 injector.getInstance(it.value.java)
             } ?: defaultInvalidValueHandler
@@ -163,7 +164,10 @@ constructor(
         }
     }
 
-    private fun getCommandParameterResolver(parameter: java.lang.reflect.Parameter, isLast: Boolean): CommandParameterResolver<*> {
+    private fun getCommandParameterResolver(
+            parameter: java.lang.reflect.Parameter,
+            isLast: Boolean
+    ): CommandParameterResolver<*> {
         if (allowedCollectionTypes.contains(parameter.type)) {
             if (!isLast) {
                 throw CommandDefinitionLoaderException("Only the last parameter can be a collection type")

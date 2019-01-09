@@ -5,6 +5,7 @@ enum class PlayerKey(
         onFootTextDrawCode: String? = null,
         inVehicleTextDrawCode: String? = null
 ) {
+
     ACTION(
             value = SAMPConstants.KEY_ACTION,
             onFootTextDrawCode = "PED_ANSWER_PHONE",

@@ -10,4 +10,7 @@ interface MutableWeaponData : WeaponData {
 
 }
 
-fun mutableWeaponDataOf(model: WeaponModel, ammo: Int): MutableWeaponData = MutableWeaponDataImpl(model = model, ammo = ammo)
+fun mutableWeaponDataOf(model: WeaponModel, ammo: Int): MutableWeaponData = MutableWeaponDataImpl(
+        model = model,
+        ammo = ammo
+)

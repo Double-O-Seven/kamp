@@ -15,7 +15,13 @@ import org.junit.jupiter.api.Test
 
 internal class EntityRegistryModuleTest {
 
-    private val modules = arrayOf(TestModule(), EntityRegistryModule(), EntityFactoryModule(), CallbackModule(), TextModule())
+    private val modules = arrayOf(
+            TestModule(),
+            EntityRegistryModule(),
+            EntityFactoryModule(),
+            CallbackModule(),
+            TextModule()
+    )
 
     @Test
     fun shouldCreateInjector() {

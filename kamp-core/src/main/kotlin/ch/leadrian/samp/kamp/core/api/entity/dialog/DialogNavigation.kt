@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.entity.dialog
 
 import ch.leadrian.samp.kamp.core.api.entity.HasPlayer
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import java.util.*
+import java.util.LinkedList
 
 class DialogNavigation
 internal constructor(override val player: Player) : HasPlayer {

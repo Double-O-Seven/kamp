@@ -52,7 +52,25 @@ internal class AttachedObjectSlotTest {
                 bone = Bone.CALF_LEFT
         )
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-            every { setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                setPlayerAttachedObject(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } returns true
             every { removePlayerAttachedObject(any(), any()) } returns true
         }
         val attachedObjectSlot = AttachedObjectSlot(
@@ -109,7 +127,25 @@ internal class AttachedObjectSlotTest {
                 materialColor2 = Colors.BLUE
         )
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-            every { setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                setPlayerAttachedObject(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } returns true
         }
         val attachedObjectSlot = AttachedObjectSlot(
                 player = player,
@@ -161,7 +197,23 @@ internal class AttachedObjectSlotTest {
         )
         val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
             every {
-                setPlayerAttachedObject(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                setPlayerAttachedObject(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
             } returns false
         }
         val attachedObjectSlot = AttachedObjectSlot(

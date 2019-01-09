@@ -10,7 +10,8 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerExitedMenuReceiverDelegate
-import java.util.*
+import java.util.Collections
+import java.util.Locale
 
 class Menu
 internal constructor(

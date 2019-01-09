@@ -51,7 +51,8 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
-import java.util.*
+import java.util.Collections
+import java.util.Locale
 
 class Player
 internal constructor(
@@ -88,7 +89,14 @@ internal constructor(
 
     val weapons: PlayerWeapons = PlayerWeapons(this, nativeFunctionExecutor)
 
-    val camera: PlayerCamera = PlayerCamera(this, nativeFunctionExecutor, mapObjectRegistry, vehicleRegistry, playerRegistry, actorRegistry)
+    val camera: PlayerCamera = PlayerCamera(
+            this,
+            nativeFunctionExecutor,
+            mapObjectRegistry,
+            vehicleRegistry,
+            playerRegistry,
+            actorRegistry
+    )
 
     val audioStream: PlayerAudioStream = PlayerAudioStream(this, nativeFunctionExecutor)
 
@@ -218,7 +226,8 @@ internal constructor(
         }
 
     fun setCoordinatesFindZ(coordinates: Vector3D) {
-        nativeFunctionExecutor.setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
+        nativeFunctionExecutor
+                .setPlayerPosFindZ(playerid = id.value, x = coordinates.x, y = coordinates.y, z = coordinates.z)
     }
 
     fun isStreamedIn(forPlayer: Player): Boolean =
@@ -311,7 +320,8 @@ internal constructor(
         get() {
             if (field.isEmpty()) {
                 val name = ReferenceString()
-                nativeFunctionExecutor.getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
+                nativeFunctionExecutor
+                        .getPlayerName(playerid = id.value, name = name, size = SAMPConstants.MAX_PLAYER_NAME)
                 field = name.value.orEmpty()
             }
             return field
@@ -323,7 +333,10 @@ internal constructor(
             val oldName = name
             val result = nativeFunctionExecutor.setPlayerName(playerid = id.value, name = value)
             when (result) {
-                -1 -> throw InvalidPlayerNameException(name = value, message = "Name is already in use, too long or invalid")
+                -1 -> throw InvalidPlayerNameException(
+                        name = value,
+                        message = "Name is already in use, too long or invalid"
+                )
                 else -> field = value
             }
             onPlayerNameChangeHandler.onPlayerNameChange(this, oldName, value)
@@ -340,7 +353,8 @@ internal constructor(
             val keys = ReferenceInt()
             val leftRight = ReferenceInt()
             val upDown = ReferenceInt()
-            nativeFunctionExecutor.getPlayerKeys(playerid = id.value, keys = keys, leftright = leftRight, updown = upDown)
+            nativeFunctionExecutor
+                    .getPlayerKeys(playerid = id.value, keys = keys, leftright = leftRight, updown = upDown)
             return PlayerKeys(
                     keys = keys.value,
                     leftRight = leftRight.value,
@@ -567,17 +581,25 @@ internal constructor(
         }
 
     fun showPlayerMarker(player: Player, color: Color) {
-        nativeFunctionExecutor.setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
+        nativeFunctionExecutor
+                .setPlayerMarkerForPlayer(playerid = this.id.value, showplayerid = player.id.value, color = color.value)
     }
 
     fun showPlayerNameTag(player: Player, show: Boolean) {
-        nativeFunctionExecutor.showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
+        nativeFunctionExecutor
+                .showPlayerNameTagForPlayer(playerid = this.id.value, showplayerid = player.id.value, show = show)
     }
 
     val mapIcons: List<PlayerMapIcon>
         get() = mapIconsById.values.toList()
 
-    fun createMapIcon(playerMapIconId: PlayerMapIconId, coordinates: Vector3D, type: MapIconType, color: Color, style: MapIconStyle): PlayerMapIcon {
+    fun createMapIcon(
+            playerMapIconId: PlayerMapIconId,
+            coordinates: Vector3D,
+            type: MapIconType,
+            color: Color,
+            style: MapIconStyle
+    ): PlayerMapIcon {
         requireConnected()
         mapIconsById[playerMapIconId]?.destroy()
         val playerMapIcon = playerMapIconFactory.create(

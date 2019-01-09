@@ -7,7 +7,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 internal class MenuFactory

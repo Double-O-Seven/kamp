@@ -19,7 +19,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Locale
 
 internal class TextLabelStreamerTest {
 
@@ -51,7 +51,8 @@ internal class TextLabelStreamerTest {
             textLabelStreamer.initialize()
 
             verify {
-                coordinatesBasedPlayerStreamerFactory.create(any<SpatialIndex3D<StreamableTextLabelImpl>>(), SAMPConstants.MAX_3DTEXT_PLAYER)
+                coordinatesBasedPlayerStreamerFactory
+                        .create(any<SpatialIndex3D<StreamableTextLabelImpl>>(), SAMPConstants.MAX_3DTEXT_PLAYER)
             }
         }
 

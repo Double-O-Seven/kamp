@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
-import java.util.*
+import java.util.Locale
 
 interface TextTransformer {
 

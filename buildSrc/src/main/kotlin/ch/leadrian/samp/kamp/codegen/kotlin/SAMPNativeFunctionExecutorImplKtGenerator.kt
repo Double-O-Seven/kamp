@@ -90,11 +90,13 @@ internal class SAMPNativeFunctionExecutorImplKtGenerator(
     }
 
     private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(AnnotationSpec
-                .builder(Generated::class)
-                .addMember("value = [%S]", this@SAMPNativeFunctionExecutorImplKtGenerator::class.java.name)
-                .addMember("date = %S", LocalDateTime.now().toString())
-                .build())
+        return addAnnotation(
+                AnnotationSpec
+                        .builder(Generated::class)
+                        .addMember("value = [%S]", this@SAMPNativeFunctionExecutorImplKtGenerator::class.java.name)
+                        .addMember("date = %S", LocalDateTime.now().toString())
+                        .build()
+        )
     }
 
     private fun TypeSpec.Builder.addNativeFunctions(): TypeSpec.Builder {
