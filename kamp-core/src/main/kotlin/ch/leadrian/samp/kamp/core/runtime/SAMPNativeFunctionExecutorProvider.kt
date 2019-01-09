@@ -11,8 +11,14 @@ internal class SAMPNativeFunctionExecutorProvider
 @Inject
 constructor(
         nativeFunctionHookFactories: Set<@JvmSuppressWildcards SAMPNativeFunctionHookFactory>,
-        @Named(CoreModule.BASE_NATIVE_FUNCTION_EXECUTOR) baseNativeFunctionExecutor: SAMPNativeFunctionExecutor
+        @Named(BASE_NATIVE_FUNCTION_EXECUTOR_NAME) baseNativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : Provider<SAMPNativeFunctionExecutor> {
+
+    companion object {
+
+        const val BASE_NATIVE_FUNCTION_EXECUTOR_NAME = "baseNativeFunctionExecutor"
+
+    }
 
     private val nativeFunctionExecutor: SAMPNativeFunctionExecutor by lazy {
         nativeFunctionHookFactories

@@ -22,12 +22,6 @@ internal class CoreModule(
         private val plugins: List<Plugin>
 ) : KampModule() {
 
-    companion object {
-
-        const val BASE_NATIVE_FUNCTION_EXECUTOR = "baseNativeFunctionExecutor"
-
-    }
-
     override fun configure() {
         installModules()
         bindServer()
@@ -55,7 +49,7 @@ internal class CoreModule(
 
     private fun bindNativeFunctionExecutor() {
         bind(SAMPNativeFunctionExecutor::class.java)
-                .annotatedWith(named(BASE_NATIVE_FUNCTION_EXECUTOR))
+                .annotatedWith(named(SAMPNativeFunctionExecutorProvider.BASE_NATIVE_FUNCTION_EXECUTOR_NAME))
                 .toInstance(nativeFunctionExecutor)
         bind(SAMPNativeFunctionExecutor::class.java).toProvider(SAMPNativeFunctionExecutorProvider::class.java)
     }
