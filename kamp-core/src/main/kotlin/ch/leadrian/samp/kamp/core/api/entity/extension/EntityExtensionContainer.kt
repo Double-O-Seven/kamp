@@ -20,7 +20,8 @@ class EntityExtensionContainer<E : Any>(val entity: E) : AbstractDestroyable() {
     }
 
     operator fun <T : Any> get(entityClass: KClass<T>): T =
-            entityClass.safeCast(extensions[entityClass]) ?: throw NoSuchEntityExtensionException(entityClass.qualifiedName)
+            entityClass.safeCast(extensions[entityClass])
+                    ?: throw NoSuchEntityExtensionException(entityClass.qualifiedName)
 
     inline fun <reified T : Any> get(): T = get(T::class)
 

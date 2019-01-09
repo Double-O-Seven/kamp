@@ -4,7 +4,7 @@ package ch.leadrian.samp.kamp.core.api.text
 
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import java.util.*
+import java.util.Locale
 
 object MessageArguments {
 

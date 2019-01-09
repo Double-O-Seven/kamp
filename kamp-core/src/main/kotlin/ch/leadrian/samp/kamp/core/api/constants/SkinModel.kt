@@ -9,6 +9,7 @@ enum class SkinModel(
         val gender: SkinModel.Gender,
         val race: SkinModel.Race
 ) : ConstantValue<Int> {
+
     CJ(0, "Carl \"CJ\" Johnson", Gender.MALE, Race.BLACK),
     TRUTH(1, "The Truth", Gender.MALE, Race.WHITE),
     MACCER(2, "Maccer", Gender.MALE, Race.WHITE),

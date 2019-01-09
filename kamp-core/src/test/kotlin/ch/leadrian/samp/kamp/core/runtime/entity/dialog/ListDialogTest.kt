@@ -24,7 +24,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Locale
 
 internal class ListDialogTest {
 
@@ -53,7 +53,17 @@ internal class ListDialogTest {
 
         @BeforeEach
         fun setUp() {
-            every { nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any()) } returns true
+            every {
+                nativeFunctionExecutor.showPlayerDialog(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } returns true
         }
 
         @Test

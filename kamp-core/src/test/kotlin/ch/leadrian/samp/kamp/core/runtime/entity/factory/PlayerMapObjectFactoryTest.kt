@@ -24,7 +24,19 @@ internal class PlayerMapObjectFactoryTest {
 
     @BeforeEach
     fun setUp() {
-        every { nativeFunctionExecutor.createPlayerObject(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
+        every {
+            nativeFunctionExecutor.createPlayerObject(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns 0
         every { playerMapObjectRegistry.register(any()) } just Runs
         playerMapObjectFactory = PlayerMapObjectFactory(nativeFunctionExecutor)
         player = mockk {

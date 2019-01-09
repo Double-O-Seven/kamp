@@ -9,7 +9,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
-import java.util.*
+import java.util.Locale
 import java.util.stream.Stream
 
 internal class TextProviderTest {
@@ -234,7 +234,13 @@ internal class TextProviderTest {
             private val defaultText: String? = null
     ) : Arguments {
 
-        override fun get(): Array<Any?> = arrayOf(resourceBundlePackages, locale, TextKey(textKey), expectedResult, defaultText)
+        override fun get(): Array<Any?> = arrayOf(
+                resourceBundlePackages,
+                locale,
+                TextKey(textKey),
+                expectedResult,
+                defaultText
+        )
 
     }
 }

@@ -8,7 +8,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.TextDrawFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
-import java.util.*
+import java.util.Locale
 import javax.inject.Inject
 
 class TextDrawService

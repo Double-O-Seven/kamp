@@ -54,7 +54,10 @@ internal class MapObjectStreamerTest {
             mapObjectStreamer.initialize()
 
             verify {
-                coordinatesBasedPlayerStreamerFactory.create(any<SpatialIndex3D<StreamableMapObjectImpl>>(), SAMPConstants.MAX_OBJECTS - 1)
+                coordinatesBasedPlayerStreamerFactory.create(
+                        any<SpatialIndex3D<StreamableMapObjectImpl>>(),
+                        SAMPConstants.MAX_OBJECTS - 1
+                )
             }
         }
 

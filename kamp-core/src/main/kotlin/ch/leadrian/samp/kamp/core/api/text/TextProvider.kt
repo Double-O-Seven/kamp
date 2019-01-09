@@ -1,7 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.text
 
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
-import java.util.*
+import java.util.Locale
+import java.util.MissingResourceException
+import java.util.ResourceBundle
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton

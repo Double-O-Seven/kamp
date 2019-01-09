@@ -25,7 +25,18 @@ internal class TextLabelFactoryTest {
 
     @BeforeEach
     fun setUp() {
-        every { nativeFunctionExecutor.create3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
+        every {
+            nativeFunctionExecutor.create3DTextLabel(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns 0
         every { textLabelRegistry.register(any()) } just Runs
         textLabelFactory = TextLabelFactory(nativeFunctionExecutor, textLabelRegistry, textProvider, textFormatter)
     }

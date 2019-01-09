@@ -41,22 +41,24 @@ internal class AbsoluteViewDimensionsCalculatorTest {
         val dimensions = absoluteViewDimensionsCalculator.calculate(view)
 
         assertThat(dimensions)
-                .isEqualTo(AbsoluteViewDimensions(
-                        width = 10f,
-                        height = 20f,
-                        left = 30f,
-                        right = 40f,
-                        top = 50f,
-                        bottom = 60f,
-                        marginLeft = 70f,
-                        marginRight = 80f,
-                        marginTop = 90f,
-                        marginBottom = 100f,
-                        paddingLeft = 110f,
-                        paddingRight = 120f,
-                        paddingTop = 130f,
-                        paddingBottom = 140f
-                ))
+                .isEqualTo(
+                        AbsoluteViewDimensions(
+                                width = 10f,
+                                height = 20f,
+                                left = 30f,
+                                right = 40f,
+                                top = 50f,
+                                bottom = 60f,
+                                marginLeft = 70f,
+                                marginRight = 80f,
+                                marginTop = 90f,
+                                marginBottom = 100f,
+                                paddingLeft = 110f,
+                                paddingRight = 120f,
+                                paddingTop = 130f,
+                                paddingBottom = 140f
+                        )
+                )
     }
 
     @Test
@@ -75,22 +77,24 @@ internal class AbsoluteViewDimensionsCalculatorTest {
         val dimensions = absoluteViewDimensionsCalculator.calculate(view)
 
         assertThat(dimensions)
-                .isEqualTo(AbsoluteViewDimensions(
-                        width = null,
-                        height = null,
-                        left = null,
-                        right = null,
-                        top = null,
-                        bottom = null,
-                        marginLeft = 70f,
-                        marginRight = 80f,
-                        marginTop = 90f,
-                        marginBottom = 100f,
-                        paddingLeft = 110f,
-                        paddingRight = 120f,
-                        paddingTop = 130f,
-                        paddingBottom = 140f
-                ))
+                .isEqualTo(
+                        AbsoluteViewDimensions(
+                                width = null,
+                                height = null,
+                                left = null,
+                                right = null,
+                                top = null,
+                                bottom = null,
+                                marginLeft = 70f,
+                                marginRight = 80f,
+                                marginTop = 90f,
+                                marginBottom = 100f,
+                                paddingLeft = 110f,
+                                paddingRight = 120f,
+                                paddingTop = 130f,
+                                paddingBottom = 140f
+                        )
+                )
     }
 
     @Test
@@ -116,22 +120,24 @@ internal class AbsoluteViewDimensionsCalculatorTest {
         val dimensions = absoluteViewDimensionsCalculator.calculate(view)
 
         assertThat(dimensions)
-                .isEqualTo(AbsoluteViewDimensions(
-                        width = 10f,
-                        height = 40f,
-                        left = 30f,
-                        right = 40f,
-                        top = 100f,
-                        bottom = 120f,
-                        marginLeft = 70f,
-                        marginRight = 80f,
-                        marginTop = 180f,
-                        marginBottom = 200f,
-                        paddingLeft = 110f,
-                        paddingRight = 120f,
-                        paddingTop = 260f,
-                        paddingBottom = 280f
-                ))
+                .isEqualTo(
+                        AbsoluteViewDimensions(
+                                width = 10f,
+                                height = 40f,
+                                left = 30f,
+                                right = 40f,
+                                top = 100f,
+                                bottom = 120f,
+                                marginLeft = 70f,
+                                marginRight = 80f,
+                                marginTop = 180f,
+                                marginBottom = 200f,
+                                paddingLeft = 110f,
+                                paddingRight = 120f,
+                                paddingTop = 260f,
+                                paddingBottom = 280f
+                        )
+                )
     }
 
     @Test
@@ -151,22 +157,24 @@ internal class AbsoluteViewDimensionsCalculatorTest {
         val dimensions = absoluteViewDimensionsCalculator.calculate(view)
 
         assertThat(dimensions)
-                .isEqualTo(AbsoluteViewDimensions(
-                        width = null,
-                        height = null,
-                        left = null,
-                        right = null,
-                        top = null,
-                        bottom = null,
-                        marginLeft = 70f,
-                        marginRight = 80f,
-                        marginTop = 180f,
-                        marginBottom = 200f,
-                        paddingLeft = 110f,
-                        paddingRight = 120f,
-                        paddingTop = 260f,
-                        paddingBottom = 280f
-                ))
+                .isEqualTo(
+                        AbsoluteViewDimensions(
+                                width = null,
+                                height = null,
+                                left = null,
+                                right = null,
+                                top = null,
+                                bottom = null,
+                                marginLeft = 70f,
+                                marginRight = 80f,
+                                marginTop = 180f,
+                                marginBottom = 200f,
+                                paddingLeft = 110f,
+                                paddingRight = 120f,
+                                paddingTop = 260f,
+                                paddingBottom = 280f
+                        )
+                )
     }
 
 }

@@ -86,7 +86,11 @@ internal class ActorServiceTest {
             )
 
             verifyOrder {
-                actorFactory.create(SkinModel.ARMY, angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, worldId = 1337, interiorId = 0), 4f)
+                actorFactory.create(
+                        SkinModel.ARMY,
+                        angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, worldId = 1337, interiorId = 0),
+                        4f
+                )
                 actor.virtualWorldId = 1337
             }
             assertThat(createdActor)

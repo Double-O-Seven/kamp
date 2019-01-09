@@ -4,6 +4,7 @@ package ch.leadrian.samp.kamp.core.api.constants
  * Taken from https://github.com/Shoebill/shoebill-api
  */
 enum class VehicleType(override val value: Int) : ConstantValue<Int> {
+
     UNKNOWN(-1),
     BICYCLE(0),
     MOTORBIKE(1),

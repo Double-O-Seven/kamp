@@ -26,7 +26,6 @@ internal class GeodataModuleTest {
                 .isNull()
     }
 
-
     @Nested
     inner class InjectionTests {
 

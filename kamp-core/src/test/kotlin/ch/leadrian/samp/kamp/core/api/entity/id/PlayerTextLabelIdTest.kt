@@ -8,14 +8,16 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class PlayerTextLabelIdTest {
 
     @ParameterizedTest
-    @ValueSource(ints = [
-        -1,
-        0,
-        SAMPConstants.MAX_3DTEXT_PLAYER - 1,
-        SAMPConstants.MAX_3DTEXT_PLAYER,
-        Int.MAX_VALUE,
-        SAMPConstants.INVALID_3DTEXT_ID
-    ])
+    @ValueSource(
+            ints = [
+                -1,
+                0,
+                SAMPConstants.MAX_3DTEXT_PLAYER - 1,
+                SAMPConstants.MAX_3DTEXT_PLAYER,
+                Int.MAX_VALUE,
+                SAMPConstants.INVALID_3DTEXT_ID
+            ]
+    )
     fun shouldReturnTextLabelId(value: Int) {
         val playerTextLabelId = PlayerTextLabelId.valueOf(value)
 

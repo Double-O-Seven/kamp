@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamableTextLabelImpl
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelFactory
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex3D
 import com.conversantmedia.util.collection.geometry.Rect3d
-import java.util.*
+import java.util.Locale
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton

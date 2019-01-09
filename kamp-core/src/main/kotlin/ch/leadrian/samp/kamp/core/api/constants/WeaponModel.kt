@@ -20,6 +20,7 @@ enum class WeaponModel(
         val baseDamage: Float,
         val range: Float = 0f
 ) : ConstantValue<Int>, HasTextKey {
+
     FIST(
             value = SAMPConstants.WEAPON_FIST,
             textKey = TextKeys.weapon.model.name.fist,

@@ -10,7 +10,13 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 interface OnDialogResponseListener {
 
     @IgnoredReturnValue(Result.Ignored::class)
-    fun onDialogResponse(player: Player, dialogId: DialogId, response: DialogResponse, listItem: Int, inputText: String): Result
+    fun onDialogResponse(
+            player: Player,
+            dialogId: DialogId,
+            response: DialogResponse,
+            listItem: Int,
+            inputText: String
+    ): Result
 
     sealed class Result(val value: Boolean) {
 

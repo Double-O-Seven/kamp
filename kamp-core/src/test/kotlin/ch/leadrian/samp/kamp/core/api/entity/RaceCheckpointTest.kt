@@ -109,7 +109,6 @@ internal class RaceCheckpointTest {
                     .isEqualTo(vector3DOf(x = 11f, y = 22f, z = 33f))
         }
 
-
         @Test
         fun givenNullAsNextCoordinatesItShouldUpdateRaceCheckpointForPlayerWhereItIsActive() {
             val player1 = mockk<Player> {
@@ -394,7 +393,6 @@ internal class RaceCheckpointTest {
             assertThat(isDestroyed)
                     .isTrue()
         }
-
 
         @Test
         fun shouldNotBeDestroyedTwice() {

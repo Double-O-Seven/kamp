@@ -28,7 +28,14 @@ internal class StreamableMapObjectFactoryTest {
                 textProvider = mockk(),
                 streamableMapObjectStateMachineFactory = streamableMapObjectStateMachineFactory
         )
-        every { streamableMapObjectStateMachineFactory.create(any(), any(), any(), any()) } returns streamableMapObjectStateMachine
+        every {
+            streamableMapObjectStateMachineFactory.create(
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns streamableMapObjectStateMachine
     }
 
     @Test

@@ -17,7 +17,7 @@ import ch.leadrian.samp.kamp.view.base.TextTransformers
 import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.andThen
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
-import java.util.*
+import java.util.Locale
 
 open class TextInputView(
         player: Player,
@@ -123,7 +123,13 @@ open class TextInputView(
             leftButton(TextKeys.dialog.button.ok)
             rightButton(TextKeys.dialog.button.cancel)
             onInvalidInput { _, error ->
-                message(textFormatter.format(player.locale, "${dialogValidationErrorColor.toEmbeddedString()}{0}", error))
+                message(
+                        textFormatter.format(
+                                player.locale,
+                                "${dialogValidationErrorColor.toEmbeddedString()}{0}",
+                                error
+                        )
+                )
                 show(player)
             }
             onSubmit { _, text ->

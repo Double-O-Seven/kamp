@@ -3,7 +3,8 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex
 import com.conversantmedia.util.collection.spatial.HyperRect
 
-abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> : AbstractStreamable() {
+abstract class SpatiallyIndexedStreamable<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> :
+        AbstractStreamable() {
 
     abstract fun getBoundingBox(): T
 

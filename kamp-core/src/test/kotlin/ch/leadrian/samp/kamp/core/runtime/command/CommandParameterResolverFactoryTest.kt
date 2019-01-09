@@ -109,5 +109,4 @@ internal class CommandParameterResolverFactoryTest {
 
     }
 
-
 }

@@ -41,19 +41,26 @@ class CallbackHandlerGenerator {
         }
     }
 
-    private fun FileSpec.Builder.addCallbackHandlerClass(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec.Builder {
+    private fun FileSpec.Builder.addCallbackHandlerClass(
+            className: ClassName,
+            listenerDefinition: CallbackListenerDefinition
+    ): FileSpec.Builder {
         val typeSpec = TypeSpec
                 .classBuilder(className)
                 .addModifiers(KModifier.INTERNAL)
                 .addAnnotation(Singleton::class)
-                .primaryConstructor(FunSpec
-                        .constructorBuilder()
-                        .addAnnotation(Inject::class)
-                        .build())
-                .superclass(ClassName(
-                        "ch.leadrian.samp.kamp.core.api.callback",
-                        "CallbackListenerRegistry"
-                ).parameterizedBy(listenerDefinition.type))
+                .primaryConstructor(
+                        FunSpec
+                                .constructorBuilder()
+                                .addAnnotation(Inject::class)
+                                .build()
+                )
+                .superclass(
+                        ClassName(
+                                "ch.leadrian.samp.kamp.core.api.callback",
+                                "CallbackListenerRegistry"
+                        ).parameterizedBy(listenerDefinition.type)
+                )
                 .addSuperclassConstructorParameter("%T::class", listenerDefinition.type)
                 .addSuperinterface(listenerDefinition.type)
                 .addCallbackFunction(listenerDefinition)
@@ -71,7 +78,10 @@ class CallbackHandlerGenerator {
         return this
     }
 
-    private fun TypeSpec.Builder.addCancellableCallbackFunction(listenerDefinition: CallbackListenerDefinition, ignoredReturnValueType: TypeName) {
+    private fun TypeSpec.Builder.addCancellableCallbackFunction(
+            listenerDefinition: CallbackListenerDefinition,
+            ignoredReturnValueType: TypeName
+    ) {
         val funSpec = FunSpec
                 .overriding(listenerDefinition.method)
                 .kotlinizeParameterTypes(listenerDefinition)

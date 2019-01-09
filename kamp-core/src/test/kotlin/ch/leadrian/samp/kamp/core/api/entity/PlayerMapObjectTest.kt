@@ -147,13 +147,28 @@ internal class PlayerMapObjectTest {
 
             playerMapObject.edit(player)
 
-            verify { nativeFunctionExecutor.editPlayerObject(playerid = playerId.value, objectid = playerMapObjectId.value) }
+            verify {
+                nativeFunctionExecutor.editPlayerObject(
+                        playerid = playerId.value,
+                        objectid = playerMapObjectId.value
+                )
+            }
         }
 
         @Test
         fun shouldAttachToPlayer() {
             every {
-                nativeFunctionExecutor.attachPlayerObjectToPlayer(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.attachPlayerObjectToPlayer(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
             } returns true
             val otherPlayer = mockk<Player> {
                 every { id } returns PlayerId.valueOf(69)
@@ -183,7 +198,17 @@ internal class PlayerMapObjectTest {
         @Test
         fun shouldAttachToVehicle() {
             every {
-                nativeFunctionExecutor.attachPlayerObjectToVehicle(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.attachPlayerObjectToVehicle(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
             } returns true
             val vehicle = mockk<Vehicle> {
                 every { id } returns VehicleId.valueOf(69)
@@ -428,7 +453,19 @@ internal class PlayerMapObjectTest {
         @ValueSource(strings = ["true", "false"])
         fun shouldSetMaterialText(isBold: Boolean) {
             every {
-                nativeFunctionExecutor.setPlayerObjectMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.setPlayerObjectMaterialText(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
             } returns true
 
             playerMapObject.setMaterialText(
@@ -471,7 +508,14 @@ internal class PlayerMapObjectTest {
 
         @Test
         fun shouldCallOnPlayerEditPlayerMapObjectReceiverDelegate() {
-            every { onPlayerEditPlayerMapObjectReceiver.onPlayerEditPlayerMapObject(any(), any(), any(), any()) } just Runs
+            every {
+                onPlayerEditPlayerMapObjectReceiver.onPlayerEditPlayerMapObject(
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } just Runs
 
             playerMapObject.onEdit(
                     response = ObjectEditResponse.UPDATE,

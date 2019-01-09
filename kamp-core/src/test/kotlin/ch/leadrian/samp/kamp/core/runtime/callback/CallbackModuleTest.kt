@@ -18,7 +18,13 @@ import javax.inject.Inject
 
 internal class CallbackModuleTest {
 
-    private val modules = arrayOf(CallbackModule(), EntityRegistryModule(), EntityFactoryModule(), TextModule(), TestModule())
+    private val modules = arrayOf(
+            CallbackModule(),
+            EntityRegistryModule(),
+            EntityFactoryModule(),
+            TextModule(),
+            TestModule()
+    )
 
     @Test
     fun shouldCreateInjectorAsSingleton() {

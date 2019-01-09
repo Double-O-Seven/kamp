@@ -9,7 +9,8 @@ internal class CommandParameterResolverRegistry
 @Inject
 constructor(resolvers: Set<@JvmSuppressWildcards CommandParameterResolver<*>>) {
 
-    private val resolversByParameterType: MutableMap<Class<*>, CommandParameterResolver<*>> = resolvers.associateBy { it.parameterType }.toMutableMap()
+    private val resolversByParameterType: MutableMap<Class<*>, CommandParameterResolver<*>> = resolvers.associateBy { it.parameterType }
+            .toMutableMap()
 
     fun <T : Any> getResolver(parameterType: Class<T>): CommandParameterResolver<out T>? {
         @Suppress("UNCHECKED_CAST")

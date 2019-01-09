@@ -35,12 +35,14 @@ internal class ViewAreaCalculatorTest {
             val contentArea = viewAreaCalculator.calculateContentArea(parentArea, absoluteViewDimensions)
 
             assertThat(contentArea)
-                    .isEqualTo(rectangleOf(
-                            minX = 200f + 100f + 3f + 11f,
-                            maxX = 200f + 100f + 3f + 11f + 15f,
-                            minY = 3000f + 300f + 9f + 33f,
-                            maxY = 3000f + 300f + 9f + 33f + 20f
-                    ))
+                    .isEqualTo(
+                            rectangleOf(
+                                    minX = 200f + 100f + 3f + 11f,
+                                    maxX = 200f + 100f + 3f + 11f + 15f,
+                                    minY = 3000f + 300f + 9f + 33f,
+                                    maxY = 3000f + 300f + 9f + 33f + 20f
+                            )
+                    )
         }
 
         @Test
@@ -66,12 +68,14 @@ internal class ViewAreaCalculatorTest {
             val contentArea = viewAreaCalculator.calculateContentArea(parentArea, absoluteViewDimensions)
 
             assertThat(contentArea)
-                    .isEqualTo(rectangleOf(
-                            minX = 200f + 3f + 11f,
-                            maxX = 200f + 3f + 11f + 15f,
-                            minY = 3000f + 9f + 33f,
-                            maxY = 3000f + 9f + 33f + 20f
-                    ))
+                    .isEqualTo(
+                            rectangleOf(
+                                    minX = 200f + 3f + 11f,
+                                    maxX = 200f + 3f + 11f + 15f,
+                                    minY = 3000f + 9f + 33f,
+                                    maxY = 3000f + 9f + 33f + 20f
+                            )
+                    )
         }
 
         @Test
@@ -97,12 +101,14 @@ internal class ViewAreaCalculatorTest {
             val contentArea = viewAreaCalculator.calculateContentArea(parentArea, absoluteViewDimensions)
 
             assertThat(contentArea)
-                    .isEqualTo(rectangleOf(
-                            minX = 1000f - 200f - 6f - 22f - 15f,
-                            maxX = 1000f - 200f - 6f - 22f,
-                            minY = 5000f - 400f - 12f - 44f - 20f,
-                            maxY = 5000f - 400f - 12f - 44f
-                    ))
+                    .isEqualTo(
+                            rectangleOf(
+                                    minX = 1000f - 200f - 6f - 22f - 15f,
+                                    maxX = 1000f - 200f - 6f - 22f,
+                                    minY = 5000f - 400f - 12f - 44f - 20f,
+                                    maxY = 5000f - 400f - 12f - 44f
+                            )
+                    )
         }
 
         @Test
@@ -128,12 +134,14 @@ internal class ViewAreaCalculatorTest {
             val contentArea = viewAreaCalculator.calculateContentArea(parentArea, absoluteViewDimensions)
 
             assertThat(contentArea)
-                    .isEqualTo(rectangleOf(
-                            minX = 200f + 100f + 3f + 11f,
-                            maxX = 1000f - 200f - 6f - 22f,
-                            minY = 3000f + 300f + 9f + 33f,
-                            maxY = 5000f - 400f - 12f - 44f
-                    ))
+                    .isEqualTo(
+                            rectangleOf(
+                                    minX = 200f + 100f + 3f + 11f,
+                                    maxX = 1000f - 200f - 6f - 22f,
+                                    minY = 3000f + 300f + 9f + 33f,
+                                    maxY = 5000f - 400f - 12f - 44f
+                            )
+                    )
         }
 
         @Test
@@ -159,12 +167,14 @@ internal class ViewAreaCalculatorTest {
             val contentArea = viewAreaCalculator.calculateContentArea(parentArea, absoluteViewDimensions)
 
             assertThat(contentArea)
-                    .isEqualTo(rectangleOf(
-                            minX = 200f + 3f + 11f,
-                            maxX = 1000f - 6f - 22f,
-                            minY = 3000f + 9f + 33f,
-                            maxY = 5000f - 12f - 44f
-                    ))
+                    .isEqualTo(
+                            rectangleOf(
+                                    minX = 200f + 3f + 11f,
+                                    maxX = 1000f - 6f - 22f,
+                                    minY = 3000f + 9f + 33f,
+                                    maxY = 5000f - 12f - 44f
+                            )
+                    )
         }
     }
 
@@ -191,12 +201,14 @@ internal class ViewAreaCalculatorTest {
         val paddingArea = viewAreaCalculator.calculatePaddingArea(contentArea, absoluteViewDimensions)
 
         assertThat(paddingArea)
-                .isEqualTo(rectangleOf(
-                        minX = 200f - 11f,
-                        maxX = 1000f + 22f,
-                        minY = 3000f - 33f,
-                        maxY = 5000f + 44f
-                ))
+                .isEqualTo(
+                        rectangleOf(
+                                minX = 200f - 11f,
+                                maxX = 1000f + 22f,
+                                minY = 3000f - 33f,
+                                maxY = 5000f + 44f
+                        )
+                )
     }
 
     @Test
@@ -222,12 +234,14 @@ internal class ViewAreaCalculatorTest {
         val marginArea = viewAreaCalculator.calculateMarginArea(paddingArea, absoluteViewDimensions)
 
         assertThat(marginArea)
-                .isEqualTo(rectangleOf(
-                        minX = 200f - 11f,
-                        maxX = 1000f + 22f,
-                        minY = 3000f - 33f,
-                        maxY = 5000f + 44f
-                ))
+                .isEqualTo(
+                        rectangleOf(
+                                minX = 200f - 11f,
+                                maxX = 1000f + 22f,
+                                minY = 3000f - 33f,
+                                maxY = 5000f + 44f
+                        )
+                )
     }
 
 }

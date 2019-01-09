@@ -40,7 +40,12 @@ internal class CallbackListenerManagerTest {
         fun setUp() {
             every { fooCallbackListenerRegistry.listenerClass } returns FooCallback::class
             every { barCallbackListenerRegistry.listenerClass } returns BarCallback::class
-            callbackListenerManager = CallbackListenerManager(setOf(fooCallbackListenerRegistry, barCallbackListenerRegistry))
+            callbackListenerManager = CallbackListenerManager(
+                    setOf(
+                            fooCallbackListenerRegistry,
+                            barCallbackListenerRegistry
+                    )
+            )
         }
 
         @Nested

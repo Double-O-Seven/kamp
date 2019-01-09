@@ -132,7 +132,6 @@ internal class PlayerNetworkStatisticsTest {
                 .isEqualTo(12345)
     }
 
-
     @Test
     fun shouldGetPacketLossPercentage() {
         val playerId = 100

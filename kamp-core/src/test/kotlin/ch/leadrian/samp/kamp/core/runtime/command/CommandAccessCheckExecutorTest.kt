@@ -21,7 +21,7 @@ import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Locale
 
 internal class CommandAccessCheckExecutorTest {
 
@@ -73,7 +73,13 @@ internal class CommandAccessCheckExecutorTest {
             every { getErrorMessage(any()) } returns null
             every { accessDeniedHandlers } returns listOf()
         }
-        every { defaultCommandAccessDeniedHandler.handle(any(), any(), any()) } returns OnPlayerCommandTextListener.Result.Processed
+        every {
+            defaultCommandAccessDeniedHandler.handle(
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns OnPlayerCommandTextListener.Result.Processed
         val commandDefinition = CommandDefinition(
                 name = "foo",
                 method = method,
@@ -227,7 +233,6 @@ internal class CommandAccessCheckExecutorTest {
                 .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
     }
 
-
     @Test
     fun givenMultipleAccessDeniedHandlerItShouldReturnOnFirstProcessedResult() {
         val accessChecker = mockk<CommandAccessChecker> {
@@ -245,7 +250,11 @@ internal class CommandAccessCheckExecutorTest {
         val accessCheckerGroup = mockk<CommandAccessCheckerGroup> {
             every { accessCheckers } returns listOf(accessChecker)
             every { getErrorMessage(any()) } returns "Shit happened"
-            every { accessDeniedHandlers } returns listOf(accessDeniedHandler1, accessDeniedHandler2, accessDeniedHandler3)
+            every { accessDeniedHandlers } returns listOf(
+                    accessDeniedHandler1,
+                    accessDeniedHandler2,
+                    accessDeniedHandler3
+            )
         }
         val commandDefinition = CommandDefinition(
                 name = "foo",

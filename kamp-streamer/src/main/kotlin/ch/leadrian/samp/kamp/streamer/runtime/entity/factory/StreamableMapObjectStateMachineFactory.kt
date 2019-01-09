@@ -20,6 +20,11 @@ constructor(private val streamableMapObjectStateFactory: StreamableMapObjectStat
                 coordinates = coordinates,
                 rotation = rotation
         )
-        return StreamableMapObjectStateMachine(fixedCoordinates, streamableMapObject, streamableMapObjectStateFactory, mapObjectStreamer)
+        return StreamableMapObjectStateMachine(
+                fixedCoordinates,
+                streamableMapObject,
+                streamableMapObjectStateFactory,
+                mapObjectStreamer
+        )
     }
 }

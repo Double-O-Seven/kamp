@@ -54,14 +54,16 @@ internal class PlayerClassTest {
                     assertThat(it.id)
                             .isEqualTo(PlayerClassId.valueOf(127))
                     assertThat(it.spawnInfo)
-                            .isEqualTo(spawnInfoOf(
-                                    teamId = TeamId.valueOf(13),
-                                    skinModel = SkinModel.ARMY,
-                                    position = positionOf(1f, 2f, 3f, 90f),
-                                    weapon1 = weaponDataOf(WeaponModel.AK47, 450),
-                                    weapon2 = weaponDataOf(WeaponModel.M4, 300),
-                                    weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
-                            ))
+                            .isEqualTo(
+                                    spawnInfoOf(
+                                            teamId = TeamId.valueOf(13),
+                                            skinModel = SkinModel.ARMY,
+                                            position = positionOf(1f, 2f, 3f, 90f),
+                                            weapon1 = weaponDataOf(WeaponModel.AK47, 450),
+                                            weapon2 = weaponDataOf(WeaponModel.M4, 300),
+                                            weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
+                                    )
+                            )
                 }
     }
 
@@ -99,13 +101,15 @@ internal class PlayerClassTest {
                     assertThat(it.id)
                             .isEqualTo(PlayerClassId.valueOf(127))
                     assertThat(it.spawnInfo)
-                            .isEqualTo(spawnInfoOf(
-                                    skinModel = SkinModel.ARMY,
-                                    position = positionOf(1f, 2f, 3f, 90f),
-                                    weapon1 = weaponDataOf(WeaponModel.AK47, 450),
-                                    weapon2 = weaponDataOf(WeaponModel.M4, 300),
-                                    weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
-                            ))
+                            .isEqualTo(
+                                    spawnInfoOf(
+                                            skinModel = SkinModel.ARMY,
+                                            position = positionOf(1f, 2f, 3f, 90f),
+                                            weapon1 = weaponDataOf(WeaponModel.AK47, 450),
+                                            weapon2 = weaponDataOf(WeaponModel.M4, 300),
+                                            weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
+                                    )
+                            )
                 }
     }
 }

@@ -21,7 +21,12 @@ internal constructor(
 
     fun getString(varName: String, resultLength: Int = 256): String? {
         val result = ReferenceString()
-        nativeFunctionExecutor.getPVarString(playerid = player.id.value, varname = varName, value = result, size = resultLength)
+        nativeFunctionExecutor.getPVarString(
+                playerid = player.id.value,
+                varname = varName,
+                value = result,
+                size = resultLength
+        )
         return result.value
     }
 
@@ -39,7 +44,12 @@ internal constructor(
 
     fun getNameAtIndex(index: Int, resultLength: Int = 256): String? {
         val result = ReferenceString()
-        nativeFunctionExecutor.getPVarNameAtIndex(playerid = player.id.value, index = index, varname = result, size = resultLength)
+        nativeFunctionExecutor.getPVarNameAtIndex(
+                playerid = player.id.value,
+                index = index,
+                varname = result,
+                size = resultLength
+        )
         return result.value
     }
 

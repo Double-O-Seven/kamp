@@ -38,7 +38,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStre
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
-import java.util.*
+import java.util.Locale
 
 internal class StreamableMapObjectImpl
 constructor(
@@ -314,7 +314,12 @@ constructor(
         playerMapObjectsByPlayer[player]?.edit(player)
     }
 
-    override fun onPlayerEditPlayerMapObject(playerMapObject: PlayerMapObject, response: ObjectEditResponse, offset: Vector3D, rotation: Vector3D) {
+    override fun onPlayerEditPlayerMapObject(
+            playerMapObject: PlayerMapObject,
+            response: ObjectEditResponse,
+            offset: Vector3D,
+            rotation: Vector3D
+    ) {
         requireNotDestroyed()
         if (response == ObjectEditResponse.FINAL) {
             removeOnDestroyListener()

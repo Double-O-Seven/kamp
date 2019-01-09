@@ -12,9 +12,18 @@ constructor(
 
     fun calculate(view: View): ViewLayout {
         val absoluteViewDimensions = absoluteViewDimensionsCalculator.calculate(view)
-        val contentArea = viewAreaCalculator.calculateContentArea(parentArea = view.parentArea, absoluteViewDimensions = absoluteViewDimensions)
-        val paddingArea = viewAreaCalculator.calculatePaddingArea(contentArea = contentArea, absoluteViewDimensions = absoluteViewDimensions)
-        val marginArea = viewAreaCalculator.calculateMarginArea(paddingArea = paddingArea, absoluteViewDimensions = absoluteViewDimensions)
+        val contentArea = viewAreaCalculator.calculateContentArea(
+                parentArea = view.parentArea,
+                absoluteViewDimensions = absoluteViewDimensions
+        )
+        val paddingArea = viewAreaCalculator.calculatePaddingArea(
+                contentArea = contentArea,
+                absoluteViewDimensions = absoluteViewDimensions
+        )
+        val marginArea = viewAreaCalculator.calculateMarginArea(
+                paddingArea = paddingArea,
+                absoluteViewDimensions = absoluteViewDimensions
+        )
         return ViewLayout(
                 marginArea = marginArea,
                 paddingArea = paddingArea,

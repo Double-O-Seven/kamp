@@ -47,11 +47,13 @@ internal class ViewLayoutCalculatorTest {
         val layout = viewLayoutCalculator.calculate(view)
 
         assertThat(layout)
-                .isEqualTo(ViewLayout(
-                        marginArea = marginArea,
-                        paddingArea = paddingArea,
-                        contentArea = contentArea
-                ))
+                .isEqualTo(
+                        ViewLayout(
+                                marginArea = marginArea,
+                                paddingArea = paddingArea,
+                                contentArea = contentArea
+                        )
+                )
     }
 
 }

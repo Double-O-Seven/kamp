@@ -304,12 +304,29 @@ internal class PlayerCameraTest {
 
         playerCamera.attachTo(playerMapObject)
 
-        verify { nativeFunctionExecutor.attachCameraToPlayerObject(playerid = playerId.value, playerobjectid = playerMapObjectId.value) }
+        verify {
+            nativeFunctionExecutor.attachCameraToPlayerObject(
+                    playerid = playerId.value,
+                    playerobjectid = playerMapObjectId.value
+            )
+        }
     }
 
     @Test
     fun shouldInterpolateCoordinates() {
-        every { nativeFunctionExecutor.interpolateCameraPos(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        every {
+            nativeFunctionExecutor.interpolateCameraPos(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns true
 
         playerCamera.interpolateCoordinates(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),
@@ -335,7 +352,19 @@ internal class PlayerCameraTest {
 
     @Test
     fun shouldInterpolateLookAt() {
-        every { nativeFunctionExecutor.interpolateCameraLookAt(any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns true
+        every {
+            nativeFunctionExecutor.interpolateCameraLookAt(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns true
 
         playerCamera.interpolateLookAt(
                 from = vector3DOf(x = 1f, y = 2f, z = 3f),

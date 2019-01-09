@@ -119,56 +119,84 @@ interface ViewFactory {
     }
 
     @JvmDefault
-    fun verticalScrollBarView(player: Player, adapter: ScrollBarAdapter, buildingBlock: VerticalScrollBarView.() -> Unit): VerticalScrollBarView {
+    fun verticalScrollBarView(
+            player: Player,
+            adapter: ScrollBarAdapter,
+            buildingBlock: VerticalScrollBarView.() -> Unit
+    ): VerticalScrollBarView {
         val verticalScrollBarView = VerticalScrollBarView(player, viewContext, this, adapter)
         buildingBlock(verticalScrollBarView)
         return verticalScrollBarView
     }
 
     @JvmDefault
-    fun View.verticalScrollBarView(adapter: ScrollBarAdapter, buildingBlock: VerticalScrollBarView.() -> Unit): VerticalScrollBarView {
+    fun View.verticalScrollBarView(
+            adapter: ScrollBarAdapter,
+            buildingBlock: VerticalScrollBarView.() -> Unit
+    ): VerticalScrollBarView {
         val verticalScrollBarView = verticalScrollBarView(player, adapter, buildingBlock)
         addChild(verticalScrollBarView)
         return verticalScrollBarView
     }
 
     @JvmDefault
-    fun horizontalScrollBarView(player: Player, adapter: ScrollBarAdapter, buildingBlock: HorizontalScrollBarView.() -> Unit): HorizontalScrollBarView {
+    fun horizontalScrollBarView(
+            player: Player,
+            adapter: ScrollBarAdapter,
+            buildingBlock: HorizontalScrollBarView.() -> Unit
+    ): HorizontalScrollBarView {
         val horizontalScrollBarView = HorizontalScrollBarView(player, viewContext, this, adapter)
         buildingBlock(horizontalScrollBarView)
         return horizontalScrollBarView
     }
 
     @JvmDefault
-    fun View.horizontalScrollBarView(adapter: ScrollBarAdapter, buildingBlock: HorizontalScrollBarView.() -> Unit): HorizontalScrollBarView {
+    fun View.horizontalScrollBarView(
+            adapter: ScrollBarAdapter,
+            buildingBlock: HorizontalScrollBarView.() -> Unit
+    ): HorizontalScrollBarView {
         val horizontalScrollBarView = horizontalScrollBarView(player, adapter, buildingBlock)
         addChild(horizontalScrollBarView)
         return horizontalScrollBarView
     }
 
     @JvmDefault
-    fun <T> verticalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit = {}): VerticalListView<T> {
+    fun <T> verticalListView(
+            player: Player,
+            adapter: ListViewAdapter<T>,
+            buildingBlock: VerticalListView<T>.() -> Unit = {}
+    ): VerticalListView<T> {
         val verticalListView = VerticalListView(player, viewContext, this, adapter)
         buildingBlock(verticalListView)
         return verticalListView
     }
 
     @JvmDefault
-    fun <T> View.verticalListView(adapter: ListViewAdapter<T>, buildingBlock: VerticalListView<T>.() -> Unit = {}): VerticalListView<T> {
+    fun <T> View.verticalListView(
+            adapter: ListViewAdapter<T>,
+            buildingBlock: VerticalListView<T>.() -> Unit = {}
+    ): VerticalListView<T> {
         val verticalListView = verticalListView(player, adapter, buildingBlock)
         addChild(verticalListView)
         return verticalListView
     }
 
     @JvmDefault
-    fun <T> horizontalListView(player: Player, adapter: ListViewAdapter<T>, buildingBlock: HorizontalListView<T>.() -> Unit = {}): HorizontalListView<T> {
+    fun <T> horizontalListView(
+            player: Player,
+            adapter: ListViewAdapter<T>,
+            buildingBlock: HorizontalListView<T>.() -> Unit = {}
+    ): HorizontalListView<T> {
         val horizontalListView = HorizontalListView(player, viewContext, this, adapter)
         buildingBlock(horizontalListView)
         return horizontalListView
     }
 
     @JvmDefault
-    fun <T> View.horizontalListView(adapter: ListViewAdapter<T>, buildingBlock: HorizontalListView<T>.() -> Unit = {}): HorizontalListView<T> {
+    fun <T> View.horizontalListView(
+            adapter: ListViewAdapter<T>,
+            buildingBlock: HorizontalListView<T>.() -> Unit = {}
+    ): HorizontalListView<T> {
         val horizontalListView = horizontalListView(player, adapter, buildingBlock)
         addChild(horizontalListView)
         return horizontalListView

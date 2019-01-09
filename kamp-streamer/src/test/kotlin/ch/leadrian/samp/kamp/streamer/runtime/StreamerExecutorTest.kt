@@ -228,11 +228,19 @@ internal class StreamerExecutorTest {
 
     private class TestAsyncExecutor : AsyncExecutor {
 
-        override fun execute(onSuccess: (() -> Unit)?, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> Unit) {
+        override fun execute(
+                onSuccess: (() -> Unit)?,
+                onFailure: ((Exception) -> Unit)?,
+                action: AsyncExecutor.() -> Unit
+        ) {
             throw UnsupportedOperationException()
         }
 
-        override fun <T> compute(onSuccess: (T) -> Unit, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> T) {
+        override fun <T> compute(
+                onSuccess: (T) -> Unit,
+                onFailure: ((Exception) -> Unit)?,
+                action: AsyncExecutor.() -> T
+        ) {
             throw UnsupportedOperationException()
         }
 

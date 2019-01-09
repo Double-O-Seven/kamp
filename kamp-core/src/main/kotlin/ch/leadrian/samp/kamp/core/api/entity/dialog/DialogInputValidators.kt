@@ -46,13 +46,25 @@ object DialogInputValidators {
 
     @JvmOverloads
     @JvmStatic
-    fun containedIn(vararg allowedValues: String, ignoreCase: Boolean = true, errorMessage: String? = null): DialogInputValidator =
+    fun containedIn(
+            vararg allowedValues: String,
+            ignoreCase: Boolean = true,
+            errorMessage: String? = null
+    ): DialogInputValidator =
             ContainedIn(ignoreCase = ignoreCase, errorMessage = errorMessage, allowedValues = *allowedValues)
 
     @JvmOverloads
     @JvmStatic
-    fun containedIn(vararg allowedValues: String, ignoreCase: Boolean = true, errorMessageTextKey: TextKey): DialogInputValidator =
-            ContainedIn(ignoreCase = ignoreCase, errorMessageTextKey = errorMessageTextKey, allowedValues = *allowedValues)
+    fun containedIn(
+            vararg allowedValues: String,
+            ignoreCase: Boolean = true,
+            errorMessageTextKey: TextKey
+    ): DialogInputValidator =
+            ContainedIn(
+                    ignoreCase = ignoreCase,
+                    errorMessageTextKey = errorMessageTextKey,
+                    allowedValues = *allowedValues
+            )
 
 }
 

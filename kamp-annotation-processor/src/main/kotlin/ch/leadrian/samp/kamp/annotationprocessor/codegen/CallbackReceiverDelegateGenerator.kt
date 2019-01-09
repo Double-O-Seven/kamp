@@ -42,7 +42,10 @@ class CallbackReceiverDelegateGenerator {
         }
     }
 
-    private fun FileSpec.Builder.addCallbackReceiverDelegateTypeSpec(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec.Builder {
+    private fun FileSpec.Builder.addCallbackReceiverDelegateTypeSpec(
+            className: ClassName,
+            listenerDefinition: CallbackListenerDefinition
+    ): FileSpec.Builder {
         val listenersPropertySpec = PropertySpec
                 .builder("listeners", LinkedHashSet::class.asClassName().parameterizedBy(listenerDefinition.type))
                 .addModifiers(KModifier.PRIVATE)
@@ -67,22 +70,32 @@ class CallbackReceiverDelegateGenerator {
         return this
     }
 
-    private fun TypeSpec.Builder.addAddListenerFunction(listenerDefinition: CallbackListenerDefinition, listenersPropertySpec: PropertySpec): TypeSpec.Builder {
-        return addFunction(FunSpec
-                .builder("add${listenerDefinition.type.simpleName}")
-                .addModifiers(KModifier.OVERRIDE)
-                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
-                .addStatement("%N += listener", listenersPropertySpec)
-                .build())
+    private fun TypeSpec.Builder.addAddListenerFunction(
+            listenerDefinition: CallbackListenerDefinition,
+            listenersPropertySpec: PropertySpec
+    ): TypeSpec.Builder {
+        return addFunction(
+                FunSpec
+                        .builder("add${listenerDefinition.type.simpleName}")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                        .addStatement("%N += listener", listenersPropertySpec)
+                        .build()
+        )
     }
 
-    private fun TypeSpec.Builder.addRemoveListenerFunction(listenerDefinition: CallbackListenerDefinition, listenersPropertySpec: PropertySpec): TypeSpec.Builder {
-        return addFunction(FunSpec
-                .builder("remove${listenerDefinition.type.simpleName}")
-                .addModifiers(KModifier.OVERRIDE)
-                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
-                .addStatement("%N -= listener", listenersPropertySpec)
-                .build())
+    private fun TypeSpec.Builder.addRemoveListenerFunction(
+            listenerDefinition: CallbackListenerDefinition,
+            listenersPropertySpec: PropertySpec
+    ): TypeSpec.Builder {
+        return addFunction(
+                FunSpec
+                        .builder("remove${listenerDefinition.type.simpleName}")
+                        .addModifiers(KModifier.OVERRIDE)
+                        .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                        .addStatement("%N -= listener", listenersPropertySpec)
+                        .build()
+        )
     }
 
     private fun TypeSpec.Builder.addCallbackFunction(listenerDefinition: CallbackListenerDefinition): TypeSpec.Builder {
@@ -95,7 +108,10 @@ class CallbackReceiverDelegateGenerator {
         return this
     }
 
-    private fun TypeSpec.Builder.addCancellableCallbackFunction(listenerDefinition: CallbackListenerDefinition, ignoredReturnValueType: TypeName) {
+    private fun TypeSpec.Builder.addCancellableCallbackFunction(
+            listenerDefinition: CallbackListenerDefinition,
+            ignoredReturnValueType: TypeName
+    ) {
         val funSpec = FunSpec
                 .overriding(listenerDefinition.method)
                 .kotlinizeParameterTypes(listenerDefinition)

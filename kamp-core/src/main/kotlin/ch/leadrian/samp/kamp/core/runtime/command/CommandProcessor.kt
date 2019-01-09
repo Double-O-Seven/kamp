@@ -64,7 +64,10 @@ constructor(
     private fun getCommandDefinition(parsedCommand: ParsedCommand) =
             commandRegistry.getCommandDefinition(parsedCommand.command, parsedCommand.parameterValues.firstOrNull())
 
-    private fun getStringParameterValues(commandDefinition: CommandDefinition, parsedCommand: ParsedCommand): List<String> =
+    private fun getStringParameterValues(
+            commandDefinition: CommandDefinition,
+            parsedCommand: ParsedCommand
+    ): List<String> =
             when {
                 commandDefinition.groupName == null -> parsedCommand.parameterValues
                 else -> parsedCommand.parameterValues.drop(1)
@@ -77,16 +80,22 @@ constructor(
     ): OnPlayerCommandTextListener.Result {
         commandAccessCheckExecutor.checkAccess(player, commandDefinition, stringParameterValues)?.let {
             return when (it) {
-                OnPlayerCommandTextListener.Result.UnknownCommand -> unknownCommandHandler.handle(player, commandDefinition.name, stringParameterValues)
+                OnPlayerCommandTextListener.Result.UnknownCommand -> unknownCommandHandler.handle(
+                        player,
+                        commandDefinition.name,
+                        stringParameterValues
+                )
                 else -> OnPlayerCommandTextListener.Result.Processed
             }
         }
         val result = commandParametersResolver.resolve(player, commandDefinition, stringParameterValues)
         return when (result) {
-            is CommandParametersResolver.Result.ParameterValues -> commandMethodInvoker.invoke(commandDefinition, result.parameterValues)
+            is CommandParametersResolver.Result.ParameterValues -> commandMethodInvoker.invoke(
+                    commandDefinition,
+                    result.parameterValues
+            )
             is CommandParametersResolver.Result.Error -> result.returnValue
         }
     }
-
 
 }

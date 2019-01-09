@@ -82,7 +82,8 @@ internal class ConstantValueRegistryTest {
         }
     }
 
-    sealed class TestConstantValue(override val value: Int) : ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
+    sealed class TestConstantValue(override val value: Int) :
+            ch.leadrian.samp.kamp.core.api.constants.ConstantValue<Int> {
 
         companion object {
 

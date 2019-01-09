@@ -46,7 +46,12 @@ internal constructor(
     operator fun get(slot: WeaponSlot): WeaponData {
         val weapon = ReferenceInt()
         val ammo = ReferenceInt()
-        nativeFunctionExecutor.getPlayerWeaponData(playerid = player.id.value, slot = slot.value, weapon = weapon, ammo = ammo)
+        nativeFunctionExecutor.getPlayerWeaponData(
+                playerid = player.id.value,
+                slot = slot.value,
+                weapon = weapon,
+                ammo = ammo
+        )
         return weaponDataOf(model = WeaponModel[weapon.value], ammo = ammo.value)
     }
 

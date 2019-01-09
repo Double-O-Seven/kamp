@@ -12,7 +12,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import java.util.*
+import java.util.Locale
 
 internal class TextDrawFactoryTest {
 

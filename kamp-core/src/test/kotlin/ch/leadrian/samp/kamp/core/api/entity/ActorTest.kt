@@ -137,7 +137,17 @@ internal class ActorTest {
         )
         fun shouldApplyAnimation(loop: Boolean, lockX: Boolean, lockY: Boolean, freeze: Boolean) {
             every {
-                nativeFunctionExecutor.applyActorAnimation(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.applyActorAnimation(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
             } returns true
 
             actor.applyAnimation(

@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.TabListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.service.DialogService
-import java.util.*
+import java.util.ArrayList
 import javax.inject.Inject
 
 internal class CommandListDialogFactory
@@ -52,7 +52,11 @@ constructor(private val dialogService: DialogService) {
         caption(commands::getCommandListDialogTitle)
     }
 
-    private fun TabListDialogBuilder<String>.buildPagedCaption(commands: Commands, index: Int, pages: List<List<CommandDefinition>>) {
+    private fun TabListDialogBuilder<String>.buildPagedCaption(
+            commands: Commands,
+            index: Int,
+            pages: List<List<CommandDefinition>>
+    ) {
         caption { player ->
             "${commands.getCommandListDialogTitle(player)} (${index + 1}/${pages.size})"
         }
@@ -94,7 +98,11 @@ constructor(private val dialogService: DialogService) {
         leftButton(TextKeys.dialog.button.close)
     }
 
-    private fun TabListDialogBuilder<String>.buildPagedButtons(index: Int, numberOfPages: Int, dialogs: MutableList<Dialog>) {
+    private fun TabListDialogBuilder<String>.buildPagedButtons(
+            index: Int,
+            numberOfPages: Int,
+            dialogs: MutableList<Dialog>
+    ) {
         when (index) {
             0 -> {
                 leftButton(TextKeys.dialog.button.next)
