@@ -93,10 +93,10 @@ internal class CommandModuleTest {
         }
 
         @Test
-        fun shouldInjectCommandParameterResolverFactory() {
-            val commandParameterResolverFactory = injector.getInstance<CommandParameterResolverFactory>()
+        fun shouldInjectCommandParameterResolverProvider() {
+            val commandParameterResolverProvider = injector.getInstance<CommandParameterResolverProvider>()
 
-            assertThat(commandParameterResolverFactory)
+            assertThat(commandParameterResolverProvider)
                     .isNotNull
         }
 

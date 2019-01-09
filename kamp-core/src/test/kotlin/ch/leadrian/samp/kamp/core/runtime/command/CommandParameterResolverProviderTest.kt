@@ -12,15 +12,15 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 
-internal class CommandParameterResolverFactoryTest {
+internal class CommandParameterResolverProviderTest {
 
-    private lateinit var commandParameterResolverFactory: CommandParameterResolverFactory
+    private lateinit var commandParameterResolverProvider: CommandParameterResolverProvider
 
     private val commandParameterResolverRegistry = mockk<CommandParameterResolverRegistry>()
 
     @BeforeEach
     fun setUp() {
-        commandParameterResolverFactory = CommandParameterResolverFactory(commandParameterResolverRegistry)
+        commandParameterResolverProvider = CommandParameterResolverProvider(commandParameterResolverRegistry)
     }
 
     @Test
@@ -28,7 +28,7 @@ internal class CommandParameterResolverFactoryTest {
         val expectedResolver = mockk<CommandParameterResolver<Foo>>()
         every { commandParameterResolverRegistry.getResolver(Foo::class.java) } returns expectedResolver
 
-        val resolver = commandParameterResolverFactory.getResolver(Foo::class.java)
+        val resolver = commandParameterResolverProvider.getResolver(Foo::class.java)
 
         assertThat(resolver)
                 .isSameAs(expectedResolver)
@@ -38,11 +38,11 @@ internal class CommandParameterResolverFactoryTest {
     fun givenNoMatchingResolverItShouldThrowException() {
         every { commandParameterResolverRegistry.getResolver(any<Class<*>>()) } returns null
 
-        val caughtThrowable = catchThrowable { commandParameterResolverFactory.getResolver(Foo::class.java) }
+        val caughtThrowable = catchThrowable { commandParameterResolverProvider.getResolver(Foo::class.java) }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("No command parameter resolver for type ch.leadrian.samp.kamp.core.runtime.command.CommandParameterResolverFactoryTest\$Foo")
+                .hasMessage("No command parameter resolver for type ch.leadrian.samp.kamp.core.runtime.command.CommandParameterResolverProviderTest\$Foo")
     }
 
     @Nested
@@ -56,7 +56,7 @@ internal class CommandParameterResolverFactoryTest {
 
         @Test
         fun givenTypeWithStringConstructorItShouldReturnStringConstructorBasedResolver() {
-            val resolver = commandParameterResolverFactory.getResolver(TypeWithStringConstructor::class.java)
+            val resolver = commandParameterResolverProvider.getResolver(TypeWithStringConstructor::class.java)
 
             assertThat(resolver)
                     .isInstanceOf(StringConstructorBasedCommandParameterResolver::class.java)
@@ -64,7 +64,7 @@ internal class CommandParameterResolverFactoryTest {
 
         @Test
         fun givenTypeWithStringConstructorItShouldRegisterResolver() {
-            val resolver = commandParameterResolverFactory.getResolver(TypeWithStringConstructor::class.java)
+            val resolver = commandParameterResolverProvider.getResolver(TypeWithStringConstructor::class.java)
 
             verify { commandParameterResolverRegistry.register(resolver) }
         }
@@ -81,7 +81,7 @@ internal class CommandParameterResolverFactoryTest {
 
         @Test
         fun givenTypeWithFactoryMethodItShouldReturnFactoryMethodBasedResolver() {
-            val resolver = commandParameterResolverFactory.getResolver(TypeWithFactoryMethod::class.java)
+            val resolver = commandParameterResolverProvider.getResolver(TypeWithFactoryMethod::class.java)
 
             assertThat(resolver)
                     .isInstanceOf(FactoryMethodBasedCommandParameterResolver::class.java)
@@ -89,7 +89,7 @@ internal class CommandParameterResolverFactoryTest {
 
         @Test
         fun givenTypeWithFactoryMethodItShouldRegisterResolver() {
-            val resolver = commandParameterResolverFactory.getResolver(TypeWithFactoryMethod::class.java)
+            val resolver = commandParameterResolverProvider.getResolver(TypeWithFactoryMethod::class.java)
 
             verify { commandParameterResolverRegistry.register(resolver) }
         }

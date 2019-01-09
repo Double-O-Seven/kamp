@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import javax.inject.Inject
 
-internal class CommandParameterResolverFactory
+internal class CommandParameterResolverProvider
 @Inject
 constructor(private val commandParameterResolverRegistry: CommandParameterResolverRegistry) {
 
