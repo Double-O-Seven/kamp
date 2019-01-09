@@ -266,7 +266,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.FBIRANCHER.value,
-                        VehicleModelInfoType.PETROLCAP.value,
+                        VehicleModelInfoType.PETROL_CAP.value,
                         any(),
                         any(),
                         any()
@@ -278,7 +278,7 @@ internal class VehicleServiceTest {
                 true
             }
 
-            val modelInfo = vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROLCAP)
+            val modelInfo = vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROL_CAP)
 
             assertThat(modelInfo)
                     .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
@@ -289,7 +289,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.FBIRANCHER.value,
-                        VehicleModelInfoType.PETROLCAP.value,
+                        VehicleModelInfoType.PETROL_CAP.value,
                         any(),
                         any(),
                         any()
@@ -303,7 +303,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.FBIRANCHER.value,
-                        VehicleModelInfoType.FRONTSEAT.value,
+                        VehicleModelInfoType.FRONT_SEAT.value,
                         any(),
                         any(),
                         any()
@@ -314,9 +314,9 @@ internal class VehicleServiceTest {
                 arg<ReferenceFloat>(4).value = 6f
                 true
             }
-            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROLCAP)
+            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROL_CAP)
 
-            val modelInfo = vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.FRONTSEAT)
+            val modelInfo = vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.FRONT_SEAT)
 
             assertThat(modelInfo)
                     .isEqualTo(vector3DOf(x = 4f, y = 5f, z = 6f))
@@ -327,7 +327,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.FBIRANCHER.value,
-                        VehicleModelInfoType.PETROLCAP.value,
+                        VehicleModelInfoType.PETROL_CAP.value,
                         any(),
                         any(),
                         any()
@@ -341,7 +341,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.BULLET.value,
-                        VehicleModelInfoType.PETROLCAP.value,
+                        VehicleModelInfoType.PETROL_CAP.value,
                         any(),
                         any(),
                         any()
@@ -352,9 +352,9 @@ internal class VehicleServiceTest {
                 arg<ReferenceFloat>(4).value = 6f
                 true
             }
-            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROLCAP)
+            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROL_CAP)
 
-            val modelInfo = vehicleService.getModelInfo(VehicleModel.BULLET, VehicleModelInfoType.PETROLCAP)
+            val modelInfo = vehicleService.getModelInfo(VehicleModel.BULLET, VehicleModelInfoType.PETROL_CAP)
 
             assertThat(modelInfo)
                     .isEqualTo(vector3DOf(x = 4f, y = 5f, z = 6f))
@@ -365,7 +365,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.FBIRANCHER.value,
-                        VehicleModelInfoType.PETROLCAP.value,
+                        VehicleModelInfoType.PETROL_CAP.value,
                         any(),
                         any(),
                         any()
@@ -379,7 +379,7 @@ internal class VehicleServiceTest {
             every {
                 nativeFunctionExecutor.getVehicleModelInfo(
                         VehicleModel.BULLET.value,
-                        VehicleModelInfoType.FRONTSEAT.value,
+                        VehicleModelInfoType.FRONT_SEAT.value,
                         any(),
                         any(),
                         any()
@@ -390,9 +390,9 @@ internal class VehicleServiceTest {
                 arg<ReferenceFloat>(4).value = 6f
                 true
             }
-            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROLCAP)
+            vehicleService.getModelInfo(VehicleModel.FBIRANCHER, VehicleModelInfoType.PETROL_CAP)
 
-            val modelInfo = vehicleService.getModelInfo(VehicleModel.BULLET, VehicleModelInfoType.FRONTSEAT)
+            val modelInfo = vehicleService.getModelInfo(VehicleModel.BULLET, VehicleModelInfoType.FRONT_SEAT)
 
             assertThat(modelInfo)
                     .isEqualTo(vector3DOf(x = 4f, y = 5f, z = 6f))
