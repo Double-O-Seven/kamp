@@ -790,9 +790,7 @@ constructor(
                 BulletHitType.VEHICLE -> OnPlayerWeaponShotListener.Target.VehicleTarget(hitid.toVehicle())
                 BulletHitType.OBJECT -> OnPlayerWeaponShotListener.Target.MapObjectTarget(hitid.toMapObject())
                 BulletHitType.PLAYER_OBJECT -> OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(
-                        hitid.toPlayerMapObject(
-                                player
-                        )
+                        hitid.toPlayerMapObject(player)
                 )
             }
             onPlayerWeaponShotHandler.onPlayerShotWeapon(
