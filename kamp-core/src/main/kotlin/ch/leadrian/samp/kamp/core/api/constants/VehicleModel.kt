@@ -8,6 +8,7 @@ import org.apache.commons.collections4.trie.PatriciaTrie
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
+@Suppress("SpellCheckingInspection", "unused")
 enum class VehicleModel(
         override val value: Int,
         override val textKey: TextKey,
@@ -17,366 +18,1152 @@ enum class VehicleModel(
 ) : ConstantValue<Int>, HasTextKey {
 
     LANDSTALKER(
-            SAMPConstants.VEHICLE_LANDSTALKER,
-            TextKeys.vehicle.model.name.landstalker,
-            "Landstalker",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_LANDSTALKER,
+            textKey = TextKeys.vehicle.model.name.landstalker,
+            modelName = "Landstalker",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
-    BRAVURA(SAMPConstants.VEHICLE_BRAVURA, TextKeys.vehicle.model.name.bravura, "Bravura", VehicleType.CAR, 2),
-    BUFFALO(SAMPConstants.VEHICLE_BUFFALO, TextKeys.vehicle.model.name.buffalo, "Buffalo", VehicleType.CAR, 2),
+    BRAVURA(
+            value = SAMPConstants.VEHICLE_BRAVURA,
+            textKey = TextKeys.vehicle.model.name.bravura,
+            modelName = "Bravura",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    BUFFALO(
+            value = SAMPConstants.VEHICLE_BUFFALO,
+            textKey = TextKeys.vehicle.model.name.buffalo,
+            modelName = "Buffalo",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     LINERUNNER(
-            SAMPConstants.VEHICLE_LINERUNNER,
-            TextKeys.vehicle.model.name.linerunner,
-            "Linerunner",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_LINERUNNER,
+            textKey = TextKeys.vehicle.model.name.linerunner,
+            modelName = "Linerunner",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    PERRENIAL(SAMPConstants.VEHICLE_PERRENIAL, TextKeys.vehicle.model.name.perrenial, "Perennial", VehicleType.CAR, 4),
-    SENTINEL(SAMPConstants.VEHICLE_SENTINEL, TextKeys.vehicle.model.name.sentinel, "Sentinel", VehicleType.CAR, 4),
-    DUMPER(SAMPConstants.VEHICLE_DUMPER, TextKeys.vehicle.model.name.dumper, "Dumper", VehicleType.CAR, 1),
-    FIRETRUCK(SAMPConstants.VEHICLE_FIRETRUCK, TextKeys.vehicle.model.name.firetruck, "Firetruck", VehicleType.CAR, 2),
+    PERRENIAL(
+            value = SAMPConstants.VEHICLE_PERRENIAL,
+            textKey = TextKeys.vehicle.model.name.perrenial,
+            modelName = "Perennial",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    SENTINEL(
+            value = SAMPConstants.VEHICLE_SENTINEL,
+            textKey = TextKeys.vehicle.model.name.sentinel,
+            modelName = "Sentinel",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    DUMPER(
+            value = SAMPConstants.VEHICLE_DUMPER,
+            textKey = TextKeys.vehicle.model.name.dumper,
+            modelName = "Dumper",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    FIRETRUCK(
+            value = SAMPConstants.VEHICLE_FIRETRUCK,
+            textKey = TextKeys.vehicle.model.name.firetruck,
+            modelName = "Firetruck",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     TRASHMASTER(
-            SAMPConstants.VEHICLE_TRASHMASTER,
-            TextKeys.vehicle.model.name.trashmaster,
-            "Trashmaster",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_TRASHMASTER,
+            textKey = TextKeys.vehicle.model.name.trashmaster,
+            modelName = "Trashmaster",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    STRETCH(SAMPConstants.VEHICLE_STRETCH, TextKeys.vehicle.model.name.stretch, "Stretch", VehicleType.CAR, 4),
-    MANANA(SAMPConstants.VEHICLE_MANANA, TextKeys.vehicle.model.name.manana, "Manana", VehicleType.CAR, 2),
-    INFERNUS(SAMPConstants.VEHICLE_INFERNUS, TextKeys.vehicle.model.name.infernus, "Infernus", VehicleType.CAR, 2),
-    VOODOO(SAMPConstants.VEHICLE_VOODOO, TextKeys.vehicle.model.name.voodoo, "Voodoo", VehicleType.CAR, 2),
-    PONY(SAMPConstants.VEHICLE_PONY, TextKeys.vehicle.model.name.pony, "Pony", VehicleType.CAR, 2),
-    MULE(SAMPConstants.VEHICLE_MULE, TextKeys.vehicle.model.name.mule, "Mule", VehicleType.CAR, 2),
-    CHEETAH(SAMPConstants.VEHICLE_CHEETAH, TextKeys.vehicle.model.name.cheetah, "Cheetah", VehicleType.CAR, 2),
-    AMBULANCE(SAMPConstants.VEHICLE_AMBULANCE, TextKeys.vehicle.model.name.ambulance, "Ambulance", VehicleType.CAR, 4),
+    STRETCH(
+            value = SAMPConstants.VEHICLE_STRETCH,
+            textKey = TextKeys.vehicle.model.name.stretch,
+            modelName = "Stretch",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    MANANA(
+            value = SAMPConstants.VEHICLE_MANANA,
+            textKey = TextKeys.vehicle.model.name.manana,
+            modelName = "Manana",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    INFERNUS(
+            value = SAMPConstants.VEHICLE_INFERNUS,
+            textKey = TextKeys.vehicle.model.name.infernus,
+            modelName = "Infernus",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    VOODOO(
+            value = SAMPConstants.VEHICLE_VOODOO,
+            textKey = TextKeys.vehicle.model.name.voodoo,
+            modelName = "Voodoo",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    PONY(
+            value = SAMPConstants.VEHICLE_PONY,
+            textKey = TextKeys.vehicle.model.name.pony,
+            modelName = "Pony",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MULE(
+            value = SAMPConstants.VEHICLE_MULE,
+            textKey = TextKeys.vehicle.model.name.mule,
+            modelName = "Mule",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    CHEETAH(
+            value = SAMPConstants.VEHICLE_CHEETAH,
+            textKey = TextKeys.vehicle.model.name.cheetah,
+            modelName = "Cheetah",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    AMBULANCE(
+            value = SAMPConstants.VEHICLE_AMBULANCE,
+            textKey = TextKeys.vehicle.model.name.ambulance,
+            modelName = "Ambulance",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     LEVIATHAN(
-            SAMPConstants.VEHICLE_LEVIATHAN,
-            TextKeys.vehicle.model.name.leviathan,
-            "Leviathan",
-            VehicleType.HELICOPTER,
-            2
+            value = SAMPConstants.VEHICLE_LEVIATHAN,
+            textKey = TextKeys.vehicle.model.name.leviathan,
+            modelName = "Leviathan",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
     ),
-    MOONBEAM(SAMPConstants.VEHICLE_MOONBEAM, TextKeys.vehicle.model.name.moonbeam, "Moonbeam", VehicleType.CAR, 4),
-    ESPERANTO(SAMPConstants.VEHICLE_ESPERANTO, TextKeys.vehicle.model.name.esperanto, "Esperanto", VehicleType.CAR, 2),
-    TAXI(SAMPConstants.VEHICLE_TAXI, TextKeys.vehicle.model.name.taxi, "Taxi", VehicleType.CAR, 4),
+    MOONBEAM(
+            value = SAMPConstants.VEHICLE_MOONBEAM,
+            textKey = TextKeys.vehicle.model.name.moonbeam,
+            modelName = "Moonbeam",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    ESPERANTO(
+            value = SAMPConstants.VEHICLE_ESPERANTO,
+            textKey = TextKeys.vehicle.model.name.esperanto,
+            modelName = "Esperanto",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    TAXI(
+            value = SAMPConstants.VEHICLE_TAXI,
+            textKey = TextKeys.vehicle.model.name.taxi,
+            modelName = "Taxi",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     WASHINGTON(
-            SAMPConstants.VEHICLE_WASHINGTON,
-            TextKeys.vehicle.model.name.washington,
-            "Washington",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_WASHINGTON,
+            textKey = TextKeys.vehicle.model.name.washington,
+            modelName = "Washington",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
-    BOBCAT(SAMPConstants.VEHICLE_BOBCAT, TextKeys.vehicle.model.name.bobcat, "Bobcat", VehicleType.CAR, 2),
-    MRWHOOPEE(SAMPConstants.VEHICLE_MRWHOOPEE, TextKeys.vehicle.model.name.mrwhoopee, "Mr Whoopee", VehicleType.CAR, 2),
+    BOBCAT(
+            value = SAMPConstants.VEHICLE_BOBCAT,
+            textKey = TextKeys.vehicle.model.name.bobcat,
+            modelName = "Bobcat",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MRWHOOPEE(
+            value = SAMPConstants.VEHICLE_MRWHOOPEE,
+            textKey = TextKeys.vehicle.model.name.mrwhoopee,
+            modelName = "Mr Whoopee",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     BFINJECTION(
-            SAMPConstants.VEHICLE_BFINJECTION,
-            TextKeys.vehicle.model.name.bfinjection,
-            "BF Injection",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_BFINJECTION,
+            textKey = TextKeys.vehicle.model.name.bfinjection,
+            modelName = "BF Injection",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    HUNTER(SAMPConstants.VEHICLE_HUNTER, TextKeys.vehicle.model.name.hunter, "Hunter", VehicleType.HELICOPTER, 1),
-    PREMIER(SAMPConstants.VEHICLE_PREMIER, TextKeys.vehicle.model.name.premier, "Premier", VehicleType.CAR, 4),
-    ENFORCER(SAMPConstants.VEHICLE_ENFORCER, TextKeys.vehicle.model.name.enforcer, "Enforcer", VehicleType.CAR, 4),
-    SECURICAR(SAMPConstants.VEHICLE_SECURICAR, TextKeys.vehicle.model.name.securicar, "Securicar", VehicleType.CAR, 4),
-    BANSHEE(SAMPConstants.VEHICLE_BANSHEE, TextKeys.vehicle.model.name.banshee, "Banshee", VehicleType.CAR, 2),
-    PREDATOR(SAMPConstants.VEHICLE_PREDATOR, TextKeys.vehicle.model.name.predator, "Predator", VehicleType.BOAT, 0),
-    BUS(SAMPConstants.VEHICLE_BUS, TextKeys.vehicle.model.name.bus, "Bus", VehicleType.CAR, 8),
-    RHINO(SAMPConstants.VEHICLE_RHINO, TextKeys.vehicle.model.name.rhino, "Rhino", VehicleType.TANK, 1),
-    BARRACKS(SAMPConstants.VEHICLE_BARRACKS, TextKeys.vehicle.model.name.barracks, "Barracks", VehicleType.CAR, 2),
-    HOTKNIFE(SAMPConstants.VEHICLE_HOTKNIFE, TextKeys.vehicle.model.name.hotknife, "Hotknife", VehicleType.CAR, 2),
+    HUNTER(
+            value = SAMPConstants.VEHICLE_HUNTER,
+            textKey = TextKeys.vehicle.model.name.hunter,
+            modelName = "Hunter",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 1
+    ),
+    PREMIER(
+            value = SAMPConstants.VEHICLE_PREMIER,
+            textKey = TextKeys.vehicle.model.name.premier,
+            modelName = "Premier",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    ENFORCER(
+            value = SAMPConstants.VEHICLE_ENFORCER,
+            textKey = TextKeys.vehicle.model.name.enforcer,
+            modelName = "Enforcer",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    SECURICAR(
+            value = SAMPConstants.VEHICLE_SECURICAR,
+            textKey = TextKeys.vehicle.model.name.securicar,
+            modelName = "Securicar",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    BANSHEE(
+            value = SAMPConstants.VEHICLE_BANSHEE,
+            textKey = TextKeys.vehicle.model.name.banshee,
+            modelName = "Banshee",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    PREDATOR(
+            value = SAMPConstants.VEHICLE_PREDATOR,
+            textKey = TextKeys.vehicle.model.name.predator,
+            modelName = "Predator",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    BUS(
+            value = SAMPConstants.VEHICLE_BUS,
+            textKey = TextKeys.vehicle.model.name.bus,
+            modelName = "Bus",
+            type = VehicleType.CAR,
+            numberOfSeats = 8
+    ),
+    RHINO(
+            value = SAMPConstants.VEHICLE_RHINO,
+            textKey = TextKeys.vehicle.model.name.rhino,
+            modelName = "Rhino",
+            type = VehicleType.TANK,
+            numberOfSeats = 1
+    ),
+    BARRACKS(
+            value = SAMPConstants.VEHICLE_BARRACKS,
+            textKey = TextKeys.vehicle.model.name.barracks,
+            modelName = "Barracks",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    HOTKNIFE(
+            value = SAMPConstants.VEHICLE_HOTKNIFE,
+            textKey = TextKeys.vehicle.model.name.hotknife,
+            modelName = "Hotknife",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     ARTICLETRAILER1(
-            SAMPConstants.VEHICLE_ARTICLETRAILER1,
-            TextKeys.vehicle.model.name.articletrailer1,
-            "Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_ARTICLETRAILER1,
+            textKey = TextKeys.vehicle.model.name.articletrailer1,
+            modelName = "Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
-    PREVION(SAMPConstants.VEHICLE_PREVION, TextKeys.vehicle.model.name.previon, "Previon", VehicleType.CAR, 2),
-    COACH(SAMPConstants.VEHICLE_COACH, TextKeys.vehicle.model.name.coach, "Coach", VehicleType.CAR, 8),
-    CABBIE(SAMPConstants.VEHICLE_CABBIE, TextKeys.vehicle.model.name.cabbie, "Cabbie", VehicleType.CAR, 4),
-    STALLION(SAMPConstants.VEHICLE_STALLION, TextKeys.vehicle.model.name.stallion, "Stallion", VehicleType.CAR, 2),
-    RUMPO(SAMPConstants.VEHICLE_RUMPO, TextKeys.vehicle.model.name.rumpo, "Rumpo", VehicleType.CAR, 4),
+    PREVION(
+            value = SAMPConstants.VEHICLE_PREVION,
+            textKey = TextKeys.vehicle.model.name.previon,
+            modelName = "Previon",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    COACH(
+            value = SAMPConstants.VEHICLE_COACH,
+            textKey = TextKeys.vehicle.model.name.coach,
+            modelName = "Coach",
+            type = VehicleType.CAR,
+            numberOfSeats = 8
+    ),
+    CABBIE(
+            value = SAMPConstants.VEHICLE_CABBIE,
+            textKey = TextKeys.vehicle.model.name.cabbie,
+            modelName = "Cabbie",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    STALLION(
+            value = SAMPConstants.VEHICLE_STALLION,
+            textKey = TextKeys.vehicle.model.name.stallion,
+            modelName = "Stallion",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    RUMPO(
+            value = SAMPConstants.VEHICLE_RUMPO,
+            textKey = TextKeys.vehicle.model.name.rumpo,
+            modelName = "Rumpo",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     RCBANDIT(
-            SAMPConstants.VEHICLE_RCBANDIT,
-            TextKeys.vehicle.model.name.rcbandit,
-            "RC Bandit",
-            VehicleType.REMOTE_CONTROL,
-            1
+            value = SAMPConstants.VEHICLE_RCBANDIT,
+            textKey = TextKeys.vehicle.model.name.rcbandit,
+            modelName = "RC Bandit",
+            type = VehicleType.REMOTE_CONTROL,
+            numberOfSeats = 1
     ),
-    ROMERO(SAMPConstants.VEHICLE_ROMERO, TextKeys.vehicle.model.name.romero, "Romero", VehicleType.CAR, 2),
-    PACKER(SAMPConstants.VEHICLE_PACKER, TextKeys.vehicle.model.name.packer, "Packer", VehicleType.CAR, 2),
-    MONSTER(SAMPConstants.VEHICLE_MONSTER, TextKeys.vehicle.model.name.monster, "Monster", VehicleType.CAR, 2),
-    ADMIRAL(SAMPConstants.VEHICLE_ADMIRAL, TextKeys.vehicle.model.name.admiral, "Admiral", VehicleType.CAR, 4),
-    SQUALO(SAMPConstants.VEHICLE_SQUALO, TextKeys.vehicle.model.name.squalo, "Squalo", VehicleType.BOAT, 0),
+    ROMERO(
+            value = SAMPConstants.VEHICLE_ROMERO,
+            textKey = TextKeys.vehicle.model.name.romero,
+            modelName = "Romero",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    PACKER(
+            value = SAMPConstants.VEHICLE_PACKER,
+            textKey = TextKeys.vehicle.model.name.packer,
+            modelName = "Packer",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MONSTER(
+            value = SAMPConstants.VEHICLE_MONSTER,
+            textKey = TextKeys.vehicle.model.name.monster,
+            modelName = "Monster",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    ADMIRAL(
+            value = SAMPConstants.VEHICLE_ADMIRAL,
+            textKey = TextKeys.vehicle.model.name.admiral,
+            modelName = "Admiral",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    SQUALO(
+            value = SAMPConstants.VEHICLE_SQUALO,
+            textKey = TextKeys.vehicle.model.name.squalo,
+            modelName = "Squalo",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
     SEASPARROW(
-            SAMPConstants.VEHICLE_SEASPARROW,
-            TextKeys.vehicle.model.name.seasparrow,
-            "Seasparrow",
-            VehicleType.HELICOPTER,
-            2
+            value = SAMPConstants.VEHICLE_SEASPARROW,
+            textKey = TextKeys.vehicle.model.name.seasparrow,
+            modelName = "Seasparrow",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
     ),
     PIZZABOY(
-            SAMPConstants.VEHICLE_PIZZABOY,
-            TextKeys.vehicle.model.name.pizzaboy,
-            "Pizzaboy",
-            VehicleType.MOTORBIKE,
-            1
+            value = SAMPConstants.VEHICLE_PIZZABOY,
+            textKey = TextKeys.vehicle.model.name.pizzaboy,
+            modelName = "Pizzaboy",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 1
     ),
-    TRAM(SAMPConstants.VEHICLE_TRAM, TextKeys.vehicle.model.name.tram, "Tram", VehicleType.TRAIN, 4),
+    TRAM(
+            value = SAMPConstants.VEHICLE_TRAM,
+            textKey = TextKeys.vehicle.model.name.tram,
+            modelName = "Tram",
+            type = VehicleType.TRAIN,
+            numberOfSeats = 4
+    ),
     ARTICLETRAILER2(
-            SAMPConstants.VEHICLE_ARTICLETRAILER2,
-            TextKeys.vehicle.model.name.articletrailer2,
-            "Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_ARTICLETRAILER2,
+            textKey = TextKeys.vehicle.model.name.articletrailer2,
+            modelName = "Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
-    TURISMO(SAMPConstants.VEHICLE_TURISMO, TextKeys.vehicle.model.name.turismo, "Turismo", VehicleType.CAR, 2),
-    SPEEDER(SAMPConstants.VEHICLE_SPEEDER, TextKeys.vehicle.model.name.speeder, "Speeder", VehicleType.BOAT, 0),
-    REEFER(SAMPConstants.VEHICLE_REEFER, TextKeys.vehicle.model.name.reefer, "Reefer", VehicleType.BOAT, 0),
-    TROPIC(SAMPConstants.VEHICLE_TROPIC, TextKeys.vehicle.model.name.tropic, "Tropic", VehicleType.BOAT, 0),
-    FLATBED(SAMPConstants.VEHICLE_FLATBED, TextKeys.vehicle.model.name.flatbed, "Flatbed", VehicleType.CAR, 2),
-    YANKEE(SAMPConstants.VEHICLE_YANKEE, TextKeys.vehicle.model.name.yankee, "Yankee", VehicleType.CAR, 2),
-    CADDY(SAMPConstants.VEHICLE_CADDY, TextKeys.vehicle.model.name.caddy, "Caddy", VehicleType.CAR, 2),
-    SOLAIR(SAMPConstants.VEHICLE_SOLAIR, TextKeys.vehicle.model.name.solair, "Solair", VehicleType.CAR, 4),
+    TURISMO(
+            value = SAMPConstants.VEHICLE_TURISMO,
+            textKey = TextKeys.vehicle.model.name.turismo,
+            modelName = "Turismo",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SPEEDER(
+            value = SAMPConstants.VEHICLE_SPEEDER,
+            textKey = TextKeys.vehicle.model.name.speeder,
+            modelName = "Speeder",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    REEFER(
+            value = SAMPConstants.VEHICLE_REEFER,
+            textKey = TextKeys.vehicle.model.name.reefer,
+            modelName = "Reefer",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    TROPIC(
+            value = SAMPConstants.VEHICLE_TROPIC,
+            textKey = TextKeys.vehicle.model.name.tropic,
+            modelName = "Tropic",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    FLATBED(
+            value = SAMPConstants.VEHICLE_FLATBED,
+            textKey = TextKeys.vehicle.model.name.flatbed,
+            modelName = "Flatbed",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    YANKEE(
+            value = SAMPConstants.VEHICLE_YANKEE,
+            textKey = TextKeys.vehicle.model.name.yankee,
+            modelName = "Yankee",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    CADDY(
+            value = SAMPConstants.VEHICLE_CADDY,
+            textKey = TextKeys.vehicle.model.name.caddy,
+            modelName = "Caddy",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SOLAIR(
+            value = SAMPConstants.VEHICLE_SOLAIR,
+            textKey = TextKeys.vehicle.model.name.solair,
+            modelName = "Solair",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     BERKLEYSRCVAN(
-            SAMPConstants.VEHICLE_BERKLEYSRCVAN,
-            TextKeys.vehicle.model.name.berkleysrcvan,
-            "Berkleys RC Van",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_BERKLEYSRCVAN,
+            textKey = TextKeys.vehicle.model.name.berkleysrcvan,
+            modelName = "Berkleys RC Van",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
-    SKIMMER(SAMPConstants.VEHICLE_SKIMMER, TextKeys.vehicle.model.name.skimmer, "Skimmer", VehicleType.AIRCRAFT, 2),
-    PCJ600(SAMPConstants.VEHICLE_PCJ600, TextKeys.vehicle.model.name.pcj600, "PCJ-600", VehicleType.MOTORBIKE, 2),
-    FAGGIO(SAMPConstants.VEHICLE_FAGGIO, TextKeys.vehicle.model.name.faggio, "Faggio", VehicleType.MOTORBIKE, 2),
-    FREEWAY(SAMPConstants.VEHICLE_FREEWAY, TextKeys.vehicle.model.name.freeway, "Freeway", VehicleType.MOTORBIKE, 0),
+    SKIMMER(
+            value = SAMPConstants.VEHICLE_SKIMMER,
+            textKey = TextKeys.vehicle.model.name.skimmer,
+            modelName = "Skimmer",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 2
+    ),
+    PCJ600(
+            value = SAMPConstants.VEHICLE_PCJ600,
+            textKey = TextKeys.vehicle.model.name.pcj600,
+            modelName = "PCJ-600",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    FAGGIO(
+            value = SAMPConstants.VEHICLE_FAGGIO,
+            textKey = TextKeys.vehicle.model.name.faggio,
+            modelName = "Faggio",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    FREEWAY(
+            value = SAMPConstants.VEHICLE_FREEWAY,
+            textKey = TextKeys.vehicle.model.name.freeway,
+            modelName = "Freeway",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 0
+    ),
     RCBARON(
-            SAMPConstants.VEHICLE_RCBARON,
-            TextKeys.vehicle.model.name.rcbaron,
-            "RC Baron",
-            VehicleType.REMOTE_CONTROL,
-            1
+            value = SAMPConstants.VEHICLE_RCBARON,
+            textKey = TextKeys.vehicle.model.name.rcbaron,
+            modelName = "RC Baron",
+            type = VehicleType.REMOTE_CONTROL,
+            numberOfSeats = 1
     ),
     RCRAIDER(
-            SAMPConstants.VEHICLE_RCRAIDER,
-            TextKeys.vehicle.model.name.rcraider,
-            "RC Raider",
-            VehicleType.REMOTE_CONTROL,
-            1
+            value = SAMPConstants.VEHICLE_RCRAIDER,
+            textKey = TextKeys.vehicle.model.name.rcraider,
+            modelName = "RC Raider",
+            type = VehicleType.REMOTE_CONTROL,
+            numberOfSeats = 1
     ),
-    GLENDALE(SAMPConstants.VEHICLE_GLENDALE, TextKeys.vehicle.model.name.glendale, "Glendale", VehicleType.CAR, 4),
-    OCEANIC(SAMPConstants.VEHICLE_OCEANIC, TextKeys.vehicle.model.name.oceanic, "Oceanic", VehicleType.CAR, 4),
-    SANCHEZ(SAMPConstants.VEHICLE_SANCHEZ, TextKeys.vehicle.model.name.sanchez, "Sanchez", VehicleType.MOTORBIKE, 2),
-    SPARROW(SAMPConstants.VEHICLE_SPARROW, TextKeys.vehicle.model.name.sparrow, "Sparrow", VehicleType.HELICOPTER, 2),
-    PATRIOT(SAMPConstants.VEHICLE_PATRIOT, TextKeys.vehicle.model.name.patriot, "Patriot", VehicleType.CAR, 4),
-    QUAD(SAMPConstants.VEHICLE_QUAD, TextKeys.vehicle.model.name.quad, "Quad", VehicleType.MOTORBIKE, 2),
+    GLENDALE(
+            value = SAMPConstants.VEHICLE_GLENDALE,
+            textKey = TextKeys.vehicle.model.name.glendale,
+            modelName = "Glendale",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    OCEANIC(
+            value = SAMPConstants.VEHICLE_OCEANIC,
+            textKey = TextKeys.vehicle.model.name.oceanic,
+            modelName = "Oceanic",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    SANCHEZ(
+            value = SAMPConstants.VEHICLE_SANCHEZ,
+            textKey = TextKeys.vehicle.model.name.sanchez,
+            modelName = "Sanchez",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    SPARROW(
+            value = SAMPConstants.VEHICLE_SPARROW,
+            textKey = TextKeys.vehicle.model.name.sparrow,
+            modelName = "Sparrow",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
+    ),
+    PATRIOT(
+            value = SAMPConstants.VEHICLE_PATRIOT,
+            textKey = TextKeys.vehicle.model.name.patriot,
+            modelName = "Patriot",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    QUAD(
+            value = SAMPConstants.VEHICLE_QUAD,
+            textKey = TextKeys.vehicle.model.name.quad,
+            modelName = "Quad",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
     COASTGUARD(
-            SAMPConstants.VEHICLE_COASTGUARD,
-            TextKeys.vehicle.model.name.coastguard,
-            "Coastguard",
-            VehicleType.BOAT,
-            0
+            value = SAMPConstants.VEHICLE_COASTGUARD,
+            textKey = TextKeys.vehicle.model.name.coastguard,
+            modelName = "Coastguard",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
     ),
-    DINGHY(SAMPConstants.VEHICLE_DINGHY, TextKeys.vehicle.model.name.dinghy, "Dinghy", VehicleType.BOAT, 0),
-    HERMES(SAMPConstants.VEHICLE_HERMES, TextKeys.vehicle.model.name.hermes, "Hermes", VehicleType.CAR, 2),
-    SABRE(SAMPConstants.VEHICLE_SABRE, TextKeys.vehicle.model.name.sabre, "Sabre", VehicleType.CAR, 2),
-    RUSTLER(SAMPConstants.VEHICLE_RUSTLER, TextKeys.vehicle.model.name.rustler, "Rustler", VehicleType.AIRCRAFT, 1),
-    ZR350(SAMPConstants.VEHICLE_ZR350, TextKeys.vehicle.model.name.zr350, "ZR-350", VehicleType.CAR, 2),
-    WALTON(SAMPConstants.VEHICLE_WALTON, TextKeys.vehicle.model.name.walton, "Walton", VehicleType.CAR, 2),
-    REGINA(SAMPConstants.VEHICLE_REGINA, TextKeys.vehicle.model.name.regina, "Regina", VehicleType.CAR, 4),
-    COMET(SAMPConstants.VEHICLE_COMET, TextKeys.vehicle.model.name.comet, "Comet", VehicleType.CAR, 2),
-    BMX(SAMPConstants.VEHICLE_BMX, TextKeys.vehicle.model.name.bmx, "BMX", VehicleType.BICYCLE, 1),
-    BURRITO(SAMPConstants.VEHICLE_BURRITO, TextKeys.vehicle.model.name.burrito, "Burrito", VehicleType.CAR, 4),
-    CAMPER(SAMPConstants.VEHICLE_CAMPER, TextKeys.vehicle.model.name.camper, "Camper", VehicleType.CAR, 3),
-    MARQUIS(SAMPConstants.VEHICLE_MARQUIS, TextKeys.vehicle.model.name.marquis, "Marquis", VehicleType.BOAT, 0),
-    BAGGAGE(SAMPConstants.VEHICLE_BAGGAGE, TextKeys.vehicle.model.name.baggage, "Baggage", VehicleType.CAR, 1),
-    DOZER(SAMPConstants.VEHICLE_DOZER, TextKeys.vehicle.model.name.dozer, "Dozer", VehicleType.CAR, 1),
+    DINGHY(
+            value = SAMPConstants.VEHICLE_DINGHY,
+            textKey = TextKeys.vehicle.model.name.dinghy,
+            modelName = "Dinghy",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    HERMES(
+            value = SAMPConstants.VEHICLE_HERMES,
+            textKey = TextKeys.vehicle.model.name.hermes,
+            modelName = "Hermes",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SABRE(
+            value = SAMPConstants.VEHICLE_SABRE,
+            textKey = TextKeys.vehicle.model.name.sabre,
+            modelName = "Sabre",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    RUSTLER(
+            value = SAMPConstants.VEHICLE_RUSTLER,
+            textKey = TextKeys.vehicle.model.name.rustler,
+            modelName = "Rustler",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
+    ZR350(
+            value = SAMPConstants.VEHICLE_ZR350,
+            textKey = TextKeys.vehicle.model.name.zr350,
+            modelName = "ZR-350",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    WALTON(
+            value = SAMPConstants.VEHICLE_WALTON,
+            textKey = TextKeys.vehicle.model.name.walton,
+            modelName = "Walton",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    REGINA(
+            value = SAMPConstants.VEHICLE_REGINA,
+            textKey = TextKeys.vehicle.model.name.regina,
+            modelName = "Regina",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    COMET(
+            value = SAMPConstants.VEHICLE_COMET,
+            textKey = TextKeys.vehicle.model.name.comet,
+            modelName = "Comet",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    BMX(
+            value = SAMPConstants.VEHICLE_BMX,
+            textKey = TextKeys.vehicle.model.name.bmx,
+            modelName = "BMX",
+            type = VehicleType.BICYCLE,
+            numberOfSeats = 1
+    ),
+    BURRITO(
+            value = SAMPConstants.VEHICLE_BURRITO,
+            textKey = TextKeys.vehicle.model.name.burrito,
+            modelName = "Burrito",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    CAMPER(
+            value = SAMPConstants.VEHICLE_CAMPER,
+            textKey = TextKeys.vehicle.model.name.camper,
+            modelName = "Camper",
+            type = VehicleType.CAR,
+            numberOfSeats = 3
+    ),
+    MARQUIS(
+            value = SAMPConstants.VEHICLE_MARQUIS,
+            textKey = TextKeys.vehicle.model.name.marquis,
+            modelName = "Marquis",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    BAGGAGE(
+            value = SAMPConstants.VEHICLE_BAGGAGE,
+            textKey = TextKeys.vehicle.model.name.baggage,
+            modelName = "Baggage",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    DOZER(
+            value = SAMPConstants.VEHICLE_DOZER,
+            textKey = TextKeys.vehicle.model.name.dozer,
+            modelName = "Dozer",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
     MAVERICK(
-            SAMPConstants.VEHICLE_MAVERICK,
-            TextKeys.vehicle.model.name.maverick,
-            "Maverick",
-            VehicleType.HELICOPTER,
-            4
+            value = SAMPConstants.VEHICLE_MAVERICK,
+            textKey = TextKeys.vehicle.model.name.maverick,
+            modelName = "Maverick",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 4
     ),
     SANNEWSMAVERICK(
-            SAMPConstants.VEHICLE_SANNEWSMAVERICK,
-            TextKeys.vehicle.model.name.sannewsmaverick,
-            "News Chopper",
-            VehicleType.HELICOPTER,
-            2
+            value = SAMPConstants.VEHICLE_SANNEWSMAVERICK,
+            textKey = TextKeys.vehicle.model.name.sannewsmaverick,
+            modelName = "News Chopper",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
     ),
-    RANCHER(SAMPConstants.VEHICLE_RANCHER, TextKeys.vehicle.model.name.rancher, "Rancher", VehicleType.CAR, 2),
+    RANCHER(
+            value = SAMPConstants.VEHICLE_RANCHER,
+            textKey = TextKeys.vehicle.model.name.rancher,
+            modelName = "Rancher",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     FBIRANCHER(
-            SAMPConstants.VEHICLE_FBIRANCHER,
-            TextKeys.vehicle.model.name.fbirancher,
-            "FBI Rancher",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_FBIRANCHER,
+            textKey = TextKeys.vehicle.model.name.fbirancher,
+            modelName = "FBI Rancher",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
-    VIRGO(SAMPConstants.VEHICLE_VIRGO, TextKeys.vehicle.model.name.virgo, "Virgo", VehicleType.CAR, 2),
-    GREENWOOD(SAMPConstants.VEHICLE_GREENWOOD, TextKeys.vehicle.model.name.greenwood, "Greenwood", VehicleType.CAR, 2),
-    JETMAX(SAMPConstants.VEHICLE_JETMAX, TextKeys.vehicle.model.name.jetmax, "Jetmax", VehicleType.BOAT, 0),
+    VIRGO(
+            value = SAMPConstants.VEHICLE_VIRGO,
+            textKey = TextKeys.vehicle.model.name.virgo,
+            modelName = "Virgo",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    GREENWOOD(
+            value = SAMPConstants.VEHICLE_GREENWOOD,
+            textKey = TextKeys.vehicle.model.name.greenwood,
+            modelName = "Greenwood",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    JETMAX(
+            value = SAMPConstants.VEHICLE_JETMAX,
+            textKey = TextKeys.vehicle.model.name.jetmax,
+            modelName = "Jetmax",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
     HOTRINGRACER(
-            SAMPConstants.VEHICLE_HOTRINGRACER,
-            TextKeys.vehicle.model.name.hotringracer,
-            "Hotring",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_HOTRINGRACER,
+            textKey = TextKeys.vehicle.model.name.hotringracer,
+            modelName = "Hotring",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    SANDKING(SAMPConstants.VEHICLE_SANDKING, TextKeys.vehicle.model.name.sandking, "Sandking", VehicleType.CAR, 2),
+    SANDKING(
+            value = SAMPConstants.VEHICLE_SANDKING,
+            textKey = TextKeys.vehicle.model.name.sandking,
+            modelName = "Sandking",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     BLISTACOMPACT(
-            SAMPConstants.VEHICLE_BLISTACOMPACT,
-            TextKeys.vehicle.model.name.blistacompact,
-            "Blista Compact",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_BLISTACOMPACT,
+            textKey = TextKeys.vehicle.model.name.blistacompact,
+            modelName = "Blista Compact",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
     POLICEMAVERICK(
-            SAMPConstants.VEHICLE_POLICEMAVERICK,
-            TextKeys.vehicle.model.name.policemaverick,
-            "Police Maverick",
-            VehicleType.HELICOPTER,
-            4
+            value = SAMPConstants.VEHICLE_POLICEMAVERICK,
+            textKey = TextKeys.vehicle.model.name.policemaverick,
+            modelName = "Police Maverick",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 4
     ),
-    BOXVILLE(SAMPConstants.VEHICLE_BOXVILLE, TextKeys.vehicle.model.name.boxville, "Boxville", VehicleType.CAR, 4),
-    BENSON(SAMPConstants.VEHICLE_BENSON, TextKeys.vehicle.model.name.benson, "Benson", VehicleType.CAR, 2),
-    MESA(SAMPConstants.VEHICLE_MESA, TextKeys.vehicle.model.name.mesa, "Mesa", VehicleType.CAR, 2),
+    BOXVILLE(
+            value = SAMPConstants.VEHICLE_BOXVILLE,
+            textKey = TextKeys.vehicle.model.name.boxville,
+            modelName = "Boxville",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    BENSON(
+            value = SAMPConstants.VEHICLE_BENSON,
+            textKey = TextKeys.vehicle.model.name.benson,
+            modelName = "Benson",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MESA(
+            value = SAMPConstants.VEHICLE_MESA,
+            textKey = TextKeys.vehicle.model.name.mesa,
+            modelName = "Mesa",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     RCGOBLIN(
-            SAMPConstants.VEHICLE_RCGOBLIN,
-            TextKeys.vehicle.model.name.rcgoblin,
-            "RC Goblin",
-            VehicleType.REMOTE_CONTROL,
-            1
+            value = SAMPConstants.VEHICLE_RCGOBLIN,
+            textKey = TextKeys.vehicle.model.name.rcgoblin,
+            modelName = "RC Goblin",
+            type = VehicleType.REMOTE_CONTROL,
+            numberOfSeats = 1
     ),
     HOTRINGRACERA(
-            SAMPConstants.VEHICLE_HOTRINGRACERA,
-            TextKeys.vehicle.model.name.hotringracera,
-            "Hotring Racer",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_HOTRINGRACERA,
+            textKey = TextKeys.vehicle.model.name.hotringracera,
+            modelName = "Hotring Racer",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
     HOTRINGRACERB(
-            SAMPConstants.VEHICLE_HOTRINGRACERB,
-            TextKeys.vehicle.model.name.hotringracerb,
-            "Hotring Racer",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_HOTRINGRACERB,
+            textKey = TextKeys.vehicle.model.name.hotringracerb,
+            modelName = "Hotring Racer",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
     BLOODRINGBANGER(
-            SAMPConstants.VEHICLE_BLOODRINGBANGER,
-            TextKeys.vehicle.model.name.bloodringbanger,
-            "Bloodring Banger",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_BLOODRINGBANGER,
+            textKey = TextKeys.vehicle.model.name.bloodringbanger,
+            modelName = "Bloodring Banger",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
     RANCHERLURE(
-            SAMPConstants.VEHICLE_RANCHERLURE,
-            TextKeys.vehicle.model.name.rancherlure,
-            "Rancher",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_RANCHERLURE,
+            textKey = TextKeys.vehicle.model.name.rancherlure,
+            modelName = "Rancher",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    SUPERGT(SAMPConstants.VEHICLE_SUPERGT, TextKeys.vehicle.model.name.supergt, "Super GT", VehicleType.CAR, 2),
-    ELEGANT(SAMPConstants.VEHICLE_ELEGANT, TextKeys.vehicle.model.name.elegant, "Elegant", VehicleType.CAR, 4),
-    JOURNEY(SAMPConstants.VEHICLE_JOURNEY, TextKeys.vehicle.model.name.journey, "Journey", VehicleType.CAR, 2),
-    BIKE(SAMPConstants.VEHICLE_BIKE, TextKeys.vehicle.model.name.bike, "Bike", VehicleType.BICYCLE, 1),
+    SUPERGT(
+            value = SAMPConstants.VEHICLE_SUPERGT,
+            textKey = TextKeys.vehicle.model.name.supergt,
+            modelName = "Super GT",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    ELEGANT(
+            value = SAMPConstants.VEHICLE_ELEGANT,
+            textKey = TextKeys.vehicle.model.name.elegant,
+            modelName = "Elegant",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    JOURNEY(
+            value = SAMPConstants.VEHICLE_JOURNEY,
+            textKey = TextKeys.vehicle.model.name.journey,
+            modelName = "Journey",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    BIKE(
+            value = SAMPConstants.VEHICLE_BIKE,
+            textKey = TextKeys.vehicle.model.name.bike,
+            modelName = "Bike",
+            type = VehicleType.BICYCLE,
+            numberOfSeats = 1
+    ),
     MOUNTAINBIKE(
-            SAMPConstants.VEHICLE_MOUNTAINBIKE,
-            TextKeys.vehicle.model.name.mountainbike,
-            "Mountain Bike",
-            VehicleType.BICYCLE,
-            1
+            value = SAMPConstants.VEHICLE_MOUNTAINBIKE,
+            textKey = TextKeys.vehicle.model.name.mountainbike,
+            modelName = "Mountain Bike",
+            type = VehicleType.BICYCLE,
+            numberOfSeats = 1
     ),
-    BEAGLE(SAMPConstants.VEHICLE_BEAGLE, TextKeys.vehicle.model.name.beagle, "Beagle", VehicleType.AIRCRAFT, 2),
-    CROPDUST(SAMPConstants.VEHICLE_CROPDUST, TextKeys.vehicle.model.name.cropdust, "Cropdust", VehicleType.AIRCRAFT, 1),
+    BEAGLE(
+            value = SAMPConstants.VEHICLE_BEAGLE,
+            textKey = TextKeys.vehicle.model.name.beagle,
+            modelName = "Beagle",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 2
+    ),
+    CROPDUST(
+            value = SAMPConstants.VEHICLE_CROPDUST,
+            textKey = TextKeys.vehicle.model.name.cropdust,
+            modelName = "Cropdust",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
     STUNTPLANE(
-            SAMPConstants.VEHICLE_STUNTPLANE,
-            TextKeys.vehicle.model.name.stuntplane,
-            "Stunt",
-            VehicleType.AIRCRAFT,
-            1
+            value = SAMPConstants.VEHICLE_STUNTPLANE,
+            textKey = TextKeys.vehicle.model.name.stuntplane,
+            modelName = "Stunt",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
     ),
-    TANKER(SAMPConstants.VEHICLE_TANKER, TextKeys.vehicle.model.name.tanker, "Tanker", VehicleType.CAR, 2),
-    ROADTRAIN(SAMPConstants.VEHICLE_ROADTRAIN, TextKeys.vehicle.model.name.roadtrain, "RoadTrain", VehicleType.CAR, 2),
-    NEBULA(SAMPConstants.VEHICLE_NEBULA, TextKeys.vehicle.model.name.nebula, "Nebula", VehicleType.CAR, 4),
-    MAJESTIC(SAMPConstants.VEHICLE_MAJESTIC, TextKeys.vehicle.model.name.majestic, "Majestic", VehicleType.CAR, 2),
-    BUCCANEER(SAMPConstants.VEHICLE_BUCCANEER, TextKeys.vehicle.model.name.buccaneer, "Buccaneer", VehicleType.CAR, 2),
-    SHAMAL(SAMPConstants.VEHICLE_SHAMAL, TextKeys.vehicle.model.name.shamal, "Shamal", VehicleType.AIRCRAFT, 1),
-    HYDRA(SAMPConstants.VEHICLE_HYDRA, TextKeys.vehicle.model.name.hydra, "Hydra", VehicleType.AIRCRAFT, 1),
-    FCR900(SAMPConstants.VEHICLE_FCR900, TextKeys.vehicle.model.name.fcr900, "FCR-900", VehicleType.MOTORBIKE, 2),
-    NRG500(SAMPConstants.VEHICLE_NRG500, TextKeys.vehicle.model.name.nrg500, "NRG-500", VehicleType.MOTORBIKE, 2),
-    HPV1000(SAMPConstants.VEHICLE_HPV1000, TextKeys.vehicle.model.name.hpv1000, "HPV1000", VehicleType.MOTORBIKE, 2),
+    TANKER(
+            value = SAMPConstants.VEHICLE_TANKER,
+            textKey = TextKeys.vehicle.model.name.tanker,
+            modelName = "Tanker",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    ROADTRAIN(
+            value = SAMPConstants.VEHICLE_ROADTRAIN,
+            textKey = TextKeys.vehicle.model.name.roadtrain,
+            modelName = "RoadTrain",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    NEBULA(
+            value = SAMPConstants.VEHICLE_NEBULA,
+            textKey = TextKeys.vehicle.model.name.nebula,
+            modelName = "Nebula",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    MAJESTIC(
+            value = SAMPConstants.VEHICLE_MAJESTIC,
+            textKey = TextKeys.vehicle.model.name.majestic,
+            modelName = "Majestic",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    BUCCANEER(
+            value = SAMPConstants.VEHICLE_BUCCANEER,
+            textKey = TextKeys.vehicle.model.name.buccaneer,
+            modelName = "Buccaneer",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SHAMAL(
+            value = SAMPConstants.VEHICLE_SHAMAL,
+            textKey = TextKeys.vehicle.model.name.shamal,
+            modelName = "Shamal",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
+    HYDRA(
+            value = SAMPConstants.VEHICLE_HYDRA,
+            textKey = TextKeys.vehicle.model.name.hydra,
+            modelName = "Hydra",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
+    FCR900(
+            value = SAMPConstants.VEHICLE_FCR900,
+            textKey = TextKeys.vehicle.model.name.fcr900,
+            modelName = "FCR-900",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    NRG500(
+            value = SAMPConstants.VEHICLE_NRG500,
+            textKey = TextKeys.vehicle.model.name.nrg500,
+            modelName = "NRG-500",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    HPV1000(
+            value = SAMPConstants.VEHICLE_HPV1000,
+            textKey = TextKeys.vehicle.model.name.hpv1000,
+            modelName = "HPV1000",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
     CEMENTTRUCK(
-            SAMPConstants.VEHICLE_CEMENTTRUCK,
-            TextKeys.vehicle.model.name.cementtruck,
-            "Cement Truck",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_CEMENTTRUCK,
+            textKey = TextKeys.vehicle.model.name.cementtruck,
+            modelName = "Cement Truck",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    TOWTRUCK(SAMPConstants.VEHICLE_TOWTRUCK, TextKeys.vehicle.model.name.towtruck, "Tow Truck", VehicleType.CAR, 2),
-    FORTUNE(SAMPConstants.VEHICLE_FORTUNE, TextKeys.vehicle.model.name.fortune, "Fortune", VehicleType.CAR, 2),
-    CADRONA(SAMPConstants.VEHICLE_CADRONA, TextKeys.vehicle.model.name.cadrona, "Cadrona", VehicleType.CAR, 2),
-    FBITRUCK(SAMPConstants.VEHICLE_FBITRUCK, TextKeys.vehicle.model.name.fbitruck, "FBI Truck", VehicleType.CAR, 2),
-    WILLARD(SAMPConstants.VEHICLE_WILLARD, TextKeys.vehicle.model.name.willard, "Willard", VehicleType.CAR, 4),
-    FORKLIFT(SAMPConstants.VEHICLE_FORKLIFT, TextKeys.vehicle.model.name.forklift, "Forklift", VehicleType.CAR, 1),
-    TRACTOR(SAMPConstants.VEHICLE_TRACTOR, TextKeys.vehicle.model.name.tractor, "Tractor", VehicleType.CAR, 1),
-    COMBINE(SAMPConstants.VEHICLE_COMBINE, TextKeys.vehicle.model.name.combine, "Combine", VehicleType.CAR, 1),
-    FELTZER(SAMPConstants.VEHICLE_FELTZER, TextKeys.vehicle.model.name.feltzer, "Feltzer", VehicleType.CAR, 2),
-    REMINGTON(SAMPConstants.VEHICLE_REMINGTON, TextKeys.vehicle.model.name.remington, "Remington", VehicleType.CAR, 2),
-    SLAMVAN(SAMPConstants.VEHICLE_SLAMVAN, TextKeys.vehicle.model.name.slamvan, "Slamvan", VehicleType.CAR, 2),
-    BLADE(SAMPConstants.VEHICLE_BLADE, TextKeys.vehicle.model.name.blade, "Blade", VehicleType.CAR, 2),
-    FREIGHT(SAMPConstants.VEHICLE_FREIGHT, TextKeys.vehicle.model.name.freight, "Freight", VehicleType.TRAIN, 2),
+    TOWTRUCK(
+            value = SAMPConstants.VEHICLE_TOWTRUCK,
+            textKey = TextKeys.vehicle.model.name.towtruck,
+            modelName = "Tow Truck",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    FORTUNE(
+            value = SAMPConstants.VEHICLE_FORTUNE,
+            textKey = TextKeys.vehicle.model.name.fortune,
+            modelName = "Fortune",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    CADRONA(
+            value = SAMPConstants.VEHICLE_CADRONA,
+            textKey = TextKeys.vehicle.model.name.cadrona,
+            modelName = "Cadrona",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    FBITRUCK(
+            value = SAMPConstants.VEHICLE_FBITRUCK,
+            textKey = TextKeys.vehicle.model.name.fbitruck,
+            modelName = "FBI Truck",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    WILLARD(
+            value = SAMPConstants.VEHICLE_WILLARD,
+            textKey = TextKeys.vehicle.model.name.willard,
+            modelName = "Willard",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    FORKLIFT(
+            value = SAMPConstants.VEHICLE_FORKLIFT,
+            textKey = TextKeys.vehicle.model.name.forklift,
+            modelName = "Forklift",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    TRACTOR(
+            value = SAMPConstants.VEHICLE_TRACTOR,
+            textKey = TextKeys.vehicle.model.name.tractor,
+            modelName = "Tractor",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    COMBINE(
+            value = SAMPConstants.VEHICLE_COMBINE,
+            textKey = TextKeys.vehicle.model.name.combine,
+            modelName = "Combine",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    FELTZER(
+            value = SAMPConstants.VEHICLE_FELTZER,
+            textKey = TextKeys.vehicle.model.name.feltzer,
+            modelName = "Feltzer",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    REMINGTON(
+            value = SAMPConstants.VEHICLE_REMINGTON,
+            textKey = TextKeys.vehicle.model.name.remington,
+            modelName = "Remington",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SLAMVAN(
+            value = SAMPConstants.VEHICLE_SLAMVAN,
+            textKey = TextKeys.vehicle.model.name.slamvan,
+            modelName = "Slamvan",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    BLADE(
+            value = SAMPConstants.VEHICLE_BLADE,
+            textKey = TextKeys.vehicle.model.name.blade,
+            modelName = "Blade",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    FREIGHT(
+            value = SAMPConstants.VEHICLE_FREIGHT,
+            textKey = TextKeys.vehicle.model.name.freight,
+            modelName = "Freight",
+            type = VehicleType.TRAIN,
+            numberOfSeats = 2
+    ),
     BROWNSTREAK(
-            SAMPConstants.VEHICLE_BROWNSTREAK,
-            TextKeys.vehicle.model.name.brownstreak,
-            "Streak",
-            VehicleType.TRAIN,
-            2
+            value = SAMPConstants.VEHICLE_BROWNSTREAK,
+            textKey = TextKeys.vehicle.model.name.brownstreak,
+            modelName = "Streak",
+            type = VehicleType.TRAIN,
+            numberOfSeats = 2
     ),
-    VORTEX(SAMPConstants.VEHICLE_VORTEX, TextKeys.vehicle.model.name.vortex, "Vortex", VehicleType.BOAT, 0),
-    VINCENT(SAMPConstants.VEHICLE_VINCENT, TextKeys.vehicle.model.name.vincent, "Vincent", VehicleType.CAR, 4),
-    BULLET(SAMPConstants.VEHICLE_BULLET, TextKeys.vehicle.model.name.bullet, "Bullet", VehicleType.CAR, 2),
-    CLOVER(SAMPConstants.VEHICLE_CLOVER, TextKeys.vehicle.model.name.clover, "Clover", VehicleType.CAR, 2),
-    SADLER(SAMPConstants.VEHICLE_SADLER, TextKeys.vehicle.model.name.sadler, "Sadler", VehicleType.CAR, 2),
+    VORTEX(
+            value = SAMPConstants.VEHICLE_VORTEX,
+            textKey = TextKeys.vehicle.model.name.vortex,
+            modelName = "Vortex",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
+    VINCENT(
+            value = SAMPConstants.VEHICLE_VINCENT,
+            textKey = TextKeys.vehicle.model.name.vincent,
+            modelName = "Vincent",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    BULLET(
+            value = SAMPConstants.VEHICLE_BULLET,
+            textKey = TextKeys.vehicle.model.name.bullet,
+            modelName = "Bullet",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    CLOVER(
+            value = SAMPConstants.VEHICLE_CLOVER,
+            textKey = TextKeys.vehicle.model.name.clover,
+            modelName = "Clover",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SADLER(
+            value = SAMPConstants.VEHICLE_SADLER,
+            textKey = TextKeys.vehicle.model.name.sadler,
+            modelName = "Sadler",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     FIRETRUCKLA(
-            SAMPConstants.VEHICLE_FIRETRUCKLA,
-            TextKeys.vehicle.model.name.firetruckla,
-            "Firetruck",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_FIRETRUCKLA,
+            textKey = TextKeys.vehicle.model.name.firetruckla,
+            modelName = "Firetruck",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    HUSTLER(SAMPConstants.VEHICLE_HUSTLER, TextKeys.vehicle.model.name.hustler, "Hustler", VehicleType.CAR, 2),
-    INTRUDER(SAMPConstants.VEHICLE_INTRUDER, TextKeys.vehicle.model.name.intruder, "Intruder", VehicleType.CAR, 4),
-    PRIMO(SAMPConstants.VEHICLE_PRIMO, TextKeys.vehicle.model.name.primo, "Primo", VehicleType.CAR, 4),
+    HUSTLER(
+            value = SAMPConstants.VEHICLE_HUSTLER,
+            textKey = TextKeys.vehicle.model.name.hustler,
+            modelName = "Hustler",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    INTRUDER(
+            value = SAMPConstants.VEHICLE_INTRUDER,
+            textKey = TextKeys.vehicle.model.name.intruder,
+            modelName = "Intruder",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    PRIMO(
+            value = SAMPConstants.VEHICLE_PRIMO,
+            textKey = TextKeys.vehicle.model.name.primo,
+            modelName = "Primo",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     CARGOBOB(
-            SAMPConstants.VEHICLE_CARGOBOB,
-            TextKeys.vehicle.model.name.cargobob,
-            "Cargobob",
-            VehicleType.HELICOPTER,
-            2
+            value = SAMPConstants.VEHICLE_CARGOBOB,
+            textKey = TextKeys.vehicle.model.name.cargobob,
+            modelName = "Cargobob",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
     ),
-    TAMPA(SAMPConstants.VEHICLE_TAMPA, TextKeys.vehicle.model.name.tampa, "Tampa", VehicleType.CAR, 2),
-    SUNRISE(SAMPConstants.VEHICLE_SUNRISE, TextKeys.vehicle.model.name.sunrise, "Sunrise", VehicleType.CAR, 4),
-    MERIT(SAMPConstants.VEHICLE_MERIT, TextKeys.vehicle.model.name.merit, "Merit", VehicleType.CAR, 4),
-    UTILITYVAN(SAMPConstants.VEHICLE_UTILITYVAN, TextKeys.vehicle.model.name.utilityvan, "Utility", VehicleType.CAR, 2),
-    NEVADA(SAMPConstants.VEHICLE_NEVADA, TextKeys.vehicle.model.name.nevada, "Nevada", VehicleType.AIRCRAFT, 1),
-    YOSEMITE(SAMPConstants.VEHICLE_YOSEMITE, TextKeys.vehicle.model.name.yosemite, "Yosemite", VehicleType.CAR, 2),
-    WINDSOR(SAMPConstants.VEHICLE_WINDSOR, TextKeys.vehicle.model.name.windsor, "Windsor", VehicleType.CAR, 2),
-    MONSTERA(SAMPConstants.VEHICLE_MONSTERA, TextKeys.vehicle.model.name.monstera, "Monster", VehicleType.CAR, 2),
-    MONSTERB(SAMPConstants.VEHICLE_MONSTERB, TextKeys.vehicle.model.name.monsterb, "Monster", VehicleType.CAR, 2),
-    URANUS(SAMPConstants.VEHICLE_URANUS, TextKeys.vehicle.model.name.uranus, "Uranus", VehicleType.CAR, 2),
-    JESTER(SAMPConstants.VEHICLE_JESTER, TextKeys.vehicle.model.name.jester, "Jester", VehicleType.CAR, 2),
-    SULTAN(SAMPConstants.VEHICLE_SULTAN, TextKeys.vehicle.model.name.sultan, "Sultan", VehicleType.CAR, 4),
-    STRATUM(SAMPConstants.VEHICLE_STRATUM, TextKeys.vehicle.model.name.stratum, "Stratum", VehicleType.CAR, 4),
-    ELEGY(SAMPConstants.VEHICLE_ELEGY, TextKeys.vehicle.model.name.elegy, "Elegy", VehicleType.CAR, 2),
+    TAMPA(
+            value = SAMPConstants.VEHICLE_TAMPA,
+            textKey = TextKeys.vehicle.model.name.tampa,
+            modelName = "Tampa",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SUNRISE(
+            value = SAMPConstants.VEHICLE_SUNRISE,
+            textKey = TextKeys.vehicle.model.name.sunrise,
+            modelName = "Sunrise",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    MERIT(
+            value = SAMPConstants.VEHICLE_MERIT,
+            textKey = TextKeys.vehicle.model.name.merit,
+            modelName = "Merit",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    UTILITYVAN(
+            value = SAMPConstants.VEHICLE_UTILITYVAN,
+            textKey = TextKeys.vehicle.model.name.utilityvan,
+            modelName = "Utility",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    NEVADA(
+            value = SAMPConstants.VEHICLE_NEVADA,
+            textKey = TextKeys.vehicle.model.name.nevada,
+            modelName = "Nevada",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
+    YOSEMITE(
+            value = SAMPConstants.VEHICLE_YOSEMITE,
+            textKey = TextKeys.vehicle.model.name.yosemite,
+            modelName = "Yosemite",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    WINDSOR(
+            value = SAMPConstants.VEHICLE_WINDSOR,
+            textKey = TextKeys.vehicle.model.name.windsor,
+            modelName = "Windsor",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MONSTERA(
+            value = SAMPConstants.VEHICLE_MONSTERA,
+            textKey = TextKeys.vehicle.model.name.monstera,
+            modelName = "Monster",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    MONSTERB(
+            value = SAMPConstants.VEHICLE_MONSTERB,
+            textKey = TextKeys.vehicle.model.name.monsterb,
+            modelName = "Monster",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    URANUS(
+            value = SAMPConstants.VEHICLE_URANUS,
+            textKey = TextKeys.vehicle.model.name.uranus,
+            modelName = "Uranus",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    JESTER(
+            value = SAMPConstants.VEHICLE_JESTER,
+            textKey = TextKeys.vehicle.model.name.jester,
+            modelName = "Jester",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SULTAN(
+            value = SAMPConstants.VEHICLE_SULTAN,
+            textKey = TextKeys.vehicle.model.name.sultan,
+            modelName = "Sultan",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    STRATUM(
+            value = SAMPConstants.VEHICLE_STRATUM,
+            textKey = TextKeys.vehicle.model.name.stratum,
+            modelName = "Stratum",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    ELEGY(
+            value = SAMPConstants.VEHICLE_ELEGY,
+            textKey = TextKeys.vehicle.model.name.elegy,
+            modelName = "Elegy",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     RAINDANCE(
-            SAMPConstants.VEHICLE_RAINDANCE,
-            TextKeys.vehicle.model.name.raindance,
-            "Raindance",
-            VehicleType.HELICOPTER,
-            2
+            value = SAMPConstants.VEHICLE_RAINDANCE,
+            textKey = TextKeys.vehicle.model.name.raindance,
+            modelName = "Raindance",
+            type = VehicleType.HELICOPTER,
+            numberOfSeats = 2
     ),
     RCTIGER(
             SAMPConstants.VEHICLE_RCTIGER,
@@ -385,154 +1172,334 @@ enum class VehicleModel(
             VehicleType.REMOTE_CONTROL,
             1
     ),
-    FLASH(SAMPConstants.VEHICLE_FLASH, TextKeys.vehicle.model.name.flash, "Flash", VehicleType.CAR, 2),
-    TAHOMA(SAMPConstants.VEHICLE_TAHOMA, TextKeys.vehicle.model.name.tahoma, "Tahoma", VehicleType.CAR, 4),
-    SAVANNA(SAMPConstants.VEHICLE_SAVANNA, TextKeys.vehicle.model.name.savanna, "Savanna", VehicleType.CAR, 4),
-    BANDITO(SAMPConstants.VEHICLE_BANDITO, TextKeys.vehicle.model.name.bandito, "Bandito", VehicleType.CAR, 1),
+    FLASH(
+            value = SAMPConstants.VEHICLE_FLASH,
+            textKey = TextKeys.vehicle.model.name.flash,
+            modelName = "Flash",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    TAHOMA(
+            value = SAMPConstants.VEHICLE_TAHOMA,
+            textKey = TextKeys.vehicle.model.name.tahoma,
+            modelName = "Tahoma",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    SAVANNA(
+            value = SAMPConstants.VEHICLE_SAVANNA,
+            textKey = TextKeys.vehicle.model.name.savanna,
+            modelName = "Savanna",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    BANDITO(
+            value = SAMPConstants.VEHICLE_BANDITO,
+            textKey = TextKeys.vehicle.model.name.bandito,
+            modelName = "Bandito",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
     FREIGHTFLATTRAILER(
-            SAMPConstants.VEHICLE_FREIGHTFLATTRAILER,
-            TextKeys.vehicle.model.name.freightflattrailer,
-            "Freight",
-            VehicleType.TRAIN,
-            0
+            value = SAMPConstants.VEHICLE_FREIGHTFLATTRAILER,
+            textKey = TextKeys.vehicle.model.name.freightflattrailer,
+            modelName = "Freight",
+            type = VehicleType.TRAIN,
+            numberOfSeats = 0
     ),
     STREAKTRAILER(
-            SAMPConstants.VEHICLE_STREAKTRAILER,
-            TextKeys.vehicle.model.name.streaktrailer,
-            "Trailer",
-            VehicleType.TRAIN,
-            0
+            value = SAMPConstants.VEHICLE_STREAKTRAILER,
+            textKey = TextKeys.vehicle.model.name.streaktrailer,
+            modelName = "Trailer",
+            type = VehicleType.TRAIN,
+            numberOfSeats = 0
     ),
-    KART(SAMPConstants.VEHICLE_KART, TextKeys.vehicle.model.name.kart, "Kart", VehicleType.CAR, 1),
-    MOWER(SAMPConstants.VEHICLE_MOWER, TextKeys.vehicle.model.name.mower, "Mower", VehicleType.CAR, 1),
-    DUNERIDE(SAMPConstants.VEHICLE_DUNERIDE, TextKeys.vehicle.model.name.duneride, "Duneride", VehicleType.CAR, 2),
-    SWEEPER(SAMPConstants.VEHICLE_SWEEPER, TextKeys.vehicle.model.name.sweeper, "Sweeper", VehicleType.CAR, 1),
-    BROADWAY(SAMPConstants.VEHICLE_BROADWAY, TextKeys.vehicle.model.name.broadway, "Broadway", VehicleType.CAR, 2),
-    TORNADO(SAMPConstants.VEHICLE_TORNADO, TextKeys.vehicle.model.name.tornado, "Tornado", VehicleType.CAR, 2),
-    AT400(SAMPConstants.VEHICLE_AT400, TextKeys.vehicle.model.name.at400, "AT-400", VehicleType.AIRCRAFT, 1),
-    DFT30(SAMPConstants.VEHICLE_DFT30, TextKeys.vehicle.model.name.dft30, "DFT-30", VehicleType.CAR, 2),
-    HUNTLEY(SAMPConstants.VEHICLE_HUNTLEY, TextKeys.vehicle.model.name.huntley, "Huntley", VehicleType.CAR, 4),
-    STAFFORD(SAMPConstants.VEHICLE_STAFFORD, TextKeys.vehicle.model.name.stafford, "Stafford", VehicleType.CAR, 4),
-    BF400(SAMPConstants.VEHICLE_BF400, TextKeys.vehicle.model.name.bf400, "BF-400", VehicleType.MOTORBIKE, 2),
-    NEWSVAN(SAMPConstants.VEHICLE_NEWSVAN, TextKeys.vehicle.model.name.newsvan, "Newsvan", VehicleType.CAR, 2),
-    TUG(SAMPConstants.VEHICLE_TUG, TextKeys.vehicle.model.name.tug, "Tug", VehicleType.CAR, 1),
+    KART(
+            value = SAMPConstants.VEHICLE_KART,
+            textKey = TextKeys.vehicle.model.name.kart,
+            modelName = "Kart",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    MOWER(
+            value = SAMPConstants.VEHICLE_MOWER,
+            textKey = TextKeys.vehicle.model.name.mower,
+            modelName = "Mower",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    DUNERIDE(
+            value = SAMPConstants.VEHICLE_DUNERIDE,
+            textKey = TextKeys.vehicle.model.name.duneride,
+            modelName = "Duneride",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SWEEPER(
+            value = SAMPConstants.VEHICLE_SWEEPER,
+            textKey = TextKeys.vehicle.model.name.sweeper,
+            modelName = "Sweeper",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
+    BROADWAY(
+            value = SAMPConstants.VEHICLE_BROADWAY,
+            textKey = TextKeys.vehicle.model.name.broadway,
+            modelName = "Broadway",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    TORNADO(
+            value = SAMPConstants.VEHICLE_TORNADO,
+            textKey = TextKeys.vehicle.model.name.tornado,
+            modelName = "Tornado",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    AT400(
+            value = SAMPConstants.VEHICLE_AT400,
+            textKey = TextKeys.vehicle.model.name.at400,
+            modelName = "AT-400",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 1
+    ),
+    DFT30(
+            value = SAMPConstants.VEHICLE_DFT30,
+            textKey = TextKeys.vehicle.model.name.dft30,
+            modelName = "DFT-30",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    HUNTLEY(
+            value = SAMPConstants.VEHICLE_HUNTLEY,
+            textKey = TextKeys.vehicle.model.name.huntley,
+            modelName = "Huntley",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    STAFFORD(
+            value = SAMPConstants.VEHICLE_STAFFORD,
+            textKey = TextKeys.vehicle.model.name.stafford,
+            modelName = "Stafford",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
+    BF400(
+            value = SAMPConstants.VEHICLE_BF400,
+            textKey = TextKeys.vehicle.model.name.bf400,
+            modelName = "BF-400",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
+    ),
+    NEWSVAN(
+            value = SAMPConstants.VEHICLE_NEWSVAN,
+            textKey = TextKeys.vehicle.model.name.newsvan,
+            modelName = "Newsvan",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    TUG(
+            value = SAMPConstants.VEHICLE_TUG,
+            textKey = TextKeys.vehicle.model.name.tug,
+            modelName = "Tug",
+            type = VehicleType.CAR,
+            numberOfSeats = 1
+    ),
     PETROLTRAILER(
-            SAMPConstants.VEHICLE_PETROLTRAILER,
-            TextKeys.vehicle.model.name.petroltrailer,
-            "Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_PETROLTRAILER,
+            textKey = TextKeys.vehicle.model.name.petroltrailer,
+            modelName = "Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
-    EMPEROR(SAMPConstants.VEHICLE_EMPEROR, TextKeys.vehicle.model.name.emperor, "Emperor", VehicleType.CAR, 4),
+    EMPEROR(
+            value = SAMPConstants.VEHICLE_EMPEROR,
+            textKey = TextKeys.vehicle.model.name.emperor,
+            modelName = "Emperor",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     WAYFARER(
-            SAMPConstants.VEHICLE_WAYFARER,
-            TextKeys.vehicle.model.name.wayfarer,
-            "Wayfarer",
-            VehicleType.MOTORBIKE,
-            2
+            value = SAMPConstants.VEHICLE_WAYFARER,
+            textKey = TextKeys.vehicle.model.name.wayfarer,
+            modelName = "Wayfarer",
+            type = VehicleType.MOTORBIKE,
+            numberOfSeats = 2
     ),
-    EUROS(SAMPConstants.VEHICLE_EUROS, TextKeys.vehicle.model.name.euros, "Euros", VehicleType.CAR, 2),
-    HOTDOG(SAMPConstants.VEHICLE_HOTDOG, TextKeys.vehicle.model.name.hotdog, "Hotdog", VehicleType.CAR, 2),
-    CLUB(SAMPConstants.VEHICLE_CLUB, TextKeys.vehicle.model.name.club, "Club", VehicleType.CAR, 2),
+    EUROS(
+            value = SAMPConstants.VEHICLE_EUROS,
+            textKey = TextKeys.vehicle.model.name.euros,
+            modelName = "Euros",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    HOTDOG(
+            value = SAMPConstants.VEHICLE_HOTDOG,
+            textKey = TextKeys.vehicle.model.name.hotdog,
+            modelName = "Hotdog",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    CLUB(
+            value = SAMPConstants.VEHICLE_CLUB,
+            textKey = TextKeys.vehicle.model.name.club,
+            modelName = "Club",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     FREIGHTBOXTRAILER(
-            SAMPConstants.VEHICLE_FREIGHTBOXTRAILER,
-            TextKeys.vehicle.model.name.freightboxtrailer,
-            "Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_FREIGHTBOXTRAILER,
+            textKey = TextKeys.vehicle.model.name.freightboxtrailer,
+            modelName = "Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
     ARTICLETRAILER3(
-            SAMPConstants.VEHICLE_ARTICLETRAILER3,
-            TextKeys.vehicle.model.name.articletrailer3,
-            "Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_ARTICLETRAILER3,
+            textKey = TextKeys.vehicle.model.name.articletrailer3,
+            modelName = "Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
     ANDROMADA(
-            SAMPConstants.VEHICLE_ANDROMADA,
-            TextKeys.vehicle.model.name.andromada,
-            "Andromada",
-            VehicleType.AIRCRAFT,
-            2
+            value = SAMPConstants.VEHICLE_ANDROMADA,
+            textKey = TextKeys.vehicle.model.name.andromada,
+            modelName = "Andromada",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 2
     ),
-    DODO(SAMPConstants.VEHICLE_DODO, TextKeys.vehicle.model.name.dodo, "Dodo", VehicleType.AIRCRAFT, 2),
-    RCCAM(SAMPConstants.VEHICLE_RCCAM, TextKeys.vehicle.model.name.rccam, "RC Cam", VehicleType.REMOTE_CONTROL, 1),
-    LAUNCH(SAMPConstants.VEHICLE_LAUNCH, TextKeys.vehicle.model.name.launch, "Launch", VehicleType.BOAT, 0),
+    DODO(
+            value = SAMPConstants.VEHICLE_DODO,
+            textKey = TextKeys.vehicle.model.name.dodo,
+            modelName = "Dodo",
+            type = VehicleType.AIRCRAFT,
+            numberOfSeats = 2
+    ),
+    RCCAM(
+            value = SAMPConstants.VEHICLE_RCCAM,
+            textKey = TextKeys.vehicle.model.name.rccam,
+            modelName = "RC Cam",
+            type = VehicleType.REMOTE_CONTROL,
+            numberOfSeats = 1
+    ),
+    LAUNCH(
+            value = SAMPConstants.VEHICLE_LAUNCH,
+            textKey = TextKeys.vehicle.model.name.launch,
+            modelName = "Launch",
+            type = VehicleType.BOAT,
+            numberOfSeats = 0
+    ),
     POLICECARLSPD(
-            SAMPConstants.VEHICLE_POLICECARLSPD,
-            TextKeys.vehicle.model.name.policecarlspd,
-            "Police Car LSPD",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_POLICECARLSPD,
+            textKey = TextKeys.vehicle.model.name.policecarlspd,
+            modelName = "Police Car LSPD",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
     POLICECARSFPD(
-            SAMPConstants.VEHICLE_POLICECARSFPD,
-            TextKeys.vehicle.model.name.policecarsfpd,
-            "Police Car SFPD",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_POLICECARSFPD,
+            textKey = TextKeys.vehicle.model.name.policecarsfpd,
+            modelName = "Police Car SFPD",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
     POLICECARLVPD(
-            SAMPConstants.VEHICLE_POLICECARLVPD,
-            TextKeys.vehicle.model.name.policecarlvpd,
-            "Police Car LVPD",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_POLICECARLVPD,
+            textKey = TextKeys.vehicle.model.name.policecarlvpd,
+            modelName = "Police Car LVPD",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
     POLICERANGER(
-            SAMPConstants.VEHICLE_POLICERANGER,
-            TextKeys.vehicle.model.name.policeranger,
-            "Police Ranger",
-            VehicleType.CAR,
-            2
+            value = SAMPConstants.VEHICLE_POLICERANGER,
+            textKey = TextKeys.vehicle.model.name.policeranger,
+            modelName = "Police Ranger",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
     ),
-    PICADOR(SAMPConstants.VEHICLE_PICADOR, TextKeys.vehicle.model.name.picador, "Picador", VehicleType.CAR, 2),
-    SWAT(SAMPConstants.VEHICLE_SWAT, TextKeys.vehicle.model.name.swat, "SWAT Van", VehicleType.CAR, 2),
-    ALPHA(SAMPConstants.VEHICLE_ALPHA, TextKeys.vehicle.model.name.alpha, "Alpha", VehicleType.CAR, 2),
-    PHOENIX(SAMPConstants.VEHICLE_PHOENIX, TextKeys.vehicle.model.name.phoenix, "Phoenix", VehicleType.CAR, 2),
+    PICADOR(
+            value = SAMPConstants.VEHICLE_PICADOR,
+            textKey = TextKeys.vehicle.model.name.picador,
+            modelName = "Picador",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    SWAT(
+            value = SAMPConstants.VEHICLE_SWAT,
+            textKey = TextKeys.vehicle.model.name.swat,
+            modelName = "SWAT Van",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    ALPHA(
+            value = SAMPConstants.VEHICLE_ALPHA,
+            textKey = TextKeys.vehicle.model.name.alpha,
+            modelName = "Alpha",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
+    PHOENIX(
+            value = SAMPConstants.VEHICLE_PHOENIX,
+            textKey = TextKeys.vehicle.model.name.phoenix,
+            modelName = "Phoenix",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     GLENDALESHIT(
-            SAMPConstants.VEHICLE_GLENDALESHIT,
-            TextKeys.vehicle.model.name.glendaleshit,
-            "Glendale",
-            VehicleType.CAR,
-            4
+            value = SAMPConstants.VEHICLE_GLENDALESHIT,
+            textKey = TextKeys.vehicle.model.name.glendaleshit,
+            modelName = "Glendale",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
     ),
-    SADLERSHIT(SAMPConstants.VEHICLE_SADLERSHIT, TextKeys.vehicle.model.name.sadlershit, "Sadler", VehicleType.CAR, 2),
+    SADLERSHIT(
+            value = SAMPConstants.VEHICLE_SADLERSHIT,
+            textKey = TextKeys.vehicle.model.name.sadlershit,
+            modelName = "Sadler",
+            type = VehicleType.CAR,
+            numberOfSeats = 2
+    ),
     BAGGAGETRAILERA(
-            SAMPConstants.VEHICLE_BAGGAGETRAILERA,
-            TextKeys.vehicle.model.name.baggagetrailera,
-            "Luggage Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_BAGGAGETRAILERA,
+            textKey = TextKeys.vehicle.model.name.baggagetrailera,
+            modelName = "Luggage Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
     BAGGAGETRAILERB(
-            SAMPConstants.VEHICLE_BAGGAGETRAILERB,
-            TextKeys.vehicle.model.name.baggagetrailerb,
-            "Luggage Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_BAGGAGETRAILERB,
+            textKey = TextKeys.vehicle.model.name.baggagetrailerb,
+            modelName = "Luggage Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
     TUGSTAIRSTRAILER(
-            SAMPConstants.VEHICLE_TUGSTAIRSTRAILER,
-            TextKeys.vehicle.model.name.tugstairstrailer,
-            "Stair Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_TUGSTAIRSTRAILER,
+            textKey = TextKeys.vehicle.model.name.tugstairstrailer,
+            modelName = "Stair Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
-    BOXBURG(SAMPConstants.VEHICLE_BOXBURG, TextKeys.vehicle.model.name.boxburg, "Boxville", VehicleType.CAR, 4),
+    BOXBURG(
+            value = SAMPConstants.VEHICLE_BOXBURG,
+            textKey = TextKeys.vehicle.model.name.boxburg,
+            modelName = "Boxville",
+            type = VehicleType.CAR,
+            numberOfSeats = 4
+    ),
     FARMTRAILER(
-            SAMPConstants.VEHICLE_FARMTRAILER,
-            TextKeys.vehicle.model.name.farmtrailer,
-            "Farm Plow",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_FARMTRAILER,
+            textKey = TextKeys.vehicle.model.name.farmtrailer,
+            modelName = "Farm Plow",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     ),
     UTILITYTRAILER(
-            SAMPConstants.VEHICLE_UTILITYTRAILER,
-            TextKeys.vehicle.model.name.utilitytrailer,
-            "Utility Trailer",
-            VehicleType.TRAILER,
-            0
+            value = SAMPConstants.VEHICLE_UTILITYTRAILER,
+            textKey = TextKeys.vehicle.model.name.utilitytrailer,
+            modelName = "Utility Trailer",
+            type = VehicleType.TRAILER,
+            numberOfSeats = 0
     );
 
     companion object : ConstantValueRegistry<Int, VehicleModel>(*VehicleModel.values()) {
