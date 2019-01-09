@@ -159,43 +159,33 @@ constructor(
         }
     }
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPlayer(): Player =
+    private fun Int.toPlayer(): Player =
             playerRegistry[this] ?: throw IllegalArgumentException("Invalid player ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPlayerOrNull(): Player? = playerRegistry[this]
+    private fun Int.toPlayerOrNull(): Player? = playerRegistry[this]
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPlayerClass(): PlayerClass =
+    private fun Int.toPlayerClass(): PlayerClass =
             playerClassRegistry[this] ?: throw IllegalArgumentException("Invalid player class ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toVehicle(): Vehicle =
+    private fun Int.toVehicle(): Vehicle =
             vehicleRegistry[this] ?: throw IllegalArgumentException("Invalid vehicle ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toMapObject(): MapObject =
+    private fun Int.toMapObject(): MapObject =
             mapObjectRegistry[this] ?: throw IllegalArgumentException("Invalid map object ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPlayerMapObject(player: Player): PlayerMapObject =
+    private fun Int.toPlayerMapObject(player: Player): PlayerMapObject =
             player.playerMapObjectRegistry[this]
                     ?: throw IllegalArgumentException("Invalid player map object ID $this for player ID ${player.id.value}")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPickup(): Pickup =
+    private fun Int.toPickup(): Pickup =
             pickupRegistry[this] ?: throw IllegalArgumentException("Invalid pickup ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toActor(): Actor =
+    private fun Int.toActor(): Actor =
             actorRegistry[this] ?: throw IllegalArgumentException("Invalid actor ID $this")
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toTextDrawOrNull(): TextDraw? = textDrawRegistry[this]
+    private fun Int.toTextDrawOrNull(): TextDraw? = textDrawRegistry[this]
 
-    @Suppress("NOTHING_TO_INLINE")
-    private inline fun Int.toPlayerTextDraw(player: Player): PlayerTextDraw =
+    private fun Int.toPlayerTextDraw(player: Player): PlayerTextDraw =
             player.playerTextDrawRegistry[this]
                     ?: throw IllegalArgumentException("Invalid player text draw ID $this for player ID ${player.id.value}")
 
