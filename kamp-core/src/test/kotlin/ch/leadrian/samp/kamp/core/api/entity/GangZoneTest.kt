@@ -43,14 +43,7 @@ internal class GangZoneTest {
         @Test
         fun givenCreateGangZoneReturnsInvalidGangZoneIdItShouldThrowCreationFailedException() {
             val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
-                every {
-                    gangZoneCreate(
-                            minx = 1f,
-                            maxx = 2f,
-                            miny = 3f,
-                            maxy = 4f
-                    )
-                } returns SAMPConstants.INVALID_GANG_ZONE
+                every { gangZoneCreate(minx = 1f, maxx = 2f, miny = 3f, maxy = 4f) } returns SAMPConstants.INVALID_GANG_ZONE
             }
 
             val caughtThrowable = catchThrowable {

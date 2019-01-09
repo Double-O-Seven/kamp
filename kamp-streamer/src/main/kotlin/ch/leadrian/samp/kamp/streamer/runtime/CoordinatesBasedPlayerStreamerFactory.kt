@@ -15,12 +15,7 @@ internal constructor(private val distanceBasedPlayerStreamerFactory: DistanceBas
             maxCapacity: Int,
             streamableClass: KClass<S>
     ): CoordinatesBasedPlayerStreamer<S, T> =
-            CoordinatesBasedPlayerStreamer(
-                    spatialIndex,
-                    streamableClass,
-                    maxCapacity,
-                    distanceBasedPlayerStreamerFactory
-            )
+            CoordinatesBasedPlayerStreamer(spatialIndex, streamableClass, maxCapacity, distanceBasedPlayerStreamerFactory)
 
     inline fun <reified S : CoordinatesBasedPlayerStreamable<S, T>, T : HyperRect<*>> create(
             spatialIndex: SpatialIndex<S, T>,

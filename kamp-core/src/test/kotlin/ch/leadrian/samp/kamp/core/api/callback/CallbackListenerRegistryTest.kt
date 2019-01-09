@@ -36,6 +36,7 @@ internal class CallbackListenerRegistryTest {
         callbackListenerRegistry.register(BarCallbackListener)
         callbackListenerRegistry.register(BatCallbackListener)
 
+
         val listeners = callbackListenerRegistry.listeners
 
         assertThat(listeners.toList())

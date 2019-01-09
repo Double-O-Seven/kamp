@@ -124,6 +124,7 @@ internal class PlayerSearchIndexTest {
                 .isNull()
     }
 
+
     @Test
     fun onNameChangeShouldReindexPlayer() {
         val oldName = "hans.wurst"

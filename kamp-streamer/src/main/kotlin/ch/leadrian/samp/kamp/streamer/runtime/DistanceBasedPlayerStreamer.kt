@@ -21,8 +21,7 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         playerService: PlayerService
 ) : Streamer, OnPlayerDisconnectListener {
 
-    private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap
-            .create(playerService.getMaxPlayers(), maxCapacity)
+    private val streamedInStreamables: Multimap<Player, T> = ArrayListMultimap.create(playerService.getMaxPlayers(), maxCapacity)
 
     private val beforeStreamActions = ConcurrentLinkedQueue<() -> Unit>()
 
@@ -45,10 +44,7 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         beforeStreamActions += action
     }
 
-    fun isStreamedIn(streamable: T, forPlayer: Player): Boolean = streamedInStreamables.containsEntry(
-            forPlayer,
-            streamable
-    )
+    fun isStreamedIn(streamable: T, forPlayer: Player): Boolean = streamedInStreamables.containsEntry(forPlayer, streamable)
 
     private fun beforeStream() {
         do {

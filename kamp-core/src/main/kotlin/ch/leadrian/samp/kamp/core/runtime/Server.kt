@@ -13,7 +13,7 @@ import com.netflix.governator.guice.BootstrapModule
 import com.netflix.governator.lifecycle.LifecycleManager
 import java.nio.file.Files
 import java.nio.file.Path
-import java.util.Properties
+import java.util.*
 
 internal class Server
 private constructor(

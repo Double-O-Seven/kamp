@@ -61,12 +61,7 @@ internal class VehicleDoorDamageStatusValueTest {
                 VehicleDoorDamageStatusValueArguments(value = 0b100, isRemoved = true),
                 VehicleDoorDamageStatusValueArguments(value = 0b101, isRemoved = true, isOpened = true),
                 VehicleDoorDamageStatusValueArguments(value = 0b110, isRemoved = true, isDamaged = true),
-                VehicleDoorDamageStatusValueArguments(
-                        value = 0b111,
-                        isRemoved = true,
-                        isOpened = true,
-                        isDamaged = true
-                )
+                VehicleDoorDamageStatusValueArguments(value = 0b111, isRemoved = true, isOpened = true, isDamaged = true)
         )
     }
 

@@ -7,8 +7,7 @@ import javax.inject.Inject
 
 internal class TextDrawCommandParameterResolver
 @Inject
-constructor(textDrawRegistry: TextDrawRegistry) :
-        EntityCommandParameterResolver<TextDraw, TextDrawId>(textDrawRegistry) {
+constructor(textDrawRegistry: TextDrawRegistry) : EntityCommandParameterResolver<TextDraw, TextDrawId>(textDrawRegistry) {
 
     override val parameterType: Class<TextDraw> = TextDraw::class.java
 

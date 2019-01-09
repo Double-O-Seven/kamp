@@ -42,6 +42,7 @@ internal class StreamableMapObjectStateMachine(
         transitionTo(moving)
     }
 
+
     fun transitionToAttachedToPlayer(player: Player, offset: Vector3D, rotation: Vector3D) {
         val attachedToPlayer = streamableMapObjectStateFactory.createAttachedToPlayer(
                 player = player,

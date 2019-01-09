@@ -29,11 +29,7 @@ internal class CommandMethodInvokerTest {
                 name = commandMethodName,
                 parameters = listOf(),
                 commandsInstance = TestCommands(testService),
-                method = TestCommands::class.java.getMethod(
-                        commandMethodName,
-                        Player::class.java,
-                        Int::class.javaPrimitiveType
-                )
+                method = TestCommands::class.java.getMethod(commandMethodName, Player::class.java, Int::class.javaPrimitiveType)
         )
         val parameterValues = arrayOf(player, 1337)
 

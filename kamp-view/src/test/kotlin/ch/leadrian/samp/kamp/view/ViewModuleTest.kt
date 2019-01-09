@@ -30,6 +30,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import javax.inject.Inject
 
+
 internal class ViewModuleTest {
 
     private val modules = arrayOf(

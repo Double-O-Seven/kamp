@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.text
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import java.util.Locale
+import java.util.*
 
 object TextArguments {
 

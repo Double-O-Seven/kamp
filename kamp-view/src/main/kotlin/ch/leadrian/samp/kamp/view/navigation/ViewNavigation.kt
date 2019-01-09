@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.entity.AbstractDestroyable
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.view.base.View
-import java.util.LinkedList
+import java.util.*
 
 class ViewNavigation
 internal constructor(private val viewNavigationElementFactory: ViewNavigationElementFactory) : AbstractDestroyable() {

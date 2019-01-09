@@ -22,11 +22,7 @@ constructor() {
                 val values = it.split(',')
                 val vegetationObject = VegetationObject(
                         modelId = values[0].toInt(),
-                        coordinates = vector3DOf(
-                                x = values[1].toFloat(),
-                                y = values[2].toFloat(),
-                                z = values[3].toFloat()
-                        ),
+                        coordinates = vector3DOf(x = values[1].toFloat(), y = values[2].toFloat(), z = values[3].toFloat()),
                         rotation = vector3DOf(x = values[4].toFloat(), y = values[5].toFloat(), z = values[6].toFloat())
                 )
                 processor.process(vegetationObject)

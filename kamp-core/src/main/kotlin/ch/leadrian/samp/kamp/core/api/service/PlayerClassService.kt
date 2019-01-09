@@ -31,15 +31,13 @@ internal constructor(
             weapon1: WeaponData,
             weapon2: WeaponData,
             weapon3: WeaponData
-    ): PlayerClass = playerClassFactory.create(
-            spawnInfoOf(
-                    skinModel = skinModel,
-                    position = positionOf(coordinates, angle),
-                    weapon1 = weapon1,
-                    weapon2 = weapon2,
-                    weapon3 = weapon3
-            )
-    )
+    ): PlayerClass = playerClassFactory.create(spawnInfoOf(
+            skinModel = skinModel,
+            position = positionOf(coordinates, angle),
+            weapon1 = weapon1,
+            weapon2 = weapon2,
+            weapon3 = weapon3
+    ))
 
     fun addPlayerClass(
             skinModel: SkinModel,
@@ -47,15 +45,13 @@ internal constructor(
             weapon1: WeaponData,
             weapon2: WeaponData,
             weapon3: WeaponData
-    ): PlayerClass = playerClassFactory.create(
-            spawnInfoOf(
-                    skinModel = skinModel,
-                    position = position,
-                    weapon1 = weapon1,
-                    weapon2 = weapon2,
-                    weapon3 = weapon3
-            )
-    )
+    ): PlayerClass = playerClassFactory.create(spawnInfoOf(
+            skinModel = skinModel,
+            position = position,
+            weapon1 = weapon1,
+            weapon2 = weapon2,
+            weapon3 = weapon3
+    ))
 
     fun addPlayerClass(
             teamId: TeamId,
@@ -64,16 +60,14 @@ internal constructor(
             weapon1: WeaponData,
             weapon2: WeaponData,
             weapon3: WeaponData
-    ): PlayerClass = playerClassFactory.create(
-            spawnInfoOf(
-                    skinModel = skinModel,
-                    position = position,
-                    weapon1 = weapon1,
-                    weapon2 = weapon2,
-                    weapon3 = weapon3,
-                    teamId = teamId
-            )
-    )
+    ): PlayerClass = playerClassFactory.create(spawnInfoOf(
+            skinModel = skinModel,
+            position = position,
+            weapon1 = weapon1,
+            weapon2 = weapon2,
+            weapon3 = weapon3,
+            teamId = teamId
+    ))
 
     fun addPlayerClass(
             teamId: TeamId,
@@ -83,22 +77,19 @@ internal constructor(
             weapon1: WeaponData,
             weapon2: WeaponData,
             weapon3: WeaponData
-    ): PlayerClass = playerClassFactory.create(
-            spawnInfoOf(
-                    skinModel = skinModel,
-                    position = positionOf(coordinates, angle),
-                    weapon1 = weapon1,
-                    weapon2 = weapon2,
-                    weapon3 = weapon3,
-                    teamId = teamId
-            )
-    )
+    ): PlayerClass = playerClassFactory.create(spawnInfoOf(
+            skinModel = skinModel,
+            position = positionOf(coordinates, angle),
+            weapon1 = weapon1,
+            weapon2 = weapon2,
+            weapon3 = weapon3,
+            teamId = teamId
+    ))
 
     fun isValidPlayerClass(playerClassId: PlayerClassId): Boolean = playerClassRegistry[playerClassId] != null
 
     fun getPlayerClass(playerClassId: PlayerClassId): PlayerClass =
-            playerClassRegistry[playerClassId]
-                    ?: throw NoSuchEntityException("No player class with ID ${playerClassId.value}")
+            playerClassRegistry[playerClassId] ?: throw NoSuchEntityException("No player class with ID ${playerClassId.value}")
 
     fun getAllPlayerClasses(): List<PlayerClass> = playerClassRegistry.getAll()
 

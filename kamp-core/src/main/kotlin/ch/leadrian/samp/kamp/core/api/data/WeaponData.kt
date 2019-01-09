@@ -19,7 +19,4 @@ interface WeaponData {
 
 }
 
-fun weaponDataOf(model: ch.leadrian.samp.kamp.core.api.constants.WeaponModel, ammo: Int): WeaponData = WeaponDataImpl(
-        model = model,
-        ammo = ammo
-)
+fun weaponDataOf(model: ch.leadrian.samp.kamp.core.api.constants.WeaponModel, ammo: Int): WeaponData = WeaponDataImpl(model = model, ammo = ammo)

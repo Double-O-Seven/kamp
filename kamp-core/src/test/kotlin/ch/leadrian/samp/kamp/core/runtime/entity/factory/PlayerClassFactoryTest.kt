@@ -43,15 +43,13 @@ internal class PlayerClassFactoryTest {
             every { get(any<PlayerClassId>()) } returns null
         }
         val playerClassFactory = PlayerClassFactory(nativeFunctionExecutor, playerClassRegistry)
-        val playerClass = playerClassFactory.create(
-                spawnInfoOf(
-                        skinModel = SkinModel.ARMY,
-                        position = positionOf(1f, 2f, 3f, 90f),
-                        weapon1 = weaponDataOf(WeaponModel.AK47, 450),
-                        weapon2 = weaponDataOf(WeaponModel.M4, 300),
-                        weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
-                )
-        )
+        val playerClass = playerClassFactory.create(spawnInfoOf(
+                skinModel = SkinModel.ARMY,
+                position = positionOf(1f, 2f, 3f, 90f),
+                weapon1 = weaponDataOf(WeaponModel.AK47, 450),
+                weapon2 = weaponDataOf(WeaponModel.M4, 300),
+                weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
+        ))
 
         assertThat(playerClass.id.value)
                 .isEqualTo(127)
@@ -82,15 +80,13 @@ internal class PlayerClassFactoryTest {
         }
         val playerClassFactory = PlayerClassFactory(nativeFunctionExecutor, playerClassRegistry)
 
-        val playerClass = playerClassFactory.create(
-                spawnInfoOf(
-                        skinModel = SkinModel.ARMY,
-                        position = positionOf(1f, 2f, 3f, 90f),
-                        weapon1 = weaponDataOf(WeaponModel.AK47, 450),
-                        weapon2 = weaponDataOf(WeaponModel.M4, 300),
-                        weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
-                )
-        )
+        val playerClass = playerClassFactory.create(spawnInfoOf(
+                skinModel = SkinModel.ARMY,
+                position = positionOf(1f, 2f, 3f, 90f),
+                weapon1 = weaponDataOf(WeaponModel.AK47, 450),
+                weapon2 = weaponDataOf(WeaponModel.M4, 300),
+                weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
+        ))
 
         verify { playerClassRegistry.register(playerClass) }
     }
@@ -122,15 +118,13 @@ internal class PlayerClassFactoryTest {
         }
         val playerClassFactory = PlayerClassFactory(nativeFunctionExecutor, playerClassRegistry)
 
-        playerClassFactory.create(
-                spawnInfoOf(
-                        skinModel = SkinModel.ARMY,
-                        position = positionOf(1f, 2f, 3f, 90f),
-                        weapon1 = weaponDataOf(WeaponModel.AK47, 450),
-                        weapon2 = weaponDataOf(WeaponModel.M4, 300),
-                        weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
-                )
-        )
+        playerClassFactory.create(spawnInfoOf(
+                skinModel = SkinModel.ARMY,
+                position = positionOf(1f, 2f, 3f, 90f),
+                weapon1 = weaponDataOf(WeaponModel.AK47, 450),
+                weapon2 = weaponDataOf(WeaponModel.M4, 300),
+                weapon3 = weaponDataOf(WeaponModel.TEC9, 200)
+        ))
 
         verify { playerClassRegistry.unregister(existingPlayerClass) }
     }

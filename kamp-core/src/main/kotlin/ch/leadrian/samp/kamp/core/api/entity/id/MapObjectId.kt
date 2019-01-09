@@ -8,8 +8,7 @@ data class MapObjectId internal constructor(override val value: Int) : EntityId 
 
         val INVALID = MapObjectId(SAMPConstants.INVALID_OBJECT_ID)
 
-        private val mapObjectId: Array<MapObjectId> = (0 until SAMPConstants.MAX_OBJECTS).map { MapObjectId(it) }
-                .toTypedArray()
+        private val mapObjectId: Array<MapObjectId> = (0 until SAMPConstants.MAX_OBJECTS).map { MapObjectId(it) }.toTypedArray()
 
         fun valueOf(value: Int): MapObjectId =
                 when {

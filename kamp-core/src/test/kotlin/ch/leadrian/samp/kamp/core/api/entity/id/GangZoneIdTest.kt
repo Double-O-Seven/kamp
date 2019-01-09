@@ -8,16 +8,14 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class GangZoneIdTest {
 
     @ParameterizedTest
-    @ValueSource(
-            ints = [
-                -1,
-                0,
-                SAMPConstants.MAX_GANG_ZONES - 1,
-                SAMPConstants.MAX_GANG_ZONES,
-                Int.MAX_VALUE,
-                SAMPConstants.INVALID_GANG_ZONE
-            ]
-    )
+    @ValueSource(ints = [
+        -1,
+        0,
+        SAMPConstants.MAX_GANG_ZONES - 1,
+        SAMPConstants.MAX_GANG_ZONES,
+        Int.MAX_VALUE,
+        SAMPConstants.INVALID_GANG_ZONE
+    ])
     fun shouldReturnGangZoneId(value: Int) {
         val gangZoneId = GangZoneId.valueOf(value)
 

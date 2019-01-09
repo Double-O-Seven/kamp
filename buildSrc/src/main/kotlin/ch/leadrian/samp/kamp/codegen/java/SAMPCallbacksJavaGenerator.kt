@@ -36,13 +36,11 @@ internal class SAMPCallbacksJavaGenerator(
     }
 
     private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class.java)
-                        .addMember("value", "\$S", this@SAMPCallbacksJavaGenerator::class.java.name)
-                        .addMember("date", "\$S", LocalDateTime.now().toString())
-                        .build()
-        )
+        return addAnnotation(AnnotationSpec
+                .builder(Generated::class.java)
+                .addMember("value", "\$S", this@SAMPCallbacksJavaGenerator::class.java.name)
+                .addMember("date", "\$S", LocalDateTime.now().toString())
+                .build())
     }
 
     private fun TypeSpec.Builder.addMethods(): TypeSpec.Builder {

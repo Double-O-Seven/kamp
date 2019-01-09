@@ -7,8 +7,7 @@ import javax.inject.Inject
 
 internal class GangZoneCommandParameterResolver
 @Inject
-constructor(gangZoneRegistry: GangZoneRegistry) :
-        EntityCommandParameterResolver<GangZone, GangZoneId>(gangZoneRegistry) {
+constructor(gangZoneRegistry: GangZoneRegistry) : EntityCommandParameterResolver<GangZone, GangZoneId>(gangZoneRegistry) {
 
     override val parameterType: Class<GangZone> = GangZone::class.java
 

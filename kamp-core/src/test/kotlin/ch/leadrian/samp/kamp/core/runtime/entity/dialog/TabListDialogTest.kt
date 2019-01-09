@@ -24,7 +24,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import java.util.Locale
+import java.util.*
 
 internal class TabTabListDialogTest {
 
@@ -53,10 +53,7 @@ internal class TabTabListDialogTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                nativeFunctionExecutor
-                        .showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
-            } returns true
+            every { nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any()) } returns true
         }
 
         @Test
@@ -328,10 +325,7 @@ internal class TabTabListDialogTest {
                             override val value: Int = 666
 
                             override fun getTabbedContent(player: Player): List<String> =
-                                    listOf(
-                                            "3:",
-                                            "To be honest, I wish I hadn't seen you so I wouldn't have to talk to your nasty face."
-                                    )
+                                    listOf("3:", "To be honest, I wish I hadn't seen you so I wouldn't have to talk to your nasty face.")
 
                             override fun onSelect(player: Player, inputText: String) {
                             }

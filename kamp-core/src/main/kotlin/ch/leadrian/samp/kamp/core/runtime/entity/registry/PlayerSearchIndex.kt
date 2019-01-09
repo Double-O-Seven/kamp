@@ -15,8 +15,7 @@ import javax.inject.Singleton
 @Singleton
 internal class PlayerSearchIndex
 @Inject
-constructor(private val callbackListenerManager: CallbackListenerManager) : OnPlayerNameChangeListener,
-        OnPlayerDisconnectListener, OnPlayerConnectListener {
+constructor(private val callbackListenerManager: CallbackListenerManager) : OnPlayerNameChangeListener, OnPlayerDisconnectListener, OnPlayerConnectListener {
 
     private val playersByName: Trie<String, Player> = PatriciaTrie()
 

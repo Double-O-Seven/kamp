@@ -14,8 +14,8 @@ import ch.leadrian.samp.kamp.view.layout.ViewLayout
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
 import ch.leadrian.samp.kamp.view.style.Style
+import java.util.*
 import java.util.Collections.unmodifiableSet
-import java.util.LinkedHashSet
 
 open class View(
         final override val player: Player,
@@ -281,22 +281,13 @@ open class View(
 
     protected fun screenMinXToTextDrawMinX(minX: Float): Float = minX + horizontalTextDrawBoxOffset
 
-    protected fun screenMinXAndWidthToTextDrawMaxX(
-            minX: Float,
-            width: Float
-    ): Float = minX + width - horizontalTextDrawBoxOffset
+    protected fun screenMinXAndWidthToTextDrawMaxX(minX: Float, width: Float): Float = minX + width - horizontalTextDrawBoxOffset
 
     protected fun screenWidthToTextDrawWidth(width: Float): Float = width - horizontalTextDrawBoxOffset
 
-    protected fun screenMinYToTextDrawMinY(
-            y: Float,
-            offset: Float = verticalTextDrawBoxOffset
-    ): Float = (y + offset) / magicNumber
+    protected fun screenMinYToTextDrawMinY(y: Float, offset: Float = verticalTextDrawBoxOffset): Float = (y + offset) / magicNumber
 
-    protected fun screenHeightToTextDrawHeight(
-            height: Float,
-            offset: Float = verticalTextDrawBoxOffset
-    ): Float = (height - offset) / magicNumber
+    protected fun screenHeightToTextDrawHeight(height: Float, offset: Float = verticalTextDrawBoxOffset): Float = (height - offset) / magicNumber
 
     protected fun screenHeightToTextDrawHeightByLetterSize(height: Float): Float = screenHeightToLetterSizeY(height) / 0.135f
 

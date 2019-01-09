@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
-import java.util.Locale
+import java.util.*
 
 object TextTransformers {
 
@@ -28,13 +28,9 @@ object TextTransformers {
 
 fun TextTransformer.andThen(next: TextTransformer): TextTransformer = CombiningTextTransformer(this, next)
 
-private class CombiningTextTransformer(private val first: TextTransformer, private val second: TextTransformer) :
-        TextTransformer {
+private class CombiningTextTransformer(private val first: TextTransformer, private val second: TextTransformer) : TextTransformer {
 
-    override fun transform(text: String, locale: Locale): String = second.transform(
-            first.transform(text, locale),
-            locale
-    )
+    override fun transform(text: String, locale: Locale): String = second.transform(first.transform(text, locale), locale)
 
 }
 

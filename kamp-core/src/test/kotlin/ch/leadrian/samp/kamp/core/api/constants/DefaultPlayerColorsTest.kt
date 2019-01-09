@@ -15,6 +15,7 @@ internal class DefaultPlayerColorsTest {
                 .isEqualTo(colorOf(0x6495EDFF))
     }
 
+
     @Test
     fun shouldWrapAroundWithHighPlayerIds() {
         val color = DefaultPlayerColors[PlayerId.valueOf(102)]

@@ -37,10 +37,7 @@ class CallbackReceiverGenerator {
                 .build()
     }
 
-    private fun FileSpec.Builder.addCallbackReceiverClass(
-            className: ClassName,
-            listenerDefinition: CallbackListenerDefinition
-    ): FileSpec.Builder {
+    private fun FileSpec.Builder.addCallbackReceiverClass(className: ClassName, listenerDefinition: CallbackListenerDefinition): FileSpec.Builder {
         val typeSpec = TypeSpec
                 .interfaceBuilder(className)
                 .addAddListenerFunction(listenerDefinition)
@@ -50,29 +47,22 @@ class CallbackReceiverGenerator {
     }
 
     private fun TypeSpec.Builder.addAddListenerFunction(listenerDefinition: CallbackListenerDefinition): TypeSpec.Builder {
-        return addFunction(
-                FunSpec
-                        .builder("add${listenerDefinition.type.simpleName}")
-                        .addModifiers(KModifier.ABSTRACT)
-                        .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
-                        .build()
-        )
+        return addFunction(FunSpec
+                .builder("add${listenerDefinition.type.simpleName}")
+                .addModifiers(KModifier.ABSTRACT)
+                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                .build())
     }
 
     private fun TypeSpec.Builder.addRemoveListenerFunction(listenerDefinition: CallbackListenerDefinition): TypeSpec.Builder {
-        return addFunction(
-                FunSpec
-                        .builder("remove${listenerDefinition.type.simpleName}")
-                        .addModifiers(KModifier.ABSTRACT)
-                        .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
-                        .build()
-        )
+        return addFunction(FunSpec
+                .builder("remove${listenerDefinition.type.simpleName}")
+                .addModifiers(KModifier.ABSTRACT)
+                .addParameter(ParameterSpec.builder("listener", listenerDefinition.type).build())
+                .build())
     }
 
-    private fun FileSpec.Builder.addInlineCallbackFunction(
-            listenerDefinition: CallbackListenerDefinition,
-            className: ClassName
-    ): FileSpec.Builder {
+    private fun FileSpec.Builder.addInlineCallbackFunction(listenerDefinition: CallbackListenerDefinition, className: ClassName): FileSpec.Builder {
         val actionReceiver = listenerDefinition.method.parameters.firstOrNull { it.isReceiver }
                 ?: throw CallbackAnnotationProcessorException("Could not find ${Receiver::class.java} annotation on ${listenerDefinition.type}")
         val actionParameters = listenerDefinition.method.parameters.filter { !it.isReceiver }
@@ -93,28 +83,18 @@ class CallbackReceiverGenerator {
         return addFunction(funSpec)
     }
 
-    private fun buildActionParameterSpec(
-            actionReceiver: VariableElement,
-            actionParameterTypes: Array<TypeName>,
-            listenerDefinition: CallbackListenerDefinition
-    ): ParameterSpec {
+    private fun buildActionParameterSpec(actionReceiver: VariableElement, actionParameterTypes: Array<TypeName>, listenerDefinition: CallbackListenerDefinition): ParameterSpec {
         return ParameterSpec
-                .builder(
-                        "action", LambdaTypeName.get(
+                .builder("action", LambdaTypeName.get(
                         receiver = actionReceiver.asType().toKotlinTypeName(),
                         parameters = *actionParameterTypes,
                         returnType = listenerDefinition.method.returnType.asTypeName()
-                )
-                )
+                ))
                 .addModifiers(KModifier.CROSSINLINE)
                 .build()
     }
 
-    private fun buildInlineListenerTypeSpec(
-            listenerDefinition: CallbackListenerDefinition,
-            actionReceiver: VariableElement,
-            actionParameters: List<VariableElement>
-    ): TypeSpec {
+    private fun buildInlineListenerTypeSpec(listenerDefinition: CallbackListenerDefinition, actionReceiver: VariableElement, actionParameters: List<VariableElement>): TypeSpec {
         return TypeSpec
                 .anonymousClassBuilder()
                 .addSuperinterface(listenerDefinition.type)

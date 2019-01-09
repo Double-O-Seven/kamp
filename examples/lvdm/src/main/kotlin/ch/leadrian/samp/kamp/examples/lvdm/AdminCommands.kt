@@ -44,10 +44,7 @@ constructor(
         dialogService.createTabListDialog<Vehicle> {
             caption(TextKeys.lvdm.command.vehicles.dialog.caption)
             leftButton(TextKeys.lvdm.command.vehicles.dialog.button.select)
-            headerContent(
-                    TextKeys.lvdm.command.vehicles.dialog.tab.model,
-                    TextKeys.lvdm.command.vehicles.dialog.tab.location
-            )
+            headerContent(TextKeys.lvdm.command.vehicles.dialog.tab.model, TextKeys.lvdm.command.vehicles.dialog.tab.location)
             vehicleService.getAllVehicles().forEach { vehicle ->
                 item {
                     value(vehicle)

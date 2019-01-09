@@ -61,12 +61,7 @@ internal class VehicleLightsDamageStatusTest {
                 VehicleLightsDamageStatusArguments(value = 0b01000000, backLights = true),
                 VehicleLightsDamageStatusArguments(value = 0b01000001, backLights = true, frontLeftLights = true),
                 VehicleLightsDamageStatusArguments(value = 0b01000100, backLights = true, frontRightLights = true),
-                VehicleLightsDamageStatusArguments(
-                        value = 0b01000101,
-                        backLights = true,
-                        frontLeftLights = true,
-                        frontRightLights = true
-                )
+                VehicleLightsDamageStatusArguments(value = 0b01000101, backLights = true, frontLeftLights = true, frontRightLights = true)
         )
 
     }

@@ -11,8 +11,7 @@ import kotlin.reflect.jvm.internal.impl.builtins.jvm.JavaToKotlinClassMap
 import kotlin.reflect.jvm.internal.impl.name.FqName
 
 fun TypeMirror.toKotlinTypeName(): TypeName {
-    val kotlinClassName = JavaToKotlinClassMap.INSTANCE.mapJavaToKotlin(FqName(this.toString()))?.asSingleFqName()
-            ?.asString()
+    val kotlinClassName = JavaToKotlinClassMap.INSTANCE.mapJavaToKotlin(FqName(this.toString()))?.asSingleFqName()?.asString()
     return kotlinClassName?.let { ClassName.bestGuess(it) } ?: this.asTypeName()
 }
 

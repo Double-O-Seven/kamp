@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.text
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import java.text.MessageFormat
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class MessageFormatter

@@ -169,8 +169,7 @@ internal class MapObjectTest {
         @ValueSource(strings = ["true", "false"])
         fun shouldAttachToMapObject(syncRotation: Boolean) {
             every {
-                nativeFunctionExecutor
-                        .attachObjectToObject(any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.attachObjectToObject(any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns true
             val otherMapObject = mockk<MapObject> {
                 every { id } returns MapObjectId.valueOf(69)
@@ -395,8 +394,7 @@ internal class MapObjectTest {
         @ValueSource(strings = ["true", "false"])
         fun shouldSetMaterialText(isBold: Boolean) {
             every {
-                nativeFunctionExecutor
-                        .setObjectMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.setObjectMaterialText(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns true
 
             mapObject.setMaterialText(

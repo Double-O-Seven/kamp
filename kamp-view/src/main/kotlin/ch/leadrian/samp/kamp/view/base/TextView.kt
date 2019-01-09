@@ -20,7 +20,7 @@ import ch.leadrian.samp.kamp.view.ValueSupplier
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.pixels
-import java.util.Locale
+import java.util.*
 
 open class TextView(
         player: Player,

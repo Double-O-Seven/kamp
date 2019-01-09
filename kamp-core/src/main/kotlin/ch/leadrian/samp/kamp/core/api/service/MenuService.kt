@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class MenuService

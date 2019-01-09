@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.view.base
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import java.util.Locale
+import java.util.*
 
 internal class TextTransformersTest {
 

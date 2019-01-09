@@ -130,6 +130,7 @@ internal class ShapesTest {
                     .isCloseTo(1050f, withPercentage(0.0001))
         }
 
+
         @ParameterizedTest
         @ArgumentsSource(BoxFactoryArgumentsProvider::class)
         fun toBoxShouldReturnImmutableBox(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box) {
@@ -372,22 +373,8 @@ internal class ShapesTest {
 
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
-                        create { minX, maxX, minY, maxY ->
-                            rectangleOf(
-                                    minX = minX,
-                                    maxX = maxX,
-                                    minY = minY,
-                                    maxY = maxY
-                            )
-                        },
-                        create { minX, maxX, minY, maxY ->
-                            mutableRectangleOf(
-                                    minX = minX,
-                                    maxX = maxX,
-                                    minY = minY,
-                                    maxY = maxY
-                            )
-                        }
+                        create { minX, maxX, minY, maxY -> rectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY) },
+                        create { minX, maxX, minY, maxY -> mutableRectangleOf(minX = minX, maxX = maxX, minY = minY, maxY = maxY) }
                 )
 
         fun create(factory: (Float, Float, Float, Float) -> Rectangle): Arguments = Arguments.of(factory)
@@ -455,9 +442,7 @@ internal class ShapesTest {
                         }
                 )
 
-        fun create(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box): Arguments = Arguments.of(
-                factory
-        )
+        fun create(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box): Arguments = Arguments.of(factory)
 
     }
 
@@ -541,12 +526,7 @@ internal class ShapesTest {
                         create { x, y, radius -> circleOf(x = x, y = y, radius = radius) },
                         create { x, y, radius -> circleOf(coordinates = vector2DOf(x = x, y = y), radius = radius) },
                         create { x, y, radius -> mutableCircleOf(x = x, y = y, radius = radius) },
-                        create { x, y, radius ->
-                            mutableCircleOf(
-                                    coordinates = vector2DOf(x = x, y = y),
-                                    radius = radius
-                            )
-                        }
+                        create { x, y, radius -> mutableCircleOf(coordinates = vector2DOf(x = x, y = y), radius = radius) }
                 )
 
         fun create(factory: (Float, Float, Float) -> Circle): Arguments = Arguments.of(factory)
@@ -608,32 +588,18 @@ internal class ShapesTest {
 
     }
 
+
     private class SphereFactoryArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =
                 Stream.of(
                         create { x, y, z, radius -> sphereOf(x = x, y = y, z = z, radius = radius) },
-                        create { x, y, z, radius ->
-                            sphereOf(
-                                    coordinates = vector3DOf(x = x, y = y, z = z),
-                                    radius = radius
-                            )
-                        },
+                        create { x, y, z, radius -> sphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
                         create { x, y, z, radius -> sphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) },
                         create { x, y, z, radius -> circleOf(x = x, y = y, radius = radius).toSphere(z) },
                         create { x, y, z, radius -> mutableSphereOf(x = x, y = y, z = z, radius = radius) },
-                        create { x, y, z, radius ->
-                            mutableSphereOf(
-                                    coordinates = vector3DOf(x = x, y = y, z = z),
-                                    radius = radius
-                            )
-                        },
-                        create { x, y, z, radius ->
-                            mutableSphereOf(
-                                    circle = circleOf(x = x, y = y, radius = radius),
-                                    z = z
-                            )
-                        },
+                        create { x, y, z, radius -> mutableSphereOf(coordinates = vector3DOf(x = x, y = y, z = z), radius = radius) },
+                        create { x, y, z, radius -> mutableSphereOf(circle = circleOf(x = x, y = y, radius = radius), z = z) },
                         create { x, y, z, radius -> circleOf(x = x, y = y, radius = radius).toMutableSphere(z) }
                 )
 

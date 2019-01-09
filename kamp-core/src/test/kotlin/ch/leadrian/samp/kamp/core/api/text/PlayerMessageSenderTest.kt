@@ -64,10 +64,8 @@ internal class PlayerMessageSenderTest {
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, "Hi %s", "there")
 
             verify {
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo")
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(playerid = 75, senderid = fromPlayerId.value, message = "Bonjour")
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo")
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 75, senderid = fromPlayerId.value, message = "Bonjour")
             }
         }
 
@@ -101,10 +99,8 @@ internal class PlayerMessageSenderTest {
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, textKey)
 
             verify {
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo")
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(playerid = 75, senderid = fromPlayerId.value, message = "Bonjour")
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo")
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 75, senderid = fromPlayerId.value, message = "Bonjour")
             }
         }
 
@@ -139,14 +135,8 @@ internal class PlayerMessageSenderTest {
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, textKey, "SAMP")
 
             verify {
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo SAMP")
-                nativeFunctionExecutor
-                        .sendPlayerMessageToPlayer(
-                                playerid = 75,
-                                senderid = fromPlayerId.value,
-                                message = "Bonjour SAMP"
-                        )
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 50, senderid = fromPlayerId.value, message = "Hallo SAMP")
+                nativeFunctionExecutor.sendPlayerMessageToPlayer(playerid = 75, senderid = fromPlayerId.value, message = "Bonjour SAMP")
             }
         }
 

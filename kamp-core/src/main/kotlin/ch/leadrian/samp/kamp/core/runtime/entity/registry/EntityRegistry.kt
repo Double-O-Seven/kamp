@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.entity.registry
 
 import ch.leadrian.samp.kamp.core.api.entity.Entity
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
-import java.util.LinkedList
+import java.util.*
 
 internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val entities: Array<T?>) {
 

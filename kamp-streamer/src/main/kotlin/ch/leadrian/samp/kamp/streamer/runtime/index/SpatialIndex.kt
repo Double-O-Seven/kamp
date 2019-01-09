@@ -9,7 +9,7 @@ import com.conversantmedia.util.collection.spatial.HyperRect
 import com.conversantmedia.util.collection.spatial.RectBuilder
 import com.conversantmedia.util.collection.spatial.SpatialSearch
 import com.conversantmedia.util.collection.spatial.SpatialSearches
-import java.util.LinkedList
+import java.util.*
 
 abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> : RectBuilder<Entry<S, T>> {
 

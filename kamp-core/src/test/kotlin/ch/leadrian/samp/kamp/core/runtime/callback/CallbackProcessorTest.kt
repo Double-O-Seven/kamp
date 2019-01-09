@@ -137,8 +137,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
 import java.nio.file.Paths
-import java.util.Locale
-import java.util.Properties
+import java.util.*
 import javax.annotation.PreDestroy
 import javax.inject.Singleton
 
@@ -770,12 +769,7 @@ internal class CallbackProcessorTest {
         @Test
         fun shouldCallOnPlayerCommandTextAndReturnFalse() {
             val onPlayerCommandTextListener = mockk<OnPlayerCommandTextListener> {
-                every {
-                    onPlayerCommandText(
-                            player,
-                            "/hi there"
-                    )
-                } returns OnPlayerCommandTextListener.Result.UnknownCommand
+                every { onPlayerCommandText(player, "/hi there") } returns OnPlayerCommandTextListener.Result.UnknownCommand
             }
             callbackListenerManager.register(onPlayerCommandTextListener)
 
@@ -855,12 +849,7 @@ internal class CallbackProcessorTest {
         @Test
         fun shouldCallOnPlayerRequestClassAndReturnFalse() {
             val onPlayerRequestClassListener = mockk<OnPlayerRequestClassListener> {
-                every {
-                    onPlayerRequestClass(
-                            player,
-                            playerClass
-                    )
-                } returns OnPlayerRequestClassListener.Result.PreventSpawn
+                every { onPlayerRequestClass(player, playerClass) } returns OnPlayerRequestClassListener.Result.PreventSpawn
             }
             callbackListenerManager.register(onPlayerRequestClassListener)
 
@@ -1092,21 +1081,11 @@ internal class CallbackProcessorTest {
             val onPlayerStateChangeListener = mockk<OnPlayerStateChangeListener>(relaxed = true)
             callbackListenerManager.register(onPlayerStateChangeListener)
 
-            callbackProcessor
-                    .onPlayerStateChange(
-                            playerid = playerId,
-                            newstate = PlayerState.ON_FOOT.value,
-                            oldstate = PlayerState.DRIVER.value
-                    )
+            callbackProcessor.onPlayerStateChange(playerid = playerId, newstate = PlayerState.ON_FOOT.value, oldstate = PlayerState.DRIVER.value)
 
             verify { uncaughtExceptionNotifier wasNot Called }
             verify {
-                onPlayerStateChangeListener
-                        .onPlayerStateChange(
-                                player = player,
-                                newState = PlayerState.ON_FOOT,
-                                oldState = PlayerState.DRIVER
-                        )
+                onPlayerStateChangeListener.onPlayerStateChange(player = player, newState = PlayerState.ON_FOOT, oldState = PlayerState.DRIVER)
             }
         }
 
@@ -1116,12 +1095,7 @@ internal class CallbackProcessorTest {
             callbackListenerManager.register(onPlayerStateChangeListener)
 
             val caughtThrowable = catchThrowable {
-                callbackProcessor
-                        .onPlayerStateChange(
-                                playerid = 500,
-                                newstate = PlayerState.ON_FOOT.value,
-                                oldstate = PlayerState.DRIVER.value
-                        )
+                callbackProcessor.onPlayerStateChange(playerid = 500, newstate = PlayerState.ON_FOOT.value, oldstate = PlayerState.DRIVER.value)
             }
 
             assertThat(caughtThrowable)
@@ -1143,25 +1117,13 @@ internal class CallbackProcessorTest {
             callbackListenerManager.register(onPlayerStateChangeListener)
 
             val caughtThrowable = catchThrowable {
-                callbackProcessor
-                        .onPlayerStateChange(
-                                playerid = playerId,
-                                newstate = PlayerState.ON_FOOT.value,
-                                oldstate = PlayerState.DRIVER.value
-                        )
+                callbackProcessor.onPlayerStateChange(playerid = playerId, newstate = PlayerState.ON_FOOT.value, oldstate = PlayerState.DRIVER.value)
             }
 
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerStateChangeListener
-                        .onPlayerStateChange(
-                                player = player,
-                                newState = PlayerState.ON_FOOT,
-                                oldState = PlayerState.DRIVER
-                        )
-            }
+            verify { onPlayerStateChangeListener.onPlayerStateChange(player = player, newState = PlayerState.ON_FOOT, oldState = PlayerState.DRIVER) }
         }
 
     }
@@ -1795,8 +1757,7 @@ internal class CallbackProcessorTest {
             }
             callbackListenerManager.register(onVehicleModListener)
 
-            val result = callbackProcessor
-                    .onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
+            val result = callbackProcessor.onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
 
             assertThat(result)
                     .isTrue()
@@ -1811,8 +1772,7 @@ internal class CallbackProcessorTest {
             }
             callbackListenerManager.register(onVehicleModListener)
 
-            val result = callbackProcessor
-                    .onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
+            val result = callbackProcessor.onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
 
             assertThat(result)
                     .isFalse()
@@ -1865,8 +1825,7 @@ internal class CallbackProcessorTest {
             }
             callbackListenerManager.register(onVehicleModListener)
 
-            val result = callbackProcessor
-                    .onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
+            val result = callbackProcessor.onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
 
             assertThat(result)
                     .isFalse()
@@ -2534,10 +2493,7 @@ internal class CallbackProcessorTest {
             callbackProcessor.onPlayerInteriorChange(playerid = playerId, newinteriorid = 0, oldinteriorid = 15)
 
             verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerInteriorChangeListener
-                        .onPlayerInteriorChange(player = player, newInteriorId = 0, oldInteriorId = 15)
-            }
+            verify { onPlayerInteriorChangeListener.onPlayerInteriorChange(player = player, newInteriorId = 0, oldInteriorId = 15) }
         }
 
         @Test
@@ -2574,10 +2530,7 @@ internal class CallbackProcessorTest {
             assertThat(caughtThrowable)
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerInteriorChangeListener
-                        .onPlayerInteriorChange(player = player, newInteriorId = 0, oldInteriorId = 15)
-            }
+            verify { onPlayerInteriorChangeListener.onPlayerInteriorChange(player = player, newInteriorId = 0, oldInteriorId = 15) }
         }
 
     }
@@ -3291,15 +3244,7 @@ internal class CallbackProcessorTest {
         @EnumSource(DialogResponse::class)
         fun shouldCallOnDialogResponseAndReturnTrue(response: DialogResponse) {
             val onDialogResponseListener = mockk<OnDialogResponseListener> {
-                every {
-                    onDialogResponse(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } returns OnDialogResponseListener.Result.Processed
+                every { onDialogResponse(any(), any(), any(), any(), any()) } returns OnDialogResponseListener.Result.Processed
             }
             // Priority required due to DialogCallbackListener and the mocked dialog
             callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
@@ -3329,15 +3274,7 @@ internal class CallbackProcessorTest {
         @Test
         fun shouldCallOnDialogResponseAndReturnFalse() {
             val onDialogResponseListener = mockk<OnDialogResponseListener> {
-                every {
-                    onDialogResponse(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } returns OnDialogResponseListener.Result.Ignored
+                every { onDialogResponse(any(), any(), any(), any(), any()) } returns OnDialogResponseListener.Result.Ignored
             }
             // Priority required due to DialogCallbackListener and the mocked dialog
             callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
@@ -4267,10 +4204,7 @@ internal class CallbackProcessorTest {
             assertThat(result)
                     .isTrue()
             verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onVehicleSirenStateChangeListener
-                        .onVehicleSirenStateChange(player, vehicle, VehicleSirenState.ON)
-            }
+            verify { onVehicleSirenStateChangeListener.onVehicleSirenStateChange(player, vehicle, VehicleSirenState.ON) }
         }
 
     }
@@ -4791,18 +4725,7 @@ internal class CallbackProcessorTest {
         fun shouldCatchException() {
             val exception = RuntimeException("test")
             val onPlayerEditAttachedObjectListener = mockk<OnPlayerEditAttachedObjectListener> {
-                every {
-                    onPlayerEditAttachedObject(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } throws exception
+                every { onPlayerEditAttachedObject(any(), any(), any(), any(), any(), any(), any(), any()) } throws exception
             }
             callbackListenerManager.register(onPlayerEditAttachedObjectListener)
 
@@ -4821,8 +4744,7 @@ internal class CallbackProcessorTest {
                         fRotZ = 6f,
                         fScaleX = 7f,
                         fScaleY = 8f,
-                        fScaleZ = 9f
-                )
+                        fScaleZ = 9f)
             }
 
             assertThat(caughtThrowable)
@@ -5134,14 +5056,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.AllowDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5171,14 +5086,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.PreventDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5217,8 +5125,7 @@ internal class CallbackProcessorTest {
                         hitid = targetPlayerId,
                         fX = 1f,
                         fY = 2f,
-                        fZ = 3f
-                )
+                        fZ = 3f)
 
                 assertThat(result)
                         .isTrue()
@@ -5302,14 +5209,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.AllowDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5339,14 +5239,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.PreventDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5385,8 +5278,7 @@ internal class CallbackProcessorTest {
                         hitid = targetVehicleId,
                         fX = 1f,
                         fY = 2f,
-                        fZ = 3f
-                )
+                        fZ = 3f)
 
                 assertThat(result)
                         .isTrue()
@@ -5470,14 +5362,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.AllowDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5507,14 +5392,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.PreventDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5553,8 +5431,7 @@ internal class CallbackProcessorTest {
                         hitid = targetMapObjectId,
                         fX = 1f,
                         fY = 2f,
-                        fZ = 3f
-                )
+                        fZ = 3f)
 
                 assertThat(result)
                         .isTrue()
@@ -5638,14 +5515,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.AllowDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5675,14 +5545,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.PreventDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5721,8 +5584,7 @@ internal class CallbackProcessorTest {
                         hitid = targetPlayerMapObjectId,
                         fX = 1f,
                         fY = 2f,
-                        fZ = 3f
-                )
+                        fZ = 3f)
 
                 assertThat(result)
                         .isTrue()
@@ -5797,14 +5659,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.AllowDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5834,14 +5689,7 @@ internal class CallbackProcessorTest {
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
                 val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
+                    every { onPlayerShotWeapon(any(), any(), any(), any()) } returns OnPlayerWeaponShotListener.Result.PreventDamage
                 }
                 callbackListenerManager.register(onPlayerWeaponShotListener)
 
@@ -5880,8 +5728,7 @@ internal class CallbackProcessorTest {
                         hitid = 0,
                         fX = 1f,
                         fY = 2f,
-                        fZ = 3f
-                )
+                        fZ = 3f)
 
                 assertThat(result)
                         .isTrue()
@@ -5961,11 +5808,7 @@ internal class CallbackProcessorTest {
 
     private class TestUnknownCommandHandler : UnknownCommandHandler {
 
-        override fun handle(
-                player: Player,
-                command: String,
-                parameters: List<String>
-        ): OnPlayerCommandTextListener.Result =
+        override fun handle(player: Player, command: String, parameters: List<String>): OnPlayerCommandTextListener.Result =
                 OnPlayerCommandTextListener.Result.UnknownCommand
     }
 

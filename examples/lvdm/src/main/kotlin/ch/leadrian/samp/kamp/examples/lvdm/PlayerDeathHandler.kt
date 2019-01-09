@@ -30,22 +30,9 @@ constructor(
         playerService.sendDeathMessage(player, reason, killer)
         if (killer != null) {
             if (reason == WeaponModel.FIST) {
-                messageSender
-                        .sendMessageToAll(
-                                Colors.RED,
-                                TextKeys.lvdm.player.killed.fists,
-                                coloredNameOf(killer),
-                                coloredNameOf(player)
-                        )
+                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.killed.fists, coloredNameOf(killer), coloredNameOf(player))
             } else {
-                messageSender
-                        .sendMessageToAll(
-                                Colors.RED,
-                                TextKeys.lvdm.player.killed.weapon,
-                                coloredNameOf(killer),
-                                coloredNameOf(player),
-                                reason
-                        )
+                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.killed.weapon, coloredNameOf(killer), coloredNameOf(player), reason)
             }
             killer.giveMoney(player.money)
             player.resetMoney()

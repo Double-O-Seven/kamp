@@ -8,16 +8,14 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class TextLabelIdTest {
 
     @ParameterizedTest
-    @ValueSource(
-            ints = [
-                -1,
-                0,
-                SAMPConstants.MAX_3DTEXT_GLOBAL - 1,
-                SAMPConstants.MAX_3DTEXT_GLOBAL,
-                Int.MAX_VALUE,
-                SAMPConstants.INVALID_3DTEXT_ID
-            ]
-    )
+    @ValueSource(ints = [
+        -1,
+        0,
+        SAMPConstants.MAX_3DTEXT_GLOBAL - 1,
+        SAMPConstants.MAX_3DTEXT_GLOBAL,
+        Int.MAX_VALUE,
+        SAMPConstants.INVALID_3DTEXT_ID
+    ])
     fun shouldReturnTextLabelId(value: Int) {
         val textLabelId = TextLabelId.valueOf(value)
 

@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.Locale
+import java.util.*
 
 internal class MenuTest {
 
@@ -166,10 +166,7 @@ internal class MenuTest {
 
                 menu.addItem(column, "Hi there")
 
-                verify {
-                    nativeFunctionExecutor
-                            .addMenuItem(menuid = menuId.value, column = column, menutext = "Hi there")
-                }
+                verify { nativeFunctionExecutor.addMenuItem(menuid = menuId.value, column = column, menutext = "Hi there") }
             }
 
             @ParameterizedTest

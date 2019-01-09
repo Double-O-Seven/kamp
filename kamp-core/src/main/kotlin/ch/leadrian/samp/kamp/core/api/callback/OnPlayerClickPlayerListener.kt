@@ -8,11 +8,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 interface OnPlayerClickPlayerListener {
 
     @IgnoredReturnValue(Result.Continue::class)
-    fun onPlayerClickPlayer(
-            player: Player,
-            clickedPlayer: Player,
-            source: ch.leadrian.samp.kamp.core.api.constants.ClickPlayerSource
-    ): Result
+    fun onPlayerClickPlayer(player: Player, clickedPlayer: Player, source: ch.leadrian.samp.kamp.core.api.constants.ClickPlayerSource): Result
 
     sealed class Result(val value: Boolean) {
 
@@ -20,5 +16,6 @@ interface OnPlayerClickPlayerListener {
 
         object Continue : Result(false)
     }
+
 
 }

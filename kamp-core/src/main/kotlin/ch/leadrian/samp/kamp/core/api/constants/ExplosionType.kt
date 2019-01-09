@@ -9,7 +9,6 @@ enum class ExplosionType(
         val audibleSound: Boolean,
         val range: Range
 ) : ConstantValue<Int> {
-
     NORMAL_1(
             value = 0,
             visible = true,

@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.TextLabelFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextLabelRegistry
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class TextLabelService

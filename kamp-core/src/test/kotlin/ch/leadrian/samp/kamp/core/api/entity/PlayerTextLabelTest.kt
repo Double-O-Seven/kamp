@@ -74,6 +74,7 @@ internal class PlayerTextLabelTest {
                     .isEqualTo(playerTextLabelId)
         }
 
+
         @Test
         fun givenNoAttachPlayerOrVehicleItShouldConstructPlayerTextLabel() {
             val playerId = PlayerId.valueOf(65)
@@ -172,8 +173,7 @@ internal class PlayerTextLabelTest {
             every { player.id } returns playerId
             every { player.isConnected } returns true
             every {
-                nativeFunctionExecutor
-                        .createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
+                nativeFunctionExecutor.createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
             } returns playerTextLabelId.value
             playerTextLabel = PlayerTextLabel(
                     player = player,

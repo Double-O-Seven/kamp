@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSpawnListener
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import java.util.Random
+import java.util.*
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton

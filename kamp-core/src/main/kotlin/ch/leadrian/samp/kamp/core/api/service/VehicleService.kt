@@ -110,8 +110,7 @@ internal constructor(
             val x = ReferenceFloat()
             val y = ReferenceFloat()
             val z = ReferenceFloat()
-            nativeFunctionExecutor
-                    .getVehicleModelInfo(model = vehicleModel.value, infotype = type.value, X = x, Y = y, Z = z)
+            nativeFunctionExecutor.getVehicleModelInfo(model = vehicleModel.value, infotype = type.value, X = x, Y = y, Z = z)
             vector3DOf(x = x.value, y = y.value, z = z.value)
         }
     }

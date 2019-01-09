@@ -19,7 +19,7 @@ import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.style.ButtonStyle
 import ch.leadrian.samp.kamp.view.style.Style
-import java.util.Locale
+import java.util.*
 
 open class ButtonView(
         player: Player,

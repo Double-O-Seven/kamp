@@ -67,41 +67,15 @@ internal class VehicleTiresDamageStatusTest {
                         VehicleTiresDamageStatusArguments(value = 0b0100, backLeftTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b0101, backRightTire = true, backLeftTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b0110, backLeftTire = true, frontRightTire = true),
-                        VehicleTiresDamageStatusArguments(
-                                value = 0b0111,
-                                backRightTire = true,
-                                backLeftTire = true,
-                                frontRightTire = true
-                        ),
+                        VehicleTiresDamageStatusArguments(value = 0b0111, backRightTire = true, backLeftTire = true, frontRightTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b1000, frontLeftTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b1001, frontLeftTire = true, backRightTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b1010, frontLeftTire = true, frontRightTire = true),
-                        VehicleTiresDamageStatusArguments(
-                                value = 0b1011,
-                                frontLeftTire = true,
-                                backRightTire = true,
-                                frontRightTire = true
-                        ),
+                        VehicleTiresDamageStatusArguments(value = 0b1011, frontLeftTire = true, backRightTire = true, frontRightTire = true),
                         VehicleTiresDamageStatusArguments(value = 0b1100, frontLeftTire = true, backLeftTire = true),
-                        VehicleTiresDamageStatusArguments(
-                                value = 0b1101,
-                                frontLeftTire = true,
-                                backRightTire = true,
-                                backLeftTire = true
-                        ),
-                        VehicleTiresDamageStatusArguments(
-                                value = 0b1110,
-                                frontLeftTire = true,
-                                backLeftTire = true,
-                                frontRightTire = true
-                        ),
-                        VehicleTiresDamageStatusArguments(
-                                value = 0b1111,
-                                frontLeftTire = true,
-                                backRightTire = true,
-                                backLeftTire = true,
-                                frontRightTire = true
-                        )
+                        VehicleTiresDamageStatusArguments(value = 0b1101, frontLeftTire = true, backRightTire = true, backLeftTire = true),
+                        VehicleTiresDamageStatusArguments(value = 0b1110, frontLeftTire = true, backLeftTire = true, frontRightTire = true),
+                        VehicleTiresDamageStatusArguments(value = 0b1111, frontLeftTire = true, backRightTire = true, backLeftTire = true, frontRightTire = true)
                 )
 
     }

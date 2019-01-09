@@ -76,23 +76,14 @@ internal class TabListDialog<V : Any>(
                 }
             }.toString()
 
-    override fun onResponse(
-            player: Player,
-            response: DialogResponse,
-            listItem: Int,
-            inputText: String
-    ): OnDialogResponseListener.Result {
+    override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseListener.Result {
         return when (response) {
             DialogResponse.LEFT_BUTTON -> handleLeftButtonClick(player, listItem, inputText)
             DialogResponse.RIGHT_BUTTON -> handleRightButtonClick(player)
         }
     }
 
-    private fun handleLeftButtonClick(
-            player: Player,
-            listItem: Int,
-            inputText: String
-    ): OnDialogResponseListener.Result {
+    private fun handleLeftButtonClick(player: Player, listItem: Int, inputText: String): OnDialogResponseListener.Result {
         val item = items.getOrNull(listItem)
         return if (item != null) {
             item.onSelect(player, inputText)

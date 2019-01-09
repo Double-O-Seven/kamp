@@ -8,10 +8,5 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 
 internal abstract class AbstractDialog(override val id: DialogId) : Dialog {
 
-    abstract fun onResponse(
-            player: Player,
-            response: DialogResponse,
-            listItem: Int,
-            inputText: String
-    ): OnDialogResponseListener.Result
+    abstract fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String): OnDialogResponseListener.Result
 }

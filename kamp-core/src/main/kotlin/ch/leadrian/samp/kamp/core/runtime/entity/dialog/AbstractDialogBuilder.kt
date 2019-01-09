@@ -9,8 +9,7 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.TextKeyDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 
-internal abstract class AbstractDialogBuilder<B : DialogBuilder<B>>(protected val textProvider: TextProvider) :
-        DialogBuilder<B> {
+internal abstract class AbstractDialogBuilder<B : DialogBuilder<B>>(protected val textProvider: TextProvider) : DialogBuilder<B> {
 
     protected lateinit var captionTextSupplier: DialogTextSupplier
 

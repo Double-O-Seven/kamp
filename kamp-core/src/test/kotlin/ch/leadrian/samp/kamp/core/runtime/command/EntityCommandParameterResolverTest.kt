@@ -48,8 +48,8 @@ internal class EntityCommandParameterResolverTest {
                 .isNull()
     }
 
-    private class TestEntityCommandParameterResolver(entityRegistry: EntityRegistry<Entity<EntityId>, EntityId>) :
-            EntityCommandParameterResolver<Entity<EntityId>, EntityId>(entityRegistry) {
+    private class TestEntityCommandParameterResolver(entityRegistry: EntityRegistry<Entity<EntityId>, EntityId>)
+        : EntityCommandParameterResolver<Entity<EntityId>, EntityId>(entityRegistry) {
 
         override val parameterType: Class<Entity<EntityId>>
             get() = throw UnsupportedOperationException()

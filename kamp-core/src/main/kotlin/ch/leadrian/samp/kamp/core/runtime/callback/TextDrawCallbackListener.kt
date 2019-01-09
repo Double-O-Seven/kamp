@@ -18,9 +18,6 @@ constructor(private val callbackListenerManager: CallbackListenerManager) : OnPl
         callbackListenerManager.register(this)
     }
 
-    override fun onPlayerClickTextDraw(
-            player: Player,
-            textDraw: TextDraw
-    ): OnPlayerClickTextDrawListener.Result = textDraw.onClick(player)
+    override fun onPlayerClickTextDraw(player: Player, textDraw: TextDraw): OnPlayerClickTextDrawListener.Result = textDraw.onClick(player)
 
 }

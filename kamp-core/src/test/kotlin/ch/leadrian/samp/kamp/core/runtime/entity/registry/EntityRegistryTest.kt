@@ -153,8 +153,7 @@ internal class EntityRegistryTest {
                 .isEqualTo(50)
     }
 
-    private class TestEntityRegistry(numberOfEntities: Int) :
-            EntityRegistry<TestEntity, TestId>(arrayOfNulls(numberOfEntities))
+    private class TestEntityRegistry(numberOfEntities: Int) : EntityRegistry<TestEntity, TestId>(arrayOfNulls(numberOfEntities))
 
     private class TestEntity(override val id: TestId) : Entity<TestId>
 

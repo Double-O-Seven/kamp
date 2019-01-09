@@ -14,27 +14,17 @@ import com.google.inject.name.Names
 abstract class KampModule : AbstractModule() {
 
     protected fun newCommandParameterResolverSetBinder(): Multibinder<CommandParameterResolver<*>> =
-            Multibinder.newSetBinder(
-                    binder(),
-                    object : TypeLiteral<@JvmSuppressWildcards CommandParameterResolver<*>>() {})
+            Multibinder.newSetBinder(binder(), object : TypeLiteral<@JvmSuppressWildcards CommandParameterResolver<*>>() {})
 
     protected fun newTextProviderResourceBundlePackagesSetBinder(): Multibinder<String> =
-            Multibinder.newSetBinder(
-                    binder(),
-                    String::class.java,
-                    Names.named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME)
-            )
+            Multibinder.newSetBinder(binder(), String::class.java, Names.named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME))
 
     protected fun newCommandsSetBinder(): Multibinder<Commands> =
             Multibinder.newSetBinder(binder(), Commands::class.java)
 
     protected fun newCallbackListenerRegistrySetBinder(): Multibinder<CallbackListenerRegistry<*>> =
-            Multibinder.newSetBinder(
-                    binder(),
-                    object : TypeLiteral<@JvmSuppressWildcards CallbackListenerRegistry<*>>() {})
+            Multibinder.newSetBinder(binder(), object : TypeLiteral<@JvmSuppressWildcards CallbackListenerRegistry<*>>() {})
 
     protected fun newPlayerExtensionFactorySetBinder(): Multibinder<EntityExtensionFactory<Player, *>> =
-            Multibinder.newSetBinder(
-                    binder(),
-                    object : TypeLiteral<@JvmSuppressWildcards EntityExtensionFactory<Player, *>>() {})
+            Multibinder.newSetBinder(binder(), object : TypeLiteral<@JvmSuppressWildcards EntityExtensionFactory<Player, *>>() {})
 }

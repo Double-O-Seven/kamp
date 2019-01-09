@@ -49,10 +49,7 @@ internal class PlayerWeaponsTest {
 
             playerWeapons.armed = WeaponModel.TEC9
 
-            verify {
-                nativeFunctionExecutor
-                        .setPlayerArmedWeapon(playerid = playerId.value, weaponid = WeaponModel.TEC9.value)
-            }
+            verify { nativeFunctionExecutor.setPlayerArmedWeapon(playerid = playerId.value, weaponid = WeaponModel.TEC9.value) }
         }
     }
 
@@ -117,10 +114,7 @@ internal class PlayerWeaponsTest {
 
     @Test
     fun shouldGetWeaponData() {
-        every {
-            nativeFunctionExecutor
-                    .getPlayerWeaponData(playerId.value, WeaponSlot.MACHINE_PISTOL.value, any(), any())
-        } answers {
+        every { nativeFunctionExecutor.getPlayerWeaponData(playerId.value, WeaponSlot.MACHINE_PISTOL.value, any(), any()) } answers {
             thirdArg<ReferenceInt>().value = WeaponModel.TEC9.value
             arg<ReferenceInt>(3).value = 150
             true

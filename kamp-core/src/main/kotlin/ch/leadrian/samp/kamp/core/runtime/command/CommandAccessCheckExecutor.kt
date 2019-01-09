@@ -19,22 +19,14 @@ constructor(
     @field:com.google.inject.Inject(optional = true)
     private var defaultCommandAccessDeniedHandler: CommandAccessDeniedHandler = defaultCommandAccessDeniedHandler
 
-    fun checkAccess(
-            player: Player,
-            commandDefinition: CommandDefinition,
-            stringParameterValues: List<String>
-    ): OnPlayerCommandTextListener.Result? {
+    fun checkAccess(player: Player, commandDefinition: CommandDefinition, stringParameterValues: List<String>): OnPlayerCommandTextListener.Result? {
         commandDefinition.accessCheckers.forEach { accessCheckerGroup ->
             val accessDenied = accessCheckerGroup.accessCheckers.any {
                 !it.hasAccess(player, commandDefinition, stringParameterValues)
             }
             if (accessDenied) {
                 val isProcessed = accessCheckerGroup.accessDeniedHandlers.any {
-                    it.handle(
-                            player,
-                            commandDefinition,
-                            stringParameterValues
-                    ) == OnPlayerCommandTextListener.Result.Processed
+                    it.handle(player, commandDefinition, stringParameterValues) == OnPlayerCommandTextListener.Result.Processed
                 }
                 if (isProcessed) {
                     return OnPlayerCommandTextListener.Result.Processed

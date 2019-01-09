@@ -7,15 +7,13 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class DialogIdTest {
 
     @ParameterizedTest
-    @ValueSource(
-            ints = [
-                -1,
-                0,
-                255,
-                256,
-                Int.MAX_VALUE
-            ]
-    )
+    @ValueSource(ints = [
+        -1,
+        0,
+        255,
+        256,
+        Int.MAX_VALUE
+    ])
     fun shouldReturnDialogId(value: Int) {
         val dialogId = DialogId.valueOf(value)
 

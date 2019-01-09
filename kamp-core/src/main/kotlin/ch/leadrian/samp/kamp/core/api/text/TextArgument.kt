@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
-import java.util.Locale
+import java.util.*
 
 interface TextArgument {
 

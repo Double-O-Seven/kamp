@@ -11,14 +11,7 @@ open class DefaultUnknownCommandHandler
 @Inject constructor(private val messageSender: MessageSender) : UnknownCommandHandler {
 
     override fun handle(player: Player, command: String, parameters: List<String>): OnPlayerCommandTextListener.Result {
-        messageSender
-                .sendMessageToPlayer(
-                        player,
-                        Colors.RED,
-                        TextKeys.command.unknown,
-                        command,
-                        parameters.joinToString(" ")
-                )
+        messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.unknown, command, parameters.joinToString(" "))
         return OnPlayerCommandTextListener.Result.Processed
     }
 }

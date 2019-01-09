@@ -48,7 +48,7 @@ import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.EnumSource
-import java.util.Locale
+import java.util.*
 import java.util.stream.Stream
 
 internal class StreamableMapObjectImplTest {
@@ -640,16 +640,14 @@ internal class StreamableMapObjectImplTest {
         val boundingBox = streamableMapObject.getBoundingBox()
 
         assertThat(boundingBox)
-                .isEqualTo(
-                        Rect3d(
-                                -74.0,
-                                -73.0,
-                                -72.0,
-                                76.0,
-                                77.0,
-                                78.0
-                        )
-                )
+                .isEqualTo(Rect3d(
+                        -74.0,
+                        -73.0,
+                        -72.0,
+                        76.0,
+                        77.0,
+                        78.0
+                ))
     }
 
     @Nested
@@ -942,12 +940,7 @@ internal class StreamableMapObjectImplTest {
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { duration } returns 1337L
             }
-            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(
-                    currentState,
-                    currentState,
-                    currentState,
-                    moving
-            )
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
 
             streamableMapObject.moveTo(
                     coordinates = vector3DOf(123f, 456f, 789f),
@@ -976,12 +969,7 @@ internal class StreamableMapObjectImplTest {
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { duration } returns 1337L
             }
-            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(
-                    currentState,
-                    currentState,
-                    currentState,
-                    moving
-            )
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
 
             val duration = streamableMapObject.moveTo(
                     coordinates = vector3DOf(123f, 456f, 789f),
@@ -1007,12 +995,7 @@ internal class StreamableMapObjectImplTest {
             val moving = mockk<StreamableMapObjectState.Moving> {
                 every { duration } returns 1337L
             }
-            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(
-                    currentState,
-                    currentState,
-                    currentState,
-                    moving
-            )
+            every { streamableMapObjectStateMachine.currentState } returnsMany listOf(currentState, currentState, currentState, moving)
 
             streamableMapObject.moveTo(
                     coordinates = vector3DOf(123f, 456f, 789f),
@@ -1525,14 +1508,8 @@ internal class StreamableMapObjectImplTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                onPlayerEditStreamableMapObjectReceiver
-                        .onPlayerEditStreamableMapObject(any(), any(), any(), any(), any())
-            } just Runs
-            every {
-                onPlayerEditStreamableMapObjectHandler
-                        .onPlayerEditStreamableMapObject(any(), any(), any(), any(), any())
-            } just Runs
+            every { onPlayerEditStreamableMapObjectReceiver.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any()) } just Runs
+            every { onPlayerEditStreamableMapObjectHandler.onPlayerEditStreamableMapObject(any(), any(), any(), any(), any()) } just Runs
         }
 
         @Test
@@ -1633,14 +1610,8 @@ internal class StreamableMapObjectImplTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                onPlayerSelectStreamableMapObjectReceiver
-                        .onPlayerSelectStreamableMapObject(any(), any(), any(), any())
-            } just Runs
-            every {
-                onPlayerSelectStreamableMapObjectHandler
-                        .onPlayerSelectStreamableMapObject(any(), any(), any(), any())
-            } just Runs
+            every { onPlayerSelectStreamableMapObjectReceiver.onPlayerSelectStreamableMapObject(any(), any(), any(), any()) } just Runs
+            every { onPlayerSelectStreamableMapObjectHandler.onPlayerSelectStreamableMapObject(any(), any(), any(), any()) } just Runs
         }
 
         @Test

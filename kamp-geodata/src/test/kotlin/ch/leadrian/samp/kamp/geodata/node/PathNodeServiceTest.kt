@@ -47,6 +47,7 @@ internal class PathNodeServiceTest {
         ImageIO.write(image, "jpeg", outputStream)
     }
 
+
     private fun drawLinks(pathNode: PathNode, image: BufferedImage, color: Int) {
         pathNode
                 .links

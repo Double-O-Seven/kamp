@@ -19,9 +19,7 @@ internal class StreamableMapObjectStateMachineFactoryTest {
             } returns fixedCoordinates
         }
         val streamableMapObject = mockk<StreamableMapObjectImpl>()
-        val streamableMapObjectStateMachineFactory = StreamableMapObjectStateMachineFactory(
-                streamableMapObjectStateFactory
-        )
+        val streamableMapObjectStateMachineFactory = StreamableMapObjectStateMachineFactory(streamableMapObjectStateFactory)
 
         val streamableMapObjectStateMachine = streamableMapObjectStateMachineFactory.create(
                 streamableMapObject = streamableMapObject,

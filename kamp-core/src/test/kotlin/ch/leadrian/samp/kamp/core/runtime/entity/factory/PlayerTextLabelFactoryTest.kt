@@ -33,10 +33,7 @@ internal class PlayerTextLabelFactoryTest {
     fun setUp() {
         every { attachToPlayer.id } returns attachToPlayerId
         every { attachToVehicle.id } returns attachToVehicleId
-        every {
-            nativeFunctionExecutor
-                    .createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any())
-        } returns 0
+        every { nativeFunctionExecutor.createPlayer3DTextLabel(any(), any(), any(), any(), any(), any(), any(), any(), any(), any()) } returns 0
         every { playerTextLabelRegistry.register(any()) } just Runs
         playerTextLabelFactory = PlayerTextLabelFactory(nativeFunctionExecutor)
         player = mockk {

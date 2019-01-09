@@ -13,6 +13,7 @@ import java.time.LocalDateTime
 import javax.annotation.Generated
 import javax.lang.model.element.Modifier
 
+
 internal class SAMPConstantsJavaGenerator(
         private val constants: List<Constant>,
         private val javaPackageName: String,
@@ -32,22 +33,18 @@ internal class SAMPConstantsJavaGenerator(
     }
 
     private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class.java)
-                        .addMember("value", "\$S", this@SAMPConstantsJavaGenerator::class.java.name)
-                        .addMember("date", "\$S", LocalDateTime.now().toString())
-                        .build()
-        )
+        return addAnnotation(AnnotationSpec
+                .builder(Generated::class.java)
+                .addMember("value", "\$S", this@SAMPConstantsJavaGenerator::class.java.name)
+                .addMember("date", "\$S", LocalDateTime.now().toString())
+                .build())
     }
 
     private fun TypeSpec.Builder.addPrivateConstructor(): TypeSpec.Builder {
-        return addMethod(
-                MethodSpec
-                        .constructorBuilder()
-                        .addModifiers(Modifier.PRIVATE)
-                        .build()
-        )
+        return addMethod(MethodSpec
+                .constructorBuilder()
+                .addModifiers(Modifier.PRIVATE)
+                .build())
     }
 
     private fun TypeSpec.Builder.addFields(): TypeSpec.Builder {

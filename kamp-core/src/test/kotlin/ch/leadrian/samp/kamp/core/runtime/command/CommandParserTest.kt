@@ -19,14 +19,12 @@ internal class CommandParserTest {
     }
 
     @ParameterizedTest
-    @ValueSource(
-            strings = [
-                "/pm 13 \"How are you?\"",
-                "/pm 13 \'How are you?\'",
-                "/pm    13    \"How are you?\"    ",
-                "/pm    13    \'How are you?\'    "
-            ]
-    )
+    @ValueSource(strings = [
+        "/pm 13 \"How are you?\"",
+        "/pm 13 \'How are you?\'",
+        "/pm    13    \"How are you?\"    ",
+        "/pm    13    \'How are you?\'    "
+    ])
     fun shouldParseCommandWithParameters(commandLine: String) {
         val result = commandParser.parse(commandLine)
 

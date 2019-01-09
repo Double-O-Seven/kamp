@@ -24,13 +24,11 @@ internal class ViewNavigationElementFactoryTest {
         )
 
         assertThat(element)
-                .isEqualTo(
-                        ViewNavigationElement(
-                                view = view,
-                                allowManualNavigation = allowManualNavigation,
-                                useMouse = useMouse
-                        )
-                )
+                .isEqualTo(ViewNavigationElement(
+                        view = view,
+                        allowManualNavigation = allowManualNavigation,
+                        useMouse = useMouse
+                ))
     }
 
 }

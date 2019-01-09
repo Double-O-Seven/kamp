@@ -89,8 +89,7 @@ internal constructor(
     }
 
     fun attachTo(playerMapObject: PlayerMapObject) {
-        nativeFunctionExecutor
-                .attachCameraToPlayerObject(playerid = player.id.value, playerobjectid = playerMapObject.id.value)
+        nativeFunctionExecutor.attachCameraToPlayerObject(playerid = player.id.value, playerobjectid = playerMapObject.id.value)
     }
 
     @JvmOverloads

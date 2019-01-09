@@ -8,8 +8,7 @@ data class TextLabelId internal constructor(override val value: Int) : EntityId 
 
         val INVALID = TextLabelId(SAMPConstants.INVALID_3DTEXT_ID)
 
-        private val textLabelIds: Array<TextLabelId> = (0 until SAMPConstants.MAX_3DTEXT_GLOBAL).map { TextLabelId(it) }
-                .toTypedArray()
+        private val textLabelIds: Array<TextLabelId> = (0 until SAMPConstants.MAX_3DTEXT_GLOBAL).map { TextLabelId(it) }.toTypedArray()
 
         fun valueOf(value: Int): TextLabelId =
                 when {

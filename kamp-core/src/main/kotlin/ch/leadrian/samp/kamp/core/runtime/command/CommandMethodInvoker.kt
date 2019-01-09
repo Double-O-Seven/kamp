@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import javax.inject.Inject
 
+
 internal class CommandMethodInvoker
 @Inject
 constructor() {

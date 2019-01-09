@@ -349,8 +349,7 @@ internal class GameTextSenderTest {
                 arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
             }
 
-            gameTextSender
-                    .sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there", playerFilter = playerFilter)
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, "Hi %s", "there", playerFilter = playerFilter)
 
             verify {
                 nativeFunctionExecutor.gameTextForPlayer(
@@ -370,8 +369,7 @@ internal class GameTextSenderTest {
                 arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
             }
 
-            gameTextSender
-                    .sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there", playerFilter = playerFilter)
+            gameTextSender.sendGameText(GameTextStyle.BANK_GOTHIC_CENTER_1, 13, textKey, "there", playerFilter = playerFilter)
 
             verify {
                 nativeFunctionExecutor.gameTextForPlayer(

@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.core.api.text
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class MessagePreparer
@@ -136,12 +136,7 @@ internal constructor(
                             valueTransform = { textProvider.getText(it, textKey) }
                     )
 
-    private fun getFormattedMessages(
-            color: Color,
-            players: List<Player>,
-            text: String,
-            args: Array<out Any>
-    ): Map<Locale, String> =
+    private fun getFormattedMessages(color: Color, players: List<Player>, text: String, args: Array<out Any>): Map<Locale, String> =
             players
                     .asSequence()
                     .map { it.locale }

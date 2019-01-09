@@ -78,11 +78,7 @@ constructor(
         } while (true)
     }
 
-    override fun execute(
-            onSuccess: (() -> Unit)?,
-            onFailure: ((Exception) -> Unit)?,
-            action: AsyncExecutor.() -> Unit
-    ) {
+    override fun execute(onSuccess: (() -> Unit)?, onFailure: ((Exception) -> Unit)?, action: AsyncExecutor.() -> Unit) {
         executorService.execute {
             try {
                 action.invoke(this)

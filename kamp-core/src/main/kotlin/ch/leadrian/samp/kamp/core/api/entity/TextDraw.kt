@@ -18,7 +18,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerClickTextDrawReceiverDelegate
-import java.util.Locale
+import java.util.*
 
 class TextDraw
 internal constructor(

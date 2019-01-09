@@ -322,9 +322,7 @@ constructor(
                         setText(
                                 "Vehicle ID: {0}${TextDrawCodes.NEW_LINE}Location: {1}",
                                 TextArguments.translate { vehicle.id.value.toString() },
-                                TextArguments.translate {
-                                    SanAndreasZone.getZone(vehicle.coordinates)?.name ?: "San Andreas"
-                                }
+                                TextArguments.translate { SanAndreasZone.getZone(vehicle.coordinates)?.name ?: "San Andreas" }
                         )
                     }
                     enable()
@@ -450,10 +448,7 @@ constructor(
                                 text { "Left aligned: x x x x x x x x x x" }
                                 alignment = TextDrawAlignment.LEFT
                                 enable()
-                                onClick {
-                                    messageSender
-                                            .sendMessageToPlayer(player, Colors.GREY, "Left aligned clicked")
-                                }
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Left aligned clicked") }
                             }
                         }
                     }
@@ -469,10 +464,7 @@ constructor(
                                 text { "Center aligned: x x x x x x x x x x" }
                                 alignment = TextDrawAlignment.CENTERED
                                 enable()
-                                onClick {
-                                    messageSender
-                                            .sendMessageToPlayer(player, Colors.GREY, "Center aligned clicked")
-                                }
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Center aligned clicked") }
                             }
                         }
                     }
@@ -488,10 +480,7 @@ constructor(
                                 text { "Right aligned: x x x x x x x x x x" }
                                 alignment = TextDrawAlignment.RIGHT
                                 enable()
-                                onClick {
-                                    messageSender
-                                            .sendMessageToPlayer(player, Colors.GREY, "Right aligned clicked")
-                                }
+                                onClick { messageSender.sendMessageToPlayer(player, Colors.GREY, "Right aligned clicked") }
                             }
                         }
                     }

@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableTextLabel
 import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
-import java.util.Locale
+import java.util.*
 import javax.inject.Inject
 
 class StreamableTextLabelService
@@ -99,6 +99,7 @@ internal constructor(
             virtualWorldIds = virtualWorldIds,
             testLOS = testLOS
     )
+
 
     @JvmOverloads
     fun createStreamableTextLabel(

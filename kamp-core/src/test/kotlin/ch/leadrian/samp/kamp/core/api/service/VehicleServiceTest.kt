@@ -105,14 +105,7 @@ internal class VehicleServiceTest {
             val createdVehicle = vehicleService.createVehicle(
                     model = VehicleModel.FBIRANCHER,
                     colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                    angledLocation = angledLocationOf(
-                            x = 1f,
-                            y = 2f,
-                            z = 3f,
-                            interiorId = 187,
-                            worldId = 69,
-                            angle = 4f
-                    ),
+                    angledLocation = angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
                     respawnDelay = 60,
                     addSiren = true
             )
@@ -123,14 +116,7 @@ internal class VehicleServiceTest {
                 vehicleFactory.create(
                         model = VehicleModel.FBIRANCHER,
                         colors = vehicleColorsOf(VehicleColor[3], VehicleColor[6]),
-                        coordinates = angledLocationOf(
-                                x = 1f,
-                                y = 2f,
-                                z = 3f,
-                                interiorId = 187,
-                                worldId = 69,
-                                angle = 4f
-                        ),
+                        coordinates = angledLocationOf(x = 1f, y = 2f, z = 3f, interiorId = 187, worldId = 69, angle = 4f),
                         rotation = 4f,
                         respawnDelay = 60,
                         addSiren = true
@@ -264,14 +250,7 @@ internal class VehicleServiceTest {
         @Test
         fun shouldReturnModelInfo() {
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.FBIRANCHER.value,
-                                VehicleModelInfoType.PETROLCAP.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.FBIRANCHER.value, VehicleModelInfoType.PETROLCAP.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 1f
                 arg<ReferenceFloat>(3).value = 2f
@@ -288,14 +267,7 @@ internal class VehicleServiceTest {
         @Test
         fun givenSameModelAndDifferentTypeItShouldReturnDifferentResults() {
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.FBIRANCHER.value,
-                                VehicleModelInfoType.PETROLCAP.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.FBIRANCHER.value, VehicleModelInfoType.PETROLCAP.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 1f
                 arg<ReferenceFloat>(3).value = 2f
@@ -303,14 +275,7 @@ internal class VehicleServiceTest {
                 true
             }
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.FBIRANCHER.value,
-                                VehicleModelInfoType.FRONTSEAT.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.FBIRANCHER.value, VehicleModelInfoType.FRONTSEAT.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 4f
                 arg<ReferenceFloat>(3).value = 5f
@@ -328,14 +293,7 @@ internal class VehicleServiceTest {
         @Test
         fun givenDifferentModelAndSameTypeItShouldReturnDifferentResults() {
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.FBIRANCHER.value,
-                                VehicleModelInfoType.PETROLCAP.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.FBIRANCHER.value, VehicleModelInfoType.PETROLCAP.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 1f
                 arg<ReferenceFloat>(3).value = 2f
@@ -343,14 +301,7 @@ internal class VehicleServiceTest {
                 true
             }
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.BULLET.value,
-                                VehicleModelInfoType.PETROLCAP.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.BULLET.value, VehicleModelInfoType.PETROLCAP.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 4f
                 arg<ReferenceFloat>(3).value = 5f
@@ -368,14 +319,7 @@ internal class VehicleServiceTest {
         @Test
         fun givenDifferentModelAndDifferentTypeItShouldReturnDifferentResults() {
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.FBIRANCHER.value,
-                                VehicleModelInfoType.PETROLCAP.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.FBIRANCHER.value, VehicleModelInfoType.PETROLCAP.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 1f
                 arg<ReferenceFloat>(3).value = 2f
@@ -383,14 +327,7 @@ internal class VehicleServiceTest {
                 true
             }
             every {
-                nativeFunctionExecutor
-                        .getVehicleModelInfo(
-                                VehicleModel.BULLET.value,
-                                VehicleModelInfoType.FRONTSEAT.value,
-                                any(),
-                                any(),
-                                any()
-                        )
+                nativeFunctionExecutor.getVehicleModelInfo(VehicleModel.BULLET.value, VehicleModelInfoType.FRONTSEAT.value, any(), any(), any())
             } answers {
                 thirdArg<ReferenceFloat>().value = 4f
                 arg<ReferenceFloat>(3).value = 5f

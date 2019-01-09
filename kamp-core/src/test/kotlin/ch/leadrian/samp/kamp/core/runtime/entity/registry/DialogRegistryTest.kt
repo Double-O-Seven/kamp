@@ -92,12 +92,7 @@ internal class DialogRegistryTest {
 
         override fun show(forPlayer: Player) = throw UnsupportedOperationException()
 
-        override fun onResponse(
-                player: Player,
-                response: DialogResponse,
-                listItem: Int,
-                inputText: String
-        ) = throw UnsupportedOperationException()
+        override fun onResponse(player: Player, response: DialogResponse, listItem: Int, inputText: String) = throw UnsupportedOperationException()
 
     }
 

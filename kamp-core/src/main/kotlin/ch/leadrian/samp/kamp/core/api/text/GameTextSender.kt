@@ -133,13 +133,7 @@ internal constructor(
         }
     }
 
-    fun sendGameText(
-            style: GameTextStyle,
-            time: Int,
-            text: String,
-            vararg args: Any,
-            playerFilter: (Player) -> Boolean
-    ) {
+    fun sendGameText(style: GameTextStyle, time: Int, text: String, vararg args: Any, playerFilter: (Player) -> Boolean) {
         textPreparer.prepare(playerFilter, text, args) { player, playerText ->
             nativeFunctionExecutor.gameTextForPlayer(
                     playerid = player.id.value,
@@ -150,13 +144,7 @@ internal constructor(
         }
     }
 
-    fun sendGameText(
-            style: GameTextStyle,
-            time: Int,
-            textKey: TextKey,
-            vararg args: Any,
-            playerFilter: (Player) -> Boolean
-    ) {
+    fun sendGameText(style: GameTextStyle, time: Int, textKey: TextKey, vararg args: Any, playerFilter: (Player) -> Boolean) {
         textPreparer.prepare(playerFilter, textKey, args) { player, playerText ->
             nativeFunctionExecutor.gameTextForPlayer(
                     playerid = player.id.value,

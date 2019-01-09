@@ -32,7 +32,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.Locale
+import java.util.*
 
 internal class TextDrawTest {
 
@@ -87,7 +87,6 @@ internal class TextDrawTest {
 
     @Nested
     inner class PostConstructionTests {
-
         private val locale = Locale.GERMANY
         private val textDrawId = TextDrawId.valueOf(69)
         private lateinit var textDraw: TextDraw
@@ -634,6 +633,7 @@ internal class TextDrawTest {
             }
         }
 
+
         @Nested
         inner class SetPreviewModelRotationTests {
 
@@ -701,12 +701,10 @@ internal class TextDrawTest {
                     )
                 }
                 assertThat(textDraw.previewModelVehicleColors)
-                        .isEqualTo(
-                                vehicleColorsOf(
-                                        color1 = VehicleColor[3],
-                                        color2 = VehicleColor[6]
-                                )
-                        )
+                        .isEqualTo(vehicleColorsOf(
+                                color1 = VehicleColor[3],
+                                color2 = VehicleColor[6]
+                        ))
             }
 
             @Test
@@ -722,22 +720,17 @@ internal class TextDrawTest {
 
                 verify(exactly = 1) { nativeFunctionExecutor.textDrawSetPreviewVehCol(any(), any(), any()) }
                 assertThat(textDraw.previewModelVehicleColors)
-                        .isEqualTo(
-                                vehicleColorsOf(
-                                        color1 = VehicleColor[3],
-                                        color2 = VehicleColor[6]
-                                )
-                        )
+                        .isEqualTo(vehicleColorsOf(
+                                color1 = VehicleColor[3],
+                                color2 = VehicleColor[6]
+                        ))
             }
         }
 
         @Test
         fun shouldCallOnPlayerClickTextDrawReceiverDelegate() {
             val player = mockk<Player>()
-            every {
-                onPlayerClickTextDrawReceiver
-                        .onPlayerClickTextDraw(any(), any())
-            } returns OnPlayerClickTextDrawListener.Result.Processed
+            every { onPlayerClickTextDrawReceiver.onPlayerClickTextDraw(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
 
             textDraw.onClick(player)
 

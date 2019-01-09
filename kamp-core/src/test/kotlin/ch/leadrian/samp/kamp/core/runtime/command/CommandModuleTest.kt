@@ -134,8 +134,7 @@ internal class CommandModuleTest {
 
         @Test
         fun shouldInjectDefaultInvalidCommandParameterValueHandler() {
-            val defaultInvalidCommandParameterValueHandler = injector
-                    .getInstance<DefaultInvalidCommandParameterValueHandler>()
+            val defaultInvalidCommandParameterValueHandler = injector.getInstance<DefaultInvalidCommandParameterValueHandler>()
 
             assertThat(defaultInvalidCommandParameterValueHandler)
                     .isNotNull

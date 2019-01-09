@@ -7,8 +7,7 @@ import javax.inject.Inject
 
 internal class MapObjectCommandParameterResolver
 @Inject
-constructor(mapObjectRegistry: MapObjectRegistry) :
-        EntityCommandParameterResolver<MapObject, MapObjectId>(mapObjectRegistry) {
+constructor(mapObjectRegistry: MapObjectRegistry) : EntityCommandParameterResolver<MapObject, MapObjectId>(mapObjectRegistry) {
 
     override val parameterType: Class<MapObject> = MapObject::class.java
 

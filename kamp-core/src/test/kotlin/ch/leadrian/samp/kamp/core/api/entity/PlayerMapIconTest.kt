@@ -95,6 +95,7 @@ internal class PlayerMapIconTest {
             }
         }
 
+
         @Test
         fun settingCoordinatesShouldStoreImmutableVector3D() {
             val player = mockk<Player> {
