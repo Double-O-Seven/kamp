@@ -2,8 +2,6 @@ package ch.leadrian.samp.kamp.core.runtime.entity.factory
 
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
-import ch.leadrian.samp.kamp.core.api.text.TextFormatter
-import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextLabelRegistry
 import io.mockk.Runs
@@ -20,8 +18,6 @@ internal class TextLabelFactoryTest {
 
     private val textLabelRegistry = mockk<TextLabelRegistry>()
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
-    private val textProvider = mockk<TextProvider>()
-    private val textFormatter = mockk<TextFormatter>()
 
     @BeforeEach
     fun setUp() {
@@ -38,7 +34,7 @@ internal class TextLabelFactoryTest {
             )
         } returns 0
         every { textLabelRegistry.register(any()) } just Runs
-        textLabelFactory = TextLabelFactory(nativeFunctionExecutor, textLabelRegistry, textProvider, textFormatter)
+        textLabelFactory = TextLabelFactory(nativeFunctionExecutor, textLabelRegistry)
     }
 
     @Test

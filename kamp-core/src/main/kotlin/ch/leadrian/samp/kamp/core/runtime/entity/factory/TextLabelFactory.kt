@@ -4,8 +4,6 @@ import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.TextLabel
 import ch.leadrian.samp.kamp.core.api.entity.onDestroy
-import ch.leadrian.samp.kamp.core.api.text.TextFormatter
-import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextLabelRegistry
 import javax.inject.Inject
@@ -14,9 +12,7 @@ internal class TextLabelFactory
 @Inject
 constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
-        private val textLabelRegistry: TextLabelRegistry,
-        private val textProvider: TextProvider,
-        private val textFormatter: TextFormatter
+        private val textLabelRegistry: TextLabelRegistry
 ) {
 
     fun create(
