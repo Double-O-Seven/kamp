@@ -20,64 +20,64 @@ internal abstract class AbstractDialogBuilder<B : DialogBuilder<B>>(protected va
 
     override fun caption(text: String): B {
         captionTextSupplier = StringDialogTextSupplier(text)
-        return self()
+        return self
     }
 
     override fun caption(textKey: TextKey): B {
         captionTextSupplier = TextKeyDialogTextSupplier(textKey, textProvider)
-        return self()
+        return self
     }
 
     override fun caption(supplier: (Player) -> String): B {
         captionTextSupplier = FunctionalDialogTextSupplier(supplier)
-        return self()
+        return self
     }
 
     override fun caption(supplier: DialogTextSupplier): B {
         captionTextSupplier = supplier
-        return self()
+        return self
     }
 
     override fun leftButton(text: String): B {
         leftButtonTextSupplier = StringDialogTextSupplier(text)
-        return self()
+        return self
     }
 
     override fun leftButton(textKey: TextKey): B {
         leftButtonTextSupplier = TextKeyDialogTextSupplier(textKey, textProvider)
-        return self()
+        return self
     }
 
     override fun leftButton(supplier: (Player) -> String): B {
         leftButtonTextSupplier = FunctionalDialogTextSupplier(supplier)
-        return self()
+        return self
     }
 
     override fun leftButton(supplier: DialogTextSupplier): B {
         leftButtonTextSupplier = supplier
-        return self()
+        return self
     }
 
     override fun rightButton(text: String): B {
         rightButtonTextSupplier = StringDialogTextSupplier(text)
-        return self()
+        return self
     }
 
     override fun rightButton(textKey: TextKey): B {
         rightButtonTextSupplier = TextKeyDialogTextSupplier(textKey, textProvider)
-        return self()
+        return self
     }
 
     override fun rightButton(supplier: (Player) -> String): B {
         rightButtonTextSupplier = FunctionalDialogTextSupplier(supplier)
-        return self()
+        return self
     }
 
     override fun rightButton(supplier: DialogTextSupplier): B {
         rightButtonTextSupplier = supplier
-        return self()
+        return self
     }
 
-    protected abstract fun self(): B
+    protected abstract val self: B
 
 }

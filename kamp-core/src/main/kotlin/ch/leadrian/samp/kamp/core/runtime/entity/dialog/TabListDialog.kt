@@ -129,53 +129,53 @@ internal class TabListDialog<V : Any>(
 
         override fun headerContent(vararg text: String): Builder<V> {
             headerTextSuppliers = text.map { StringDialogTextSupplier(it) }
-            return self()
+            return self
         }
 
         override fun headerContent(vararg textKey: TextKey): Builder<V> {
             headerTextSuppliers = textKey.map { TextKeyDialogTextSupplier(it, textProvider) }
-            return self()
+            return self
         }
 
         override fun headerContent(vararg supplier: (Player) -> String): Builder<V> {
             headerTextSuppliers = supplier.map { FunctionalDialogTextSupplier(it) }
-            return self()
+            return self
         }
 
         override fun headerContent(vararg supplier: DialogTextSupplier): Builder<V> {
             headerTextSuppliers = supplier.toList()
-            return self()
+            return self
         }
 
         override fun item(builder: TabListDialogItem.Builder<V>.() -> Unit): Builder<V> {
             val item = DefaultTabListDialogItem.Builder<V>(textProvider).apply(builder).build()
             items.add(item)
-            return self()
+            return self
         }
 
         override fun item(item: TabListDialogItem<V>): Builder<V> {
             items.add(item)
-            return self()
+            return self
         }
 
         override fun items(vararg item: TabListDialogItem<V>): Builder<V> {
             items.addAll(item)
-            return self()
+            return self
         }
 
         override fun items(items: Collection<TabListDialogItem<V>>): Builder<V> {
             this.items.addAll(items)
-            return self()
+            return self
         }
 
         override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): Builder<V> {
             this.onCancel = onCancel
-            return self()
+            return self
         }
 
         override fun onSelectItem(onSelectItem: Dialog.(Player, TabListDialogItem<V>, String) -> Unit): Builder<V> {
             this.onSelectItem = onSelectItem
-            return self()
+            return self
         }
 
         override fun build(): TabListDialog<V> = dialogRegistry.register { dialogId ->
@@ -192,7 +192,7 @@ internal class TabListDialog<V : Any>(
             )
         }
 
-        override fun self(): Builder<V> = this
+        override val self: Builder<V> = this
 
     }
 }

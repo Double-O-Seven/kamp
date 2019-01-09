@@ -69,32 +69,32 @@ internal class MessageBoxDialog(
 
         override fun message(text: String): Builder {
             messageTextSupplier = StringDialogTextSupplier(text)
-            return self()
+            return self
         }
 
         override fun message(textKey: TextKey): Builder {
             messageTextSupplier = TextKeyDialogTextSupplier(textKey, textProvider)
-            return self()
+            return self
         }
 
         override fun message(supplier: (Player) -> String): Builder {
             messageTextSupplier = FunctionalDialogTextSupplier(supplier)
-            return self()
+            return self
         }
 
         override fun message(supplier: DialogTextSupplier): Builder {
             messageTextSupplier = supplier
-            return self()
+            return self
         }
 
         override fun onClickLeftButton(onClickLeftButton: Dialog.(Player) -> Unit): Builder {
             this.onClickLeftButton = onClickLeftButton
-            return self()
+            return self
         }
 
         override fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseListener.Result): Builder {
             this.onClickRightButton = onClickRightButton
-            return self()
+            return self
         }
 
         override fun build(): MessageBoxDialog = dialogRegistry.register { dialogId ->
@@ -110,6 +110,6 @@ internal class MessageBoxDialog(
             )
         }
 
-        override fun self(): Builder = this
+        override val self: Builder = this
     }
 }

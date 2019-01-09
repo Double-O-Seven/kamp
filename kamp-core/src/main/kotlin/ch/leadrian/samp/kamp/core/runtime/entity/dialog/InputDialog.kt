@@ -88,62 +88,62 @@ internal class InputDialog(
 
         override fun message(text: String): Builder {
             messageTextSupplier = StringDialogTextSupplier(text)
-            return self()
+            return self
         }
 
         override fun message(textKey: TextKey): Builder {
             messageTextSupplier = TextKeyDialogTextSupplier(textKey, textProvider)
-            return self()
+            return self
         }
 
         override fun message(supplier: (Player) -> String): Builder {
             messageTextSupplier = FunctionalDialogTextSupplier(supplier)
-            return self()
+            return self
         }
 
         override fun message(supplier: DialogTextSupplier): Builder {
             messageTextSupplier = supplier
-            return self()
+            return self
         }
 
         override fun validator(validator: DialogInputValidator): Builder {
             validators += validator
-            return self()
+            return self
         }
 
         override fun validators(vararg validator: DialogInputValidator): Builder {
             validators += validator
-            return self()
+            return self
         }
 
         override fun validators(validators: Collection<DialogInputValidator>): Builder {
             this.validators.addAll(validators)
-            return self()
+            return self
         }
 
         override fun isPasswordInput(isPasswordInput: Boolean): Builder {
             this.isPasswordInput = { isPasswordInput }
-            return self()
+            return self
         }
 
         override fun isPasswordInput(isPasswordInput: Dialog.(Player) -> Boolean): Builder {
             this.isPasswordInput = isPasswordInput
-            return self()
+            return self
         }
 
         override fun onSubmit(onSubmit: Dialog.(Player, String) -> Unit): Builder {
             this.onSubmit = onSubmit
-            return self()
+            return self
         }
 
         override fun onInvalidInput(onInvalidInput: Dialog.(Player, Any) -> Unit): Builder {
             this.onInvalidInput = onInvalidInput
-            return self()
+            return self
         }
 
         override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): Builder {
             this.onCancel = onCancel
-            return self()
+            return self
         }
 
         override fun build(): InputDialog = dialogRegistry.register { dialogId ->
@@ -162,7 +162,7 @@ internal class InputDialog(
             )
         }
 
-        override fun self(): Builder = this
+        override val self: Builder = this
 
     }
 }

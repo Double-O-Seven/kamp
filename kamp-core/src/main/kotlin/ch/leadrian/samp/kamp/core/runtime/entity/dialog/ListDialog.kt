@@ -97,32 +97,32 @@ internal class ListDialog<V : Any>(
         override fun item(builder: ListDialogItem.Builder<V>.() -> Unit): Builder<V> {
             val item = DefaultListDialogItem.Builder<V>(textProvider).apply(builder).build()
             items.add(item)
-            return self()
+            return self
         }
 
         override fun item(item: ListDialogItem<V>): Builder<V> {
             items.add(item)
-            return self()
+            return self
         }
 
         override fun items(vararg item: ListDialogItem<V>): Builder<V> {
             items.addAll(item)
-            return self()
+            return self
         }
 
         override fun items(items: Collection<ListDialogItem<V>>): Builder<V> {
             this.items.addAll(items)
-            return self()
+            return self
         }
 
         override fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): Builder<V> {
             this.onCancel = onCancel
-            return self()
+            return self
         }
 
         override fun onSelectItem(onSelectItem: Dialog.(Player, ListDialogItem<V>, String) -> Unit): Builder<V> {
             this.onSelectItem = onSelectItem
-            return self()
+            return self
         }
 
         override fun build(): ListDialog<V> = dialogRegistry.register { dialogId ->
@@ -138,7 +138,7 @@ internal class ListDialog<V : Any>(
             )
         }
 
-        override fun self(): Builder<V> = this
+        override val self: Builder<V> = this
 
     }
 }
