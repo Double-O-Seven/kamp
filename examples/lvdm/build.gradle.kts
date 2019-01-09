@@ -35,6 +35,8 @@ serverStarter {
     configProperty("kamp.streamer.rate.ms", "300")
 }
 
-val configureServer by tasks
-
-configureServer.dependsOn(project(":kamp-plugin").tasks.getByName("build"))
+tasks {
+    configureServer {
+        dependsOn(project(":kamp-plugin").tasks.getByName("build"))
+    }
+}
