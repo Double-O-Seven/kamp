@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
@@ -10,7 +11,7 @@ class PlayerMessageSender
 internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val playerRegistry: PlayerRegistry,
-        private val textPreparer: TextPreparer
+        private val messagePreparer: MessagePreparer
 ) {
 
     fun sendPlayerMessageToAll(fromPlayer: Player, message: String) {
@@ -18,7 +19,8 @@ internal constructor(
     }
 
     fun sendPlayerMessageToAll(fromPlayer: Player, message: String, vararg args: Any) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
+                color = Colors.WHITE,
                 text = message,
                 args = args,
                 consumer = { player, playerMessage ->
@@ -33,7 +35,7 @@ internal constructor(
     }
 
     fun sendPlayerMessageToAll(fromPlayer: Player, textKey: TextKey) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
                 textKey = textKey,
                 consumer = { player, playerMessage ->
                     nativeFunctionExecutor.sendPlayerMessageToPlayer(
@@ -47,7 +49,8 @@ internal constructor(
     }
 
     fun sendPlayerMessageToAll(fromPlayer: Player, textKey: TextKey, vararg args: Any) {
-        textPreparer.prepareForAllPlayers(
+        messagePreparer.prepareForAllPlayers(
+                color = Colors.WHITE,
                 textKey = textKey,
                 args = args,
                 consumer = { player, playerMessage ->
@@ -70,7 +73,7 @@ internal constructor(
     }
 
     fun sendPlayerMessageToPlayer(toPlayer: Player, fromPlayer: Player, message: String, vararg args: Any) {
-        textPreparer.prepareForPlayer(toPlayer, message, args) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(Colors.WHITE, toPlayer, message, args) { _, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = toPlayer.id.value,
                     senderid = fromPlayer.id.value,
@@ -80,7 +83,7 @@ internal constructor(
     }
 
     fun sendPlayerMessageToPlayer(toPlayer: Player, fromPlayer: Player, textKey: TextKey) {
-        textPreparer.prepareForPlayer(toPlayer, textKey) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(toPlayer, textKey) { _, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = toPlayer.id.value,
                     senderid = fromPlayer.id.value,
@@ -90,7 +93,7 @@ internal constructor(
     }
 
     fun sendPlayerMessageToPlayer(toPlayer: Player, fromPlayer: Player, textKey: TextKey, vararg args: Any) {
-        textPreparer.prepareForPlayer(toPlayer, textKey, args) { _, playerMessage ->
+        messagePreparer.prepareForPlayer(Colors.WHITE, toPlayer, textKey, args) { _, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = toPlayer.id.value,
                     senderid = fromPlayer.id.value,
@@ -114,7 +117,7 @@ internal constructor(
     }
 
     fun sendPlayerMessage(fromPlayer: Player, message: String, vararg args: Any, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, message, args) { player, playerMessage ->
+        messagePreparer.prepare(Colors.WHITE, playerFilter, message, args) { player, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = player.id.value,
                     senderid = fromPlayer.id.value,
@@ -124,7 +127,7 @@ internal constructor(
     }
 
     fun sendPlayerMessage(fromPlayer: Player, textKey: TextKey, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, textKey) { player, playerMessage ->
+        messagePreparer.prepare(playerFilter, textKey) { player, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = player.id.value,
                     senderid = fromPlayer.id.value,
@@ -134,7 +137,7 @@ internal constructor(
     }
 
     fun sendPlayerMessage(fromPlayer: Player, textKey: TextKey, vararg args: Any, playerFilter: (Player) -> Boolean) {
-        textPreparer.prepare(playerFilter, textKey, args) { player, playerMessage ->
+        messagePreparer.prepare(Colors.WHITE, playerFilter, textKey, args) { player, playerMessage ->
             nativeFunctionExecutor.sendPlayerMessageToPlayer(
                     playerid = player.id.value,
                     senderid = fromPlayer.id.value,

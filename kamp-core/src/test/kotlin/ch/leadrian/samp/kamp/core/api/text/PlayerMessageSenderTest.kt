@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.text
 
+import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -19,7 +20,7 @@ internal class PlayerMessageSenderTest {
 
     private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private val playerRegistry = mockk<PlayerRegistry>()
-    private val textPreparer = mockk<TextPreparer>()
+    private val messagePreparer = mockk<MessagePreparer>()
 
     @BeforeEach
     fun setUp() {
@@ -29,7 +30,7 @@ internal class PlayerMessageSenderTest {
         playerMessageSender = PlayerMessageSender(
                 nativeFunctionExecutor = nativeFunctionExecutor,
                 playerRegistry = playerRegistry,
-                textPreparer = textPreparer
+                messagePreparer = messagePreparer
         )
     }
 
@@ -56,9 +57,17 @@ internal class PlayerMessageSenderTest {
             val player2 = mockk<Player> {
                 every { id } returns PlayerId.valueOf(75)
             }
-            every { textPreparer.prepareForAllPlayers("Hi %s", arrayOf("there"), any(), any()) } answers {
-                thirdArg<(Player, String) -> Unit>().invoke(player1, "Hallo")
-                thirdArg<(Player, String) -> Unit>().invoke(player2, "Bonjour")
+            every {
+                messagePreparer.prepareForAllPlayers(
+                        Colors.WHITE,
+                        "Hi %s",
+                        arrayOf("there"),
+                        any(),
+                        any()
+                )
+            } answers {
+                arg<(Player, String) -> Unit>(3).invoke(player1, "Hallo")
+                arg<(Player, String) -> Unit>(3).invoke(player2, "Bonjour")
             }
 
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, "Hi %s", "there")
@@ -80,8 +89,16 @@ internal class PlayerMessageSenderTest {
         @Test
         fun shouldSendFormattedGameTextToAll() {
             every { nativeFunctionExecutor.sendPlayerMessageToAll(any(), any()) } returns true
-            every { textPreparer.prepareForAllPlayers("Hi %s", arrayOf("there"), any(), any()) } answers {
-                arg<(String) -> Unit>(3).invoke("Hi there")
+            every {
+                messagePreparer.prepareForAllPlayers(
+                        Colors.WHITE,
+                        "Hi %s",
+                        arrayOf("there"),
+                        any(),
+                        any()
+                )
+            } answers {
+                arg<(String) -> Unit>(4).invoke("Hi there")
             }
 
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, "Hi %s", "there")
@@ -99,7 +116,7 @@ internal class PlayerMessageSenderTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            every { textPreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
+            every { messagePreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
                 secondArg<(Player, String) -> Unit>().invoke(player1, "Hallo")
                 secondArg<(Player, String) -> Unit>().invoke(player2, "Bonjour")
             }
@@ -124,7 +141,7 @@ internal class PlayerMessageSenderTest {
         fun shouldSendTranslatedGameTextToAll() {
             val textKey = TextKey("test")
             every { nativeFunctionExecutor.sendPlayerMessageToAll(any(), any()) } returns true
-            every { textPreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
+            every { messagePreparer.prepareForAllPlayers(textKey, any(), any()) } answers {
                 thirdArg<(String) -> Unit>().invoke("Hi there")
             }
 
@@ -143,9 +160,17 @@ internal class PlayerMessageSenderTest {
                 every { id } returns PlayerId.valueOf(75)
             }
             val textKey = TextKey("test")
-            every { textPreparer.prepareForAllPlayers(textKey, arrayOf("SAMP"), any(), any()) } answers {
-                thirdArg<(Player, String) -> Unit>().invoke(player1, "Hallo SAMP")
-                thirdArg<(Player, String) -> Unit>().invoke(player2, "Bonjour SAMP")
+            every {
+                messagePreparer.prepareForAllPlayers(
+                        Colors.WHITE,
+                        textKey,
+                        arrayOf("SAMP"),
+                        any(),
+                        any()
+                )
+            } answers {
+                arg<(Player, String) -> Unit>(3).invoke(player1, "Hallo SAMP")
+                arg<(Player, String) -> Unit>(3).invoke(player2, "Bonjour SAMP")
             }
 
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, textKey, "SAMP")
@@ -168,8 +193,16 @@ internal class PlayerMessageSenderTest {
         fun shouldSendFormattedTranslatedGameTextToAll() {
             val textKey = TextKey("test")
             every { nativeFunctionExecutor.sendPlayerMessageToAll(any(), any()) } returns true
-            every { textPreparer.prepareForAllPlayers(textKey, arrayOf("there"), any(), any()) } answers {
-                arg<(String) -> Unit>(3).invoke("Hi there")
+            every {
+                messagePreparer.prepareForAllPlayers(
+                        Colors.WHITE,
+                        textKey,
+                        arrayOf("there"),
+                        any(),
+                        any()
+                )
+            } answers {
+                arg<(String) -> Unit>(4).invoke("Hi there")
             }
 
             playerMessageSender.sendPlayerMessageToAll(fromPlayer, textKey, "there")
@@ -208,7 +241,7 @@ internal class PlayerMessageSenderTest {
         @Test
         fun shouldSendTranslatedText() {
             val textKey = TextKey("test")
-            every { textPreparer.prepareForPlayer(player, textKey, any()) } answers {
+            every { messagePreparer.prepareForPlayer(player, textKey, any()) } answers {
                 thirdArg<(Player, String) -> String>().invoke(player, "Hi there")
             }
 
@@ -225,8 +258,8 @@ internal class PlayerMessageSenderTest {
 
         @Test
         fun shouldSendFormattedText() {
-            every { textPreparer.prepareForPlayer(player, "Hi %s", arrayOf("there"), any()) } answers {
-                arg<(Player, String) -> String>(3).invoke(player, "Hi there")
+            every { messagePreparer.prepareForPlayer(Colors.WHITE, player, "Hi %s", arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> String>(4).invoke(player, "Hi there")
             }
 
             playerMessageSender.sendPlayerMessageToPlayer(player, fromPlayer, "Hi %s", "there")
@@ -243,8 +276,8 @@ internal class PlayerMessageSenderTest {
         @Test
         fun shouldSendFormattedTranslatedText() {
             val textKey = TextKey("test")
-            every { textPreparer.prepareForPlayer(player, textKey, arrayOf("there"), any()) } answers {
-                arg<(Player, String) -> String>(3).invoke(player, "Hi there")
+            every { messagePreparer.prepareForPlayer(Colors.WHITE, player, textKey, arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> String>(4).invoke(player, "Hi there")
             }
 
             playerMessageSender.sendPlayerMessageToPlayer(player, fromPlayer, textKey, "there")
@@ -297,7 +330,7 @@ internal class PlayerMessageSenderTest {
         fun shouldSendTranslatedText() {
             val textKey = TextKey("test")
             val playerFilter: (Player) -> Boolean = { it != player2 }
-            every { textPreparer.prepare(playerFilter, textKey, any()) } answers {
+            every { messagePreparer.prepare(playerFilter, textKey, any()) } answers {
                 thirdArg<(Player, String) -> Unit>().invoke(player1, "Hi there")
             }
 
@@ -315,8 +348,8 @@ internal class PlayerMessageSenderTest {
         @Test
         fun shouldSendFormattedText() {
             val playerFilter: (Player) -> Boolean = { it != player2 }
-            every { textPreparer.prepare(playerFilter, "Hi %s", arrayOf("there"), any()) } answers {
-                arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
+            every { messagePreparer.prepare(Colors.WHITE, playerFilter, "Hi %s", arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> Unit>(4).invoke(player1, "Hi there")
             }
 
             playerMessageSender.sendPlayerMessage(fromPlayer, "Hi %s", "there", playerFilter = playerFilter)
@@ -334,8 +367,8 @@ internal class PlayerMessageSenderTest {
         fun shouldSendFormattedTranslatedText() {
             val textKey = TextKey("test")
             val playerFilter: (Player) -> Boolean = { it != player2 }
-            every { textPreparer.prepare(playerFilter, textKey, arrayOf("there"), any()) } answers {
-                arg<(Player, String) -> Unit>(3).invoke(player1, "Hi there")
+            every { messagePreparer.prepare(Colors.WHITE, playerFilter, textKey, arrayOf("there"), any()) } answers {
+                arg<(Player, String) -> Unit>(4).invoke(player1, "Hi there")
             }
 
             playerMessageSender.sendPlayerMessage(fromPlayer, textKey, "there", playerFilter = playerFilter)
