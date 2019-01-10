@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
+@Suppress("SpellCheckingInspection", "unused")
 enum class VehicleComponentModel(
         override val value: Int,
         val modelName: String,

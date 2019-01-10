@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class GameTextStyle(override val value: Int) : ConstantValue<Int> {
+
     PRICEDOWN_CENTER_9_SECONDS(0),
     PRICEDOWN_BOTTOM_RIGHT_8_SECONDS(1),
     DIPLOMA_CENTER_UNTIL_RESPAWN(2),

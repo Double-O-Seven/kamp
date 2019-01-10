@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class MapIconType(override val value: Int) : ConstantValue<Int> {
+
     COLORED(0),
     WHITE_SQUARE(1),
     PLAYER_POSITION(2),

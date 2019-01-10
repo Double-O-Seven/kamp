@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 
 import org.apache.commons.collections4.trie.PatriciaTrie
 
-@Suppress("unused")
+@Suppress("SpellCheckingInspection", "unused")
 enum class SkinModel(
         override val value: Int,
         val description: String,

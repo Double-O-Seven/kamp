@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 
+@Suppress("SpellCheckingInspection")
 enum class ShopName(
         val description: String,
         val coordinates: Vector3D,

@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class SpecialAction(override val value: Int) : ConstantValue<Int> {
+
     NONE(SAMPConstants.SPECIAL_ACTION_NONE),
     DUCK(SAMPConstants.SPECIAL_ACTION_DUCK),
     USE_JETPACK(SAMPConstants.SPECIAL_ACTION_USEJETPACK),

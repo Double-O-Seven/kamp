@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class PlayerKey(
         val value: Int,
         onFootTextDrawCode: String? = null,

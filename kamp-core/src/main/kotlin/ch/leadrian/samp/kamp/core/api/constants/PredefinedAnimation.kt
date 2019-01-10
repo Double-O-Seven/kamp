@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.api.constants
 
 import ch.leadrian.samp.kamp.core.api.data.Animation
 
-@Suppress("EnumEntryName")
+@Suppress("SpellCheckingInspection", "EnumEntryName")
 enum class PredefinedAnimation(
         override val library: String,
         override val animationName: String

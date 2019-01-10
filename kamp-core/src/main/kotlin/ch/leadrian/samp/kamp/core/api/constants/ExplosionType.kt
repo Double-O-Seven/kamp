@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("unused")
 enum class ExplosionType(
         override val value: Int,
         val visible: Boolean,

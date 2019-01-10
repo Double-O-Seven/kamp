@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class WeaponSlot(override val value: Int) : ConstantValue<Int> {
+
     INVALID(-1),
     HAND(0),
     MELEE(1),

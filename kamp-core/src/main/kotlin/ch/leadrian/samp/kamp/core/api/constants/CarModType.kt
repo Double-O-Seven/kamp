@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+@Suppress("SpellCheckingInspection")
 enum class CarModType(override val value: Int) : ConstantValue<Int> {
+
     SPOILER(SAMPConstants.CARMODTYPE_SPOILER),
     HOOD(SAMPConstants.CARMODTYPE_HOOD),
     ROOF(SAMPConstants.CARMODTYPE_ROOF),

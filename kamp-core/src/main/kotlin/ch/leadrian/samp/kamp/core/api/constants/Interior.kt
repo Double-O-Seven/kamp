@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 /**
  * Taken from https://github.com/Shoebill/shoebill-api
  */
+@Suppress("SpellCheckingInspection")
 enum class Interior(val description: String, val interiorId: Int, val coordinates: Vector3D) {
 
     TWENTYFORSEVEN_1("24/7 1", 17, vector3DOf(-25.884498f, -185.868988f, 1003.546875f)),
