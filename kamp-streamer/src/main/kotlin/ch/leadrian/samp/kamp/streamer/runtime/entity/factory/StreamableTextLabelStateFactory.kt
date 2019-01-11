@@ -11,41 +11,39 @@ import javax.inject.Inject
 
 internal class StreamableTextLabelStateFactory
 @Inject
-constructor(
-        private val playerTextLabelService: PlayerTextLabelService,
-        private val asyncExecutor: AsyncExecutor
-) {
+constructor(private val playerTextLabelService: PlayerTextLabelService, private val asyncExecutor: AsyncExecutor) {
 
     fun createFixedCoordinates(
             streamableTextLabel: StreamableTextLabelImpl,
             coordinates: Vector3D
-    ): StreamableTextLabelState.FixedCoordinates =
-            StreamableTextLabelState.FixedCoordinates(streamableTextLabel, coordinates, playerTextLabelService)
+    ): StreamableTextLabelState.FixedCoordinates = StreamableTextLabelState.FixedCoordinates(
+            streamableTextLabel,
+            coordinates,
+            playerTextLabelService
+    )
 
     fun createAttachedToVehicle(
             streamableTextLabel: StreamableTextLabelImpl,
             offset: Vector3D,
             vehicle: Vehicle
-    ): StreamableTextLabelState.AttachedToVehicle =
-            StreamableTextLabelState.AttachedToVehicle(
-                    streamableTextLabel,
-                    vehicle,
-                    offset,
-                    playerTextLabelService,
-                    asyncExecutor
-            )
+    ): StreamableTextLabelState.AttachedToVehicle = StreamableTextLabelState.AttachedToVehicle(
+            streamableTextLabel,
+            vehicle,
+            offset,
+            playerTextLabelService,
+            asyncExecutor
+    )
 
     fun createAttachedToPlayer(
             streamableTextLabel: StreamableTextLabelImpl,
             offset: Vector3D,
             Player: Player
-    ): StreamableTextLabelState.AttachedToPlayer =
-            StreamableTextLabelState.AttachedToPlayer(
-                    streamableTextLabel,
-                    Player,
-                    offset,
-                    playerTextLabelService,
-                    asyncExecutor
-            )
+    ): StreamableTextLabelState.AttachedToPlayer = StreamableTextLabelState.AttachedToPlayer(
+            streamableTextLabel,
+            Player,
+            offset,
+            playerTextLabelService,
+            asyncExecutor
+    )
 
 }
