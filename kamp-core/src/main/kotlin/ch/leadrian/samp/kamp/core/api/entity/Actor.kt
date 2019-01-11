@@ -1,9 +1,13 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.annotations.Receiver
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutReceiver
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageActorReceiver
+import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -14,6 +18,7 @@ import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamOutReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerGiveDamageActorReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class Actor
@@ -23,11 +28,13 @@ internal constructor(
         rotation: Float,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val onActorStreamInReceiver: OnActorStreamInReceiverDelegate = OnActorStreamInReceiverDelegate(),
-        private val onActorStreamOutReceiver: OnActorStreamOutReceiverDelegate = OnActorStreamOutReceiverDelegate()
+        private val onActorStreamOutReceiver: OnActorStreamOutReceiverDelegate = OnActorStreamOutReceiverDelegate(),
+        private val onPlayerGiveDamageActorReceiver: OnPlayerGiveDamageActorReceiverDelegate = OnPlayerGiveDamageActorReceiverDelegate()
 ) : Entity<ActorId>,
         AbstractDestroyable(),
         OnActorStreamInReceiver by onActorStreamInReceiver,
-        OnActorStreamOutReceiver by onActorStreamOutReceiver {
+        OnActorStreamOutReceiver by onActorStreamOutReceiver,
+        OnPlayerGiveDamageActorReceiver by onPlayerGiveDamageActorReceiver {
 
     override val id: ActorId
         get() = requireNotDestroyed { field }
@@ -140,6 +147,15 @@ internal constructor(
 
     internal fun onStreamOut(player: Player) {
         onActorStreamOutReceiver.onActorStreamOut(this, player)
+    }
+
+    internal fun onDamage(
+            player: Player,
+            amount: Float,
+            weaponModel: WeaponModel,
+            bodyPart: BodyPart
+    ) {
+        onPlayerGiveDamageActorReceiver.onPlayerGiveDamageActor(player, this, amount, weaponModel, bodyPart)
     }
 
     override fun onDestroy() {

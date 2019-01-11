@@ -1,7 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
@@ -11,6 +13,7 @@ import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamOutReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerGiveDamageActorReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import io.mockk.Runs
 import io.mockk.every
@@ -93,6 +96,7 @@ internal class ActorTest {
         private lateinit var actor: Actor
         private val onActorStreamInReceiver = mockk<OnActorStreamInReceiverDelegate>()
         private val onActorStreamOutReceiver = mockk<OnActorStreamOutReceiverDelegate>()
+        private val onPlayerGiveDamageActorReceiver = mockk<OnPlayerGiveDamageActorReceiverDelegate>()
 
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
 
@@ -105,7 +109,8 @@ internal class ActorTest {
                     rotation = 4f,
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     onActorStreamInReceiver = onActorStreamInReceiver,
-                    onActorStreamOutReceiver = onActorStreamOutReceiver
+                    onActorStreamOutReceiver = onActorStreamOutReceiver,
+                    onPlayerGiveDamageActorReceiver = onPlayerGiveDamageActorReceiver
             )
         }
 
@@ -367,6 +372,26 @@ internal class ActorTest {
             actor.onStreamOut(player)
 
             verify { onActorStreamOutReceiver.onActorStreamOut(actor, player) }
+        }
+
+        @Test
+        fun shouldCallOnPlayerGiveDamageActorDelegate() {
+            val player = mockk<Player>()
+            every {
+                onPlayerGiveDamageActorReceiver.onPlayerGiveDamageActor(any(), any(), any(), any(), any())
+            } just Runs
+
+            actor.onDamage(player, 13.37f, WeaponModel.AK47, BodyPart.GROIN)
+
+            verify {
+                onPlayerGiveDamageActorReceiver.onPlayerGiveDamageActor(
+                        player,
+                        actor,
+                        13.37f,
+                        WeaponModel.AK47,
+                        BodyPart.GROIN
+                )
+            }
         }
 
         @Nested

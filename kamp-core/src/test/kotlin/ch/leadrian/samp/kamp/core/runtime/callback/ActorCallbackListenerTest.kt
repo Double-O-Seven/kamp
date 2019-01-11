@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.constants.BodyPart
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import io.mockk.Runs
@@ -35,7 +37,7 @@ internal class ActorCallbackListenerTest {
     fun shouldExecuteOnStreamIn() {
         val player = mockk<Player>()
         val actor = mockk<Actor> {
-            every { onStreamIn(any<Player>()) } just Runs
+            every { onStreamIn(any()) } just Runs
         }
 
         actorCallbackListener.onActorStreamIn(actor, player)
@@ -47,12 +49,30 @@ internal class ActorCallbackListenerTest {
     fun shouldExecuteOnStreamOut() {
         val player = mockk<Player>()
         val actor = mockk<Actor> {
-            every { onStreamOut(any<Player>()) } just Runs
+            every { onStreamOut(any()) } just Runs
         }
 
         actorCallbackListener.onActorStreamOut(actor, player)
 
         verify { actor.onStreamOut(player) }
+    }
+
+    @Test
+    fun shouldExecuteOnDamage() {
+        val player = mockk<Player>()
+        val actor = mockk<Actor> {
+            every { onDamage(any(), any(), any(), any()) } just Runs
+        }
+
+        actorCallbackListener.onPlayerGiveDamageActor(
+                player,
+                actor,
+                13.37f,
+                WeaponModel.AK47,
+                BodyPart.GROIN
+        )
+
+        verify { actor.onDamage(player, 13.37f, WeaponModel.AK47, BodyPart.GROIN) }
     }
 
 }
