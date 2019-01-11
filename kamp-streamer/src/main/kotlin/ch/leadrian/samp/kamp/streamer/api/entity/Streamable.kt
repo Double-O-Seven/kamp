@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.streamer.runtime.entity
+package ch.leadrian.samp.kamp.streamer.api.entity
 
 import ch.leadrian.samp.kamp.core.api.entity.Destroyable
 

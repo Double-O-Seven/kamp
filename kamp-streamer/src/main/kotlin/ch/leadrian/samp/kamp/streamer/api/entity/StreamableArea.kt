@@ -5,7 +5,7 @@ import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerEnterStreamableAreaLi
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerLeaveStreamableAreaListener
 import kotlin.reflect.full.cast
 
-abstract class StreamableArea {
+abstract class StreamableArea : Streamable {
 
     private val onEnterListeners = LinkedHashSet<OnPlayerEnterStreamableAreaListener>()
     private val onLeaveListeners = LinkedHashSet<OnPlayerLeaveStreamableAreaListener>()

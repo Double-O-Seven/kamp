@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.streamer.api.entity.Streamable
 
 interface PlayerStreamable : Streamable {
 

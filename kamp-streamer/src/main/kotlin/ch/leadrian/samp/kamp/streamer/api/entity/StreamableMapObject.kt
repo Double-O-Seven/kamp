@@ -14,13 +14,12 @@ import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamIn
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapObjectStreamOutReceiver
 
 interface StreamableMapObject : MapObjectBase,
+        Streamable,
         OnStreamableMapObjectMovedReceiver,
         OnPlayerEditStreamableMapObjectReceiver,
         OnPlayerSelectStreamableMapObjectReceiver,
         OnStreamableMapObjectStreamInReceiver,
         OnStreamableMapObjectStreamOutReceiver {
-
-    val priority: Int
 
     var interiorIds: MutableSet<Int>
 
