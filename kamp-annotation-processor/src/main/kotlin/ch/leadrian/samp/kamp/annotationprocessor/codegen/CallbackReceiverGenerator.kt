@@ -78,7 +78,7 @@ class CallbackReceiverGenerator {
         val actionParameters = listenerDefinition.method.parameters.filter { !it.isReceiver }
         val actionParameterTypes = actionParameters.map { it.getKotlinTypeName() }.toTypedArray()
         val parameterSpec = buildActionParameterSpec(actionReceiver, actionParameterTypes, listenerDefinition)
-        val listenerTypeSpec = buildInlineListenerTypeSpec(listenerDefinition, actionReceiver, actionParameters)
+        val listenerTypeSpec = buildAnonymousListenerTypeSpec(listenerDefinition, actionReceiver, actionParameters)
         val functionName = listenerDefinition.method.getAnnotation(InlineCallback::class.java).name
         val funSpec = FunSpec
                 .builder(functionName)
@@ -110,7 +110,7 @@ class CallbackReceiverGenerator {
                 .build()
     }
 
-    private fun buildInlineListenerTypeSpec(
+    private fun buildAnonymousListenerTypeSpec(
             listenerDefinition: CallbackListenerDefinition,
             actionReceiver: VariableElement,
             actionParameters: List<VariableElement>
@@ -118,11 +118,11 @@ class CallbackReceiverGenerator {
         return TypeSpec
                 .anonymousClassBuilder()
                 .addSuperinterface(listenerDefinition.type)
-                .addInlineCallbackFunction(listenerDefinition, actionReceiver, actionParameters)
+                .addAnonymousListenerCallbackFunction(listenerDefinition, actionReceiver, actionParameters)
                 .build()
     }
 
-    private fun TypeSpec.Builder.addInlineCallbackFunction(
+    private fun TypeSpec.Builder.addAnonymousListenerCallbackFunction(
             listenerDefinition: CallbackListenerDefinition,
             actionReceiver: VariableElement,
             actionParameters: List<VariableElement>
