@@ -3692,6 +3692,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { actor.id } returns ActorId.valueOf(actorId)
+            every { actor.onDamage(any(), any(), any(), any()) } just Runs
             server.injector.getInstance<ActorRegistry>().register(actor)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
         }
