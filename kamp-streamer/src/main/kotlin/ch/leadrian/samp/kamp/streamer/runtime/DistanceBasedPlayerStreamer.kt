@@ -11,6 +11,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.entity.StreamLocation
 import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
 import java.util.concurrent.ConcurrentLinkedQueue
+import java.util.stream.Collectors.toList
 import java.util.stream.Collectors.toSet
 import java.util.stream.Stream
 import kotlin.properties.Delegates
@@ -61,15 +62,26 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
     }
 
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
-        // TODO Not thread safe, race conditions with isDestroyed
         return streamInCandidateSupplier
                 .getStreamInCandidates(streamLocation)
-                .filter { !it.isDestroyed }
-                .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
-                .filter { it.distance <= it.streamable.streamDistance }
+                .collect(toList())
+                .takeNotDestroyedStreamablesInRange(streamLocation)
                 .takeClosestStreamables()
                 .map { it.streamable }
                 .collect(toSet())
+    }
+
+    private fun List<T>.takeNotDestroyedStreamablesInRange(streamLocation: StreamLocation): Stream<StreamingInfo<T>> {
+        return asyncExecutor
+                .computeOnMainThread {
+                    asSequence()
+                            .filter { !it.isDestroyed }
+                            .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
+                            .filter { it.distance <= it.streamable.streamDistance }
+                            .toList()
+                }
+                .get()
+                .stream()
     }
 
     private fun Stream<StreamingInfo<T>>.takeClosestStreamables(): Stream<StreamingInfo<T>> {

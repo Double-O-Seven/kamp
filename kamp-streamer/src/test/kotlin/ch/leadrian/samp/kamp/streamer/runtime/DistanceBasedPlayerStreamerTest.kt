@@ -19,6 +19,7 @@ import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import java.util.concurrent.CompletableFuture
 import java.util.stream.Stream
 
 internal class DistanceBasedPlayerStreamerTest {
@@ -36,6 +37,9 @@ internal class DistanceBasedPlayerStreamerTest {
         asyncExecutor = mockk {
             every { executeOnMainThread(any()) } answers {
                 firstArg<() -> Unit>().invoke()
+            }
+            every { computeOnMainThread(any<() -> Any>()) } answers {
+                CompletableFuture.completedFuture(firstArg<() -> Any>().invoke())
             }
         }
         distanceBasedPlayerStreamer = DistanceBasedPlayerStreamer(
