@@ -95,6 +95,91 @@ internal class DistanceBasedPlayerStreamerTest {
     }
 
     @Test
+    fun givenCapacityOfOneItShouldStreamInOnlyTheClosestStreamable() {
+        distanceBasedPlayerStreamer.capacity = 1
+        val player = mockk<Player> {
+            every { isConnected } returns true
+        }
+        val streamable1 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(150f, 100f, 20f)
+                )
+        )
+        val streamable2 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 50f,
+                        coordinates = vector3DOf(120f, 180f, 40f)
+                )
+        )
+        val streamable3 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(1000f, 0f, 20f)
+                )
+        )
+        val streamLocation = StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))
+        every {
+            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        } returns Stream.of(streamable1, streamable2, streamable3)
+
+        distanceBasedPlayerStreamer.stream(listOf(streamLocation))
+
+        verify(exactly = 1) {
+            streamable2.onStreamIn(player)
+        }
+        verify(exactly = 0) {
+            streamable1.onStreamIn(player)
+            streamable2.onStreamOut(player)
+            streamable3.onStreamIn(player)
+        }
+    }
+
+    @Test
+    fun givenCapacityOfZeroItShouldStreamInNothing() {
+        distanceBasedPlayerStreamer.capacity = 0
+        val player = mockk<Player> {
+            every { isConnected } returns true
+        }
+        val streamable1 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(150f, 100f, 20f)
+                )
+        )
+        val streamable2 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 50f,
+                        coordinates = vector3DOf(120f, 180f, 40f)
+                )
+        )
+        val streamable3 = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(1000f, 0f, 20f)
+                )
+        )
+        val streamLocation = StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))
+        every {
+            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        } returns Stream.of(streamable1, streamable2, streamable3)
+
+        distanceBasedPlayerStreamer.stream(listOf(streamLocation))
+
+        verify(exactly = 0) {
+            streamable1.onStreamIn(any())
+            streamable2.onStreamIn(any())
+            streamable3.onStreamIn(any())
+        }
+    }
+
+    @Test
     fun shouldNotBeStreamedInAfterOnPlayerDisconnect() {
         val player = mockk<Player> {
             every { isConnected } returns true

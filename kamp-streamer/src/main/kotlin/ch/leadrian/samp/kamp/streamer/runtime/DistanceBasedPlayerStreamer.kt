@@ -12,6 +12,7 @@ import com.google.common.collect.ArrayListMultimap
 import com.google.common.collect.Multimap
 import java.util.concurrent.ConcurrentLinkedQueue
 import java.util.stream.Collectors.toSet
+import java.util.stream.Stream
 import kotlin.properties.Delegates
 
 class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
@@ -61,14 +62,22 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
 
     private fun getStreamedInStreamables(streamLocation: StreamLocation): Set<T> {
         // TODO Not thread safe, race conditions with isDestroyed
-        return streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        return streamInCandidateSupplier
+                .getStreamInCandidates(streamLocation)
                 .filter { !it.isDestroyed }
                 .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
                 .filter { it.distance <= it.streamable.streamDistance }
-                .sorted(byPriorityDescendingAndDistanceAscending)
-                .limit(capacity.toLong())
+                .takeClosestStreamables()
                 .map { it.streamable }
                 .collect(toSet())
+    }
+
+    private fun Stream<StreamingInfo<T>>.takeClosestStreamables(): Stream<StreamingInfo<T>> {
+        return when {
+            capacity <= 0 -> Stream.empty()
+            capacity == 1 -> min(byPriorityDescendingAndDistanceAscending).map { Stream.of(it) }.orElse(Stream.empty())
+            else -> sorted(byPriorityDescendingAndDistanceAscending).limit(capacity.toLong())
+        }
     }
 
     private fun streamOnMainThread(player: Player, newStreamables: Set<T>) {

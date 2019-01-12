@@ -15,13 +15,11 @@ internal constructor(
     fun <T : DistanceBasedPlayerStreamable> create(
             maxCapacity: Int,
             streamInCandidateSupplier: StreamInCandidateSupplier<T>
-    ): DistanceBasedPlayerStreamer<T> {
-        return DistanceBasedPlayerStreamer(
-                maxCapacity = maxCapacity,
-                asyncExecutor = asyncExecutor,
-                streamInCandidateSupplier = streamInCandidateSupplier,
-                playerService = playerService
-        )
-    }
+    ): DistanceBasedPlayerStreamer<T> = DistanceBasedPlayerStreamer(
+            maxCapacity = maxCapacity,
+            asyncExecutor = asyncExecutor,
+            streamInCandidateSupplier = streamInCandidateSupplier,
+            playerService = playerService
+    )
 
 }
