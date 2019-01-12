@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.data.Colors
+import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -23,7 +24,10 @@ import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextArguments
+import ch.leadrian.samp.kamp.streamer.api.callback.onStreamIn
+import ch.leadrian.samp.kamp.streamer.api.callback.onStreamOut
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.base.onClick
@@ -50,7 +54,8 @@ constructor(
         private val mapObjectService: MapObjectService,
         private val streamableMapObjectService: StreamableMapObjectService,
         private val viewFactory: ViewFactory,
-        private val vehicleService: VehicleService
+        private val vehicleService: VehicleService,
+        private val streamableTextLabelService: StreamableTextLabelService
 ) : Commands() {
 
     private val objectsByName: MutableMap<String, MapObject> = mutableMapOf()
@@ -59,6 +64,36 @@ constructor(
     @Command
     fun debugCmds(player: Player) {
         showCommandList(player)
+    }
+
+    @Command
+    fun labelVehicles(player: Player) {
+        vehicleService.getAllVehicles().forEach { vehicle ->
+            streamableTextLabelService.createStreamableTextLabel(
+                    textKey = vehicle.model.textKey,
+                    color = vehicle.colors.color1.color,
+                    coordinates = Vector3D.ORIGIN,
+                    streamDistance = 300f
+            ).apply {
+                attachTo(vehicle, vector3DOf(0f, 0f, 0f))
+                onStreamIn {
+                    messageSender.sendMessageToPlayer(
+                            player,
+                            vehicle.colors.color1.color,
+                            "{0} label streamed in",
+                            vehicle.model.textKey
+                    )
+                }
+                onStreamOut {
+                    messageSender.sendMessageToPlayer(
+                            player,
+                            vehicle.colors.color1.color,
+                            "{0} label streamed out",
+                            vehicle.model.textKey
+                    )
+                }
+            }
+        }
     }
 
     @Command
