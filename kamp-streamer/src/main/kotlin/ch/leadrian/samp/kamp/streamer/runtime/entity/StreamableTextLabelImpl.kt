@@ -5,13 +5,22 @@ import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.Destroyable
+import ch.leadrian.samp.kamp.core.api.entity.OnDestroyListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextLabel
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableTextLabelStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableTextLabelStreamOutReceiver
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableTextLabel
 import ch.leadrian.samp.kamp.streamer.runtime.TextLabelStreamer
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamInReceiverDelegate
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.Locale
@@ -27,30 +36,38 @@ internal class StreamableTextLabelImpl(
         override var testLOS: Boolean,
         private val textProvider: TextProvider,
         private val textLabelStreamer: TextLabelStreamer,
-        private val streamableTextLabelStateFactory: StreamableTextLabelStateFactory
-) : CoordinatesBasedPlayerStreamable<StreamableTextLabelImpl, Rect3d>(),
+        private val streamableTextLabelStateFactory: StreamableTextLabelStateFactory,
+        private val onStreamableTextLabelStreamInHandler: OnStreamableTextLabelStreamInHandler,
+        private val onStreamableTextLabelStreamOutHandler: OnStreamableTextLabelStreamOutHandler,
+        private val onStreamableTextLabelStreamInReceiver: OnStreamableTextLabelStreamInReceiverDelegate = OnStreamableTextLabelStreamInReceiverDelegate(),
+        private val onStreamableTextLabelStreamOutReceiver: OnStreamableTextLabelStreamOutReceiverDelegate = OnStreamableTextLabelStreamOutReceiverDelegate()
+) :
+        CoordinatesBasedPlayerStreamable<StreamableTextLabelImpl, Rect3d>(),
+        StreamableTextLabel,
         OnPlayerDisconnectListener,
-        StreamableTextLabel {
+        OnDestroyListener,
+        OnStreamableTextLabelStreamInReceiver by onStreamableTextLabelStreamInReceiver,
+        OnStreamableTextLabelStreamOutReceiver by onStreamableTextLabelStreamOutReceiver {
 
     private val playerTextLabelsByPlayer: MutableMap<Player, PlayerTextLabel> = mutableMapOf()
 
-    private var state: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(
+    private var currentState: StreamableTextLabelState = streamableTextLabelStateFactory.createFixedCoordinates(
             this,
             coordinates
     )
 
-    private var _color: Color = color.toColor()
-        set(value) {
-            field = value.toColor()
-        }
-
-    val isAttached: Boolean
-        get() = when (state) {
+    override val isAttached: Boolean
+        get() = when (currentState) {
             is StreamableTextLabelState.AttachedToPlayer, is StreamableTextLabelState.AttachedToVehicle -> true
             is StreamableTextLabelState.FixedCoordinates -> false
         }
 
     override val drawDistance: Float = streamDistance
+
+    private var _color: Color = color.toColor()
+        set(value) {
+            field = value.toColor()
+        }
 
     override var color: Color
         get() = _color
@@ -59,21 +76,14 @@ internal class StreamableTextLabelImpl(
         }
 
     override var coordinates: Vector3D
-        get() = state.coordinates
+        get() = currentState.coordinates
         set(value) {
-            transitionToFixedCoordinates(value)
+            requireNotDestroyed()
+            fixCoordinates(value)
+            textLabelStreamer.onBoundingBoxChange(this)
         }
 
-    private fun transitionToState(newState: StreamableTextLabelState) {
-        state = newState
-        playerTextLabelsByPlayer.replaceAll { player, playerTextLabel ->
-            playerTextLabel.destroy()
-            newState.createPlayerTextLabel(player)
-        }
-        textLabelStreamer.onStateChange(this)
-    }
-
-    private fun transitionToFixedCoordinates(coordinates: Vector3D) {
+    private fun fixCoordinates(coordinates: Vector3D) {
         transitionToState(streamableTextLabelStateFactory.createFixedCoordinates(this, coordinates))
         textLabelStreamer.onBoundingBoxChange(this)
     }
@@ -103,11 +113,33 @@ internal class StreamableTextLabelImpl(
     }
 
     override fun update(color: Color, textSupplier: (Locale) -> String) {
+        requireNotDestroyed()
         _color = color
         this.textSupplier = textSupplier
         playerTextLabelsByPlayer.forEach { player, playerTextLabel ->
             playerTextLabel.update(textSupplier(player.locale), _color)
         }
+    }
+
+    override fun attachTo(player: Player, offset: Vector3D) {
+        requireNotDestroyed()
+        transitionToState(streamableTextLabelStateFactory.createAttachedToPlayer(this, offset, player))
+    }
+
+    override fun attachTo(vehicle: Vehicle, offset: Vector3D) {
+        requireNotDestroyed()
+        transitionToState(streamableTextLabelStateFactory.createAttachedToVehicle(this, offset, vehicle))
+        vehicle.addOnDestroyListener(this)
+    }
+
+    private fun transitionToState(newState: StreamableTextLabelState) {
+        removeOnDestroyListener()
+        currentState = newState
+        playerTextLabelsByPlayer.replaceAll { player, playerTextLabel ->
+            playerTextLabel.destroy()
+            newState.createPlayerTextLabel(player)
+        }
+        textLabelStreamer.onStateChange(this)
     }
 
     override fun distanceTo(location: Location): Float =
@@ -118,19 +150,22 @@ internal class StreamableTextLabelImpl(
             }
 
     override fun onStreamIn(forPlayer: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onStreamIn(onStreamIn: StreamableTextLabel.(Player) -> Unit) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        requireNotDestroyed()
+        if (isStreamedIn(forPlayer)) {
+            throw IllegalStateException("Streamable text label is already streamed in")
+        }
+        playerTextLabelsByPlayer[forPlayer] = currentState.createPlayerTextLabel(forPlayer)
+        onStreamableTextLabelStreamInReceiver.onStreamableTextLabelStreamIn(this, forPlayer)
+        onStreamableTextLabelStreamInHandler.onStreamableTextLabelStreamIn(this, forPlayer)
     }
 
     override fun onStreamOut(forPlayer: Player) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onStreamOut(onStreamOut: StreamableTextLabel.(Player) -> Unit) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        requireNotDestroyed()
+        val playerTextLabel = playerTextLabelsByPlayer.remove(forPlayer)
+                ?: throw IllegalStateException("Streamable text label was not streamed in")
+        playerTextLabel.destroy()
+        onStreamableTextLabelStreamOutReceiver.onStreamableTextLabelStreamOut(this, forPlayer)
+        onStreamableTextLabelStreamOutHandler.onStreamableTextLabelStreamOut(this, forPlayer)
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerTextLabelsByPlayer.containsKey(forPlayer)
@@ -155,21 +190,29 @@ internal class StreamableTextLabelImpl(
     }
 
     override fun onDestroy() {
+        removeOnDestroyListener()
         playerTextLabelsByPlayer.values.forEach { it.destroy() }
         playerTextLabelsByPlayer.clear()
     }
 
     override fun onPlayerDisconnect(player: Player, reason: DisconnectReason) {
-        val currentState = state
+        val currentState = currentState
         if (currentState is StreamableTextLabelState.AttachedToPlayer && player == currentState.player) {
-            transitionToFixedCoordinates(coordinates)
+            fixCoordinates(coordinates)
         }
     }
 
-    private fun onVehicleDestruction(vehicle: Vehicle) {
-        val currentState = state
-        if (currentState is StreamableTextLabelState.AttachedToVehicle && vehicle == currentState.vehicle) {
-            transitionToFixedCoordinates(coordinates)
+    override fun onDestroy(destroyable: Destroyable) {
+        val currentState1 = currentState
+        if (currentState1 is StreamableTextLabelState.AttachedToVehicle && currentState1.vehicle == destroyable) {
+            fixCoordinates(coordinates)
+        }
+    }
+
+    private fun removeOnDestroyListener() {
+        val currentState = currentState
+        if (currentState is StreamableTextLabelState.AttachedToVehicle) {
+            currentState.vehicle.removeOnDestroyListener(this)
         }
     }
 
