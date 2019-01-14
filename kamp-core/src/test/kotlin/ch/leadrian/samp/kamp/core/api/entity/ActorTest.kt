@@ -53,7 +53,7 @@ internal class ActorTest {
             val actor = Actor(
                     model = SkinModel.BALLAS2,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    rotation = 4f,
+                    angle = 4f,
                     nativeFunctionExecutor = nativeFunctionExecutor
             )
 
@@ -79,7 +79,7 @@ internal class ActorTest {
                 Actor(
                         model = SkinModel.BALLAS2,
                         coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                        rotation = 4f,
+                        angle = 4f,
                         nativeFunctionExecutor = nativeFunctionExecutor
                 )
             }
@@ -106,7 +106,7 @@ internal class ActorTest {
             actor = Actor(
                     model = SkinModel.BALLAS2,
                     coordinates = vector3DOf(x = 1f, y = 2f, z = 3f),
-                    rotation = 4f,
+                    angle = 4f,
                     nativeFunctionExecutor = nativeFunctionExecutor,
                     onActorStreamInReceiver = onActorStreamInReceiver,
                     onActorStreamOutReceiver = onActorStreamOutReceiver,

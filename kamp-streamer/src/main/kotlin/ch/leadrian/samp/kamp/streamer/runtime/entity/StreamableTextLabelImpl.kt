@@ -22,6 +22,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStre
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableTextLabelStateFactory
+import ch.leadrian.samp.kamp.streamer.runtime.util.toRect3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.Locale
 
@@ -170,24 +171,7 @@ internal class StreamableTextLabelImpl(
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerTextLabelsByPlayer.containsKey(forPlayer)
 
-    override fun getBoundingBox(): Rect3d {
-        val coordinates = coordinates
-        val minX = coordinates.x - streamDistance
-        val minY = coordinates.y - streamDistance
-        val minZ = coordinates.z - streamDistance
-        val maxX = coordinates.x + streamDistance
-        val maxY = coordinates.y + streamDistance
-        val maxZ = coordinates.z + streamDistance
-
-        return Rect3d(
-                minX.toDouble(),
-                minY.toDouble(),
-                minZ.toDouble(),
-                maxX.toDouble(),
-                maxY.toDouble(),
-                maxZ.toDouble()
-        )
-    }
+    override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
 
     override fun onDestroy() {
         removeOnDestroyListener()

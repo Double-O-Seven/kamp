@@ -37,6 +37,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStre
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.entity.factory.StreamableMapObjectStateMachineFactory
+import ch.leadrian.samp.kamp.streamer.runtime.util.toRect3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 import java.util.Locale
 
@@ -377,24 +378,7 @@ constructor(
         }
     }
 
-    override fun getBoundingBox(): Rect3d {
-        val coordinates = coordinates
-        val minX = coordinates.x - streamDistance
-        val minY = coordinates.y - streamDistance
-        val minZ = coordinates.z - streamDistance
-        val maxX = coordinates.x + streamDistance
-        val maxY = coordinates.y + streamDistance
-        val maxZ = coordinates.z + streamDistance
-
-        return Rect3d(
-                minX.toDouble(),
-                minY.toDouble(),
-                minZ.toDouble(),
-                maxX.toDouble(),
-                maxY.toDouble(),
-                maxZ.toDouble()
-        )
-    }
+    override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
 
     private class Material(
             private val index: Int,

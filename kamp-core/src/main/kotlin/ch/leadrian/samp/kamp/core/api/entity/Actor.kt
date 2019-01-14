@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
-import ch.leadrian.samp.kamp.annotations.Receiver
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageActorReceiver
@@ -23,9 +22,9 @@ import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class Actor
 internal constructor(
-        model: SkinModel,
+        val model: SkinModel,
         coordinates: Vector3D,
-        rotation: Float,
+        angle: Float,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val onActorStreamInReceiver: OnActorStreamInReceiverDelegate = OnActorStreamInReceiverDelegate(),
         private val onActorStreamOutReceiver: OnActorStreamOutReceiverDelegate = OnActorStreamOutReceiverDelegate(),
@@ -45,7 +44,7 @@ internal constructor(
                 x = coordinates.x,
                 y = coordinates.y,
                 z = coordinates.z,
-                rotation = rotation
+                rotation = angle
         )
 
         if (actorId == SAMPConstants.INVALID_ACTOR_ID) {
