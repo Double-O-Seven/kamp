@@ -23,6 +23,11 @@ constructor(private val messageSender: MessageSender) : Commands() {
     }
 
     @Command
+    fun me(player: Player, text: String) {
+        messageSender.sendMessageToAll(player.color, "* {0} {1}", player.name, text)
+    }
+
+    @Command
     fun giveCash(
             player: Player,
             @Parameter(nameTextKey = TextKeys.lvdm.command.givecash.parameter.receiver_) receiver: Player,
