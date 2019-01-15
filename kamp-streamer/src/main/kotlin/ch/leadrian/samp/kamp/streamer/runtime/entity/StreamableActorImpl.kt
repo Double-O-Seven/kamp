@@ -2,10 +2,7 @@ package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDamageStreamableActorReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageActorListener
-import ch.leadrian.samp.kamp.core.api.callback.OnStreamableActorStreamInReceiver
-import ch.leadrian.samp.kamp.core.api.callback.OnStreamableActorStreamOutReceiver
 import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
@@ -18,13 +15,16 @@ import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.ActorService
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerDamageStreamableActorHandler
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerDamageStreamableActorReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.callback.OnStreamableActorStreamInHandler
-import ch.leadrian.samp.kamp.core.runtime.callback.OnStreamableActorStreamInReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.callback.OnStreamableActorStreamOutHandler
-import ch.leadrian.samp.kamp.core.runtime.callback.OnStreamableActorStreamOutReceiverDelegate
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerDamageStreamableActorReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamOutReceiver
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableActor
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorReceiverDelegate
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInReceiverDelegate
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.util.toRect3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 

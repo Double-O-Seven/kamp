@@ -1,12 +1,12 @@
 package ch.leadrian.samp.kamp.streamer.api.entity
 
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDamageStreamableActorReceiver
-import ch.leadrian.samp.kamp.core.api.callback.OnStreamableActorStreamInReceiver
-import ch.leadrian.samp.kamp.core.api.callback.OnStreamableActorStreamOutReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerDamageStreamableActorReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamOutReceiver
 
 interface StreamableActor :
         Streamable,
