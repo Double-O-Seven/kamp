@@ -45,7 +45,7 @@ internal class StreamableActorImpl(
         private val onStreamableActorStreamOutReceiver: OnStreamableActorStreamOutReceiverDelegate = OnStreamableActorStreamOutReceiverDelegate(),
         private val onPlayerDamageStreamableActorReceiver: OnPlayerDamageStreamableActorReceiverDelegate = OnPlayerDamageStreamableActorReceiverDelegate()
 ) :
-        SpatiallyIndexedStreamable<StreamableActorImpl, Rect3d>(),
+        CoordinatesBasedGlobalStreamable<StreamableActorImpl, Rect3d>(),
         StreamableActor,
         DistanceBasedGlobalStreamable,
         OnStreamableActorStreamInReceiver by onStreamableActorStreamInReceiver,
