@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
+import ch.leadrian.samp.kamp.codegen.isOutParameter
 import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -95,7 +96,7 @@ internal class SAMPNativeFunctionExecutorKtGenerator(
 
     private fun FunSpec.Builder.addFunctionParameter(parameter: Parameter) {
         val parameterType = when {
-            parameter.hasAttribute("out") -> getKotlinOutType(parameter.type)
+            parameter.isOutParameter -> getKotlinOutType(parameter.type)
             else -> getKotlinType(parameter.type)
         }
         val parameterSpec = ParameterSpec.builder(parameter.name, parameterType).build()

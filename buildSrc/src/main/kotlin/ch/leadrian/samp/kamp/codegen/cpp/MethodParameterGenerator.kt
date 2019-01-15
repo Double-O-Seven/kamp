@@ -4,7 +4,7 @@ internal interface MethodParameterGenerator {
 
     fun generateMethodCallSetup(): String?
 
-    fun generateJniMethodCallParameter(): String
+    fun generateMethodInvocationParameter(): String
 
     fun generateMethodCallResultProcessing(): String?
 }

@@ -1,14 +1,13 @@
 package ch.leadrian.samp.kamp.codegen.java
 
 import ch.leadrian.samp.cidl.model.Function
-import ch.leadrian.samp.cidl.model.Parameter
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.isCallback
 import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import org.jetbrains.annotations.NotNull
@@ -23,6 +22,8 @@ internal class SAMPCallbacksJavaGenerator(
         private val javaPackageName: String,
         outputDirectory: File
 ) : SingleFileCodeGenerator(outputDirectory) {
+
+    private val sampCallbacksParameterGeneratorFactory = SAMPCallbacksParameterGeneratorFactory()
 
     override val fileName: String = "SAMPCallbacks.java"
 
@@ -61,30 +62,73 @@ internal class SAMPCallbacksJavaGenerator(
     }
 
     private fun TypeSpec.Builder.addMethod(function: Function) {
+        val parameterGenerators: List<SAMPCallbacksParameterGenerator> = function
+                .parameters
+                .map { sampCallbacksParameterGeneratorFactory.create(it) }
+
+        val isDefaultMethodRequired = parameterGenerators.any { it.isDefaultMethodRequired }
+
+        addAbstractMethod(function, parameterGenerators)
+        if (isDefaultMethodRequired) {
+            addDefaultMethod(function, parameterGenerators)
+        }
+    }
+
+    private fun TypeSpec.Builder.addAbstractMethod(
+            function: Function,
+            parameterGenerators: List<SAMPCallbacksParameterGenerator>
+    ) {
         val returnType = getJavaType(function.type)
         val methodSpecBuilder = MethodSpec
                 .methodBuilder(function.camelCaseName)
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .returns(returnType)
-                .addParameters(function.parameters)
-        if (!returnType.isPrimitive) {
+
+        parameterGenerators.forEach {
+            methodSpecBuilder.addParameter(it.generateAbstractMethodParameterSpec())
+        }
+
+        if (!returnType.isPrimitive && returnType != TypeName.VOID) {
             methodSpecBuilder.addAnnotation(NotNull::class.java)
         }
         addMethod(methodSpecBuilder.build())
     }
 
-    private fun MethodSpec.Builder.addParameters(parameters: List<Parameter>): MethodSpec.Builder {
-        parameters.forEach { parameter -> addParameter(parameter) }
-        return this
+    private fun TypeSpec.Builder.addDefaultMethod(
+            function: Function,
+            parameterGenerators: List<SAMPCallbacksParameterGenerator>
+    ) {
+        val returnType = getJavaType(function.type)
+        val methodSpecBuilder = MethodSpec
+                .methodBuilder(function.camelCaseName)
+                .addModifiers(Modifier.PUBLIC, Modifier.DEFAULT)
+                .returns(returnType)
+
+        parameterGenerators.forEach { methodSpecBuilder.addParameter(it.generateDefaultMethodParameterSpec()) }
+
+        methodSpecBuilder.addMethodBody(parameterGenerators, function, returnType)
+
+        if (!returnType.isPrimitive && returnType != TypeName.VOID) {
+            methodSpecBuilder.addAnnotation(NotNull::class.java)
+        }
+        addMethod(methodSpecBuilder.build())
     }
 
-    private fun MethodSpec.Builder.addParameter(parameter: Parameter) {
-        val parameterType = getJavaType(parameter.type)
-        val parameterSpecBuilder = ParameterSpec.builder(parameterType, parameter.name)
-        if (!parameterType.isPrimitive) {
-            parameterSpecBuilder.addAnnotation(NotNull::class.java)
+    private fun MethodSpec.Builder.addMethodBody(
+            parameterGenerators: List<SAMPCallbacksParameterGenerator>,
+            function: Function,
+            returnType: TypeName
+    ) {
+        val parameterArguments = parameterGenerators
+                .map { it.generateAbstractMethodInvocationParameterCode() }
+                .toTypedArray()
+        val parameters = (0 until parameterArguments.size).joinToString(", ") { "\$L" }
+        val statement = CodeBlock.of("${function.camelCaseName}($parameters)", *parameterArguments)
+        if (returnType != TypeName.VOID) {
+            addStatement("return \$L", statement)
+        } else {
+            addStatement(statement)
         }
-        addParameter(parameterSpecBuilder.build())
     }
 
     private fun Writer.writeJavaFile(typeSpec: TypeSpec) {

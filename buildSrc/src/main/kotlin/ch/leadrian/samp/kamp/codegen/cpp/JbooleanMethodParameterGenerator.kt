@@ -4,7 +4,7 @@ internal class JbooleanMethodParameterGenerator(private val parameterName: Strin
 
     override fun generateMethodCallSetup(): String? = null
 
-    override fun generateJniMethodCallParameter(): String = "($parameterName ? true : false)"
+    override fun generateMethodInvocationParameter(): String = "($parameterName ? true : false)"
 
     override fun generateMethodCallResultProcessing(): String? = null
 }

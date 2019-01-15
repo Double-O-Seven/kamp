@@ -54,7 +54,7 @@ int FieldCache::InitializeReferenceStringValueField(JNIEnv *jniEnv) {
 		return -1;
 	}
 
-	this->referenceStringValueFieldID = jniEnv->GetFieldID(referenceStringClass, "value", "Ljava/lang/String;");
+	this->referenceStringValueFieldID = jniEnv->GetFieldID(referenceStringClass, "value", "[B");
 
 	jniEnv->DeleteLocalRef(referenceStringClass);
 

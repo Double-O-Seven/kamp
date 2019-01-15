@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.api.service
 
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.StringEncoding
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import io.mockk.every
 import io.mockk.mockk
@@ -13,6 +14,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
+import java.nio.charset.Charset
 
 internal class ServerServiceTest {
 
@@ -198,6 +200,17 @@ internal class ServerServiceTest {
 
         assertThat(result)
                 .isEqualTo(expectedResult)
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["ISO-8859-1", "UTF-8"])
+    fun shouldSetCharset(charsetName: String) {
+        val charset = Charset.forName(charsetName)
+
+        serverService.setCharset(charset)
+
+        assertThat(StringEncoding.getCharset())
+                .isEqualTo(charset)
     }
 
 }

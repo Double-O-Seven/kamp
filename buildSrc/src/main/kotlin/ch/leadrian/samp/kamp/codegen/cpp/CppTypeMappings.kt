@@ -7,7 +7,7 @@ private val JNI_TYPE_MAPPING = mapOf(
         Types.CHAR to "jchar",
         Types.FLOAT to "jfloat",
         Types.INT to "jint",
-        Types.STRING to "jstring",
+        Types.STRING to "jbyteArray",
         Types.VOID to "void"
 )
 
@@ -31,7 +31,7 @@ private val JVM_TYPE_SIGNATURES = mapOf(
         Types.CHAR to "C",
         Types.FLOAT to "F",
         Types.INT to "I",
-        Types.STRING to "Ljava/lang/String;",
+        Types.STRING to "[B",
         Types.VOID to "V"
 )
 

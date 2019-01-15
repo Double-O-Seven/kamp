@@ -13,3 +13,4 @@ val Function.hasNoImplementation: Boolean
 
 val Function.camelCaseName: String
     get() = "${name[0].toLowerCase()}${name.substring(1)}"
+

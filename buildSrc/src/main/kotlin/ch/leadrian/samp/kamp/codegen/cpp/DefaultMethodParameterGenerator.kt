@@ -4,7 +4,7 @@ internal class DefaultMethodParameterGenerator(private val parameterName: String
 
     override fun generateMethodCallSetup(): String? = null
 
-    override fun generateJniMethodCallParameter(): String = parameterName
+    override fun generateMethodInvocationParameter(): String = parameterName
 
     override fun generateMethodCallResultProcessing(): String? = null
 }

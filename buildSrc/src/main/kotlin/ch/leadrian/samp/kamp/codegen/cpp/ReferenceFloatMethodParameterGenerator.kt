@@ -14,7 +14,7 @@ internal class ReferenceFloatMethodParameterGenerator(
                 |${indentation}float $outVariable;
                 |""".trimMargin()
 
-    override fun generateJniMethodCallParameter(): String = "&$outVariable"
+    override fun generateMethodInvocationParameter(): String = "&$outVariable"
 
     override fun generateMethodCallResultProcessing(): String? =
             "${indentation}env->SetFloatField($parameterName, $fieldIDVariable, $outVariable);\n"

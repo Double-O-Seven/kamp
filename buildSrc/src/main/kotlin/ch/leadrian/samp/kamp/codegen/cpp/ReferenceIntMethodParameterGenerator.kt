@@ -14,7 +14,7 @@ internal class ReferenceIntMethodParameterGenerator(
                 |${indentation}int $outVariable;
                 |""".trimMargin()
 
-    override fun generateJniMethodCallParameter(): String = "&$outVariable"
+    override fun generateMethodInvocationParameter(): String = "&$outVariable"
 
     override fun generateMethodCallResultProcessing(): String? =
             "${indentation}env->SetIntField($parameterName, $fieldIDVariable, $outVariable);\n"

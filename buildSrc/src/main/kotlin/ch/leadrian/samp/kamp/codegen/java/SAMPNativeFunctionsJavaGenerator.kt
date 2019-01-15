@@ -1,15 +1,17 @@
 package ch.leadrian.samp.kamp.codegen.java
 
 import ch.leadrian.samp.cidl.model.Function
-import ch.leadrian.samp.cidl.model.Parameter
+import ch.leadrian.samp.cidl.model.Types
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
+import ch.leadrian.samp.kamp.codegen.isOutParameter
 import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.ParameterSpec
+import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import org.jetbrains.annotations.NotNull
 import java.io.File
@@ -24,6 +26,8 @@ internal class SAMPNativeFunctionsJavaGenerator(
         outputDirectory: File
 ) : SingleFileCodeGenerator(outputDirectory) {
 
+    private val sampNativeFunctionsParameterGeneratorFactory = SAMPNativeFunctionsParameterGeneratorFactory()
+
     override val fileName: String = "SAMPNativeFunctions.java"
 
     override fun generate(writer: Writer) {
@@ -32,7 +36,7 @@ internal class SAMPNativeFunctionsJavaGenerator(
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .addGeneratedAnnotation()
                 .addPrivateConstructor()
-                .addNativeMethods()
+                .addMethods()
         writer.writeJavaFile(sampNativeFunctionsTypeSpecBuilder.build())
     }
 
@@ -55,41 +59,98 @@ internal class SAMPNativeFunctionsJavaGenerator(
         )
     }
 
-    private fun TypeSpec.Builder.addNativeMethods(): TypeSpec.Builder {
+    private fun TypeSpec.Builder.addMethods(): TypeSpec.Builder {
         functions
                 .filter { it.isNative && !it.hasNoImplementation }
-                .forEach { function -> addNativeMethod(function) }
+                .forEach { addMethod(it) }
         return this
     }
 
-    private fun TypeSpec.Builder.addNativeMethod(function: Function) {
+    private fun TypeSpec.Builder.addMethod(function: Function) {
+        val parameterGenerators: List<SAMPNativeFunctionsParameterGenerator> = function
+                .parameters
+                .map { sampNativeFunctionsParameterGeneratorFactory.create(it) }
+
+        val isWrapperMethodRequired = parameterGenerators.any { it.isWrapperMethodRequired }
+
+        addNativeMethod(function, parameterGenerators)
+        if (isWrapperMethodRequired) {
+            addWrapperMethod(function, parameterGenerators)
+        }
+    }
+
+    private fun TypeSpec.Builder.addNativeMethod(
+            function: Function,
+            parameterGenerators: List<SAMPNativeFunctionsParameterGenerator>
+    ) {
         val returnType = getJavaType(function.type)
         val methodSpecBuilder = MethodSpec
                 .methodBuilder(function.camelCaseName)
                 .addModifiers(Modifier.PUBLIC, Modifier.STATIC, Modifier.NATIVE)
                 .returns(returnType)
-                .addParameters(function.parameters)
-        if (!returnType.isPrimitive) {
+
+        parameterGenerators.forEach {
+            methodSpecBuilder.addParameter(it.generateNativeMethodParameterSpec())
+        }
+
+        if (!returnType.isPrimitive && returnType != TypeName.VOID) {
             methodSpecBuilder.addAnnotation(NotNull::class.java)
         }
         addMethod(methodSpecBuilder.build())
     }
 
-    private fun MethodSpec.Builder.addParameters(parameters: List<Parameter>): MethodSpec.Builder {
-        parameters.forEach { parameter -> addParameter(parameter) }
-        return this
+    private fun TypeSpec.Builder.addWrapperMethod(
+            function: Function,
+            parameterGenerators: List<SAMPNativeFunctionsParameterGenerator>
+    ) {
+        val returnType = getJavaType(function.type)
+        val methodSpecBuilder = MethodSpec
+                .methodBuilder(function.camelCaseName)
+                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                .returns(returnType)
+
+        parameterGenerators.forEach {
+            methodSpecBuilder.addParameter(it.generateWrapperMethodParameterSpec())
+        }
+
+        methodSpecBuilder.addMethodBody(parameterGenerators, function, returnType)
+
+        if (!returnType.isPrimitive && returnType != TypeName.VOID) {
+            methodSpecBuilder.addAnnotation(NotNull::class.java)
+        }
+        addMethod(methodSpecBuilder.build())
     }
 
-    private fun MethodSpec.Builder.addParameter(parameter: Parameter) {
-        val parameterType = when {
-            parameter.hasAttribute("out") -> getJavaOutType(parameter.type)
-            else -> getJavaType(parameter.type)
+    private fun MethodSpec.Builder.addMethodBody(
+            parameterGenerators: List<SAMPNativeFunctionsParameterGenerator>,
+            function: Function,
+            returnType: TypeName
+    ) {
+        val parameterArguments = parameterGenerators
+                .map { it.generateNativeMethodInvocationParameterCode() }
+                .toTypedArray()
+        val parameters = (0 until parameterArguments.size).joinToString(", ") { "\$L" }
+        val statement = CodeBlock.of("${function.camelCaseName}($parameters)", *parameterArguments)
+        if (returnType != TypeName.VOID) {
+            addStatement("return \$L", statement)
+        } else {
+            addStatement(statement)
         }
-        val parameterSpecBuilder = ParameterSpec.builder(parameterType, parameter.name)
-        if (!parameterType.isPrimitive) {
-            parameterSpecBuilder.addAnnotation(NotNull::class.java)
+    }
+
+    private fun MethodSpec.Builder.addNativeInvocation(function: Function): MethodSpec.Builder {
+        val parameters = function.parameters.joinToString(", ") {
+            when {
+                it.type == Types.STRING && !it.isOutParameter -> "${it.name}.getBytes(\$T.getCharset())"
+                else -> it.name
+            }
         }
-        addParameter(parameterSpecBuilder.build())
+        val arguments = function
+                .parameters
+                .filter { it.type == Types.STRING && !it.isOutParameter }
+                .map { STRING_ENCODING_TYPE }
+                .toTypedArray()
+        return addStatement("return ${function.camelCaseName}($parameters)", *arguments)
     }
 
     private fun Writer.writeJavaFile(typeSpec: TypeSpec) {

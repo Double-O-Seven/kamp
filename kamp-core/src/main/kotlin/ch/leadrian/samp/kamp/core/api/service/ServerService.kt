@@ -4,7 +4,9 @@ import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.core.api.entity.ServerVars
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.StringEncoding
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
+import java.nio.charset.Charset
 import javax.inject.Inject
 
 class ServerService
@@ -71,4 +73,8 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
     }
 
     fun isOnMainThread(): Boolean = nativeFunctionExecutor.isOnMainThread()
+
+    fun setCharset(charset: Charset) {
+        StringEncoding.setCharset(charset)
+    }
 }
