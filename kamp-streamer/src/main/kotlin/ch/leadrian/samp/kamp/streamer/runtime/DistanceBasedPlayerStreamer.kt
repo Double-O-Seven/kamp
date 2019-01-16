@@ -115,7 +115,7 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         while (iterator.hasNext()) {
             val streamable = iterator.next()
             val isDestroyed = streamable.isDestroyed
-            if (isDestroyed || !newStreamables.contains(streamable)) {
+            if (isDestroyed || streamable !in newStreamables) {
                 iterator.remove()
                 if (!isDestroyed) {
                     streamable.onStreamOut(forPlayer)
