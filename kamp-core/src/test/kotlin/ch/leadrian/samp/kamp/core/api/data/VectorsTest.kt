@@ -794,7 +794,7 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun shouldCreateAngledLocationWithExpectedValues(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
+        fun shouldCreateAngledLocationWithExpectedValues(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
             val x = 13.37f
             val y = 69f
             val z = -0.815f
@@ -802,7 +802,7 @@ internal class VectorsTest {
             val worldId = 1234
             val angle = 123f
 
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+            val angledLocation: AngledLocation = factory(
                     x,
                     y,
                     z,
@@ -830,14 +830,14 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun shouldConvertAngledLocationToMutableAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
+        fun shouldConvertAngledLocationToMutableAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
             val x = 13.37f
             val y = 69f
             val z = -0.815f
             val interiorId = 1337
             val worldId = 1234
             val angle = 123f
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+            val angledLocation: AngledLocation = factory(
                     x,
                     y,
                     z,
@@ -867,14 +867,14 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun shouldConvertAngledLocationToImmutableAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
+        fun shouldConvertAngledLocationToImmutableAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
             val x = 13.37f
             val y = 69f
             val z = -0.815f
             val interiorId = 1337
             val worldId = 1234
             val angle = 123f
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(
+            val angledLocation: AngledLocation = factory(
                     x,
                     y,
                     z,
@@ -883,7 +883,7 @@ internal class VectorsTest {
                     angle
             )
 
-            val immutableAngledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = angledLocation.toAngledLocation()
+            val immutableAngledLocation: AngledLocation = angledLocation.toAngledLocation()
 
             assertThat(immutableAngledLocation)
                     .isNotInstanceOf(MutableAngledLocation::class.java)
@@ -905,8 +905,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenInteriorIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenInteriorIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -924,8 +924,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenInteriorIdIsNotTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenInteriorIdIsNotTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -943,8 +943,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenWorldIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenWorldIdAndWorldIdAreTheSameItShouldCalculateDistanceToAngledLocation(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -962,8 +962,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenVectorInRangeItShouldReturnTrue(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -981,8 +981,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenVectorNotInRangeItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenVectorNotInRangeItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -1000,8 +1000,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenInteriorIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenInteriorIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -1019,8 +1019,8 @@ internal class VectorsTest {
 
         @ParameterizedTest
         @ArgumentsSource(AngledLocationFactoryArgumentsProvider::class)
-        fun givenWorldIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation) {
-            val angledLocation: ch.leadrian.samp.kamp.core.api.data.AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
+        fun givenWorldIdIsNotTheSameItShouldReturnFalse(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation) {
+            val angledLocation: AngledLocation = factory(7f, 4f, 3f, 1337, 1234, 0f)
             val otherAngledLocation = angledLocationOf(
                     x = 17f,
                     y = 6f,
@@ -1348,7 +1348,7 @@ internal class VectorsTest {
                 }
         )
 
-        private fun createArguments(factory: (Float, Float, Float, Int, Int, Float) -> ch.leadrian.samp.kamp.core.api.data.AngledLocation): Arguments = Arguments.of(
+        private fun createArguments(factory: (Float, Float, Float, Int, Int, Float) -> AngledLocation): Arguments = Arguments.of(
                 factory
         )
 

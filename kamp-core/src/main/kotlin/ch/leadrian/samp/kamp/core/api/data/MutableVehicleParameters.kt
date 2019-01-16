@@ -1,31 +1,39 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+
 interface MutableVehicleParameters : VehicleParameters {
 
-    override var engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+    override var engine: VehicleEngineState
 
-    override var lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+    override var lights: VehicleLightsState
 
-    override var alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+    override var alarm: VehicleAlarmState
 
-    override var doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+    override var doorLock: VehicleDoorLockState
 
-    override var bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+    override var bonnet: VehicleBonnetState
 
-    override var boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+    override var boot: VehicleBootState
 
-    override var objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+    override var objective: VehicleObjectiveState
 
 }
 
 fun mutableVehicleParametersOf(
-        engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-        lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-        alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-        doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-        bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-        boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-        objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+        engine: VehicleEngineState,
+        lights: VehicleLightsState,
+        alarm: VehicleAlarmState,
+        doorLock: VehicleDoorLockState,
+        bonnet: VehicleBonnetState,
+        boot: VehicleBootState,
+        objective: VehicleObjectiveState
 ): MutableVehicleParameters = MutableVehicleParametersImpl(
         engine = engine,
         lights = lights,

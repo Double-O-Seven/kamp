@@ -14,10 +14,10 @@ internal class MutableVehicleWindowStatesTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleWindowStateArgumentsProvider::class)
     fun toMutableVehicleWindowStatesShouldReturnSameInstance(
-            driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+            driver: VehicleWindowState,
+            passenger: VehicleWindowState,
+            backLeft: VehicleWindowState,
+            backRight: VehicleWindowState
     ) {
         val expectedMutableVehicleWindowStates = mutableVehicleWindowStatesOf(
                 driver = driver,
@@ -35,10 +35,10 @@ internal class MutableVehicleWindowStatesTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleWindowStateArgumentsProvider::class)
     fun toVehicleWindowStatesShouldReturnImmutableInstance(
-            driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+            driver: VehicleWindowState,
+            passenger: VehicleWindowState,
+            backLeft: VehicleWindowState,
+            backRight: VehicleWindowState
     ) {
         val mutableVehicleWindowStates = mutableVehicleWindowStatesOf(
                 driver = driver,
@@ -68,16 +68,16 @@ internal class MutableVehicleWindowStatesTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
             return Stream.of(
                     VehicleWindowStateArguments(
-                            driver = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.OPEN,
-                            passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.CLOSED,
-                            backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.UNSET,
-                            backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.OPEN
+                            driver = VehicleWindowState.OPEN,
+                            passenger = VehicleWindowState.CLOSED,
+                            backRight = VehicleWindowState.UNSET,
+                            backLeft = VehicleWindowState.OPEN
                     ),
                     VehicleWindowStateArguments(
-                            driver = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.CLOSED,
-                            passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.UNSET,
-                            backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.OPEN,
-                            backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState.UNSET
+                            driver = VehicleWindowState.CLOSED,
+                            passenger = VehicleWindowState.UNSET,
+                            backRight = VehicleWindowState.OPEN,
+                            backLeft = VehicleWindowState.UNSET
                     )
             )
         }
@@ -85,10 +85,10 @@ internal class MutableVehicleWindowStatesTest {
     }
 
     private class VehicleWindowStateArguments(
-            val driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            val passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            val backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-            val backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+            val driver: VehicleWindowState,
+            val passenger: VehicleWindowState,
+            val backLeft: VehicleWindowState,
+            val backRight: VehicleWindowState
     ) : Arguments {
 
         override fun get(): Array<Any> = arrayOf(driver, passenger, backLeft, backRight)

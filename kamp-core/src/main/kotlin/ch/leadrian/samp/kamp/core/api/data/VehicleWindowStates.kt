@@ -1,14 +1,16 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+
 interface VehicleWindowStates {
 
-    val driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+    val driver: VehicleWindowState
 
-    val passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+    val passenger: VehicleWindowState
 
-    val backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+    val backLeft: VehicleWindowState
 
-    val backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+    val backRight: VehicleWindowState
 
     fun toVehicleWindowStates(): VehicleWindowStates
 
@@ -17,10 +19,10 @@ interface VehicleWindowStates {
 }
 
 fun vehicleWindowStatesOf(
-        driver: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState,
-        backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+        driver: VehicleWindowState,
+        passenger: VehicleWindowState,
+        backLeft: VehicleWindowState,
+        backRight: VehicleWindowState
 ): VehicleWindowStates =
         VehicleWindowStatesImpl(
                 driver = driver,

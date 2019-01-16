@@ -1,22 +1,24 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+
 interface MutableVehicleDoorStates : VehicleDoorStates {
 
-    override var driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    override var driver: VehicleDoorState
 
-    override var passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    override var passenger: VehicleDoorState
 
-    override var backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    override var backLeft: VehicleDoorState
 
-    override var backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    override var backRight: VehicleDoorState
 
 }
 
 fun mutableVehicleDoorStatesOf(
-        driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+        driver: VehicleDoorState,
+        passenger: VehicleDoorState,
+        backLeft: VehicleDoorState,
+        backRight: VehicleDoorState
 ): MutableVehicleDoorStates =
         MutableVehicleDoorStatesImpl(
                 driver = driver,

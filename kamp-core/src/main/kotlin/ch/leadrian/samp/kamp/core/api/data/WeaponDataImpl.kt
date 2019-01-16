@@ -1,7 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+
 internal data class WeaponDataImpl(
-        override val model: ch.leadrian.samp.kamp.core.api.constants.WeaponModel,
+        override val model: WeaponModel,
         override val ammo: Int
 ) : WeaponData {
 

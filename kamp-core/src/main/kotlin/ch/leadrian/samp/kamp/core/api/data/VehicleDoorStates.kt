@@ -1,14 +1,16 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+
 interface VehicleDoorStates {
 
-    val driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    val driver: VehicleDoorState
 
-    val passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    val passenger: VehicleDoorState
 
-    val backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    val backLeft: VehicleDoorState
 
-    val backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+    val backRight: VehicleDoorState
 
     fun toVehicleDoorStates(): VehicleDoorStates
 
@@ -17,10 +19,10 @@ interface VehicleDoorStates {
 }
 
 fun vehicleDoorStatesOf(
-        driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-        backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+        driver: VehicleDoorState,
+        passenger: VehicleDoorState,
+        backLeft: VehicleDoorState,
+        backRight: VehicleDoorState
 ): VehicleDoorStates =
         VehicleDoorStatesImpl(
                 driver = driver,

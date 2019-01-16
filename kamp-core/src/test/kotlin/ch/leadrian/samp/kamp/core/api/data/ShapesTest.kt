@@ -121,7 +121,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(BoxFactoryArgumentsProvider::class)
-        fun shouldHaveExpectedArea(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box) {
+        fun shouldHaveExpectedArea(factory: (Float, Float, Float, Float, Float, Float) -> Box) {
             val box = factory(-1f, 2f, 5f, 10f, -20f, 50f)
 
             val area = box.volume
@@ -132,7 +132,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(BoxFactoryArgumentsProvider::class)
-        fun toBoxShouldReturnImmutableBox(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box) {
+        fun toBoxShouldReturnImmutableBox(factory: (Float, Float, Float, Float, Float, Float) -> Box) {
             val minX = -1f
             val maxX = 2f
             val minY = 5f
@@ -141,7 +141,7 @@ internal class ShapesTest {
             val maxZ = 50f
             val box = factory(minX, maxX, minY, maxY, minZ, maxZ)
 
-            val immutableBox: ch.leadrian.samp.kamp.core.api.data.Box = box.toBox()
+            val immutableBox: Box = box.toBox()
 
             assertThat(immutableBox)
                     .isNotInstanceOf(MutableBox::class.java)
@@ -163,7 +163,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(BoxFactoryArgumentsProvider::class)
-        fun toMutableBoxShouldReturnMutableBox(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box) {
+        fun toMutableBoxShouldReturnMutableBox(factory: (Float, Float, Float, Float, Float, Float) -> Box) {
             val minX = -1f
             val maxX = 2f
             val minY = 5f
@@ -193,7 +193,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(BoxContainsArgumentsProvider::class)
-        fun shouldContainCoordinates(box: ch.leadrian.samp.kamp.core.api.data.Box, coordinates: Vector3D) {
+        fun shouldContainCoordinates(box: Box, coordinates: Vector3D) {
             val contains = box.contains(coordinates)
 
             assertThat(contains)
@@ -202,7 +202,7 @@ internal class ShapesTest {
 
         @ParameterizedTest
         @ArgumentsSource(BoxDoesNotContainArgumentsProvider::class)
-        fun shouldNotContainCoordinates(box: ch.leadrian.samp.kamp.core.api.data.Box, coordinates: Vector3D) {
+        fun shouldNotContainCoordinates(box: Box, coordinates: Vector3D) {
             val contains = box.contains(coordinates)
 
             assertThat(contains)
@@ -455,7 +455,7 @@ internal class ShapesTest {
                         }
                 )
 
-        fun create(factory: (Float, Float, Float, Float, Float, Float) -> ch.leadrian.samp.kamp.core.api.data.Box): Arguments = Arguments.of(
+        fun create(factory: (Float, Float, Float, Float, Float, Float) -> Box): Arguments = Arguments.of(
                 factory
         )
 

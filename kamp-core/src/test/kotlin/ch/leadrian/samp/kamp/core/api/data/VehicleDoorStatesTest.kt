@@ -14,10 +14,10 @@ internal class VehicleDoorStatesTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleDoorStateArgumentsProvider::class)
     fun toVehicleDoorStatesShouldReturnSameInstance(
-            driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+            driver: VehicleDoorState,
+            passenger: VehicleDoorState,
+            backLeft: VehicleDoorState,
+            backRight: VehicleDoorState
     ) {
         val expectedVehicleDoorStates = vehicleDoorStatesOf(
                 driver = driver,
@@ -36,10 +36,10 @@ internal class VehicleDoorStatesTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleDoorStateArgumentsProvider::class)
     fun toMutableVehicleDoorStatesShouldReturnMutableInstance(
-            driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+            driver: VehicleDoorState,
+            passenger: VehicleDoorState,
+            backLeft: VehicleDoorState,
+            backRight: VehicleDoorState
     ) {
         val vehicleDoorStates = vehicleDoorStatesOf(
                 driver = driver,
@@ -68,16 +68,16 @@ internal class VehicleDoorStatesTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
             return Stream.of(
                     VehicleDoorStateArguments(
-                            driver = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.OPEN,
-                            passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.CLOSED,
-                            backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.UNSET,
-                            backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.OPEN
+                            driver = VehicleDoorState.OPEN,
+                            passenger = VehicleDoorState.CLOSED,
+                            backRight = VehicleDoorState.UNSET,
+                            backLeft = VehicleDoorState.OPEN
                     ),
                     VehicleDoorStateArguments(
-                            driver = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.CLOSED,
-                            passenger = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.UNSET,
-                            backRight = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.OPEN,
-                            backLeft = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState.UNSET
+                            driver = VehicleDoorState.CLOSED,
+                            passenger = VehicleDoorState.UNSET,
+                            backRight = VehicleDoorState.OPEN,
+                            backLeft = VehicleDoorState.UNSET
                     )
             )
         }
@@ -85,10 +85,10 @@ internal class VehicleDoorStatesTest {
     }
 
     private class VehicleDoorStateArguments(
-            val driver: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            val passenger: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            val backLeft: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState,
-            val backRight: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
+            val driver: VehicleDoorState,
+            val passenger: VehicleDoorState,
+            val backLeft: VehicleDoorState,
+            val backRight: VehicleDoorState
     ) : Arguments {
 
         override fun get(): Array<Any> = arrayOf(driver, passenger, backLeft, backRight)

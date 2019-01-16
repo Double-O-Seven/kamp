@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 
 interface WeaponData {
 
-    val model: ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+    val model: WeaponModel
 
     val ammo: Int
 
@@ -14,12 +14,12 @@ interface WeaponData {
 
     companion object {
 
-        val FISTS = weaponDataOf(model = ch.leadrian.samp.kamp.core.api.constants.WeaponModel.FIST, ammo = 0)
+        val FISTS = weaponDataOf(model = WeaponModel.FIST, ammo = 0)
     }
 
 }
 
-fun weaponDataOf(model: ch.leadrian.samp.kamp.core.api.constants.WeaponModel, ammo: Int): WeaponData = WeaponDataImpl(
+fun weaponDataOf(model: WeaponModel, ammo: Int): WeaponData = WeaponDataImpl(
         model = model,
         ammo = ammo
 )

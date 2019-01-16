@@ -1,6 +1,12 @@
 package ch.leadrian.samp.kamp.core.api.data
 
-import ch.leadrian.samp.kamp.core.api.constants.*
+import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
+import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
@@ -14,13 +20,13 @@ internal class VehicleParametersTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleParametersArgumentsProvider::class)
     fun toVehicleParametersShouldReturnSameInstance(
-            engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-            lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-            alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-            doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-            bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-            boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-            objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+            engine: VehicleEngineState,
+            lights: VehicleLightsState,
+            alarm: VehicleAlarmState,
+            doorLock: VehicleDoorLockState,
+            bonnet: VehicleBonnetState,
+            boot: VehicleBootState,
+            objective: VehicleObjectiveState
     ) {
         val expectedVehicleParameters = vehicleParametersOf(
                 engine = engine,
@@ -42,13 +48,13 @@ internal class VehicleParametersTest {
     @ParameterizedTest
     @ArgumentsSource(VehicleParametersArgumentsProvider::class)
     fun toMutableVehicleParametersShouldReturnMutableInstance(
-            engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-            lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-            alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-            doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-            bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-            boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-            objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+            engine: VehicleEngineState,
+            lights: VehicleLightsState,
+            alarm: VehicleAlarmState,
+            doorLock: VehicleDoorLockState,
+            bonnet: VehicleBonnetState,
+            boot: VehicleBootState,
+            objective: VehicleObjectiveState
     ) {
         val vehicleParameters = vehicleParametersOf(
                 engine = engine,
@@ -86,31 +92,31 @@ internal class VehicleParametersTest {
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
             return Stream.of(
                     VehicleParametersArguments(
-                            engine = ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState.RUNNING,
-                            lights = ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState.ON,
-                            alarm = ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState.IS_OR_WAS_SOUNDING,
-                            doorLock = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState.LOCKED,
-                            bonnet = ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState.OPEN,
-                            boot = ch.leadrian.samp.kamp.core.api.constants.VehicleBootState.OPEN,
-                            objective = ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState.ON
+                            engine = VehicleEngineState.RUNNING,
+                            lights = VehicleLightsState.ON,
+                            alarm = VehicleAlarmState.IS_OR_WAS_SOUNDING,
+                            doorLock = VehicleDoorLockState.LOCKED,
+                            bonnet = VehicleBonnetState.OPEN,
+                            boot = VehicleBootState.OPEN,
+                            objective = VehicleObjectiveState.ON
                     ),
                     VehicleParametersArguments(
-                            engine = ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState.OFF,
-                            lights = ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState.OFF,
-                            alarm = ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState.OFF,
-                            doorLock = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState.UNLOCKED,
-                            bonnet = ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState.CLOSED,
-                            boot = ch.leadrian.samp.kamp.core.api.constants.VehicleBootState.CLOSED,
-                            objective = ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState.OFF
+                            engine = VehicleEngineState.OFF,
+                            lights = VehicleLightsState.OFF,
+                            alarm = VehicleAlarmState.OFF,
+                            doorLock = VehicleDoorLockState.UNLOCKED,
+                            bonnet = VehicleBonnetState.CLOSED,
+                            boot = VehicleBootState.CLOSED,
+                            objective = VehicleObjectiveState.OFF
                     ),
                     VehicleParametersArguments(
-                            engine = ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState.UNSET,
-                            lights = ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState.UNSET,
-                            alarm = ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState.UNSET,
-                            doorLock = ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState.UNSET,
-                            bonnet = ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState.UNSET,
-                            boot = ch.leadrian.samp.kamp.core.api.constants.VehicleBootState.UNSET,
-                            objective = ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState.UNSET
+                            engine = VehicleEngineState.UNSET,
+                            lights = VehicleLightsState.UNSET,
+                            alarm = VehicleAlarmState.UNSET,
+                            doorLock = VehicleDoorLockState.UNSET,
+                            bonnet = VehicleBonnetState.UNSET,
+                            boot = VehicleBootState.UNSET,
+                            objective = VehicleObjectiveState.UNSET
                     )
             )
         }
@@ -118,13 +124,13 @@ internal class VehicleParametersTest {
     }
 
     private class VehicleParametersArguments(
-            val engine: ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState,
-            val lights: ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState,
-            val alarm: ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState,
-            val doorLock: ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState,
-            val bonnet: ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState,
-            val boot: ch.leadrian.samp.kamp.core.api.constants.VehicleBootState,
-            val objective: ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+            val engine: VehicleEngineState,
+            val lights: VehicleLightsState,
+            val alarm: VehicleAlarmState,
+            val doorLock: VehicleDoorLockState,
+            val bonnet: VehicleBonnetState,
+            val boot: VehicleBootState,
+            val objective: VehicleObjectiveState
     ) : Arguments {
 
         override fun get(): Array<Any> = arrayOf(
