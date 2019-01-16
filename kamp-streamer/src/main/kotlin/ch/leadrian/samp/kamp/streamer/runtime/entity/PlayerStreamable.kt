@@ -11,4 +11,6 @@ interface PlayerStreamable : Streamable {
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
+    fun isVisible(forPlayer: Player): Boolean
+
 }

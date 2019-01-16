@@ -921,4 +921,41 @@ internal class StreamableTextLabelImplTest {
             )
         }
     }
+
+    @Nested
+    inner class VisibilityTests {
+
+        @Test
+        fun isVisibleShouldReturnTrueByDefault() {
+            val player = mockk<Player>()
+
+            val isVisible = streamableTextLabel.isVisible(player)
+
+            assertThat(isVisible)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenTrueConditionIsVisibleShouldReturnTrue() {
+            val player = mockk<Player>()
+            streamableTextLabel.visibleWhen { p -> p == player }
+
+            val isVisible = streamableTextLabel.isVisible(player)
+
+            assertThat(isVisible)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenFalseConditionIsVisibleShouldReturnFalse() {
+            val player = mockk<Player>()
+            streamableTextLabel.visibleWhen { p -> p != player }
+
+            val isVisible = streamableTextLabel.isVisible(player)
+
+            assertThat(isVisible)
+                    .isFalse()
+        }
+
+    }
 }

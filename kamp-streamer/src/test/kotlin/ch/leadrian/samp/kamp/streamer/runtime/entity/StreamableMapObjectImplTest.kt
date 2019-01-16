@@ -1699,6 +1699,43 @@ internal class StreamableMapObjectImplTest {
 
     }
 
+    @Nested
+    inner class VisibilityTests {
+
+        @Test
+        fun isVisibleShouldReturnTrueByDefault() {
+            val player = mockk<Player>()
+
+            val isVisible = streamableMapObject.isVisible(player)
+
+            assertThat(isVisible)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenTrueConditionIsVisibleShouldReturnTrue() {
+            val player = mockk<Player>()
+            streamableMapObject.visibleWhen { p -> p == player }
+
+            val isVisible = streamableMapObject.isVisible(player)
+
+            assertThat(isVisible)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenFalseConditionIsVisibleShouldReturnFalse() {
+            val player = mockk<Player>()
+            streamableMapObject.visibleWhen { p -> p != player }
+
+            val isVisible = streamableMapObject.isVisible(player)
+
+            assertThat(isVisible)
+                    .isFalse()
+        }
+
+    }
+
     private class NonMovingStateProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext): Stream<out Arguments> =

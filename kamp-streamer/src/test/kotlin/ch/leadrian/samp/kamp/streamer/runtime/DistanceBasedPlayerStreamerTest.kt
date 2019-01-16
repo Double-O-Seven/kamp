@@ -263,6 +263,34 @@ internal class DistanceBasedPlayerStreamerTest {
     }
 
     @Test
+    fun shouldNotStreamInInvisibleStreamable() {
+        val player = mockk<Player> {
+            every { isConnected } returns true
+        }
+        val streamable = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(150f, 100f, 20f),
+                        isVisible = false
+                )
+        )
+        val streamLocation = StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))
+        every {
+            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        } returns Stream.of(streamable)
+
+        distanceBasedPlayerStreamer.stream(listOf(streamLocation))
+
+        verify(exactly = 0) {
+            streamable.onStreamIn(any())
+            streamable.onStreamOut(any())
+        }
+        assertThat(distanceBasedPlayerStreamer.isStreamedIn(streamable, player))
+                .isFalse()
+    }
+
+    @Test
     fun shouldNotStreamInAlreadyStreamedInStreamable() {
         val player = mockk<Player> {
             every { isConnected } returns true
@@ -423,7 +451,8 @@ internal class DistanceBasedPlayerStreamerTest {
             override val streamDistance: Float,
             override val priority: Int,
             override var isDestroyed: Boolean = false,
-            vararg streamedInForPlayers: Player
+            vararg streamedInForPlayers: Player,
+            private val isVisible: Boolean = true
     ) : DistanceBasedPlayerStreamable, AbstractDestroyable() {
 
         private val isStreamedIn: MutableMap<Player, Boolean> = mutableMapOf()
@@ -447,6 +476,8 @@ internal class DistanceBasedPlayerStreamerTest {
         override fun isStreamedIn(forPlayer: Player): Boolean = isStreamedIn[forPlayer] ?: false
 
         override fun onDestroy() {}
+
+        override fun isVisible(forPlayer: Player): Boolean = isVisible
 
     }
 

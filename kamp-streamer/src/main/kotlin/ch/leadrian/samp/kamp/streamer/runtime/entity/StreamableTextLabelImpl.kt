@@ -76,6 +76,14 @@ internal class StreamableTextLabelImpl(
             update(value, textSupplier)
         }
 
+    private var visibilityCondition: StreamableTextLabel.(Player) -> Boolean = { true }
+
+    override fun isVisible(forPlayer: Player): Boolean = visibilityCondition.invoke(this, forPlayer)
+
+    override fun visibleWhen(condition: StreamableTextLabel.(Player) -> Boolean) {
+        visibilityCondition = condition
+    }
+
     override var coordinates: Vector3D
         get() = currentState.coordinates
         set(value) {

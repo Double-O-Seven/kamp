@@ -33,6 +33,10 @@ interface StreamableMapObject : MapObjectBase,
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
+    fun isVisible(forPlayer: Player): Boolean
+
+    fun visibleWhen(condition: StreamableMapObject.(Player) -> Boolean)
+
     fun setMaterialText(
             textKey: TextKey,
             index: Int = 0,

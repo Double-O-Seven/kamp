@@ -38,6 +38,10 @@ interface StreamableTextLabel :
 
     fun isStreamedIn(forPlayer: Player): Boolean
 
+    fun isVisible(forPlayer: Player): Boolean
+
+    fun visibleWhen(condition: StreamableTextLabel.(Player) -> Boolean)
+
     fun attachTo(player: Player, offset: Vector3D)
 
     fun attachTo(vehicle: Vehicle, offset: Vector3D)

@@ -374,6 +374,8 @@ internal class CoordinatesBasedPlayerStreamerTest {
 
         override fun isStreamedIn(forPlayer: Player): Boolean = throw UnsupportedOperationException()
 
+        override fun isVisible(forPlayer: Player): Boolean = throw UnsupportedOperationException()
+
     }
 
 }

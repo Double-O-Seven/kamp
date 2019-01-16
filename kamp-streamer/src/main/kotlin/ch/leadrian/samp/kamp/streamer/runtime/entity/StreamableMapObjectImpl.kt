@@ -94,6 +94,14 @@ constructor(
 
     override val drawDistance: Float = streamDistance
 
+    private var visibilityCondition: StreamableMapObject.(Player) -> Boolean = { true }
+
+    override fun isVisible(forPlayer: Player): Boolean = visibilityCondition.invoke(this, forPlayer)
+
+    override fun visibleWhen(condition: StreamableMapObject.(Player) -> Boolean) {
+        visibilityCondition = condition
+    }
+
     override fun onStreamIn(forPlayer: Player) {
         requireNotDestroyed()
         if (playerMapObjectsByPlayer.contains(forPlayer)) {

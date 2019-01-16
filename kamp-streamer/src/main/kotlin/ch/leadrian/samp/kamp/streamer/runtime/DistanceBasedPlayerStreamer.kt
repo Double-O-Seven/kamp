@@ -75,7 +75,7 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         return asyncExecutor
                 .computeOnMainThread {
                     asSequence()
-                            .filter { !it.isDestroyed }
+                            .filter { !it.isDestroyed && it.isVisible(streamLocation.player) }
                             .map { StreamingInfo(it, it.distanceTo(streamLocation.location)) }
                             .filter { it.distance <= it.streamable.streamDistance }
                             .toList()
