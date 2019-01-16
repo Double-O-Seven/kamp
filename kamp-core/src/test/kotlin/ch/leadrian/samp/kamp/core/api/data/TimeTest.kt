@@ -2,6 +2,8 @@ package ch.leadrian.samp.kamp.core.api.data
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
+import java.time.LocalTime
 
 internal class TimeTest {
 
@@ -38,5 +40,21 @@ internal class TimeTest {
                     assertThat(it.minute)
                             .isEqualTo(minute)
                 }
+    }
+
+    @Test
+    fun shouldConvertLocalDateTimeToTime() {
+        val time = timeOf(LocalDateTime.of(1992, 2, 4, 15, 45))
+
+        assertThat(time)
+                .isEqualTo(timeOf(hour = 15, minute = 45))
+    }
+
+    @Test
+    fun shouldConvertLocalTimeToTime() {
+        val time = timeOf(LocalTime.of(15, 45))
+
+        assertThat(time)
+                .isEqualTo(timeOf(hour = 15, minute = 45))
     }
 }

@@ -1,5 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import java.time.LocalDateTime
+import java.time.LocalTime
+
 interface MutableTime : Time {
 
     override var hour: Int
@@ -8,7 +11,11 @@ interface MutableTime : Time {
 
 }
 
-fun mutableTimeOf(hour: Int, minute: Int): MutableTime = MutableTimeImpl(
-        hour = hour,
-        minute = minute
+fun mutableTimeOf(hour: Int, minute: Int): MutableTime = MutableTimeImpl(hour = hour, minute = minute)
+
+fun mutableTimeOf(localDateTime: LocalDateTime): Time = mutableTimeOf(
+        hour = localDateTime.hour,
+        minute = localDateTime.minute
 )
+
+fun mutableTimeOf(localTime: LocalTime): Time = mutableTimeOf(hour = localTime.hour, minute = localTime.minute)

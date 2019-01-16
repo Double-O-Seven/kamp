@@ -1,5 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import java.time.LocalDateTime
+import java.time.LocalTime
+
 interface Time {
 
     val hour: Int
@@ -12,7 +15,8 @@ interface Time {
 
 }
 
-fun timeOf(hour: Int, minute: Int): Time = TimeImpl(
-        hour = hour,
-        minute = minute
-)
+fun timeOf(hour: Int, minute: Int): Time = TimeImpl(hour = hour, minute = minute)
+
+fun timeOf(localDateTime: LocalDateTime): Time = timeOf(hour = localDateTime.hour, minute = localDateTime.minute)
+
+fun timeOf(localTime: LocalTime): Time = timeOf(hour = localTime.hour, minute = localTime.minute)
