@@ -49,10 +49,8 @@ class DistanceBasedPlayerStreamer<T : DistanceBasedPlayerStreamable>(
         beforeStreamActions += action
     }
 
-    fun isStreamedIn(streamable: T, forPlayer: Player): Boolean = streamedInStreamables.containsEntry(
-            forPlayer,
-            streamable
-    )
+    fun isStreamedIn(streamable: T, forPlayer: Player): Boolean =
+            streamedInStreamables.containsEntry(forPlayer, streamable)
 
     private fun beforeStream() {
         do {
