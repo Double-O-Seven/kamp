@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import java.util.Locale
 import java.util.MissingResourceException
 import java.util.ResourceBundle
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Singleton
@@ -27,6 +28,11 @@ internal constructor(
     }
 
     private val resourceBundlesByLocale = mutableMapOf<Locale, ResourceBundleGroup>()
+
+    @PostConstruct
+    internal fun printResourceBundlePackages() {
+        resourceBundlePackages.forEach { log.info("Using translations from {}", it) }
+    }
 
     @JvmOverloads
     fun getText(locale: Locale, key: TextKey, defaultText: String? = null): String {

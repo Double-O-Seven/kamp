@@ -55,6 +55,7 @@ constructor(
                 streamRateInMs,
                 TimeUnit.MILLISECONDS
         )
+        streamers.forEach { log.info("Loaded streamer {}", it::class.qualifiedName) }
     }
 
     @PreDestroy

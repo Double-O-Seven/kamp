@@ -1,5 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.callback
 
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
+import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.reflect.KClass
@@ -9,6 +11,12 @@ class CallbackListenerManager
 @Inject
 internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards CallbackListenerRegistry<*>>) {
 
+    private companion object {
+
+        val log = loggerFor<CallbackListenerManager>()
+
+    }
+
     private val callbackListenerRegistries: MutableMap<KClass<out Any>, CallbackListenerRegistry<*>> = mutableMapOf()
 
     init {
@@ -16,6 +24,17 @@ internal constructor(callbackListenerRegistries: Set<@JvmSuppressWildcards Callb
             this.callbackListenerRegistries.merge(it.listenerClass, it) { oldValue, newValue ->
                 throw IllegalArgumentException("Duplicate listeners for class ${it.listenerClass}: $oldValue, $newValue")
             }
+        }
+    }
+
+    @PostConstruct
+    internal fun printCallbackListenerRegistries() {
+        callbackListenerRegistries.forEach { listenerClass, registry ->
+            log.info(
+                    "Using {} as callback listener registry for {}",
+                    registry::class.qualifiedName,
+                    listenerClass.qualifiedName
+            )
         }
     }
 

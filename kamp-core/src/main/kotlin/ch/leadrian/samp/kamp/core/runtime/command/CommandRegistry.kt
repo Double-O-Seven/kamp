@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.Commands
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,6 +15,12 @@ constructor(
         private val commandDefinitionLoader: CommandDefinitionLoader
 ) {
 
+    private companion object {
+
+        val log = loggerFor<CommandRegistry>()
+
+    }
+
     private val entriesByName: MutableMap<String, Entry> = mutableMapOf()
 
     @PostConstruct
@@ -25,6 +32,7 @@ constructor(
                 addSingleCommand(it)
             }
         }
+        commands.forEach { log.info("Loading commands from {}", it::class.qualifiedName) }
     }
 
     fun getCommandDefinition(name: String, firstParameterValue: String?): CommandDefinition? {
