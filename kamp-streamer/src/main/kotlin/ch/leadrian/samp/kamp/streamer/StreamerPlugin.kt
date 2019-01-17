@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.streamer.api
+package ch.leadrian.samp.kamp.streamer
 
 import ch.leadrian.samp.kamp.core.api.Plugin
 import ch.leadrian.samp.kamp.streamer.runtime.StreamerModule

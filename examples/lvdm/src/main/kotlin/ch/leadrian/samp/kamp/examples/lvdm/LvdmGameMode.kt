@@ -19,7 +19,7 @@ import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.geodata.GeodataPlugin
-import ch.leadrian.samp.kamp.streamer.api.StreamerPlugin
+import ch.leadrian.samp.kamp.streamer.StreamerPlugin
 import ch.leadrian.samp.kamp.view.ViewPlugin
 import com.google.inject.Module
 import javax.annotation.PostConstruct
