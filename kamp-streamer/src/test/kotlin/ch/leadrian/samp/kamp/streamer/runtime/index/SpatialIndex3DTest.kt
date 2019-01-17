@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.runtime.index
 
-import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatiallyIndexedStreamable
+import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatialIndexBasedStreamable
 import com.conversantmedia.util.collection.geometry.Point3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +18,7 @@ internal class SpatialIndex3DTest {
                 .isEqualTo(Rect3d(1.0, 2.0, 3.0, 4.0, 5.0, 6.0))
     }
 
-    private class TestStreamable : SpatiallyIndexedStreamable<TestStreamable, Rect3d>() {
+    private class TestStreamable : SpatialIndexBasedStreamable<TestStreamable, Rect3d>() {
 
         override fun getBoundingBox(): Rect3d {
             throw UnsupportedOperationException()

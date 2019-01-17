@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.index
 
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatiallyIndexedStreamable
+import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatialIndexBasedStreamable
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex.Entry
 import com.conversantmedia.util.collection.geometry.Rect3d
 import com.conversantmedia.util.collection.spatial.HyperPoint
@@ -11,7 +11,7 @@ import com.conversantmedia.util.collection.spatial.SpatialSearch
 import com.conversantmedia.util.collection.spatial.SpatialSearches
 import java.util.LinkedList
 
-abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>> : RectBuilder<Entry<S, T>> {
+abstract class SpatialIndex<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect<*>> : RectBuilder<Entry<S, T>> {
 
     private val rTree: SpatialSearch<Entry<S, T>> by lazy { SpatialSearches.rTree(this) }
 
@@ -49,7 +49,7 @@ abstract class SpatialIndex<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<
         }
     }
 
-    class Entry<S : SpatiallyIndexedStreamable<S, T>, T : HyperRect<*>>
+    class Entry<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect<*>>
     internal constructor(internal val streamable: S) {
 
         val boundingBox: T = streamable.getBoundingBox()

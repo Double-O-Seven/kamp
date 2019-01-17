@@ -13,6 +13,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
@@ -24,20 +25,26 @@ internal class CoordinatesBasedPlayerStreamerTest {
 
     private lateinit var coordinatesBasedPlayerStreamer: CoordinatesBasedPlayerStreamer<TestStreamable, Rect3d>
 
-    private val distanceBasedPlayerStreamerFactory = mockk<DistanceBasedPlayerStreamerFactory>()
-    private val distanceBasedPlayerStreamer = mockk<DistanceBasedPlayerStreamer<TestStreamable>>()
-    private val spatialIndex = mockk<SpatialIndex3D<TestStreamable>>()
+    private val distanceBasedPlayerStreamerFactory: DistanceBasedPlayerStreamerFactory = mockk()
+    private val distanceBasedPlayerStreamer: DistanceBasedPlayerStreamer<TestStreamable> = mockk()
+    private val spatialIndex: SpatialIndex3D<TestStreamable> = mockk()
+    private val spatialIndexBasedStreamableContainerFactory: SpatialIndexBasedStreamableContainerFactory = mockk()
+    private val spatialIndexBasedStreamableContainer: SpatialIndexBasedStreamableContainer<TestStreamable, Rect3d> = mockk()
 
     @BeforeEach
     fun setUp() {
         every {
             distanceBasedPlayerStreamerFactory.create<TestStreamable>(any(), any())
         } returns distanceBasedPlayerStreamer
+        every {
+            spatialIndexBasedStreamableContainerFactory.create(spatialIndex, TestStreamable::class)
+        } returns spatialIndexBasedStreamableContainer
         coordinatesBasedPlayerStreamer = CoordinatesBasedPlayerStreamer(
                 spatialIndex,
                 TestStreamable::class,
                 50,
-                distanceBasedPlayerStreamerFactory
+                distanceBasedPlayerStreamerFactory,
+                spatialIndexBasedStreamableContainerFactory
         )
     }
 
@@ -67,6 +74,7 @@ internal class CoordinatesBasedPlayerStreamerTest {
 
     @Test
     fun shouldDelegateStream() {
+        every { spatialIndexBasedStreamableContainer.onStream() } just Runs
         every { distanceBasedPlayerStreamer.stream(any()) } just Runs
         val streamLocation1 = StreamLocation(mockk(), locationOf(1f, 2f, 3f, 4, 5))
         val streamLocation2 = StreamLocation(mockk(), locationOf(6f, 7f, 8f, 9, 10))
@@ -74,7 +82,10 @@ internal class CoordinatesBasedPlayerStreamerTest {
 
         coordinatesBasedPlayerStreamer.stream(streamLocations)
 
-        verify { distanceBasedPlayerStreamer.stream(streamLocations) }
+        verifyOrder {
+            spatialIndexBasedStreamableContainer.onStream()
+            distanceBasedPlayerStreamer.stream(streamLocations)
+        }
     }
 
     @Test
@@ -87,271 +98,45 @@ internal class CoordinatesBasedPlayerStreamerTest {
         verify { distanceBasedPlayerStreamer.onPlayerDisconnect(player, DisconnectReason.QUIT) }
     }
 
-    @Nested
-    inner class AddTests {
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldDelegateAdd(addToSpatialIndex: Boolean) {
+        val streamable = TestStreamable()
+        every { spatialIndexBasedStreamableContainer.add(any(), any()) } just Runs
 
-        @BeforeEach
-        fun setUp() {
-            every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                firstArg<() -> Unit>().invoke()
-            }
-            every { spatialIndex.add(any()) } just Runs
-        }
+        coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex)
 
-        @Test
-        fun shouldAddStreamableToSpatialIndex() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-
-            coordinatesBasedPlayerStreamer.add(streamable)
-
-            verify { spatialIndex.add(streamable) }
-        }
-
-        @Test
-        fun shouldNotAddNonIndexedStreamableToSpatialIndex() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-
-            verify(exactly = 0) { spatialIndex.add(any()) }
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun shouldAddStreamerAsOnDestroyListener(addToSpatialIndex: Boolean) {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex)
-
-            verify { streamable.addOnDestroyListener(coordinatesBasedPlayerStreamer) }
-        }
-
+        verify { spatialIndexBasedStreamableContainer.add(streamable, addToSpatialIndex) }
     }
 
-    @Nested
-    inner class RemoveTests {
+    @Test
+    fun shouldDelegateRemove() {
+        val streamable = TestStreamable()
+        every { spatialIndexBasedStreamableContainer.remove(any()) } just Runs
 
-        @BeforeEach
-        fun setUp() {
-            every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                firstArg<() -> Unit>().invoke()
-            }
-            every { spatialIndex.add(any()) } just Runs
-            every { spatialIndex.remove(any()) } just Runs
-        }
+        coordinatesBasedPlayerStreamer.remove(streamable)
 
-        @Test
-        fun shouldRemoveStreamableFromSpatialIndex() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable)
-
-            coordinatesBasedPlayerStreamer.remove(streamable)
-
-            verify { spatialIndex.remove(streamable) }
-        }
-
-        @Test
-        fun shouldNotRemoveNonIndexedStreamableFromSpatialIndex() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-
-            coordinatesBasedPlayerStreamer.remove(streamable)
-
-            verify(exactly = 0) { spatialIndex.remove(any()) }
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun shouldRemoveStreamerAsOnDestroyListener(addToSpatialIndex: Boolean) {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex)
-
-            coordinatesBasedPlayerStreamer.remove(streamable)
-
-            verify { streamable.removeOnDestroyListener(coordinatesBasedPlayerStreamer) }
-        }
-
+        verify { spatialIndexBasedStreamableContainer.remove(streamable) }
     }
 
-    @Nested
-    inner class RemoveFromSpatialIndexTests {
+    @Test
+    fun shouldDelegateRemoveFromSpatialIndex() {
+        val streamable = TestStreamable()
+        every { spatialIndexBasedStreamableContainer.removeFromSpatialIndex(any()) } just Runs
 
-        @BeforeEach
-        fun setUp() {
-            every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                firstArg<() -> Unit>().invoke()
-            }
-            every { spatialIndex.add(any()) } just Runs
-        }
+        coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamable)
 
-        @Test
-        fun shouldRemoveIndexedStreamableFromSpatialIndex() {
-            every { spatialIndex.remove(any()) } just Runs
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable)
-
-            coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamable)
-
-            verify { spatialIndex.remove(streamable) }
-        }
-
-        @Test
-        fun shouldNotRemoveNonIndexedStreamableFromSpatialIndex() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-
-            coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamable)
-
-            verify(exactly = 0) { spatialIndex.remove(any()) }
-        }
-
+        verify { spatialIndexBasedStreamableContainer.removeFromSpatialIndex(streamable) }
     }
 
-    @Nested
-    inner class OnBoundingBoxChangeTests {
+    @Test
+    fun shouldDelegateOnBoundingBoxChange() {
+        val streamable = TestStreamable()
+        every { spatialIndexBasedStreamableContainer.onBoundingBoxChange(any()) } just Runs
 
-        @BeforeEach
-        fun setUp() {
-            every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                firstArg<() -> Unit>().invoke()
-            }
-            every { spatialIndex.add(any()) } just Runs
-            every { spatialIndex.update(any()) } just Runs
-        }
+        coordinatesBasedPlayerStreamer.onBoundingBoxChange(streamable)
 
-        @Test
-        fun shouldUpdateIndexedStreamable() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable)
-
-            coordinatesBasedPlayerStreamer.onBoundingBoxChange(streamable)
-
-            verify { spatialIndex.update(streamable) }
-        }
-
-        @Test
-        fun shouldNotUpdateNonIndexedStreamable() {
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-
-            coordinatesBasedPlayerStreamer.onBoundingBoxChange(streamable)
-
-            verify(exactly = 0) { spatialIndex.update(any()) }
-        }
-    }
-
-    @Nested
-    inner class GetStreamInCandidatesTests {
-
-        @BeforeEach
-        fun setUp() {
-            every { distanceBasedPlayerStreamer.beforeStream(any()) } answers {
-                firstArg<() -> Unit>().invoke()
-            }
-        }
-
-        @Test
-        fun shouldReturnStreamInCandidates() {
-            val location = locationOf(100f, 200f, 300f, 4, 5)
-            val streamLocation = StreamLocation(mockk(), location)
-            val streamable1 = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-            val streamable2 = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-            val streamable3 = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable3, addToSpatialIndex = false)
-            every { spatialIndex.getIntersections(location) } returns listOf(streamable1, streamable2)
-
-            val candidates = coordinatesBasedPlayerStreamer.getStreamInCandidates(streamLocation)
-
-            assertThat(candidates)
-                    .containsExactlyInAnyOrder(streamable1, streamable2, streamable3)
-        }
-
-        @Test
-        fun shouldNotReturnRemovedStreamInCandidate() {
-            val location = locationOf(100f, 200f, 300f, 4, 5)
-            val streamLocation = StreamLocation(mockk(), location)
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            every { spatialIndex.getIntersections(location) } returns emptyList()
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-            coordinatesBasedPlayerStreamer.remove(streamable)
-
-            val candidates = coordinatesBasedPlayerStreamer.getStreamInCandidates(streamLocation)
-
-            assertThat(candidates)
-                    .isEmpty()
-        }
-
-        @Test
-        fun shouldNotReturnDestroyedIndexedStreamInCandidate() {
-            val location = locationOf(100f, 200f, 300f, 4, 5)
-            val streamLocation = StreamLocation(mockk(), location)
-            val streamable = TestStreamable()
-            every { spatialIndex.getIntersections(location) } returns emptyList()
-            coordinatesBasedPlayerStreamer.add(streamable, addToSpatialIndex = false)
-            streamable.destroy()
-
-            val candidates = coordinatesBasedPlayerStreamer.getStreamInCandidates(streamLocation)
-
-            assertThat(candidates)
-                    .isEmpty()
-        }
-
-        @Test
-        fun shouldReturnStreamInCandidateRemovedFromSpatialIndex() {
-            val location = locationOf(100f, 200f, 300f, 4, 5)
-            val streamLocation = StreamLocation(mockk(), location)
-            val streamable = mockk<TestStreamable> {
-                every { addOnDestroyListener(any()) } just Runs
-                every { removeOnDestroyListener(any()) } just Runs
-            }
-            spatialIndex.apply {
-                every { getIntersections(location) } returns emptyList()
-                every { add(any()) } just Runs
-                every { remove(any()) } just Runs
-            }
-            coordinatesBasedPlayerStreamer.add(streamable)
-            coordinatesBasedPlayerStreamer.removeFromSpatialIndex(streamable)
-
-            val candidates = coordinatesBasedPlayerStreamer.getStreamInCandidates(streamLocation)
-
-            assertThat(candidates)
-                    .containsExactlyInAnyOrder(streamable)
-        }
-
+        verify { spatialIndexBasedStreamableContainer.onBoundingBoxChange(streamable) }
     }
 
     private class TestStreamable : CoordinatesBasedPlayerStreamable<TestStreamable, Rect3d>() {

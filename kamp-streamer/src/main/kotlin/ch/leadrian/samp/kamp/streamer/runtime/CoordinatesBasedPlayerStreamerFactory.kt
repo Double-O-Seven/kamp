@@ -8,7 +8,10 @@ import kotlin.reflect.KClass
 
 class CoordinatesBasedPlayerStreamerFactory
 @Inject
-internal constructor(private val distanceBasedPlayerStreamerFactory: DistanceBasedPlayerStreamerFactory) {
+internal constructor(
+        private val distanceBasedPlayerStreamerFactory: DistanceBasedPlayerStreamerFactory,
+        private val spatialIndexBasedStreamableContainerFactory: SpatialIndexBasedStreamableContainerFactory
+) {
 
     fun <S : CoordinatesBasedPlayerStreamable<S, T>, T : HyperRect<*>> create(
             spatialIndex: SpatialIndex<S, T>,
@@ -19,7 +22,8 @@ internal constructor(private val distanceBasedPlayerStreamerFactory: DistanceBas
                     spatialIndex,
                     streamableClass,
                     maxCapacity,
-                    distanceBasedPlayerStreamerFactory
+                    distanceBasedPlayerStreamerFactory,
+                    spatialIndexBasedStreamableContainerFactory
             )
 
     inline fun <reified S : CoordinatesBasedPlayerStreamable<S, T>, T : HyperRect<*>> create(
