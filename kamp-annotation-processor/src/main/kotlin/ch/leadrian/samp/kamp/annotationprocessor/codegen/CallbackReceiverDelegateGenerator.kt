@@ -61,6 +61,7 @@ class CallbackReceiverDelegateGenerator {
                 .addModifiers(KModifier.INTERNAL)
                 .addSuperinterface(receiverClassName)
                 .addSuperinterface(listenerDefinition.type)
+                .addGeneratedAnnotation(this@CallbackReceiverDelegateGenerator::class)
                 .addProperty(listenersPropertySpec)
                 .addAddListenerFunction(listenerDefinition, listenersPropertySpec)
                 .addRemoveListenerFunction(listenerDefinition, listenersPropertySpec)

@@ -43,6 +43,7 @@ class CallbackReceiverGenerator {
     ): FileSpec.Builder {
         val typeSpec = TypeSpec
                 .interfaceBuilder(className)
+                .addGeneratedAnnotation(this@CallbackReceiverGenerator::class)
                 .addAddListenerFunction(listenerDefinition)
                 .addRemoveListenerFunction(listenerDefinition)
                 .build()

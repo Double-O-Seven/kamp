@@ -48,6 +48,7 @@ class CallbackHandlerGenerator {
         val typeSpec = TypeSpec
                 .classBuilder(className)
                 .addModifiers(KModifier.INTERNAL)
+                .addGeneratedAnnotation(this@CallbackHandlerGenerator::class)
                 .addAnnotation(Singleton::class)
                 .primaryConstructor(
                         FunSpec
