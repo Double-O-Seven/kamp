@@ -3,14 +3,11 @@ package ch.leadrian.samp.kamp.core.runtime
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
-import ch.leadrian.samp.kamp.core.runtime.async.AsyncModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.command.CommandModule
-import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
+import ch.leadrian.samp.kamp.core.runtime.entity.extension.EntityExtensionModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
-import ch.leadrian.samp.kamp.core.runtime.service.ServiceModule
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
-import ch.leadrian.samp.kamp.core.runtime.timer.TimerModule
 import com.google.inject.multibindings.Multibinder
 import com.google.inject.name.Names.named
 
@@ -33,14 +30,11 @@ internal class CoreModule(
     }
 
     private fun installModules() {
-        install(AsyncModule())
         install(CallbackModule())
         install(CommandModule())
-        install(EntityFactoryModule())
+        install(EntityExtensionModule())
         install(EntityRegistryModule())
-        install(ServiceModule())
         install(TextModule())
-        install(TimerModule())
     }
 
     private fun bindServer() {

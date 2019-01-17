@@ -17,7 +17,7 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.TabListDialog
-import ch.leadrian.samp.kamp.core.runtime.entity.factory.EntityFactoryModule
+import ch.leadrian.samp.kamp.core.runtime.entity.extension.EntityExtensionModule
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistryModule
 import ch.leadrian.samp.kamp.core.runtime.inject.InjectorFactory
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
@@ -54,7 +54,7 @@ internal class CommandListDialogFactoryTest {
                 EntityRegistryModule(),
                 CommandModule(),
                 CallbackModule(),
-                EntityFactoryModule()
+                EntityExtensionModule()
         )
         val lifecycleManager = injector.getInstance<LifecycleManager>()
         lifecycleManager.start()

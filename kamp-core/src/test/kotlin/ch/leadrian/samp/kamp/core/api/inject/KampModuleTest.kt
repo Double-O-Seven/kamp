@@ -6,9 +6,14 @@ import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.TestModule
+import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.Server
+import com.google.inject.AbstractModule
 import com.google.inject.Guice
 import com.google.inject.Injector
+import com.netflix.governator.lifecycle.LifecycleManager
+import io.mockk.every
+import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -181,5 +186,18 @@ internal class KampModuleTest {
     private object FooCommands : Commands()
 
     private object BarCommands : Commands()
+
+    private class TestModule(private val maxPlayers: Int = 50) : AbstractModule() {
+
+        override fun configure() {
+            val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor> {
+                every { getMaxPlayers() } returns maxPlayers
+            }
+            bind(SAMPNativeFunctionExecutor::class.java).toInstance(nativeFunctionExecutor)
+            bind(LifecycleManager::class.java).toInstance(mockk())
+            bind(Server::class.java).toInstance(mockk())
+        }
+
+    }
 
 }

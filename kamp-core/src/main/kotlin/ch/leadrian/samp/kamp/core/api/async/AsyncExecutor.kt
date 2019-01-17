@@ -1,7 +1,10 @@
 package ch.leadrian.samp.kamp.core.api.async
 
+import ch.leadrian.samp.kamp.core.runtime.async.AsyncExecutorImpl
+import com.google.inject.ImplementedBy
 import java.util.concurrent.CompletableFuture
 
+@ImplementedBy(AsyncExecutorImpl::class)
 interface AsyncExecutor {
 
     fun execute(
