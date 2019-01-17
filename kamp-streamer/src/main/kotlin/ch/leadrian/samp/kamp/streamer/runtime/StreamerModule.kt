@@ -33,6 +33,7 @@ internal class StreamerModule : AbstractStreamerModule() {
         newStreamerSetBinder().apply {
             addBinding().to(MapObjectStreamer::class.java)
             addBinding().to(TextLabelStreamer::class.java)
+            addBinding().to(ActorStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
     }

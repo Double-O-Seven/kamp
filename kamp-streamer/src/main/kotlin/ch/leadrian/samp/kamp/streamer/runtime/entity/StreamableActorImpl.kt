@@ -19,6 +19,7 @@ import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerDamageStreamableActor
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamInReceiver
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamOutReceiver
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableActor
+import ch.leadrian.samp.kamp.streamer.runtime.ActorStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInHandler
@@ -41,6 +42,7 @@ internal class StreamableActorImpl(
         private val onStreamableActorStreamInHandler: OnStreamableActorStreamInHandler,
         private val onStreamableActorStreamOutHandler: OnStreamableActorStreamOutHandler,
         private val onPlayerDamageStreamableActorHandler: OnPlayerDamageStreamableActorHandler,
+        private val actorStreamer: ActorStreamer,
         private val onStreamableActorStreamInReceiver: OnStreamableActorStreamInReceiverDelegate = OnStreamableActorStreamInReceiverDelegate(),
         private val onStreamableActorStreamOutReceiver: OnStreamableActorStreamOutReceiverDelegate = OnStreamableActorStreamOutReceiverDelegate(),
         private val onPlayerDamageStreamableActorReceiver: OnPlayerDamageStreamableActorReceiverDelegate = OnPlayerDamageStreamableActorReceiverDelegate()
@@ -76,7 +78,7 @@ internal class StreamableActorImpl(
         set(value) {
             field = value.toVector3D()
             actor?.coordinates = field
-            // TODO notify streamer
+            actorStreamer.onBoundingBoxChange(this)
         }
 
     override var angle: Float = angle
