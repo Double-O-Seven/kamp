@@ -43,28 +43,16 @@ internal class ActorStreamerTest {
         )
     }
 
-    @Nested
-    inner class InitializeTests {
+    @Test
+    fun initializeShouldCreateCoordinatesBasedGlobalStreamer() {
+        actorStreamer.initialize()
 
-        @Test
-        fun shouldCreateCoordinatesBasedGlobalStreamer() {
-            actorStreamer.initialize()
-
-            verify {
-                coordinatesBasedGlobalStreamerFactory.create(
-                        any<SpatialIndex3D<StreamableActorImpl>>(),
-                        SAMPConstants.MAX_ACTORS
-                )
-            }
+        verify {
+            coordinatesBasedGlobalStreamerFactory.create(
+                    any<SpatialIndex3D<StreamableActorImpl>>(),
+                    SAMPConstants.MAX_ACTORS
+            )
         }
-
-        @Test
-        fun initializeShouldRegisterAsCallbackListener() {
-            actorStreamer.initialize()
-
-            verify { callbackListenerManager.register(coordinatesBasedGlobalStreamer) }
-        }
-
     }
 
     @Nested

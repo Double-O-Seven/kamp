@@ -33,7 +33,6 @@ constructor(
     @PostConstruct
     fun initialize() {
         delegate = coordinatesBasedGlobalStreamerFactory.create(SpatialIndex3D(), SAMPConstants.MAX_ACTORS)
-        callbackListenerManager.register(delegate)
     }
 
     fun createActor(
