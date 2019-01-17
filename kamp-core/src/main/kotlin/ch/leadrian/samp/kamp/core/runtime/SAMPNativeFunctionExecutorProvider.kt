@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.core.runtime
 
-import ch.leadrian.samp.kamp.core.api.SAMPNativeFunctionHookFactory
 import javax.inject.Inject
 import javax.inject.Named
 import javax.inject.Provider

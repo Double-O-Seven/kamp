@@ -1,7 +1,5 @@
 package ch.leadrian.samp.kamp.core.runtime
 
-import ch.leadrian.samp.kamp.core.api.SAMPNativeFunctionHook
-import ch.leadrian.samp.kamp.core.api.SAMPNativeFunctionHookFactory
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -50,7 +48,8 @@ internal class SAMPNativeFunctionExecutorProviderTest {
     private class BarHook(nativeFunctionExecutor: SAMPNativeFunctionExecutor) :
             SAMPNativeFunctionHook(nativeFunctionExecutor)
 
-    private class BarHookFactory(override val priority: Int) : SAMPNativeFunctionHookFactory {
+    private class BarHookFactory(override val priority: Int) :
+            SAMPNativeFunctionHookFactory {
 
         override fun create(nativeFunctionExecutor: SAMPNativeFunctionExecutor): SAMPNativeFunctionHook {
             return BarHook(nativeFunctionExecutor)
@@ -61,7 +60,8 @@ internal class SAMPNativeFunctionExecutorProviderTest {
     private class FooHook(nativeFunctionExecutor: SAMPNativeFunctionExecutor) :
             SAMPNativeFunctionHook(nativeFunctionExecutor)
 
-    private class FooHookFactory(override val priority: Int) : SAMPNativeFunctionHookFactory {
+    private class FooHookFactory(override val priority: Int) :
+            SAMPNativeFunctionHookFactory {
 
         override fun create(nativeFunctionExecutor: SAMPNativeFunctionExecutor): SAMPNativeFunctionHook {
             return FooHook(nativeFunctionExecutor)
@@ -72,7 +72,8 @@ internal class SAMPNativeFunctionExecutorProviderTest {
     private class QuxHook(nativeFunctionExecutor: SAMPNativeFunctionExecutor) :
             SAMPNativeFunctionHook(nativeFunctionExecutor)
 
-    private class QuxHookFactory(override val priority: Int) : SAMPNativeFunctionHookFactory {
+    private class QuxHookFactory(override val priority: Int) :
+            SAMPNativeFunctionHookFactory {
 
         override fun create(nativeFunctionExecutor: SAMPNativeFunctionExecutor): SAMPNativeFunctionHook {
             return QuxHook(nativeFunctionExecutor)
