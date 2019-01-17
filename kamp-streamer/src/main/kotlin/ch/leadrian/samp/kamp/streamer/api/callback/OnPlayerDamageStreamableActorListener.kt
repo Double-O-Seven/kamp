@@ -9,7 +9,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableActor
 
 @CallbackListener(runtimePackageName = "ch.leadrian.samp.kamp.streamer.runtime.callback")
-interface OnPlayerDamageStreamableActor {
+interface OnPlayerDamageStreamableActorListener {
 
     @InlineCallback("onDamage")
     fun onPlayerDamageStreamableActor(
