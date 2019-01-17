@@ -12,6 +12,12 @@ import javax.annotation.PostConstruct
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Example of a callback listener. A callback listener may implement any callback listener interface.
+ * It should be bound as eager singleton inside a [com.google.inject.AbstractModule].
+ * @see [com.google.inject.AbstractModule.bind]
+ * @see [com.google.inject.binder.ScopedBindingBuilder.asEagerSingleton]
+ */
 @Singleton
 class PlayerDeathHandler
 @Inject

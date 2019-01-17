@@ -14,5 +14,6 @@ class LvdmModule : KampModule() {
             addBinding().to(AdminCommands::class.java)
             addBinding().to(DebugCommands::class.java)
         }
+        newSAMPNativeFunctionHookFactorySetBinder().addBinding().to(ClientMessageLoggerFactory::class.java)
     }
 }
