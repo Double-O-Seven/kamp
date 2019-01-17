@@ -31,6 +31,9 @@ internal class StreamerModule : AbstractStreamerModule() {
         }
         bind(DistanceBasedPlayerStreamerFactory::class.java)
         bind(CoordinatesBasedPlayerStreamerFactory::class.java)
+        bind(DistanceBasedGlobalStreamerFactory::class.java)
+        bind(CoordinatesBasedGlobalStreamerFactory::class.java)
+        bind(SpatialIndexBasedStreamableContainerFactory::class.java)
         bind(MapObjectStreamer::class.java)
         bind(TextLabelStreamer::class.java)
         newStreamerSetBinder().apply {
