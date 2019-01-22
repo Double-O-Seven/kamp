@@ -155,6 +155,7 @@ internal class StreamableActorImpl(
         if (!isStreamedIn) {
             throw IllegalStateException("Actor was not streamed in")
         }
+        actor?.let { this@StreamableActorImpl.health = it.health }
         destroyActor()
         actor = null
     }
