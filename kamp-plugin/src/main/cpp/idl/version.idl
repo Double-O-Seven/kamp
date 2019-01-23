@@ -1,0 +1,1 @@
+[native] void GetKampPluginVersion([out] string version, int length);

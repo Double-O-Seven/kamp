@@ -25,8 +25,6 @@ private constructor(
 
     companion object {
 
-        const val GAME_MODE_CLASS_PROPERTY_KEY = "kamp.gamemode.class.name"
-
         @JvmOverloads
         @JvmStatic
         fun start(
@@ -58,6 +56,7 @@ private constructor(
         loadGameMode()
         loadPlugins()
         initializeNativeFunctionExecutor()
+        checkVersion()
         initializeDataDirectories()
         createInjector()
     }
@@ -88,10 +87,7 @@ private constructor(
     }
 
     private fun loadGameMode() {
-        val gameModeClassName = configProperties.getProperty(GAME_MODE_CLASS_PROPERTY_KEY)
-                ?: throw IllegalStateException("Could not find required property $GAME_MODE_CLASS_PROPERTY_KEY")
-        val gameModeClass = Class.forName(gameModeClassName)
-        gameMode = gameModeClass.newInstance() as GameMode
+        gameMode = GameModeLoader.load(configProperties)
     }
 
     private fun loadPlugins() {
@@ -102,9 +98,13 @@ private constructor(
         nativeFunctionExecutor.initialize()
     }
 
+    private fun checkVersion() {
+        VersionChecker.check(nativeFunctionExecutor)
+    }
+
     private fun createInjector() {
         val modules = mutableListOf<Module>()
-        modules += getCoreModule()
+        modules += createCoreModule()
         modules += gameMode.getModules()
         modules += plugins.flatMap { it.getModules() }
         injector = InjectorFactory.createInjector(
@@ -120,7 +120,7 @@ private constructor(
                 binder.bindConfigurationProvider().toInstance(PropertiesConfigurationProvider(configProperties))
             }
 
-    private fun getCoreModule(): Module =
+    private fun createCoreModule(): Module =
             CoreModule(
                     server = this,
                     nativeFunctionExecutor = nativeFunctionExecutor,

@@ -12,26 +12,31 @@ dependencies {
 
 val runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
-val sampgdkDir = "$projectDir/src/main/cpp/sampgdk"
+val srcMainCppDir = "$projectDir/src/main/cpp"
 
-val idlFilesDir = "$sampgdkDir/lib/sampgdk"
+val sampgdkDir = "$srcMainCppDir/sampgdk"
 
-val actorIDLFile = "$idlFilesDir/a_actor.idl"
-val objectsIDLFile = "$idlFilesDir/a_objects.idl"
-val playersIDLFile = "$idlFilesDir/a_players.idl"
-val sampIDLFile = "$idlFilesDir/a_samp.idl"
-val vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
+val versionIDLFile = "$srcMainCppDir/idl/version.idl"
+
+val sampgdkIDLFilesDir = "$sampgdkDir/lib/sampgdk"
+
+val actorIDLFile = "$sampgdkIDLFilesDir/a_actor.idl"
+val objectsIDLFile = "$sampgdkIDLFilesDir/a_objects.idl"
+val playersIDLFile = "$sampgdkIDLFilesDir/a_players.idl"
+val sampIDLFile = "$sampgdkIDLFilesDir/a_samp.idl"
+val vehiclesIDLFile = "$sampgdkIDLFilesDir/a_vehicles.idl"
 
 val kampSrcDir = "$sampgdkDir/plugins/kamp"
 
 val sampgdkBuildDir = "$buildDir/sampgdk"
 
-val sampPluginSdkDir = "$projectDir/src/main/cpp/samp-plugin-sdk-original"
+val sampPluginSdkDir = "$srcMainCppDir/samp-plugin-sdk-original"
 
 kampCppCodegen {
+    version = project.version.toString()
     runtimeJavaPackageName = runtimePackageName
     outputDirectoryPath = kampSrcDir
-    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
 tasks {

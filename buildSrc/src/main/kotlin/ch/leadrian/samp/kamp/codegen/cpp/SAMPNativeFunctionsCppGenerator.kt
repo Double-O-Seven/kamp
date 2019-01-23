@@ -13,6 +13,7 @@ import java.io.Writer
 internal class SAMPNativeFunctionsCppGenerator(
         private val functions: List<Function>,
         private val javaPackageName: String,
+        private val kampPluginVersion: String,
         outputDirectory: File
 ) : SingleFileCodeGenerator(outputDirectory) {
 
@@ -43,6 +44,10 @@ internal class SAMPNativeFunctionsCppGenerator(
             |
             |#include "Kamp.hpp"
             |#include "FieldCache.hpp"
+            |
+            |void GetKampPluginVersion(char *version, size_t versionLength) {
+            |   strncpy(version, "$kampPluginVersion", versionLength);
+            |}
             |
             |
         """.trimMargin("|")
@@ -92,6 +97,7 @@ internal class SAMPNativeFunctionsCppGenerator(
         when {
             resultProcessingSteps.isEmpty() && function.type != Types.VOID -> write("    return ")
             function.type != Types.VOID -> write("    auto _result = ")
+            else -> write("    ")
         }
         write("${function.name}(")
         write(methodParameterGenerators.joinToString(separator = ", ") { it.generateMethodInvocationParameter() })

@@ -16,6 +16,7 @@ import javax.lang.model.element.Modifier
 internal class SAMPConstantsJavaGenerator(
         private val constants: List<Constant>,
         private val javaPackageName: String,
+        private val kampCoreVersion: String,
         outputDirectory: File
 ) : SingleFileCodeGenerator(outputDirectory) {
 
@@ -51,6 +52,18 @@ internal class SAMPConstantsJavaGenerator(
     }
 
     private fun TypeSpec.Builder.addFields(): TypeSpec.Builder {
+        addField(
+                FieldSpec
+                        .builder(
+                                String::class.java,
+                                "KAMP_CORE_VERSION",
+                                Modifier.PUBLIC,
+                                Modifier.STATIC,
+                                Modifier.FINAL
+                        )
+                        .initializer("\$S", kampCoreVersion)
+                        .build()
+        )
         constants.forEach { addField(it.toFieldSpec()) }
         return this
     }

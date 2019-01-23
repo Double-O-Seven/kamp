@@ -56,7 +56,12 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
     }
 
     private val sampNativeFunctionsCppGenerator: SAMPNativeFunctionsCppGenerator by lazy {
-        SAMPNativeFunctionsCppGenerator(functions, extension.runtimeJavaPackageName, outputDirectory)
+        SAMPNativeFunctionsCppGenerator(
+                functions = functions,
+                javaPackageName = extension.runtimeJavaPackageName,
+                kampPluginVersion = project.version.toString(),
+                outputDirectory = outputDirectory
+        )
     }
 
     @TaskAction

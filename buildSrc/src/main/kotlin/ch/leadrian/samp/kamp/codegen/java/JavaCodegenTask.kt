@@ -61,7 +61,12 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
     }
 
     private val sampConstantsJavaGenerator: SAMPConstantsJavaGenerator by lazy {
-        SAMPConstantsJavaGenerator(constants, extension.constantsJavaPackageName, apiOutputDirectory)
+        SAMPConstantsJavaGenerator(
+                constants = constants,
+                javaPackageName = extension.constantsJavaPackageName,
+                kampCoreVersion = project.version.toString(),
+                outputDirectory = apiOutputDirectory
+        )
     }
 
     private val sampNativeFunctionsJavaGenerator: SAMPNativeFunctionsJavaGenerator by lazy {

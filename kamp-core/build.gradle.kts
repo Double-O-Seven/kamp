@@ -35,25 +35,30 @@ val apiPackageName = "$corePackageName.api"
 val constantsPackageName = "$apiPackageName.constants"
 
 val kampPluginProjectDir = project(":kamp-plugin").projectDir
-val idlFilesDir = "$kampPluginProjectDir/src/main/cpp/sampgdk/lib/sampgdk"
+val kampPluginSrcMainCppDir = "$kampPluginProjectDir/src/main/cpp"
 
-val actorIDLFile = "$idlFilesDir/a_actor.idl"
-val objectsIDLFile = "$idlFilesDir/a_objects.idl"
-val playersIDLFile = "$idlFilesDir/a_players.idl"
-val sampIDLFile = "$idlFilesDir/a_samp.idl"
-val vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
+val versionIDLFile = "$kampPluginSrcMainCppDir/idl/version.idl"
+
+val sampgdkIDLFilesDir = "$kampPluginSrcMainCppDir/sampgdk/lib/sampgdk"
+
+val actorIDLFile = "$sampgdkIDLFilesDir/a_actor.idl"
+val objectsIDLFile = "$sampgdkIDLFilesDir/a_objects.idl"
+val playersIDLFile = "$sampgdkIDLFilesDir/a_players.idl"
+val sampIDLFile = "$sampgdkIDLFilesDir/a_samp.idl"
+val vehiclesIDLFile = "$sampgdkIDLFilesDir/a_vehicles.idl"
 
 kampJavaCodegen {
+    version = project.version.toString()
     constantsJavaPackageName = constantsPackageName
     runtimeJavaPackageName = runtimePackageName
     outputDirectoryPath = generatedSrcJavaDir
-    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
 kampKotlinCodegen {
     runtimeJavaPackageName = runtimePackageName
     outputDirectoryPath = generatedSrcKotlinDir
-    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile)
+    interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
 textKeyGenerator {
