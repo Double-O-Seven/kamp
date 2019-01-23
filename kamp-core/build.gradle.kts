@@ -35,17 +35,15 @@ val apiPackageName = "$corePackageName.api"
 val constantsPackageName = "$apiPackageName.constants"
 
 val kampPluginProjectDir = project(":kamp-plugin").projectDir
-val kampPluginSrcMainCppDir = "$kampPluginProjectDir/src/main/cpp"
 
-val versionIDLFile = "$kampPluginSrcMainCppDir/idl/version.idl"
+val idlFilesDir = "$kampPluginProjectDir/src/main/idl"
 
-val sampgdkIDLFilesDir = "$kampPluginSrcMainCppDir/sampgdk/lib/sampgdk"
-
-val actorIDLFile = "$sampgdkIDLFilesDir/a_actor.idl"
-val objectsIDLFile = "$sampgdkIDLFilesDir/a_objects.idl"
-val playersIDLFile = "$sampgdkIDLFilesDir/a_players.idl"
-val sampIDLFile = "$sampgdkIDLFilesDir/a_samp.idl"
-val vehiclesIDLFile = "$sampgdkIDLFilesDir/a_vehicles.idl"
+val actorIDLFile = "$idlFilesDir/a_actor.idl"
+val objectsIDLFile = "$idlFilesDir/a_objects.idl"
+val playersIDLFile = "$idlFilesDir/a_players.idl"
+val sampIDLFile = "$idlFilesDir/a_samp.idl"
+val vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
+val versionIDLFile = "$idlFilesDir/version.idl"
 
 kampJavaCodegen {
     version = project.version.toString()

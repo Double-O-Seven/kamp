@@ -4,7 +4,9 @@ open class CppCodegenExtension {
 
     var runtimeJavaPackageName: String = "ch.leadrian.samp.kamp.core.runtime"
 
-    var outputDirectoryPath: Any? = null
+    var cppOutputDirectoryPath: Any? = null
+
+    var headersOutputDirectoryPath: Any? = null
 
     val interfaceDefinitionFiles: MutableList<Any> = mutableListOf()
 

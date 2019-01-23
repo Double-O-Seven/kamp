@@ -34,7 +34,7 @@ allprojects {
     }
 }
 
-subprojects {
+configure(subprojects - project("kamp-plugin")) {
     apply(plugin = "java")
     apply(plugin = "kotlin")
     apply(plugin = "jacoco")

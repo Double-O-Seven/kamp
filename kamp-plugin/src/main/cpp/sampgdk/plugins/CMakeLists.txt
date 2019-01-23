@@ -1,1 +1,0 @@
-sampgdk_add_subproject(kamp)

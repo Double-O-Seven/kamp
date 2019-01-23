@@ -36,23 +36,26 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         }
     }
 
-    private val outputDirectory: File
-        get() = fileLookup.fileResolver.resolve(extension.outputDirectoryPath)
+    private val cppOutputDirectory: File
+        get() = fileLookup.fileResolver.resolve(extension.cppOutputDirectoryPath)
+
+    private val headersOutputDirectory: File
+        get() = fileLookup.fileResolver.resolve(extension.headersOutputDirectoryPath)
 
     private val sampCallbacksCppGenerator: SAMPCallbacksCppGenerator by lazy {
-        SAMPCallbacksCppGenerator(functions, outputDirectory)
+        SAMPCallbacksCppGenerator(functions, cppOutputDirectory)
     }
 
     private val sampCallbacksDefGenerator: SAMPCallbacksDefGenerator by lazy {
-        SAMPCallbacksDefGenerator(functions, outputDirectory)
+        SAMPCallbacksDefGenerator(functions, cppOutputDirectory)
     }
 
     private val sampCallbacksMethodCacheCppGenerator: SAMPCallbacksMethodCacheCppGenerator by lazy {
-        SAMPCallbacksMethodCacheCppGenerator(functions, outputDirectory)
+        SAMPCallbacksMethodCacheCppGenerator(functions, cppOutputDirectory)
     }
 
     private val sampCallbacksMethodCacheHppGenerator: SAMPCallbacksMethodCacheHppGenerator by lazy {
-        SAMPCallbacksMethodCacheHppGenerator(functions, outputDirectory)
+        SAMPCallbacksMethodCacheHppGenerator(functions, headersOutputDirectory)
     }
 
     private val sampNativeFunctionsCppGenerator: SAMPNativeFunctionsCppGenerator by lazy {
@@ -60,7 +63,7 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
                 functions = functions,
                 javaPackageName = extension.runtimeJavaPackageName,
                 kampPluginVersion = project.version.toString(),
-                outputDirectory = outputDirectory
+                outputDirectory = cppOutputDirectory
         )
     }
 

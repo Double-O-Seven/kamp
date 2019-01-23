@@ -802,4 +802,9 @@ constructor(
         } ?: OnPlayerWeaponShotListener.Result.AllowDamage
         return result.value
     }
+
+    override fun onPlayerRequestDownload(playerid: Int, type: Int, crc: Int): Boolean {
+        throw UnsupportedOperationException("0.3DL is not supported")
+    }
+
 }

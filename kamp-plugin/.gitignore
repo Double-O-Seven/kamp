@@ -1,7 +1,7 @@
 # Generated C++ files
-src/main/cpp/sampgdk/plugins/kamp/SAMPNativeFunctions.cpp
-src/main/cpp/sampgdk/plugins/kamp/SAMPNativeFunctions.h
-src/main/cpp/sampgdk/plugins/kamp/SAMPCallbacks.cpp
-src/main/cpp/sampgdk/plugins/kamp/SAMPCallbacks.def
-src/main/cpp/sampgdk/plugins/kamp/SAMPCallbacksMethodCache.cpp
-src/main/cpp/sampgdk/plugins/kamp/SAMPCallbacksMethodCache.hpp
+src/main/cpp/SAMPNativeFunctions.cpp
+src/main/headers/SAMPNativeFunctions.h
+src/main/cpp/SAMPCallbacks.cpp
+src/main/cpp/SAMPCallbacks.def
+src/main/cpp/SAMPCallbacksMethodCache.cpp
+src/main/headers/SAMPCallbacksMethodCache.hpp

@@ -1,6 +1,10 @@
 import org.gradle.internal.jvm.Jvm
+import org.gradle.internal.os.OperatingSystem
 
 plugins {
+    base
+    `cpp-library`
+    `visual-studio`
     id("kamp-cpp-codegen")
 }
 
@@ -13,36 +17,66 @@ dependencies {
 val runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
 val srcMainCppDir = "$projectDir/src/main/cpp"
-
-val sampgdkDir = "$srcMainCppDir/sampgdk"
-
-val versionIDLFile = "$srcMainCppDir/idl/version.idl"
-
-val sampgdkIDLFilesDir = "$sampgdkDir/lib/sampgdk"
-
-val actorIDLFile = "$sampgdkIDLFilesDir/a_actor.idl"
-val objectsIDLFile = "$sampgdkIDLFilesDir/a_objects.idl"
-val playersIDLFile = "$sampgdkIDLFilesDir/a_players.idl"
-val sampIDLFile = "$sampgdkIDLFilesDir/a_samp.idl"
-val vehiclesIDLFile = "$sampgdkIDLFilesDir/a_vehicles.idl"
-
-val kampSrcDir = "$sampgdkDir/plugins/kamp"
-
-val sampgdkBuildDir = "$buildDir/sampgdk"
-
-val sampPluginSdkDir = "$srcMainCppDir/samp-plugin-sdk-original"
+val srcMainHeadersDir = "$projectDir/src/main/headers"
+val idlFilesDir = "$projectDir/src/main/idl"
+val actorIDLFile = "$idlFilesDir/a_actor.idl"
+val objectsIDLFile = "$idlFilesDir/a_objects.idl"
+val playersIDLFile = "$idlFilesDir/a_players.idl"
+val sampIDLFile = "$idlFilesDir/a_samp.idl"
+val vehiclesIDLFile = "$idlFilesDir/a_vehicles.idl"
+val versionIDLFile = "$idlFilesDir/version.idl"
 
 kampCppCodegen {
     version = project.version.toString()
     runtimeJavaPackageName = runtimePackageName
-    outputDirectoryPath = kampSrcDir
+    cppOutputDirectoryPath = srcMainCppDir
+    headersOutputDirectoryPath = srcMainHeadersDir
     interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
+val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
+val javaHome: File by lazy { org.gradle.internal.jvm.Jvm.current().javaHome }
+
+library {
+    baseName.set("Kamp")
+
+    targetMachines.addAll(machines.linux.x86, machines.windows.x86)
+
+    privateHeaders {
+        from(srcMainHeadersDir)
+        from("$javaHome/include")
+        from("$sampgdkHome/include")
+    }
+
+    binaries.whenElementFinalized {
+        when {
+            targetPlatform.operatingSystem.isWindows -> {
+                privateHeaders {
+                    from("$javaHome/include/win32")
+                }
+            }
+            targetPlatform.operatingSystem.isLinux -> {
+                privateHeaders {
+                    from("$javaHome/include/linux")
+                }
+            }
+        }
+    }
+
+    dependencies {
+        val sampgdk4LibraryPath = file("$sampgdkHome/lib/sampgdk4".toStaticLibraryName())
+        val jdkLibraryPath = file("$javaHome/lib/jvm".toStaticLibraryName())
+        implementation(files(sampgdk4LibraryPath, jdkLibraryPath))
+    }
+}
+
+fun String.toStaticLibraryName(): String = OperatingSystem.current().getStaticLibraryName(this)
+
 tasks {
+
     val generateSAMPNativeFunctionsHeaderFile: Task by creating {
         val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets["main"].output
-        val sampNativeFunctionsHeaderFile = "$kampSrcDir/SAMPNativeFunctions.h"
+        val sampNativeFunctionsHeaderFile = "$srcMainHeadersDir/SAMPNativeFunctions.h"
 
         kampCoreMainOutput.classesDirs.files.forEach(inputs::dir)
         outputs.file(sampNativeFunctionsHeaderFile)
@@ -64,47 +98,11 @@ tasks {
         }
     }
 
-    val makePlugin: Task by creating {
-        inputs.dir(sampgdkDir)
-        inputs.dir(sampPluginSdkDir)
-        outputs.dir(sampgdkBuildDir)
-
+    assemble {
         dependsOn(generateSAMPNativeFunctionsHeaderFile, generateKampCppFiles)
-
-        doFirst {
-            file(sampgdkBuildDir).mkdirs()
-        }
-
-        doLast {
-            exec {
-                workingDir(sampgdkBuildDir)
-
-                val command = "cmake \"$sampgdkDir\" -DSAMP_SDK_ROOT=\"$sampPluginSdkDir\" -DSAMPGDK_STATIC=ON -DSAMPGDK_BUILD_PLUGINS=ON"
-                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    commandLine("cmd", "/c", command)
-                } else {
-                    commandLine(command)
-                }
-            }
-
-            exec {
-                workingDir(sampgdkBuildDir)
-
-                val command = "cmake --build . --config Release"
-                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
-                    commandLine("cmd", "/c", command)
-                } else {
-                    commandLine(command)
-                }
-            }
-        }
     }
 
     clean {
-        dependsOn("cleanGenerateKampCppFiles", "cleanMakePlugin", "cleanGenerateSAMPNativeFunctionsHeaderFile")
-    }
-
-    build {
-        dependsOn(makePlugin)
+        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile")
     }
 }
