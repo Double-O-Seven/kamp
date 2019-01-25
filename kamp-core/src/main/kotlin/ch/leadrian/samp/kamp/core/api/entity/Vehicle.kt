@@ -31,10 +31,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehiclePanelDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
 import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
-import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
-import ch.leadrian.samp.kamp.core.api.data.locationOf
-import ch.leadrian.samp.kamp.core.api.data.positionOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleParametersOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleWindowStatesOf
@@ -47,8 +43,14 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDeathReceiverDelegat
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleAngleDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleAngledLocationDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleCoordinatesDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleHealthDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleLocationDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehiclePositionDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleVelocityDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 
 class Vehicle
@@ -106,27 +108,9 @@ internal constructor(
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isVehicleStreamedIn(vehicleid = id.value, forplayerid = forPlayer.id.value)
 
-    var coordinates: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getVehiclePos(vehicleid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehiclePos(vehicleid = id.value, x = value.x, y = value.y, z = value.z)
-        }
+    var coordinates: Vector3D by VehicleCoordinatesDelegate(nativeFunctionExecutor)
 
-    var angle: Float
-        get() {
-            val angle = ReferenceFloat()
-            nativeFunctionExecutor.getVehicleZAngle(vehicleid = id.value, z_angle = angle)
-            return angle.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleZAngle(vehicleid = id.value, z_angle = value)
-        }
+    var angle: Float by VehicleAngleDelegate(nativeFunctionExecutor)
 
     var interiorId: Int = 0
         set(value) {
@@ -140,60 +124,11 @@ internal constructor(
             nativeFunctionExecutor.setVehicleVirtualWorld(vehicleid = id.value, worldid = value)
         }
 
-    var position: Position
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getVehiclePos(vehicleid = id.value, x = x, y = y, z = z)
-            return positionOf(x = x.value, y = y.value, z = z.value, angle = angle)
-        }
-        set(value) {
-            coordinates = value
-            angle = value.angle
-        }
+    var position: Position by VehiclePositionDelegate(nativeFunctionExecutor)
 
-    var location: Location
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getVehiclePos(vehicleid = id.value, x = x, y = y, z = z)
-            return locationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId
-            )
-        }
-        set(value) {
-            coordinates = value
-            interiorId = value.interiorId
-            virtualWorldId = value.virtualWorldId
-        }
+    var location: Location by VehicleLocationDelegate(nativeFunctionExecutor)
 
-    var angledLocation: AngledLocation
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getVehiclePos(vehicleid = id.value, x = x, y = y, z = z)
-            return angledLocationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId,
-                    angle = angle
-            )
-        }
-        set(value) {
-            coordinates = value
-            interiorId = value.interiorId
-            virtualWorldId = value.virtualWorldId
-            angle = value.angle
-        }
+    var angledLocation: AngledLocation by VehicleAngledLocationDelegate(nativeFunctionExecutor)
 
     fun respawn() {
         nativeFunctionExecutor.setVehicleToRespawn(id.value)
@@ -329,15 +264,7 @@ internal constructor(
             field = value
         }
 
-    var health: Float
-        get() {
-            val health = ReferenceFloat()
-            nativeFunctionExecutor.getVehicleHealth(vehicleid = id.value, health = health)
-            return health.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleHealth(vehicleid = id.value, health = value)
-        }
+    var health: Float by VehicleHealthDelegate(nativeFunctionExecutor)
 
     var numberPlate: String? = null
         set(value) {
@@ -351,17 +278,7 @@ internal constructor(
         nativeFunctionExecutor.repairVehicle(id.value)
     }
 
-    var velocity: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getVehicleVelocity(vehicleid = id.value, X = x, Y = y, Z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleVelocity(vehicleid = id.value, X = value.x, Y = value.y, Z = value.z)
-        }
+    var velocity: Vector3D by VehicleVelocityDelegate(nativeFunctionExecutor)
 
     fun setAngularVelocity(velocity: Vector3D) {
         nativeFunctionExecutor.setVehicleAngularVelocity(

@@ -18,10 +18,7 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleDoorsDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleLightsDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehiclePanelDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
-import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.mutableVehicleColorsOf
-import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
@@ -39,7 +36,6 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegat
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import io.mockk.Runs
 import io.mockk.every
@@ -223,192 +219,6 @@ internal class VehicleTest {
 
             assertThat(result)
                     .isEqualTo(expectedResult)
-        }
-
-        @Nested
-        inner class CoordinatesTests {
-
-            @Test
-            fun shouldGetCoordinates() {
-                every { nativeFunctionExecutor.getVehiclePos(vehicleId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-
-                val coordinates = vehicle.coordinates
-
-                assertThat(coordinates)
-                        .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-            }
-
-            @Test
-            fun shouldSetCoordinates() {
-                every { nativeFunctionExecutor.setVehiclePos(any(), any(), any(), any()) } returns true
-
-                vehicle.coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                verify { nativeFunctionExecutor.setVehiclePos(vehicleid = vehicleId.value, x = 1f, y = 2f, z = 3f) }
-            }
-        }
-
-        @Nested
-        inner class PositionTests {
-
-            @Test
-            fun shouldGetPosition() {
-                every { nativeFunctionExecutor.getVehiclePos(vehicleId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-                every { nativeFunctionExecutor.getVehicleZAngle(vehicleId.value, any()) } answers {
-                    secondArg<ReferenceFloat>().value = 4f
-                    true
-                }
-
-                val position = vehicle.position
-
-                assertThat(position)
-                        .isEqualTo(positionOf(x = 1f, y = 2f, z = 3f, angle = 4f))
-            }
-
-            @Test
-            fun shouldSetPosition() {
-                every { nativeFunctionExecutor.setVehiclePos(any(), any(), any(), any()) } returns true
-                every { nativeFunctionExecutor.setVehicleZAngle(any(), any()) } returns true
-
-                vehicle.position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f)
-
-                verify {
-                    nativeFunctionExecutor.setVehiclePos(vehicleid = vehicleId.value, x = 1f, y = 2f, z = 3f)
-                    nativeFunctionExecutor.setVehicleZAngle(vehicleid = vehicleId.value, z_angle = 4f)
-                }
-            }
-        }
-
-        @Nested
-        inner class LocationTests {
-
-            @Test
-            fun shouldGetLocation() {
-                every { nativeFunctionExecutor.getVehiclePos(vehicleId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-                every { nativeFunctionExecutor.linkVehicleToInterior(any(), any()) } returns true
-                vehicle.interiorId = 69
-                every { nativeFunctionExecutor.getVehicleVirtualWorld(vehicleId.value) } returns 1337
-
-                val location = vehicle.location
-
-                assertThat(location)
-                        .isEqualTo(locationOf(x = 1f, y = 2f, z = 3f, interiorId = 69, worldId = 1337))
-            }
-
-            @Test
-            fun shouldSetLocation() {
-                every { nativeFunctionExecutor.setVehiclePos(any(), any(), any(), any()) } returns true
-                every { nativeFunctionExecutor.linkVehicleToInterior(any(), any()) } returns true
-                every { nativeFunctionExecutor.setVehicleVirtualWorld(any(), any()) } returns true
-
-                vehicle.location = locationOf(x = 1f, y = 2f, z = 3f, interiorId = 69, worldId = 1337)
-
-                verify {
-                    nativeFunctionExecutor.setVehiclePos(vehicleid = vehicleId.value, x = 1f, y = 2f, z = 3f)
-                    nativeFunctionExecutor.linkVehicleToInterior(vehicleid = vehicleId.value, interiorid = 69)
-                    nativeFunctionExecutor.setVehicleVirtualWorld(vehicleid = vehicleId.value, worldid = 1337)
-                }
-            }
-        }
-
-        @Nested
-        inner class AngledLocationTests {
-
-            @Test
-            fun shouldGetAngledLocation() {
-                every { nativeFunctionExecutor.getVehiclePos(vehicleId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-                every { nativeFunctionExecutor.getVehicleZAngle(vehicleId.value, any()) } answers {
-                    secondArg<ReferenceFloat>().value = 4f
-                    true
-                }
-                every { nativeFunctionExecutor.linkVehicleToInterior(any(), any()) } returns true
-                vehicle.interiorId = 69
-                every { nativeFunctionExecutor.getVehicleVirtualWorld(vehicleId.value) } returns 1337
-
-                val angledLocation = vehicle.angledLocation
-
-                assertThat(angledLocation)
-                        .isEqualTo(
-                                angledLocationOf(
-                                        x = 1f,
-                                        y = 2f,
-                                        z = 3f,
-                                        angle = 4f,
-                                        interiorId = 69,
-                                        worldId = 1337
-                                )
-                        )
-            }
-
-            @Test
-            fun shouldSetAngledLocation() {
-                every { nativeFunctionExecutor.setVehiclePos(any(), any(), any(), any()) } returns true
-                every { nativeFunctionExecutor.setVehicleZAngle(any(), any()) } returns true
-                every { nativeFunctionExecutor.linkVehicleToInterior(any(), any()) } returns true
-                every { nativeFunctionExecutor.setVehicleVirtualWorld(any(), any()) } returns true
-
-                vehicle.angledLocation = angledLocationOf(
-                        x = 1f,
-                        y = 2f,
-                        z = 3f,
-                        angle = 4f,
-                        interiorId = 69,
-                        worldId = 1337
-                )
-
-                verify {
-                    nativeFunctionExecutor.setVehiclePos(vehicleid = vehicleId.value, x = 1f, y = 2f, z = 3f)
-                    nativeFunctionExecutor.setVehicleZAngle(vehicleid = vehicleId.value, z_angle = 4f)
-                    nativeFunctionExecutor.linkVehicleToInterior(vehicleid = vehicleId.value, interiorid = 69)
-                    nativeFunctionExecutor.setVehicleVirtualWorld(vehicleid = vehicleId.value, worldid = 1337)
-                }
-            }
-        }
-
-        @Nested
-        inner class AngleTests {
-
-            @Test
-            fun shouldGetAngle() {
-                every { nativeFunctionExecutor.getVehicleZAngle(vehicleId.value, any()) } answers {
-                    secondArg<ReferenceFloat>().value = 4f
-                    true
-                }
-
-                val angle = vehicle.angle
-
-                assertThat(angle)
-                        .isEqualTo(4f)
-            }
-
-            @Test
-            fun shouldSetAngle() {
-                every { nativeFunctionExecutor.setVehicleZAngle(any(), any()) } returns true
-
-                vehicle.angle = 4f
-
-                verify { nativeFunctionExecutor.setVehicleZAngle(vehicleid = vehicleId.value, z_angle = 4f) }
-            }
         }
 
         @Nested
@@ -826,32 +636,6 @@ internal class VehicleTest {
                 }
             }
 
-            @Nested
-            inner class HealthTests {
-
-                @Test
-                fun shouldGetHealth() {
-                    every { nativeFunctionExecutor.getVehicleHealth(vehicleId.value, any()) } answers {
-                        secondArg<ReferenceFloat>().value = 50f
-                        true
-                    }
-
-                    val health = vehicle.health
-
-                    assertThat(health)
-                            .isEqualTo(50f)
-                }
-
-                @Test
-                fun shouldSetHealth() {
-                    every { nativeFunctionExecutor.setVehicleHealth(any(), any()) } returns true
-
-                    vehicle.health = 50f
-
-                    verify { nativeFunctionExecutor.setVehicleHealth(vehicleid = vehicleId.value, health = 50f) }
-                }
-            }
-
             @Test
             fun shouldInitializeTrailer() {
                 val trailer = vehicle.trailer
@@ -929,41 +713,6 @@ internal class VehicleTest {
                 vehicle.repair()
 
                 verify { nativeFunctionExecutor.repairVehicle(vehicleId.value) }
-            }
-
-            @Nested
-            inner class VelocityTests {
-
-                @Test
-                fun shouldGetVelocity() {
-                    every { nativeFunctionExecutor.getVehicleVelocity(vehicleId.value, any(), any(), any()) } answers {
-                        secondArg<ReferenceFloat>().value = 1f
-                        thirdArg<ReferenceFloat>().value = 2f
-                        arg<ReferenceFloat>(3).value = 3f
-                        true
-                    }
-
-                    val velocity = vehicle.velocity
-
-                    assertThat(velocity)
-                            .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-                }
-
-                @Test
-                fun shouldSetVelocity() {
-                    every { nativeFunctionExecutor.setVehicleVelocity(any(), any(), any(), any()) } returns true
-
-                    vehicle.velocity = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                    verify {
-                        nativeFunctionExecutor.setVehicleVelocity(
-                                vehicleid = vehicleId.value,
-                                X = 1f,
-                                Y = 2f,
-                                Z = 3f
-                        )
-                    }
-                }
             }
 
             @Test
