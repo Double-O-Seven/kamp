@@ -25,20 +25,26 @@ import ch.leadrian.samp.kamp.core.api.data.SpawnInfo
 import ch.leadrian.samp.kamp.core.api.data.Sphere
 import ch.leadrian.samp.kamp.core.api.data.Time
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
-import ch.leadrian.samp.kamp.core.api.data.locationOf
-import ch.leadrian.samp.kamp.core.api.data.positionOf
-import ch.leadrian.samp.kamp.core.api.data.timeOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
-import ch.leadrian.samp.kamp.core.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerAngleDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerAngledLocationDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerArmourDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerCoordinatesDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerHealthDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerKeysDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerLastShotVectorsDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerLocationDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerNameDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerPositionDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerTimeDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerVelocityDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -48,8 +54,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextDrawRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextLabelRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import java.util.Collections
 import java.util.Locale
@@ -64,7 +68,7 @@ internal constructor(
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
-        private val onPlayerNameChangeHandler: OnPlayerNameChangeHandler
+        onPlayerNameChangeHandler: OnPlayerNameChangeHandler
 ) : Entity<PlayerId> {
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
@@ -124,27 +128,9 @@ internal constructor(
         )
     }
 
-    var coordinates: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerPos(playerid = id.value, x = value.x, y = value.y, z = value.z)
-        }
+    var coordinates: Vector3D by PlayerCoordinatesDelegate(nativeFunctionExecutor)
 
-    var angle: Float
-        get() {
-            val angle = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerFacingAngle(playerid = id.value, angle = angle)
-            return angle.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerFacingAngle(playerid = id.value, angle = value)
-        }
+    var angle: Float by PlayerAngleDelegate(nativeFunctionExecutor)
 
     var interiorId: Int
         get() = nativeFunctionExecutor.getPlayerInterior(id.value)
@@ -158,72 +144,13 @@ internal constructor(
             nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
         }
 
-    var position: Position
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            return positionOf(x = x.value, y = y.value, z = z.value, angle = angle)
-        }
-        set(value) {
-            coordinates = value
-            angle = value.angle
-        }
+    var position: Position by PlayerPositionDelegate(nativeFunctionExecutor)
 
-    var location: Location
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            return locationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId
-            )
-        }
-        set(value) {
-            coordinates = value
-            interiorId = value.interiorId
-            virtualWorldId = value.virtualWorldId
-        }
+    var location: Location by PlayerLocationDelegate(nativeFunctionExecutor)
 
-    var angledLocation: AngledLocation
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerPos(playerid = id.value, x = x, y = y, z = z)
-            return angledLocationOf(
-                    x = x.value,
-                    y = y.value,
-                    z = z.value,
-                    interiorId = interiorId,
-                    worldId = virtualWorldId,
-                    angle = angle
-            )
-        }
-        set(value) {
-            coordinates = value
-            interiorId = value.interiorId
-            virtualWorldId = value.virtualWorldId
-            angle = value.angle
-        }
+    var angledLocation: AngledLocation by PlayerAngledLocationDelegate(nativeFunctionExecutor)
 
-    var velocity: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerVelocity(playerid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerVelocity(playerid = id.value, x = value.x, y = value.y, z = value.z)
-        }
+    var velocity: Vector3D by PlayerVelocityDelegate(nativeFunctionExecutor)
 
     fun setCoordinatesFindZ(coordinates: Vector3D) {
         nativeFunctionExecutor.setPlayerPosFindZ(
@@ -237,25 +164,9 @@ internal constructor(
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
 
-    var health: Float
-        get() {
-            val health = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerHealth(playerid = id.value, health = health)
-            return health.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerHealth(playerid = id.value, health = value)
-        }
+    var health: Float by PlayerHealthDelegate(nativeFunctionExecutor)
 
-    var armour: Float
-        get() {
-            val armour = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerArmour(playerid = id.value, armour = armour)
-            return armour.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerArmour(playerid = id.value, armour = value)
-        }
+    var armour: Float by PlayerArmourDelegate(nativeFunctionExecutor)
 
     val targetPlayer: Player?
         get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry[it] }
@@ -320,34 +231,7 @@ internal constructor(
         gpci.value ?: ""
     }
 
-    var name: String = ""
-        get() {
-            if (field.isEmpty()) {
-                val name = ReferenceString()
-                nativeFunctionExecutor.getPlayerName(
-                        playerid = id.value,
-                        name = name,
-                        size = SAMPConstants.MAX_PLAYER_NAME
-                )
-                field = name.value.orEmpty()
-            }
-            return field
-        }
-        set(value) {
-            if (value.isEmpty()) {
-                throw InvalidPlayerNameException("", "Name cannot be empty")
-            }
-            val oldName = name
-            val result = nativeFunctionExecutor.setPlayerName(playerid = id.value, name = value)
-            when (result) {
-                -1 -> throw InvalidPlayerNameException(
-                        name = value,
-                        message = "Name is already in use, too long or invalid"
-                )
-                else -> field = value
-            }
-            onPlayerNameChangeHandler.onPlayerNameChange(this, oldName, value)
-        }
+    var name: String by PlayerNameDelegate(nativeFunctionExecutor, onPlayerNameChangeHandler)
 
     val state: PlayerState
         get() = nativeFunctionExecutor.getPlayerState(id.value).let { PlayerState[it] }
@@ -355,35 +239,9 @@ internal constructor(
     val ping: Int
         get() = nativeFunctionExecutor.getPlayerPing(id.value)
 
-    val keys: PlayerKeys
-        get() {
-            val keys = ReferenceInt()
-            val leftRight = ReferenceInt()
-            val upDown = ReferenceInt()
-            nativeFunctionExecutor.getPlayerKeys(
-                    playerid = id.value,
-                    keys = keys,
-                    leftright = leftRight,
-                    updown = upDown
-            )
-            return PlayerKeys(
-                    keys = keys.value,
-                    leftRight = leftRight.value,
-                    upDown = upDown.value,
-                    player = this
-            )
-        }
+    val keys: PlayerKeys by PlayerKeysDelegate(nativeFunctionExecutor)
 
-    var time: Time
-        get() {
-            val hour = ReferenceInt()
-            val minute = ReferenceInt()
-            nativeFunctionExecutor.getPlayerTime(playerid = id.value, hour = hour, minute = minute)
-            return timeOf(hour = hour.value, minute = minute.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerTime(playerid = id.value, hour = value.hour, minute = value.minute)
-        }
+    var time: Time by PlayerTimeDelegate(nativeFunctionExecutor)
 
     fun toggleClock(toggle: Boolean) {
         nativeFunctionExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
@@ -442,28 +300,7 @@ internal constructor(
         )
     }
 
-    val lastShotVectors: LastShotVectors
-        get() {
-            val hitPosX = ReferenceFloat()
-            val hitPosY = ReferenceFloat()
-            val hitPosZ = ReferenceFloat()
-            val originX = ReferenceFloat()
-            val originY = ReferenceFloat()
-            val originZ = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerLastShotVectors(
-                    playerid = id.value,
-                    fHitPosX = hitPosX,
-                    fHitPosY = hitPosY,
-                    fHitPosZ = hitPosZ,
-                    fOriginX = originX,
-                    fOriginY = originY,
-                    fOriginZ = originZ
-            )
-            return LastShotVectors(
-                    origin = vector3DOf(x = originX.value, y = originY.value, z = originZ.value),
-                    hitPosition = vector3DOf(x = hitPosX.value, y = hitPosY.value, z = hitPosZ.value)
-            )
-        }
+    val lastShotVectors: LastShotVectors by PlayerLastShotVectorsDelegate(nativeFunctionExecutor)
 
     val attachedObjectSlots: List<AttachedObjectSlot> =
             (0..9).map {

@@ -17,16 +17,12 @@ import ch.leadrian.samp.kamp.core.api.constants.SpectateType
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.constants.Weather
 import ch.leadrian.samp.kamp.core.api.data.Colors
-import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
-import ch.leadrian.samp.kamp.core.api.data.angledLocationOf
 import ch.leadrian.samp.kamp.core.api.data.colorOf
-import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.mutableColorOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.rectangleOf
 import ch.leadrian.samp.kamp.core.api.data.spawnInfoOf
 import ch.leadrian.samp.kamp.core.api.data.sphereOf
-import ch.leadrian.samp.kamp.core.api.data.timeOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
@@ -35,7 +31,6 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
-import ch.leadrian.samp.kamp.core.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
@@ -45,8 +40,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import io.mockk.Called
 import io.mockk.Runs
@@ -275,181 +268,6 @@ internal class PlayerTest {
     }
 
     @Nested
-    inner class CoordinatesTests {
-
-        @Test
-        fun shouldGetCoordinates() {
-            every { nativeFunctionExecutor.getPlayerPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-
-            val coordinates = player.coordinates
-
-            assertThat(coordinates)
-                    .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-        }
-
-        @Test
-        fun shouldSetCoordinates() {
-            every { nativeFunctionExecutor.setPlayerPos(any(), any(), any(), any()) } returns true
-
-            player.coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-            verify { nativeFunctionExecutor.setPlayerPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f) }
-        }
-    }
-
-    @Nested
-    inner class PositionTests {
-
-        @Test
-        fun shouldGetPosition() {
-            every { nativeFunctionExecutor.getPlayerPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-            every { nativeFunctionExecutor.getPlayerFacingAngle(playerId.value, any()) } answers {
-                secondArg<ReferenceFloat>().value = 4f
-                true
-            }
-
-            val position = player.position
-
-            assertThat(position)
-                    .isEqualTo(positionOf(x = 1f, y = 2f, z = 3f, angle = 4f))
-        }
-
-        @Test
-        fun shouldSetPosition() {
-            every { nativeFunctionExecutor.setPlayerPos(any(), any(), any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerFacingAngle(any(), any()) } returns true
-
-            player.position = positionOf(x = 1f, y = 2f, z = 3f, angle = 4f)
-
-            verify {
-                nativeFunctionExecutor.setPlayerPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
-                nativeFunctionExecutor.setPlayerFacingAngle(playerid = playerId.value, angle = 4f)
-            }
-        }
-    }
-
-    @Nested
-    inner class LocationTests {
-
-        @Test
-        fun shouldGetLocation() {
-            every { nativeFunctionExecutor.getPlayerPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-            every { nativeFunctionExecutor.getPlayerInterior(playerId.value) } returns 69
-            every { nativeFunctionExecutor.getPlayerVirtualWorld(playerId.value) } returns 1337
-
-            val location = player.location
-
-            assertThat(location)
-                    .isEqualTo(locationOf(x = 1f, y = 2f, z = 3f, interiorId = 69, worldId = 1337))
-        }
-
-        @Test
-        fun shouldSetLocation() {
-            every { nativeFunctionExecutor.setPlayerPos(any(), any(), any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerInterior(any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerVirtualWorld(any(), any()) } returns true
-
-            player.location = locationOf(x = 1f, y = 2f, z = 3f, interiorId = 69, worldId = 1337)
-
-            verify {
-                nativeFunctionExecutor.setPlayerPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
-                nativeFunctionExecutor.setPlayerInterior(playerid = playerId.value, interiorid = 69)
-                nativeFunctionExecutor.setPlayerVirtualWorld(playerid = playerId.value, worldid = 1337)
-            }
-        }
-    }
-
-    @Nested
-    inner class AngledLocationTests {
-
-        @Test
-        fun shouldGetAngledLocation() {
-            every { nativeFunctionExecutor.getPlayerPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-            every { nativeFunctionExecutor.getPlayerFacingAngle(playerId.value, any()) } answers {
-                secondArg<ReferenceFloat>().value = 4f
-                true
-            }
-            every { nativeFunctionExecutor.getPlayerInterior(playerId.value) } returns 69
-            every { nativeFunctionExecutor.getPlayerVirtualWorld(playerId.value) } returns 1337
-
-            val angledLocation = player.angledLocation
-
-            assertThat(angledLocation)
-                    .isEqualTo(angledLocationOf(x = 1f, y = 2f, z = 3f, angle = 4f, interiorId = 69, worldId = 1337))
-        }
-
-        @Test
-        fun shouldSetAngledLocation() {
-            every { nativeFunctionExecutor.setPlayerPos(any(), any(), any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerFacingAngle(any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerInterior(any(), any()) } returns true
-            every { nativeFunctionExecutor.setPlayerVirtualWorld(any(), any()) } returns true
-
-            player.angledLocation = angledLocationOf(
-                    x = 1f,
-                    y = 2f,
-                    z = 3f,
-                    angle = 4f,
-                    interiorId = 69,
-                    worldId = 1337
-            )
-
-            verify {
-                nativeFunctionExecutor.setPlayerPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
-                nativeFunctionExecutor.setPlayerFacingAngle(playerid = playerId.value, angle = 4f)
-                nativeFunctionExecutor.setPlayerInterior(playerid = playerId.value, interiorid = 69)
-                nativeFunctionExecutor.setPlayerVirtualWorld(playerid = playerId.value, worldid = 1337)
-            }
-        }
-    }
-
-    @Nested
-    inner class AngleTests {
-
-        @Test
-        fun shouldGetAngle() {
-            every { nativeFunctionExecutor.getPlayerFacingAngle(playerId.value, any()) } answers {
-                secondArg<ReferenceFloat>().value = 4f
-                true
-            }
-
-            val angle = player.angle
-
-            assertThat(angle)
-                    .isEqualTo(4f)
-        }
-
-        @Test
-        fun shouldSetAngle() {
-            every { nativeFunctionExecutor.setPlayerFacingAngle(any(), any()) } returns true
-
-            player.angle = 4f
-
-            verify { nativeFunctionExecutor.setPlayerFacingAngle(playerid = playerId.value, angle = 4f) }
-        }
-    }
-
-    @Nested
     inner class InteriorIdTests {
 
         @Test
@@ -495,34 +313,6 @@ internal class PlayerTest {
         }
     }
 
-    @Nested
-    inner class VelocityTests {
-
-        @Test
-        fun shouldGetVelocity() {
-            every { nativeFunctionExecutor.getPlayerVelocity(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-
-            val velocity = player.velocity
-
-            assertThat(velocity)
-                    .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-        }
-
-        @Test
-        fun shouldSetVelocity() {
-            every { nativeFunctionExecutor.setPlayerVelocity(any(), any(), any(), any()) } returns true
-
-            player.velocity = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-            verify { nativeFunctionExecutor.setPlayerVelocity(playerid = playerId.value, x = 1f, y = 2f, z = 3f) }
-        }
-    }
-
     @Test
     fun shouldSetCoordinatesFindZ() {
         every { nativeFunctionExecutor.setPlayerPosFindZ(any(), any(), any(), any()) } returns true
@@ -546,58 +336,6 @@ internal class PlayerTest {
 
         assertThat(result)
                 .isEqualTo(expectedResult)
-    }
-
-    @Nested
-    inner class HealthTests {
-
-        @Test
-        fun shouldGetHealth() {
-            every { nativeFunctionExecutor.getPlayerHealth(playerId.value, any()) } answers {
-                secondArg<ReferenceFloat>().value = 50f
-                true
-            }
-
-            val health = player.health
-
-            assertThat(health)
-                    .isEqualTo(50f)
-        }
-
-        @Test
-        fun shouldSetHealth() {
-            every { nativeFunctionExecutor.setPlayerHealth(any(), any()) } returns true
-
-            player.health = 50f
-
-            verify { nativeFunctionExecutor.setPlayerHealth(playerid = playerId.value, health = 50f) }
-        }
-    }
-
-    @Nested
-    inner class ArmourTests {
-
-        @Test
-        fun shouldGetArmour() {
-            every { nativeFunctionExecutor.getPlayerArmour(playerId.value, any()) } answers {
-                secondArg<ReferenceFloat>().value = 50f
-                true
-            }
-
-            val armour = player.armour
-
-            assertThat(armour)
-                    .isEqualTo(50f)
-        }
-
-        @Test
-        fun shouldSetArmour() {
-            every { nativeFunctionExecutor.setPlayerArmour(any(), any()) } returns true
-
-            player.armour = 50f
-
-            verify { nativeFunctionExecutor.setPlayerArmour(playerid = playerId.value, armour = 50f) }
-        }
     }
 
     @Nested
@@ -870,141 +608,6 @@ internal class PlayerTest {
         }
     }
 
-    @Nested
-    inner class NameTests {
-
-        @BeforeEach
-        fun setUp() {
-            every { onPlayerNameChangeHandler.onPlayerNameChange(any(), any(), any()) } just Runs
-        }
-
-        @Test
-        fun givenWasNotYetSetItShouldGetPlayerName() {
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } answers {
-                secondArg<ReferenceString>().value = "hans.wurst"
-                0
-            }
-
-            val name = player.name
-
-            assertThat(name)
-                    .isEqualTo("hans.wurst")
-        }
-
-        @Test
-        fun givenResultingNameIsNullItShouldReturnEmptyString() {
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } returns 0
-
-            val name = player.name
-
-            assertThat(name)
-                    .isEmpty()
-        }
-
-        @Test
-        fun givenNameWasSetItShouldReturnCachedName() {
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } answers {
-                secondArg<ReferenceString>().value = "John.Sausage"
-                0
-            }
-            every { nativeFunctionExecutor.setPlayerName(playerId.value, any()) } returns 0
-            player.name = "hans.wurst"
-
-            val name = player.name
-
-            assertThat(name)
-                    .isEqualTo("hans.wurst")
-            verify(exactly = 1) { nativeFunctionExecutor.getPlayerName(any(), any(), any()) }
-            verifyOrder {
-                nativeFunctionExecutor.getPlayerName(any(), any(), any())
-                nativeFunctionExecutor.setPlayerName(any(), any())
-            }
-        }
-
-        @Test
-        fun shouldSetPlayerName() {
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } answers {
-                secondArg<ReferenceString>().value = "John.Sausage"
-                0
-            }
-            every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
-
-            player.name = "hans.wurst"
-
-            verify { nativeFunctionExecutor.setPlayerName(playerid = playerId.value, name = "hans.wurst") }
-        }
-
-        @Test
-        fun shouldCallOnPlayerNameChangeHandler() {
-            every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } answers {
-                secondArg<ReferenceString>().value = "hans.wurst"
-                0
-            }
-
-            player.name = "John.Sausage"
-
-            verify { onPlayerNameChangeHandler.onPlayerNameChange(player, "hans.wurst", "John.Sausage") }
-        }
-
-        @Test
-        fun givenEmptyNameIsSetItShouldThrowAnException() {
-            val caughtThrowable = catchThrowable { player.name = "" }
-
-            assertThat(caughtThrowable)
-                    .isInstanceOf(InvalidPlayerNameException::class.java)
-        }
-
-        @Test
-        fun givenInvalidNameIsSetItShouldThrowAnException() {
-            every {
-                nativeFunctionExecutor.getPlayerName(
-                        playerId.value,
-                        any(),
-                        SAMPConstants.MAX_PLAYER_NAME
-                )
-            } answers {
-                secondArg<ReferenceString>().value = "hans.wurst"
-                0
-            }
-            every { nativeFunctionExecutor.setPlayerName(playerId.value, "???") } returns -1
-            val caughtThrowable = catchThrowable { player.name = "???" }
-
-            assertThat(caughtThrowable)
-                    .isInstanceOf(InvalidPlayerNameException::class.java)
-        }
-    }
-
     @Test
     fun shouldGetPlayerState() {
         every { nativeFunctionExecutor.getPlayerState(playerId.value) } returns PlayerState.ON_FOOT.value
@@ -1023,57 +626,6 @@ internal class PlayerTest {
 
         assertThat(ping)
                 .isEqualTo(31)
-    }
-
-    @Test
-    fun shouldGetPlayerKeys() {
-        every { nativeFunctionExecutor.getPlayerKeys(playerId.value, any(), any(), any()) } answers {
-            secondArg<ReferenceInt>().value = 50
-            thirdArg<ReferenceInt>().value = 75
-            arg<ReferenceInt>(3).value = 100
-            true
-        }
-
-        val playerKeys = player.keys
-
-        assertThat(playerKeys)
-                .isInstanceOfSatisfying(PlayerKeys::class.java) {
-                    assertThat(it.keys)
-                            .isEqualTo(50)
-                    assertThat(it.upDown)
-                            .isEqualTo(75)
-                    assertThat(it.leftRight)
-                            .isEqualTo(100)
-                    assertThat(it.player)
-                            .isSameAs(player)
-                }
-    }
-
-    @Nested
-    inner class TimeTests {
-
-        @Test
-        fun shouldGetTime() {
-            every { nativeFunctionExecutor.getPlayerTime(playerId.value, any(), any()) } answers {
-                secondArg<ReferenceInt>().value = 13
-                thirdArg<ReferenceInt>().value = 37
-                true
-            }
-
-            val time = player.time
-
-            assertThat(time)
-                    .isEqualTo(timeOf(hour = 13, minute = 37))
-        }
-
-        @Test
-        fun shouldSetTime() {
-            every { nativeFunctionExecutor.setPlayerTime(any(), any(), any()) } returns true
-
-            player.time = timeOf(hour = 13, minute = 37)
-
-            verify { nativeFunctionExecutor.setPlayerTime(playerid = playerId.value, hour = 13, minute = 37) }
-        }
     }
 
     @ParameterizedTest
@@ -1269,39 +821,6 @@ internal class PlayerTest {
                     fRadius = 4f
             )
         }
-    }
-
-    @Test
-    fun shouldLastShotVectors() {
-        every {
-            nativeFunctionExecutor.getPlayerLastShotVectors(
-                    playerId.value,
-                    any(),
-                    any(),
-                    any(),
-                    any(),
-                    any(),
-                    any()
-            )
-        } answers {
-            secondArg<ReferenceFloat>().value = 1f
-            thirdArg<ReferenceFloat>().value = 2f
-            arg<ReferenceFloat>(3).value = 3f
-            arg<ReferenceFloat>(4).value = 4f
-            arg<ReferenceFloat>(5).value = 5f
-            arg<ReferenceFloat>(6).value = 6f
-            true
-        }
-
-        val lastShotVectors = player.lastShotVectors
-
-        assertThat(lastShotVectors)
-                .isEqualTo(
-                        LastShotVectors(
-                                origin = vector3DOf(x = 1f, y = 2f, z = 3f),
-                                hitPosition = vector3DOf(x = 4f, y = 5f, z = 6f)
-                        )
-                )
     }
 
     @Test
