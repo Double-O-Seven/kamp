@@ -68,6 +68,16 @@ library {
         val jdkLibraryPath = file("$javaHome/lib/jvm".toStaticLibraryName())
         implementation(files(sampgdk4LibraryPath, jdkLibraryPath))
     }
+
+    toolChains {
+        withType<VisualCpp> {
+            eachPlatform {
+                linker.withArguments {
+                    add("/DEF:\"$srcMainCppDir/SAMPCallbacks.def\"")
+                }
+            }
+        }
+    }
 }
 
 fun String.toStaticLibraryName(): String = OperatingSystem.current().getStaticLibraryName(this)

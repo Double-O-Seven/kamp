@@ -1,3 +1,5 @@
+import org.gradle.internal.os.OperatingSystem
+
 dependencies {
     implementation(project(":kamp-core"))
     implementation(project(":kamp-streamer"))
@@ -29,10 +31,16 @@ textKeyGenerator {
 
 serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
-    kampPluginBinaryPath = project(":kamp-plugin").buildDir.toString() + "/sampgdk/plugins/kamp/Release/kamp.dll"
+    kampPluginBinaryPath = getKampPluginBinaryPath()
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
     configProperty("kamp.streamer.rate.ms", "300")
+}
+
+fun getKampPluginBinaryPath(): String {
+    return OperatingSystem
+            .current()
+            .getSharedLibraryName("${project(":kamp-plugin").buildDir}/lib/main/release/${OperatingSystem.current().familyName}/Kamp")
 }
 
 tasks {

@@ -46,6 +46,14 @@ internal class SAMPCallbacksCppGenerator(
             |    sampgdk::Unload();
             |}
             |
+            |PLUGIN_EXPORT int PLUGIN_CALL AmxLoad(AMX *amx) {
+            |   return AMX_ERR_NONE;
+            |}
+            |
+            |PLUGIN_EXPORT int PLUGIN_CALL AmxUnload(AMX *amx) {
+            |   return AMX_ERR_NONE;
+            |}
+            |
             |void HandleException(JNIEnv *jniEnv) {
             |    if (jniEnv->ExceptionOccurred()) {
             |       jniEnv->ExceptionDescribe();

@@ -1,6 +1,12 @@
 
 #include "Kamp.hpp"
 
+#include <sampgdk/core.h>
+#include <vector>
+#include <fstream>
+#include <iostream>
+#include <exception>
+
 Kamp::~Kamp() {
 	this->Shutdown();
 }

@@ -5,3 +5,6 @@ src/main/cpp/SAMPCallbacks.cpp
 src/main/cpp/SAMPCallbacks.def
 src/main/cpp/SAMPCallbacksMethodCache.cpp
 src/main/headers/SAMPCallbacksMethodCache.hpp
+kamp-pluginDll.vcxproj
+kamp-pluginDll.vcxproj.filters
+.vs
