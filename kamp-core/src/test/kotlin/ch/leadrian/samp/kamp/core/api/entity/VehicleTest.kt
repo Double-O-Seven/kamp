@@ -1,16 +1,9 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
-import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
-import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
 import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
@@ -22,7 +15,6 @@ import ch.leadrian.samp.kamp.core.api.data.mutableVehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
-import ch.leadrian.samp.kamp.core.api.data.vehicleParametersOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleWindowStatesOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
@@ -322,693 +314,502 @@ internal class VehicleTest {
         }
 
         @Nested
-        inner class ParametersTests {
+        inner class DoorStatesTests {
 
             @ParameterizedTest
-            @ArgumentsSource(VehicleParametersArgumentsProvider::class)
-            fun shouldGetParameters(
-                    engine: VehicleEngineState,
-                    lights: VehicleLightsState,
-                    alarm: VehicleAlarmState,
-                    doorLocked: VehicleDoorLockState,
-                    bonnet: VehicleBonnetState,
-                    boot: VehicleBootState,
-                    objective: VehicleObjectiveState
+            @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
+            fun shouldGetDoorStates(
+                    driver: VehicleDoorState,
+                    passenger: VehicleDoorState,
+                    backLeft: VehicleDoorState,
+                    backRight: VehicleDoorState
             ) {
                 every {
-                    nativeFunctionExecutor.getVehicleParamsEx(
-                            vehicleId.value,
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
+                    nativeFunctionExecutor.getVehicleParamsCarDoors(vehicleId.value, any(), any(), any(), any())
                 } answers {
-                    secondArg<ReferenceInt>().value = engine.value
-                    thirdArg<ReferenceInt>().value = lights.value
-                    arg<ReferenceInt>(3).value = alarm.value
-                    arg<ReferenceInt>(4).value = doorLocked.value
-                    arg<ReferenceInt>(5).value = bonnet.value
-                    arg<ReferenceInt>(6).value = boot.value
-                    arg<ReferenceInt>(7).value = objective.value
+                    secondArg<ReferenceInt>().value = driver.value
+                    thirdArg<ReferenceInt>().value = passenger.value
+                    arg<ReferenceInt>(3).value = backLeft.value
+                    arg<ReferenceInt>(4).value = backRight.value
                     true
                 }
 
-                val parameters = vehicle.parameters
+                val doorStates = vehicle.doorStates
 
-                assertThat(parameters)
+                assertThat(doorStates)
                         .isEqualTo(
-                                vehicleParametersOf(
-                                        engine = engine,
-                                        lights = lights,
-                                        alarm = alarm,
-                                        doorLock = doorLocked,
-                                        bonnet = bonnet,
-                                        boot = boot,
-                                        objective = objective
+                                vehicleDoorStatesOf(
+                                        driver = driver,
+                                        passenger = passenger,
+                                        backLeft = backLeft,
+                                        backRight = backRight
                                 )
                         )
             }
 
             @ParameterizedTest
-            @ArgumentsSource(VehicleParametersArgumentsProvider::class)
-            fun shouldSetParameters(
-                    engine: VehicleEngineState,
-                    lights: VehicleLightsState,
-                    alarm: VehicleAlarmState,
-                    doorLocked: VehicleDoorLockState,
-                    bonnet: VehicleBonnetState,
-                    boot: VehicleBootState,
-                    objective: VehicleObjectiveState
+            @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
+            fun shouldSetDoorStates(
+                    driver: VehicleDoorState,
+                    passenger: VehicleDoorState,
+                    backLeft: VehicleDoorState,
+                    backRight: VehicleDoorState
             ) {
                 every {
-                    nativeFunctionExecutor.setVehicleParamsEx(
-                            vehicleId.value,
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
+                    nativeFunctionExecutor.setVehicleParamsCarDoors(any(), any(), any(), any(), any())
                 } returns true
 
-                vehicle.parameters = vehicleParametersOf(
-                        engine = engine,
-                        lights = lights,
-                        alarm = alarm,
-                        doorLock = doorLocked,
-                        bonnet = bonnet,
-                        boot = boot,
-                        objective = objective
+                vehicle.doorStates = vehicleDoorStatesOf(
+                        driver = driver,
+                        passenger = passenger,
+                        backLeft = backLeft,
+                        backRight = backRight
                 )
 
                 verify {
-                    nativeFunctionExecutor.setVehicleParamsEx(
+                    nativeFunctionExecutor.setVehicleParamsCarDoors(
                             vehicleid = vehicleId.value,
-                            engine = engine.value,
-                            lights = lights.value,
-                            alarm = alarm.value,
-                            doors = doorLocked.value,
-                            bonnet = bonnet.value,
-                            boot = boot.value,
-                            objective = objective.value
+                            driver = driver.value,
+                            passenger = passenger.value,
+                            backleft = backLeft.value,
+                            backright = backRight.value
                     )
                 }
             }
+        }
 
-            @Nested
-            inner class DoorStatesTests {
+        @Nested
+        inner class WindowStatesTests {
 
-                @ParameterizedTest
-                @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
-                fun shouldGetDoorStates(
-                        driver: VehicleDoorState,
-                        passenger: VehicleDoorState,
-                        backLeft: VehicleDoorState,
-                        backRight: VehicleDoorState
-                ) {
-                    every {
-                        nativeFunctionExecutor.getVehicleParamsCarDoors(vehicleId.value, any(), any(), any(), any())
-                    } answers {
-                        secondArg<ReferenceInt>().value = driver.value
-                        thirdArg<ReferenceInt>().value = passenger.value
-                        arg<ReferenceInt>(3).value = backLeft.value
-                        arg<ReferenceInt>(4).value = backRight.value
-                        true
-                    }
-
-                    val doorStates = vehicle.doorStates
-
-                    assertThat(doorStates)
-                            .isEqualTo(
-                                    vehicleDoorStatesOf(
-                                            driver = driver,
-                                            passenger = passenger,
-                                            backLeft = backLeft,
-                                            backRight = backRight
-                                    )
-                            )
+            @ParameterizedTest
+            @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
+            fun shouldGetWindowStates(
+                    driver: VehicleWindowState,
+                    passenger: VehicleWindowState,
+                    backLeft: VehicleWindowState,
+                    backRight: VehicleWindowState
+            ) {
+                every {
+                    nativeFunctionExecutor.getVehicleParamsCarWindows(vehicleId.value, any(), any(), any(), any())
+                } answers {
+                    secondArg<ReferenceInt>().value = driver.value
+                    thirdArg<ReferenceInt>().value = passenger.value
+                    arg<ReferenceInt>(3).value = backLeft.value
+                    arg<ReferenceInt>(4).value = backRight.value
+                    true
                 }
 
-                @ParameterizedTest
-                @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
-                fun shouldSetDoorStates(
-                        driver: VehicleDoorState,
-                        passenger: VehicleDoorState,
-                        backLeft: VehicleDoorState,
-                        backRight: VehicleDoorState
-                ) {
-                    every {
-                        nativeFunctionExecutor.setVehicleParamsCarDoors(any(), any(), any(), any(), any())
-                    } returns true
+                val windowStates = vehicle.windowStates
 
-                    vehicle.doorStates = vehicleDoorStatesOf(
-                            driver = driver,
-                            passenger = passenger,
-                            backLeft = backLeft,
-                            backRight = backRight
-                    )
-
-                    verify {
-                        nativeFunctionExecutor.setVehicleParamsCarDoors(
-                                vehicleid = vehicleId.value,
-                                driver = driver.value,
-                                passenger = passenger.value,
-                                backleft = backLeft.value,
-                                backright = backRight.value
+                assertThat(windowStates)
+                        .isEqualTo(
+                                vehicleWindowStatesOf(
+                                        driver = driver,
+                                        passenger = passenger,
+                                        backLeft = backLeft,
+                                        backRight = backRight
+                                )
                         )
-                    }
-                }
-            }
-
-            @Nested
-            inner class WindowStatesTests {
-
-                @ParameterizedTest
-                @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
-                fun shouldGetWindowStates(
-                        driver: VehicleWindowState,
-                        passenger: VehicleWindowState,
-                        backLeft: VehicleWindowState,
-                        backRight: VehicleWindowState
-                ) {
-                    every {
-                        nativeFunctionExecutor.getVehicleParamsCarWindows(vehicleId.value, any(), any(), any(), any())
-                    } answers {
-                        secondArg<ReferenceInt>().value = driver.value
-                        thirdArg<ReferenceInt>().value = passenger.value
-                        arg<ReferenceInt>(3).value = backLeft.value
-                        arg<ReferenceInt>(4).value = backRight.value
-                        true
-                    }
-
-                    val windowStates = vehicle.windowStates
-
-                    assertThat(windowStates)
-                            .isEqualTo(
-                                    vehicleWindowStatesOf(
-                                            driver = driver,
-                                            passenger = passenger,
-                                            backLeft = backLeft,
-                                            backRight = backRight
-                                    )
-                            )
-                }
-
-                @ParameterizedTest
-                @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
-                fun shouldSetWindowStates(
-                        driver: VehicleWindowState,
-                        passenger: VehicleWindowState,
-                        backLeft: VehicleWindowState,
-                        backRight: VehicleWindowState
-                ) {
-                    every {
-                        nativeFunctionExecutor.setVehicleParamsCarWindows(any(), any(), any(), any(), any())
-                    } returns true
-
-                    vehicle.windowStates = vehicleWindowStatesOf(
-                            driver = driver,
-                            passenger = passenger,
-                            backLeft = backLeft,
-                            backRight = backRight
-                    )
-
-                    verify {
-                        nativeFunctionExecutor.setVehicleParamsCarWindows(
-                                vehicleid = vehicleId.value,
-                                driver = driver.value,
-                                passenger = passenger.value,
-                                backleft = backLeft.value,
-                                backright = backRight.value
-                        )
-                    }
-                }
-            }
-
-            @Test
-            fun shouldInitializeVehicleComponents() {
-                val vehicleComponents = vehicle.components
-
-                assertThat(vehicleComponents)
-                        .isInstanceOfSatisfying(VehicleComponents::class.java) {
-                            assertThat(it.vehicle)
-                                    .isEqualTo(vehicle)
-                        }
-            }
-
-            @Nested
-            inner class ColorsTests {
-
-                @Test
-                fun shouldInitializeColors() {
-                    val colors = vehicle.colors
-
-                    assertThat(colors)
-                            .isEqualTo(vehicleColorsOf(color1 = VehicleColor[3], color2 = VehicleColor[6]))
-                }
-
-                @Test
-                fun shouldSetColors() {
-                    every { nativeFunctionExecutor.changeVehicleColor(any(), any(), any()) } returns true
-
-                    vehicle.colors = mutableVehicleColorsOf(color1 = VehicleColor[50], color2 = VehicleColor[70])
-
-                    verify {
-                        nativeFunctionExecutor.changeVehicleColor(vehicleid = vehicleId.value, color1 = 50, color2 = 70)
-                    }
-                    assertThat(vehicle.colors)
-                            .isEqualTo(vehicleColorsOf(color1 = VehicleColor[50], color2 = VehicleColor[70]))
-                }
-            }
-
-            @Nested
-            inner class PaintjobTests {
-
-                @Test
-                fun shouldInitializePaintjobWithNull() {
-                    val paintjob = vehicle.paintjob
-
-                    assertThat(paintjob)
-                            .isNull()
-                }
-
-                @Test
-                fun shouldSetPaintjob() {
-                    every {
-                        nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
-                    } returns true
-                    // Need to extract it because there seems to be some smartcast issue here
-                    val paintjob: Int? = 1
-
-                    vehicle.paintjob = paintjob
-
-                    verify {
-                        nativeFunctionExecutor.changeVehiclePaintjob(
-                                vehicleid = vehicleId.value,
-                                paintjobid = paintjob!!
-                        )
-                    }
-                    assertThat(vehicle.paintjob)
-                            .isEqualTo(paintjob)
-                }
-
-                @Test
-                fun givenPaintjobIsSetToNullItShouldChangePaintjobToMinusOne() {
-                    every {
-                        nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
-                    } returns true
-                    // Need to extract it because there seems to be some smartcast issue here
-                    val paintjob: Int? = null
-
-                    vehicle.paintjob = paintjob
-
-                    verify {
-                        nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = vehicleId.value, paintjobid = -1)
-                    }
-                    assertThat(vehicle.paintjob)
-                            .isNull()
-                }
-            }
-
-            @Test
-            fun shouldInitializeTrailer() {
-                val trailer = vehicle.trailer
-
-                assertThat(trailer)
-                        .isInstanceOfSatisfying(VehicleTrailer::class.java) {
-                            assertThat(it.vehicle)
-                                    .isEqualTo(vehicle)
-                        }
-            }
-
-            @Nested
-            inner class NumberPlateTests {
-
-                @Test
-                fun shouldInitializeNumberPlateWithNull() {
-                    val numberPlate = vehicle.numberPlate
-
-                    assertThat(numberPlate)
-                            .isNull()
-                }
-
-                @Test
-                fun shouldSetVehicleNumberPlate() {
-                    every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
-
-                    vehicle.numberPlate = "ABC123"
-
-                    verify {
-                        nativeFunctionExecutor.setVehicleNumberPlate(
-                                vehicleid = vehicleId.value,
-                                numberplate = "ABC123"
-                        )
-                    }
-                    assertThat(vehicle.numberPlate)
-                            .isEqualTo("ABC123")
-                }
-
-                @Test
-                fun shouldNotSetEmptyNumberPlate() {
-                    every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
-                    vehicle.numberPlate = "ABC123"
-
-                    vehicle.numberPlate = ""
-
-
-                    verify(exactly = 0) {
-                        nativeFunctionExecutor.setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "")
-                    }
-                    assertThat(vehicle.numberPlate)
-                            .isEqualTo("ABC123")
-                }
-
-                @Test
-                fun shouldNotSetNullNumberPlate() {
-                    every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
-                    vehicle.numberPlate = "ABC123"
-
-                    val nullNumberPlate: String? = null
-                    vehicle.numberPlate = nullNumberPlate
-
-
-                    verify(exactly = 0) {
-                        nativeFunctionExecutor.setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "")
-                    }
-                    assertThat(vehicle.numberPlate)
-                            .isEqualTo("ABC123")
-                }
-            }
-
-            @Test
-            fun shouldRepairVehicle() {
-                every { nativeFunctionExecutor.repairVehicle(any()) } returns true
-
-                vehicle.repair()
-
-                verify { nativeFunctionExecutor.repairVehicle(vehicleId.value) }
-            }
-
-            @Test
-            fun shouldSetAngularVelocity() {
-                every { nativeFunctionExecutor.setVehicleAngularVelocity(any(), any(), any(), any()) } returns true
-
-                vehicle.setAngularVelocity(vector3DOf(x = 1f, y = 2f, z = 3f))
-
-                verify {
-                    nativeFunctionExecutor.setVehicleAngularVelocity(
-                            vehicleid = vehicleId.value,
-                            X = 1f,
-                            Y = 2f,
-                            Z = 3f
-                    )
-                }
-            }
-
-            @Nested
-            inner class DamageStatusTests {
-
-                @Test
-                fun shouldGetDamageStatus() {
-                    every {
-                        nativeFunctionExecutor.getVehicleDamageStatus(vehicleId.value, any(), any(), any(), any())
-                    } answers {
-                        secondArg<ReferenceInt>().value = 10
-                        thirdArg<ReferenceInt>().value = 20
-                        arg<ReferenceInt>(3).value = 30
-                        arg<ReferenceInt>(4).value = 40
-                        true
-                    }
-
-                    val damageStatus = vehicle.damageStatus
-
-                    assertThat(damageStatus)
-                            .isEqualTo(
-                                    VehicleDamageStatus(
-                                            panels = VehiclePanelDamageStatus(10),
-                                            doors = VehicleDoorsDamageStatus(20),
-                                            lights = VehicleLightsDamageStatus(30),
-                                            tires = VehicleTiresDamageStatus(40)
-                                    )
-                            )
-                }
-
-                @Test
-                fun shouldSetDamageStatus() {
-                    every {
-                        nativeFunctionExecutor.updateVehicleDamageStatus(any(), any(), any(), any(), any())
-                    } returns true
-
-                    vehicle.damageStatus = VehicleDamageStatus(
-                            panels = VehiclePanelDamageStatus(10),
-                            doors = VehicleDoorsDamageStatus(20),
-                            lights = VehicleLightsDamageStatus(30),
-                            tires = VehicleTiresDamageStatus(40)
-                    )
-
-                    verify {
-                        nativeFunctionExecutor.updateVehicleDamageStatus(
-                                vehicleid = vehicleId.value,
-                                panels = 10,
-                                doors = 20,
-                                lights = 30,
-                                tires = 40
-                        )
-                    }
-                }
-            }
-
-            @Nested
-            inner class DestroyTests {
-
-                @BeforeEach
-                fun setUp() {
-                    every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
-                }
-
-                @Test
-                fun isDestroyedShouldInitiallyBeFalse() {
-                    val isDestroyed = vehicle.isDestroyed
-
-                    assertThat(isDestroyed)
-                            .isFalse()
-                }
-
-                @Test
-                fun shouldDestroyVehicle() {
-                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
-                    vehicle.onDestroy(onDestroy)
-
-                    vehicle.destroy()
-
-                    verifyOrder {
-                        onDestroy.invoke(vehicle)
-                        nativeFunctionExecutor.destroyVehicle(vehicleId.value)
-                    }
-                    assertThat(vehicle.isDestroyed)
-                            .isTrue()
-                }
-
-                @Test
-                fun shouldNotExecuteDestroyTwice() {
-                    val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
-                    vehicle.onDestroy(onDestroy)
-
-                    vehicle.destroy()
-                    vehicle.destroy()
-
-                    verify(exactly = 1) {
-                        nativeFunctionExecutor.destroyVehicle(vehicleId.value)
-                        onDestroy.invoke(vehicle)
-                    }
-                }
-
-                @Test
-                fun givenItDestroyedIdShouldThrowException() {
-                    vehicle.destroy()
-
-                    val caughtThrowable = catchThrowable { vehicle.id }
-
-                    assertThat(caughtThrowable)
-                            .isInstanceOf(AlreadyDestroyedException::class.java)
-                }
-            }
-
-            @Test
-            fun shouldCallOnVehicleSpawnReceiver() {
-
-            }
-
-            @Nested
-            inner class OnSpawnTests {
-
-                @BeforeEach
-                fun setUp() {
-                    every { onVehicleSpawnReceiver.onVehicleSpawn(any()) } just Runs
-                }
-
-                @Test
-                fun shouldCallOnVehicleSpawnReceiverDelegate() {
-                    vehicle.onSpawn()
-
-                    verify { onVehicleSpawnReceiver.onVehicleSpawn(vehicle) }
-                }
-
-                @Test
-                fun shouldResetColorsToInitialColors() {
-                    every { nativeFunctionExecutor.changeVehicleColor(any(), any(), any()) } returns true
-                    vehicle.colors = vehicleColorsOf(69, 187)
-
-                    vehicle.onSpawn()
-
-                    assertThat(vehicle.colors)
-                            .isEqualTo(vehicleColorsOf(3, 6))
-                }
-
-            }
-
-            @Test
-            fun shouldCallOnVehicleDeathReceiverDelegate() {
-                val killer = mockk<Player>()
-                every { onVehicleDeathReceiver.onVehicleDeath(any(), any()) } just Runs
-
-                vehicle.onDeath(killer)
-
-                verify { onVehicleDeathReceiver.onVehicleDeath(vehicle, killer) }
             }
 
             @ParameterizedTest
-            @ValueSource(strings = ["true", "false"])
-            fun shouldCallOnPlayerEnterVehicleReceiverDelegate(isPassenger: Boolean) {
-                val player = mockk<Player>()
-                every { onPlayerEnterVehicleReceiver.onPlayerEnterVehicle(any(), any(), any()) } just Runs
+            @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
+            fun shouldSetWindowStates(
+                    driver: VehicleWindowState,
+                    passenger: VehicleWindowState,
+                    backLeft: VehicleWindowState,
+                    backRight: VehicleWindowState
+            ) {
+                every {
+                    nativeFunctionExecutor.setVehicleParamsCarWindows(any(), any(), any(), any(), any())
+                } returns true
 
-                vehicle.onEnter(player, isPassenger)
-
-                verify { onPlayerEnterVehicleReceiver.onPlayerEnterVehicle(player, vehicle, isPassenger) }
-            }
-
-            @Test
-            fun shouldCallOnPlayerExitVehicleReceiverDelegate() {
-                val player = mockk<Player>()
-                every { onPlayerExitVehicleReceiver.onPlayerExitVehicle(any(), any()) } just Runs
-
-                vehicle.onExit(player)
-
-                verify { onPlayerExitVehicleReceiver.onPlayerExitVehicle(player, vehicle) }
-            }
-
-            @Test
-            fun shouldCallOnVehicleStreamInReceiverDelegate() {
-                val player = mockk<Player>()
-                every { onVehicleStreamInReceiver.onVehicleStreamIn(any(), any()) } just Runs
-
-                vehicle.onStreamIn(player)
-
-                verify { onVehicleStreamInReceiver.onVehicleStreamIn(vehicle, player) }
-            }
-
-            @Test
-            fun shouldCallOnVehicleStreamOutReceiverDelegate() {
-                val player = mockk<Player>()
-                every { onVehicleStreamOutReceiver.onVehicleStreamOut(any(), any()) } just Runs
-
-                vehicle.onStreamOut(player)
-
-                verify { onVehicleStreamOutReceiver.onVehicleStreamOut(vehicle, player) }
-            }
-        }
-    }
-
-    private class VehicleParametersArgumentsProvider : ArgumentsProvider {
-
-        override fun provideArguments(context: ExtensionContext?): Stream<VehicleParametersArguments> =
-                Stream.of(
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.RUNNING,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.ON,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.IS_OR_WAS_SOUNDING,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.LOCKED,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.OPEN,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.OPEN,
-                                objective = VehicleObjectiveState.UNSET
-                        ),
-                        VehicleParametersArguments(
-                                engine = VehicleEngineState.UNSET,
-                                lights = VehicleLightsState.UNSET,
-                                alarm = VehicleAlarmState.UNSET,
-                                door = VehicleDoorLockState.UNSET,
-                                bonnet = VehicleBonnetState.UNSET,
-                                boot = VehicleBootState.UNSET,
-                                objective = VehicleObjectiveState.ON
-                        )
+                vehicle.windowStates = vehicleWindowStatesOf(
+                        driver = driver,
+                        passenger = passenger,
+                        backLeft = backLeft,
+                        backRight = backRight
                 )
 
-    }
+                verify {
+                    nativeFunctionExecutor.setVehicleParamsCarWindows(
+                            vehicleid = vehicleId.value,
+                            driver = driver.value,
+                            passenger = passenger.value,
+                            backleft = backLeft.value,
+                            backright = backRight.value
+                    )
+                }
+            }
+        }
 
-    private class VehicleParametersArguments(
-            val engine: VehicleEngineState,
-            val lights: VehicleLightsState,
-            val alarm: VehicleAlarmState,
-            val door: VehicleDoorLockState,
-            val bonnet: VehicleBonnetState,
-            val boot: VehicleBootState,
-            val objective: VehicleObjectiveState
-    ) : Arguments {
+        @Test
+        fun shouldInitializeVehicleComponents() {
+            val vehicleComponents = vehicle.components
 
-        override fun get(): Array<Any> = arrayOf(engine, lights, alarm, door, bonnet, boot, objective)
+            assertThat(vehicleComponents)
+                    .isInstanceOfSatisfying(VehicleComponents::class.java) {
+                        assertThat(it.vehicle)
+                                .isEqualTo(vehicle)
+                    }
+        }
 
+        @Nested
+        inner class ColorsTests {
+
+            @Test
+            fun shouldInitializeColors() {
+                val colors = vehicle.colors
+
+                assertThat(colors)
+                        .isEqualTo(vehicleColorsOf(color1 = VehicleColor[3], color2 = VehicleColor[6]))
+            }
+
+            @Test
+            fun shouldSetColors() {
+                every { nativeFunctionExecutor.changeVehicleColor(any(), any(), any()) } returns true
+
+                vehicle.colors = mutableVehicleColorsOf(color1 = VehicleColor[50], color2 = VehicleColor[70])
+
+                verify {
+                    nativeFunctionExecutor.changeVehicleColor(vehicleid = vehicleId.value, color1 = 50, color2 = 70)
+                }
+                assertThat(vehicle.colors)
+                        .isEqualTo(vehicleColorsOf(color1 = VehicleColor[50], color2 = VehicleColor[70]))
+            }
+        }
+
+        @Nested
+        inner class PaintjobTests {
+
+            @Test
+            fun shouldInitializePaintjobWithNull() {
+                val paintjob = vehicle.paintjob
+
+                assertThat(paintjob)
+                        .isNull()
+            }
+
+            @Test
+            fun shouldSetPaintjob() {
+                every {
+                    nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
+                } returns true
+                // Need to extract it because there seems to be some smartcast issue here
+                val paintjob: Int? = 1
+
+                vehicle.paintjob = paintjob
+
+                verify {
+                    nativeFunctionExecutor.changeVehiclePaintjob(
+                            vehicleid = vehicleId.value,
+                            paintjobid = paintjob!!
+                    )
+                }
+                assertThat(vehicle.paintjob)
+                        .isEqualTo(paintjob)
+            }
+
+            @Test
+            fun givenPaintjobIsSetToNullItShouldChangePaintjobToMinusOne() {
+                every {
+                    nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
+                } returns true
+                // Need to extract it because there seems to be some smartcast issue here
+                val paintjob: Int? = null
+
+                vehicle.paintjob = paintjob
+
+                verify {
+                    nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = vehicleId.value, paintjobid = -1)
+                }
+                assertThat(vehicle.paintjob)
+                        .isNull()
+            }
+        }
+
+        @Test
+        fun shouldInitializeTrailer() {
+            val trailer = vehicle.trailer
+
+            assertThat(trailer)
+                    .isInstanceOfSatisfying(VehicleTrailer::class.java) {
+                        assertThat(it.vehicle)
+                                .isEqualTo(vehicle)
+                    }
+        }
+
+        @Nested
+        inner class NumberPlateTests {
+
+            @Test
+            fun shouldInitializeNumberPlateWithNull() {
+                val numberPlate = vehicle.numberPlate
+
+                assertThat(numberPlate)
+                        .isNull()
+            }
+
+            @Test
+            fun shouldSetVehicleNumberPlate() {
+                every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
+
+                vehicle.numberPlate = "ABC123"
+
+                verify {
+                    nativeFunctionExecutor.setVehicleNumberPlate(
+                            vehicleid = vehicleId.value,
+                            numberplate = "ABC123"
+                    )
+                }
+                assertThat(vehicle.numberPlate)
+                        .isEqualTo("ABC123")
+            }
+
+            @Test
+            fun shouldNotSetEmptyNumberPlate() {
+                every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
+                vehicle.numberPlate = "ABC123"
+
+                vehicle.numberPlate = ""
+
+
+                verify(exactly = 0) {
+                    nativeFunctionExecutor.setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "")
+                }
+                assertThat(vehicle.numberPlate)
+                        .isEqualTo("ABC123")
+            }
+
+            @Test
+            fun shouldNotSetNullNumberPlate() {
+                every { nativeFunctionExecutor.setVehicleNumberPlate(any(), any()) } returns true
+                vehicle.numberPlate = "ABC123"
+
+                val nullNumberPlate: String? = null
+                vehicle.numberPlate = nullNumberPlate
+
+
+                verify(exactly = 0) {
+                    nativeFunctionExecutor.setVehicleNumberPlate(vehicleid = vehicleId.value, numberplate = "")
+                }
+                assertThat(vehicle.numberPlate)
+                        .isEqualTo("ABC123")
+            }
+        }
+
+        @Test
+        fun shouldRepairVehicle() {
+            every { nativeFunctionExecutor.repairVehicle(any()) } returns true
+
+            vehicle.repair()
+
+            verify { nativeFunctionExecutor.repairVehicle(vehicleId.value) }
+        }
+
+        @Test
+        fun shouldSetAngularVelocity() {
+            every { nativeFunctionExecutor.setVehicleAngularVelocity(any(), any(), any(), any()) } returns true
+
+            vehicle.setAngularVelocity(vector3DOf(x = 1f, y = 2f, z = 3f))
+
+            verify {
+                nativeFunctionExecutor.setVehicleAngularVelocity(
+                        vehicleid = vehicleId.value,
+                        X = 1f,
+                        Y = 2f,
+                        Z = 3f
+                )
+            }
+        }
+
+        @Nested
+        inner class DamageStatusTests {
+
+            @Test
+            fun shouldGetDamageStatus() {
+                every {
+                    nativeFunctionExecutor.getVehicleDamageStatus(vehicleId.value, any(), any(), any(), any())
+                } answers {
+                    secondArg<ReferenceInt>().value = 10
+                    thirdArg<ReferenceInt>().value = 20
+                    arg<ReferenceInt>(3).value = 30
+                    arg<ReferenceInt>(4).value = 40
+                    true
+                }
+
+                val damageStatus = vehicle.damageStatus
+
+                assertThat(damageStatus)
+                        .isEqualTo(
+                                VehicleDamageStatus(
+                                        panels = VehiclePanelDamageStatus(10),
+                                        doors = VehicleDoorsDamageStatus(20),
+                                        lights = VehicleLightsDamageStatus(30),
+                                        tires = VehicleTiresDamageStatus(40)
+                                )
+                        )
+            }
+
+            @Test
+            fun shouldSetDamageStatus() {
+                every {
+                    nativeFunctionExecutor.updateVehicleDamageStatus(any(), any(), any(), any(), any())
+                } returns true
+
+                vehicle.damageStatus = VehicleDamageStatus(
+                        panels = VehiclePanelDamageStatus(10),
+                        doors = VehicleDoorsDamageStatus(20),
+                        lights = VehicleLightsDamageStatus(30),
+                        tires = VehicleTiresDamageStatus(40)
+                )
+
+                verify {
+                    nativeFunctionExecutor.updateVehicleDamageStatus(
+                            vehicleid = vehicleId.value,
+                            panels = 10,
+                            doors = 20,
+                            lights = 30,
+                            tires = 40
+                    )
+                }
+            }
+        }
+
+        @Nested
+        inner class DestroyTests {
+
+            @BeforeEach
+            fun setUp() {
+                every { nativeFunctionExecutor.destroyVehicle(any()) } returns true
+            }
+
+            @Test
+            fun isDestroyedShouldInitiallyBeFalse() {
+                val isDestroyed = vehicle.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isFalse()
+            }
+
+            @Test
+            fun shouldDestroyVehicle() {
+                val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                vehicle.onDestroy(onDestroy)
+
+                vehicle.destroy()
+
+                verifyOrder {
+                    onDestroy.invoke(vehicle)
+                    nativeFunctionExecutor.destroyVehicle(vehicleId.value)
+                }
+                assertThat(vehicle.isDestroyed)
+                        .isTrue()
+            }
+
+            @Test
+            fun shouldNotExecuteDestroyTwice() {
+                val onDestroy = mockk<Vehicle.() -> Unit>(relaxed = true)
+                vehicle.onDestroy(onDestroy)
+
+                vehicle.destroy()
+                vehicle.destroy()
+
+                verify(exactly = 1) {
+                    nativeFunctionExecutor.destroyVehicle(vehicleId.value)
+                    onDestroy.invoke(vehicle)
+                }
+            }
+
+            @Test
+            fun givenItDestroyedIdShouldThrowException() {
+                vehicle.destroy()
+
+                val caughtThrowable = catchThrowable { vehicle.id }
+
+                assertThat(caughtThrowable)
+                        .isInstanceOf(AlreadyDestroyedException::class.java)
+            }
+        }
+
+        @Nested
+        inner class OnSpawnTests {
+
+            @BeforeEach
+            fun setUp() {
+                every { onVehicleSpawnReceiver.onVehicleSpawn(any()) } just Runs
+            }
+
+            @Test
+            fun shouldCallOnVehicleSpawnReceiverDelegate() {
+                vehicle.onSpawn()
+
+                verify { onVehicleSpawnReceiver.onVehicleSpawn(vehicle) }
+            }
+
+            @Test
+            fun shouldResetColorsToInitialColors() {
+                every { nativeFunctionExecutor.changeVehicleColor(any(), any(), any()) } returns true
+                vehicle.colors = vehicleColorsOf(69, 187)
+
+                vehicle.onSpawn()
+
+                assertThat(vehicle.colors)
+                        .isEqualTo(vehicleColorsOf(3, 6))
+            }
+
+        }
+
+        @Test
+        fun shouldCallOnVehicleDeathReceiverDelegate() {
+            val killer = mockk<Player>()
+            every { onVehicleDeathReceiver.onVehicleDeath(any(), any()) } just Runs
+
+            vehicle.onDeath(killer)
+
+            verify { onVehicleDeathReceiver.onVehicleDeath(vehicle, killer) }
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = ["true", "false"])
+        fun shouldCallOnPlayerEnterVehicleReceiverDelegate(isPassenger: Boolean) {
+            val player = mockk<Player>()
+            every { onPlayerEnterVehicleReceiver.onPlayerEnterVehicle(any(), any(), any()) } just Runs
+
+            vehicle.onEnter(player, isPassenger)
+
+            verify { onPlayerEnterVehicleReceiver.onPlayerEnterVehicle(player, vehicle, isPassenger) }
+        }
+
+        @Test
+        fun shouldCallOnPlayerExitVehicleReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onPlayerExitVehicleReceiver.onPlayerExitVehicle(any(), any()) } just Runs
+
+            vehicle.onExit(player)
+
+            verify { onPlayerExitVehicleReceiver.onPlayerExitVehicle(player, vehicle) }
+        }
+
+        @Test
+        fun shouldCallOnVehicleStreamInReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onVehicleStreamInReceiver.onVehicleStreamIn(any(), any()) } just Runs
+
+            vehicle.onStreamIn(player)
+
+            verify { onVehicleStreamInReceiver.onVehicleStreamIn(vehicle, player) }
+        }
+
+        @Test
+        fun shouldCallOnVehicleStreamOutReceiverDelegate() {
+            val player = mockk<Player>()
+            every { onVehicleStreamOutReceiver.onVehicleStreamOut(any(), any()) } just Runs
+
+            vehicle.onStreamOut(player)
+
+            verify { onVehicleStreamOutReceiver.onVehicleStreamOut(vehicle, player) }
+        }
     }
 
     private class VehicleDoorStatesArgumentsProvider : ArgumentsProvider {

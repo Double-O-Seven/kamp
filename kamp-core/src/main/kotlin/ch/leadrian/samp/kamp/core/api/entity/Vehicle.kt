@@ -7,15 +7,8 @@ import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.constants.VehicleAlarmState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleBonnetState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleBootState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
-import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
@@ -32,7 +25,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
 import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
 import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
-import ch.leadrian.samp.kamp.core.api.data.vehicleParametersOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleWindowStatesOf
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
@@ -48,6 +40,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleAngledLocationD
 import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleCoordinatesDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleHealthDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleLocationDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleParametersDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehiclePositionDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleVelocityDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
@@ -146,47 +139,7 @@ internal constructor(
     val sirenState: VehicleSirenState
         get() = nativeFunctionExecutor.getVehicleParamsSirenState(id.value).let { VehicleSirenState[it] }
 
-    var parameters: VehicleParameters
-        get() {
-            val engine = ReferenceInt()
-            val objective = ReferenceInt()
-            val boot = ReferenceInt()
-            val bonnet = ReferenceInt()
-            val lights = ReferenceInt()
-            val alarm = ReferenceInt()
-            val doors = ReferenceInt()
-            nativeFunctionExecutor.getVehicleParamsEx(
-                    vehicleid = id.value,
-                    engine = engine,
-                    objective = objective,
-                    boot = boot,
-                    bonnet = bonnet,
-                    lights = lights,
-                    alarm = alarm,
-                    doors = doors
-            )
-            return vehicleParametersOf(
-                    engine = VehicleEngineState[engine.value],
-                    objective = VehicleObjectiveState[objective.value],
-                    boot = VehicleBootState[boot.value],
-                    bonnet = VehicleBonnetState[bonnet.value],
-                    lights = VehicleLightsState[lights.value],
-                    alarm = VehicleAlarmState[alarm.value],
-                    doorLock = VehicleDoorLockState[doors.value]
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleParamsEx(
-                    vehicleid = id.value,
-                    engine = value.engine.value,
-                    objective = value.objective.value,
-                    boot = value.boot.value,
-                    bonnet = value.bonnet.value,
-                    lights = value.lights.value,
-                    alarm = value.alarm.value,
-                    doors = value.doorLock.value
-            )
-        }
+    var parameters: VehicleParameters by VehicleParametersDelegate(nativeFunctionExecutor)
 
     var doorStates: VehicleDoorStates
         get() {
