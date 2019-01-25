@@ -811,4 +811,14 @@ internal constructor(
         }
         return null
     }
+
+    fun isInRange(coordinates: Vector3D, range: Float): Boolean {
+        return nativeFunctionExecutor.isPlayerInRangeOfPoint(
+                playerid = id.value,
+                range = range,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z
+        )
+    }
 }

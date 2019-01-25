@@ -2753,4 +2753,23 @@ internal class PlayerTest {
         }
 
     }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun isInRangeShouldReturnTrueIfAndOnlyIfIsPlayerInRangeOfPointReturnsTrue(expectedIsInRange: Boolean) {
+        every {
+            nativeFunctionExecutor.isPlayerInRangeOfPoint(
+                    playerId.value,
+                    69f,
+                    1f,
+                    2f,
+                    3f
+            )
+        } returns expectedIsInRange
+
+        val isInRange = player.isInRange(vector3DOf(1f, 2f, 3f), 69f)
+
+        assertThat(isInRange)
+                .isEqualTo(expectedIsInRange)
+    }
 }
