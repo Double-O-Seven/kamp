@@ -248,14 +248,19 @@ internal constructor(
             )
         }
 
-    var colors: VehicleColors = colors.toVehicleColors()
+    private val initialColors: VehicleColors = colors.toVehicleColors()
+
+    private var _colors: VehicleColors = initialColors
+
+    var colors: VehicleColors
+        get() = _colors
         set(value) {
             nativeFunctionExecutor.changeVehicleColor(
                     vehicleid = id.value,
                     color1 = value.color1.value,
                     color2 = value.color2.value
             )
-            field = value.toVehicleColors()
+            _colors = value.toVehicleColors()
         }
 
     var paintjob: Int? = null
@@ -322,6 +327,7 @@ internal constructor(
     operator fun contains(player: Player): Boolean = player.isInVehicle(this)
 
     internal fun onSpawn() {
+        _colors = initialColors
         onVehicleSpawnReceiver.onVehicleSpawn(this)
     }
 

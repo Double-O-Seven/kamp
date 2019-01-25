@@ -845,13 +845,32 @@ internal class VehicleTest {
 
             }
 
-            @Test
-            fun shouldCallOnVehicleSpawnReceiverDelegate() {
-                every { onVehicleSpawnReceiver.onVehicleSpawn(any()) } just Runs
+            @Nested
+            inner class OnSpawnTests {
 
-                vehicle.onSpawn()
+                @BeforeEach
+                fun setUp() {
+                    every { onVehicleSpawnReceiver.onVehicleSpawn(any()) } just Runs
+                }
 
-                verify { onVehicleSpawnReceiver.onVehicleSpawn(vehicle) }
+                @Test
+                fun shouldCallOnVehicleSpawnReceiverDelegate() {
+                    vehicle.onSpawn()
+
+                    verify { onVehicleSpawnReceiver.onVehicleSpawn(vehicle) }
+                }
+
+                @Test
+                fun shouldResetColorsToInitialColors() {
+                    every { nativeFunctionExecutor.changeVehicleColor(any(), any(), any()) } returns true
+                    vehicle.colors = vehicleColorsOf(69, 187)
+
+                    vehicle.onSpawn()
+
+                    assertThat(vehicle.colors)
+                            .isEqualTo(vehicleColorsOf(3, 6))
+                }
+
             }
 
             @Test
