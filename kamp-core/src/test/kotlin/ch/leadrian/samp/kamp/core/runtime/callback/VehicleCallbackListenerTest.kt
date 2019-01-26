@@ -1,6 +1,8 @@
 package ch.leadrian.samp.kamp.core.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleResprayListener
+import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import io.mockk.Runs
@@ -8,6 +10,7 @@ import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -73,7 +76,7 @@ internal class VehicleCallbackListenerTest {
     fun shouldExecuteOnExit() {
         val player = mockk<Player>()
         val vehicle = mockk<Vehicle> {
-            every { onExit(any<Player>()) } just Runs
+            every { onExit(any()) } just Runs
         }
 
         vehicleCallbackListener.onPlayerExitVehicle(player, vehicle)
@@ -85,7 +88,7 @@ internal class VehicleCallbackListenerTest {
     fun shouldExecuteOnStreamIn() {
         val player = mockk<Player>()
         val vehicle = mockk<Vehicle> {
-            every { onStreamIn(any<Player>()) } just Runs
+            every { onStreamIn(any()) } just Runs
         }
 
         vehicleCallbackListener.onVehicleStreamIn(vehicle, player)
@@ -97,12 +100,37 @@ internal class VehicleCallbackListenerTest {
     fun shouldExecuteOnStreamOut() {
         val player = mockk<Player>()
         val vehicle = mockk<Vehicle> {
-            every { onStreamOut(any<Player>()) } just Runs
+            every { onStreamOut(any()) } just Runs
         }
 
         vehicleCallbackListener.onVehicleStreamOut(vehicle, player)
 
         verify { vehicle.onStreamOut(player) }
+    }
+
+    @Test
+    fun shouldExecuteOnRespray() {
+        val player = mockk<Player>()
+        val vehicle = mockk<Vehicle> {
+            every { onRespray(player, vehicleColorsOf(3, 6)) } returns OnVehicleResprayListener.Result.Sync
+        }
+
+        val result = vehicleCallbackListener.onVehicleRespray(player, vehicle, vehicleColorsOf(3, 6))
+
+        assertThat(result)
+                .isEqualTo(OnVehicleResprayListener.Result.Sync)
+    }
+
+    @Test
+    fun shouldExecuteOnPaintjob() {
+        val player = mockk<Player>()
+        val vehicle = mockk<Vehicle> {
+            every { onPaintjobChange(any(), any()) } just Runs
+        }
+
+        vehicleCallbackListener.onVehiclePaintjob(player, vehicle, 2)
+
+        verify { vehicle.onPaintjobChange(player, 2) }
     }
 
 }
