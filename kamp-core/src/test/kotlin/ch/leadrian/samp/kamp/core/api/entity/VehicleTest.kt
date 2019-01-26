@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleResprayListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
@@ -15,6 +16,8 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEnterVehicleReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerExitVehicleReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDeathReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnVehiclePaintjobReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleResprayReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
@@ -156,6 +159,8 @@ internal class VehicleTest {
         private val onPlayerExitVehicleReceiver = mockk<OnPlayerExitVehicleReceiverDelegate>()
         private val onVehicleStreamInReceiver = mockk<OnVehicleStreamInReceiverDelegate>()
         private val onVehicleStreamOutReceiver = mockk<OnVehicleStreamOutReceiverDelegate>()
+        private val onVehicleResprayReceiver = mockk<OnVehicleResprayReceiverDelegate>()
+        private val onVehiclePaintjobReceiver = mockk<OnVehiclePaintjobReceiverDelegate>()
 
         private val vehicleRegistry = mockk<VehicleRegistry>()
         private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
@@ -181,7 +186,9 @@ internal class VehicleTest {
                     onPlayerEnterVehicleReceiver = onPlayerEnterVehicleReceiver,
                     onPlayerExitVehicleReceiver = onPlayerExitVehicleReceiver,
                     onVehicleStreamInReceiver = onVehicleStreamInReceiver,
-                    onVehicleStreamOutReceiver = onVehicleStreamOutReceiver
+                    onVehicleStreamOutReceiver = onVehicleStreamOutReceiver,
+                    onVehicleResprayReceiver = onVehicleResprayReceiver,
+                    onVehiclePaintjobReceiver = onVehiclePaintjobReceiver
             )
         }
 
@@ -624,6 +631,89 @@ internal class VehicleTest {
             vehicle.onStreamOut(player)
 
             verify { onVehicleStreamOutReceiver.onVehicleStreamOut(vehicle, player) }
+        }
+
+        @Nested
+        inner class OnResprayTests {
+
+            @Test
+            fun shouldCallOnVehicleResprayReceiverDelegate() {
+                val player = mockk<Player>()
+                every {
+                    onVehicleResprayReceiver.onVehicleRespray(
+                            any(),
+                            any(),
+                            any()
+                    )
+                } returns OnVehicleResprayListener.Result.Sync
+
+                vehicle.onRespray(player, vehicleColorsOf(3, 6))
+
+                verify { onVehicleResprayReceiver.onVehicleRespray(player, vehicle, vehicleColorsOf(3, 6)) }
+            }
+
+            @Test
+            fun givenReceiverResultIsSyncItShouldChangeVehicleColors() {
+                val player = mockk<Player>()
+                every {
+                    onVehicleResprayReceiver.onVehicleRespray(
+                            any(),
+                            any(),
+                            any()
+                    )
+                } returns OnVehicleResprayListener.Result.Sync
+
+                vehicle.onRespray(player, vehicleColorsOf(69, 187))
+
+                assertThat(vehicle.colors)
+                        .isEqualTo(vehicleColorsOf(69, 187))
+            }
+
+            @Test
+            fun givenReceiverResultIsDesyncItShouldNotChangeVehicleColors() {
+                val player = mockk<Player>()
+                every {
+                    onVehicleResprayReceiver.onVehicleRespray(
+                            any(),
+                            any(),
+                            any()
+                    )
+                } returns OnVehicleResprayListener.Result.Desync
+
+                vehicle.onRespray(player, vehicleColorsOf(69, 187))
+
+                assertThat(vehicle.colors)
+                        .isEqualTo(vehicleColorsOf(3, 6))
+            }
+        }
+
+        @Nested
+        inner class OnPaintjobChangeTests {
+
+            @BeforeEach
+            fun setUp() {
+                every { onVehiclePaintjobReceiver.onVehiclePaintjob(any(), any(), any()) } just Runs
+            }
+
+            @Test
+            fun shouldCallOnVehiclePaintjobReceiverDelegate() {
+                val player = mockk<Player>()
+
+                vehicle.onPaintjobChange(player, 2)
+
+                verify { onVehiclePaintjobReceiver.onVehiclePaintjob(player, vehicle, 2) }
+            }
+
+            @Test
+            fun shouldChangePaintjob() {
+                val player = mockk<Player>()
+
+                vehicle.onPaintjobChange(player, 2)
+
+                assertThat(vehicle.paintjob)
+                        .isEqualTo(2)
+            }
+
         }
     }
 }

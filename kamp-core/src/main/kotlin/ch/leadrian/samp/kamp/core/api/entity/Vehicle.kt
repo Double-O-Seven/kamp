@@ -3,6 +3,9 @@ package ch.leadrian.samp.kamp.core.api.entity
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterVehicleReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitVehicleReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDeathReceiver
+import ch.leadrian.samp.kamp.core.api.callback.OnVehiclePaintjobReceiver
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleResprayListener
+import ch.leadrian.samp.kamp.core.api.callback.OnVehicleResprayReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
@@ -24,6 +27,8 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEnterVehicleReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerExitVehicleReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDeathReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnVehiclePaintjobReceiverDelegate
+import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleResprayReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
@@ -55,7 +60,9 @@ internal constructor(
         private val onPlayerEnterVehicleReceiver: OnPlayerEnterVehicleReceiverDelegate = OnPlayerEnterVehicleReceiverDelegate(),
         private val onPlayerExitVehicleReceiver: OnPlayerExitVehicleReceiverDelegate = OnPlayerExitVehicleReceiverDelegate(),
         private val onVehicleStreamInReceiver: OnVehicleStreamInReceiverDelegate = OnVehicleStreamInReceiverDelegate(),
-        private val onVehicleStreamOutReceiver: OnVehicleStreamOutReceiverDelegate = OnVehicleStreamOutReceiverDelegate()
+        private val onVehicleStreamOutReceiver: OnVehicleStreamOutReceiverDelegate = OnVehicleStreamOutReceiverDelegate(),
+        private val onVehicleResprayReceiver: OnVehicleResprayReceiverDelegate = OnVehicleResprayReceiverDelegate(),
+        private val onVehiclePaintjobReceiver: OnVehiclePaintjobReceiverDelegate = OnVehiclePaintjobReceiverDelegate()
 ) : Entity<VehicleId>,
         AbstractDestroyable(),
         OnVehicleSpawnReceiver by onVehicleSpawnReceiver,
@@ -63,7 +70,9 @@ internal constructor(
         OnPlayerEnterVehicleReceiver by onPlayerEnterVehicleReceiver,
         OnPlayerExitVehicleReceiver by onPlayerExitVehicleReceiver,
         OnVehicleStreamInReceiver by onVehicleStreamInReceiver,
-        OnVehicleStreamOutListener by onVehicleStreamOutReceiver {
+        OnVehicleStreamOutListener by onVehicleStreamOutReceiver,
+        OnVehicleResprayReceiver by onVehicleResprayReceiver,
+        OnVehiclePaintjobReceiver by onVehiclePaintjobReceiver {
 
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 
@@ -138,12 +147,15 @@ internal constructor(
             _colors = value.toVehicleColors()
         }
 
-    var paintjob: Int? = null
+    private var _paintjob: Int? = null
+
+    var paintjob: Int?
+        get() = _paintjob
         set(value) {
             if (value != null) {
                 nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = id.value, paintjobid = value)
+                _paintjob = value
             }
-            field = value
         }
 
     var health: Float by VehicleHealthProperty(nativeFunctionExecutor)
@@ -193,7 +205,7 @@ internal constructor(
 
     internal fun onSpawn() {
         _colors = initialColors
-        paintjob = null
+        _paintjob = null
         onVehicleSpawnReceiver.onVehicleSpawn(this)
     }
 
@@ -215,6 +227,19 @@ internal constructor(
 
     internal fun onStreamOut(player: Player) {
         onVehicleStreamOutReceiver.onVehicleStreamOut(this, player)
+    }
+
+    internal fun onRespray(player: Player, colors: VehicleColors): OnVehicleResprayListener.Result {
+        val result = onVehicleResprayReceiver.onVehicleRespray(player, this, colors)
+        if (result != OnVehicleResprayListener.Result.Desync) {
+            _colors = colors
+        }
+        return result
+    }
+
+    internal fun onPaintjobChange(player: Player, paintjobId: Int) {
+        _paintjob = paintjobId
+        onVehiclePaintjobReceiver.onVehiclePaintjob(player, this, paintjobId)
     }
 
     override fun onDestroy() {
