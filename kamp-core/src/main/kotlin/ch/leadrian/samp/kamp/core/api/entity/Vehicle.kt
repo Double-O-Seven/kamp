@@ -35,14 +35,14 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleDeathReceiverDelegat
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleAngleDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleAngledLocationDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleCoordinatesDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleHealthDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleLocationDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleParametersDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehiclePositionDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.VehicleVelocityDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngleProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngledLocationProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleHealthProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleLocationProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleParametersProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehiclePositionProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleVelocityProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 
@@ -101,9 +101,9 @@ internal constructor(
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isVehicleStreamedIn(vehicleid = id.value, forplayerid = forPlayer.id.value)
 
-    var coordinates: Vector3D by VehicleCoordinatesDelegate(nativeFunctionExecutor)
+    var coordinates: Vector3D by VehicleCoordinatesProperty(nativeFunctionExecutor)
 
-    var angle: Float by VehicleAngleDelegate(nativeFunctionExecutor)
+    var angle: Float by VehicleAngleProperty(nativeFunctionExecutor)
 
     var interiorId: Int = 0
         set(value) {
@@ -117,11 +117,11 @@ internal constructor(
             nativeFunctionExecutor.setVehicleVirtualWorld(vehicleid = id.value, worldid = value)
         }
 
-    var position: Position by VehiclePositionDelegate(nativeFunctionExecutor)
+    var position: Position by VehiclePositionProperty(nativeFunctionExecutor)
 
-    var location: Location by VehicleLocationDelegate(nativeFunctionExecutor)
+    var location: Location by VehicleLocationProperty(nativeFunctionExecutor)
 
-    var angledLocation: AngledLocation by VehicleAngledLocationDelegate(nativeFunctionExecutor)
+    var angledLocation: AngledLocation by VehicleAngledLocationProperty(nativeFunctionExecutor)
 
     fun respawn() {
         nativeFunctionExecutor.setVehicleToRespawn(id.value)
@@ -139,7 +139,7 @@ internal constructor(
     val sirenState: VehicleSirenState
         get() = nativeFunctionExecutor.getVehicleParamsSirenState(id.value).let { VehicleSirenState[it] }
 
-    var parameters: VehicleParameters by VehicleParametersDelegate(nativeFunctionExecutor)
+    var parameters: VehicleParameters by VehicleParametersProperty(nativeFunctionExecutor)
 
     var doorStates: VehicleDoorStates
         get() {
@@ -222,7 +222,7 @@ internal constructor(
             field = value
         }
 
-    var health: Float by VehicleHealthDelegate(nativeFunctionExecutor)
+    var health: Float by VehicleHealthProperty(nativeFunctionExecutor)
 
     var numberPlate: String? = null
         set(value) {
@@ -236,7 +236,7 @@ internal constructor(
         nativeFunctionExecutor.repairVehicle(id.value)
     }
 
-    var velocity: Vector3D by VehicleVelocityDelegate(nativeFunctionExecutor)
+    var velocity: Vector3D by VehicleVelocityProperty(nativeFunctionExecutor)
 
     fun setAngularVelocity(velocity: Vector3D) {
         nativeFunctionExecutor.setVehicleAngularVelocity(

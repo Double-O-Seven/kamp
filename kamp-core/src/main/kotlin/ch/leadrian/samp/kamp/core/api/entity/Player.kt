@@ -33,18 +33,18 @@ import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerAngleDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerAngledLocationDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerArmourDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerCoordinatesDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerHealthDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerKeysDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerLastShotVectorsDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerLocationDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerNameDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerPositionDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerTimeDelegate
-import ch.leadrian.samp.kamp.core.runtime.entity.delegate.PlayerVelocityDelegate
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngleProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngledLocationProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerArmourProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerHealthProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerKeysProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerLastShotVectorsProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerLocationProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNameProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerPositionProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerTimeProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerVelocityProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -128,9 +128,9 @@ internal constructor(
         )
     }
 
-    var coordinates: Vector3D by PlayerCoordinatesDelegate(nativeFunctionExecutor)
+    var coordinates: Vector3D by PlayerCoordinatesProperty(nativeFunctionExecutor)
 
-    var angle: Float by PlayerAngleDelegate(nativeFunctionExecutor)
+    var angle: Float by PlayerAngleProperty(nativeFunctionExecutor)
 
     var interiorId: Int
         get() = nativeFunctionExecutor.getPlayerInterior(id.value)
@@ -144,13 +144,13 @@ internal constructor(
             nativeFunctionExecutor.setPlayerVirtualWorld(playerid = id.value, worldid = value)
         }
 
-    var position: Position by PlayerPositionDelegate(nativeFunctionExecutor)
+    var position: Position by PlayerPositionProperty(nativeFunctionExecutor)
 
-    var location: Location by PlayerLocationDelegate(nativeFunctionExecutor)
+    var location: Location by PlayerLocationProperty(nativeFunctionExecutor)
 
-    var angledLocation: AngledLocation by PlayerAngledLocationDelegate(nativeFunctionExecutor)
+    var angledLocation: AngledLocation by PlayerAngledLocationProperty(nativeFunctionExecutor)
 
-    var velocity: Vector3D by PlayerVelocityDelegate(nativeFunctionExecutor)
+    var velocity: Vector3D by PlayerVelocityProperty(nativeFunctionExecutor)
 
     fun setCoordinatesFindZ(coordinates: Vector3D) {
         nativeFunctionExecutor.setPlayerPosFindZ(
@@ -164,9 +164,9 @@ internal constructor(
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
 
-    var health: Float by PlayerHealthDelegate(nativeFunctionExecutor)
+    var health: Float by PlayerHealthProperty(nativeFunctionExecutor)
 
-    var armour: Float by PlayerArmourDelegate(nativeFunctionExecutor)
+    var armour: Float by PlayerArmourProperty(nativeFunctionExecutor)
 
     val targetPlayer: Player?
         get() = nativeFunctionExecutor.getPlayerTargetPlayer(id.value).let { playerRegistry[it] }
@@ -231,7 +231,7 @@ internal constructor(
         gpci.value ?: ""
     }
 
-    var name: String by PlayerNameDelegate(nativeFunctionExecutor, onPlayerNameChangeHandler)
+    var name: String by PlayerNameProperty(nativeFunctionExecutor, onPlayerNameChangeHandler)
 
     val state: PlayerState
         get() = nativeFunctionExecutor.getPlayerState(id.value).let { PlayerState[it] }
@@ -239,9 +239,9 @@ internal constructor(
     val ping: Int
         get() = nativeFunctionExecutor.getPlayerPing(id.value)
 
-    val keys: PlayerKeys by PlayerKeysDelegate(nativeFunctionExecutor)
+    val keys: PlayerKeys by PlayerKeysProperty(nativeFunctionExecutor)
 
-    var time: Time by PlayerTimeDelegate(nativeFunctionExecutor)
+    var time: Time by PlayerTimeProperty(nativeFunctionExecutor)
 
     fun toggleClock(toggle: Boolean) {
         nativeFunctionExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
@@ -300,7 +300,7 @@ internal constructor(
         )
     }
 
-    val lastShotVectors: LastShotVectors by PlayerLastShotVectorsDelegate(nativeFunctionExecutor)
+    val lastShotVectors: LastShotVectors by PlayerLastShotVectorsProperty(nativeFunctionExecutor)
 
     val attachedObjectSlots: List<AttachedObjectSlot> =
             (0..9).map {
