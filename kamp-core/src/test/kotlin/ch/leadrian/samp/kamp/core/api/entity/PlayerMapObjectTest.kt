@@ -13,7 +13,6 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditPlayerMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectPlayerMapObjectReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -232,94 +231,6 @@ internal class PlayerMapObjectTest {
                         fRotY = 5f,
                         RotZ = 6f
                 )
-            }
-        }
-
-        @Nested
-        inner class CoordinatesTests {
-
-            @Test
-            fun shouldGetCoordinates() {
-                every {
-                    nativeFunctionExecutor.getPlayerObjectPos(
-                            playerid = playerId.value,
-                            objectid = playerMapObjectId.value,
-                            x = any(),
-                            y = any(),
-                            z = any()
-                    )
-                } answers {
-                    thirdArg<ReferenceFloat>().value = 1f
-                    arg<ReferenceFloat>(3).value = 2f
-                    arg<ReferenceFloat>(4).value = 3f
-                    true
-                }
-
-                val coordinates = playerMapObject.coordinates
-
-                assertThat(coordinates)
-                        .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-            }
-
-            @Test
-            fun shouldSetCoordinates() {
-                every { nativeFunctionExecutor.setPlayerObjectPos(any(), any(), any(), any(), any()) } returns true
-
-                playerMapObject.coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                verify {
-                    nativeFunctionExecutor.setPlayerObjectPos(
-                            playerid = playerId.value,
-                            objectid = playerMapObjectId.value,
-                            x = 1f,
-                            y = 2f,
-                            z = 3f
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class RotationTests {
-
-            @Test
-            fun shouldGetRotation() {
-                every {
-                    nativeFunctionExecutor.getPlayerObjectRot(
-                            playerid = playerId.value,
-                            objectid = playerMapObjectId.value,
-                            rotX = any(),
-                            rotY = any(),
-                            rotZ = any()
-                    )
-                } answers {
-                    thirdArg<ReferenceFloat>().value = 1f
-                    arg<ReferenceFloat>(3).value = 2f
-                    arg<ReferenceFloat>(4).value = 3f
-                    true
-                }
-
-                val rotation = playerMapObject.rotation
-
-                assertThat(rotation)
-                        .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-            }
-
-            @Test
-            fun shouldSetRotation() {
-                every { nativeFunctionExecutor.setPlayerObjectRot(any(), any(), any(), any(), any()) } returns true
-
-                playerMapObject.rotation = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                verify {
-                    nativeFunctionExecutor.setPlayerObjectRot(
-                            playerid = playerId.value,
-                            objectid = playerMapObjectId.value,
-                            rotX = 1f,
-                            rotY = 2f,
-                            rotZ = 3f
-                    )
-                }
             }
         }
 

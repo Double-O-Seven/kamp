@@ -9,14 +9,14 @@ import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditPlayerMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectPlayerMapObjectReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerMapObjectCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerMapObjectRotationProperty
 
 class PlayerMapObject
 internal constructor(
@@ -92,53 +92,9 @@ internal constructor(
         )
     }
 
-    override var coordinates: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerObjectPos(
-                    playerid = player.id.value,
-                    objectid = id.value,
-                    x = x,
-                    y = y,
-                    z = z
-            )
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerObjectPos(
-                    playerid = player.id.value,
-                    objectid = id.value,
-                    x = value.x,
-                    y = value.y,
-                    z = value.z
-            )
-        }
+    override var coordinates: Vector3D by PlayerMapObjectCoordinatesProperty(nativeFunctionExecutor)
 
-    override var rotation: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerObjectRot(
-                    playerid = player.id.value,
-                    objectid = id.value,
-                    rotX = x,
-                    rotY = y,
-                    rotZ = z
-            )
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerObjectRot(
-                    playerid = player.id.value,
-                    objectid = id.value,
-                    rotX = value.x,
-                    rotY = value.y,
-                    rotZ = value.z
-            )
-        }
+    override var rotation: Vector3D by PlayerMapObjectRotationProperty(nativeFunctionExecutor)
 
     override fun disableCameraCollision() {
         nativeFunctionExecutor.setPlayerObjectNoCameraCol(playerid = player.id.value, objectid = id.value)
