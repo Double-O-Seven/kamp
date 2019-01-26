@@ -4,11 +4,6 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
-import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehicleDoorsDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehicleLightsDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehiclePanelDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.mutableVehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -24,7 +19,6 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleSpawnReceiverDelegat
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -481,59 +475,6 @@ internal class VehicleTest {
                         Y = 2f,
                         Z = 3f
                 )
-            }
-        }
-
-        @Nested
-        inner class DamageStatusTests {
-
-            @Test
-            fun shouldGetDamageStatus() {
-                every {
-                    nativeFunctionExecutor.getVehicleDamageStatus(vehicleId.value, any(), any(), any(), any())
-                } answers {
-                    secondArg<ReferenceInt>().value = 10
-                    thirdArg<ReferenceInt>().value = 20
-                    arg<ReferenceInt>(3).value = 30
-                    arg<ReferenceInt>(4).value = 40
-                    true
-                }
-
-                val damageStatus = vehicle.damageStatus
-
-                assertThat(damageStatus)
-                        .isEqualTo(
-                                VehicleDamageStatus(
-                                        panels = VehiclePanelDamageStatus(10),
-                                        doors = VehicleDoorsDamageStatus(20),
-                                        lights = VehicleLightsDamageStatus(30),
-                                        tires = VehicleTiresDamageStatus(40)
-                                )
-                        )
-            }
-
-            @Test
-            fun shouldSetDamageStatus() {
-                every {
-                    nativeFunctionExecutor.updateVehicleDamageStatus(any(), any(), any(), any(), any())
-                } returns true
-
-                vehicle.damageStatus = VehicleDamageStatus(
-                        panels = VehiclePanelDamageStatus(10),
-                        doors = VehicleDoorsDamageStatus(20),
-                        lights = VehicleLightsDamageStatus(30),
-                        tires = VehicleTiresDamageStatus(40)
-                )
-
-                verify {
-                    nativeFunctionExecutor.updateVehicleDamageStatus(
-                            vehicleid = vehicleId.value,
-                            panels = 10,
-                            doors = 20,
-                            lights = 30,
-                            tires = 40
-                    )
-                }
             }
         }
 

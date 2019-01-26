@@ -16,11 +16,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleDoorStates
-import ch.leadrian.samp.kamp.core.api.data.VehicleDoorsDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehicleLightsDamageStatus
-import ch.leadrian.samp.kamp.core.api.data.VehiclePanelDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
-import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
@@ -34,6 +30,7 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDel
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngleProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngledLocationProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleDamageStatusProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleDoorStatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleHealthProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleLocationProperty
@@ -42,7 +39,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.property.VehiclePositionPropert
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleVelocityProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleWindowStatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 
 class Vehicle
 internal constructor(
@@ -189,35 +185,7 @@ internal constructor(
         )
     }
 
-    var damageStatus: VehicleDamageStatus
-        get() {
-            val lights = ReferenceInt()
-            val doors = ReferenceInt()
-            val panels = ReferenceInt()
-            val tires = ReferenceInt()
-            nativeFunctionExecutor.getVehicleDamageStatus(
-                    vehicleid = id.value,
-                    lights = lights,
-                    doors = doors,
-                    panels = panels,
-                    tires = tires
-            )
-            return VehicleDamageStatus(
-                    tires = VehicleTiresDamageStatus(tires.value),
-                    panels = VehiclePanelDamageStatus(panels.value),
-                    doors = VehicleDoorsDamageStatus(doors.value),
-                    lights = VehicleLightsDamageStatus(lights.value)
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.updateVehicleDamageStatus(
-                    vehicleid = id.value,
-                    tires = value.tires.value,
-                    panels = value.panels.value,
-                    doors = value.doors.value,
-                    lights = value.lights.value
-            )
-        }
+    var damageStatus: VehicleDamageStatus by VehicleDamageStatusProperty(nativeFunctionExecutor)
 
     operator fun contains(player: Player): Boolean = player.isInVehicle(this)
 
