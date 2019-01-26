@@ -366,7 +366,7 @@ internal class VehicleTest {
             }
 
             @Test
-            fun givenPaintjobIsSetToNullItShouldChangePaintjobToMinusOne() {
+            fun givenPaintjobIsSetToNullItShouldNotChangePaintjob() {
                 every {
                     nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
                 } returns true
@@ -375,8 +375,8 @@ internal class VehicleTest {
 
                 vehicle.paintjob = paintjob
 
-                verify {
-                    nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = vehicleId.value, paintjobid = -1)
+                verify(exactly = 0) {
+                    nativeFunctionExecutor.changeVehiclePaintjob(any(), any())
                 }
                 assertThat(vehicle.paintjob)
                         .isNull()
@@ -558,6 +558,19 @@ internal class VehicleTest {
 
                 assertThat(vehicle.colors)
                         .isEqualTo(vehicleColorsOf(3, 6))
+            }
+
+            @Test
+            fun shouldResetPaintjob() {
+                every { nativeFunctionExecutor.changeVehiclePaintjob(any(), any()) } returns true
+                vehicle.paintjob = 1
+
+                vehicle.onSpawn()
+
+                // Doesn't allow smart cast
+                val paintjob: Int? = vehicle.paintjob
+                assertThat(paintjob)
+                        .isNull()
             }
 
         }

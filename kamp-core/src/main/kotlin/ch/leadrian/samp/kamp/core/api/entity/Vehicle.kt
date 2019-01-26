@@ -92,9 +92,6 @@ internal constructor(
         id = VehicleId.valueOf(vehicleId)
     }
 
-    fun isStreamedIn(forPlayer: Player): Boolean =
-            nativeFunctionExecutor.isVehicleStreamedIn(vehicleid = id.value, forplayerid = forPlayer.id.value)
-
     var coordinates: Vector3D by VehicleCoordinatesProperty(nativeFunctionExecutor)
 
     var angle: Float by VehicleAngleProperty(nativeFunctionExecutor)
@@ -116,19 +113,6 @@ internal constructor(
     var location: Location by VehicleLocationProperty(nativeFunctionExecutor)
 
     var angledLocation: AngledLocation by VehicleAngledLocationProperty(nativeFunctionExecutor)
-
-    fun respawn() {
-        nativeFunctionExecutor.setVehicleToRespawn(id.value)
-    }
-
-    fun setParametersForPlayer(forPlayer: Player, objective: Boolean, locked: Boolean) {
-        nativeFunctionExecutor.setVehicleParamsForPlayer(
-                vehicleid = id.value,
-                playerid = forPlayer.id.value,
-                objective = if (objective) 1 else 0,
-                doorslocked = if (locked) 1 else 0
-        )
-    }
 
     val sirenState: VehicleSirenState
         get() = nativeFunctionExecutor.getVehicleParamsSirenState(id.value).let { VehicleSirenState[it] }
@@ -156,7 +140,9 @@ internal constructor(
 
     var paintjob: Int? = null
         set(value) {
-            nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = id.value, paintjobid = value ?: -1)
+            if (value != null) {
+                nativeFunctionExecutor.changeVehiclePaintjob(vehicleid = id.value, paintjobid = value)
+            }
             field = value
         }
 
@@ -170,11 +156,29 @@ internal constructor(
             }
         }
 
+    var velocity: Vector3D by VehicleVelocityProperty(nativeFunctionExecutor)
+
+    var damageStatus: VehicleDamageStatus by VehicleDamageStatusProperty(nativeFunctionExecutor)
+
+    fun isStreamedIn(forPlayer: Player): Boolean =
+            nativeFunctionExecutor.isVehicleStreamedIn(vehicleid = id.value, forplayerid = forPlayer.id.value)
+
+    fun respawn() {
+        nativeFunctionExecutor.setVehicleToRespawn(id.value)
+    }
+
+    fun setParametersForPlayer(forPlayer: Player, objective: Boolean, locked: Boolean) {
+        nativeFunctionExecutor.setVehicleParamsForPlayer(
+                vehicleid = id.value,
+                playerid = forPlayer.id.value,
+                objective = if (objective) 1 else 0,
+                doorslocked = if (locked) 1 else 0
+        )
+    }
+
     fun repair() {
         nativeFunctionExecutor.repairVehicle(id.value)
     }
-
-    var velocity: Vector3D by VehicleVelocityProperty(nativeFunctionExecutor)
 
     fun setAngularVelocity(velocity: Vector3D) {
         nativeFunctionExecutor.setVehicleAngularVelocity(
@@ -185,12 +189,11 @@ internal constructor(
         )
     }
 
-    var damageStatus: VehicleDamageStatus by VehicleDamageStatusProperty(nativeFunctionExecutor)
-
     operator fun contains(player: Player): Boolean = player.isInVehicle(this)
 
     internal fun onSpawn() {
         _colors = initialColors
+        paintjob = null
         onVehicleSpawnReceiver.onVehicleSpawn(this)
     }
 
