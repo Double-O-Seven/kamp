@@ -2,10 +2,8 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
-import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
 import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleDoorsDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleLightsDamageStatus
@@ -14,8 +12,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.mutableVehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
-import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
-import ch.leadrian.samp.kamp.core.api.data.vehicleWindowStatesOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
@@ -40,14 +36,9 @@ import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.ParameterizedTest
-import org.junit.jupiter.params.provider.Arguments
-import org.junit.jupiter.params.provider.ArgumentsProvider
-import org.junit.jupiter.params.provider.ArgumentsSource
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.util.stream.Stream
 
 internal class VehicleTest {
 
@@ -311,136 +302,6 @@ internal class VehicleTest {
 
             assertThat(containsPlayer)
                     .isEqualTo(isInVehicle)
-        }
-
-        @Nested
-        inner class DoorStatesTests {
-
-            @ParameterizedTest
-            @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
-            fun shouldGetDoorStates(
-                    driver: VehicleDoorState,
-                    passenger: VehicleDoorState,
-                    backLeft: VehicleDoorState,
-                    backRight: VehicleDoorState
-            ) {
-                every {
-                    nativeFunctionExecutor.getVehicleParamsCarDoors(vehicleId.value, any(), any(), any(), any())
-                } answers {
-                    secondArg<ReferenceInt>().value = driver.value
-                    thirdArg<ReferenceInt>().value = passenger.value
-                    arg<ReferenceInt>(3).value = backLeft.value
-                    arg<ReferenceInt>(4).value = backRight.value
-                    true
-                }
-
-                val doorStates = vehicle.doorStates
-
-                assertThat(doorStates)
-                        .isEqualTo(
-                                vehicleDoorStatesOf(
-                                        driver = driver,
-                                        passenger = passenger,
-                                        backLeft = backLeft,
-                                        backRight = backRight
-                                )
-                        )
-            }
-
-            @ParameterizedTest
-            @ArgumentsSource(VehicleDoorStatesArgumentsProvider::class)
-            fun shouldSetDoorStates(
-                    driver: VehicleDoorState,
-                    passenger: VehicleDoorState,
-                    backLeft: VehicleDoorState,
-                    backRight: VehicleDoorState
-            ) {
-                every {
-                    nativeFunctionExecutor.setVehicleParamsCarDoors(any(), any(), any(), any(), any())
-                } returns true
-
-                vehicle.doorStates = vehicleDoorStatesOf(
-                        driver = driver,
-                        passenger = passenger,
-                        backLeft = backLeft,
-                        backRight = backRight
-                )
-
-                verify {
-                    nativeFunctionExecutor.setVehicleParamsCarDoors(
-                            vehicleid = vehicleId.value,
-                            driver = driver.value,
-                            passenger = passenger.value,
-                            backleft = backLeft.value,
-                            backright = backRight.value
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class WindowStatesTests {
-
-            @ParameterizedTest
-            @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
-            fun shouldGetWindowStates(
-                    driver: VehicleWindowState,
-                    passenger: VehicleWindowState,
-                    backLeft: VehicleWindowState,
-                    backRight: VehicleWindowState
-            ) {
-                every {
-                    nativeFunctionExecutor.getVehicleParamsCarWindows(vehicleId.value, any(), any(), any(), any())
-                } answers {
-                    secondArg<ReferenceInt>().value = driver.value
-                    thirdArg<ReferenceInt>().value = passenger.value
-                    arg<ReferenceInt>(3).value = backLeft.value
-                    arg<ReferenceInt>(4).value = backRight.value
-                    true
-                }
-
-                val windowStates = vehicle.windowStates
-
-                assertThat(windowStates)
-                        .isEqualTo(
-                                vehicleWindowStatesOf(
-                                        driver = driver,
-                                        passenger = passenger,
-                                        backLeft = backLeft,
-                                        backRight = backRight
-                                )
-                        )
-            }
-
-            @ParameterizedTest
-            @ArgumentsSource(VehicleWindowStatesArgumentsProvider::class)
-            fun shouldSetWindowStates(
-                    driver: VehicleWindowState,
-                    passenger: VehicleWindowState,
-                    backLeft: VehicleWindowState,
-                    backRight: VehicleWindowState
-            ) {
-                every {
-                    nativeFunctionExecutor.setVehicleParamsCarWindows(any(), any(), any(), any(), any())
-                } returns true
-
-                vehicle.windowStates = vehicleWindowStatesOf(
-                        driver = driver,
-                        passenger = passenger,
-                        backLeft = backLeft,
-                        backRight = backRight
-                )
-
-                verify {
-                    nativeFunctionExecutor.setVehicleParamsCarWindows(
-                            vehicleid = vehicleId.value,
-                            driver = driver.value,
-                            passenger = passenger.value,
-                            backleft = backLeft.value,
-                            backright = backRight.value
-                    )
-                }
-            }
         }
 
         @Test
@@ -810,91 +671,5 @@ internal class VehicleTest {
 
             verify { onVehicleStreamOutReceiver.onVehicleStreamOut(vehicle, player) }
         }
-    }
-
-    private class VehicleDoorStatesArgumentsProvider : ArgumentsProvider {
-
-        override fun provideArguments(context: ExtensionContext?): Stream<VehicleDoorStatesArguments> =
-                Stream.of(
-                        VehicleDoorStatesArguments(
-                                driver = VehicleDoorState.OPEN,
-                                passenger = VehicleDoorState.UNSET,
-                                backLeft = VehicleDoorState.UNSET,
-                                backRight = VehicleDoorState.UNSET
-                        ),
-                        VehicleDoorStatesArguments(
-                                driver = VehicleDoorState.UNSET,
-                                passenger = VehicleDoorState.OPEN,
-                                backLeft = VehicleDoorState.UNSET,
-                                backRight = VehicleDoorState.UNSET
-                        ),
-                        VehicleDoorStatesArguments(
-                                driver = VehicleDoorState.UNSET,
-                                passenger = VehicleDoorState.UNSET,
-                                backLeft = VehicleDoorState.OPEN,
-                                backRight = VehicleDoorState.UNSET
-                        ),
-                        VehicleDoorStatesArguments(
-                                driver = VehicleDoorState.UNSET,
-                                passenger = VehicleDoorState.UNSET,
-                                backLeft = VehicleDoorState.UNSET,
-                                backRight = VehicleDoorState.OPEN
-                        )
-                )
-
-    }
-
-    private class VehicleDoorStatesArguments(
-            val driver: VehicleDoorState,
-            val passenger: VehicleDoorState,
-            val backLeft: VehicleDoorState,
-            val backRight: VehicleDoorState
-    ) : Arguments {
-
-        override fun get(): Array<Any> = arrayOf(driver, passenger, backLeft, backRight)
-
-    }
-
-    private class VehicleWindowStatesArgumentsProvider : ArgumentsProvider {
-
-        override fun provideArguments(context: ExtensionContext?): Stream<VehicleWindowStatesArguments> =
-                Stream.of(
-                        VehicleWindowStatesArguments(
-                                driver = VehicleWindowState.OPEN,
-                                passenger = VehicleWindowState.UNSET,
-                                backLeft = VehicleWindowState.UNSET,
-                                backRight = VehicleWindowState.UNSET
-                        ),
-                        VehicleWindowStatesArguments(
-                                driver = VehicleWindowState.UNSET,
-                                passenger = VehicleWindowState.OPEN,
-                                backLeft = VehicleWindowState.UNSET,
-                                backRight = VehicleWindowState.UNSET
-                        ),
-                        VehicleWindowStatesArguments(
-                                driver = VehicleWindowState.UNSET,
-                                passenger = VehicleWindowState.UNSET,
-                                backLeft = VehicleWindowState.OPEN,
-                                backRight = VehicleWindowState.UNSET
-                        ),
-                        VehicleWindowStatesArguments(
-                                driver = VehicleWindowState.UNSET,
-                                passenger = VehicleWindowState.UNSET,
-                                backLeft = VehicleWindowState.UNSET,
-                                backRight = VehicleWindowState.OPEN
-                        )
-                )
-
-    }
-
-    private class VehicleWindowStatesArguments(
-            val driver: VehicleWindowState,
-            val passenger: VehicleWindowState,
-            val backLeft: VehicleWindowState,
-            val backRight: VehicleWindowState
-    ) : Arguments {
-
-        override fun get(): Array<Any> = arrayOf(driver, passenger, backLeft, backRight)
-
     }
 }

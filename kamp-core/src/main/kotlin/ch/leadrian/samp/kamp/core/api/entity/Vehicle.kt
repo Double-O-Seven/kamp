@@ -7,10 +7,8 @@ import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
-import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
-import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Position
@@ -24,8 +22,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehiclePanelDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
 import ch.leadrian.samp.kamp.core.api.data.VehicleTiresDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
-import ch.leadrian.samp.kamp.core.api.data.vehicleDoorStatesOf
-import ch.leadrian.samp.kamp.core.api.data.vehicleWindowStatesOf
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -38,11 +34,13 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnVehicleStreamOutReceiverDel
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngleProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleAngledLocationProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleDoorStatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleHealthProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleLocationProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleParametersProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehiclePositionProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleVelocityProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleWindowStatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 
@@ -141,65 +139,9 @@ internal constructor(
 
     var parameters: VehicleParameters by VehicleParametersProperty(nativeFunctionExecutor)
 
-    var doorStates: VehicleDoorStates
-        get() {
-            val driver = ReferenceInt()
-            val passenger = ReferenceInt()
-            val backLeft = ReferenceInt()
-            val backRight = ReferenceInt()
-            nativeFunctionExecutor.getVehicleParamsCarDoors(
-                    vehicleid = id.value,
-                    driver = driver,
-                    passenger = passenger,
-                    backleft = backLeft,
-                    backright = backRight
-            )
-            return vehicleDoorStatesOf(
-                    driver = VehicleDoorState[driver.value],
-                    passenger = VehicleDoorState[passenger.value],
-                    backLeft = VehicleDoorState[backLeft.value],
-                    backRight = VehicleDoorState[backRight.value]
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleParamsCarDoors(
-                    vehicleid = id.value,
-                    driver = value.driver.value,
-                    passenger = value.passenger.value,
-                    backleft = value.backLeft.value,
-                    backright = value.backRight.value
-            )
-        }
+    var doorStates: VehicleDoorStates by VehicleDoorStatesProperty(nativeFunctionExecutor)
 
-    var windowStates: VehicleWindowStates
-        get() {
-            val driver = ReferenceInt()
-            val passenger = ReferenceInt()
-            val backLeft = ReferenceInt()
-            val backRight = ReferenceInt()
-            nativeFunctionExecutor.getVehicleParamsCarWindows(
-                    vehicleid = id.value,
-                    driver = driver,
-                    passenger = passenger,
-                    backleft = backLeft,
-                    backright = backRight
-            )
-            return vehicleWindowStatesOf(
-                    driver = VehicleWindowState[driver.value],
-                    passenger = VehicleWindowState[passenger.value],
-                    backLeft = VehicleWindowState[backLeft.value],
-                    backRight = VehicleWindowState[backRight.value]
-            )
-        }
-        set(value) {
-            nativeFunctionExecutor.setVehicleParamsCarWindows(
-                    vehicleid = id.value,
-                    driver = value.driver.value,
-                    passenger = value.passenger.value,
-                    backleft = value.backLeft.value,
-                    backright = value.backRight.value
-            )
-        }
+    var windowStates: VehicleWindowStates by VehicleWindowStatesProperty(nativeFunctionExecutor)
 
     private val initialColors: VehicleColors = colors.toVehicleColors()
 
