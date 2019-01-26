@@ -13,7 +13,6 @@ import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnMapObjectMovedReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerEditMapObjectReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerSelectMapObjectReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
@@ -233,64 +232,6 @@ internal class MapObjectTest {
                         fRotY = 5f,
                         fRotZ = 6f
                 )
-            }
-        }
-
-        @Nested
-        inner class CoordinatesTests {
-
-            @Test
-            fun shouldGetCoordinates() {
-                every { nativeFunctionExecutor.getObjectPos(mapObjectId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-
-                val coordinates = mapObject.coordinates
-
-                assertThat(coordinates)
-                        .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-            }
-
-            @Test
-            fun shouldSetCoordinates() {
-                every { nativeFunctionExecutor.setObjectPos(any(), any(), any(), any()) } returns true
-
-                mapObject.coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                verify { nativeFunctionExecutor.setObjectPos(objectid = mapObjectId.value, x = 1f, y = 2f, z = 3f) }
-            }
-        }
-
-        @Nested
-        inner class RotationTests {
-
-            @Test
-            fun shouldGetRotation() {
-                every { nativeFunctionExecutor.getObjectRot(mapObjectId.value, any(), any(), any()) } answers {
-                    secondArg<ReferenceFloat>().value = 1f
-                    thirdArg<ReferenceFloat>().value = 2f
-                    arg<ReferenceFloat>(3).value = 3f
-                    true
-                }
-
-                val rotation = mapObject.rotation
-
-                assertThat(rotation)
-                        .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-            }
-
-            @Test
-            fun shouldSetRotation() {
-                every { nativeFunctionExecutor.setObjectRot(any(), any(), any(), any()) } returns true
-
-                mapObject.rotation = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-                verify {
-                    nativeFunctionExecutor.setObjectRot(objectid = mapObjectId.value, rotX = 1f, rotY = 2f, rotZ = 3f)
-                }
             }
         }
 
