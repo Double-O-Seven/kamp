@@ -23,6 +23,7 @@ import ch.leadrian.samp.kamp.core.api.constants.BulletHitType
 import ch.leadrian.samp.kamp.core.api.constants.ClickPlayerSource
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
+import ch.leadrian.samp.kamp.core.api.constants.DownloadRequestType
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.PlayerState
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
@@ -130,7 +131,8 @@ constructor(
         private val onVehicleSirenStateChangeHandler: OnVehicleSirenStateChangeHandler,
         private val onVehicleSpawnHandler: OnVehicleSpawnHandler,
         private val onVehicleStreamInHandler: OnVehicleStreamInHandler,
-        private val onVehicleStreamOutHandler: OnVehicleStreamOutHandler
+        private val onVehicleStreamOutHandler: OnVehicleStreamOutHandler,
+        private val onPlayerRequestDownloadHandler: OnPlayerRequestDownloadHandler
 ) : SAMPCallbacks {
 
     private companion object {
@@ -804,7 +806,10 @@ constructor(
     }
 
     override fun onPlayerRequestDownload(playerid: Int, type: Int, crc: Int): Boolean {
-        throw UnsupportedOperationException("0.3DL is not supported")
+        tryAndCatch {
+            onPlayerRequestDownloadHandler.onPlayerRequestDownload(playerid.toPlayer(), DownloadRequestType[type], crc)
+        }
+        return true
     }
 
 }

@@ -79,6 +79,7 @@ internal class CallbackModule : KampModule() {
             addBinding().to(OnVehicleStreamInHandler::class.java)
             addBinding().to(OnVehicleStreamOutHandler::class.java)
             addBinding().to(OnPlayerNameChangeHandler::class.java)
+            addBinding().to(OnPlayerRequestDownloadHandler::class.java)
         }
     }
 }

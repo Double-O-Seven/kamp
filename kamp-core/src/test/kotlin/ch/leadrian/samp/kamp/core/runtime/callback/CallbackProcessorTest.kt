@@ -37,6 +37,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveRaceCheckpointListen
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestClassListener
+import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestDownloadListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestSpawnListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectMapObjectListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
@@ -71,6 +72,7 @@ import ch.leadrian.samp.kamp.core.api.constants.BulletHitType
 import ch.leadrian.samp.kamp.core.api.constants.ClickPlayerSource
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
+import ch.leadrian.samp.kamp.core.api.constants.DownloadRequestType
 import ch.leadrian.samp.kamp.core.api.constants.ObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.PlayerState
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
@@ -119,6 +121,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.PickupRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerClassRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
+import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import com.google.inject.Module
 import com.google.inject.Stage
 import io.mockk.Called
@@ -161,6 +164,9 @@ internal class CallbackProcessorTest {
         configProperties["test.value.bar"] = "1337"
         nativeFunctionExecutor = mockk(relaxed = true) {
             every { getMaxPlayers() } returns 1000
+            every { getKampPluginVersion(any(), any()) } answers {
+                firstArg<ReferenceString>().value = SAMPConstants.KAMP_CORE_VERSION
+            }
         }
         server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
         callbackProcessor = server.injector.getInstance()
@@ -1953,6 +1959,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { vehicle.onEnter(any(), any()) } just Runs
+            every { vehicle.onPaintjobChange(any(), any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -2037,6 +2044,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
+            every { vehicle.onRespray(any(), any()) } returns OnVehicleResprayListener.Result.Sync
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
         }
@@ -5939,6 +5947,63 @@ internal class CallbackProcessorTest {
             }
         }
 
+    }
+
+    @Nested
+    inner class OnPlayerRequestDownloadTests {
+
+        private lateinit var player: Player
+        private val playerId = 69
+
+        @BeforeEach
+        fun setUp() {
+            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+        }
+
+        @Test
+        fun shouldCallOnPlayerRequestDownload() {
+            val onPlayerRequestDownloadListener = mockk<OnPlayerRequestDownloadListener>(relaxed = true)
+            callbackListenerManager.register(onPlayerRequestDownloadListener)
+
+            callbackProcessor.onPlayerRequestDownload(playerId, SAMPConstants.DOWNLOAD_REQUEST_MODEL_FILE, 1337)
+
+            val slot = slot<Player>()
+            verify { uncaughtExceptionNotifier wasNot Called }
+            verify {
+                onPlayerRequestDownloadListener.onPlayerRequestDownload(
+                        capture(slot),
+                        DownloadRequestType.MODEL_FILE,
+                        1337
+                )
+            }
+            assertThat(slot.captured)
+                    .satisfies {
+                        assertThat(it.id)
+                                .isEqualTo(PlayerId.valueOf(playerId))
+                    }
+        }
+
+        @Test
+        fun shouldCatchException() {
+            val exception = RuntimeException("test")
+            val onPlayerRequestDownloadListener = mockk<OnPlayerRequestDownloadListener> {
+                every { onPlayerRequestDownload(any(), any(), any()) } throws exception
+            }
+            callbackListenerManager.register(onPlayerRequestDownloadListener)
+
+            val caughtThrowable = catchThrowable {
+                callbackProcessor.onPlayerRequestDownload(
+                        playerId,
+                        SAMPConstants.DOWNLOAD_REQUEST_MODEL_FILE,
+                        1337
+                )
+            }
+
+            assertThat(caughtThrowable)
+                    .isNull()
+            verify { uncaughtExceptionNotifier.notify(exception) }
+            verify { onPlayerRequestDownloadListener.onPlayerRequestDownload(any(), any(), any()) }
+        }
     }
 
     @Suppress("unused")

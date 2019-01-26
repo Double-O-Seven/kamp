@@ -2,9 +2,11 @@ package ch.leadrian.samp.kamp.core.runtime
 
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
+import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.getInstance
+import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import com.google.inject.Module
 import com.google.inject.Stage
 import com.netflix.governator.annotations.Configuration
@@ -41,6 +43,9 @@ internal class ServerTest {
         configProperties["test.value.bar"] = "1337"
         every { nativeFunctionExecutor.getMaxPlayers() } returns 50
         every { nativeFunctionExecutor.initialize() } just Runs
+        every { nativeFunctionExecutor.getKampPluginVersion(any(), any()) } answers {
+            firstArg<ReferenceString>().value = SAMPConstants.KAMP_CORE_VERSION
+        }
     }
 
     @Test

@@ -14,7 +14,7 @@ internal class PlayerNameProperty(
         private val onPlayerNameChangeHandler: OnPlayerNameChangeHandler
 ) : ReadWriteProperty<Player, String> {
 
-    private lateinit var name: String
+    private var name: String? = null
 
     override fun getValue(thisRef: Player, property: KProperty<*>): String = getName(thisRef)
 
@@ -35,7 +35,7 @@ internal class PlayerNameProperty(
     }
 
     private fun getName(thisRef: Player): String {
-        if (!this::name.isInitialized) {
+        if (name == null) {
             val name = ReferenceString()
             nativeFunctionExecutor.getPlayerName(
                     playerid = thisRef.id.value,
@@ -44,7 +44,7 @@ internal class PlayerNameProperty(
             )
             name.value?.let { this.name = it }
         }
-        return name
+        return name ?: "<Player ${thisRef.id.value}>"
     }
 
 }
