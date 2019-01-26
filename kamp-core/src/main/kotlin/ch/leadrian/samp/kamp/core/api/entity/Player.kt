@@ -33,6 +33,7 @@ import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
+import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngleProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngledLocationProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerArmourProperty
@@ -45,7 +46,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNameProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerPositionProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerTimeProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerVelocityProperty
-import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
@@ -55,6 +55,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextDrawRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerTextLabelRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
+import java.net.URL
 import java.util.Collections
 import java.util.Locale
 
@@ -657,5 +658,13 @@ internal constructor(
                 y = coordinates.y,
                 z = coordinates.z
         )
+    }
+
+    fun redirectDownload(url: String) {
+        nativeFunctionExecutor.redirectDownload(id.value, url)
+    }
+
+    fun redirectDownload(url: URL) {
+        redirectDownload(url.toString())
     }
 }

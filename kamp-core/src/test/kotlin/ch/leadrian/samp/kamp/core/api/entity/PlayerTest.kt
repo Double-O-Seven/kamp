@@ -57,6 +57,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
+import java.net.URL
 import java.util.Locale
 
 internal class PlayerTest {
@@ -2290,5 +2291,28 @@ internal class PlayerTest {
 
         assertThat(isInRange)
                 .isEqualTo(expectedIsInRange)
+    }
+
+    @Nested
+    inner class RedirectDownloadTests {
+
+        @Test
+        fun shouldCallNativeFunctionExecutorWithStringURL() {
+            every { nativeFunctionExecutor.redirectDownload(any(), any()) } returns true
+
+            player.redirectDownload("www.google.com")
+
+            verify { nativeFunctionExecutor.redirectDownload(playerId.value, "www.google.com") }
+        }
+
+        @Test
+        fun shouldCallNativeFunctionExecutorWithURL() {
+            every { nativeFunctionExecutor.redirectDownload(any(), any()) } returns true
+
+            player.redirectDownload(URL("http://www.google.com"))
+
+            verify { nativeFunctionExecutor.redirectDownload(playerId.value, "http://www.google.com") }
+        }
+
     }
 }
