@@ -57,7 +57,7 @@ internal class PlayerNamePropertyTest {
     }
 
     @Test
-    fun givenResultingNameIsNullItShouldThrowException() {
+    fun givenResultingNameIsNullItShouldReturnStringWithPlayerId() {
         every {
             nativeFunctionExecutor.getPlayerName(
                     playerId.value,
@@ -66,10 +66,10 @@ internal class PlayerNamePropertyTest {
             )
         } returns 0
 
-        val caughtThrowable = catchThrowable { playerNameProperty.getValue(player, property) }
+        val name = playerNameProperty.getValue(player, property)
 
-        assertThat(caughtThrowable)
-                .isInstanceOf(UninitializedPropertyAccessException::class.java)
+        assertThat(name)
+                .isEqualTo("<Player ${playerId.value}>")
     }
 
     @Test
@@ -145,7 +145,7 @@ internal class PlayerNamePropertyTest {
     }
 
     @Test
-    fun givenInvalidNameIsSetItShouldThrowAnException() {
+    fun givenInvalidNameIsSetItShouldReturnPlayerIdInString() {
         every {
             nativeFunctionExecutor.getPlayerName(
                     playerId.value,
