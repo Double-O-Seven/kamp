@@ -1,18 +1,15 @@
 package ch.leadrian.samp.kamp.core.api
 
-import com.google.inject.Module
 import java.nio.file.Path
 
-abstract class GameMode {
+abstract class GameMode : Script {
 
-    fun getTextProviderResourcePackages(): Set<String> =
+    override fun getTextProviderResourcePackages(): Set<String> =
             setOf(this::class.java.getPackage().name)
 
-    fun getInjectorBasePackages(): Set<String> = emptySet()
+    override fun getInjectorBasePackages(): Set<String> = emptySet()
 
-    abstract fun getModules(): List<Module>
-
-    lateinit var dataDirectory: Path
+    override lateinit var dataDirectory: Path
         internal set
 
     abstract fun getPlugins(): List<Plugin>
