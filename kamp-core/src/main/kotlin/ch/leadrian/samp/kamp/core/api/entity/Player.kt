@@ -209,7 +209,7 @@ internal constructor(
         get() = nativeFunctionExecutor.getPlayerMoney(id.value)
         set(value) {
             val moneyToGive = value - nativeFunctionExecutor.getPlayerMoney(id.value)
-            nativeFunctionExecutor.givePlayerMoney(playerid = id.value, money = moneyToGive)
+            giveMoney(moneyToGive)
         }
 
     fun giveMoney(amount: Int) {
@@ -253,7 +253,7 @@ internal constructor(
     }
 
     fun setWeather(weather: Weather) {
-        nativeFunctionExecutor.setPlayerWeather(playerid = id.value, weather = weather.value)
+        setWeather(weather.value)
     }
 
     fun forceClassSelection() {
