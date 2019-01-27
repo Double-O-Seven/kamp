@@ -67,7 +67,7 @@ internal class StreamableActorImpl(
             field = value
             if (actor != null) {
                 destroyActor()
-                actor = createActor()
+                createActor()
             }
         }
 
@@ -150,7 +150,7 @@ internal class StreamableActorImpl(
         if (isStreamedIn) {
             throw IllegalStateException("Actor is already streamed in")
         }
-        actor = createActor()
+        createActor()
     }
 
     override fun onStreamOut() {
@@ -160,7 +160,6 @@ internal class StreamableActorImpl(
         }
         actor?.let { this@StreamableActorImpl.health = it.health }
         destroyActor()
-        actor = null
     }
 
     override fun onActorStreamIn(actor: Actor, forPlayer: Player) {
@@ -198,10 +197,9 @@ internal class StreamableActorImpl(
     override fun onDestroy() {
         extensions.destroy()
         destroyActor()
-        actor = null
     }
 
-    private fun createActor(): Actor {
+    private fun createActor() {
         val actor = actorService.createActor(model, coordinates, angle)
         actor.isInvulnerable = isInvulnerable
         actor.health = health
@@ -209,7 +207,7 @@ internal class StreamableActorImpl(
         actor.addOnActorStreamInListener(this)
         actor.addOnActorStreamOutListener(this)
         actor.addOnPlayerGiveDamageActorListener(this)
-        return actor
+        this.actor = actor
     }
 
     private fun destroyActor() {
@@ -219,6 +217,7 @@ internal class StreamableActorImpl(
             removeOnPlayerGiveDamageActorListener(this@StreamableActorImpl)
             destroy()
         }
+        actor = null
     }
 
 }
