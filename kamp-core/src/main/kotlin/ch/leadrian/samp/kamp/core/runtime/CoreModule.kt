@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime
 
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
+import ch.leadrian.samp.kamp.core.api.Script
 import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import ch.leadrian.samp.kamp.core.runtime.callback.CallbackModule
 import ch.leadrian.samp.kamp.core.runtime.command.CommandModule
@@ -25,6 +26,7 @@ internal class CoreModule(
         bindNativeFunctionExecutor()
         bindGameMode()
         bindPlugins()
+        bindScripts()
         bindTextProviderResourcePackages()
         newSAMPNativeFunctionHookFactorySetBinder()
     }
@@ -58,6 +60,14 @@ internal class CoreModule(
         plugins.forEach { plugin ->
             bind(plugin.javaClass).toInstance(plugin)
             pluginSetBinder.addBinding().toInstance(plugin)
+        }
+    }
+
+    private fun bindScripts() {
+        val scriptSetBinder = Multibinder.newSetBinder(binder(), Script::class.java)
+        scriptSetBinder.addBinding().toInstance(gameMode)
+        plugins.forEach { plugin ->
+            scriptSetBinder.addBinding().toInstance(plugin)
         }
     }
 
