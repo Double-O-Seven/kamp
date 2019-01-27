@@ -15,6 +15,7 @@ import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.colorOf
+import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
@@ -24,8 +25,10 @@ import ch.leadrian.samp.kamp.core.api.service.MapObjectService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextArguments
+import ch.leadrian.samp.kamp.geodata.hmap.HeightMap
 import ch.leadrian.samp.kamp.streamer.api.callback.onStreamIn
 import ch.leadrian.samp.kamp.streamer.api.callback.onStreamOut
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableActorService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
 import ch.leadrian.samp.kamp.view.ViewContext
@@ -45,6 +48,7 @@ import ch.leadrian.samp.kamp.view.navigation.viewNavigation
 import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 @Singleton
 class DebugCommands
@@ -55,7 +59,9 @@ constructor(
         private val streamableMapObjectService: StreamableMapObjectService,
         private val viewFactory: ViewFactory,
         private val vehicleService: VehicleService,
-        private val streamableTextLabelService: StreamableTextLabelService
+        private val streamableTextLabelService: StreamableTextLabelService,
+        private val streamableActorService: StreamableActorService,
+        private val heightMap: HeightMap
 ) : Commands() {
 
     private val objectsByName: MutableMap<String, MapObject> = mutableMapOf()
@@ -614,4 +620,24 @@ constructor(
         }
     }
 
+    @Command
+    fun debugActors(player: Player, offset: Int) {
+        val random = Random(System.currentTimeMillis())
+        var actorCount = 0
+        (-3000..3000 step offset).map { it.toFloat() }.forEach { x ->
+            (-3000..3000 step offset).map { it.toFloat() }.forEach { y ->
+                val z = heightMap.findZ(x, y) + 2f
+                val skinModel = SkinModel.values()[random.nextInt(SkinModel.values().size)]
+                val actor = streamableActorService.createStreamableActor(skinModel, positionOf(x, y, z, 0f))
+                actor.onStreamIn { p ->
+                    messageSender.sendMessageToPlayer(p, Colors.PINK, "$skinModel streamed in")
+                }
+                actor.onStreamOut { p ->
+                    messageSender.sendMessageToPlayer(p, Colors.PINK, "$skinModel streamed out")
+                }
+                actorCount++
+            }
+        }
+        messageSender.sendMessageToPlayer(player, Colors.PINK, "$actorCount actors created")
+    }
 }
