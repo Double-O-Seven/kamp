@@ -14,7 +14,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verify
@@ -50,36 +49,6 @@ internal class PlayerCameraTest {
         )
     }
 
-    @Nested
-    inner class CoordinatesTests {
-
-        @Test
-        fun shouldGetCoordinates() {
-            every { nativeFunctionExecutor.getPlayerCameraPos(playerId.value, any(), any(), any()) } answers {
-                secondArg<ReferenceFloat>().value = 1f
-                thirdArg<ReferenceFloat>().value = 2f
-                arg<ReferenceFloat>(3).value = 3f
-                true
-            }
-
-            val coordinates = playerCamera.coordinates
-
-            assertThat(coordinates)
-                    .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
-        }
-
-        @Test
-        fun shouldSetCoordinates() {
-            every { nativeFunctionExecutor.setPlayerCameraPos(any(), any(), any(), any()) } returns true
-
-            playerCamera.coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-
-            verify {
-                nativeFunctionExecutor.setPlayerCameraPos(playerid = playerId.value, x = 1f, y = 2f, z = 3f)
-            }
-        }
-    }
-
     @Test
     fun shouldSetLookAt() {
         every { nativeFunctionExecutor.setPlayerCameraLookAt(any(), any(), any(), any(), any()) } returns true
@@ -104,21 +73,6 @@ internal class PlayerCameraTest {
         playerCamera.setBehind()
 
         verify { nativeFunctionExecutor.setCameraBehindPlayer(playerId.value) }
-    }
-
-    @Test
-    fun shouldGetCameraFrontVector() {
-        every { nativeFunctionExecutor.getPlayerCameraFrontVector(playerId.value, any(), any(), any()) } answers {
-            secondArg<ReferenceFloat>().value = 1f
-            thirdArg<ReferenceFloat>().value = 2f
-            arg<ReferenceFloat>(3).value = 3f
-            true
-        }
-
-        val frontVector = playerCamera.frontVector
-
-        assertThat(frontVector)
-                .isEqualTo(vector3DOf(x = 1f, y = 2f, z = 3f))
     }
 
     @Test

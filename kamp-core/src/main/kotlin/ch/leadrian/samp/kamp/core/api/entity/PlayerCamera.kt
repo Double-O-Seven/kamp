@@ -5,6 +5,8 @@ import ch.leadrian.samp.kamp.core.api.constants.CameraType
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerCameraCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerCameraFrontVectorProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
@@ -21,17 +23,7 @@ internal constructor(
         private val actorRegistry: ActorRegistry
 ) : HasPlayer {
 
-    var coordinates: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerCameraPos(playerid = player.id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setPlayerCameraPos(playerid = player.id.value, x = value.x, y = value.y, z = value.z)
-        }
+    var coordinates: Vector3D by PlayerCameraCoordinatesProperty(nativeFunctionExecutor)
 
     val mode: CameraMode
         get() = nativeFunctionExecutor.getPlayerCameraMode(player.id.value).let { CameraMode[it] }
@@ -60,14 +52,7 @@ internal constructor(
     val zoom: Float
         get() = nativeFunctionExecutor.getPlayerCameraZoom(player.id.value)
 
-    val frontVector: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getPlayerCameraFrontVector(playerid = player.id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
+    val frontVector: Vector3D by PlayerCameraFrontVectorProperty(nativeFunctionExecutor)
 
     @JvmOverloads
     fun lookAt(coordinates: Vector3D, type: CameraType = CameraType.CUT) {
