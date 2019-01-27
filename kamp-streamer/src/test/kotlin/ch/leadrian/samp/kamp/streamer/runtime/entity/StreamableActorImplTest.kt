@@ -1,12 +1,15 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
+import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
+import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.api.data.mutablePositionOf
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
+import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.ActorService
 import ch.leadrian.samp.kamp.streamer.runtime.ActorStreamer
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorHandler
@@ -15,6 +18,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamIn
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutReceiverDelegate
+import com.conversantmedia.util.collection.geometry.Rect3d
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.every
@@ -54,7 +58,7 @@ internal class StreamableActorImplTest {
                 isInvulnerable = true,
                 virtualWorldId = 13,
                 interiorIds = mutableSetOf(187),
-                streamDistance = 13.37f,
+                streamDistance = 10f,
                 priority = 13,
                 actorStreamer = actorStreamer,
                 actorService = actorService,
@@ -515,5 +519,191 @@ internal class StreamableActorImplTest {
                     .hasMessage("Actor was not streamed in")
         }
 
+    }
+
+    @Nested
+    inner class OnActorStreamInTests {
+
+        private val actor: Actor = mockk(relaxed = true)
+        private val player: Player = mockk()
+
+        @BeforeEach
+        fun setUp() {
+            every { onStreamableActorStreamInReceiver.onStreamableActorStreamIn(any(), any()) } just Runs
+            every { onStreamableActorStreamInHandler.onStreamableActorStreamIn(any(), any()) } just Runs
+            every { actorService.createActor(any(), any(), any()) } returns actor
+            streamableActor.onStreamIn()
+        }
+
+        @Test
+        fun shouldCallOnStreamableActorStreamInReceiver() {
+            streamableActor.onActorStreamIn(actor, player)
+
+            verify { onStreamableActorStreamInReceiver.onStreamableActorStreamIn(streamableActor, player) }
+        }
+
+        @Test
+        fun shouldCallOnStreamableActorStreamInHandler() {
+            streamableActor.onActorStreamIn(actor, player)
+
+            verify { onStreamableActorStreamInHandler.onStreamableActorStreamIn(streamableActor, player) }
+        }
+
+        @Test
+        fun givenStreamedInActorIsAnotherActorItShouldThrowException() {
+            val otherActor: Actor = mockk(relaxed = true)
+
+            val caughtThrowable = catchThrowable { streamableActor.onActorStreamIn(otherActor, player) }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("Actor is not the streamed in actor")
+        }
+
+    }
+
+    @Nested
+    inner class OnActorStreamOutTests {
+
+        private val actor: Actor = mockk(relaxed = true)
+        private val player: Player = mockk()
+
+        @BeforeEach
+        fun setUp() {
+            every { onStreamableActorStreamOutReceiver.onStreamableActorStreamOut(any(), any()) } just Runs
+            every { onStreamableActorStreamOutHandler.onStreamableActorStreamOut(any(), any()) } just Runs
+            every { actorService.createActor(any(), any(), any()) } returns actor
+            streamableActor.onStreamIn()
+        }
+
+        @Test
+        fun shouldCallOnStreamableActorStreamOutReceiver() {
+            streamableActor.onActorStreamOut(actor, player)
+
+            verify { onStreamableActorStreamOutReceiver.onStreamableActorStreamOut(streamableActor, player) }
+        }
+
+        @Test
+        fun shouldCallOnStreamableActorStreamOutHandler() {
+            streamableActor.onActorStreamOut(actor, player)
+
+            verify { onStreamableActorStreamOutHandler.onStreamableActorStreamOut(streamableActor, player) }
+        }
+
+        @Test
+        fun givenStreamedInActorIsAnotherActorItShouldThrowException() {
+            val otherActor: Actor = mockk(relaxed = true)
+
+            val caughtThrowable = catchThrowable { streamableActor.onActorStreamOut(otherActor, player) }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("Actor is not the streamed in actor")
+        }
+
+    }
+
+    @Nested
+    inner class OnPlayerGiveDamageActorTests {
+
+        private val actor: Actor = mockk(relaxed = true)
+        private val player: Player = mockk()
+
+        @BeforeEach
+        fun setUp() {
+            every {
+                onPlayerDamageStreamableActorReceiver.onPlayerDamageStreamableActor(any(), any(), any(), any(), any())
+            } just Runs
+            every {
+                onPlayerDamageStreamableActorHandler.onPlayerDamageStreamableActor(any(), any(), any(), any(), any())
+            } just Runs
+            every { actorService.createActor(any(), any(), any()) } returns actor
+            streamableActor.onStreamIn()
+        }
+
+        @Test
+        fun shouldCallOnPlayerDamageStreamableActorReceiver() {
+            streamableActor.onPlayerGiveDamageActor(player, actor, 13.37f, WeaponModel.AK47, BodyPart.GROIN)
+
+            verify {
+                onPlayerDamageStreamableActorReceiver.onPlayerDamageStreamableActor(
+                        player,
+                        streamableActor,
+                        13.37f,
+                        WeaponModel.AK47,
+                        BodyPart.GROIN
+                )
+            }
+        }
+
+        @Test
+        fun shouldCallOnPlayerDamageStreamableActorHandler() {
+            streamableActor.onPlayerGiveDamageActor(player, actor, 13.37f, WeaponModel.AK47, BodyPart.GROIN)
+
+            verify {
+                onPlayerDamageStreamableActorHandler.onPlayerDamageStreamableActor(
+                        player,
+                        streamableActor,
+                        13.37f,
+                        WeaponModel.AK47,
+                        BodyPart.GROIN
+                )
+            }
+        }
+
+        @Test
+        fun givenStreamedInActorIsAnotherActorItShouldThrowException() {
+            val otherActor: Actor = mockk(relaxed = true)
+
+            val caughtThrowable = catchThrowable {
+                streamableActor.onPlayerGiveDamageActor(player, otherActor, 13.37f, WeaponModel.AK47, BodyPart.GROIN)
+            }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(IllegalStateException::class.java)
+                    .hasMessage("Actor is not the streamed in actor")
+        }
+
+    }
+
+    @Test
+    fun shouldReturnBoundingBox() {
+        every { actorStreamer.onBoundingBoxChange(any()) } just Runs
+        streamableActor.coordinates = vector3DOf(1f, 2f, 3f)
+
+        val boundingBox = streamableActor.getBoundingBox()
+
+        assertThat(boundingBox)
+                .isEqualTo(Rect3d(-9.0, -8.0, -7.0, 11.0, 12.0, 13.0))
+    }
+
+    @Nested
+    inner class OnDestroyTests {
+
+        private val actor: Actor = mockk(relaxed = true)
+
+        @BeforeEach
+        fun setUp() {
+            every { actorService.createActor(any(), any(), any()) } returns actor
+            streamableActor.onStreamIn()
+        }
+
+        @Test
+        fun shouldDestroyActor() {
+            streamableActor.destroy()
+
+            verify { actor.destroy() }
+        }
+
+        @Test
+        fun shouldRemoveCallbackListeners() {
+            streamableActor.destroy()
+
+            verify {
+                actor.removeOnActorStreamInListener(streamableActor)
+                actor.removeOnActorStreamOutListener(streamableActor)
+                actor.removeOnPlayerGiveDamageActorListener(streamableActor)
+            }
+        }
     }
 }

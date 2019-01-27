@@ -137,7 +137,7 @@ internal class StreamableActorImpl(
     override fun distanceTo(location: Location): Float {
         return when {
             virtualWorldId != location.virtualWorldId -> Float.MAX_VALUE
-            location.interiorId !in interiorIds -> Float.MAX_VALUE
+            interiorIds.isNotEmpty() && location.interiorId !in interiorIds -> Float.MAX_VALUE
             else -> coordinates.distanceTo(location)
         }
     }
@@ -162,11 +162,13 @@ internal class StreamableActorImpl(
 
     override fun onActorStreamIn(actor: Actor, forPlayer: Player) {
         requireStreamedInActor(actor)
+        onStreamableActorStreamInReceiver.onStreamableActorStreamIn(this, forPlayer)
         onStreamableActorStreamInHandler.onStreamableActorStreamIn(this, forPlayer)
     }
 
     override fun onActorStreamOut(actor: Actor, forPlayer: Player) {
         requireStreamedInActor(actor)
+        onStreamableActorStreamOutReceiver.onStreamableActorStreamOut(this, forPlayer)
         onStreamableActorStreamOutHandler.onStreamableActorStreamOut(this, forPlayer)
     }
 
@@ -178,6 +180,7 @@ internal class StreamableActorImpl(
             bodyPart: BodyPart
     ) {
         requireStreamedInActor(actor)
+        onPlayerDamageStreamableActorReceiver.onPlayerDamageStreamableActor(player, this, amount, weaponModel, bodyPart)
         onPlayerDamageStreamableActorHandler.onPlayerDamageStreamableActor(player, this, amount, weaponModel, bodyPart)
     }
 
