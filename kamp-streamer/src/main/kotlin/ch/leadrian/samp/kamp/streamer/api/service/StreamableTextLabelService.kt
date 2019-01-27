@@ -20,9 +20,9 @@ internal constructor(
     fun createStreamableTextLabel(
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorId: Int,
             virtualWorldId: Int,
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true,
             textSupplier: (Locale) -> String
@@ -41,9 +41,9 @@ internal constructor(
     fun createStreamableTextLabel(
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorIds: MutableSet<Int> = mutableSetOf(),
             virtualWorldIds: MutableSet<Int> = mutableSetOf(),
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true,
             textSupplier: (Locale) -> String
@@ -63,9 +63,9 @@ internal constructor(
             text: String,
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorId: Int,
             virtualWorldId: Int,
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true
     ): StreamableTextLabel = textLabelStreamer.createTextLabel(
@@ -84,9 +84,9 @@ internal constructor(
             text: String,
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorIds: MutableSet<Int> = mutableSetOf(),
             virtualWorldIds: MutableSet<Int> = mutableSetOf(),
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true
     ): StreamableTextLabel = textLabelStreamer.createTextLabel(
@@ -105,9 +105,9 @@ internal constructor(
             textKey: TextKey,
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorId: Int,
             virtualWorldId: Int,
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true
     ): StreamableTextLabel = textLabelStreamer.createTextLabel(
@@ -126,9 +126,9 @@ internal constructor(
             textKey: TextKey,
             color: Color,
             coordinates: Vector3D,
-            streamDistance: Float,
             interiorIds: MutableSet<Int> = mutableSetOf(),
             virtualWorldIds: MutableSet<Int> = mutableSetOf(),
+            streamDistance: Float = 50f,
             priority: Int = 0,
             testLOS: Boolean = true
     ): StreamableTextLabel = textLabelStreamer.createTextLabel(

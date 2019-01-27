@@ -11,14 +11,15 @@ internal constructor(
         private val mapObjectStreamer: MapObjectStreamer
 ) {
 
+    @JvmOverloads
     fun createStreamableMapObject(
             modelId: Int,
-            priority: Int,
-            streamDistance: Float,
             coordinates: Vector3D,
             rotation: Vector3D,
             interiorId: Int,
-            virtualWorldId: Int
+            virtualWorldId: Int,
+            streamDistance: Float = 300f,
+            priority: Int = 0
     ): StreamableMapObject = mapObjectStreamer.createMapObject(
             modelId = modelId,
             priority = priority,
@@ -32,12 +33,12 @@ internal constructor(
     @JvmOverloads
     fun createStreamableMapObject(
             modelId: Int,
-            priority: Int,
-            streamDistance: Float,
             coordinates: Vector3D,
             rotation: Vector3D,
             interiorIds: MutableSet<Int> = mutableSetOf(),
-            virtualWorldIds: MutableSet<Int> = mutableSetOf()
+            virtualWorldIds: MutableSet<Int> = mutableSetOf(),
+            streamDistance: Float = 300f,
+            priority: Int = 0
     ): StreamableMapObject = mapObjectStreamer.createMapObject(
             modelId = modelId,
             priority = priority,
