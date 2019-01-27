@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import io.mockk.every
@@ -42,7 +43,7 @@ internal class PlayerAnimationTest {
         } returns true
 
         playerAnimation.apply(
-                animation = ch.leadrian.samp.kamp.core.api.data.Animation.valueOf(library = "ABC", name = "xyz"),
+                animation = animationOf(library = "ABC", name = "xyz"),
                 fDelta = 1f,
                 time = 60,
                 loop = loop,

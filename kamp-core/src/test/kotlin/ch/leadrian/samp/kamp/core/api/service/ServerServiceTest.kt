@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.service
 
-import ch.leadrian.samp.kamp.core.api.data.Animation
+import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.StringEncoding
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
@@ -141,7 +141,7 @@ internal class ServerServiceTest {
             val animation = serverService.getAnimationName(1337)
 
             assertThat(animation)
-                    .isEqualTo(Animation.valueOf(library = "TEST_LIB", name = "test_anim"))
+                    .isEqualTo(animationOf(library = "TEST_LIB", name = "test_anim"))
         }
 
         @Test

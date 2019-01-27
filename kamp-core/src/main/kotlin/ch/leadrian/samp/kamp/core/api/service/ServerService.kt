@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.service
 
 import ch.leadrian.samp.kamp.core.api.data.Animation
+import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.api.entity.ConsoleVars
 import ch.leadrian.samp.kamp.core.api.entity.ServerVars
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -66,7 +67,7 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
         val animationLibraryValue = animationLibrary.value
         val animationNameValue = animationName.value
         if (animationLibraryValue != null && animationNameValue != null) {
-            return Animation.valueOf(library = animationLibraryValue, name = animationNameValue)
+            return animationOf(library = animationLibraryValue, name = animationNameValue)
         } else {
             throw IllegalArgumentException("Invalid animation index: $animationIndex")
         }

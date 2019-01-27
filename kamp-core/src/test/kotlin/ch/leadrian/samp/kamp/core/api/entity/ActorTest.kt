@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
@@ -156,7 +157,7 @@ internal class ActorTest {
             } returns true
 
             actor.applyAnimation(
-                    animation = ch.leadrian.samp.kamp.core.api.data.Animation.valueOf(library = "ABC", name = "xyz"),
+                    animation = animationOf(library = "ABC", name = "xyz"),
                     fDelta = 1f,
                     time = 60,
                     loop = loop,

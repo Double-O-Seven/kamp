@@ -2,19 +2,16 @@ package ch.leadrian.samp.kamp.core.api.data
 
 interface Animation {
 
-    companion object {
-
-        fun valueOf(library: String, name: String): Animation =
-                AnimationImpl(
-                        library = library,
-                        animationName = name
-                )
-    }
-
     val library: String
 
     val animationName: String
 }
+
+fun animationOf(library: String, name: String): Animation =
+        AnimationImpl(
+                library = library,
+                animationName = name
+        )
 
 private data class AnimationImpl(
         override val library: String,

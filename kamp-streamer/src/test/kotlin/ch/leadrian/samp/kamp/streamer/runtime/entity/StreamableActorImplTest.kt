@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
-import ch.leadrian.samp.kamp.core.api.data.Animation
+import ch.leadrian.samp.kamp.core.api.data.animationOf
 import ch.leadrian.samp.kamp.core.api.data.mutablePositionOf
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
@@ -385,7 +385,7 @@ internal class StreamableActorImplTest {
         streamableActor.onStreamIn()
 
         streamableActor.applyAnimation(
-                animation = Animation.valueOf(library = "ABC", name = "xyz"),
+                animation = animationOf(library = "ABC", name = "xyz"),
                 fDelta = 1f,
                 time = 60,
                 loop = loop,
@@ -396,7 +396,7 @@ internal class StreamableActorImplTest {
 
         verify {
             actor.applyAnimation(
-                    animation = Animation.valueOf(library = "ABC", name = "xyz"),
+                    animation = animationOf(library = "ABC", name = "xyz"),
                     fDelta = 1f,
                     time = 60,
                     loop = loop,
