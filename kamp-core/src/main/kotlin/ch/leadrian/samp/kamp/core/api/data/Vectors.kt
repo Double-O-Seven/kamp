@@ -2,6 +2,17 @@
 
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.runtime.data.AngledLocationImpl
+import ch.leadrian.samp.kamp.core.runtime.data.LocationImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableAngledLocationImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableLocationImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutablePositionImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableVector2DImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableVector3DImpl
+import ch.leadrian.samp.kamp.core.runtime.data.PositionImpl
+import ch.leadrian.samp.kamp.core.runtime.data.Vector2DImpl
+import ch.leadrian.samp.kamp.core.runtime.data.Vector3DImpl
+
 fun vector2DOf(x: Float, y: Float): Vector2D = Vector2DImpl(
         x = x,
         y = y

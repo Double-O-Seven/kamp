@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.runtime.data.MutableTimeImpl
 import java.time.LocalDateTime
 import java.time.LocalTime
 
@@ -11,7 +12,10 @@ interface MutableTime : Time {
 
 }
 
-fun mutableTimeOf(hour: Int, minute: Int): MutableTime = MutableTimeImpl(hour = hour, minute = minute)
+fun mutableTimeOf(hour: Int, minute: Int): MutableTime = MutableTimeImpl(
+        hour = hour,
+        minute = minute
+)
 
 fun mutableTimeOf(localDateTime: LocalDateTime): Time = mutableTimeOf(
         hour = localDateTime.hour,

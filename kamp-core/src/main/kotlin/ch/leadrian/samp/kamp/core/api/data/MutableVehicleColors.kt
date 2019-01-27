@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.data
 
 import ch.leadrian.samp.kamp.core.api.constants.VehicleColor
+import ch.leadrian.samp.kamp.core.runtime.data.MutableVehicleColorsImpl
 
 interface MutableVehicleColors : VehicleColors {
 

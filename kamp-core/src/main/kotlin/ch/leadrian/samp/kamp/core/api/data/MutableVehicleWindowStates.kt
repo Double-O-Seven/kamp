@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.data
 
 import ch.leadrian.samp.kamp.core.api.constants.VehicleWindowState
+import ch.leadrian.samp.kamp.core.runtime.data.MutableVehicleWindowStatesImpl
 
 interface MutableVehicleWindowStates : VehicleWindowStates {
 

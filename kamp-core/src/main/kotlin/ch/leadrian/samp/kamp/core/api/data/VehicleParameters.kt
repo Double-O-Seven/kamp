@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.core.api.constants.VehicleDoorLockState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleEngineState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleLightsState
 import ch.leadrian.samp.kamp.core.api.constants.VehicleObjectiveState
+import ch.leadrian.samp.kamp.core.runtime.data.VehicleParametersImpl
 
 interface VehicleParameters {
 

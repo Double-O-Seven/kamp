@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.api.data
 
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
+import ch.leadrian.samp.kamp.core.runtime.data.SpawnInfoImpl
 
 interface SpawnInfo {
 

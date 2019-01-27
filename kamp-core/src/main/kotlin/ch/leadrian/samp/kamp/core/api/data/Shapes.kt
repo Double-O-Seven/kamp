@@ -2,6 +2,15 @@
 
 package ch.leadrian.samp.kamp.core.api.data
 
+import ch.leadrian.samp.kamp.core.runtime.data.BoxImpl
+import ch.leadrian.samp.kamp.core.runtime.data.CircleImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableBoxImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableCircleImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableRectangleImpl
+import ch.leadrian.samp.kamp.core.runtime.data.MutableSphereImpl
+import ch.leadrian.samp.kamp.core.runtime.data.RectangleImpl
+import ch.leadrian.samp.kamp.core.runtime.data.SphereImpl
+
 fun rectangleOf(minX: Float, maxX: Float, minY: Float, maxY: Float): Rectangle =
         RectangleImpl(
                 minX = minX,
