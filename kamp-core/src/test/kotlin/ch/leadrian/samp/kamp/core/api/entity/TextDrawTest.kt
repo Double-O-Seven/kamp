@@ -770,8 +770,8 @@ internal class TextDrawTest {
                 textDraw.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(textDraw)
                     nativeFunctionExecutor.textDrawDestroy(textDrawId.value)
+                    onDestroy.invoke(textDraw)
                 }
                 assertThat(textDraw.isDestroyed)
                         .isTrue()

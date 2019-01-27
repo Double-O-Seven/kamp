@@ -496,11 +496,11 @@ internal class PlayerMapObjectTest {
                 playerMapObject.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(playerMapObject)
                     nativeFunctionExecutor.destroyPlayerObject(
                             playerid = playerId.value,
                             objectid = playerMapObjectId.value
                     )
+                    onDestroy.invoke(playerMapObject)
                 }
                 assertThat(playerMapObject.isDestroyed)
                         .isTrue()

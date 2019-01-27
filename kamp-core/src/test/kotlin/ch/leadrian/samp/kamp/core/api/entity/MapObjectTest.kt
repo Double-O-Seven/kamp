@@ -464,8 +464,8 @@ internal class MapObjectTest {
                 mapObject.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(mapObject)
                     nativeFunctionExecutor.destroyObject(mapObjectId.value)
+                    onDestroy.invoke(mapObject)
                 }
                 assertThat(mapObject.isDestroyed)
                         .isTrue()

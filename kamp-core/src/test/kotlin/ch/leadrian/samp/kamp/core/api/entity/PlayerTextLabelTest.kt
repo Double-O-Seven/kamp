@@ -304,11 +304,11 @@ internal class PlayerTextLabelTest {
                 playerTextLabel.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(playerTextLabel)
                     nativeFunctionExecutor.deletePlayer3DTextLabel(
                             playerid = playerId.value,
                             id = playerTextLabelId.value
                     )
+                    onDestroy.invoke(playerTextLabel)
                 }
                 assertThat(playerTextLabel.isDestroyed)
                         .isTrue()

@@ -223,8 +223,8 @@ internal class GangZoneTest {
                 gangZone.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(gangZone)
                     nativeFunctionExecutor.gangZoneDestroy(gangZoneId.value)
+                    onDestroy.invoke(gangZone)
                 }
                 assertThat(gangZone.isDestroyed)
                         .isTrue()

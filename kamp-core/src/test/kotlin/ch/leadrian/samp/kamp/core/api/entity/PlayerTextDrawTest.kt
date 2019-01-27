@@ -799,11 +799,11 @@ internal class PlayerTextDrawTest {
                 playerTextDraw.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(playerTextDraw)
                     nativeFunctionExecutor.playerTextDrawDestroy(
                             playerid = playerId.value,
                             text = playerTextDrawId.value
                     )
+                    onDestroy.invoke(playerTextDraw)
                 }
                 assertThat(playerTextDraw.isDestroyed)
                         .isTrue()

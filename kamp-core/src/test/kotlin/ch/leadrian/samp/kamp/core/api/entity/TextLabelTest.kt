@@ -250,8 +250,8 @@ internal class TextLabelTest {
                 textLabel.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(textLabel)
                     nativeFunctionExecutor.delete3DTextLabel(textLabelId.value)
+                    onDestroy.invoke(textLabel)
                 }
                 assertThat(textLabel.isDestroyed)
                         .isTrue()

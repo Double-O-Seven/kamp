@@ -178,8 +178,8 @@ internal class PickupTest {
                 pickup.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(pickup)
                     nativeFunctionExecutor.destroyPickup(pickupId.value)
+                    onDestroy.invoke(pickup)
                 }
                 assertThat(pickup.isDestroyed)
                         .isTrue()

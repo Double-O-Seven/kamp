@@ -509,8 +509,8 @@ internal class VehicleTest {
                 vehicle.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(vehicle)
                     nativeFunctionExecutor.destroyVehicle(vehicleId.value)
+                    onDestroy.invoke(vehicle)
                 }
                 assertThat(vehicle.isDestroyed)
                         .isTrue()

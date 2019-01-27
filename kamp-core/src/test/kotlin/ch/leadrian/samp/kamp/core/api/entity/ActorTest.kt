@@ -301,8 +301,8 @@ internal class ActorTest {
                 actor.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(actor)
                     nativeFunctionExecutor.destroyActor(actorId.value)
+                    onDestroy.invoke(actor)
                 }
                 assertThat(actor.isDestroyed)
                         .isTrue()

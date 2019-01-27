@@ -440,8 +440,8 @@ internal class MenuTest {
                 menu.destroy()
 
                 verifyOrder {
-                    onDestroy.invoke(menu)
                     nativeFunctionExecutor.destroyMenu(menuId.value)
+                    onDestroy.invoke(menu)
                 }
                 assertThat(menu.isDestroyed)
                         .isTrue()
