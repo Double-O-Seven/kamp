@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.positionOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
 import ch.leadrian.samp.kamp.core.api.service.ActorService
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerDamageStreamableActorReceiver
@@ -58,6 +59,8 @@ internal class StreamableActorImpl(
         OnPlayerGiveDamageActorListener {
 
     private var actor: Actor? = null
+
+    override val extensions: EntityExtensionContainer<StreamableActor> = EntityExtensionContainer(this)
 
     override var model: SkinModel = model
         set(value) {
@@ -193,6 +196,7 @@ internal class StreamableActorImpl(
     override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
 
     override fun onDestroy() {
+        extensions.destroy()
         destroyActor()
         actor = null
     }

@@ -72,6 +72,14 @@ internal class StreamableActorImplTest {
         )
     }
 
+    @Test
+    fun shouldInitializeExtensionsWithStreamableActorAsEntity() {
+        val entity = streamableActor.extensions.entity
+
+        assertThat(entity)
+                .isEqualTo(streamableActor)
+    }
+
     @Nested
     inner class ModelTests {
 
@@ -704,6 +712,16 @@ internal class StreamableActorImplTest {
                 actor.removeOnActorStreamOutListener(streamableActor)
                 actor.removeOnPlayerGiveDamageActorListener(streamableActor)
             }
+        }
+
+        @Test
+        fun shouldDestroyExtensions() {
+            streamableActor.destroy()
+
+            val isDestroyed = streamableActor.extensions.isDestroyed
+
+            assertThat(isDestroyed)
+                    .isTrue()
         }
     }
 }
