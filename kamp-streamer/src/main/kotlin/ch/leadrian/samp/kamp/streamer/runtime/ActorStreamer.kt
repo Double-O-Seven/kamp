@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -17,7 +16,6 @@ import javax.inject.Singleton
 internal class ActorStreamer
 @Inject
 constructor(
-        private val callbackListenerManager: CallbackListenerManager,
         private val coordinatesBasedGlobalStreamerFactory: CoordinatesBasedGlobalStreamerFactory,
         private val streamableActorFactory: StreamableActorFactory
 ) : Streamer {

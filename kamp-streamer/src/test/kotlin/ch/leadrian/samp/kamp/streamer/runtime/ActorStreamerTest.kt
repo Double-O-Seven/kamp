@@ -1,6 +1,5 @@
 package ch.leadrian.samp.kamp.streamer.runtime
 
-import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.locationOf
@@ -19,13 +18,11 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
-import kotlin.reflect.KClass
 
 internal class ActorStreamerTest {
 
     private lateinit var actorStreamer: ActorStreamer
 
-    private val callbackListenerManager = mockk<CallbackListenerManager>()
     private val coordinatesBasedGlobalStreamerFactory = mockk<CoordinatesBasedGlobalStreamerFactory>()
     private val coordinatesBasedGlobalStreamer = mockk<CoordinatesBasedGlobalStreamer<StreamableActorImpl, Rect3d>>()
     private val streamableActorFactory = mockk<StreamableActorFactory>()
@@ -35,9 +32,7 @@ internal class ActorStreamerTest {
         every {
             coordinatesBasedGlobalStreamerFactory.create<StreamableActorImpl, Rect3d>(any(), any(), any())
         } returns coordinatesBasedGlobalStreamer
-        every { callbackListenerManager.register(any()) } just Runs
         actorStreamer = ActorStreamer(
-                callbackListenerManager,
                 coordinatesBasedGlobalStreamerFactory,
                 streamableActorFactory
         )
@@ -92,7 +87,6 @@ internal class ActorStreamerTest {
 
             @BeforeEach
             fun setUp() {
-                every { callbackListenerManager.registerOnlyAs(any<KClass<*>>(), any(), any()) } just Runs
                 every { coordinatesBasedGlobalStreamer.add(any()) } just Runs
             }
 
