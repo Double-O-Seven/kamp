@@ -601,7 +601,7 @@ internal class CallbackProcessorTest {
         fun setUp() {
             vehicle = mockk {
                 every { id } returns VehicleId.valueOf(vehicleId)
-                every { onDeath(any<Player>()) } just Runs
+                every { onDeath(any()) } just Runs
             }
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
         }
@@ -1008,7 +1008,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any<Player>()) } just Runs
+            every { vehicle.onExit(any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -1700,7 +1700,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { pickup.onPickUp(any<Player>()) } just Runs
+            every { pickup.onPickUp(any()) } just Runs
             every { pickup.id } returns PickupId.valueOf(pickupId)
             server.injector.getInstance<PickupRegistry>().register(pickup)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -2144,7 +2144,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any<Player>()) } just Runs
+            every { vehicle.onExit(any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -2228,7 +2228,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any<Player>()) } just Runs
+            every { vehicle.onExit(any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -2961,7 +2961,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            every { vehicle.onStreamIn(any<Player>()) } just Runs
+            every { vehicle.onStreamIn(any()) } just Runs
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
         }
@@ -3046,7 +3046,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            every { vehicle.onStreamOut(any<Player>()) } just Runs
+            every { vehicle.onStreamOut(any()) } just Runs
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
         }
@@ -3131,7 +3131,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { actor.id } returns ActorId.valueOf(actorId)
-            every { actor.onStreamIn(any<Player>()) } just Runs
+            every { actor.onStreamIn(any()) } just Runs
             server.injector.getInstance<ActorRegistry>().register(actor)
             forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
         }
@@ -3216,7 +3216,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { actor.id } returns ActorId.valueOf(actorId)
-            every { actor.onStreamOut(any<Player>()) } just Runs
+            every { actor.onStreamOut(any()) } just Runs
             server.injector.getInstance<ActorRegistry>().register(actor)
             forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
         }
@@ -3903,7 +3903,7 @@ internal class CallbackProcessorTest {
         @BeforeEach
         fun setUp() {
             every { textDraw.id } returns TextDrawId.valueOf(textDrawId)
-            every { textDraw.onClick(any<Player>()) } returns OnPlayerClickTextDrawListener.Result.NotFound
+            every { textDraw.onClick(any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
             server.injector.getInstance<TextDrawRegistry>().register(textDraw)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
         }
@@ -4132,7 +4132,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any<Player>()) } just Runs
+            every { vehicle.onExit(any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
@@ -4218,7 +4218,7 @@ internal class CallbackProcessorTest {
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any<Player>()) } just Runs
+            every { vehicle.onExit(any()) } just Runs
             every { vehicle.id } returns VehicleId.valueOf(vehicleId)
             server.injector.getInstance<VehicleRegistry>().register(vehicle)
             player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
