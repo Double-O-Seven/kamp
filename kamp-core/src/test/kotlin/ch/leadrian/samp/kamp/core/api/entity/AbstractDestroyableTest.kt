@@ -71,7 +71,7 @@ internal class AbstractDestroyableTest {
     }
 
     @Test
-    fun shouldCallOnDestroyListenerOnlyTwice() {
+    fun shouldCallOnDestroyListenerOnlyOnce() {
         val destroyable = TestDestroyable()
         val listener = mockk<OnDestroyListener>(relaxed = true)
         destroyable.addOnDestroyListener(listener)

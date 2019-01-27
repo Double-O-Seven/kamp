@@ -20,8 +20,8 @@ abstract class AbstractDestroyable : Destroyable {
             return
         }
 
-        onDestroyListeners.forEach { it.onDestroy(this) }
         onDestroy()
+        onDestroyListeners.forEach { it.onDestroy(this) }
         isDestroyed = true
     }
 
