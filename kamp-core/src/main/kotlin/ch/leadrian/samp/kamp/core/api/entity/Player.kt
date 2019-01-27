@@ -575,6 +575,7 @@ internal constructor(
         nativeFunctionExecutor.kick(id.value)
     }
 
+    @JvmOverloads
     fun ban(reason: String? = null) {
         when {
             reason != null && reason.isNotBlank() -> nativeFunctionExecutor.banEx(playerid = id.value, reason = reason)
