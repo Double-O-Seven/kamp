@@ -103,7 +103,7 @@ constructor(
     ): CommandDefinition {
         val commandAnnotation: Command? = commandMethod.getAnnotation(Command::class.java)
         val name = (commandAnnotation?.name?.takeIf { it.isNotEmpty() } ?: commandMethod.name).toLowerCase()
-        val aliases = commandAnnotation?.aliases?.toSet().orEmpty()
+        val aliases = commandAnnotation?.aliases?.map { it.toLowerCase() }?.toSet().orEmpty()
         val description = getDescription(commandMethod)
         val parameters = getCommandParameterDefinitions(commandMethod)
         val isGreedy = commandAnnotation?.isGreedy ?: true

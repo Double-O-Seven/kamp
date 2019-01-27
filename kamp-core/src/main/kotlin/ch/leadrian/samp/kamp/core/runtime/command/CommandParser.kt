@@ -20,7 +20,7 @@ constructor() {
         return when {
             tokens.isEmpty() -> null
             else -> ParsedCommand(
-                    command = tokens[0],
+                    command = tokens[0].toLowerCase(),
                     parameterValues = tokens.drop(1)
             )
         }
