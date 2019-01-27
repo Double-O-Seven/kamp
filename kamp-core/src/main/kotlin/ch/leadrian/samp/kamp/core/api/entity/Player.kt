@@ -19,6 +19,7 @@ import ch.leadrian.samp.kamp.core.api.data.AngledLocation
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.LastShotVectors
 import ch.leadrian.samp.kamp.core.api.data.Location
+import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Rectangle
 import ch.leadrian.samp.kamp.core.api.data.SpawnInfo

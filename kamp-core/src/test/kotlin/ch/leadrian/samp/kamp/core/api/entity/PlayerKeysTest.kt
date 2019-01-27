@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
-import io.mockk.mockk
+import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -17,8 +17,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
@@ -33,8 +32,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP)
@@ -49,8 +47,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
@@ -69,8 +66,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)
@@ -85,8 +81,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP)
@@ -101,8 +96,7 @@ internal class PlayerKeysTest {
             val playerKeys = PlayerKeys(
                     keys = keys,
                     upDown = 0,
-                    leftRight = 0,
-                    player = mockk()
+                    leftRight = 0
             )
 
             val pressed = playerKeys.isOnlyKeyPressed(PlayerKey.ACTION, PlayerKey.JUMP, PlayerKey.FIRE)

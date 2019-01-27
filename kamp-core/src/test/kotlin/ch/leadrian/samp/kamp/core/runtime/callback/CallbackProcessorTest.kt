@@ -79,6 +79,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -89,7 +90,6 @@ import ch.leadrian.samp.kamp.core.api.entity.MenuRow
 import ch.leadrian.samp.kamp.core.api.entity.Pickup
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerClass
-import ch.leadrian.samp.kamp.core.api.entity.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.entity.TextDraw
@@ -2621,8 +2621,9 @@ internal class CallbackProcessorTest {
             verify { uncaughtExceptionNotifier wasNot Called }
             verify {
                 onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
-                        oldKeys = PlayerKeys(256, 0, 0, player),
-                        newKeys = PlayerKeys(64, 0, 0, player)
+                        player = player,
+                        oldKeys = PlayerKeys(256, 0, 0),
+                        newKeys = PlayerKeys(64, 0, 0)
                 )
             }
         }
@@ -2650,7 +2651,7 @@ internal class CallbackProcessorTest {
         fun shouldCatchException() {
             val exception = RuntimeException("test")
             val onPlayerKeyStateChangeListener = mockk<OnPlayerKeyStateChangeListener> {
-                every { onPlayerKeyStateChange(any(), any()) } throws exception
+                every { onPlayerKeyStateChange(any(), any(), any()) } throws exception
             }
             callbackListenerManager.register(onPlayerKeyStateChangeListener)
 
@@ -2663,8 +2664,9 @@ internal class CallbackProcessorTest {
             verify { uncaughtExceptionNotifier.notify(exception) }
             verify {
                 onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
-                        oldKeys = PlayerKeys(256, 0, 0, player),
-                        newKeys = PlayerKeys(64, 0, 0, player)
+                        player = player,
+                        oldKeys = PlayerKeys(256, 0, 0),
+                        newKeys = PlayerKeys(64, 0, 0)
                 )
             }
         }

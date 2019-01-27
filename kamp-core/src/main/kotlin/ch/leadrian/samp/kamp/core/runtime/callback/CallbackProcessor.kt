@@ -30,6 +30,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
@@ -37,7 +38,6 @@ import ch.leadrian.samp.kamp.core.api.entity.MapObject
 import ch.leadrian.samp.kamp.core.api.entity.Pickup
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerClass
-import ch.leadrian.samp.kamp.core.api.entity.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.entity.TextDraw
@@ -475,10 +475,18 @@ constructor(
 
     override fun onPlayerKeyStateChange(playerid: Int, newkeys: Int, oldkeys: Int): Boolean {
         tryAndCatch {
-            val player = playerid.toPlayer()
             onPlayerKeyStateChangeHandler.onPlayerKeyStateChange(
-                    oldKeys = PlayerKeys(keys = oldkeys, upDown = 0, leftRight = 0, player = player),
-                    newKeys = PlayerKeys(keys = newkeys, upDown = 0, leftRight = 0, player = player)
+                    player = playerid.toPlayer(),
+                    oldKeys = PlayerKeys(
+                            keys = oldkeys,
+                            upDown = 0,
+                            leftRight = 0
+                    ),
+                    newKeys = PlayerKeys(
+                            keys = newkeys,
+                            upDown = 0,
+                            leftRight = 0
+                    )
             )
         }
         return true

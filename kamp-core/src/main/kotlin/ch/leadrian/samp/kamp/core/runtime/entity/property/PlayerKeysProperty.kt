@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.property
 
+import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.PlayerKeys
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
 import kotlin.properties.ReadOnlyProperty
@@ -25,8 +25,7 @@ internal class PlayerKeysProperty(
         return PlayerKeys(
                 keys = keys.value,
                 leftRight = leftRight.value,
-                upDown = upDown.value,
-                player = thisRef
+                upDown = upDown.value
         )
     }
 
