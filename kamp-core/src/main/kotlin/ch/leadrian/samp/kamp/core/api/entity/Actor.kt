@@ -10,15 +10,16 @@ import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.positionOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamInReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnActorStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerGiveDamageActorReceiverDelegate
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
+import ch.leadrian.samp.kamp.core.runtime.entity.property.ActorAngleProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.ActorCoordinatesProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.ActorHealthProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.ActorPositionProperty
 
 class Actor
 internal constructor(
@@ -83,27 +84,9 @@ internal constructor(
         nativeFunctionExecutor.clearActorAnimations(id.value)
     }
 
-    var coordinates: Vector3D
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getActorPos(actorid = id.value, x = x, y = y, z = z)
-            return vector3DOf(x = x.value, y = y.value, z = z.value)
-        }
-        set(value) {
-            nativeFunctionExecutor.setActorPos(actorid = id.value, x = value.x, y = value.y, z = value.z)
-        }
+    var coordinates: Vector3D by ActorCoordinatesProperty(nativeFunctionExecutor)
 
-    var angle: Float
-        get() {
-            val angle = ReferenceFloat()
-            nativeFunctionExecutor.getActorFacingAngle(actorid = id.value, angle = angle)
-            return angle.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setActorFacingAngle(actorid = id.value, angle = value)
-        }
+    var angle: Float by ActorAngleProperty(nativeFunctionExecutor)
 
     var virtualWorldId: Int
         get() = nativeFunctionExecutor.getActorVirtualWorld(id.value)
@@ -111,28 +94,9 @@ internal constructor(
             nativeFunctionExecutor.setActorVirtualWorld(actorid = id.value, vworld = value)
         }
 
-    var position: Position
-        get() {
-            val x = ReferenceFloat()
-            val y = ReferenceFloat()
-            val z = ReferenceFloat()
-            nativeFunctionExecutor.getActorPos(actorid = id.value, x = x, y = y, z = z)
-            return positionOf(x = x.value, y = y.value, z = z.value, angle = angle)
-        }
-        set(value) {
-            coordinates = value
-            angle = value.angle
-        }
+    var position: Position by ActorPositionProperty(nativeFunctionExecutor)
 
-    var health: Float
-        get() {
-            val health = ReferenceFloat()
-            nativeFunctionExecutor.getActorHealth(actorid = id.value, health = health)
-            return health.value
-        }
-        set(value) {
-            nativeFunctionExecutor.setActorHealth(actorid = id.value, health = value)
-        }
+    var health: Float by ActorHealthProperty(nativeFunctionExecutor)
 
     var isInvulnerable: Boolean
         get() = nativeFunctionExecutor.isActorInvulnerable(id.value)
