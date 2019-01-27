@@ -21,6 +21,7 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
 import ch.leadrian.samp.kamp.core.api.data.VehicleDoorStates
 import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -73,6 +74,8 @@ internal constructor(
         OnVehicleStreamOutListener by onVehicleStreamOutReceiver,
         OnVehicleResprayReceiver by onVehicleResprayReceiver,
         OnVehiclePaintjobReceiver by onVehiclePaintjobReceiver {
+
+    val extensions: EntityExtensionContainer<Vehicle> = EntityExtensionContainer(this)
 
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 
@@ -243,6 +246,7 @@ internal constructor(
     }
 
     override fun onDestroy() {
+        extensions.destroy()
         nativeFunctionExecutor.destroyVehicle(id.value)
     }
 }

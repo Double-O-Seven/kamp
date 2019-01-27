@@ -192,6 +192,14 @@ internal class VehicleTest {
             )
         }
 
+        @Test
+        fun shouldInitializeExtensionsWithVehicleAsEntity() {
+            val entity = vehicle.extensions.entity
+
+            assertThat(entity)
+                    .isEqualTo(vehicle)
+        }
+
         @ParameterizedTest
         @ValueSource(strings = ["true", "false"])
         fun isStreamedInShouldReturnExpectedReturn(expectedResult: Boolean) {
@@ -538,6 +546,16 @@ internal class VehicleTest {
 
                 assertThat(caughtThrowable)
                         .isInstanceOf(AlreadyDestroyedException::class.java)
+            }
+
+            @Test
+            fun shouldDestroyExtensions() {
+                vehicle.destroy()
+
+                val isDestroyed = vehicle.extensions.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
         }
 

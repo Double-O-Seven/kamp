@@ -113,6 +113,14 @@ internal class ActorTest {
             )
         }
 
+        @Test
+        fun shouldInitializeExtensionsWithActorAsEntity() {
+            val entity = actor.extensions.entity
+
+            assertThat(entity)
+                    .isEqualTo(actor)
+        }
+
         @ParameterizedTest
         @ValueSource(strings = ["true", "false"])
         fun isStreamedInShouldReturnExpectedReturn(expectedResult: Boolean) {
@@ -330,6 +338,16 @@ internal class ActorTest {
 
                 assertThat(caughtThrowable)
                         .isInstanceOf(AlreadyDestroyedException::class.java)
+            }
+
+            @Test
+            fun shouldDestroyExtensions() {
+                actor.destroy()
+
+                val isDestroyed = actor.extensions.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
         }
     }

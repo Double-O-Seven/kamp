@@ -136,6 +136,14 @@ internal class PickupTest {
         }
 
         @Test
+        fun shouldInitializeExtensionsWithPickupAsEntity() {
+            val entity = pickup.extensions.entity
+
+            assertThat(entity)
+                    .isEqualTo(pickup)
+        }
+
+        @Test
         fun shouldGetCoordinates() {
             val coordinates = pickup.coordinates
 
@@ -207,6 +215,16 @@ internal class PickupTest {
 
                 assertThat(caughtThrowable)
                         .isInstanceOf(AlreadyDestroyedException::class.java)
+            }
+
+            @Test
+            fun shouldDestroyExtensions() {
+                pickup.destroy()
+
+                val isDestroyed = pickup.extensions.isDestroyed
+
+                assertThat(isDestroyed)
+                        .isTrue()
             }
         }
     }

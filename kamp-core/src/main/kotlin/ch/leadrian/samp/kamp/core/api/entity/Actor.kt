@@ -10,6 +10,7 @@ import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -35,6 +36,8 @@ internal constructor(
         OnActorStreamInReceiver by onActorStreamInReceiver,
         OnActorStreamOutReceiver by onActorStreamOutReceiver,
         OnPlayerGiveDamageActorReceiver by onPlayerGiveDamageActorReceiver {
+
+    val extensions: EntityExtensionContainer<Actor> = EntityExtensionContainer(this)
 
     override val id: ActorId
         get() = requireNotDestroyed { field }
@@ -122,6 +125,7 @@ internal constructor(
     }
 
     override fun onDestroy() {
+        extensions.destroy()
         nativeFunctionExecutor.destroyActor(id.value)
     }
 }
