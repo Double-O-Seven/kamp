@@ -22,6 +22,7 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleDoorStates
 import ch.leadrian.samp.kamp.core.api.data.VehicleParameters
 import ch.leadrian.samp.kamp.core.api.data.VehicleWindowStates
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
+import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -66,6 +67,7 @@ internal constructor(
         private val onVehiclePaintjobReceiver: OnVehiclePaintjobReceiverDelegate = OnVehiclePaintjobReceiverDelegate()
 ) : Entity<VehicleId>,
         AbstractDestroyable(),
+        Extendable<Vehicle>,
         OnVehicleSpawnReceiver by onVehicleSpawnReceiver,
         OnVehicleDeathReceiver by onVehicleDeathReceiver,
         OnPlayerEnterVehicleReceiver by onPlayerEnterVehicleReceiver,
@@ -75,7 +77,7 @@ internal constructor(
         OnVehicleResprayReceiver by onVehicleResprayReceiver,
         OnVehiclePaintjobReceiver by onVehiclePaintjobReceiver {
 
-    val extensions: EntityExtensionContainer<Vehicle> = EntityExtensionContainer(this)
+    override val extensions: EntityExtensionContainer<Vehicle> = EntityExtensionContainer(this)
 
     val components: VehicleComponents = VehicleComponents(this, nativeFunctionExecutor)
 

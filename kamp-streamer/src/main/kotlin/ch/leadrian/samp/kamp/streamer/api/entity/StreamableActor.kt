@@ -4,18 +4,17 @@ import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.data.Animation
 import ch.leadrian.samp.kamp.core.api.data.Position
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
+import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
 import ch.leadrian.samp.kamp.streamer.api.callback.OnPlayerDamageStreamableActorReceiver
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamInReceiver
 import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableActorStreamOutReceiver
 
 interface StreamableActor :
         Streamable,
+        Extendable<StreamableActor>,
         OnStreamableActorStreamInReceiver,
         OnStreamableActorStreamOutReceiver,
         OnPlayerDamageStreamableActorReceiver {
-
-    val extensions: EntityExtensionContainer<StreamableActor>
 
     var model: SkinModel
 

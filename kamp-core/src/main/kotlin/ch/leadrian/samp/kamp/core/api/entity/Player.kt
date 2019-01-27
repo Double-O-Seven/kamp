@@ -28,6 +28,7 @@ import ch.leadrian.samp.kamp.core.api.data.Time
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
+import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
@@ -71,7 +72,7 @@ internal constructor(
         private val playerMapIconFactory: PlayerMapIconFactory,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         onPlayerNameChangeHandler: OnPlayerNameChangeHandler
-) : Entity<PlayerId> {
+) : Entity<PlayerId>, Extendable<Player> {
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
 
@@ -81,7 +82,7 @@ internal constructor(
 
     internal val playerTextLabelRegistry = PlayerTextLabelRegistry()
 
-    val extensions: EntityExtensionContainer<Player> = EntityExtensionContainer(this)
+    override val extensions: EntityExtensionContainer<Player> = EntityExtensionContainer(this)
 
     override val id: PlayerId = id
         get() = requireConnected { field }

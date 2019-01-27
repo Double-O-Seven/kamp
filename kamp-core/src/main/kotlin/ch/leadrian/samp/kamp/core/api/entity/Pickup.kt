@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupReceiver
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
+import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
 import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
 import ch.leadrian.samp.kamp.core.api.exception.CreationFailedException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -18,9 +19,10 @@ internal constructor(
         private val onPlayerPickUpPickupReceiver: OnPlayerPickUpPickupReceiverDelegate = OnPlayerPickUpPickupReceiverDelegate()
 ) : Entity<PickupId>,
         AbstractDestroyable(),
+        Extendable<Pickup>,
         OnPlayerPickUpPickupReceiver by onPlayerPickUpPickupReceiver {
 
-    val extensions: EntityExtensionContainer<Pickup> = EntityExtensionContainer(this)
+    override val extensions: EntityExtensionContainer<Pickup> = EntityExtensionContainer(this)
 
     override val id: PickupId
         get() = requireNotDestroyed { field }
