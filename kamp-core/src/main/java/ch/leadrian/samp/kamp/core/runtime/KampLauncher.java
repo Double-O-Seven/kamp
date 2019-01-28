@@ -21,6 +21,8 @@ public class KampLauncher {
 
     private static final Path DATA_DIRECTORY = KAMP_DIRECTORY.resolve("layout");
 
+    private static final Path JARS_DIRECTORY = KAMP_DIRECTORY.resolve(Paths.get("launch", "jars"));
+
     private static final String CONFIG_PROPERTIES_FILE = "config.properties";
 
     private static final String PLUGIN_NAME_PROPERTY = "kamp.plugin.name";
@@ -34,6 +36,7 @@ public class KampLauncher {
             return;
         }
         try {
+            ClassPathExtender.extendClassPath(JARS_DIRECTORY);
             Properties properties = loadConfigProperties();
             System.loadLibrary(Objects.requireNonNull(properties.getProperty(PLUGIN_NAME_PROPERTY)));
             server = Server.start(new SAMPNativeFunctionExecutorImpl(), properties, DATA_DIRECTORY);
