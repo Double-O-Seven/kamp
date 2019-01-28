@@ -2,6 +2,7 @@ import org.gradle.internal.os.OperatingSystem
 
 dependencies {
     implementation(project(":kamp-core"))
+    implementation(project(":kamp-view"))
     implementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.25")
 }
 
@@ -20,14 +21,8 @@ sourceSets {
     }
 }
 
-textKeyGenerator {
-    outputDirectory = generatedSrcJavaDir
-    packageName("ch.leadrian.samp.kamp.examples.lvdm")
-    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
-}
-
 serverStarter {
-    gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
+    gameModeClassName = "ch.leadrian.samp.kamp.examples.viewtest.ViewTestGameMode"
     kampPluginBinaryPath = getKampPluginBinaryPath()
     rconPassword = "test1234"
     jvmOption("-Xmx1G")

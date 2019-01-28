@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.examples.lvdm
+package ch.leadrian.samp.kamp.examples.viewtest
 
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
@@ -10,24 +10,21 @@ import ch.leadrian.samp.kamp.core.api.constants.VehicleModel
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.WeaponData
 import ch.leadrian.samp.kamp.core.api.data.positionOf
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
-import ch.leadrian.samp.kamp.core.api.service.PickupService
 import ch.leadrian.samp.kamp.core.api.service.PlayerClassService
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
+import ch.leadrian.samp.kamp.view.ViewPlugin
 import com.google.inject.Module
 import javax.annotation.PostConstruct
 import javax.inject.Inject
 
-class LvdmGameMode : GameMode(), OnGameModeInitListener {
+class ViewTestGameMode : GameMode(), OnGameModeInitListener {
 
     @Inject
     private lateinit var vehicleService: VehicleService
-    @Inject
-    private lateinit var pickupService: PickupService
     @Inject
     private lateinit var playerClassService: PlayerClassService
     @Inject
@@ -43,7 +40,7 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
     }
 
     override fun onGameModeInit() {
-        serverService.setGameModeText("Ventura's DM~MG")
+        serverService.setGameModeText("Kamp View Test")
         playerService.apply {
             showMarkers(PlayerMarkersMode.STREAMED)
             showNameTags()
@@ -56,13 +53,6 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
                     weapon2 = weaponDataOf(WeaponModel.DESERT_EAGLE, 300),
                     weapon3 = WeaponData.FISTS
             )
-        }
-        pickupService.apply {
-            createPickup(371, 15, vector3DOf(1710.3359f, 1614.3585f, 10.1191f))
-            createPickup(371, 15, vector3DOf(1964.4523f, 1917.0341f, 130.9375f))
-            createPickup(371, 15, vector3DOf(2055.7258f, 2395.8589f, 150.4766f))
-            createPickup(371, 15, vector3DOf(2265.0120f, 1672.3837f, 94.9219f))
-            createPickup(371, 15, vector3DOf(2265.9739f, 1623.4060f, 94.9219f))
         }
         vehicleService.apply {
             createVehicle(
@@ -1466,7 +1456,7 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
         }
     }
 
-    override fun getModules(): List<Module> = listOf(LvdmModule())
+    override fun getModules(): List<Module> = listOf(ViewTestModule())
 
-    override fun getPlugins(): List<Plugin> = emptyList()
+    override fun getPlugins(): List<Plugin> = listOf(ViewPlugin())
 }
