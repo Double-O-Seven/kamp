@@ -15,7 +15,6 @@ serverStarter {
     kampPluginBinaryPath = getKampPluginBinaryPath()
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
-    configProperty("kamp.streamer.rate.ms", "300")
 }
 
 fun getKampPluginBinaryPath(): String {
