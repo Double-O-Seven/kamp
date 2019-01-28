@@ -99,7 +99,7 @@ private constructor(
     }
 
     private fun checkVersion() {
-        VersionChecker.check(nativeFunctionExecutor)
+        VersionChecker.check(nativeFunctionExecutor, configProperties)
     }
 
     private fun createInjector() {
