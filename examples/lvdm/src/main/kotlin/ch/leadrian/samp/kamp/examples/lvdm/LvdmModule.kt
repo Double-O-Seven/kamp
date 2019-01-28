@@ -8,7 +8,6 @@ class LvdmModule : KampModule() {
         bind(PlayerSpawner::class.java).asEagerSingleton()
         bind(PlayerClassSelector::class.java).asEagerSingleton()
         bind(PlayerDeathHandler::class.java).asEagerSingleton()
-        bind(MapLoader::class.java).asEagerSingleton()
         newCommandsSetBinder().apply {
             addBinding().to(LvdmCommands::class.java)
             addBinding().to(AdminCommands::class.java)

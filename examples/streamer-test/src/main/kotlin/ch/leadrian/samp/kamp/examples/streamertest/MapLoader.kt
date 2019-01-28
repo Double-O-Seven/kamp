@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.examples.lvdm
+package ch.leadrian.samp.kamp.examples.streamertest
 
 import ch.leadrian.samp.kamp.geodata.vegetation.VegetationLoader
 import ch.leadrian.samp.kamp.geodata.vegetation.VegetationObject
