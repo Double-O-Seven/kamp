@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.animationOf
+import ch.leadrian.samp.kamp.core.api.data.locationOf
 import ch.leadrian.samp.kamp.core.api.data.mutablePositionOf
 import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.positionOf
@@ -28,6 +29,7 @@ import io.mockk.verify
 import io.mockk.verifyOrder
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
+import org.assertj.core.data.Percentage
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -436,6 +438,43 @@ internal class StreamableActorImplTest {
 
         assertThat(isStreamedIn)
                 .isFalse()
+    }
+
+    @Nested
+    inner class DistanceToTests {
+
+        @Test
+        fun shouldReturnDistanceToLocation() {
+            val location = locationOf(10f, 2f, 3f, interiorId = 187, worldId = 13)
+
+            val distance = streamableActor.distanceTo(location)
+
+            assertThat(distance)
+                    .isCloseTo(9f, Percentage.withPercentage(0.01))
+        }
+
+        @Test
+        fun givenActorIsNotInInteriorItShouldReturnFloatMax() {
+            val location = locationOf(1f, 2f, 3f, interiorId = 187, worldId = 13)
+            streamableActor.interiorIds = mutableSetOf(0)
+
+            val distance = streamableActor.distanceTo(location)
+
+            assertThat(distance)
+                    .isEqualTo(Float.MAX_VALUE)
+        }
+
+        @Test
+        fun givenActorIsNotInVirtualWorldItShouldReturnFloatMax() {
+            val location = locationOf(1f, 2f, 3f, interiorId = 187, worldId = 13)
+            streamableActor.virtualWorldId = 0
+
+            val distance = streamableActor.distanceTo(location)
+
+            assertThat(distance)
+                    .isEqualTo(Float.MAX_VALUE)
+        }
+
     }
 
     @Nested

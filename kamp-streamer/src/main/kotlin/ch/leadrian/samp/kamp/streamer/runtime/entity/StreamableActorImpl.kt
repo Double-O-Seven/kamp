@@ -158,7 +158,6 @@ internal class StreamableActorImpl(
         if (!isStreamedIn) {
             throw IllegalStateException("Actor was not streamed in")
         }
-        actor?.let { this@StreamableActorImpl.health = it.health }
         destroyActor()
     }
 
@@ -212,6 +211,7 @@ internal class StreamableActorImpl(
 
     private fun destroyActor() {
         actor?.apply {
+            this@StreamableActorImpl.health = health
             removeOnActorStreamInListener(this@StreamableActorImpl)
             removeOnActorStreamOutListener(this@StreamableActorImpl)
             removeOnPlayerGiveDamageActorListener(this@StreamableActorImpl)
