@@ -11,16 +11,6 @@ plugins {
     id("kamp-serverstarter")
 }
 
-val generatedSrcJavaDir = "$buildDir/generated-src/main/java"
-
-sourceSets {
-    main {
-        java {
-            srcDir(generatedSrcJavaDir)
-        }
-    }
-}
-
 serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.streamertest.StreamerTestGameMode"
     kampPluginBinaryPath = getKampPluginBinaryPath()
