@@ -5,7 +5,6 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
-#include <exception>
 
 Kamp::~Kamp() {
 	this->Shutdown();
@@ -23,7 +22,7 @@ void Kamp::Launch() {
 		this->CallLaunchMethod();
 		this->InitializeSAMPCallbacksInstance();
 		this->InitializeSAMPCallbacksMethodCache();
-	} catch (std::exception& e) {
+	} catch (KampException& e) {
 		sampgdk::logprintf("Failed to initialize Kamp: %s", e.what());
 		sampgdk::logprintf("Destroying JVM...");
 		this->DestroyJVM();
@@ -37,33 +36,33 @@ void Kamp::Launch() {
 void Kamp::InitializeJVM() {
 	long result = this->CreateJVM();
 	if (result) {
-		throw std::exception(("Failed to create JVM: " + std::to_string(result)).c_str());
+		throw KampException(("Failed to create JVM: " + std::to_string(result)).c_str());
 	}
 }
 
 void Kamp::InitializeKampLauncherClass() {
 	this->kampLauncherClass = this->jniEnv->FindClass(KAMP_LAUNCHER_CLASS.c_str());
 	if (!this->kampLauncherClass) {
-		throw std::exception(("Could not find launcher class " + KAMP_LAUNCHER_CLASS).c_str());
+		throw KampException(("Could not find launcher class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 
 	this->kampLauncherClassReference = this->jniEnv->NewGlobalRef(this->kampLauncherClass);
 	if (!this->kampLauncherClassReference) {
-		throw std::exception("Could not create global reference for Kamp launcher class");
+		throw KampException("Could not create global reference for Kamp launcher class");
 	}
 }
 
 void Kamp::InitializeFieldCache() {
 	int result = this->fieldCache.Initialize(this->jniEnv);
 	if (result) {
-		throw std::exception(("Initializing field cache failed with result: " + std::to_string(result)).c_str());
+		throw KampException(("Initializing field cache failed with result: " + std::to_string(result)).c_str());
 	}
 }
 
 void Kamp::CallLaunchMethod() {
 	jmethodID launchMethodID = this->jniEnv->GetStaticMethodID(this->kampLauncherClass, KAMP_LAUNCHER_LAUNCH_METHOD_NAME.c_str(), "()V");
 	if (!launchMethodID) {
-		throw std::exception(("Could not find method " + KAMP_LAUNCHER_LAUNCH_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
+		throw KampException(("Could not find method " + KAMP_LAUNCHER_LAUNCH_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 	this->jniEnv->CallStaticVoidMethod(this->kampLauncherClass, launchMethodID);
 	if (this->jniEnv->ExceptionOccurred()) {
@@ -79,30 +78,30 @@ void Kamp::InitializeSAMPCallbacksInstance() {
 		KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_SIGNATURE.c_str()
 	);
 	if (!getCallbacksInstanceMethodID) {
-		throw std::exception(("Could not find method " + KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
+		throw KampException(("Could not find method " + KAMP_LAUNCHER_GET_CALLBACKS_INSTANCE_METHOD_NAME + " in class " + KAMP_LAUNCHER_CLASS).c_str());
 	}
 
 	this->sampCallbacksInstance = this->jniEnv->CallStaticObjectMethod(this->kampLauncherClass, getCallbacksInstanceMethodID);
 	if (!this->sampCallbacksInstance) {
-		throw std::exception("Could not get SAMPCallbacks instance");
+		throw KampException("Could not get SAMPCallbacks instance");
 	}
 
 	this->sampCallbacksInstanceReference = this->jniEnv->NewGlobalRef(this->sampCallbacksInstance);
 	if (!this->sampCallbacksInstanceReference) {
-		throw std::exception("Could not create global reference for SAMPCallbacks instance");
+		throw KampException("Could not create global reference for SAMPCallbacks instance");
 	}
 }
 
 void Kamp::InitializeSAMPCallbacksMethodCache() {
 	jclass sampCallbacksInstanceClass = this->jniEnv->GetObjectClass(this->sampCallbacksInstanceReference);
 	if (!sampCallbacksInstanceClass) {
-		throw std::exception("Failed to get SAMPCallbacks instance class");
+		throw KampException("Failed to get SAMPCallbacks instance class");
 	}
 
 	int initializeSAMPCallbacksMethodCacheResult = this->sampCallbacksMethodCache.Initialize(this->jniEnv, sampCallbacksInstanceClass);
 	this->jniEnv->DeleteLocalRef(sampCallbacksInstanceClass);
 	if (initializeSAMPCallbacksMethodCacheResult) {
-		throw std::exception(("Initializing SAMPCallbacks method cache failed with result: " + std::to_string(initializeSAMPCallbacksMethodCacheResult)).c_str());
+		throw KampException(("Initializing SAMPCallbacks method cache failed with result: " + std::to_string(initializeSAMPCallbacksMethodCacheResult)).c_str());
 	}
 }
 

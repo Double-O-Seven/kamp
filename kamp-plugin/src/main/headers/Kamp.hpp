@@ -4,6 +4,7 @@
 
 #include <string>
 #include <jni.h>
+#include <exception>
 
 #include "FieldCache.hpp"
 #include "SAMPCallbacksMethodCache.hpp"
@@ -83,6 +84,22 @@ private:
 
 	FieldCache fieldCache;
 	SAMPCallbacksMethodCache sampCallbacksMethodCache;
+
+};
+
+class KampException : public std::exception {
+
+public:
+	KampException(const char* message) {
+		this->message = message;
+	}
+
+	virtual const char* what() const throw() {
+		return message;
+	}
+
+private:
+	const char* message;
 
 };
 
