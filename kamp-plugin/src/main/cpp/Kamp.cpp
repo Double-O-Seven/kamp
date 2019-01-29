@@ -131,7 +131,7 @@ long Kamp::CreateJVM() {
 		}
 	}
 
-	const std::string libraryPath = "-Djava.library.path=./plugins";
+	const std::string libraryPath = "-Djava.library.path=./plugins/";
 	optionStrings.push_back(strdup(libraryPath.c_str()));
 
 	auto vmOptions = new JavaVMOption[optionStrings.size()];
