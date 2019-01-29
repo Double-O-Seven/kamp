@@ -37,7 +37,7 @@ library {
         withType<VisualCpp> {
             val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
             val javaHome: File by lazy { Jvm.current().javaHome }
-            
+
             eachPlatform {
                 cppCompiler.withArguments {
                     add("/I$javaHome\\include")
@@ -50,6 +50,14 @@ library {
                     add("/DEF:$srcMainCppDir\\SAMPCallbacks.def")
                     add("$sampgdkHome\\lib\\sampgdk4.lib")
                     add("$javaHome\\lib\\jvm.lib")
+                }
+            }
+        }
+
+        withType<Gcc> {
+            eachPlatform {
+                cppCompiler.withArguments {
+                    add("-std=c++11")
                 }
             }
         }
