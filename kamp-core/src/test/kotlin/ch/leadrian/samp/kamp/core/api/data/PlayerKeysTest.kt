@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.data
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
-import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
