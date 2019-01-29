@@ -59,7 +59,14 @@ library {
             eachPlatform {
                 cppCompiler.withArguments {
                     add("-std=c++11")
+                    add("-I$javaHome/include")
+                    add("-I$javaHome/include/linux")
                     add("-DLINUX")
+                }
+                linker.withArguments {
+                    add("-L$javaHome/jre/lib/i386/server")
+                    add("jvm")
+                    add("sampgdk")
                 }
             }
         }
