@@ -8,12 +8,6 @@ plugins {
     id("kamp-cpp-codegen")
 }
 
-val runtimeCodegen: Configuration by configurations.creating
-
-dependencies {
-    runtimeCodegen(project(":kamp-core"))
-}
-
 val runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
 val srcMainCppDir = "$projectDir/src/main/cpp"
@@ -34,53 +28,33 @@ kampCppCodegen {
     interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
-val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
-val javaHome: File by lazy { org.gradle.internal.jvm.Jvm.current().javaHome }
-
 library {
     baseName.set("Kamp")
 
     targetMachines.addAll(machines.linux.x86, machines.windows.x86)
 
-    privateHeaders {
-        from(srcMainHeadersDir)
-        from("$javaHome/include")
-        from("$sampgdkHome/include")
-    }
-
-    binaries.whenElementFinalized {
-        when {
-            targetPlatform.operatingSystem.isWindows -> {
-                privateHeaders {
-                    from("$javaHome/include/win32")
-                }
-            }
-            targetPlatform.operatingSystem.isLinux -> {
-                privateHeaders {
-                    from("$javaHome/include/linux")
-                }
-            }
-        }
-    }
-
-    dependencies {
-        val sampgdk4LibraryPath = file("$sampgdkHome/lib/sampgdk4".toStaticLibraryName())
-        val jdkLibraryPath = file("$javaHome/lib/jvm".toStaticLibraryName())
-        implementation(files(sampgdk4LibraryPath, jdkLibraryPath))
-    }
-
     toolChains {
         withType<VisualCpp> {
+            val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
+            val javaHome: File by lazy { Jvm.current().javaHome }
+            
             eachPlatform {
+                cppCompiler.withArguments {
+                    add("/I$javaHome\\include")
+                    add("/I$javaHome\\include\\win32")
+                    add("/I$sampgdkHome\\include")
+                }
                 linker.withArguments {
-                    add("/DEF:\"$srcMainCppDir/SAMPCallbacks.def\"")
+                    add("/LIBPATH:$javaHome\\lib")
+                    add("/LIBPATH:$sampgdkHome\\lib")
+                    add("/DEF:$srcMainCppDir\\SAMPCallbacks.def")
+                    add("$sampgdkHome\\lib\\sampgdk4.lib")
+                    add("$javaHome\\lib\\jvm.lib")
                 }
             }
         }
     }
 }
-
-fun String.toStaticLibraryName(): String = OperatingSystem.current().getStaticLibraryName(this)
 
 tasks {
 
