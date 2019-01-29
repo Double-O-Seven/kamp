@@ -126,12 +126,12 @@ long Kamp::CreateJVM() {
 	std::string line;
 	while (std::getline(jvmOptionsFile, line)) {
 		if (!line.empty()) {
-			optionStrings.push_back(_strdup(line.c_str()));
+			optionStrings.push_back(strdup(line.c_str()));
 		}
 	}
 
 	const std::string libraryPath = "-Djava.library.path=./plugins";
-	optionStrings.push_back(_strdup(libraryPath.c_str()));
+	optionStrings.push_back(strdup(libraryPath.c_str()));
 
 	auto vmOptions = new JavaVMOption[optionStrings.size()];
 
