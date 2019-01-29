@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.core.api.entity
+package ch.leadrian.samp.kamp.core.api.data
 
 import ch.leadrian.samp.kamp.core.api.constants.PlayerKey
 import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
