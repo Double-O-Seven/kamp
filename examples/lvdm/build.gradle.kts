@@ -28,15 +28,9 @@ textKeyGenerator {
 
 serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
-    kampPluginBinaryPath = getKampPluginBinaryPath()
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
-}
-
-fun getKampPluginBinaryPath(): String {
-    return OperatingSystem
-            .current()
-            .getSharedLibraryName("${project(":kamp-plugin").buildDir}/lib/main/release/${OperatingSystem.current().familyName}/Kamp")
+    configProperty("kamp.ignore.version.mismatch", "true")
 }
 
 tasks {

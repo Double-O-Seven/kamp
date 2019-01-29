@@ -10,7 +10,7 @@ buildscript {
             }
         }
 
-        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.3")
+        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.3-1-g603da5f")
     }
 }
 
