@@ -28,6 +28,9 @@ kampCppCodegen {
     interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
+val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
+val javaHome: File by lazy { Jvm.current().javaHome }
+
 library {
     baseName.set("Kamp")
 
@@ -35,8 +38,6 @@ library {
 
     toolChains {
         withType<VisualCpp> {
-            val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
-            val javaHome: File by lazy { Jvm.current().javaHome }
 
             eachPlatform {
                 cppCompiler.withArguments {
@@ -58,6 +59,7 @@ library {
             eachPlatform {
                 cppCompiler.withArguments {
                     add("-std=c++11")
+                    add("-DLINUX")
                 }
             }
         }
