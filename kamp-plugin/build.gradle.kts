@@ -38,7 +38,6 @@ library {
 
     toolChains {
         withType<VisualCpp> {
-
             eachPlatform {
                 cppCompiler.withArguments {
                     add("/I$javaHome\\include")
@@ -61,6 +60,7 @@ library {
                     add("-std=c++11")
                     add("-I$javaHome/include")
                     add("-I$javaHome/include/linux")
+                    add("-I$srcMainHeadersDir/amx")
                     add("-DLINUX")
                 }
                 linker.withArguments {
