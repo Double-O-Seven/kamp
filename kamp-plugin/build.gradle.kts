@@ -32,7 +32,7 @@ val sampgdkHome: String by lazy { System.getenv("SAMPGDK_HOME") }
 val javaHome: File by lazy { Jvm.current().javaHome }
 
 library {
-    baseName.set("Kamp")
+    baseName.set("kamp")
 
     targetMachines.addAll(machines.linux.x86, machines.windows.x86)
 
@@ -65,8 +65,8 @@ library {
                 }
                 linker.withArguments {
                     add("-L$javaHome/jre/lib/i386/server")
-                    add("jvm")
-                    add("sampgdk")
+                    add("-ljvm")
+                    add("-lsampgdk")
                 }
             }
         }
