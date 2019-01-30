@@ -17,18 +17,6 @@ dependencies {
     testCompileOnly(project(":kamp-annotations"))
 }
 
-val generatedSrcJavaDir = "$buildDir/generated-src/main/java"
-val generatedSrcKotlinDir = "$buildDir/generated-src/main/kotlin"
-
-sourceSets {
-    main {
-        java {
-            srcDir(generatedSrcJavaDir)
-            srcDir(generatedSrcKotlinDir)
-        }
-    }
-}
-
 val corePackageName = "ch.leadrian.samp.kamp.core"
 val runtimePackageName = "$corePackageName.runtime"
 val apiPackageName = "$corePackageName.api"
@@ -49,18 +37,15 @@ kampJavaCodegen {
     version = project.version.toString()
     constantsJavaPackageName = constantsPackageName
     runtimeJavaPackageName = runtimePackageName
-    outputDirectoryPath = generatedSrcJavaDir
     interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
 kampKotlinCodegen {
     runtimeJavaPackageName = runtimePackageName
-    outputDirectoryPath = generatedSrcKotlinDir
     interfaceDefinitionFiles(actorIDLFile, objectsIDLFile, playersIDLFile, sampIDLFile, vehiclesIDLFile, versionIDLFile)
 }
 
 textKeyGenerator {
-    outputDirectory = generatedSrcJavaDir
     packageName(corePackageName)
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }

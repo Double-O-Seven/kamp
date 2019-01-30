@@ -10,18 +10,7 @@ plugins {
     id("kamp-serverstarter")
 }
 
-val generatedSrcJavaDir = "$buildDir/generated-src/main/java"
-
-sourceSets {
-    main {
-        java {
-            srcDir(generatedSrcJavaDir)
-        }
-    }
-}
-
 textKeyGenerator {
-    outputDirectory = generatedSrcJavaDir
     packageName("ch.leadrian.samp.kamp.examples.lvdm")
     resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }

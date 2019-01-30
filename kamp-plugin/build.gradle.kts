@@ -76,7 +76,7 @@ library {
 tasks {
 
     val generateSAMPNativeFunctionsHeaderFile: Task by creating {
-        val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets["main"].output
+        val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output
         val sampNativeFunctionsHeaderFile = "$srcMainHeadersDir/SAMPNativeFunctions.h"
 
         kampCoreMainOutput.classesDirs.files.forEach(inputs::dir)

@@ -41,7 +41,7 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         get() = interfaceDefinitionUnit.functions
 
     private val outputDirectory: File by lazy {
-        fileLookup.fileResolver.resolve(extension.outputDirectoryPath)
+        project.buildDir.resolve(KotlinCodegenPlugin.GENERATED_SOURCE_DIRECTORY)
     }
 
     private val runtimeOutputDirectory: File by lazy {

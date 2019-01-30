@@ -45,7 +45,7 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         get() = interfaceDefinitionUnit.constants
 
     private val outputDirectory: File by lazy {
-        fileLookup.fileResolver.resolve(extension.outputDirectoryPath)
+        project.buildDir.resolve(JavaCodegenPlugin.GENERATED_SOURCE_DIRECTORY)
     }
 
     private val apiOutputDirectory: File by lazy {
