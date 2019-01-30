@@ -2,7 +2,6 @@ package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.Commands
-import com.google.common.hash.HashCode
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -16,7 +15,7 @@ import org.junit.jupiter.params.provider.ValueSource
 internal class CommandRegistryTest {
 
     private val commandDefinitionLoader = mockk<CommandDefinitionLoader>()
-    private val method = HashCode::class.java.getMethod("hashCode")
+    private val method = Any::class.java.getMethod("hashCode")
 
     @Nested
     inner class ValidCommandDefinitionsTests {
