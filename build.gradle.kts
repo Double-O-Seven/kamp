@@ -11,7 +11,6 @@ buildscript {
         }
 
         classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.3-6-gf8ef169")
-        classpath(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "0.9.17")
     }
 }
 
@@ -19,6 +18,7 @@ plugins {
     java
     kotlin("jvm")
     jacoco
+    id("org.jetbrains.dokka") version "0.9.17"
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
@@ -66,6 +66,10 @@ configure(subprojects - project("kamp-plugin")) {
             jacoco {
                 toolVersion = "0.8.2"
             }
+        }
+
+        dokka {
+            reportUndocumented = false
         }
     }
 

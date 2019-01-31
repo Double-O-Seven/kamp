@@ -4,6 +4,9 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import java.util.Locale
 
+/**
+ * A collection of [CommandAccessChecker] applied on a [CommandDefinition].
+ */
 data class CommandAccessCheckerGroup
 internal constructor(
         val accessCheckers: List<CommandAccessChecker>,

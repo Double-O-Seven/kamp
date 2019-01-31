@@ -8,6 +8,9 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import javax.inject.Inject
 
+/**
+ * Default [InvalidCommandParameterValueHandler] that will be used if none other was provided through a [ch.leadrian.samp.kamp.core.api.inject.KampModule].
+ */
 open class DefaultInvalidCommandParameterValueHandler
 @Inject
 constructor(
@@ -15,6 +18,14 @@ constructor(
         private val textProvider: TextProvider
 ) : InvalidCommandParameterValueHandler {
 
+    /**
+     * Sends the player a message describing how to use the command properly.
+     *
+     * Example:
+     * ```
+     * Usage: /pm [Player] [Text]
+     * ```
+     */
     override fun handle(
             player: Player,
             commandDefinition: CommandDefinition,

@@ -8,7 +8,8 @@ import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import javax.inject.Inject
 
 open class DefaultUnknownCommandHandler
-@Inject constructor(private val messageSender: MessageSender) : UnknownCommandHandler {
+@Inject
+constructor(private val messageSender: MessageSender) : UnknownCommandHandler {
 
     override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result {
         messageSender.sendMessageToPlayer(

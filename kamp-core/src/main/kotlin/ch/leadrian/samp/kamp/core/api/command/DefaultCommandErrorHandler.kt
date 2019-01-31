@@ -7,10 +7,18 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import javax.inject.Inject
 
+/**
+ * Default [CommandErrorHandler] that will be used if none other was provided through a [ch.leadrian.samp.kamp.core.api.inject.KampModule].
+ */
 open class DefaultCommandErrorHandler
 @Inject
 constructor(private val messageSender: MessageSender) : CommandErrorHandler {
 
+    /**
+     * If [exception] is not null, a message saying that an unknown error occurred will be sent to the player,
+     * else, a parsing error must have occurred and a message saying that the command was not valid will be sent to the player.
+     * Any further command processing will be suppress by returning [OnPlayerCommandTextListener.Result.Processed].
+     */
     override fun handle(
             player: Player,
             commandLine: String,
