@@ -26,6 +26,10 @@ constructor(
         private val messageSender: MessageSender
 ) : Commands() {
 
+    override fun getCommandListDialogTitle(player: Player): String {
+        return textProvider.getText(player.locale, LvdmTextKeys.lvdm.commands.title.admin)
+    }
+
     @Unlisted
     @Command
     fun admcmds(player: Player) {
