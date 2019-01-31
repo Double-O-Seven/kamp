@@ -16,6 +16,17 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
             return entries.asSequence().map { it.listener }
         }
 
+    /**
+     * Registers [listener] as listener for all known callbacks.
+     *
+     * If [listener] is already registered, it will be re-registered with new [priority].
+     *
+     * If [priority] is not null, [listener] will be registered with priority [priority],
+     * else, if any [Priority] or [Priorities] annotation is present, the priority will be derived from those,
+     * else, the default priority of 0 will be used.
+     *
+     * @return true, if [listener] is an instance of [T], else false
+     */
     fun register(listener: Any, priority: Int? = null): Boolean {
         if (!listenerClass.isInstance(listener)) return false
 
@@ -27,6 +38,11 @@ open class CallbackListenerRegistry<T : Any>(val listenerClass: KClass<T>) {
         return true
     }
 
+    /**
+     * Unregisters [listener] as listener for all known callbacks.
+     *
+     * @return true if [listener] was registered before, else false
+     */
     fun unregister(listener: Any): Boolean {
         val removed = entries.removeIf { it.listener === listener }
         if (removed) {

@@ -11,6 +11,7 @@ buildscript {
         }
 
         classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.3-6-gf8ef169")
+        classpath(group = "org.jetbrains.dokka", name = "dokka-gradle-plugin", version = "0.9.17")
     }
 }
 
@@ -38,6 +39,7 @@ configure(subprojects - project("kamp-plugin")) {
     apply(plugin = "java")
     apply(plugin = "kotlin")
     apply(plugin = "jacoco")
+    apply(plugin = "org.jetbrains.dokka")
 
     tasks {
         compileKotlin {
