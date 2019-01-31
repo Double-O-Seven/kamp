@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
+import ch.leadrian.samp.kamp.core.api.command.CommandErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.DefaultCommandErrorHandler
 import ch.leadrian.samp.kamp.core.api.command.DefaultUnknownCommandHandler
@@ -312,7 +313,7 @@ internal class CommandProcessorTest {
         }
 
         @Test
-        fun givenExceptionIsThrownItShouldExecutorCommandErrorHandler() {
+        fun givenExceptionIsThrownWithNoCommandSpecificErrorHandlerItShouldExecuteDefaultCommandErrorHandler() {
             every { player.name } returns "hans.wurst"
             val commandLine = "/hi there"
             val commandDefinition = CommandDefinition(
@@ -341,6 +342,41 @@ internal class CommandProcessorTest {
             assertThat(result)
                     .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
             verify { defaultCommandErrorHandler.handle(player, commandLine, exception) }
+        }
+
+        @Test
+        fun givenExceptionIsThrownItShouldExecuteCommandErrorHandler() {
+            every { player.name } returns "hans.wurst"
+            val commandLine = "/hi there"
+            val errorHandler = mockk<CommandErrorHandler> {
+                every {
+                    handle(any(), any(), any())
+                } returns OnPlayerCommandTextListener.Result.Processed
+            }
+            val commandDefinition = CommandDefinition(
+                    name = "hi",
+                    method = method,
+                    commandsInstance = TestCommands,
+                    parameters = listOf(),
+                    errorHandler = errorHandler
+            )
+            val stringParameterValues = listOf("there", "123")
+            every { commandParser.parse(commandLine) } returns ParsedCommand("hi", stringParameterValues)
+            every { commandRegistry.getCommandDefinition("hi", "there") } returns commandDefinition
+            every {
+                commandAccessCheckExecutor.checkAccess(player, commandDefinition, stringParameterValues)
+            } returns null
+            every {
+                commandParametersResolver.resolve(player, commandDefinition, listOf("there", "123"))
+            } returns CommandParametersResolver.Result.ParameterValues(arrayOf(player, "there", 123))
+            val exception = Exception("shit happened")
+            every { commandExecutor.invoke(any(), any()) } throws exception
+
+            val result = commandProcessor.onPlayerCommandText(player, commandLine)
+
+            assertThat(result)
+                    .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
+            verify { errorHandler.handle(player, commandLine, exception) }
         }
 
     }

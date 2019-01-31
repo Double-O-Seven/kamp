@@ -37,7 +37,7 @@ constructor(
     private var unknownCommandHandler: UnknownCommandHandler = defaultUnknownCommandHandler
 
     @field:com.google.inject.Inject(optional = true)
-    private var commandErrorHandler: CommandErrorHandler = defaultCommandErrorHandler
+    private var defaultCommandErrorHandler: CommandErrorHandler = defaultCommandErrorHandler
 
     @PostConstruct
     fun initialize() {
@@ -45,19 +45,17 @@ constructor(
     }
 
     override fun onPlayerCommandText(player: Player, commandText: String): OnPlayerCommandTextListener.Result {
-        try {
-            val parsedCommand = commandParser.parse(commandText)
-                    ?: return commandErrorHandler.handle(player, commandText, null)
-
-            val commandDefinition = getCommandDefinition(parsedCommand)
-                    ?: return unknownCommandHandler.handle(player, commandText)
-
-            val stringParameterValues = getStringParameterValues(commandDefinition, parsedCommand)
-
-            return processCommand(player, commandText, commandDefinition, stringParameterValues)
+        val parsedCommand = commandParser.parse(commandText)
+                ?: return defaultCommandErrorHandler.handle(player, commandText, null)
+        val commandDefinition = getCommandDefinition(parsedCommand)
+                ?: return unknownCommandHandler.handle(player, commandText)
+        val stringParameterValues = getStringParameterValues(commandDefinition, parsedCommand)
+        return try {
+            processCommand(player, commandText, commandDefinition, stringParameterValues)
         } catch (e: Exception) {
             log.error("Exception while processing command by player {}: {}", player.name, commandText, e)
-            return commandErrorHandler.handle(player, commandText, e)
+            val errorHandler = commandDefinition.errorHandler ?: defaultCommandErrorHandler
+            errorHandler.handle(player, commandText, e)
         }
     }
 
