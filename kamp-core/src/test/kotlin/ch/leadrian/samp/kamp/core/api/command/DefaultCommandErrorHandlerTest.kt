@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -33,7 +33,7 @@ internal class DefaultCommandErrorHandlerTest {
 
         val result = defaultCommandErrorHandler.handle(player, "/hi there", null)
 
-        verify { messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.invalid, "/hi there") }
+        verify { messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.invalid, "/hi there") }
         assertThat(result)
                 .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
     }
@@ -44,7 +44,7 @@ internal class DefaultCommandErrorHandlerTest {
 
         val result = defaultCommandErrorHandler.handle(player, "/hi there", Exception())
 
-        verify { messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.unexpected.error) }
+        verify { messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.unexpected.error) }
         assertThat(result)
                 .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
     }

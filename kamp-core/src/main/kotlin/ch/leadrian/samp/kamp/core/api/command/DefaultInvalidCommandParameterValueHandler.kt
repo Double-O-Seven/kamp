@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -22,7 +22,7 @@ constructor(
             parameterIndex: Int?
     ): OnPlayerCommandTextListener.Result {
         val message = StringBuilder().apply {
-            append(textProvider.getText(player.locale, TextKeys.command.usage.prefix))
+            append(textProvider.getText(player.locale, KampCoreTextKeys.command.usage.prefix))
             append(": /")
             append(commandDefinition.name)
             commandDefinition.parameters.forEach {

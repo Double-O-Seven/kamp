@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.dialog
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import java.util.regex.Pattern
@@ -75,7 +75,7 @@ private class FloatValue(
 
     override fun validate(player: Player, inputText: String): Any? {
         return when (inputText.toFloatOrNull()) {
-            null -> errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.floatvalue
+            null -> errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.floatvalue
             else -> null
         }
     }
@@ -89,7 +89,7 @@ private class IntValue(
 
     override fun validate(player: Player, inputText: String): Any? {
         return when (inputText.toIntOrNull()) {
-            null -> errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.intvalue
+            null -> errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.intvalue
             else -> null
         }
     }
@@ -108,7 +108,7 @@ private class PatternMatch(
         if (pattern.matcher(inputText).matches()) {
             return null
         }
-        return errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.generic
+        return errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.generic
     }
 
 }
@@ -120,7 +120,7 @@ private class NotBlank(
 
     override fun validate(player: Player, inputText: String): Any? {
         if (inputText.isBlank()) {
-            return errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.notblank
+            return errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.notblank
         }
         return null
     }
@@ -134,7 +134,7 @@ private class NotEmpty(
 
     override fun validate(player: Player, inputText: String): Any? {
         if (inputText.isEmpty()) {
-            return errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.notempty
+            return errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.notempty
         }
         return null
     }
@@ -160,7 +160,7 @@ private class ContainedIn(
         }
         return when {
             contains -> null
-            else -> errorMessageTextKey ?: errorMessage ?: TextKeys.dialog.input.validation.error.generic
+            else -> errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.generic
         }
     }
 

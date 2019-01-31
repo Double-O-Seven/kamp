@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
@@ -17,8 +17,8 @@ constructor(private val messageSender: MessageSender) : CommandErrorHandler {
             exception: Exception?
     ): OnPlayerCommandTextListener.Result {
         when (exception) {
-            null -> messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.invalid, commandLine)
-            else -> messageSender.sendMessageToPlayer(player, Colors.RED, TextKeys.command.unexpected.error)
+            null -> messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.invalid, commandLine)
+            else -> messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.unexpected.error)
         }
         return OnPlayerCommandTextListener.Result.Processed
     }

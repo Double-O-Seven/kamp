@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.data.Box
 import ch.leadrian.samp.kamp.core.api.data.Vector2D
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
@@ -55,7 +55,7 @@ internal constructor(
                 listOf(
                         SanAndreasZone(
                                 name = "Caligula's Palace",
-                                textKey = TextKeys.zone.name.caligulaspalace,
+                                textKey = KampCoreTextKeys.zone.name.caligulaspalace,
                                 minX = 2087.3f,
                                 minY = 1543.2f,
                                 minZ = 900.0f,
@@ -66,7 +66,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Four Dragons Casino",
-                                textKey = TextKeys.zone.name.thefourdragonscasino,
+                                textKey = KampCoreTextKeys.zone.name.thefourdragonscasino,
                                 minX = 1817.3f,
                                 minY = 863.2f,
                                 minZ = 900.0f,
@@ -77,7 +77,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Big Ear",
-                                textKey = TextKeys.zone.name.thebigear,
+                                textKey = KampCoreTextKeys.zone.name.thebigear,
                                 minX = -410.0f,
                                 minY = 1403.3f,
                                 minZ = -3.0f,
@@ -88,7 +88,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Aldea Malvada",
-                                textKey = TextKeys.zone.name.aldeamalvada,
+                                textKey = KampCoreTextKeys.zone.name.aldeamalvada,
                                 minX = -1372.1f,
                                 minY = 2498.5f,
                                 minZ = 0.0f,
@@ -99,7 +99,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Angel Pine",
-                                textKey = TextKeys.zone.name.angelpine,
+                                textKey = KampCoreTextKeys.zone.name.angelpine,
                                 minX = -2324.9f,
                                 minY = -2584.2f,
                                 minZ = -6.1f,
@@ -110,7 +110,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Arco del Oeste",
-                                textKey = TextKeys.zone.name.arcodeloeste,
+                                textKey = KampCoreTextKeys.zone.name.arcodeloeste,
                                 minX = -901.1f,
                                 minY = 2221.8f,
                                 minZ = 0.0f,
@@ -121,7 +121,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2646.4f,
                                 minY = -355.4f,
                                 minZ = 0.0f,
@@ -132,7 +132,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2831.8f,
                                 minY = -430.2f,
                                 minZ = -6.1f,
@@ -143,7 +143,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2361.5f,
                                 minY = -417.1f,
                                 minZ = 0.0f,
@@ -154,7 +154,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2667.8f,
                                 minY = -302.1f,
                                 minZ = -28.8f,
@@ -165,7 +165,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2470.0f,
                                 minY = -355.4f,
                                 minZ = 0.0f,
@@ -176,7 +176,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Avispa Country Club",
-                                textKey = TextKeys.zone.name.avispacountryclub,
+                                textKey = KampCoreTextKeys.zone.name.avispacountryclub,
                                 minX = -2550.0f,
                                 minY = -355.4f,
                                 minZ = 0.0f,
@@ -187,7 +187,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Back o Beyond",
-                                textKey = TextKeys.zone.name.backobeyond,
+                                textKey = KampCoreTextKeys.zone.name.backobeyond,
                                 minX = -1166.9f,
                                 minY = -2641.1f,
                                 minZ = 0.0f,
@@ -198,7 +198,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Battery Point",
-                                textKey = TextKeys.zone.name.batterypoint,
+                                textKey = KampCoreTextKeys.zone.name.batterypoint,
                                 minX = -2741.0f,
                                 minY = 1268.4f,
                                 minZ = -4.5f,
@@ -209,7 +209,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Bayside",
-                                textKey = TextKeys.zone.name.bayside,
+                                textKey = KampCoreTextKeys.zone.name.bayside,
                                 minX = -2741.0f,
                                 minY = 2175.1f,
                                 minZ = 0.0f,
@@ -220,7 +220,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Bayside Marina",
-                                textKey = TextKeys.zone.name.baysidemarina,
+                                textKey = KampCoreTextKeys.zone.name.baysidemarina,
                                 minX = -2353.1f,
                                 minY = 2275.7f,
                                 minZ = 0.0f,
@@ -231,7 +231,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Beacon Hill",
-                                textKey = TextKeys.zone.name.beaconhill,
+                                textKey = KampCoreTextKeys.zone.name.beaconhill,
                                 minX = -399.6f,
                                 minY = -1075.5f,
                                 minZ = -1.4f,
@@ -242,7 +242,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield",
-                                textKey = TextKeys.zone.name.blackfield,
+                                textKey = KampCoreTextKeys.zone.name.blackfield,
                                 minX = 964.3f,
                                 minY = 1203.2f,
                                 minZ = -89.0f,
@@ -253,7 +253,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield",
-                                textKey = TextKeys.zone.name.blackfield,
+                                textKey = KampCoreTextKeys.zone.name.blackfield,
                                 minX = 964.3f,
                                 minY = 1403.2f,
                                 minZ = -89.0f,
@@ -264,7 +264,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Chapel",
-                                textKey = TextKeys.zone.name.blackfieldchapel,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldchapel,
                                 minX = 1375.6f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -275,7 +275,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Chapel",
-                                textKey = TextKeys.zone.name.blackfieldchapel,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldchapel,
                                 minX = 1325.6f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -286,7 +286,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Intersection",
-                                textKey = TextKeys.zone.name.blackfieldintersection,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldintersection,
                                 minX = 1197.3f,
                                 minY = 1044.6f,
                                 minZ = -89.0f,
@@ -297,7 +297,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Intersection",
-                                textKey = TextKeys.zone.name.blackfieldintersection,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldintersection,
                                 minX = 1166.5f,
                                 minY = 795.0f,
                                 minZ = -89.0f,
@@ -308,7 +308,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Intersection",
-                                textKey = TextKeys.zone.name.blackfieldintersection,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldintersection,
                                 minX = 1277.0f,
                                 minY = 1044.6f,
                                 minZ = -89.0f,
@@ -319,7 +319,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blackfield Intersection",
-                                textKey = TextKeys.zone.name.blackfieldintersection,
+                                textKey = KampCoreTextKeys.zone.name.blackfieldintersection,
                                 minX = 1375.6f,
                                 minY = 823.2f,
                                 minZ = -89.0f,
@@ -330,7 +330,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blueberry",
-                                textKey = TextKeys.zone.name.blueberry,
+                                textKey = KampCoreTextKeys.zone.name.blueberry,
                                 minX = 104.5f,
                                 minY = -220.1f,
                                 minZ = 2.3f,
@@ -341,7 +341,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blueberry",
-                                textKey = TextKeys.zone.name.blueberry,
+                                textKey = KampCoreTextKeys.zone.name.blueberry,
                                 minX = 19.6f,
                                 minY = -404.1f,
                                 minZ = 3.8f,
@@ -352,7 +352,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Blueberry Acres",
-                                textKey = TextKeys.zone.name.blueberryacres,
+                                textKey = KampCoreTextKeys.zone.name.blueberryacres,
                                 minX = -319.6f,
                                 minY = -220.1f,
                                 minZ = 0.0f,
@@ -363,7 +363,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Caligula's Palace",
-                                textKey = TextKeys.zone.name.caligulaspalace,
+                                textKey = KampCoreTextKeys.zone.name.caligulaspalace,
                                 minX = 2087.3f,
                                 minY = 1543.2f,
                                 minZ = -89.0f,
@@ -374,7 +374,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Caligula's Palace",
-                                textKey = TextKeys.zone.name.caligulaspalace,
+                                textKey = KampCoreTextKeys.zone.name.caligulaspalace,
                                 minX = 2137.4f,
                                 minY = 1703.2f,
                                 minZ = -89.0f,
@@ -385,7 +385,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Calton Heights",
-                                textKey = TextKeys.zone.name.caltonheights,
+                                textKey = KampCoreTextKeys.zone.name.caltonheights,
                                 minX = -2274.1f,
                                 minY = 744.1f,
                                 minZ = -6.1f,
@@ -396,7 +396,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Chinatown",
-                                textKey = TextKeys.zone.name.chinatown,
+                                textKey = KampCoreTextKeys.zone.name.chinatown,
                                 minX = -2274.1f,
                                 minY = 578.3f,
                                 minZ = -7.6f,
@@ -407,7 +407,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "City Hall",
-                                textKey = TextKeys.zone.name.cityhall,
+                                textKey = KampCoreTextKeys.zone.name.cityhall,
                                 minX = -2867.8f,
                                 minY = 277.4f,
                                 minZ = -9.1f,
@@ -418,7 +418,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Come-A-Lot",
-                                textKey = TextKeys.zone.name.comealot,
+                                textKey = KampCoreTextKeys.zone.name.comealot,
                                 minX = 2087.3f,
                                 minY = 943.2f,
                                 minZ = -89.0f,
@@ -429,7 +429,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1323.9f,
                                 minY = -1842.2f,
                                 minZ = -89.0f,
@@ -440,7 +440,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1323.9f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -451,7 +451,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1370.8f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -462,7 +462,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1463.9f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -473,7 +473,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1583.5f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -484,7 +484,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Commerce",
-                                textKey = TextKeys.zone.name.commerce,
+                                textKey = KampCoreTextKeys.zone.name.commerce,
                                 minX = 1667.9f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -495,7 +495,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Conference Center",
-                                textKey = TextKeys.zone.name.conferencecenter,
+                                textKey = KampCoreTextKeys.zone.name.conferencecenter,
                                 minX = 1046.1f,
                                 minY = -1804.2f,
                                 minZ = -89.0f,
@@ -506,7 +506,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Conference Center",
-                                textKey = TextKeys.zone.name.conferencecenter,
+                                textKey = KampCoreTextKeys.zone.name.conferencecenter,
                                 minX = 1073.2f,
                                 minY = -1842.2f,
                                 minZ = -89.0f,
@@ -517,7 +517,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Cranberry Station",
-                                textKey = TextKeys.zone.name.cranberrystation,
+                                textKey = KampCoreTextKeys.zone.name.cranberrystation,
                                 minX = -2007.8f,
                                 minY = 56.3f,
                                 minZ = 0.0f,
@@ -528,7 +528,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Creek",
-                                textKey = TextKeys.zone.name.creek,
+                                textKey = KampCoreTextKeys.zone.name.creek,
                                 minX = 2749.9f,
                                 minY = 1937.2f,
                                 minZ = -89.0f,
@@ -539,7 +539,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Dillimore",
-                                textKey = TextKeys.zone.name.dillimore,
+                                textKey = KampCoreTextKeys.zone.name.dillimore,
                                 minX = 580.7f,
                                 minY = -674.8f,
                                 minZ = -9.5f,
@@ -550,7 +550,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Doherty",
-                                textKey = TextKeys.zone.name.doherty,
+                                textKey = KampCoreTextKeys.zone.name.doherty,
                                 minX = -2270.0f,
                                 minY = -324.1f,
                                 minZ = -0.0f,
@@ -561,7 +561,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Doherty",
-                                textKey = TextKeys.zone.name.doherty,
+                                textKey = KampCoreTextKeys.zone.name.doherty,
                                 minX = -2173.0f,
                                 minY = -222.5f,
                                 minZ = -0.0f,
@@ -572,7 +572,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -1982.3f,
                                 minY = 744.1f,
                                 minZ = -6.1f,
@@ -583,7 +583,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -1871.7f,
                                 minY = 1176.4f,
                                 minZ = -4.5f,
@@ -594,7 +594,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -1700.0f,
                                 minY = 744.2f,
                                 minZ = -6.1f,
@@ -605,7 +605,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -1580.0f,
                                 minY = 744.2f,
                                 minZ = -6.1f,
@@ -616,7 +616,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -2078.6f,
                                 minY = 578.3f,
                                 minZ = -7.6f,
@@ -627,7 +627,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown",
-                                textKey = TextKeys.zone.name.downtown,
+                                textKey = KampCoreTextKeys.zone.name.downtown,
                                 minX = -1993.2f,
                                 minY = 265.2f,
                                 minZ = -9.1f,
@@ -638,7 +638,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1463.9f,
                                 minY = -1430.8f,
                                 minZ = -89.0f,
@@ -649,7 +649,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1724.7f,
                                 minY = -1430.8f,
                                 minZ = -89.0f,
@@ -660,7 +660,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1463.9f,
                                 minY = -1290.8f,
                                 minZ = -89.0f,
@@ -671,7 +671,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1370.8f,
                                 minY = -1384.9f,
                                 minZ = -89.0f,
@@ -682,7 +682,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1724.7f,
                                 minY = -1250.9f,
                                 minZ = -89.0f,
@@ -693,7 +693,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1370.8f,
                                 minY = -1170.8f,
                                 minZ = -89.0f,
@@ -704,7 +704,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1378.3f,
                                 minY = -1130.8f,
                                 minZ = -89.0f,
@@ -715,7 +715,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1391.0f,
                                 minY = -1026.3f,
                                 minZ = -89.0f,
@@ -726,7 +726,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Downtown Los Santos",
-                                textKey = TextKeys.zone.name.downtownlossantos,
+                                textKey = KampCoreTextKeys.zone.name.downtownlossantos,
                                 minX = 1507.5f,
                                 minY = -1385.2f,
                                 minZ = 110.9f,
@@ -737,7 +737,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Beach",
-                                textKey = TextKeys.zone.name.eastbeach,
+                                textKey = KampCoreTextKeys.zone.name.eastbeach,
                                 minX = 2632.8f,
                                 minY = -1852.8f,
                                 minZ = -89.0f,
@@ -748,7 +748,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Beach",
-                                textKey = TextKeys.zone.name.eastbeach,
+                                textKey = KampCoreTextKeys.zone.name.eastbeach,
                                 minX = 2632.8f,
                                 minY = -1668.1f,
                                 minZ = -89.0f,
@@ -759,7 +759,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Beach",
-                                textKey = TextKeys.zone.name.eastbeach,
+                                textKey = KampCoreTextKeys.zone.name.eastbeach,
                                 minX = 2747.7f,
                                 minY = -1668.1f,
                                 minZ = -89.0f,
@@ -770,7 +770,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Beach",
-                                textKey = TextKeys.zone.name.eastbeach,
+                                textKey = KampCoreTextKeys.zone.name.eastbeach,
                                 minX = 2747.7f,
                                 minY = -1498.6f,
                                 minZ = -89.0f,
@@ -781,7 +781,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2421.0f,
                                 minY = -1628.5f,
                                 minZ = -89.0f,
@@ -792,7 +792,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2222.5f,
                                 minY = -1628.5f,
                                 minZ = -89.0f,
@@ -803,7 +803,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2266.2f,
                                 minY = -1494.0f,
                                 minZ = -89.0f,
@@ -814,7 +814,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2381.6f,
                                 minY = -1494.0f,
                                 minZ = -89.0f,
@@ -825,7 +825,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2281.4f,
                                 minY = -1372.0f,
                                 minZ = -89.0f,
@@ -836,7 +836,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2381.6f,
                                 minY = -1454.3f,
                                 minZ = -89.0f,
@@ -847,7 +847,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "East Los Santos",
-                                textKey = TextKeys.zone.name.eastlossantos,
+                                textKey = KampCoreTextKeys.zone.name.eastlossantos,
                                 minX = 2462.1f,
                                 minY = -1454.3f,
                                 minZ = -89.0f,
@@ -858,7 +858,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Basin",
-                                textKey = TextKeys.zone.name.easterbasin,
+                                textKey = KampCoreTextKeys.zone.name.easterbasin,
                                 minX = -1794.9f,
                                 minY = 249.9f,
                                 minZ = -9.1f,
@@ -869,7 +869,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Basin",
-                                textKey = TextKeys.zone.name.easterbasin,
+                                textKey = KampCoreTextKeys.zone.name.easterbasin,
                                 minX = -1794.9f,
                                 minY = -50.0f,
                                 minZ = -0.0f,
@@ -880,7 +880,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1499.8f,
                                 minY = -50.0f,
                                 minZ = -0.0f,
@@ -891,7 +891,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1794.9f,
                                 minY = -730.1f,
                                 minZ = -3.0f,
@@ -902,7 +902,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1213.9f,
                                 minY = -730.1f,
                                 minZ = 0.0f,
@@ -913,7 +913,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1242.9f,
                                 minY = -50.0f,
                                 minZ = 0.0f,
@@ -924,7 +924,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1213.9f,
                                 minY = -50.0f,
                                 minZ = -4.5f,
@@ -935,7 +935,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1315.4f,
                                 minY = -405.3f,
                                 minZ = 15.4f,
@@ -946,7 +946,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1354.3f,
                                 minY = -287.3f,
                                 minZ = 15.4f,
@@ -957,7 +957,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Airport",
-                                textKey = TextKeys.zone.name.easterbayairport,
+                                textKey = KampCoreTextKeys.zone.name.easterbayairport,
                                 minX = -1490.3f,
                                 minY = -209.5f,
                                 minZ = 15.4f,
@@ -968,7 +968,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Chemicals",
-                                textKey = TextKeys.zone.name.easterbaychemicals,
+                                textKey = KampCoreTextKeys.zone.name.easterbaychemicals,
                                 minX = -1132.8f,
                                 minY = -768.0f,
                                 minZ = 0.0f,
@@ -979,7 +979,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Easter Bay Chemicals",
-                                textKey = TextKeys.zone.name.easterbaychemicals,
+                                textKey = KampCoreTextKeys.zone.name.easterbaychemicals,
                                 minX = -1132.8f,
                                 minY = -787.3f,
                                 minZ = 0.0f,
@@ -990,7 +990,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Castillo del Diablo",
-                                textKey = TextKeys.zone.name.elcastillodeldiablo,
+                                textKey = KampCoreTextKeys.zone.name.elcastillodeldiablo,
                                 minX = -464.5f,
                                 minY = 2217.6f,
                                 minZ = 0.0f,
@@ -1001,7 +1001,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Castillo del Diablo",
-                                textKey = TextKeys.zone.name.elcastillodeldiablo,
+                                textKey = KampCoreTextKeys.zone.name.elcastillodeldiablo,
                                 minX = -208.5f,
                                 minY = 2123.0f,
                                 minZ = -7.6f,
@@ -1012,7 +1012,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Castillo del Diablo",
-                                textKey = TextKeys.zone.name.elcastillodeldiablo,
+                                textKey = KampCoreTextKeys.zone.name.elcastillodeldiablo,
                                 minX = -208.5f,
                                 minY = 2337.1f,
                                 minZ = 0.0f,
@@ -1023,7 +1023,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Corona",
-                                textKey = TextKeys.zone.name.elcorona,
+                                textKey = KampCoreTextKeys.zone.name.elcorona,
                                 minX = 1812.6f,
                                 minY = -2179.2f,
                                 minZ = -89.0f,
@@ -1034,7 +1034,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Corona",
-                                textKey = TextKeys.zone.name.elcorona,
+                                textKey = KampCoreTextKeys.zone.name.elcorona,
                                 minX = 1692.6f,
                                 minY = -2179.2f,
                                 minZ = -89.0f,
@@ -1045,7 +1045,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "El Quebrados",
-                                textKey = TextKeys.zone.name.elquebrados,
+                                textKey = KampCoreTextKeys.zone.name.elquebrados,
                                 minX = -1645.2f,
                                 minY = 2498.5f,
                                 minZ = 0.0f,
@@ -1056,7 +1056,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade East",
-                                textKey = TextKeys.zone.name.esplanadeeast,
+                                textKey = KampCoreTextKeys.zone.name.esplanadeeast,
                                 minX = -1620.3f,
                                 minY = 1176.5f,
                                 minZ = -4.5f,
@@ -1067,7 +1067,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade East",
-                                textKey = TextKeys.zone.name.esplanadeeast,
+                                textKey = KampCoreTextKeys.zone.name.esplanadeeast,
                                 minX = -1580.0f,
                                 minY = 1025.9f,
                                 minZ = -6.1f,
@@ -1078,7 +1078,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade East",
-                                textKey = TextKeys.zone.name.esplanadeeast,
+                                textKey = KampCoreTextKeys.zone.name.esplanadeeast,
                                 minX = -1499.8f,
                                 minY = 578.3f,
                                 minZ = -79.6f,
@@ -1089,7 +1089,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade North",
-                                textKey = TextKeys.zone.name.esplanadenorth,
+                                textKey = KampCoreTextKeys.zone.name.esplanadenorth,
                                 minX = -2533.0f,
                                 minY = 1358.9f,
                                 minZ = -4.5f,
@@ -1100,7 +1100,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade North",
-                                textKey = TextKeys.zone.name.esplanadenorth,
+                                textKey = KampCoreTextKeys.zone.name.esplanadenorth,
                                 minX = -1996.6f,
                                 minY = 1358.9f,
                                 minZ = -4.5f,
@@ -1111,7 +1111,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Esplanade North",
-                                textKey = TextKeys.zone.name.esplanadenorth,
+                                textKey = KampCoreTextKeys.zone.name.esplanadenorth,
                                 minX = -1982.3f,
                                 minY = 1274.2f,
                                 minZ = -4.5f,
@@ -1122,7 +1122,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Fallen Tree",
-                                textKey = TextKeys.zone.name.fallentree,
+                                textKey = KampCoreTextKeys.zone.name.fallentree,
                                 minX = -792.2f,
                                 minY = -698.5f,
                                 minZ = -5.3f,
@@ -1133,7 +1133,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Fallow Bridge",
-                                textKey = TextKeys.zone.name.fallowbridge,
+                                textKey = KampCoreTextKeys.zone.name.fallowbridge,
                                 minX = 434.3f,
                                 minY = 366.5f,
                                 minZ = 0.0f,
@@ -1144,7 +1144,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Fern Ridge",
-                                textKey = TextKeys.zone.name.fernridge,
+                                textKey = KampCoreTextKeys.zone.name.fernridge,
                                 minX = 508.1f,
                                 minY = -139.2f,
                                 minZ = 0.0f,
@@ -1155,7 +1155,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Financial",
-                                textKey = TextKeys.zone.name.financial,
+                                textKey = KampCoreTextKeys.zone.name.financial,
                                 minX = -1871.7f,
                                 minY = 744.1f,
                                 minZ = -6.1f,
@@ -1166,7 +1166,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Fisher's Lagoon",
-                                textKey = TextKeys.zone.name.fisherslagoon,
+                                textKey = KampCoreTextKeys.zone.name.fisherslagoon,
                                 minX = 1916.9f,
                                 minY = -233.3f,
                                 minZ = -100.0f,
@@ -1177,7 +1177,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Flint Intersection",
-                                textKey = TextKeys.zone.name.flintintersection,
+                                textKey = KampCoreTextKeys.zone.name.flintintersection,
                                 minX = -187.7f,
                                 minY = -1596.7f,
                                 minZ = -89.0f,
@@ -1188,7 +1188,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Flint Range",
-                                textKey = TextKeys.zone.name.flintrange,
+                                textKey = KampCoreTextKeys.zone.name.flintrange,
                                 minX = -594.1f,
                                 minY = -1648.5f,
                                 minZ = 0.0f,
@@ -1199,7 +1199,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Fort Carson",
-                                textKey = TextKeys.zone.name.fortcarson,
+                                textKey = KampCoreTextKeys.zone.name.fortcarson,
                                 minX = -376.2f,
                                 minY = 826.3f,
                                 minZ = -3.0f,
@@ -1210,7 +1210,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Foster Valley",
-                                textKey = TextKeys.zone.name.fostervalley,
+                                textKey = KampCoreTextKeys.zone.name.fostervalley,
                                 minX = -2270.0f,
                                 minY = -430.2f,
                                 minZ = -0.0f,
@@ -1221,7 +1221,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Foster Valley",
-                                textKey = TextKeys.zone.name.fostervalley,
+                                textKey = KampCoreTextKeys.zone.name.fostervalley,
                                 minX = -2178.6f,
                                 minY = -599.8f,
                                 minZ = -0.0f,
@@ -1232,7 +1232,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Foster Valley",
-                                textKey = TextKeys.zone.name.fostervalley,
+                                textKey = KampCoreTextKeys.zone.name.fostervalley,
                                 minX = -2178.6f,
                                 minY = -1115.5f,
                                 minZ = 0.0f,
@@ -1243,7 +1243,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Foster Valley",
-                                textKey = TextKeys.zone.name.fostervalley,
+                                textKey = KampCoreTextKeys.zone.name.fostervalley,
                                 minX = -2178.6f,
                                 minY = -1250.9f,
                                 minZ = 0.0f,
@@ -1254,7 +1254,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Frederick Bridge",
-                                textKey = TextKeys.zone.name.frederickbridge,
+                                textKey = KampCoreTextKeys.zone.name.frederickbridge,
                                 minX = 2759.2f,
                                 minY = 296.5f,
                                 minZ = 0.0f,
@@ -1265,7 +1265,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Gant Bridge",
-                                textKey = TextKeys.zone.name.gantbridge,
+                                textKey = KampCoreTextKeys.zone.name.gantbridge,
                                 minX = -2741.4f,
                                 minY = 1659.6f,
                                 minZ = -6.1f,
@@ -1276,7 +1276,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Gant Bridge",
-                                textKey = TextKeys.zone.name.gantbridge,
+                                textKey = KampCoreTextKeys.zone.name.gantbridge,
                                 minX = -2741.0f,
                                 minY = 1490.4f,
                                 minZ = -6.1f,
@@ -1287,7 +1287,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ganton",
-                                textKey = TextKeys.zone.name.ganton,
+                                textKey = KampCoreTextKeys.zone.name.ganton,
                                 minX = 2222.5f,
                                 minY = -1852.8f,
                                 minZ = -89.0f,
@@ -1298,7 +1298,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ganton",
-                                textKey = TextKeys.zone.name.ganton,
+                                textKey = KampCoreTextKeys.zone.name.ganton,
                                 minX = 2222.5f,
                                 minY = -1722.3f,
                                 minZ = -89.0f,
@@ -1309,7 +1309,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Garcia",
-                                textKey = TextKeys.zone.name.garcia,
+                                textKey = KampCoreTextKeys.zone.name.garcia,
                                 minX = -2411.2f,
                                 minY = -222.5f,
                                 minZ = -0.0f,
@@ -1320,7 +1320,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Garcia",
-                                textKey = TextKeys.zone.name.garcia,
+                                textKey = KampCoreTextKeys.zone.name.garcia,
                                 minX = -2395.1f,
                                 minY = -222.5f,
                                 minZ = -5.3f,
@@ -1331,7 +1331,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Garver Bridge",
-                                textKey = TextKeys.zone.name.garverbridge,
+                                textKey = KampCoreTextKeys.zone.name.garverbridge,
                                 minX = -1339.8f,
                                 minY = 828.1f,
                                 minZ = -89.0f,
@@ -1342,7 +1342,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Garver Bridge",
-                                textKey = TextKeys.zone.name.garverbridge,
+                                textKey = KampCoreTextKeys.zone.name.garverbridge,
                                 minX = -1213.9f,
                                 minY = 950.0f,
                                 minZ = -89.0f,
@@ -1353,7 +1353,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Garver Bridge",
-                                textKey = TextKeys.zone.name.garverbridge,
+                                textKey = KampCoreTextKeys.zone.name.garverbridge,
                                 minX = -1499.8f,
                                 minY = 696.4f,
                                 minZ = -179.6f,
@@ -1364,7 +1364,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Glen Park",
-                                textKey = TextKeys.zone.name.glenpark,
+                                textKey = KampCoreTextKeys.zone.name.glenpark,
                                 minX = 1812.6f,
                                 minY = -1449.6f,
                                 minZ = -89.0f,
@@ -1375,7 +1375,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Glen Park",
-                                textKey = TextKeys.zone.name.glenpark,
+                                textKey = KampCoreTextKeys.zone.name.glenpark,
                                 minX = 1812.6f,
                                 minY = -1100.8f,
                                 minZ = -89.0f,
@@ -1386,7 +1386,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Glen Park",
-                                textKey = TextKeys.zone.name.glenpark,
+                                textKey = KampCoreTextKeys.zone.name.glenpark,
                                 minX = 1812.6f,
                                 minY = -1350.7f,
                                 minZ = -89.0f,
@@ -1397,7 +1397,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Green Palms",
-                                textKey = TextKeys.zone.name.greenpalms,
+                                textKey = KampCoreTextKeys.zone.name.greenpalms,
                                 minX = 176.5f,
                                 minY = 1305.4f,
                                 minZ = -3.0f,
@@ -1408,7 +1408,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Greenglass College",
-                                textKey = TextKeys.zone.name.greenglasscollege,
+                                textKey = KampCoreTextKeys.zone.name.greenglasscollege,
                                 minX = 964.3f,
                                 minY = 1044.6f,
                                 minZ = -89.0f,
@@ -1419,7 +1419,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Greenglass College",
-                                textKey = TextKeys.zone.name.greenglasscollege,
+                                textKey = KampCoreTextKeys.zone.name.greenglasscollege,
                                 minX = 964.3f,
                                 minY = 930.8f,
                                 minZ = -89.0f,
@@ -1430,7 +1430,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Hampton Barns",
-                                textKey = TextKeys.zone.name.hamptonbarns,
+                                textKey = KampCoreTextKeys.zone.name.hamptonbarns,
                                 minX = 603.0f,
                                 minY = 264.3f,
                                 minZ = 0.0f,
@@ -1441,7 +1441,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Hankypanky Point",
-                                textKey = TextKeys.zone.name.hankypankypoint,
+                                textKey = KampCoreTextKeys.zone.name.hankypankypoint,
                                 minX = 2576.9f,
                                 minY = 62.1f,
                                 minZ = 0.0f,
@@ -1452,7 +1452,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Harry Gold Parkway",
-                                textKey = TextKeys.zone.name.harrygoldparkway,
+                                textKey = KampCoreTextKeys.zone.name.harrygoldparkway,
                                 minX = 1777.3f,
                                 minY = 863.2f,
                                 minZ = -89.0f,
@@ -1463,7 +1463,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Hashbury",
-                                textKey = TextKeys.zone.name.hashbury,
+                                textKey = KampCoreTextKeys.zone.name.hashbury,
                                 minX = -2593.4f,
                                 minY = -222.5f,
                                 minZ = -0.0f,
@@ -1474,7 +1474,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Hilltop Farm",
-                                textKey = TextKeys.zone.name.hilltopfarm,
+                                textKey = KampCoreTextKeys.zone.name.hilltopfarm,
                                 minX = 967.3f,
                                 minY = -450.3f,
                                 minZ = -3.0f,
@@ -1485,7 +1485,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Hunter Quarry",
-                                textKey = TextKeys.zone.name.hunterquarry,
+                                textKey = KampCoreTextKeys.zone.name.hunterquarry,
                                 minX = 337.2f,
                                 minY = 710.8f,
                                 minZ = -115.2f,
@@ -1496,7 +1496,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 1812.6f,
                                 minY = -1852.8f,
                                 minZ = -89.0f,
@@ -1507,7 +1507,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 1812.6f,
                                 minY = -1742.3f,
                                 minZ = -89.0f,
@@ -1518,7 +1518,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 1951.6f,
                                 minY = -1742.3f,
                                 minZ = -89.0f,
@@ -1529,7 +1529,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 1812.6f,
                                 minY = -1602.3f,
                                 minZ = -89.0f,
@@ -1540,7 +1540,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 2124.6f,
                                 minY = -1742.3f,
                                 minZ = -89.0f,
@@ -1551,7 +1551,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Idlewood",
-                                textKey = TextKeys.zone.name.idlewood,
+                                textKey = KampCoreTextKeys.zone.name.idlewood,
                                 minX = 1971.6f,
                                 minY = -1852.8f,
                                 minZ = -89.0f,
@@ -1562,7 +1562,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 1996.9f,
                                 minY = -1449.6f,
                                 minZ = -89.0f,
@@ -1573,7 +1573,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 2124.6f,
                                 minY = -1494.0f,
                                 minZ = -89.0f,
@@ -1584,7 +1584,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 2056.8f,
                                 minY = -1372.0f,
                                 minZ = -89.0f,
@@ -1595,7 +1595,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 2056.8f,
                                 minY = -1210.7f,
                                 minZ = -89.0f,
@@ -1606,7 +1606,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 2185.3f,
                                 minY = -1210.7f,
                                 minZ = -89.0f,
@@ -1617,7 +1617,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Jefferson",
-                                textKey = TextKeys.zone.name.jefferson,
+                                textKey = KampCoreTextKeys.zone.name.jefferson,
                                 minX = 2056.8f,
                                 minY = -1449.6f,
                                 minZ = -89.0f,
@@ -1628,7 +1628,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway East",
-                                textKey = TextKeys.zone.name.juliusthruwayeast,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwayeast,
                                 minX = 2623.1f,
                                 minY = 943.2f,
                                 minZ = -89.0f,
@@ -1639,7 +1639,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway East",
-                                textKey = TextKeys.zone.name.juliusthruwayeast,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwayeast,
                                 minX = 2685.1f,
                                 minY = 1055.9f,
                                 minZ = -89.0f,
@@ -1650,7 +1650,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway East",
-                                textKey = TextKeys.zone.name.juliusthruwayeast,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwayeast,
                                 minX = 2536.4f,
                                 minY = 2442.5f,
                                 minZ = -89.0f,
@@ -1661,7 +1661,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway East",
-                                textKey = TextKeys.zone.name.juliusthruwayeast,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwayeast,
                                 minX = 2625.1f,
                                 minY = 2202.7f,
                                 minZ = -89.0f,
@@ -1672,7 +1672,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 2498.2f,
                                 minY = 2542.5f,
                                 minZ = -89.0f,
@@ -1683,7 +1683,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 2237.4f,
                                 minY = 2542.5f,
                                 minZ = -89.0f,
@@ -1694,7 +1694,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 2121.4f,
                                 minY = 2508.2f,
                                 minZ = -89.0f,
@@ -1705,7 +1705,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 1938.8f,
                                 minY = 2508.2f,
                                 minZ = -89.0f,
@@ -1716,7 +1716,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 1534.5f,
                                 minY = 2433.2f,
                                 minZ = -89.0f,
@@ -1727,7 +1727,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 1848.4f,
                                 minY = 2478.4f,
                                 minZ = -89.0f,
@@ -1738,7 +1738,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 1704.5f,
                                 minY = 2342.8f,
                                 minZ = -89.0f,
@@ -1749,7 +1749,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway North",
-                                textKey = TextKeys.zone.name.juliusthruwaynorth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaynorth,
                                 minX = 1377.3f,
                                 minY = 2433.2f,
                                 minZ = -89.0f,
@@ -1760,7 +1760,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway South",
-                                textKey = TextKeys.zone.name.juliusthruwaysouth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaysouth,
                                 minX = 1457.3f,
                                 minY = 823.2f,
                                 minZ = -89.0f,
@@ -1771,7 +1771,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway South",
-                                textKey = TextKeys.zone.name.juliusthruwaysouth,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaysouth,
                                 minX = 2377.3f,
                                 minY = 788.8f,
                                 minZ = -89.0f,
@@ -1782,7 +1782,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway West",
-                                textKey = TextKeys.zone.name.juliusthruwaywest,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaywest,
                                 minX = 1197.3f,
                                 minY = 1163.3f,
                                 minZ = -89.0f,
@@ -1793,7 +1793,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Julius Thruway West",
-                                textKey = TextKeys.zone.name.juliusthruwaywest,
+                                textKey = KampCoreTextKeys.zone.name.juliusthruwaywest,
                                 minX = 1236.6f,
                                 minY = 2142.8f,
                                 minZ = -89.0f,
@@ -1804,7 +1804,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Juniper Hill",
-                                textKey = TextKeys.zone.name.juniperhill,
+                                textKey = KampCoreTextKeys.zone.name.juniperhill,
                                 minX = -2533.0f,
                                 minY = 578.3f,
                                 minZ = -7.6f,
@@ -1815,7 +1815,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Juniper Hollow",
-                                textKey = TextKeys.zone.name.juniperhollow,
+                                textKey = KampCoreTextKeys.zone.name.juniperhollow,
                                 minX = -2533.0f,
                                 minY = 968.3f,
                                 minZ = -6.1f,
@@ -1826,7 +1826,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "K.A.C.C. Military Fuels",
-                                textKey = TextKeys.zone.name.kaccmilitaryfuels,
+                                textKey = KampCoreTextKeys.zone.name.kaccmilitaryfuels,
                                 minX = 2498.2f,
                                 minY = 2626.5f,
                                 minZ = -89.0f,
@@ -1837,7 +1837,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Kincaid Bridge",
-                                textKey = TextKeys.zone.name.kincaidbridge,
+                                textKey = KampCoreTextKeys.zone.name.kincaidbridge,
                                 minX = -1339.8f,
                                 minY = 599.2f,
                                 minZ = -89.0f,
@@ -1848,7 +1848,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Kincaid Bridge",
-                                textKey = TextKeys.zone.name.kincaidbridge,
+                                textKey = KampCoreTextKeys.zone.name.kincaidbridge,
                                 minX = -1213.9f,
                                 minY = 721.1f,
                                 minZ = -89.0f,
@@ -1859,7 +1859,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Kincaid Bridge",
-                                textKey = TextKeys.zone.name.kincaidbridge,
+                                textKey = KampCoreTextKeys.zone.name.kincaidbridge,
                                 minX = -1087.9f,
                                 minY = 855.3f,
                                 minZ = -89.0f,
@@ -1870,7 +1870,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "King's",
-                                textKey = TextKeys.zone.name.kings,
+                                textKey = KampCoreTextKeys.zone.name.kings,
                                 minX = -2329.3f,
                                 minY = 458.4f,
                                 minZ = -7.6f,
@@ -1881,7 +1881,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "King's",
-                                textKey = TextKeys.zone.name.kings,
+                                textKey = KampCoreTextKeys.zone.name.kings,
                                 minX = -2411.2f,
                                 minY = 265.2f,
                                 minZ = -9.1f,
@@ -1892,7 +1892,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "King's",
-                                textKey = TextKeys.zone.name.kings,
+                                textKey = KampCoreTextKeys.zone.name.kings,
                                 minX = -2253.5f,
                                 minY = 373.5f,
                                 minZ = -9.1f,
@@ -1903,7 +1903,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "LVA Freight Depot",
-                                textKey = TextKeys.zone.name.lvafreightdepot,
+                                textKey = KampCoreTextKeys.zone.name.lvafreightdepot,
                                 minX = 1457.3f,
                                 minY = 863.2f,
                                 minZ = -89.0f,
@@ -1914,7 +1914,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "LVA Freight Depot",
-                                textKey = TextKeys.zone.name.lvafreightdepot,
+                                textKey = KampCoreTextKeys.zone.name.lvafreightdepot,
                                 minX = 1375.6f,
                                 minY = 919.4f,
                                 minZ = -89.0f,
@@ -1925,7 +1925,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "LVA Freight Depot",
-                                textKey = TextKeys.zone.name.lvafreightdepot,
+                                textKey = KampCoreTextKeys.zone.name.lvafreightdepot,
                                 minX = 1277.0f,
                                 minY = 1087.6f,
                                 minZ = -89.0f,
@@ -1936,7 +1936,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "LVA Freight Depot",
-                                textKey = TextKeys.zone.name.lvafreightdepot,
+                                textKey = KampCoreTextKeys.zone.name.lvafreightdepot,
                                 minX = 1315.3f,
                                 minY = 1044.6f,
                                 minZ = -89.0f,
@@ -1947,7 +1947,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "LVA Freight Depot",
-                                textKey = TextKeys.zone.name.lvafreightdepot,
+                                textKey = KampCoreTextKeys.zone.name.lvafreightdepot,
                                 minX = 1236.6f,
                                 minY = 1163.4f,
                                 minZ = -89.0f,
@@ -1958,7 +1958,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Barrancas",
-                                textKey = TextKeys.zone.name.lasbarrancas,
+                                textKey = KampCoreTextKeys.zone.name.lasbarrancas,
                                 minX = -926.1f,
                                 minY = 1398.7f,
                                 minZ = -3.0f,
@@ -1969,7 +1969,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Brujas",
-                                textKey = TextKeys.zone.name.lasbrujas,
+                                textKey = KampCoreTextKeys.zone.name.lasbrujas,
                                 minX = -365.1f,
                                 minY = 2123.0f,
                                 minZ = -3.0f,
@@ -1980,7 +1980,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 1994.3f,
                                 minY = -1100.8f,
                                 minZ = -89.0f,
@@ -1991,7 +1991,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2056.8f,
                                 minY = -1126.3f,
                                 minZ = -89.0f,
@@ -2002,7 +2002,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2185.3f,
                                 minY = -1154.5f,
                                 minZ = -89.0f,
@@ -2013,7 +2013,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2126.8f,
                                 minY = -1126.3f,
                                 minZ = -89.0f,
@@ -2024,7 +2024,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2747.7f,
                                 minY = -1120.0f,
                                 minZ = -89.0f,
@@ -2035,7 +2035,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2632.7f,
                                 minY = -1135.0f,
                                 minZ = -89.0f,
@@ -2046,7 +2046,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Colinas",
-                                textKey = TextKeys.zone.name.lascolinas,
+                                textKey = KampCoreTextKeys.zone.name.lascolinas,
                                 minX = 2281.4f,
                                 minY = -1135.0f,
                                 minZ = -89.0f,
@@ -2057,7 +2057,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Payasadas",
-                                textKey = TextKeys.zone.name.laspayasadas,
+                                textKey = KampCoreTextKeys.zone.name.laspayasadas,
                                 minX = -354.3f,
                                 minY = 2580.3f,
                                 minZ = 2.0f,
@@ -2068,7 +2068,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Venturas Airport",
-                                textKey = TextKeys.zone.name.lasventurasairport,
+                                textKey = KampCoreTextKeys.zone.name.lasventurasairport,
                                 minX = 1236.6f,
                                 minY = 1203.2f,
                                 minZ = -89.0f,
@@ -2079,7 +2079,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Venturas Airport",
-                                textKey = TextKeys.zone.name.lasventurasairport,
+                                textKey = KampCoreTextKeys.zone.name.lasventurasairport,
                                 minX = 1457.3f,
                                 minY = 1203.2f,
                                 minZ = -89.0f,
@@ -2090,7 +2090,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Venturas Airport",
-                                textKey = TextKeys.zone.name.lasventurasairport,
+                                textKey = KampCoreTextKeys.zone.name.lasventurasairport,
                                 minX = 1457.3f,
                                 minY = 1143.2f,
                                 minZ = -89.0f,
@@ -2101,7 +2101,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Venturas Airport",
-                                textKey = TextKeys.zone.name.lasventurasairport,
+                                textKey = KampCoreTextKeys.zone.name.lasventurasairport,
                                 minX = 1515.8f,
                                 minY = 1586.4f,
                                 minZ = -12.5f,
@@ -2112,7 +2112,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Last Dime Motel",
-                                textKey = TextKeys.zone.name.lastdimemotel,
+                                textKey = KampCoreTextKeys.zone.name.lastdimemotel,
                                 minX = 1823.0f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -2123,7 +2123,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Leafy Hollow",
-                                textKey = TextKeys.zone.name.leafyhollow,
+                                textKey = KampCoreTextKeys.zone.name.leafyhollow,
                                 minX = -1166.9f,
                                 minY = -1856.0f,
                                 minZ = 0.0f,
@@ -2134,7 +2134,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Lil' Probe Inn",
-                                textKey = TextKeys.zone.name.lilprobeinn,
+                                textKey = KampCoreTextKeys.zone.name.lilprobeinn,
                                 minX = -90.2f,
                                 minY = 1286.8f,
                                 minZ = -3.0f,
@@ -2145,7 +2145,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Linden Side",
-                                textKey = TextKeys.zone.name.lindenside,
+                                textKey = KampCoreTextKeys.zone.name.lindenside,
                                 minX = 2749.9f,
                                 minY = 943.2f,
                                 minZ = -89.0f,
@@ -2156,7 +2156,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Linden Station",
-                                textKey = TextKeys.zone.name.lindenstation,
+                                textKey = KampCoreTextKeys.zone.name.lindenstation,
                                 minX = 2749.9f,
                                 minY = 1198.9f,
                                 minZ = -89.0f,
@@ -2167,7 +2167,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Linden Station",
-                                textKey = TextKeys.zone.name.lindenstation,
+                                textKey = KampCoreTextKeys.zone.name.lindenstation,
                                 minX = 2811.2f,
                                 minY = 1229.5f,
                                 minZ = -39.5f,
@@ -2178,7 +2178,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Little Mexico",
-                                textKey = TextKeys.zone.name.littlemexico,
+                                textKey = KampCoreTextKeys.zone.name.littlemexico,
                                 minX = 1701.9f,
                                 minY = -1842.2f,
                                 minZ = -89.0f,
@@ -2189,7 +2189,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Little Mexico",
-                                textKey = TextKeys.zone.name.littlemexico,
+                                textKey = KampCoreTextKeys.zone.name.littlemexico,
                                 minX = 1758.9f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -2200,7 +2200,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Flores",
-                                textKey = TextKeys.zone.name.losflores,
+                                textKey = KampCoreTextKeys.zone.name.losflores,
                                 minX = 2581.7f,
                                 minY = -1454.3f,
                                 minZ = -89.0f,
@@ -2211,7 +2211,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Flores",
-                                textKey = TextKeys.zone.name.losflores,
+                                textKey = KampCoreTextKeys.zone.name.losflores,
                                 minX = 2581.7f,
                                 minY = -1393.4f,
                                 minZ = -89.0f,
@@ -2222,7 +2222,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 1249.6f,
                                 minY = -2394.3f,
                                 minZ = -89.0f,
@@ -2233,7 +2233,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 1852.0f,
                                 minY = -2394.3f,
                                 minZ = -89.0f,
@@ -2244,7 +2244,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 1382.7f,
                                 minY = -2730.8f,
                                 minZ = -89.0f,
@@ -2255,7 +2255,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 1974.6f,
                                 minY = -2394.3f,
                                 minZ = -39.0f,
@@ -2266,7 +2266,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 1400.9f,
                                 minY = -2669.2f,
                                 minZ = -39.0f,
@@ -2277,7 +2277,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos International",
-                                textKey = TextKeys.zone.name.lossantosinternational,
+                                textKey = KampCoreTextKeys.zone.name.lossantosinternational,
                                 minX = 2051.6f,
                                 minY = -2597.2f,
                                 minZ = -39.0f,
@@ -2288,7 +2288,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Marina",
-                                textKey = TextKeys.zone.name.marina,
+                                textKey = KampCoreTextKeys.zone.name.marina,
                                 minX = 647.7f,
                                 minY = -1804.2f,
                                 minZ = -89.0f,
@@ -2299,7 +2299,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Marina",
-                                textKey = TextKeys.zone.name.marina,
+                                textKey = KampCoreTextKeys.zone.name.marina,
                                 minX = 647.7f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -2310,7 +2310,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Marina",
-                                textKey = TextKeys.zone.name.marina,
+                                textKey = KampCoreTextKeys.zone.name.marina,
                                 minX = 807.9f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -2321,7 +2321,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Market",
-                                textKey = TextKeys.zone.name.market,
+                                textKey = KampCoreTextKeys.zone.name.market,
                                 minX = 787.4f,
                                 minY = -1416.2f,
                                 minZ = -89.0f,
@@ -2332,7 +2332,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Market",
-                                textKey = TextKeys.zone.name.market,
+                                textKey = KampCoreTextKeys.zone.name.market,
                                 minX = 952.6f,
                                 minY = -1310.2f,
                                 minZ = -89.0f,
@@ -2343,7 +2343,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Market",
-                                textKey = TextKeys.zone.name.market,
+                                textKey = KampCoreTextKeys.zone.name.market,
                                 minX = 1072.6f,
                                 minY = -1416.2f,
                                 minZ = -89.0f,
@@ -2354,7 +2354,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Market",
-                                textKey = TextKeys.zone.name.market,
+                                textKey = KampCoreTextKeys.zone.name.market,
                                 minX = 926.9f,
                                 minY = -1577.5f,
                                 minZ = -89.0f,
@@ -2365,7 +2365,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Market Station",
-                                textKey = TextKeys.zone.name.marketstation,
+                                textKey = KampCoreTextKeys.zone.name.marketstation,
                                 minX = 787.4f,
                                 minY = -1410.9f,
                                 minZ = -34.1f,
@@ -2376,7 +2376,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Martin Bridge",
-                                textKey = TextKeys.zone.name.martinbridge,
+                                textKey = KampCoreTextKeys.zone.name.martinbridge,
                                 minX = -222.1f,
                                 minY = 293.3f,
                                 minZ = 0.0f,
@@ -2387,7 +2387,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Missionary Hill",
-                                textKey = TextKeys.zone.name.missionaryhill,
+                                textKey = KampCoreTextKeys.zone.name.missionaryhill,
                                 minX = -2994.4f,
                                 minY = -811.2f,
                                 minZ = 0.0f,
@@ -2398,7 +2398,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Montgomery",
-                                textKey = TextKeys.zone.name.montgomery,
+                                textKey = KampCoreTextKeys.zone.name.montgomery,
                                 minX = 1119.5f,
                                 minY = 119.5f,
                                 minZ = -3.0f,
@@ -2409,7 +2409,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Montgomery",
-                                textKey = TextKeys.zone.name.montgomery,
+                                textKey = KampCoreTextKeys.zone.name.montgomery,
                                 minX = 1451.4f,
                                 minY = 347.4f,
                                 minZ = -6.1f,
@@ -2420,7 +2420,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Montgomery Intersection",
-                                textKey = TextKeys.zone.name.montgomeryintersection,
+                                textKey = KampCoreTextKeys.zone.name.montgomeryintersection,
                                 minX = 1546.6f,
                                 minY = 208.1f,
                                 minZ = 0.0f,
@@ -2431,7 +2431,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Montgomery Intersection",
-                                textKey = TextKeys.zone.name.montgomeryintersection,
+                                textKey = KampCoreTextKeys.zone.name.montgomeryintersection,
                                 minX = 1582.4f,
                                 minY = 347.4f,
                                 minZ = 0.0f,
@@ -2442,7 +2442,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1414.0f,
                                 minY = -768.0f,
                                 minZ = -89.0f,
@@ -2453,7 +2453,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1281.1f,
                                 minY = -452.4f,
                                 minZ = -89.0f,
@@ -2464,7 +2464,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1269.1f,
                                 minY = -768.0f,
                                 minZ = -89.0f,
@@ -2475,7 +2475,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1357.0f,
                                 minY = -926.9f,
                                 minZ = -89.0f,
@@ -2486,7 +2486,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1318.1f,
                                 minY = -910.1f,
                                 minZ = -89.0f,
@@ -2497,7 +2497,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1169.1f,
                                 minY = -910.1f,
                                 minZ = -89.0f,
@@ -2508,7 +2508,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 768.6f,
                                 minY = -954.6f,
                                 minZ = -89.0f,
@@ -2519,7 +2519,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 687.8f,
                                 minY = -860.6f,
                                 minZ = -89.0f,
@@ -2530,7 +2530,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 737.5f,
                                 minY = -768.0f,
                                 minZ = -89.0f,
@@ -2541,7 +2541,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 1096.4f,
                                 minY = -910.1f,
                                 minZ = -89.0f,
@@ -2552,7 +2552,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 952.6f,
                                 minY = -937.1f,
                                 minZ = -89.0f,
@@ -2563,7 +2563,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 911.8f,
                                 minY = -860.6f,
                                 minZ = -89.0f,
@@ -2574,7 +2574,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland",
-                                textKey = TextKeys.zone.name.mulholland,
+                                textKey = KampCoreTextKeys.zone.name.mulholland,
                                 minX = 861.0f,
                                 minY = -674.8f,
                                 minZ = -89.0f,
@@ -2585,7 +2585,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Mulholland Intersection",
-                                textKey = TextKeys.zone.name.mulhollandintersection,
+                                textKey = KampCoreTextKeys.zone.name.mulhollandintersection,
                                 minX = 1463.9f,
                                 minY = -1150.8f,
                                 minZ = -89.0f,
@@ -2596,7 +2596,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "North Rock",
-                                textKey = TextKeys.zone.name.northrock,
+                                textKey = KampCoreTextKeys.zone.name.northrock,
                                 minX = 2285.3f,
                                 minY = -768.0f,
                                 minZ = 0.0f,
@@ -2607,7 +2607,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2373.7f,
                                 minY = -2697.0f,
                                 minZ = -89.0f,
@@ -2618,7 +2618,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2201.8f,
                                 minY = -2418.3f,
                                 minZ = -89.0f,
@@ -2629,7 +2629,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2324.0f,
                                 minY = -2302.3f,
                                 minZ = -89.0f,
@@ -2640,7 +2640,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2089.0f,
                                 minY = -2394.3f,
                                 minZ = -89.0f,
@@ -2651,7 +2651,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2201.8f,
                                 minY = -2730.8f,
                                 minZ = -89.0f,
@@ -2662,7 +2662,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2703.5f,
                                 minY = -2302.3f,
                                 minZ = -89.0f,
@@ -2673,7 +2673,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Docks",
-                                textKey = TextKeys.zone.name.oceandocks,
+                                textKey = KampCoreTextKeys.zone.name.oceandocks,
                                 minX = 2324.0f,
                                 minY = -2145.1f,
                                 minZ = -89.0f,
@@ -2684,7 +2684,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Flats",
-                                textKey = TextKeys.zone.name.oceanflats,
+                                textKey = KampCoreTextKeys.zone.name.oceanflats,
                                 minX = -2994.4f,
                                 minY = 277.4f,
                                 minZ = -9.1f,
@@ -2695,7 +2695,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Flats",
-                                textKey = TextKeys.zone.name.oceanflats,
+                                textKey = KampCoreTextKeys.zone.name.oceanflats,
                                 minX = -2994.4f,
                                 minY = -222.5f,
                                 minZ = -0.0f,
@@ -2706,7 +2706,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Ocean Flats",
-                                textKey = TextKeys.zone.name.oceanflats,
+                                textKey = KampCoreTextKeys.zone.name.oceanflats,
                                 minX = -2994.4f,
                                 minY = -430.2f,
                                 minZ = -0.0f,
@@ -2717,7 +2717,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Octane Springs",
-                                textKey = TextKeys.zone.name.octanesprings,
+                                textKey = KampCoreTextKeys.zone.name.octanesprings,
                                 minX = 338.6f,
                                 minY = 1228.5f,
                                 minZ = 0.0f,
@@ -2728,7 +2728,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Old Venturas Strip",
-                                textKey = TextKeys.zone.name.oldventurasstrip,
+                                textKey = KampCoreTextKeys.zone.name.oldventurasstrip,
                                 minX = 2162.3f,
                                 minY = 2012.1f,
                                 minZ = -89.0f,
@@ -2739,7 +2739,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Palisades",
-                                textKey = TextKeys.zone.name.palisades,
+                                textKey = KampCoreTextKeys.zone.name.palisades,
                                 minX = -2994.4f,
                                 minY = 458.4f,
                                 minZ = -6.1f,
@@ -2750,7 +2750,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Palomino Creek",
-                                textKey = TextKeys.zone.name.palominocreek,
+                                textKey = KampCoreTextKeys.zone.name.palominocreek,
                                 minX = 2160.2f,
                                 minY = -149.0f,
                                 minZ = 0.0f,
@@ -2761,7 +2761,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Paradiso",
-                                textKey = TextKeys.zone.name.paradiso,
+                                textKey = KampCoreTextKeys.zone.name.paradiso,
                                 minX = -2741.0f,
                                 minY = 793.4f,
                                 minZ = -6.1f,
@@ -2772,7 +2772,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Pershing Square",
-                                textKey = TextKeys.zone.name.pershingsquare,
+                                textKey = KampCoreTextKeys.zone.name.pershingsquare,
                                 minX = 1440.9f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -2783,7 +2783,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Pilgrim",
-                                textKey = TextKeys.zone.name.pilgrim,
+                                textKey = KampCoreTextKeys.zone.name.pilgrim,
                                 minX = 2437.3f,
                                 minY = 1383.2f,
                                 minZ = -89.0f,
@@ -2794,7 +2794,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Pilgrim",
-                                textKey = TextKeys.zone.name.pilgrim,
+                                textKey = KampCoreTextKeys.zone.name.pilgrim,
                                 minX = 2624.4f,
                                 minY = 1383.2f,
                                 minZ = -89.0f,
@@ -2805,7 +2805,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Pilson Intersection",
-                                textKey = TextKeys.zone.name.pilsonintersection,
+                                textKey = KampCoreTextKeys.zone.name.pilsonintersection,
                                 minX = 1098.3f,
                                 minY = 2243.2f,
                                 minZ = -89.0f,
@@ -2816,7 +2816,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Pirates in Men's Pants",
-                                textKey = TextKeys.zone.name.piratesinmenspants,
+                                textKey = KampCoreTextKeys.zone.name.piratesinmenspants,
                                 minX = 1817.3f,
                                 minY = 1469.2f,
                                 minZ = -89.0f,
@@ -2827,7 +2827,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Playa del Seville",
-                                textKey = TextKeys.zone.name.playadelseville,
+                                textKey = KampCoreTextKeys.zone.name.playadelseville,
                                 minX = 2703.5f,
                                 minY = -2126.9f,
                                 minZ = -89.0f,
@@ -2838,7 +2838,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Prickle Pine",
-                                textKey = TextKeys.zone.name.pricklepine,
+                                textKey = KampCoreTextKeys.zone.name.pricklepine,
                                 minX = 1534.5f,
                                 minY = 2583.2f,
                                 minZ = -89.0f,
@@ -2849,7 +2849,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Prickle Pine",
-                                textKey = TextKeys.zone.name.pricklepine,
+                                textKey = KampCoreTextKeys.zone.name.pricklepine,
                                 minX = 1117.4f,
                                 minY = 2507.2f,
                                 minZ = -89.0f,
@@ -2860,7 +2860,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Prickle Pine",
-                                textKey = TextKeys.zone.name.pricklepine,
+                                textKey = KampCoreTextKeys.zone.name.pricklepine,
                                 minX = 1848.4f,
                                 minY = 2553.4f,
                                 minZ = -89.0f,
@@ -2871,7 +2871,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Prickle Pine",
-                                textKey = TextKeys.zone.name.pricklepine,
+                                textKey = KampCoreTextKeys.zone.name.pricklepine,
                                 minX = 1938.8f,
                                 minY = 2624.2f,
                                 minZ = -89.0f,
@@ -2882,7 +2882,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Queens",
-                                textKey = TextKeys.zone.name.queens,
+                                textKey = KampCoreTextKeys.zone.name.queens,
                                 minX = -2533.0f,
                                 minY = 458.4f,
                                 minZ = 0.0f,
@@ -2893,7 +2893,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Queens",
-                                textKey = TextKeys.zone.name.queens,
+                                textKey = KampCoreTextKeys.zone.name.queens,
                                 minX = -2593.4f,
                                 minY = 54.7f,
                                 minZ = 0.0f,
@@ -2904,7 +2904,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Queens",
-                                textKey = TextKeys.zone.name.queens,
+                                textKey = KampCoreTextKeys.zone.name.queens,
                                 minX = -2411.2f,
                                 minY = 373.5f,
                                 minZ = 0.0f,
@@ -2915,7 +2915,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Randolph Industrial Estate",
-                                textKey = TextKeys.zone.name.randolphindustrialestate,
+                                textKey = KampCoreTextKeys.zone.name.randolphindustrialestate,
                                 minX = 1558.0f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -2926,7 +2926,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands East",
-                                textKey = TextKeys.zone.name.redsandseast,
+                                textKey = KampCoreTextKeys.zone.name.redsandseast,
                                 minX = 1817.3f,
                                 minY = 2011.8f,
                                 minZ = -89.0f,
@@ -2937,7 +2937,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands East",
-                                textKey = TextKeys.zone.name.redsandseast,
+                                textKey = KampCoreTextKeys.zone.name.redsandseast,
                                 minX = 1817.3f,
                                 minY = 2202.7f,
                                 minZ = -89.0f,
@@ -2948,7 +2948,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands East",
-                                textKey = TextKeys.zone.name.redsandseast,
+                                textKey = KampCoreTextKeys.zone.name.redsandseast,
                                 minX = 1848.4f,
                                 minY = 2342.8f,
                                 minZ = -89.0f,
@@ -2959,7 +2959,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands West",
-                                textKey = TextKeys.zone.name.redsandswest,
+                                textKey = KampCoreTextKeys.zone.name.redsandswest,
                                 minX = 1236.6f,
                                 minY = 1883.1f,
                                 minZ = -89.0f,
@@ -2970,7 +2970,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands West",
-                                textKey = TextKeys.zone.name.redsandswest,
+                                textKey = KampCoreTextKeys.zone.name.redsandswest,
                                 minX = 1297.4f,
                                 minY = 2142.8f,
                                 minZ = -89.0f,
@@ -2981,7 +2981,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands West",
-                                textKey = TextKeys.zone.name.redsandswest,
+                                textKey = KampCoreTextKeys.zone.name.redsandswest,
                                 minX = 1377.3f,
                                 minY = 2243.2f,
                                 minZ = -89.0f,
@@ -2992,7 +2992,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Redsands West",
-                                textKey = TextKeys.zone.name.redsandswest,
+                                textKey = KampCoreTextKeys.zone.name.redsandswest,
                                 minX = 1704.5f,
                                 minY = 2243.2f,
                                 minZ = -89.0f,
@@ -3003,7 +3003,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Regular Tom",
-                                textKey = TextKeys.zone.name.regulartom,
+                                textKey = KampCoreTextKeys.zone.name.regulartom,
                                 minX = -405.7f,
                                 minY = 1712.8f,
                                 minZ = -3.0f,
@@ -3014,7 +3014,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 647.5f,
                                 minY = -1118.2f,
                                 minZ = -89.0f,
@@ -3025,7 +3025,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 647.5f,
                                 minY = -954.6f,
                                 minZ = -89.0f,
@@ -3036,7 +3036,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 225.1f,
                                 minY = -1369.6f,
                                 minZ = -89.0f,
@@ -3047,7 +3047,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 225.1f,
                                 minY = -1292.0f,
                                 minZ = -89.0f,
@@ -3058,7 +3058,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 72.6f,
                                 minY = -1404.9f,
                                 minZ = -89.0f,
@@ -3069,7 +3069,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 72.6f,
                                 minY = -1235.0f,
                                 minZ = -89.0f,
@@ -3080,7 +3080,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 321.3f,
                                 minY = -1235.0f,
                                 minZ = -89.0f,
@@ -3091,7 +3091,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 321.3f,
                                 minY = -1044.0f,
                                 minZ = -89.0f,
@@ -3102,7 +3102,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 321.3f,
                                 minY = -860.6f,
                                 minZ = -89.0f,
@@ -3113,7 +3113,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Richman",
-                                textKey = TextKeys.zone.name.richman,
+                                textKey = KampCoreTextKeys.zone.name.richman,
                                 minX = 321.3f,
                                 minY = -768.0f,
                                 minZ = -89.0f,
@@ -3124,7 +3124,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Robada Intersection",
-                                textKey = TextKeys.zone.name.robadaintersection,
+                                textKey = KampCoreTextKeys.zone.name.robadaintersection,
                                 minX = -1119.0f,
                                 minY = 1178.9f,
                                 minZ = -89.0f,
@@ -3135,7 +3135,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Roca Escalante",
-                                textKey = TextKeys.zone.name.rocaescalante,
+                                textKey = KampCoreTextKeys.zone.name.rocaescalante,
                                 minX = 2237.4f,
                                 minY = 2202.7f,
                                 minZ = -89.0f,
@@ -3146,7 +3146,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Roca Escalante",
-                                textKey = TextKeys.zone.name.rocaescalante,
+                                textKey = KampCoreTextKeys.zone.name.rocaescalante,
                                 minX = 2536.4f,
                                 minY = 2202.7f,
                                 minZ = -89.0f,
@@ -3157,7 +3157,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rockshore East",
-                                textKey = TextKeys.zone.name.rockshoreeast,
+                                textKey = KampCoreTextKeys.zone.name.rockshoreeast,
                                 minX = 2537.3f,
                                 minY = 676.5f,
                                 minZ = -89.0f,
@@ -3168,7 +3168,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rockshore West",
-                                textKey = TextKeys.zone.name.rockshorewest,
+                                textKey = KampCoreTextKeys.zone.name.rockshorewest,
                                 minX = 1997.2f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -3179,7 +3179,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rockshore West",
-                                textKey = TextKeys.zone.name.rockshorewest,
+                                textKey = KampCoreTextKeys.zone.name.rockshorewest,
                                 minX = 2377.3f,
                                 minY = 596.3f,
                                 minZ = -89.0f,
@@ -3190,7 +3190,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 72.6f,
                                 minY = -1684.6f,
                                 minZ = -89.0f,
@@ -3201,7 +3201,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 72.6f,
                                 minY = -1544.1f,
                                 minZ = -89.0f,
@@ -3212,7 +3212,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 225.1f,
                                 minY = -1684.6f,
                                 minZ = -89.0f,
@@ -3223,7 +3223,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 225.1f,
                                 minY = -1501.9f,
                                 minZ = -89.0f,
@@ -3234,7 +3234,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 334.5f,
                                 minY = -1501.9f,
                                 minZ = -89.0f,
@@ -3245,7 +3245,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 312.8f,
                                 minY = -1684.6f,
                                 minZ = -89.0f,
@@ -3256,7 +3256,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 422.6f,
                                 minY = -1684.6f,
                                 minZ = -89.0f,
@@ -3267,7 +3267,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 558.0f,
                                 minY = -1684.6f,
                                 minZ = -89.0f,
@@ -3278,7 +3278,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 466.2f,
                                 minY = -1570.2f,
                                 minZ = -89.0f,
@@ -3289,7 +3289,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 422.6f,
                                 minY = -1570.2f,
                                 minZ = -89.0f,
@@ -3300,7 +3300,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 466.2f,
                                 minY = -1385.0f,
                                 minZ = -89.0f,
@@ -3311,7 +3311,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Rodeo",
-                                textKey = TextKeys.zone.name.rodeo,
+                                textKey = KampCoreTextKeys.zone.name.rodeo,
                                 minX = 334.5f,
                                 minY = -1406.0f,
                                 minZ = -89.0f,
@@ -3322,7 +3322,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Royal Casino",
-                                textKey = TextKeys.zone.name.royalcasino,
+                                textKey = KampCoreTextKeys.zone.name.royalcasino,
                                 minX = 2087.3f,
                                 minY = 1383.2f,
                                 minZ = -89.0f,
@@ -3333,7 +3333,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "San Andreas Sound",
-                                textKey = TextKeys.zone.name.sanandreassound,
+                                textKey = KampCoreTextKeys.zone.name.sanandreassound,
                                 minX = 2450.3f,
                                 minY = 385.5f,
                                 minZ = -100.0f,
@@ -3344,7 +3344,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Santa Flora",
-                                textKey = TextKeys.zone.name.santaflora,
+                                textKey = KampCoreTextKeys.zone.name.santaflora,
                                 minX = -2741.0f,
                                 minY = 458.4f,
                                 minZ = -7.6f,
@@ -3355,7 +3355,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Santa Maria Beach",
-                                textKey = TextKeys.zone.name.santamariabeach,
+                                textKey = KampCoreTextKeys.zone.name.santamariabeach,
                                 minX = 342.6f,
                                 minY = -2173.2f,
                                 minZ = -89.0f,
@@ -3366,7 +3366,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Santa Maria Beach",
-                                textKey = TextKeys.zone.name.santamariabeach,
+                                textKey = KampCoreTextKeys.zone.name.santamariabeach,
                                 minX = 72.6f,
                                 minY = -2173.2f,
                                 minZ = -89.0f,
@@ -3377,7 +3377,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Shady Cabin",
-                                textKey = TextKeys.zone.name.shadycabin,
+                                textKey = KampCoreTextKeys.zone.name.shadycabin,
                                 minX = -1632.8f,
                                 minY = -2263.4f,
                                 minZ = -3.0f,
@@ -3388,7 +3388,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Shady Creeks",
-                                textKey = TextKeys.zone.name.shadycreeks,
+                                textKey = KampCoreTextKeys.zone.name.shadycreeks,
                                 minX = -1820.6f,
                                 minY = -2643.6f,
                                 minZ = -8.0f,
@@ -3399,7 +3399,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Shady Creeks",
-                                textKey = TextKeys.zone.name.shadycreeks,
+                                textKey = KampCoreTextKeys.zone.name.shadycreeks,
                                 minX = -2030.1f,
                                 minY = -2174.8f,
                                 minZ = -6.1f,
@@ -3410,7 +3410,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Sobell Rail Yards",
-                                textKey = TextKeys.zone.name.sobellrailyards,
+                                textKey = KampCoreTextKeys.zone.name.sobellrailyards,
                                 minX = 2749.9f,
                                 minY = 1548.9f,
                                 minZ = -89.0f,
@@ -3421,7 +3421,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Spinybed",
-                                textKey = TextKeys.zone.name.spinybed,
+                                textKey = KampCoreTextKeys.zone.name.spinybed,
                                 minX = 2121.4f,
                                 minY = 2663.1f,
                                 minZ = -89.0f,
@@ -3432,7 +3432,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Starfish Casino",
-                                textKey = TextKeys.zone.name.starfishcasino,
+                                textKey = KampCoreTextKeys.zone.name.starfishcasino,
                                 minX = 2437.3f,
                                 minY = 1783.2f,
                                 minZ = -89.0f,
@@ -3443,7 +3443,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Starfish Casino",
-                                textKey = TextKeys.zone.name.starfishcasino,
+                                textKey = KampCoreTextKeys.zone.name.starfishcasino,
                                 minX = 2437.3f,
                                 minY = 1858.1f,
                                 minZ = -39.0f,
@@ -3454,7 +3454,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Starfish Casino",
-                                textKey = TextKeys.zone.name.starfishcasino,
+                                textKey = KampCoreTextKeys.zone.name.starfishcasino,
                                 minX = 2162.3f,
                                 minY = 1883.2f,
                                 minZ = -89.0f,
@@ -3465,7 +3465,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 1252.3f,
                                 minY = -1130.8f,
                                 minZ = -89.0f,
@@ -3476,7 +3476,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 1252.3f,
                                 minY = -1026.3f,
                                 minZ = -89.0f,
@@ -3487,7 +3487,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 1252.3f,
                                 minY = -926.9f,
                                 minZ = -89.0f,
@@ -3498,7 +3498,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 952.6f,
                                 minY = -1130.8f,
                                 minZ = -89.0f,
@@ -3509,7 +3509,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 1096.4f,
                                 minY = -1130.8f,
                                 minZ = -89.0f,
@@ -3520,7 +3520,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Temple",
-                                textKey = TextKeys.zone.name.temple,
+                                textKey = KampCoreTextKeys.zone.name.temple,
                                 minX = 1096.4f,
                                 minY = -1026.3f,
                                 minZ = -89.0f,
@@ -3531,7 +3531,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Camel's Toe",
-                                textKey = TextKeys.zone.name.thecamelstoe,
+                                textKey = KampCoreTextKeys.zone.name.thecamelstoe,
                                 minX = 2087.3f,
                                 minY = 1203.2f,
                                 minZ = -89.0f,
@@ -3542,7 +3542,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Clown's Pocket",
-                                textKey = TextKeys.zone.name.theclownspocket,
+                                textKey = KampCoreTextKeys.zone.name.theclownspocket,
                                 minX = 2162.3f,
                                 minY = 1783.2f,
                                 minZ = -89.0f,
@@ -3553,7 +3553,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Emerald Isle",
-                                textKey = TextKeys.zone.name.theemeraldisle,
+                                textKey = KampCoreTextKeys.zone.name.theemeraldisle,
                                 minX = 2011.9f,
                                 minY = 2202.7f,
                                 minZ = -89.0f,
@@ -3564,7 +3564,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Farm",
-                                textKey = TextKeys.zone.name.thefarm,
+                                textKey = KampCoreTextKeys.zone.name.thefarm,
                                 minX = -1209.6f,
                                 minY = -1317.1f,
                                 minZ = 114.9f,
@@ -3575,7 +3575,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Four Dragons Casino",
-                                textKey = TextKeys.zone.name.thefourdragonscasino,
+                                textKey = KampCoreTextKeys.zone.name.thefourdragonscasino,
                                 minX = 1817.3f,
                                 minY = 863.2f,
                                 minZ = -89.0f,
@@ -3586,7 +3586,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The High Roller",
-                                textKey = TextKeys.zone.name.thehighroller,
+                                textKey = KampCoreTextKeys.zone.name.thehighroller,
                                 minX = 1817.3f,
                                 minY = 1283.2f,
                                 minZ = -89.0f,
@@ -3597,7 +3597,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Mako Span",
-                                textKey = TextKeys.zone.name.themakospan,
+                                textKey = KampCoreTextKeys.zone.name.themakospan,
                                 minX = 1664.6f,
                                 minY = 401.7f,
                                 minZ = 0.0f,
@@ -3608,7 +3608,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Panopticon",
-                                textKey = TextKeys.zone.name.thepanopticon,
+                                textKey = KampCoreTextKeys.zone.name.thepanopticon,
                                 minX = -947.9f,
                                 minY = -304.3f,
                                 minZ = -1.1f,
@@ -3619,7 +3619,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Pink Swan",
-                                textKey = TextKeys.zone.name.thepinkswan,
+                                textKey = KampCoreTextKeys.zone.name.thepinkswan,
                                 minX = 1817.3f,
                                 minY = 1083.2f,
                                 minZ = -89.0f,
@@ -3630,7 +3630,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Sherman Dam",
-                                textKey = TextKeys.zone.name.theshermandam,
+                                textKey = KampCoreTextKeys.zone.name.theshermandam,
                                 minX = -968.7f,
                                 minY = 1929.4f,
                                 minZ = -3.0f,
@@ -3641,7 +3641,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Strip",
-                                textKey = TextKeys.zone.name.thestrip,
+                                textKey = KampCoreTextKeys.zone.name.thestrip,
                                 minX = 2027.4f,
                                 minY = 863.2f,
                                 minZ = -89.0f,
@@ -3652,7 +3652,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Strip",
-                                textKey = TextKeys.zone.name.thestrip,
+                                textKey = KampCoreTextKeys.zone.name.thestrip,
                                 minX = 2106.7f,
                                 minY = 1863.2f,
                                 minZ = -89.0f,
@@ -3663,7 +3663,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Strip",
-                                textKey = TextKeys.zone.name.thestrip,
+                                textKey = KampCoreTextKeys.zone.name.thestrip,
                                 minX = 2027.4f,
                                 minY = 1783.2f,
                                 minZ = -89.0f,
@@ -3674,7 +3674,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Strip",
-                                textKey = TextKeys.zone.name.thestrip,
+                                textKey = KampCoreTextKeys.zone.name.thestrip,
                                 minX = 2027.4f,
                                 minY = 1703.2f,
                                 minZ = -89.0f,
@@ -3685,7 +3685,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Visage",
-                                textKey = TextKeys.zone.name.thevisage,
+                                textKey = KampCoreTextKeys.zone.name.thevisage,
                                 minX = 1817.3f,
                                 minY = 1863.2f,
                                 minZ = -89.0f,
@@ -3696,7 +3696,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "The Visage",
-                                textKey = TextKeys.zone.name.thevisage,
+                                textKey = KampCoreTextKeys.zone.name.thevisage,
                                 minX = 1817.3f,
                                 minY = 1703.2f,
                                 minZ = -89.0f,
@@ -3707,7 +3707,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Unity Station",
-                                textKey = TextKeys.zone.name.unitystation,
+                                textKey = KampCoreTextKeys.zone.name.unitystation,
                                 minX = 1692.6f,
                                 minY = -1971.8f,
                                 minZ = -20.4f,
@@ -3718,7 +3718,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Valle Ocultado",
-                                textKey = TextKeys.zone.name.valleocultado,
+                                textKey = KampCoreTextKeys.zone.name.valleocultado,
                                 minX = -936.6f,
                                 minY = 2611.4f,
                                 minZ = 2.0f,
@@ -3729,7 +3729,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verdant Bluffs",
-                                textKey = TextKeys.zone.name.verdantbluffs,
+                                textKey = KampCoreTextKeys.zone.name.verdantbluffs,
                                 minX = 930.2f,
                                 minY = -2488.4f,
                                 minZ = -89.0f,
@@ -3740,7 +3740,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verdant Bluffs",
-                                textKey = TextKeys.zone.name.verdantbluffs,
+                                textKey = KampCoreTextKeys.zone.name.verdantbluffs,
                                 minX = 1073.2f,
                                 minY = -2006.7f,
                                 minZ = -89.0f,
@@ -3751,7 +3751,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verdant Bluffs",
-                                textKey = TextKeys.zone.name.verdantbluffs,
+                                textKey = KampCoreTextKeys.zone.name.verdantbluffs,
                                 minX = 1249.6f,
                                 minY = -2179.2f,
                                 minZ = -89.0f,
@@ -3762,7 +3762,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verdant Meadows",
-                                textKey = TextKeys.zone.name.verdantmeadows,
+                                textKey = KampCoreTextKeys.zone.name.verdantmeadows,
                                 minX = 37.0f,
                                 minY = 2337.1f,
                                 minZ = -3.0f,
@@ -3773,7 +3773,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verona Beach",
-                                textKey = TextKeys.zone.name.veronabeach,
+                                textKey = KampCoreTextKeys.zone.name.veronabeach,
                                 minX = 647.7f,
                                 minY = -2173.2f,
                                 minZ = -89.0f,
@@ -3784,7 +3784,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verona Beach",
-                                textKey = TextKeys.zone.name.veronabeach,
+                                textKey = KampCoreTextKeys.zone.name.veronabeach,
                                 minX = 930.2f,
                                 minY = -2006.7f,
                                 minZ = -89.0f,
@@ -3795,7 +3795,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verona Beach",
-                                textKey = TextKeys.zone.name.veronabeach,
+                                textKey = KampCoreTextKeys.zone.name.veronabeach,
                                 minX = 851.4f,
                                 minY = -1804.2f,
                                 minZ = -89.0f,
@@ -3806,7 +3806,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verona Beach",
-                                textKey = TextKeys.zone.name.veronabeach,
+                                textKey = KampCoreTextKeys.zone.name.veronabeach,
                                 minX = 1161.5f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -3817,7 +3817,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Verona Beach",
-                                textKey = TextKeys.zone.name.veronabeach,
+                                textKey = KampCoreTextKeys.zone.name.veronabeach,
                                 minX = 1046.1f,
                                 minY = -1722.2f,
                                 minZ = -89.0f,
@@ -3828,7 +3828,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Vinewood",
-                                textKey = TextKeys.zone.name.vinewood,
+                                textKey = KampCoreTextKeys.zone.name.vinewood,
                                 minX = 787.4f,
                                 minY = -1310.2f,
                                 minZ = -89.0f,
@@ -3839,7 +3839,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Vinewood",
-                                textKey = TextKeys.zone.name.vinewood,
+                                textKey = KampCoreTextKeys.zone.name.vinewood,
                                 minX = 787.4f,
                                 minY = -1130.8f,
                                 minZ = -89.0f,
@@ -3850,7 +3850,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Vinewood",
-                                textKey = TextKeys.zone.name.vinewood,
+                                textKey = KampCoreTextKeys.zone.name.vinewood,
                                 minX = 647.5f,
                                 minY = -1227.2f,
                                 minZ = -89.0f,
@@ -3861,7 +3861,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Vinewood",
-                                textKey = TextKeys.zone.name.vinewood,
+                                textKey = KampCoreTextKeys.zone.name.vinewood,
                                 minX = 647.7f,
                                 minY = -1416.2f,
                                 minZ = -89.0f,
@@ -3872,7 +3872,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Whitewood Estates",
-                                textKey = TextKeys.zone.name.whitewoodestates,
+                                textKey = KampCoreTextKeys.zone.name.whitewoodestates,
                                 minX = 883.3f,
                                 minY = 1726.2f,
                                 minZ = -89.0f,
@@ -3883,7 +3883,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Whitewood Estates",
-                                textKey = TextKeys.zone.name.whitewoodestates,
+                                textKey = KampCoreTextKeys.zone.name.whitewoodestates,
                                 minX = 1098.3f,
                                 minY = 1726.2f,
                                 minZ = -89.0f,
@@ -3894,7 +3894,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 1970.6f,
                                 minY = -2179.2f,
                                 minZ = -89.0f,
@@ -3905,7 +3905,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2089.0f,
                                 minY = -2235.8f,
                                 minZ = -89.0f,
@@ -3916,7 +3916,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2089.0f,
                                 minY = -1989.9f,
                                 minZ = -89.0f,
@@ -3927,7 +3927,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2201.8f,
                                 minY = -2095.0f,
                                 minZ = -89.0f,
@@ -3938,7 +3938,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2541.7f,
                                 minY = -1941.4f,
                                 minZ = -89.0f,
@@ -3949,7 +3949,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2324.0f,
                                 minY = -2059.2f,
                                 minZ = -89.0f,
@@ -3960,7 +3960,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Willowfield",
-                                textKey = TextKeys.zone.name.willowfield,
+                                textKey = KampCoreTextKeys.zone.name.willowfield,
                                 minX = 2541.7f,
                                 minY = -2059.2f,
                                 minZ = -89.0f,
@@ -3971,7 +3971,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Yellow Bell Station",
-                                textKey = TextKeys.zone.name.yellowbellstation,
+                                textKey = KampCoreTextKeys.zone.name.yellowbellstation,
                                 minX = 1377.4f,
                                 minY = 2600.4f,
                                 minZ = -21.9f,
@@ -3982,7 +3982,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Los Santos",
-                                textKey = TextKeys.zone.name.lossantos,
+                                textKey = KampCoreTextKeys.zone.name.lossantos,
                                 minX = 44.6f,
                                 minY = -2892.9f,
                                 minZ = -242.9f,
@@ -3993,7 +3993,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Las Venturas",
-                                textKey = TextKeys.zone.name.lasventuras,
+                                textKey = KampCoreTextKeys.zone.name.lasventuras,
                                 minX = 869.4f,
                                 minY = 596.3f,
                                 minZ = -242.9f,
@@ -4004,7 +4004,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Bone County",
-                                textKey = TextKeys.zone.name.bonecounty,
+                                textKey = KampCoreTextKeys.zone.name.bonecounty,
                                 minX = -480.5f,
                                 minY = 596.3f,
                                 minZ = -242.9f,
@@ -4015,7 +4015,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Tierra Robada",
-                                textKey = TextKeys.zone.name.tierrarobada,
+                                textKey = KampCoreTextKeys.zone.name.tierrarobada,
                                 minX = -2997.4f,
                                 minY = 1659.6f,
                                 minZ = -242.9f,
@@ -4026,7 +4026,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Tierra Robada",
-                                textKey = TextKeys.zone.name.tierrarobada,
+                                textKey = KampCoreTextKeys.zone.name.tierrarobada,
                                 minX = -1213.9f,
                                 minY = 596.3f,
                                 minZ = -242.9f,
@@ -4037,7 +4037,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "San Fierro",
-                                textKey = TextKeys.zone.name.sanfierro,
+                                textKey = KampCoreTextKeys.zone.name.sanfierro,
                                 minX = -2997.4f,
                                 minY = -1115.5f,
                                 minZ = -242.9f,
@@ -4048,7 +4048,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Red County",
-                                textKey = TextKeys.zone.name.redcounty,
+                                textKey = KampCoreTextKeys.zone.name.redcounty,
                                 minX = -1213.9f,
                                 minY = -768.0f,
                                 minZ = -242.9f,
@@ -4059,7 +4059,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Flint County",
-                                textKey = TextKeys.zone.name.flintcounty,
+                                textKey = KampCoreTextKeys.zone.name.flintcounty,
                                 minX = -1213.9f,
                                 minY = -2892.9f,
                                 minZ = -242.9f,
@@ -4070,7 +4070,7 @@ internal constructor(
                         ),
                         SanAndreasZone(
                                 name = "Whetstone",
-                                textKey = TextKeys.zone.name.whetstone,
+                                textKey = KampCoreTextKeys.zone.name.whetstone,
                                 minX = -2997.4f,
                                 minY = -2892.9f,
                                 minZ = -242.9f,

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.command.AdminCommandAccessChecker
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
@@ -36,23 +37,23 @@ constructor(
         val coordinates = vector3DOf(x, y, z)
         player.setCoordinatesFindZ(coordinates)
         val zone = SanAndreasZone.getZone(coordinates) ?: "San Andreas"
-        messageSender.sendMessageToPlayer(player, Colors.LIGHT_BLUE, TextKeys.lvdm.command.setpos.message, zone)
+        messageSender.sendMessageToPlayer(player, Colors.LIGHT_BLUE, LvdmTextKeys.lvdm.command.setpos.message, zone)
     }
 
     @Command(aliases = ["v", "veh"])
     fun vehicles(player: Player) {
         dialogService.createTabListDialog<Vehicle> {
-            caption(TextKeys.lvdm.command.vehicles.dialog.caption)
-            leftButton(TextKeys.lvdm.command.vehicles.dialog.button.select)
+            caption(LvdmTextKeys.lvdm.command.vehicles.dialog.caption)
+            leftButton(LvdmTextKeys.lvdm.command.vehicles.dialog.button.select)
             headerContent(
-                    TextKeys.lvdm.command.vehicles.dialog.tab.model,
-                    TextKeys.lvdm.command.vehicles.dialog.tab.location
+                    LvdmTextKeys.lvdm.command.vehicles.dialog.tab.model,
+                    LvdmTextKeys.lvdm.command.vehicles.dialog.tab.location
             )
             vehicleService.getAllVehicles().forEach { vehicle ->
                 item {
                     value(vehicle)
                     val locationTextKey = SanAndreasZone.getZone(vehicle.coordinates)?.textKey
-                            ?: ch.leadrian.samp.kamp.core.TextKeys.zone.name.sanandreas
+                            ?: KampCoreTextKeys.zone.name.sanandreas
                     tabbedContent(vehicle.model.textKey, locationTextKey)
                 }
             }
@@ -66,8 +67,8 @@ constructor(
     @Command(aliases = ["i", "int"])
     fun interiors(player: Player) {
         dialogService.createListDialog<Interior> {
-            caption(TextKeys.lvdm.command.interiors.dialog.caption)
-            leftButton(TextKeys.lvdm.command.interiors.dialog.button.teleport)
+            caption(LvdmTextKeys.lvdm.command.interiors.dialog.caption)
+            leftButton(LvdmTextKeys.lvdm.command.interiors.dialog.button.teleport)
             Interior.values().forEach { interior ->
                 item {
                     value(interior)
@@ -80,7 +81,7 @@ constructor(
                 messageSender.sendMessageToPlayer(
                         player,
                         Colors.LIGHT_BLUE,
-                        TextKeys.lvdm.command.interiors.message.teleport,
+                        LvdmTextKeys.lvdm.command.interiors.message.teleport,
                         listDialogItem.value.description
                 )
             }

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.text.HasTextKey
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import org.apache.commons.collections4.trie.PatriciaTrie
@@ -23,7 +23,7 @@ enum class WeaponModel(
 
     FIST(
             value = SAMPConstants.WEAPON_FIST,
-            textKey = TextKeys.weapon.model.name.fist,
+            textKey = KampCoreTextKeys.weapon.model.name.fist,
             modelName = "Fists",
             slot = WeaponSlot.HAND,
             modelId = 0,
@@ -31,7 +31,7 @@ enum class WeaponModel(
     ),
     BRASS_KNUCKLE(
             value = SAMPConstants.WEAPON_BRASSKNUCKLE,
-            textKey = TextKeys.weapon.model.name.brassknuckle,
+            textKey = KampCoreTextKeys.weapon.model.name.brassknuckle,
             modelName = "Brass knuckles",
             slot = WeaponSlot.HAND,
             modelId = 331,
@@ -39,7 +39,7 @@ enum class WeaponModel(
     ),
     GOLF_CLUB(
             value = SAMPConstants.WEAPON_GOLFCLUB,
-            textKey = TextKeys.weapon.model.name.golfclub,
+            textKey = KampCoreTextKeys.weapon.model.name.golfclub,
             modelName = "Golf club",
             slot = WeaponSlot.MELEE,
             modelId = 333,
@@ -47,7 +47,7 @@ enum class WeaponModel(
     ),
     NIGHT_STICK(
             value = SAMPConstants.WEAPON_NITESTICK,
-            textKey = TextKeys.weapon.model.name.nightstick,
+            textKey = KampCoreTextKeys.weapon.model.name.nightstick,
             modelName = "Nightstick",
             slot = WeaponSlot.MELEE,
             modelId = 334,
@@ -55,7 +55,7 @@ enum class WeaponModel(
     ),
     KNIFE(
             value = SAMPConstants.WEAPON_KNIFE,
-            textKey = TextKeys.weapon.model.name.knife,
+            textKey = KampCoreTextKeys.weapon.model.name.knife,
             modelName = "Knife",
             slot = WeaponSlot.MELEE,
             modelId = 335,
@@ -63,7 +63,7 @@ enum class WeaponModel(
     ),
     BAT(
             value = SAMPConstants.WEAPON_BAT,
-            textKey = TextKeys.weapon.model.name.bat,
+            textKey = KampCoreTextKeys.weapon.model.name.bat,
             modelName = "Baseball bat",
             slot = WeaponSlot.MELEE,
             modelId = 336,
@@ -71,7 +71,7 @@ enum class WeaponModel(
     ),
     SHOVEL(
             value = SAMPConstants.WEAPON_SHOVEL,
-            textKey = TextKeys.weapon.model.name.shovel,
+            textKey = KampCoreTextKeys.weapon.model.name.shovel,
             modelName = "Shovel",
             slot = WeaponSlot.MELEE,
             modelId = 337,
@@ -79,7 +79,7 @@ enum class WeaponModel(
     ),
     POOL_STICK(
             value = SAMPConstants.WEAPON_POOLSTICK,
-            textKey = TextKeys.weapon.model.name.poolstick,
+            textKey = KampCoreTextKeys.weapon.model.name.poolstick,
             modelName = "Billiards cue",
             slot = WeaponSlot.MELEE,
             modelId = 338,
@@ -87,7 +87,7 @@ enum class WeaponModel(
     ),
     KATANA(
             value = SAMPConstants.WEAPON_KATANA,
-            textKey = TextKeys.weapon.model.name.katana,
+            textKey = KampCoreTextKeys.weapon.model.name.katana,
             modelName = "Katana",
             slot = WeaponSlot.MELEE,
             modelId = 339,
@@ -95,7 +95,7 @@ enum class WeaponModel(
     ),
     CHAINSAW(
             value = SAMPConstants.WEAPON_CHAINSAW,
-            textKey = TextKeys.weapon.model.name.chainsaw,
+            textKey = KampCoreTextKeys.weapon.model.name.chainsaw,
             modelName = "Chainsaw",
             slot = WeaponSlot.MELEE,
             modelId = 341,
@@ -103,7 +103,7 @@ enum class WeaponModel(
     ),
     DILDO(
             value = SAMPConstants.WEAPON_DILDO,
-            textKey = TextKeys.weapon.model.name.dildo,
+            textKey = KampCoreTextKeys.weapon.model.name.dildo,
             modelName = "Dildo",
             slot = WeaponSlot.MISC2,
             modelId = 321,
@@ -111,7 +111,7 @@ enum class WeaponModel(
     ),
     DILDO2(
             value = SAMPConstants.WEAPON_DILDO2,
-            textKey = TextKeys.weapon.model.name.dildo2,
+            textKey = KampCoreTextKeys.weapon.model.name.dildo2,
             modelName = "Dildo",
             slot = WeaponSlot.MISC2,
             modelId = 322,
@@ -119,7 +119,7 @@ enum class WeaponModel(
     ),
     VIBRATOR(
             value = SAMPConstants.WEAPON_VIBRATOR,
-            textKey = TextKeys.weapon.model.name.vibrator,
+            textKey = KampCoreTextKeys.weapon.model.name.vibrator,
             modelName = "Vibrator",
             slot = WeaponSlot.MISC2,
             modelId = 323,
@@ -127,7 +127,7 @@ enum class WeaponModel(
     ),
     VIBRATOR2(
             value = SAMPConstants.WEAPON_VIBRATOR2,
-            textKey = TextKeys.weapon.model.name.vibrator2,
+            textKey = KampCoreTextKeys.weapon.model.name.vibrator2,
             modelName = "Vibrator",
             slot = WeaponSlot.MISC2,
             modelId = 324,
@@ -135,7 +135,7 @@ enum class WeaponModel(
     ),
     FLOWER(
             value = SAMPConstants.WEAPON_FLOWER,
-            textKey = TextKeys.weapon.model.name.flower,
+            textKey = KampCoreTextKeys.weapon.model.name.flower,
             modelName = "Flowers",
             slot = WeaponSlot.MISC2,
             modelId = 325,
@@ -143,7 +143,7 @@ enum class WeaponModel(
     ),
     CANE(
             value = SAMPConstants.WEAPON_CANE,
-            textKey = TextKeys.weapon.model.name.cane,
+            textKey = KampCoreTextKeys.weapon.model.name.cane,
             modelName = "Cane",
             slot = WeaponSlot.MISC2,
             modelId = 326,
@@ -151,7 +151,7 @@ enum class WeaponModel(
     ),
     GRENADE(
             value = SAMPConstants.WEAPON_GRENADE,
-            textKey = TextKeys.weapon.model.name.grenade,
+            textKey = KampCoreTextKeys.weapon.model.name.grenade,
             modelName = "Grenade",
             slot = WeaponSlot.THROWABLE,
             modelId = 342,
@@ -159,7 +159,7 @@ enum class WeaponModel(
     ),
     TEARGAS(
             value = SAMPConstants.WEAPON_TEARGAS,
-            textKey = TextKeys.weapon.model.name.teargas,
+            textKey = KampCoreTextKeys.weapon.model.name.teargas,
             modelName = "Tear gas",
             slot = WeaponSlot.THROWABLE,
             modelId = 343,
@@ -167,7 +167,7 @@ enum class WeaponModel(
     ),
     MOLOTOV(
             value = SAMPConstants.WEAPON_MOLTOV,
-            textKey = TextKeys.weapon.model.name.molotov,
+            textKey = KampCoreTextKeys.weapon.model.name.molotov,
             modelName = "Molotov cocktail",
             slot = WeaponSlot.THROWABLE,
             modelId = 344,
@@ -175,7 +175,7 @@ enum class WeaponModel(
     ),
     COLT45(
             value = SAMPConstants.WEAPON_COLT45,
-            textKey = TextKeys.weapon.model.name.colt45,
+            textKey = KampCoreTextKeys.weapon.model.name.colt45,
             modelName = "Colt 45",
             slot = WeaponSlot.PISTOL,
             modelId = 346,
@@ -186,7 +186,7 @@ enum class WeaponModel(
     ),
     SILENCED(
             value = SAMPConstants.WEAPON_SILENCED,
-            textKey = TextKeys.weapon.model.name.silenced,
+            textKey = KampCoreTextKeys.weapon.model.name.silenced,
             modelName = "Silenced Colt 45",
             slot = WeaponSlot.PISTOL,
             modelId = 347,
@@ -196,7 +196,7 @@ enum class WeaponModel(
     ),
     DESERT_EAGLE(
             value = SAMPConstants.WEAPON_DEAGLE,
-            textKey = TextKeys.weapon.model.name.deserteagle,
+            textKey = KampCoreTextKeys.weapon.model.name.deserteagle,
             modelName = "Desert Eagle",
             slot = WeaponSlot.PISTOL,
             modelId = 348,
@@ -206,7 +206,7 @@ enum class WeaponModel(
     ),
     SHOTGUN(
             value = SAMPConstants.WEAPON_SHOTGUN,
-            textKey = TextKeys.weapon.model.name.shotgun,
+            textKey = KampCoreTextKeys.weapon.model.name.shotgun,
             modelName = "Shotgun",
             slot = WeaponSlot.SHOTGUN,
             modelId = 349,
@@ -216,7 +216,7 @@ enum class WeaponModel(
     ),
     SAWED_OFF_SHOTGUN(
             value = SAMPConstants.WEAPON_SAWEDOFF,
-            textKey = TextKeys.weapon.model.name.sawedoffshotgun,
+            textKey = KampCoreTextKeys.weapon.model.name.sawedoffshotgun,
             modelName = "Sawed-off shotgun",
             slot = WeaponSlot.SHOTGUN,
             modelId = 350,
@@ -227,7 +227,7 @@ enum class WeaponModel(
     ),
     SPAS12_SHOTGUN(
             value = SAMPConstants.WEAPON_SHOTGSPA,
-            textKey = TextKeys.weapon.model.name.spas12shotgun,
+            textKey = KampCoreTextKeys.weapon.model.name.spas12shotgun,
             modelName = "SPAS-12",
             slot = WeaponSlot.SHOTGUN,
             modelId = 351,
@@ -237,7 +237,7 @@ enum class WeaponModel(
     ),
     MICRO_UZI(
             value = SAMPConstants.WEAPON_UZI,
-            textKey = TextKeys.weapon.model.name.microuzi,
+            textKey = KampCoreTextKeys.weapon.model.name.microuzi,
             modelName = "Micro Uri",
             slot = WeaponSlot.MACHINE_PISTOL,
             modelId = 352,
@@ -248,7 +248,7 @@ enum class WeaponModel(
     ),
     MP5(
             value = SAMPConstants.WEAPON_MP5,
-            textKey = TextKeys.weapon.model.name.mp5,
+            textKey = KampCoreTextKeys.weapon.model.name.mp5,
             modelName = "MP5",
             slot = WeaponSlot.MACHINE_PISTOL,
             modelId = 353,
@@ -258,7 +258,7 @@ enum class WeaponModel(
     ),
     AK47(
             value = SAMPConstants.WEAPON_AK47,
-            textKey = TextKeys.weapon.model.name.ak47,
+            textKey = KampCoreTextKeys.weapon.model.name.ak47,
             modelName = "AK-47",
             slot = WeaponSlot.CARABINER,
             modelId = 355,
@@ -268,7 +268,7 @@ enum class WeaponModel(
     ),
     M4(
             value = SAMPConstants.WEAPON_M4,
-            textKey = TextKeys.weapon.model.name.m4,
+            textKey = KampCoreTextKeys.weapon.model.name.m4,
             modelName = "M4",
             slot = WeaponSlot.CARABINER,
             modelId = 356,
@@ -278,7 +278,7 @@ enum class WeaponModel(
     ),
     TEC9(
             value = SAMPConstants.WEAPON_TEC9,
-            textKey = TextKeys.weapon.model.name.tec9,
+            textKey = KampCoreTextKeys.weapon.model.name.tec9,
             modelName = "TEC-9",
             slot = WeaponSlot.MACHINE_PISTOL,
             modelId = 372,
@@ -289,7 +289,7 @@ enum class WeaponModel(
     ),
     RIFLE(
             value = SAMPConstants.WEAPON_RIFLE,
-            textKey = TextKeys.weapon.model.name.rifle,
+            textKey = KampCoreTextKeys.weapon.model.name.rifle,
             modelName = "Hunting rifle",
             slot = WeaponSlot.RIFLE,
             modelId = 357,
@@ -299,7 +299,7 @@ enum class WeaponModel(
     ),
     SNIPER_RIFLE(
             value = SAMPConstants.WEAPON_SNIPER,
-            textKey = TextKeys.weapon.model.name.sniperrifle,
+            textKey = KampCoreTextKeys.weapon.model.name.sniperrifle,
             modelName = "Sniper rifle",
             slot = WeaponSlot.RIFLE,
             modelId = 358,
@@ -309,7 +309,7 @@ enum class WeaponModel(
     ),
     ROCKET_LAUNCHER(
             value = SAMPConstants.WEAPON_ROCKETLAUNCHER,
-            textKey = TextKeys.weapon.model.name.rocketlauncher,
+            textKey = KampCoreTextKeys.weapon.model.name.rocketlauncher,
             modelName = "Rocket launcher",
             slot = WeaponSlot.HEAVY,
             modelId = 359,
@@ -317,7 +317,7 @@ enum class WeaponModel(
     ),
     HEAT_SEEKER(
             value = SAMPConstants.WEAPON_HEATSEEKER,
-            textKey = TextKeys.weapon.model.name.heatseeker,
+            textKey = KampCoreTextKeys.weapon.model.name.heatseeker,
             modelName = "Heat-seeking rocket launcher",
             slot = WeaponSlot.HEAVY,
             modelId = 360,
@@ -325,7 +325,7 @@ enum class WeaponModel(
     ),
     FLAMETHROWER(
             value = SAMPConstants.WEAPON_FLAMETHROWER,
-            textKey = TextKeys.weapon.model.name.flamethrower,
+            textKey = KampCoreTextKeys.weapon.model.name.flamethrower,
             modelName = "Flamethrower",
             slot = WeaponSlot.HEAVY,
             modelId = 361,
@@ -333,7 +333,7 @@ enum class WeaponModel(
     ),
     MINIGUN(
             value = SAMPConstants.WEAPON_MINIGUN,
-            textKey = TextKeys.weapon.model.name.minigun,
+            textKey = KampCoreTextKeys.weapon.model.name.minigun,
             modelName = "Minigun",
             slot = WeaponSlot.HEAVY,
             modelId = 362,
@@ -342,7 +342,7 @@ enum class WeaponModel(
     ),
     SATCHEL(
             value = SAMPConstants.WEAPON_SATCHEL,
-            textKey = TextKeys.weapon.model.name.satchel,
+            textKey = KampCoreTextKeys.weapon.model.name.satchel,
             modelName = "Satchel",
             slot = WeaponSlot.THROWABLE,
             modelId = 363,
@@ -350,7 +350,7 @@ enum class WeaponModel(
     ),
     BOMB(
             value = SAMPConstants.WEAPON_BOMB,
-            textKey = TextKeys.weapon.model.name.bomb,
+            textKey = KampCoreTextKeys.weapon.model.name.bomb,
             modelName = "Bomb",
             slot = WeaponSlot.DETONATOR,
             modelId = 364,
@@ -358,7 +358,7 @@ enum class WeaponModel(
     ),
     SPRAY_CAN(
             value = SAMPConstants.WEAPON_SPRAYCAN,
-            textKey = TextKeys.weapon.model.name.spraycan,
+            textKey = KampCoreTextKeys.weapon.model.name.spraycan,
             modelName = "Spray can",
             slot = WeaponSlot.MISC1,
             modelId = 365,
@@ -366,7 +366,7 @@ enum class WeaponModel(
     ),
     FIRE_EXTINGUISHER(
             value = SAMPConstants.WEAPON_FIREEXTINGUISHER,
-            textKey = TextKeys.weapon.model.name.fireextinguisher,
+            textKey = KampCoreTextKeys.weapon.model.name.fireextinguisher,
             modelName = "Fire extinguisher",
             slot = WeaponSlot.MISC1,
             modelId = 366,
@@ -374,7 +374,7 @@ enum class WeaponModel(
     ),
     CAMERA(
             value = SAMPConstants.WEAPON_CAMERA,
-            textKey = TextKeys.weapon.model.name.camera,
+            textKey = KampCoreTextKeys.weapon.model.name.camera,
             modelName = "Camera",
             slot = WeaponSlot.MISC1,
             modelId = 367,
@@ -382,7 +382,7 @@ enum class WeaponModel(
     ),
     NIGHT_VISION(
             value = SAMPConstants.WEAPON_NIGHTVISION,
-            textKey = TextKeys.weapon.model.name.nightvision,
+            textKey = KampCoreTextKeys.weapon.model.name.nightvision,
             modelName = "Night vision",
             slot = WeaponSlot.WEARABLE,
             modelId = 368,
@@ -390,7 +390,7 @@ enum class WeaponModel(
     ),
     INFRARED(
             value = SAMPConstants.WEAPON_INFRARED,
-            textKey = TextKeys.weapon.model.name.infrared,
+            textKey = KampCoreTextKeys.weapon.model.name.infrared,
             modelName = "Infrared vision",
             slot = WeaponSlot.WEARABLE,
             modelId = 368,
@@ -398,7 +398,7 @@ enum class WeaponModel(
     ),
     PARACHUTE(
             value = SAMPConstants.WEAPON_PARACHUTE,
-            textKey = TextKeys.weapon.model.name.parachute,
+            textKey = KampCoreTextKeys.weapon.model.name.parachute,
             modelName = "Parachute",
             slot = WeaponSlot.WEARABLE,
             modelId = 371,
@@ -406,7 +406,7 @@ enum class WeaponModel(
     ),
     FAKE_PISTOL(
             value = 47,
-            textKey = TextKeys.weapon.model.name.fakepistol,
+            textKey = KampCoreTextKeys.weapon.model.name.fakepistol,
             modelName = "Fake pistol",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -414,7 +414,7 @@ enum class WeaponModel(
     ),
     VEHICLE(
             value = SAMPConstants.WEAPON_VEHICLE,
-            textKey = TextKeys.weapon.model.name.vehicle,
+            textKey = KampCoreTextKeys.weapon.model.name.vehicle,
             modelName = "Vehicle",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -422,7 +422,7 @@ enum class WeaponModel(
     ),
     HELICOPTER_BLADES(
             value = 50,
-            textKey = TextKeys.weapon.model.name.helicopterblades,
+            textKey = KampCoreTextKeys.weapon.model.name.helicopterblades,
             modelName = "Helicopter blades",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -430,7 +430,7 @@ enum class WeaponModel(
     ),
     EXPLOSION(
             value = 51,
-            textKey = TextKeys.weapon.model.name.explosion,
+            textKey = KampCoreTextKeys.weapon.model.name.explosion,
             modelName = "Explosion",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -438,7 +438,7 @@ enum class WeaponModel(
     ),
     DROWN(
             value = SAMPConstants.WEAPON_DROWN,
-            textKey = TextKeys.weapon.model.name.drown,
+            textKey = KampCoreTextKeys.weapon.model.name.drown,
             modelName = "Drowning",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -446,7 +446,7 @@ enum class WeaponModel(
     ),
     COLLISION(
             value = SAMPConstants.WEAPON_COLLISION,
-            textKey = TextKeys.weapon.model.name.collision,
+            textKey = KampCoreTextKeys.weapon.model.name.collision,
             modelName = "Collision",
             slot = WeaponSlot.INVALID,
             modelId = 0,
@@ -454,7 +454,7 @@ enum class WeaponModel(
     ),
     SUICIDE(
             value = 255,
-            textKey = TextKeys.weapon.model.name.suicide,
+            textKey = KampCoreTextKeys.weapon.model.name.suicide,
             modelName = "Suicide",
             slot = WeaponSlot.INVALID,
             modelId = 0,

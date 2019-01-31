@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
@@ -32,7 +32,7 @@ internal class DefaultInvalidCommandParameterValueHandlerTest {
             every { parameters } returns listOf(parameter1, parameter2)
         }
         val textProvider = mockk<TextProvider> {
-            every { getText(locale, TextKeys.command.usage.prefix) } returns "Usage"
+            every { getText(locale, KampCoreTextKeys.command.usage.prefix) } returns "Usage"
         }
         val messageSender = mockk<MessageSender> {
             every { sendMessageToPlayer(any(), any(), any<String>()) } just Runs

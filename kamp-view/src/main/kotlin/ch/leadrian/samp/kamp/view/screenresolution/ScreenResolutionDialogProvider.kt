@@ -1,10 +1,11 @@
 package ch.leadrian.samp.kamp.view.screenresolution
 
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
-import ch.leadrian.samp.kamp.view.TextKeys
+import ch.leadrian.samp.kamp.view.KampViewTextKeys
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -38,7 +39,7 @@ constructor(dialogService: DialogService, messageSender: MessageSender) {
 
     private val dialog: Dialog by lazy {
         dialogService.createListDialog<ScreenResolution> {
-            caption(TextKeys.view.dialog.screen.resolution.selection.caption)
+            caption(KampViewTextKeys.view.dialog.screen.resolution.selection.caption)
             allScreenResolutions.forEach {
                 item {
                     value(it)
@@ -51,13 +52,13 @@ constructor(dialogService: DialogService, messageSender: MessageSender) {
                 messageSender.sendMessageToPlayer(
                         player,
                         Colors.GREY,
-                        TextKeys.view.dialog.screen.resolution.message,
+                        KampViewTextKeys.view.dialog.screen.resolution.message,
                         resolution.width.toString(),
                         resolution.height.toString()
                 )
             }
-            leftButton(ch.leadrian.samp.kamp.core.TextKeys.dialog.button.ok)
-            rightButton(ch.leadrian.samp.kamp.core.TextKeys.dialog.button.cancel)
+            leftButton(KampCoreTextKeys.dialog.button.ok)
+            rightButton(KampCoreTextKeys.dialog.button.cancel)
         }
     }
 

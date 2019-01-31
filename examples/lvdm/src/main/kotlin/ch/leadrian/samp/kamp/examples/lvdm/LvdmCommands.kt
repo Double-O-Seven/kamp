@@ -30,14 +30,14 @@ constructor(private val messageSender: MessageSender) : Commands() {
     @Command
     fun giveCash(
             player: Player,
-            @Parameter(nameTextKey = TextKeys.lvdm.command.givecash.parameter.receiver_) receiver: Player,
-            @Parameter(nameTextKey = TextKeys.lvdm.command.givecash.parameter.amount_) amount: Int
+            @Parameter(nameTextKey = LvdmTextKeys.lvdm.command.givecash.parameter.receiver_) receiver: Player,
+            @Parameter(nameTextKey = LvdmTextKeys.lvdm.command.givecash.parameter.amount_) amount: Int
     ) {
         if (amount < player.money || amount < 1) {
             messageSender.sendMessageToPlayer(
                     player,
                     Colors.YELLOW,
-                    TextKeys.lvdm.command.givecash.invalid.transaction.amount
+                    LvdmTextKeys.lvdm.command.givecash.invalid.transaction.amount
             )
             return
         }
@@ -45,7 +45,7 @@ constructor(private val messageSender: MessageSender) : Commands() {
         messageSender.sendMessageToPlayer(
                 player,
                 Colors.GREEN,
-                TextKeys.lvdm.command.givecash.message.sender,
+                LvdmTextKeys.lvdm.command.givecash.message.sender,
                 coloredNameOf(receiver),
                 amount
         )
@@ -53,7 +53,7 @@ constructor(private val messageSender: MessageSender) : Commands() {
         messageSender.sendMessageToPlayer(
                 receiver,
                 Colors.GREEN,
-                TextKeys.lvdm.command.givecash.message.receiver,
+                LvdmTextKeys.lvdm.command.givecash.message.receiver,
                 amount,
                 coloredNameOf(player)
         )

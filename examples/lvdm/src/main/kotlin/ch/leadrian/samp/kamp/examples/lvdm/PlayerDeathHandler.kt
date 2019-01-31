@@ -38,14 +38,14 @@ constructor(
             if (reason == WeaponModel.FIST) {
                 messageSender.sendMessageToAll(
                         Colors.RED,
-                        TextKeys.lvdm.player.killed.fists,
+                        LvdmTextKeys.lvdm.player.killed.fists,
                         coloredNameOf(killer),
                         coloredNameOf(player)
                 )
             } else {
                 messageSender.sendMessageToAll(
                         Colors.RED,
-                        TextKeys.lvdm.player.killed.weapon,
+                        LvdmTextKeys.lvdm.player.killed.weapon,
                         coloredNameOf(killer),
                         coloredNameOf(player),
                         reason
@@ -56,9 +56,9 @@ constructor(
             killer.score = killer.score + 1
         } else {
             if (reason == WeaponModel.DROWN) {
-                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.drown, coloredNameOf(player))
+                messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.drown, coloredNameOf(player))
             } else {
-                messageSender.sendMessageToAll(Colors.RED, TextKeys.lvdm.player.died, coloredNameOf(player), reason)
+                messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.died, coloredNameOf(player), reason)
             }
         }
     }

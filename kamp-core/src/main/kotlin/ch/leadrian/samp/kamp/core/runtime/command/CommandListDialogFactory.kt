@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.command.CommandDefinition
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
@@ -63,7 +63,7 @@ constructor(private val dialogService: DialogService) {
     }
 
     private fun TabListDialogBuilder<String>.buildHeaderContent() {
-        headerContent(TextKeys.command.dialog.tab.command, TextKeys.command.dialog.tab.parameters)
+        headerContent(KampCoreTextKeys.command.dialog.tab.command, KampCoreTextKeys.command.dialog.tab.parameters)
     }
 
     private fun TabListDialogBuilder<String>.buildItems(definitions: List<CommandDefinition>) {
@@ -95,7 +95,7 @@ constructor(private val dialogService: DialogService) {
     }
 
     private fun TabListDialogBuilder<String>.buildSinglePageButtons() {
-        leftButton(TextKeys.dialog.button.close)
+        leftButton(KampCoreTextKeys.dialog.button.close)
     }
 
     private fun TabListDialogBuilder<String>.buildPagedButtons(
@@ -105,16 +105,16 @@ constructor(private val dialogService: DialogService) {
     ) {
         when (index) {
             0 -> {
-                leftButton(TextKeys.dialog.button.next)
-                rightButton(TextKeys.dialog.button.close)
+                leftButton(KampCoreTextKeys.dialog.button.next)
+                rightButton(KampCoreTextKeys.dialog.button.close)
             }
             numberOfPages - 1 -> {
-                leftButton(TextKeys.dialog.button.close)
-                rightButton(TextKeys.dialog.button.back)
+                leftButton(KampCoreTextKeys.dialog.button.close)
+                rightButton(KampCoreTextKeys.dialog.button.back)
             }
             else -> {
-                leftButton(TextKeys.dialog.button.next)
-                rightButton(TextKeys.dialog.button.back)
+                leftButton(KampCoreTextKeys.dialog.button.next)
+                rightButton(KampCoreTextKeys.dialog.button.back)
             }
         }
         onSelectItem { player, _, _ ->

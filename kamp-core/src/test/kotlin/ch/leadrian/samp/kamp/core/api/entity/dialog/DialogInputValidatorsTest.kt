@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity.dialog
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import io.mockk.mockk
@@ -36,7 +36,7 @@ internal class DialogInputValidatorsTest {
             val result = validator.validate(player, inputText)
 
             assertThat(result)
-                    .isEqualTo(TextKeys.dialog.input.validation.error.notblank)
+                    .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.notblank)
         }
 
         @ParameterizedTest
@@ -85,7 +85,7 @@ internal class DialogInputValidatorsTest {
             val result = validator.validate(player, "")
 
             assertThat(result)
-                    .isEqualTo(TextKeys.dialog.input.validation.error.notempty)
+                    .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.notempty)
         }
 
         @Test
@@ -135,7 +135,7 @@ internal class DialogInputValidatorsTest {
             val result = validator.validate(player, inputText)
 
             assertThat(result)
-                    .isEqualTo(TextKeys.dialog.input.validation.error.generic)
+                    .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.generic)
         }
 
         @ParameterizedTest
@@ -185,7 +185,7 @@ internal class DialogInputValidatorsTest {
             val result = validator.validate(player, inputText)
 
             assertThat(result)
-                    .isEqualTo(TextKeys.dialog.input.validation.error.floatvalue)
+                    .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.floatvalue)
         }
 
         @ParameterizedTest
@@ -235,7 +235,7 @@ internal class DialogInputValidatorsTest {
             val result = validator.validate(player, inputText)
 
             assertThat(result)
-                    .isEqualTo(TextKeys.dialog.input.validation.error.intvalue)
+                    .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.intvalue)
         }
 
         @ParameterizedTest
@@ -288,7 +288,7 @@ internal class DialogInputValidatorsTest {
                 val result = validator.validate(player, inputText)
 
                 assertThat(result)
-                        .isEqualTo(TextKeys.dialog.input.validation.error.generic)
+                        .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.generic)
             }
 
             @ParameterizedTest
@@ -347,7 +347,7 @@ internal class DialogInputValidatorsTest {
                 val result = validator.validate(player, inputText)
 
                 assertThat(result)
-                        .isEqualTo(TextKeys.dialog.input.validation.error.generic)
+                        .isEqualTo(KampCoreTextKeys.dialog.input.validation.error.generic)
             }
 
             @ParameterizedTest

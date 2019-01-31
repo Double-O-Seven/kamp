@@ -11,6 +11,7 @@ plugins {
 }
 
 textKeyGenerator {
+    className = "LvdmTextKeys"
     packageName("ch.leadrian.samp.kamp.examples.lvdm")
 }
 

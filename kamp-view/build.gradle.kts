@@ -7,5 +7,6 @@ dependencies {
 }
 
 textKeyGenerator {
+    className = "KampViewTextKeys"
     packageName("ch.leadrian.samp.kamp.view")
 }

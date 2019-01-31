@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.view.composite
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
@@ -120,8 +120,8 @@ open class TextInputView(
         return dialogService.createInputDialog {
             validators(validators)
             caption { title }
-            leftButton(TextKeys.dialog.button.ok)
-            rightButton(TextKeys.dialog.button.cancel)
+            leftButton(KampCoreTextKeys.dialog.button.ok)
+            rightButton(KampCoreTextKeys.dialog.button.cancel)
             onInvalidInput { _, error ->
                 message(
                         textFormatter.format(

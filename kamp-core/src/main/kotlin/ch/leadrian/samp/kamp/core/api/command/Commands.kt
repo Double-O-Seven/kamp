@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.command
 
-import ch.leadrian.samp.kamp.core.TextKeys
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
@@ -30,7 +30,7 @@ abstract class Commands {
     open val commandListDialogPageSize: Int = 30
 
     open fun getCommandListDialogTitle(player: Player): String =
-            textProvider.getText(player.locale, TextKeys.command.dialog.title.generic)
+            textProvider.getText(player.locale, KampCoreTextKeys.command.dialog.title.generic)
 
     @JvmOverloads
     fun showCommandList(player: Player, showAsNavigationRoot: Boolean = true) {

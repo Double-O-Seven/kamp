@@ -46,5 +46,6 @@ kampKotlinCodegen {
 }
 
 textKeyGenerator {
+    className = "KampCoreTextKeys"
     packageName(corePackageName)
 }
