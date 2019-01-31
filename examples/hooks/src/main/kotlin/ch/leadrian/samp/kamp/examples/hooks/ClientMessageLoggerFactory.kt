@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.examples.lvdm
+package ch.leadrian.samp.kamp.examples.hooks
 
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor

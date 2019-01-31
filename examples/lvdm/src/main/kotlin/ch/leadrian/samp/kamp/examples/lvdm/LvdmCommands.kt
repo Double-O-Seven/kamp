@@ -6,6 +6,7 @@ import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.text.MessageArguments
 import ch.leadrian.samp.kamp.core.api.text.MessageArguments.coloredNameOf
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import javax.inject.Inject
@@ -25,6 +26,24 @@ constructor(private val messageSender: MessageSender) : Commands() {
     @Command
     fun me(player: Player, text: String) {
         messageSender.sendMessageToAll(player.color, "* {0} {1}", player.name, text)
+    }
+
+    @Command(name = "pm")
+    fun sendPrivateMessage(player: Player, receiver: Player, message: String) {
+        messageSender.sendMessageToPlayer(
+                player,
+                Colors.YELLOW,
+                LvdmTextKeys.lvdm.command.pm.to,
+                MessageArguments.coloredNameOf(receiver),
+                message
+        )
+        messageSender.sendMessageToPlayer(
+                receiver,
+                Colors.YELLOW,
+                LvdmTextKeys.lvdm.command.pm.from,
+                MessageArguments.coloredNameOf(player),
+                message
+        )
     }
 
     @Command

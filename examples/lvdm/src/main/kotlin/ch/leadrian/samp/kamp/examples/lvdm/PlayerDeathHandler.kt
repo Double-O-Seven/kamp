@@ -35,31 +35,39 @@ constructor(
     override fun onPlayerDeath(player: Player, killer: Player?, reason: WeaponModel) {
         playerService.sendDeathMessage(player, reason, killer)
         if (killer != null) {
-            if (reason == WeaponModel.FIST) {
-                messageSender.sendMessageToAll(
-                        Colors.RED,
-                        LvdmTextKeys.lvdm.player.killed.fists,
-                        coloredNameOf(killer),
-                        coloredNameOf(player)
-                )
-            } else {
-                messageSender.sendMessageToAll(
-                        Colors.RED,
-                        LvdmTextKeys.lvdm.player.killed.weapon,
-                        coloredNameOf(killer),
-                        coloredNameOf(player),
-                        reason
-                )
-            }
-            killer.giveMoney(player.money)
-            player.resetMoney()
-            killer.score = killer.score + 1
+            handleMurder(player, killer, reason)
         } else {
-            if (reason == WeaponModel.DROWN) {
-                messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.drown, coloredNameOf(player))
-            } else {
-                messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.died, coloredNameOf(player), reason)
-            }
+            handleSuicide(player, reason)
+        }
+    }
+
+    private fun handleMurder(player: Player, killer: Player, reason: WeaponModel) {
+        if (reason == WeaponModel.FIST) {
+            messageSender.sendMessageToAll(
+                    Colors.RED,
+                    LvdmTextKeys.lvdm.player.killed.fists,
+                    coloredNameOf(killer),
+                    coloredNameOf(player)
+            )
+        } else {
+            messageSender.sendMessageToAll(
+                    Colors.RED,
+                    LvdmTextKeys.lvdm.player.killed.weapon,
+                    coloredNameOf(killer),
+                    coloredNameOf(player),
+                    reason
+            )
+        }
+        killer.giveMoney(player.money)
+        player.resetMoney()
+        killer.score = killer.score + 1
+    }
+
+    private fun handleSuicide(player: Player, reason: WeaponModel) {
+        if (reason == WeaponModel.DROWN) {
+            messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.drown, coloredNameOf(player))
+        } else {
+            messageSender.sendMessageToAll(Colors.RED, LvdmTextKeys.lvdm.player.died, coloredNameOf(player), reason)
         }
     }
 }

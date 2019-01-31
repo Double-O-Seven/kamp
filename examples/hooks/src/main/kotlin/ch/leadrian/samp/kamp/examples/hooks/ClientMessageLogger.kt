@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.examples.lvdm
+package ch.leadrian.samp.kamp.examples.hooks
 
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.service.PlayerService
@@ -12,7 +12,7 @@ import javax.inject.Provider
  * @see [ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionHookFactory]
  */
 class ClientMessageLogger(
-        private val playerService: Provider<PlayerService>,
+        playerService: Provider<PlayerService>,
         hookedNativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : SAMPNativeFunctionHook(hookedNativeFunctionExecutor) {
 
@@ -22,8 +22,10 @@ class ClientMessageLogger(
 
     }
 
+    private val playerService: PlayerService by lazy { playerService.get() }
+
     override fun sendClientMessage(playerid: Int, color: Int, message: String): Boolean {
-        val playerName = playerService.get().getPlayer(PlayerId.valueOf(playerid)).name
+        val playerName = playerService.getPlayer(PlayerId.valueOf(playerid)).name
         log.info("Message to {}: {}", playerName, message)
         return super.sendClientMessage(playerid, color, message)
     }
