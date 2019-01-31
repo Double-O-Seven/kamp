@@ -16,6 +16,10 @@ class PlayerSpawner
 @Inject
 constructor(private val callbackListenerManager: CallbackListenerManager) : OnPlayerSpawnListener {
 
+    /**
+     * This value is defined in config.properties. If it is missing, the default value will be taken.
+     * @see build.gradle.kts
+     */
     @Configuration("lvdm.respawn.cash.amout")
     private var respawnMoney: Int = 1000
 
