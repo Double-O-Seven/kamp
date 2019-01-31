@@ -29,7 +29,7 @@ constructor(
 
     private companion object {
 
-        private val log = loggerFor<CommandProcessor>()
+        val log = loggerFor<CommandProcessor>()
 
     }
 
@@ -50,13 +50,13 @@ constructor(
                     ?: return commandErrorHandler.handle(player, commandText, null)
 
             val commandDefinition = getCommandDefinition(parsedCommand)
-                    ?: return unknownCommandHandler.handle(player, parsedCommand.command, parsedCommand.parameterValues)
+                    ?: return unknownCommandHandler.handle(player, commandText)
 
             val stringParameterValues = getStringParameterValues(commandDefinition, parsedCommand)
 
-            return processCommand(player, commandDefinition, stringParameterValues)
+            return processCommand(player, commandText, commandDefinition, stringParameterValues)
         } catch (e: Exception) {
-            log.error("Exception while processing command by player ${player.name}: $commandText", e)
+            log.error("Exception while processing command by player {}: {}", player.name, commandText, e)
             return commandErrorHandler.handle(player, commandText, e)
         }
     }
@@ -75,16 +75,13 @@ constructor(
 
     private fun processCommand(
             player: Player,
+            commandLine: String,
             commandDefinition: CommandDefinition,
             stringParameterValues: List<String>
     ): OnPlayerCommandTextListener.Result {
         commandAccessCheckExecutor.checkAccess(player, commandDefinition, stringParameterValues)?.let {
             return when (it) {
-                OnPlayerCommandTextListener.Result.UnknownCommand -> unknownCommandHandler.handle(
-                        player,
-                        commandDefinition.name,
-                        stringParameterValues
-                )
+                OnPlayerCommandTextListener.Result.UnknownCommand -> unknownCommandHandler.handle(player, commandLine)
                 else -> OnPlayerCommandTextListener.Result.Processed
             }
         }

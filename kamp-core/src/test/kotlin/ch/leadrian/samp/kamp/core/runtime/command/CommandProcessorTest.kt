@@ -74,15 +74,15 @@ internal class CommandProcessorTest {
     @Test
     fun givenCommandDefinitionCouldNotBeFoundItShouldExecuteUnknownCommandHandler() {
         val commandLine = "/hi there"
-        every { commandParser.parse(commandLine) } returns ParsedCommand("hi", listOf("there", "lol"))
+        every { commandParser.parse(commandLine) } returns ParsedCommand("hi", listOf("there"))
         every { commandRegistry.getCommandDefinition("hi", "there") } returns null
         every {
-            unknownCommandHandler.handle(any(), any(), any())
+            unknownCommandHandler.handle(any(), any())
         } returns OnPlayerCommandTextListener.Result.Processed
 
         commandProcessor.onPlayerCommandText(player, commandLine)
 
-        verify { unknownCommandHandler.handle(player, "hi", listOf("there", "lol")) }
+        verify { unknownCommandHandler.handle(player, commandLine) }
     }
 
     @Nested
@@ -123,11 +123,7 @@ internal class CommandProcessorTest {
             every { commandParser.parse(commandLine) } returns ParsedCommand("hi", listOf("there", "lol"))
             every { commandRegistry.getCommandDefinition("hi", "there") } returns commandDefinition
             every {
-                unknownCommandHandler.handle(
-                        any(),
-                        any(),
-                        any()
-                )
+                unknownCommandHandler.handle(any(), any())
             } returns OnPlayerCommandTextListener.Result.Processed
             every {
                 commandAccessCheckExecutor.checkAccess(player, commandDefinition, listOf("lol"))
@@ -135,9 +131,7 @@ internal class CommandProcessorTest {
 
             val result = commandProcessor.onPlayerCommandText(player, commandLine)
 
-            verify {
-                unknownCommandHandler.handle(player, "hi", listOf("lol"))
-            }
+            verify { unknownCommandHandler.handle(player, commandLine) }
             assertThat(result)
                     .isEqualTo(OnPlayerCommandTextListener.Result.Processed)
         }

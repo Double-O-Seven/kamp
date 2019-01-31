@@ -31,10 +31,10 @@ internal class DefaultUnknownCommandHandlerTest {
     fun shouldSendClientMessage() {
         every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any(), any()) } just Runs
 
-        defaultUnknownCommandHandler.handle(player, "help", listOf("abc", "xyz"))
+        defaultUnknownCommandHandler.handle(player, "help")
 
         verify {
-            messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.unknown, "help", "abc xyz")
+            messageSender.sendMessageToPlayer(player, Colors.RED, KampCoreTextKeys.command.unknown, "help")
         }
     }
 
@@ -42,7 +42,7 @@ internal class DefaultUnknownCommandHandlerTest {
     fun shouldReturnResultProcessed() {
         every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any(), any()) } just Runs
 
-        val result = defaultUnknownCommandHandler.handle(player, "help", listOf("abc", "xyz"))
+        val result = defaultUnknownCommandHandler.handle(player, "help")
 
         assertThat(result)
                 .isEqualTo(OnPlayerCommandTextListener.Result.Processed)

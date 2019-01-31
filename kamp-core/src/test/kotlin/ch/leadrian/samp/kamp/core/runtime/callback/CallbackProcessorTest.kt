@@ -6042,11 +6042,7 @@ internal class CallbackProcessorTest {
 
     private class TestUnknownCommandHandler : UnknownCommandHandler {
 
-        override fun handle(
-                player: Player,
-                command: String,
-                parameters: List<String>
-        ): OnPlayerCommandTextListener.Result =
+        override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result =
                 OnPlayerCommandTextListener.Result.UnknownCommand
     }
 

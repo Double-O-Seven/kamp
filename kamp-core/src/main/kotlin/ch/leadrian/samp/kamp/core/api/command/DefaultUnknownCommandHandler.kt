@@ -10,13 +10,12 @@ import javax.inject.Inject
 open class DefaultUnknownCommandHandler
 @Inject constructor(private val messageSender: MessageSender) : UnknownCommandHandler {
 
-    override fun handle(player: Player, command: String, parameters: List<String>): OnPlayerCommandTextListener.Result {
+    override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result {
         messageSender.sendMessageToPlayer(
                 player,
                 Colors.RED,
                 KampCoreTextKeys.command.unknown,
-                command,
-                parameters.joinToString(" ")
+                commandLine
         )
         return OnPlayerCommandTextListener.Result.Processed
     }
