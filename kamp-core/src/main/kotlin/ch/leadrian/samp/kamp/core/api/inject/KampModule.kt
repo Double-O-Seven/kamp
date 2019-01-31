@@ -26,6 +26,18 @@ abstract class KampModule : AbstractModule() {
                     Names.named(TextProvider.RESOURCE_BUNDLE_PACKAGES_NAME)
             )
 
+    /**
+     * Creates a new [Commands] binder.
+     *
+     * Examples:
+     * ```
+     * newCommandsSetBinder().apply {
+     *     addBinding().to(UserCommands::class.java)
+     *     addBinding().to(VehicleCommands::class.java)
+     *     addBinding().to(AdminCommands::class.java
+     * }
+     * ```
+     */
     protected fun newCommandsSetBinder(): Multibinder<Commands> =
             Multibinder.newSetBinder(binder(), Commands::class.java)
 
