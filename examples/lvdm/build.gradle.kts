@@ -20,6 +20,7 @@ serverStarter {
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
     configProperty("kamp.ignore.version.mismatch", "true")
+    configProperty("lvdm.respawn.cash.amout", "2500")
 }
 
 tasks {

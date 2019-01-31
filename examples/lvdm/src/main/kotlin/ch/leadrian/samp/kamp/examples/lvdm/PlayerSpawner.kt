@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSpawnListener
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import com.netflix.governator.annotations.Configuration
 import java.util.Random
 import javax.annotation.PostConstruct
 import javax.inject.Inject
@@ -14,6 +15,9 @@ import javax.inject.Singleton
 class PlayerSpawner
 @Inject
 constructor(private val callbackListenerManager: CallbackListenerManager) : OnPlayerSpawnListener {
+
+    @Configuration("lvdm.respawn.cash.amout")
+    private var respawnMoney: Int = 1000
 
     private val random = Random(System.currentTimeMillis())
 
@@ -56,6 +60,7 @@ constructor(private val callbackListenerManager: CallbackListenerManager) : OnPl
     override fun onPlayerSpawn(player: Player) {
         player.coordinates = randomSpawns[random.nextInt(randomSpawns.size)]
         player.interiorId = 0
+        player.money = respawnMoney
     }
 
 }
