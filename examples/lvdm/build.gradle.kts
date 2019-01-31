@@ -12,7 +12,6 @@ plugins {
 
 textKeyGenerator {
     packageName("ch.leadrian.samp.kamp.examples.lvdm")
-    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }
 
 serverStarter {

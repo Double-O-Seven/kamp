@@ -8,5 +8,4 @@ dependencies {
 
 textKeyGenerator {
     packageName("ch.leadrian.samp.kamp.view")
-    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }

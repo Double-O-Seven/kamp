@@ -47,5 +47,4 @@ kampKotlinCodegen {
 
 textKeyGenerator {
     packageName(corePackageName)
-    resourcesDirectory = projectDir.absolutePath + "/src/main/resources"
 }
