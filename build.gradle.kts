@@ -75,8 +75,6 @@ configure(subprojects - project("kamp-plugin")) {
         api(group = "javax.inject", name = "javax.inject", version = "1")
         api(group = "org.slf4j", name = "slf4j-api", version = "1.7.25")
 
-        implementation(group = "com.google.guava", name = "guava", version = "27.0.1-jre")
-
         testImplementation(group = "io.mockk", name = "mockk", version = "1.9")
         testImplementation(group = "org.assertj", name = "assertj-core", version = "3.11.1")
         testImplementation(group = "org.junit.jupiter", name = "junit-jupiter-params", version = "5.3.2")
