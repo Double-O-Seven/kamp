@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.onClick
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
@@ -21,7 +22,7 @@ open class ModelView(
         player: Player,
         viewContext: ViewContext,
         private val playerTextDrawService: PlayerTextDrawService
-) : ClickableView(player, viewContext) {
+) : ClickableView(player, viewContext), HasModelId {
 
     private var textDraw: PlayerTextDraw? = null
 
@@ -35,10 +36,14 @@ open class ModelView(
 
     private val modelIdSupplier: ValueSupplier<Int> = ValueSupplier(18750)
 
-    var modelId: Int by modelIdSupplier
+    override var modelId: Int by modelIdSupplier
 
     fun modelId(modelIdSupplier: () -> Int) {
         this.modelIdSupplier.value(modelIdSupplier)
+    }
+
+    fun modelId(hasModelId: HasModelId) {
+        modelId { hasModelId.modelId }
     }
 
     private val rotationSupplier: ValueSupplier<Vector3D> = ValueSupplier(vector3DOf(-16.0f, 0.0f, -55.0f))

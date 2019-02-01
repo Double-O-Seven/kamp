@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.streamer.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Destroyable
 import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
@@ -12,11 +13,10 @@ interface StreamablePickup :
         Extendable<StreamablePickup>,
         OnPlayerPickUpStreamablePickupReceiver,
         OnStreamablePickupStreamInReceiver,
-        OnStreamablePickupStreamOutReceiver {
+        OnStreamablePickupStreamOutReceiver,
+        HasModelId {
 
     var coordinates: Vector3D
-
-    var modelId: Int
 
     var type: Int
 

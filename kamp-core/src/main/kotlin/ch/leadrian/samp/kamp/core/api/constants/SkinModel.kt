@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import org.apache.commons.collections4.trie.PatriciaTrie
 
 @Suppress("SpellCheckingInspection", "unused")
@@ -8,7 +9,7 @@ enum class SkinModel(
         val description: String,
         val gender: SkinModel.Gender,
         val race: SkinModel.Race
-) : ConstantValue<Int> {
+) : ConstantValue<Int>, HasModelId {
 
     CJ(0, "Carl \"CJ\" Johnson", Gender.MALE, Race.BLACK),
     TRUTH(1, "The Truth", Gender.MALE, Race.WHITE),
@@ -321,6 +322,8 @@ enum class SkinModel(
     WFYCLLV(309, "Las Venturas Police Officer", Gender.FEMALE, Race.WHITE),
     CSHERNA(310, "Country Sheriff (Without hat)", Gender.MALE, Race.WHITE),
     DSHERNA(311, "Desert Sheriff (Without hat)", Gender.MALE, Race.WHITE);
+
+    override val modelId: Int = value
 
     enum class Gender {
         MALE,

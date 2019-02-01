@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
 import ch.leadrian.samp.kamp.core.KampCoreTextKeys
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.text.HasTextKey
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import org.apache.commons.collections4.trie.PatriciaTrie
@@ -15,7 +16,7 @@ enum class VehicleModel(
         val modelName: String,
         val type: VehicleType,
         val numberOfSeats: Int
-) : ConstantValue<Int>, HasTextKey {
+) : ConstantValue<Int>, HasTextKey, HasModelId {
 
     LANDSTALKER(
             value = SAMPConstants.VEHICLE_LANDSTALKER,
@@ -1501,6 +1502,8 @@ enum class VehicleModel(
             type = VehicleType.TRAILER,
             numberOfSeats = 0
     );
+
+    override val modelId: Int = value
 
     companion object : ConstantValueRegistry<Int, VehicleModel>(*VehicleModel.values()) {
 

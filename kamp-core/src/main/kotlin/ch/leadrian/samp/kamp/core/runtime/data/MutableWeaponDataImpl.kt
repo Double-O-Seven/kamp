@@ -15,4 +15,7 @@ internal data class MutableWeaponDataImpl(
     )
 
     override fun toMutableWeaponData(): MutableWeaponData = this
+
+    override val modelId: Int
+        get() = model.modelId
 }

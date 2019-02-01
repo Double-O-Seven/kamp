@@ -1,14 +1,13 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialSize
 import ch.leadrian.samp.kamp.core.api.constants.ObjectMaterialTextAlignment
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 
-interface MapObjectBase : Destroyable {
-
-    val modelId: Int
+interface MapObjectBase : Destroyable, HasModelId {
 
     val drawDistance: Float
 

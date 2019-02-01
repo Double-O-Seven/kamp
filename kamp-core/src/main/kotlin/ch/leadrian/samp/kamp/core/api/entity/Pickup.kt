@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupReceiver
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
@@ -11,7 +12,7 @@ import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerPickUpPickupReceiverD
 
 class Pickup
 internal constructor(
-        val modelId: Int,
+        override val modelId: Int,
         coordinates: Vector3D,
         val type: Int,
         val virtualWorldId: Int?,
@@ -20,6 +21,7 @@ internal constructor(
 ) : Entity<PickupId>,
         AbstractDestroyable(),
         Extendable<Pickup>,
+        HasModelId,
         OnPlayerPickUpPickupReceiver by onPlayerPickUpPickupReceiver {
 
     override val extensions: EntityExtensionContainer<Pickup> = EntityExtensionContainer(this)

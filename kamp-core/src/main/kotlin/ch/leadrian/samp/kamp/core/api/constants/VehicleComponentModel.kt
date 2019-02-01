@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import java.util.Collections.unmodifiableSet
 
 /**
@@ -12,7 +13,7 @@ enum class VehicleComponentModel(
         val slot: CarModType,
         val componentName: String,
         supportedVehicleModelIds: Set<Int>
-) : ConstantValue<Int> {
+) : ConstantValue<Int>, HasModelId {
 
     SPOILER_PRO(1000, "spl_b_mar_m", CarModType.SPOILER, "Pro", setOf(589, 492, 516, 404, 547, 489, 405, 421)),
     SPOILER_WIN(
@@ -764,7 +765,9 @@ enum class VehicleComponentModel(
     REAR_BUMPER_CHROME_TORNADO(1192, "rbmp_lr_t1", CarModType.REAR_BUMPER, "Chrome (Tornado)", setOf(576)),
     REAR_BUMPER_SLAMIN_TORNADO(1193, "rbmp_lr_t2", CarModType.REAR_BUMPER, "Slamin (Tornado)", setOf(576));
 
-    val supportedVehicleModelIds: Set<VehicleModel> = unmodifiableSet(supportedVehicleModelIds.map { VehicleModel[it] }.toSet())
+    val supportedVehicleModels: Set<VehicleModel> = unmodifiableSet(supportedVehicleModelIds.map { VehicleModel[it] }.toSet())
+
+    override val modelId: Int = value
 
     companion object : ConstantValueRegistry<Int, VehicleComponentModel>(*VehicleComponentModel.values())
 }

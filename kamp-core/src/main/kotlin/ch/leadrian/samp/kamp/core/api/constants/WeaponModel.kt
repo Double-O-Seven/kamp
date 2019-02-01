@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.constants
 
 import ch.leadrian.samp.kamp.core.KampCoreTextKeys
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.text.HasTextKey
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import org.apache.commons.collections4.trie.PatriciaTrie
@@ -14,12 +15,12 @@ enum class WeaponModel(
         override val textKey: TextKey,
         val modelName: String,
         val slot: WeaponSlot,
-        val modelId: Int,
+        override val modelId: Int,
         val skill: WeaponSkill? = null,
         val isTwoHanded: Boolean = false,
         val baseDamage: Float,
         val range: Float = 0f
-) : ConstantValue<Int>, HasTextKey {
+) : ConstantValue<Int>, HasTextKey, HasModelId {
 
     FIST(
             value = SAMPConstants.WEAPON_FIST,

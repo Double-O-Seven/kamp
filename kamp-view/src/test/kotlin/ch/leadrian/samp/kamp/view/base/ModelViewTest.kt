@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -67,6 +68,20 @@ internal class ModelViewTest {
         @Test
         fun shouldSupplyModelId() {
             modelView.modelId { 1337 }
+
+            assertThat(modelView.modelId)
+                    .isEqualTo(1337)
+        }
+
+        @Test
+        fun shouldUseModelOfHasModelIdImplementation() {
+            val model = object : HasModelId {
+
+                override val modelId: Int = 1337
+
+            }
+
+            modelView.modelId(model)
 
             assertThat(modelView.modelId)
                     .isEqualTo(1337)

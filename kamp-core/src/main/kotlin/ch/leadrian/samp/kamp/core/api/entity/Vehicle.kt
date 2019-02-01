@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterVehicleReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitVehicleReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDeathReceiver
@@ -68,6 +69,7 @@ internal constructor(
 ) : Entity<VehicleId>,
         AbstractDestroyable(),
         Extendable<Vehicle>,
+        HasModelId by model,
         OnVehicleSpawnReceiver by onVehicleSpawnReceiver,
         OnVehicleDeathReceiver by onVehicleDeathReceiver,
         OnPlayerEnterVehicleReceiver by onPlayerEnterVehicleReceiver,
