@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
@@ -188,6 +189,10 @@ internal constructor(
             nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
             field = value
         }
+
+    override fun setPreviewModelId(hasModelId: HasModelId) {
+        previewModelId = hasModelId.modelId
+    }
 
     override var previewModelRotation: Vector3D? = null
         private set(value) {

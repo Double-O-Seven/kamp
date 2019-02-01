@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
@@ -617,6 +618,21 @@ internal class TextDrawTest {
 
                 verify { nativeFunctionExecutor.textDrawSetPreviewModel(text = textDrawId.value, modelindex = 4) }
                 assertThat(textDraw.previewModelId)
+                        .isEqualTo(4)
+            }
+
+            @Test
+            fun shouldSetPreviewModelFromHasModelIdInstance() {
+                every { nativeFunctionExecutor.textDrawSetPreviewModel(any(), any()) } returns true
+                val hasModelId: HasModelId = mockk {
+                    every { modelId } returns 4
+                }
+
+                textDraw.setPreviewModelId(hasModelId)
+
+                verify { nativeFunctionExecutor.textDrawSetPreviewModel(text = textDrawId.value, modelindex = 4) }
+                val previewModelId = textDraw.previewModelId
+                assertThat(previewModelId)
                         .isEqualTo(4)
             }
 

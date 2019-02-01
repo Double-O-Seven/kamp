@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawAlignment
 import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
@@ -39,6 +40,8 @@ interface TextDrawBase : Destroyable {
     var text: String
 
     var previewModelId: Int?
+
+    fun setPreviewModelId(hasModelId: HasModelId)
 
     val previewModelRotation: Vector3D?
 

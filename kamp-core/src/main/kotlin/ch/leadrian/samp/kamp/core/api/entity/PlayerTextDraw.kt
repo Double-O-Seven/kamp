@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawReceiver
 import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
@@ -216,6 +217,10 @@ internal constructor(
             )
             field = value
         }
+
+    override fun setPreviewModelId(hasModelId: HasModelId) {
+        previewModelId = hasModelId.modelId
+    }
 
     override var previewModelRotation: Vector3D? = null
         private set(value) {
