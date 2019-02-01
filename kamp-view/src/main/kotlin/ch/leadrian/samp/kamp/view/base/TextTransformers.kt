@@ -31,10 +31,8 @@ fun TextTransformer.andThen(next: TextTransformer): TextTransformer = CombiningT
 private class CombiningTextTransformer(private val first: TextTransformer, private val second: TextTransformer) :
         TextTransformer {
 
-    override fun transform(text: String, locale: Locale): String = second.transform(
-            first.transform(text, locale),
-            locale
-    )
+    override fun transform(text: String, locale: Locale): String =
+            second.transform(first.transform(text, locale), locale)
 
 }
 
