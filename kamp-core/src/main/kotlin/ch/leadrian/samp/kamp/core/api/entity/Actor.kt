@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.api.entity
 
+import ch.leadrian.samp.kamp.core.api.base.HasModelId
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutReceiver
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageActorReceiver
@@ -35,6 +36,7 @@ internal constructor(
 ) : Entity<ActorId>,
         AbstractDestroyable(),
         Extendable<Actor>,
+        HasModelId by model,
         OnActorStreamInReceiver by onActorStreamInReceiver,
         OnActorStreamOutReceiver by onActorStreamOutReceiver,
         OnPlayerGiveDamageActorReceiver by onPlayerGiveDamageActorReceiver {

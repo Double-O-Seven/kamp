@@ -71,6 +71,9 @@ internal class StreamableActorImpl(
             }
         }
 
+    override val modelId: Int
+        get() = model.modelId
+
     override var isInvulnerable: Boolean = isInvulnerable
         set(value) {
             field = value
