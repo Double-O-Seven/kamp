@@ -15,6 +15,7 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamablePickupStreamI
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamablePickupStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamInHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableTextLabelStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.entity.PlayerMapIconIdAllocator
 
 internal class StreamerModule : AbstractStreamerModule() {
 
@@ -47,6 +48,7 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(PickupStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
+        bind(PlayerMapIconIdAllocator::class.java).asEagerSingleton()
     }
 
 }
