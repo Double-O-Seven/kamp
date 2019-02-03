@@ -8,6 +8,8 @@ import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerPickUpStreamableP
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamInHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectStreamOutHandler
@@ -40,12 +42,16 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(OnStreamablePickupStreamInHandler::class.java)
             addBinding().to(OnStreamablePickupStreamOutHandler::class.java)
             addBinding().to(OnPlayerPickUpStreamablePickupHandler::class.java)
+
+            addBinding().to(OnStreamableMapIconStreamInHandler::class.java)
+            addBinding().to(OnStreamableMapIconStreamOutHandler::class.java)
         }
         newStreamerSetBinder().apply {
             addBinding().to(MapObjectStreamer::class.java)
             addBinding().to(TextLabelStreamer::class.java)
             addBinding().to(ActorStreamer::class.java)
             addBinding().to(PickupStreamer::class.java)
+            addBinding().to(MapIconStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
         bind(PlayerMapIconIdAllocator::class.java).asEagerSingleton()

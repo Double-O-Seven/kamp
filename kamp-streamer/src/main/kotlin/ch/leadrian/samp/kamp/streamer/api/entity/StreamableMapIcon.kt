@@ -5,8 +5,10 @@ import ch.leadrian.samp.kamp.core.api.constants.MapIconType
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapIconStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapIconStreamOutReceiver
 
-interface StreamableMapIcon : Streamable {
+interface StreamableMapIcon : Streamable, OnStreamableMapIconStreamInReceiver, OnStreamableMapIconStreamOutReceiver {
 
     var coordinates: Vector3D
 
@@ -16,9 +18,9 @@ interface StreamableMapIcon : Streamable {
 
     var style: MapIconStyle
 
-    val virtualWorldIds: MutableSet<Int>
+    var virtualWorldIds: MutableSet<Int>
 
-    val interiorIds: MutableSet<Int>
+    var interiorIds: MutableSet<Int>
 
     fun isStreamedIn(forPlayer: Player): Boolean
 

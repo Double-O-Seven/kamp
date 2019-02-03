@@ -10,7 +10,14 @@ import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.PlayerMapIcon
 import ch.leadrian.samp.kamp.core.api.entity.requireNotDestroyed
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapIconStreamInReceiver
+import ch.leadrian.samp.kamp.streamer.api.callback.OnStreamableMapIconStreamOutReceiver
 import ch.leadrian.samp.kamp.streamer.api.entity.StreamableMapIcon
+import ch.leadrian.samp.kamp.streamer.runtime.MapIconStreamer
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamInReceiverDelegate
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamOutReceiverDelegate
 import ch.leadrian.samp.kamp.streamer.runtime.util.toRect3d
 import com.conversantmedia.util.collection.geometry.Rect3d
 
@@ -19,15 +26,22 @@ internal class StreamableMapIconImpl(
         type: MapIconType,
         color: Color,
         style: MapIconStyle,
-        override val virtualWorldIds: MutableSet<Int>,
-        override val interiorIds: MutableSet<Int>,
+        override var virtualWorldIds: MutableSet<Int>,
+        override var interiorIds: MutableSet<Int>,
         override val streamDistance: Float,
         override val priority: Int,
-        private val playerMapIconIdAllocator: PlayerMapIconIdAllocator
+        private val mapIconStreamer: MapIconStreamer,
+        private val playerMapIconIdAllocator: PlayerMapIconIdAllocator,
+        private val onStreamableMapIconStreamInHandler: OnStreamableMapIconStreamInHandler,
+        private val onStreamableMapIconStreamOutHandler: OnStreamableMapIconStreamOutHandler,
+        private val onStreamableMapIconStreamInReceiver: OnStreamableMapIconStreamInReceiverDelegate = OnStreamableMapIconStreamInReceiverDelegate(),
+        private val onStreamableMapIconStreamOutReceiver: OnStreamableMapIconStreamOutReceiverDelegate = OnStreamableMapIconStreamOutReceiverDelegate()
 ) :
         CoordinatesBasedPlayerStreamable<StreamableMapIconImpl, Rect3d>(),
         StreamableMapIcon,
-        OnPlayerDisconnectListener {
+        OnPlayerDisconnectListener,
+        OnStreamableMapIconStreamInReceiver by onStreamableMapIconStreamInReceiver,
+        OnStreamableMapIconStreamOutReceiver by onStreamableMapIconStreamOutReceiver {
 
     private val playerMapIconsByPlayer: MutableMap<Player, PlayerMapIconWrapper> = mutableMapOf()
 
@@ -35,6 +49,7 @@ internal class StreamableMapIconImpl(
         set(value) {
             field = value.toVector3D()
             playerMapIconsByPlayer.values.forEach { it.playerMapIcon.coordinates = field }
+            mapIconStreamer.onBoundingBoxChange(this)
         }
 
     override var type: MapIconType = type
@@ -73,6 +88,8 @@ internal class StreamableMapIconImpl(
                 playerMapIcon = forPlayer.createMapIcon(allocation.playerMapIconId, coordinates, type, color, style),
                 playerMapIconIdAllocation = allocation
         )
+        onStreamableMapIconStreamInReceiver.onStreamableMapIconStreamIn(this, forPlayer)
+        onStreamableMapIconStreamInHandler.onStreamableMapIconStreamIn(this, forPlayer)
     }
 
     override fun onStreamOut(forPlayer: Player) {
@@ -84,6 +101,8 @@ internal class StreamableMapIconImpl(
             playerMapIcon.destroy()
             playerMapIconIdAllocation.release()
         }
+        onStreamableMapIconStreamOutReceiver.onStreamableMapIconStreamOut(this, forPlayer)
+        onStreamableMapIconStreamOutHandler.onStreamableMapIconStreamOut(this, forPlayer)
     }
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerMapIconsByPlayer.containsKey(forPlayer)
