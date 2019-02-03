@@ -8,6 +8,7 @@ class StreamerTestModule : KampModule() {
         bind(PlayerSpawner::class.java).asEagerSingleton()
         bind(PlayerClassSelector::class.java).asEagerSingleton()
         bind(MapLoader::class.java).asEagerSingleton()
+        bind(MapIconLoader::class.java).asEagerSingleton()
         newCommandsSetBinder().apply {
             addBinding().to(StreamerCommands::class.java)
         }
