@@ -291,34 +291,6 @@ internal class DistanceBasedPlayerStreamerTest {
     }
 
     @Test
-    fun shouldNotStreamInAlreadyStreamedInStreamable() {
-        val player = mockk<Player> {
-            every { isConnected } returns true
-        }
-        val streamable = spyk(
-                TestStreamable(
-                        priority = 0,
-                        streamDistance = 300f,
-                        coordinates = vector3DOf(150f, 100f, 20f),
-                        streamedInForPlayers = *arrayOf(player)
-                )
-        )
-        val streamLocation = StreamLocation(player, locationOf(100f, 200f, 50f, 1, 0))
-        every {
-            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
-        } returns Stream.of(streamable)
-
-        distanceBasedPlayerStreamer.stream(listOf(streamLocation))
-
-        verify(exactly = 0) {
-            streamable.onStreamIn(any())
-            streamable.onStreamOut(any())
-        }
-        assertThat(distanceBasedPlayerStreamer.isStreamedIn(streamable, player))
-                .isFalse()
-    }
-
-    @Test
     fun givenStreamableIsOutOfRangeItShouldStreamOut() {
         val player = mockk<Player> {
             every { isConnected } returns true
