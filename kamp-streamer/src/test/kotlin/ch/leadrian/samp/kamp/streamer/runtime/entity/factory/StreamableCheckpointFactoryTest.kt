@@ -1,8 +1,10 @@
 package ch.leadrian.samp.kamp.streamer.runtime.entity.factory
 
-import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
+import ch.leadrian.samp.kamp.core.api.entity.Checkpoint
+import ch.leadrian.samp.kamp.core.api.service.CheckpointService
 import ch.leadrian.samp.kamp.streamer.runtime.CheckpointStreamer
+import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
@@ -16,13 +18,17 @@ internal class StreamableCheckpointFactoryTest {
 
     @BeforeEach
     fun setUp() {
-        streamableCheckpointFactory = StreamableCheckpointFactory(mockk(), mockk(), mockk(), mockk(), mockk())
+        val checkpoint = mockk<Checkpoint>(relaxed = true)
+        val checkpointService = mockk<CheckpointService> {
+            every { createCheckpoint(vector3DOf(1f, 2f, 3f), 4f) } returns checkpoint
+        }
+        streamableCheckpointFactory = StreamableCheckpointFactory(checkpointService, mockk(), mockk(), mockk(), mockk())
     }
 
     @Test
     fun shouldCreateStreamableCheckpoint() {
         val streamableCheckpoint = streamableCheckpointFactory.create(
-                coordinates = mutableVector3DOf(1f, 2f, 3f),
+                coordinates = vector3DOf(1f, 2f, 3f),
                 size = 4f,
                 priority = 69,
                 streamDistance = 187f,
@@ -32,8 +38,6 @@ internal class StreamableCheckpointFactoryTest {
         )
 
         assertAll(
-                { assertThat(streamableCheckpoint.coordinates).isEqualTo(vector3DOf(1f, 2f, 3f)) },
-                { assertThat(streamableCheckpoint.size).isEqualTo(4f) },
                 { assertThat(streamableCheckpoint.priority).isEqualTo(69) },
                 { assertThat(streamableCheckpoint.streamDistance).isEqualTo(187f) },
                 { assertThat(streamableCheckpoint.interiorIds).containsExactlyInAnyOrder(12, 34) },
