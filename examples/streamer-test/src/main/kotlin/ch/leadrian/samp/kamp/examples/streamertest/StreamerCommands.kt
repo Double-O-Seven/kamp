@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Description
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
+import ch.leadrian.samp.kamp.core.api.constants.RaceCheckpointType
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
 import ch.leadrian.samp.kamp.core.api.data.Colors
@@ -21,6 +22,7 @@ import ch.leadrian.samp.kamp.streamer.api.service.StreamableActorService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableCheckpointService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamablePickupService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableRaceCheckpointService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -37,6 +39,7 @@ constructor(
         private val streamableActorService: StreamableActorService,
         private val streamablePickupService: StreamablePickupService,
         private val streamableCheckpointService: StreamableCheckpointService,
+        private val streamableRaceCheckpointService: StreamableRaceCheckpointService,
         private val heightMap: HeightMap
 ) : Commands() {
 
@@ -150,6 +153,20 @@ constructor(
         vehicleService.getAllVehicles().forEach { vehicle ->
             val checkpoint = streamableCheckpointService.createStreamableCheckpoint(vehicle.coordinates, 5f)
             checkpoint.onEnter {
+                messageSender.sendMessageToPlayer(player, vehicle.colors.color1.color, "{0} spawn point", vehicle.model)
+            }
+        }
+    }
+
+    @Command
+    fun createRaceCheckpoints(player: Player) {
+        vehicleService.getAllVehicles().forEach { vehicle ->
+            val raceCheckpoint = streamableRaceCheckpointService.createStreamableRaceCheckpoint(
+                    vehicle.coordinates,
+                    5f,
+                    RaceCheckpointType.NORMAL
+            )
+            raceCheckpoint.onEnter {
                 messageSender.sendMessageToPlayer(player, vehicle.colors.color1.color, "{0} spawn point", vehicle.model)
             }
         }
