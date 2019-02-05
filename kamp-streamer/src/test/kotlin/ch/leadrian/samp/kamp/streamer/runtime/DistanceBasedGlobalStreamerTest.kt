@@ -229,6 +229,34 @@ internal class DistanceBasedGlobalStreamerTest {
     }
 
     @Test
+    fun shouldNotStreamInAlreadyStreamedInStreamable() {
+        val streamable = spyk(
+                TestStreamable(
+                        priority = 0,
+                        streamDistance = 300f,
+                        coordinates = vector3DOf(150f, 100f, 20f),
+                        isStreamedIn = true
+                )
+        )
+        val streamLocation = StreamLocation(mockk(), locationOf(100f, 200f, 50f, 1, 0))
+        every {
+            streamInCandidateSupplier.getStreamInCandidates(streamLocation)
+        } returns Stream.of(streamable)
+
+        distanceBasedGlobalStreamer.stream(listOf(streamLocation))
+
+        assertAll(
+                {
+                    verify(exactly = 0) {
+                        streamable.onStreamIn()
+                        streamable.onStreamOut()
+                    }
+                },
+                { assertThat(distanceBasedGlobalStreamer.isStreamedIn(streamable)).isFalse() }
+        )
+    }
+
+    @Test
     fun givenStreamableIsOutOfRangeItShouldStreamOut() {
         val player = mockk<Player>()
         val coordinates = vector3DOf(150f, 100f, 20f)

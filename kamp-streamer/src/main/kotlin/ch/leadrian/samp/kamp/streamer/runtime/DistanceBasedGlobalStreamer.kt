@@ -92,8 +92,10 @@ class DistanceBasedGlobalStreamer<T : DistanceBasedGlobalStreamable>(
     private fun streamIn(newStreamables: Set<T>) {
         newStreamables.forEach {
             it.ifNotDestroyed {
-                onStreamIn()
-                streamedInStreamables.add(this)
+                if (!isStreamedIn) {
+                    onStreamIn()
+                    streamedInStreamables.add(this)
+                }
             }
         }
     }
