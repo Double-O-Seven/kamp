@@ -63,6 +63,8 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(MapIconStreamer::class.java)
             addBinding().to(CheckpointStreamer::class.java)
             addBinding().to(RaceCheckpointStreamer::class.java)
+            addBinding().to(Area2DStreamer::class.java)
+            addBinding().to(Area3DStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
         bind(PlayerMapIconIdAllocator::class.java).asEagerSingleton()
