@@ -3,11 +3,15 @@ package ch.leadrian.samp.kamp.streamer.runtime
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerDamageStreamableActorHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEditStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEnterStreamableAreaHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerEnterStreamableCheckpointHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerLeaveStreamableAreaHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerLeaveStreamableCheckpointHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerPickUpStreamablePickupHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnPlayerSelectStreamableMapObjectHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamInHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableActorStreamOutHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableCheckpointStreamInHandler
+import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableCheckpointStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamInHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapIconStreamOutHandler
 import ch.leadrian.samp.kamp.streamer.runtime.callback.OnStreamableMapObjectMovedHandler
@@ -45,6 +49,11 @@ internal class StreamerModule : AbstractStreamerModule() {
 
             addBinding().to(OnStreamableMapIconStreamInHandler::class.java)
             addBinding().to(OnStreamableMapIconStreamOutHandler::class.java)
+
+            addBinding().to(OnStreamableCheckpointStreamInHandler::class.java)
+            addBinding().to(OnStreamableCheckpointStreamOutHandler::class.java)
+            addBinding().to(OnPlayerEnterStreamableCheckpointHandler::class.java)
+            addBinding().to(OnPlayerLeaveStreamableCheckpointHandler::class.java)
         }
         newStreamerSetBinder().apply {
             addBinding().to(MapObjectStreamer::class.java)
@@ -52,6 +61,7 @@ internal class StreamerModule : AbstractStreamerModule() {
             addBinding().to(ActorStreamer::class.java)
             addBinding().to(PickupStreamer::class.java)
             addBinding().to(MapIconStreamer::class.java)
+            addBinding().to(CheckpointStreamer::class.java)
         }
         bind(StreamerExecutor::class.java).asEagerSingleton()
         bind(PlayerMapIconIdAllocator::class.java).asEagerSingleton()
