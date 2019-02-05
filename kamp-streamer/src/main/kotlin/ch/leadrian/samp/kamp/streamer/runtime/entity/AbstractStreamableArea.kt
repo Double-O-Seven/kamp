@@ -45,4 +45,6 @@ internal abstract class AbstractStreamableArea<T : HyperRect<*>>(
             else -> contains(location as Vector3D)
         }
     }
+
+    override fun onDestroy() {}
 }
