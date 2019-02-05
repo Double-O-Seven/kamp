@@ -3,7 +3,7 @@ package ch.leadrian.samp.kamp.streamer.runtime.index
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.streamer.runtime.entity.SpatialIndexBasedStreamable
 import ch.leadrian.samp.kamp.streamer.runtime.index.SpatialIndex.Entry
-import com.conversantmedia.util.collection.geometry.Rect3d
+import com.conversantmedia.util.collection.geometry.Point3d
 import com.conversantmedia.util.collection.spatial.HyperPoint
 import com.conversantmedia.util.collection.spatial.HyperRect
 import com.conversantmedia.util.collection.spatial.RectBuilder
@@ -38,7 +38,8 @@ abstract class SpatialIndex<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect
             val x = x.toDouble()
             val y = y.toDouble()
             val z = z.toDouble()
-            rTree.intersects(Rect3d(x, y, z, x, y, z)) { streamInCandidates.add(it.streamable) }
+            val point = Point3d(x, y, z)
+            rTree.intersects(getMbr(point, point)) { streamInCandidates.add(it.streamable) }
         }
         return streamInCandidates
     }
