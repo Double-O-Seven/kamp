@@ -20,7 +20,7 @@ internal class RectanglesTest {
     }
 
     @Test
-    fun shouldConvertBoxToRect2d() {
+    fun shouldConvertBoxToRect3d() {
         val box = boxOf(minX = 1f, minY = 2f, minZ = 3f, maxX = 4f, maxY = 5f, maxZ = 6f)
 
         val rect3d = box.toRect3d()
