@@ -344,7 +344,8 @@ internal class SpatialIndexBasedStreamableContainerTest {
         override val priority: Int
             get() = throw UnsupportedOperationException()
 
-        override fun getBoundingBox(): Rect3d = throw UnsupportedOperationException()
+        override val boundingBox: Rect3d
+            get() = throw UnsupportedOperationException()
 
         override fun onDestroy() {}
 

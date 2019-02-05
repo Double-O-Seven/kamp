@@ -115,7 +115,8 @@ internal class StreamableCheckpointImpl(
         checkpoint.destroy()
     }
 
-    override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
+    override val boundingBox: Rect3d
+        get() = coordinates.toRect3d(streamDistance)
 
     override fun distanceTo(location: Location): Float =
             when {

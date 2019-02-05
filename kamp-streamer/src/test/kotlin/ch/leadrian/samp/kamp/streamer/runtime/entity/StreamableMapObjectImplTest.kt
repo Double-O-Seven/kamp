@@ -637,7 +637,7 @@ internal class StreamableMapObjectImplTest {
             every { coordinates } returns vector3DOf(1f, 2f, 3f)
         }
         every { streamableMapObjectStateMachine.currentState } returns currentState
-        val boundingBox = streamableMapObject.getBoundingBox()
+        val boundingBox = streamableMapObject.boundingBox
 
         assertThat(boundingBox)
                 .isEqualTo(
@@ -1514,7 +1514,7 @@ internal class StreamableMapObjectImplTest {
         }
         every { streamableMapObjectStateMachine.currentState } returns currentState
 
-        val boundingBox = streamableMapObject.getBoundingBox()
+        val boundingBox = streamableMapObject.boundingBox
 
         assertThat(boundingBox)
                 .isEqualTo(Rect3d(125.0, 225.0, 325.0, 275.0, 375.0, 475.0))

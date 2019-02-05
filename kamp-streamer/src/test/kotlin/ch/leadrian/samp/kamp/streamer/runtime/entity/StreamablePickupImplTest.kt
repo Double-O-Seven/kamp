@@ -449,7 +449,7 @@ internal class StreamablePickupImplTest {
         every { pickupStreamer.onBoundingBoxChange(any()) } just Runs
         streamablePickup.coordinates = vector3DOf(1f, 2f, 3f)
 
-        val boundingBox = streamablePickup.getBoundingBox()
+        val boundingBox = streamablePickup.boundingBox
 
         assertThat(boundingBox)
                 .isEqualTo(Rect3d(-9.0, -8.0, -7.0, 11.0, 12.0, 13.0))

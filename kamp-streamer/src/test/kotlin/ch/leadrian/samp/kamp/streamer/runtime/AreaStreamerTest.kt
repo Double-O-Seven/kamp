@@ -233,7 +233,7 @@ internal class AreaStreamerTest {
     }
 
     private class TestStreamableArea(
-            private val boundingBox: Rectangle,
+            private val area: Rectangle,
             priority: Int = 0,
             onPlayerEnterStreamableAreaHandler: OnPlayerEnterStreamableAreaHandler = mockk(relaxed = true),
             onPlayerLeaveStreamableAreaHandler: OnPlayerLeaveStreamableAreaHandler = mockk(relaxed = true)
@@ -245,13 +245,14 @@ internal class AreaStreamerTest {
             onPlayerLeaveStreamableAreaHandler
     ) {
 
-        override fun getBoundingBox(): Rect2d = boundingBox.toRect2d()
+        override val boundingBox: Rect2d
+            get() = area.toRect2d()
 
         override fun contains(player: Player): Boolean {
             throw UnsupportedOperationException()
         }
 
-        override fun contains(coordinates: Vector3D): Boolean = coordinates in boundingBox
+        override fun contains(coordinates: Vector3D): Boolean = coordinates in area
 
         override fun onDestroy() {
         }

@@ -194,7 +194,8 @@ internal class StreamableActorImpl(
         }
     }
 
-    override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
+    override val boundingBox: Rect3d
+        get() = coordinates.toRect3d(streamDistance)
 
     override fun onDestroy() {
         extensions.destroy()

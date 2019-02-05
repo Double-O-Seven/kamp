@@ -20,9 +20,10 @@ internal class SpatialIndex3DTest {
 
     private class TestStreamable : SpatialIndexBasedStreamable<TestStreamable, Rect3d>() {
 
-        override fun getBoundingBox(): Rect3d {
-            throw UnsupportedOperationException()
-        }
+        override val boundingBox: Rect3d
+            get() {
+                throw UnsupportedOperationException()
+            }
 
         override val priority: Int
             get() = throw UnsupportedOperationException()

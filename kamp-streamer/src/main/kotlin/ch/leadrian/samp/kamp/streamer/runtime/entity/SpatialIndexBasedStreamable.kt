@@ -6,7 +6,7 @@ import com.conversantmedia.util.collection.spatial.HyperRect
 abstract class SpatialIndexBasedStreamable<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect<*>> :
         AbstractStreamable() {
 
-    abstract fun getBoundingBox(): T
+    abstract val boundingBox: T
 
     internal lateinit var spatialIndexEntry: SpatialIndex.Entry<S, T>
 

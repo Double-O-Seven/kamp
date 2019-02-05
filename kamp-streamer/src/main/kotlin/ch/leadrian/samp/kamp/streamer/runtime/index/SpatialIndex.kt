@@ -53,7 +53,7 @@ abstract class SpatialIndex<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect
     class Entry<S : SpatialIndexBasedStreamable<S, T>, T : HyperRect<*>>
     internal constructor(internal val streamable: S) {
 
-        val boundingBox: T = streamable.getBoundingBox()
+        val boundingBox: T = streamable.boundingBox
 
     }
 }

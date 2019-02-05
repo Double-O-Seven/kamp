@@ -429,7 +429,7 @@ internal class StreamableCheckpointImplTest {
     fun shouldReturnBoundingBox() {
         every { checkpoint.coordinates } returns vector3DOf(200f, 300f, 400f)
 
-        val boundingBox = streamableCheckpoint.getBoundingBox()
+        val boundingBox = streamableCheckpoint.boundingBox
 
         assertThat(boundingBox)
                 .isEqualTo(Rect3d(125.0, 225.0, 325.0, 275.0, 375.0, 475.0))

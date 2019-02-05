@@ -179,7 +179,8 @@ internal class StreamableTextLabelImpl(
 
     override fun isStreamedIn(forPlayer: Player): Boolean = playerTextLabelsByPlayer.containsKey(forPlayer)
 
-    override fun getBoundingBox(): Rect3d = coordinates.toRect3d(streamDistance)
+    override val boundingBox: Rect3d
+        get() = coordinates.toRect3d(streamDistance)
 
     override fun onDestroy() {
         removeOnDestroyListener()

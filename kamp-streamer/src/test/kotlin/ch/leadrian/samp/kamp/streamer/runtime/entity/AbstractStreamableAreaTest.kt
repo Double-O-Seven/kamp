@@ -190,9 +190,10 @@ internal class AbstractStreamableAreaTest {
             onPlayerLeaveStreamableAreaReceiver = onPlayerLeaveStreamableAreaReceiver
     ) {
 
-        override fun getBoundingBox(): Rect3d {
-            throw UnsupportedOperationException()
-        }
+        override val boundingBox: Rect3d
+            get() {
+                throw UnsupportedOperationException()
+            }
 
         override fun contains(player: Player): Boolean {
             throw UnsupportedOperationException()
