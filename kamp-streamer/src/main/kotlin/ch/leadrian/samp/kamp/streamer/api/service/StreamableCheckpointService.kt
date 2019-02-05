@@ -18,7 +18,7 @@ internal constructor(private val checkpointStreamer: CheckpointStreamer) {
             interiorIds: MutableSet<Int> = mutableSetOf(),
             virtualWorldIds: MutableSet<Int> = mutableSetOf(),
             priority: Int = 0,
-            streamDistance: Float = 300f
+            streamDistance: Float = 20f
     ): StreamableCheckpoint = checkpointStreamer.createCheckpoint(
             coordinates = coordinates,
             size = size,
@@ -35,7 +35,7 @@ internal constructor(private val checkpointStreamer: CheckpointStreamer) {
             interiorId: Int,
             virtualWorldId: Int,
             priority: Int = 0,
-            streamDistance: Float = 300f
+            streamDistance: Float = 20f
     ): StreamableCheckpoint = checkpointStreamer.createCheckpoint(
             coordinates = coordinates,
             size = size,
@@ -51,7 +51,7 @@ internal constructor(private val checkpointStreamer: CheckpointStreamer) {
             interiorIds: MutableSet<Int> = mutableSetOf(),
             virtualWorldIds: MutableSet<Int> = mutableSetOf(),
             priority: Int = 0,
-            streamDistance: Float = 300f
+            streamDistance: Float = 20f
     ): StreamableCheckpoint = checkpointStreamer.createCheckpoint(
             coordinates = vector3DOf(x = sphere.x, y = sphere.y, z = sphere.z),
             size = sphere.radius,
@@ -67,7 +67,7 @@ internal constructor(private val checkpointStreamer: CheckpointStreamer) {
             interiorId: Int,
             virtualWorldId: Int,
             priority: Int = 0,
-            streamDistance: Float = 300f
+            streamDistance: Float = 20f
     ): StreamableCheckpoint = checkpointStreamer.createCheckpoint(
             coordinates = vector3DOf(x = sphere.x, y = sphere.y, z = sphere.z),
             size = sphere.radius,

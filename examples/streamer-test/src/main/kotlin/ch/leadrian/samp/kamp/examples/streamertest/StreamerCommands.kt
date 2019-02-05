@@ -14,9 +14,11 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.geodata.hmap.HeightMap
+import ch.leadrian.samp.kamp.streamer.api.callback.onEnter
 import ch.leadrian.samp.kamp.streamer.api.callback.onStreamIn
 import ch.leadrian.samp.kamp.streamer.api.callback.onStreamOut
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableActorService
+import ch.leadrian.samp.kamp.streamer.api.service.StreamableCheckpointService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableMapObjectService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamablePickupService
 import ch.leadrian.samp.kamp.streamer.api.service.StreamableTextLabelService
@@ -34,6 +36,7 @@ constructor(
         private val streamableTextLabelService: StreamableTextLabelService,
         private val streamableActorService: StreamableActorService,
         private val streamablePickupService: StreamablePickupService,
+        private val streamableCheckpointService: StreamableCheckpointService,
         private val heightMap: HeightMap
 ) : Commands() {
 
@@ -140,5 +143,15 @@ constructor(
             }
         }
         messageSender.sendMessageToPlayer(player, Colors.PINK, "$pickupCount pickups created")
+    }
+
+    @Command
+    fun createCheckpoints(player: Player) {
+        vehicleService.getAllVehicles().forEach { vehicle ->
+            val checkpoint = streamableCheckpointService.createStreamableCheckpoint(vehicle.coordinates, 5f)
+            checkpoint.onEnter {
+                messageSender.sendMessageToPlayer(player, vehicle.colors.color1.color, "{0} spawn point", vehicle.model)
+            }
+        }
     }
 }
