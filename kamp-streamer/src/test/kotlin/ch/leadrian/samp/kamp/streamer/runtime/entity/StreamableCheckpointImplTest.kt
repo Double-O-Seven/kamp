@@ -115,6 +115,16 @@ internal class StreamableCheckpointImplTest {
             verify { checkpointStreamer.onBoundingBoxChange(streamableCheckpoint) }
         }
 
+        @Test
+        fun shouldGetCoordinatesFromCheckpoint() {
+            every { checkpoint.coordinates } returns vector3DOf(11f, 22f, 33f)
+
+            val coordinates = streamableCheckpoint.coordinates
+
+            assertThat(coordinates)
+                    .isEqualTo(vector3DOf(11f, 22f, 33f))
+        }
+
     }
 
     @Nested
