@@ -54,6 +54,22 @@ internal class AreaStreamerTest {
     }
 
     @Test
+    fun givenAreaIsNotActiveForPlayerItShouldCallNotOnEnter() {
+        val player: Player = mockk {
+            every { isConnected } returns true
+        }
+        val streamableArea = TestStreamableArea(rectangleOf(-10f, 20f, 60f, 100f))
+        streamableArea.activeWhen { p -> p != player }
+        val onEnter = mockk<StreamableArea.(Player) -> Unit>(relaxed = true)
+        streamableArea.onEnter(onEnter)
+        areaStreamer.add(streamableArea)
+
+        areaStreamer.stream(listOf(StreamLocation(player, locationOf(15f, 75f, 0f, 0, 0))))
+
+        verify { onEnter wasNot Called }
+    }
+
+    @Test
     fun shouldCallOnEnterAccordingToPriorities() {
         val player: Player = mockk {
             every { isConnected } returns true
@@ -126,7 +142,7 @@ internal class AreaStreamerTest {
     }
 
     @Test
-    fun givenAreasWasEnteredItShouldCallOnLeave() {
+    fun givenAreaWasEnteredItShouldCallOnLeave() {
         val player: Player = mockk {
             every { isConnected } returns true
         }
@@ -137,6 +153,23 @@ internal class AreaStreamerTest {
         areaStreamer.stream(listOf(StreamLocation(player, locationOf(15f, 75f, 0f, 0, 0))))
 
         areaStreamer.stream(listOf(StreamLocation(player, locationOf(150f, 750f, 0f, 0, 0))))
+
+        verify { onLeave(streamableArea, player) }
+    }
+
+    @Test
+    fun givenAreaIsNoLongerActiveForPlayerItShouldCallOnLeave() {
+        val player: Player = mockk {
+            every { isConnected } returns true
+        }
+        val streamableArea = TestStreamableArea(rectangleOf(-10f, 20f, 60f, 100f))
+        val onLeave = mockk<StreamableArea.(Player) -> Unit>(relaxed = true)
+        streamableArea.onLeave(onLeave)
+        areaStreamer.add(streamableArea)
+        areaStreamer.stream(listOf(StreamLocation(player, locationOf(15f, 75f, 0f, 0, 0))))
+        streamableArea.activeWhen { p -> p != player }
+
+        areaStreamer.stream(listOf(StreamLocation(player, locationOf(15f, 75f, 0f, 0, 0))))
 
         verify { onLeave(streamableArea, player) }
     }

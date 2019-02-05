@@ -111,6 +111,43 @@ internal class AbstractStreamableAreaTest {
                 .isEqualTo(expectedContains)
     }
 
+    @Nested
+    inner class ActiveTests {
+
+        @Test
+        fun isActiveShouldReturnTrueByDefault() {
+            val player = mockk<Player>()
+
+            val isActive = streamableArea.isActive(player)
+
+            assertThat(isActive)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenTrueConditionIsActiveShouldReturnTrue() {
+            val player = mockk<Player>()
+            streamableArea.activeWhen { p -> p == player }
+
+            val isActive = streamableArea.isActive(player)
+
+            assertThat(isActive)
+                    .isTrue()
+        }
+
+        @Test
+        fun givenFalseConditionIsActiveShouldReturnFalse() {
+            val player = mockk<Player>()
+            streamableArea.activeWhen { p -> p != player }
+
+            val isActive = streamableArea.isActive(player)
+
+            assertThat(isActive)
+                    .isFalse()
+        }
+
+    }
+
     private class ContainsLocationArgumentsProvider : ArgumentsProvider {
 
         override fun provideArguments(context: ExtensionContext): Stream<ContainsLocationArguments> =

@@ -26,6 +26,14 @@ internal abstract class AbstractStreamableArea<T : HyperRect<*>>(
         OnPlayerEnterStreamableAreaReceiver by onPlayerEnterStreamableAreaReceiver,
         OnPlayerLeaveStreamableAreaReceiver by onPlayerLeaveStreamableAreaReceiver {
 
+    private var activeCondition: StreamableArea.(Player) -> Boolean = { true }
+
+    override fun isActive(forPlayer: Player): Boolean = activeCondition.invoke(this, forPlayer)
+
+    override fun activeWhen(condition: StreamableArea.(Player) -> Boolean) {
+        activeCondition = condition
+    }
+
     fun onEnter(player: Player) {
         onPlayerEnterStreamableAreaReceiver.onPlayerEnterStreamableArea(player, this)
         onPlayerEnterStreamableAreaHandler.onPlayerEnterStreamableArea(player, this)

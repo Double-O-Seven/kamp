@@ -70,6 +70,7 @@ internal abstract class AreaStreamer<T : HyperRect<*>>(
         return spatialIndex
                 .getIntersections(streamLocation.location)
                 .filter { streamLocation.location in it }
+                .filter { it.isActive(streamLocation.player) }
     }
 
     private fun beforeStream(action: () -> Unit) {

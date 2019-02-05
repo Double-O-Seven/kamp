@@ -15,4 +15,8 @@ interface StreamableArea :
 
     fun contains(player: Player): Boolean
 
+    fun isActive(forPlayer: Player): Boolean
+
+    fun activeWhen(condition: StreamableArea.(Player) -> Boolean)
+
 }
