@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.view.base
 
+import ch.leadrian.samp.kamp.core.api.constants.TextDrawCodes
 import java.util.Locale
 
 object TextTransformers {
@@ -23,6 +24,9 @@ object TextTransformers {
 
     @JvmStatic
     fun trim(): TextTransformer = Trimmer
+
+    @JvmStatic
+    fun passwordize(): TextTransformer = Passwordizer
 
 }
 
@@ -63,5 +67,15 @@ private object AtSignFormatter : TextTransformer {
 private object Trimmer : TextTransformer {
 
     override fun transform(text: String, locale: Locale): String = text.trim()
+
+}
+
+private object Passwordizer : TextTransformer {
+
+    private val cache = (0..32).map { i -> TextDrawCodes.STAR.repeat(i) }.toList()
+
+    override fun transform(text: String, locale: Locale): String {
+        return cache.getOrNull(text.length) ?: TextDrawCodes.STAR.repeat(text.length)
+    }
 
 }

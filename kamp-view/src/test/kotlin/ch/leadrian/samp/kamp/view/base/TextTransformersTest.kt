@@ -2,7 +2,13 @@ package ch.leadrian.samp.kamp.view.base
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtensionContext
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.ArgumentsProvider
+import org.junit.jupiter.params.provider.ArgumentsSource
 import java.util.Locale
+import java.util.stream.Stream
 
 internal class TextTransformersTest {
 
@@ -63,6 +69,27 @@ internal class TextTransformersTest {
 
         assertThat(text)
                 .isEqualTo("test(at)example.com")
+    }
+
+    @ParameterizedTest
+    @ArgumentsSource(PasswordizeArgumentsProvider::class)
+    fun shouldPasswordize(inputText: String, expectedText: String) {
+        val text = TextTransformers.passwordize().transform(inputText, Locale.GERMANY)
+
+        assertThat(text)
+                .isEqualTo(expectedText)
+    }
+
+    private class PasswordizeArgumentsProvider : ArgumentsProvider {
+
+        override fun provideArguments(context: ExtensionContext): Stream<out Arguments> {
+            return Stream.of(
+                    Arguments.of("ABC", "]]]"),
+                    Arguments.of("", ""),
+                    Arguments.of("ABCD".repeat(16), "]".repeat(64))
+            )
+        }
+
     }
 
 }
