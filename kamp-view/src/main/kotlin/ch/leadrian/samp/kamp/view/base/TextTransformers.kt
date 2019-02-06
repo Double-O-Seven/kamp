@@ -26,7 +26,7 @@ object TextTransformers {
 
 }
 
-fun TextTransformer.andThen(next: TextTransformer): TextTransformer = CombiningTextTransformer(this, next)
+infix fun TextTransformer.andThen(next: TextTransformer): TextTransformer = CombiningTextTransformer(this, next)
 
 private class CombiningTextTransformer(private val first: TextTransformer, private val second: TextTransformer) :
         TextTransformer {

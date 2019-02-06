@@ -57,7 +57,7 @@ internal class TextTransformersTest {
     @Test
     fun shouldCombineTransformers() {
         val combiningTextTransformer = with(TextTransformers) {
-            formatAtSign().andThen(replaceTilde(" ")).andThen(trim()).andThen(toLowerCase())
+            formatAtSign() andThen replaceTilde(" ") andThen trim() andThen toLowerCase()
         }
         val text = combiningTextTransformer.transform("~~Test@Example.com   ", Locale.GERMANY)
 
