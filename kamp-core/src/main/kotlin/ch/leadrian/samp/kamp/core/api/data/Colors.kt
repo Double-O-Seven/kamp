@@ -34,7 +34,10 @@ private fun rgbaValue(r: Int, g: Int, b: Int, a: Int) =
 object Colors {
 
     @JvmStatic
-    val GREY = colorOf(0xAFAFAFAA)
+    val DIALOG_TEXT = colorOf(0xA9C4E4FF)
+
+    @JvmStatic
+    val GREY = colorOf(0xAFAFAFFF)
 
     @JvmStatic
     val ACTIVE_BORDER = colorOf(0xB4B4B4FF)
