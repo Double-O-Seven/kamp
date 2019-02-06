@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogTextSupplier
@@ -12,9 +13,11 @@ import ch.leadrian.samp.kamp.core.api.text.TextProvider
 internal abstract class AbstractDialogBuilder<B : DialogBuilder<B>>(protected val textProvider: TextProvider) :
         DialogBuilder<B> {
 
-    protected lateinit var captionTextSupplier: DialogTextSupplier
+    protected var captionTextSupplier: DialogTextSupplier =
+            TextKeyDialogTextSupplier(KampCoreTextKeys.dialog.caption.missing, textProvider)
 
-    protected lateinit var leftButtonTextSupplier: DialogTextSupplier
+    protected var leftButtonTextSupplier: DialogTextSupplier =
+            TextKeyDialogTextSupplier(KampCoreTextKeys.dialog.button.ok, textProvider)
 
     protected var rightButtonTextSupplier: DialogTextSupplier = StringDialogTextSupplier("")
 
