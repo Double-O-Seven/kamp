@@ -6,18 +6,16 @@ import ch.leadrian.samp.kamp.core.api.constants.TextDrawFont
 import ch.leadrian.samp.kamp.core.api.data.Color
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.service.DialogService
-import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.ViewContext
 import ch.leadrian.samp.kamp.view.base.TextTransformer
 import ch.leadrian.samp.kamp.view.base.TextTransformers
-import ch.leadrian.samp.kamp.view.factory.DefaultViewFactory
 import ch.leadrian.samp.kamp.view.factory.ViewFactory
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 import ch.leadrian.samp.kamp.view.layout.pixels
+import ch.leadrian.samp.kamp.view.stubDefaultViewFactory
 import ch.leadrian.samp.kamp.view.style.ButtonStyle
 import io.mockk.every
 import io.mockk.mockk
@@ -36,13 +34,15 @@ internal class ButtonViewTest {
     private val viewContext = mockk<ViewContext>()
     private val textProvider = mockk<TextProvider>()
     private val textFormatter = mockk<TextFormatter>()
-    private val playerTextDrawService = mockk<PlayerTextDrawService>()
-    private val dialogService = mockk<DialogService>()
     private lateinit var viewFactory: ViewFactory
 
     @BeforeEach
     fun setUp() {
-        viewFactory = DefaultViewFactory(viewContext, textProvider, textFormatter, playerTextDrawService, dialogService)
+        viewFactory = stubDefaultViewFactory(
+                viewContext = viewContext,
+                textProvider = textProvider,
+                textFormatter = textFormatter
+        )
         buttonView = ButtonView(player, viewContext, viewFactory)
     }
 

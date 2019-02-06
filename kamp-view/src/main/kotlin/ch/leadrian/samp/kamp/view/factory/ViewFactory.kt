@@ -3,6 +3,7 @@ package ch.leadrian.samp.kamp.view.factory
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.PlayerTextDrawService
+import ch.leadrian.samp.kamp.core.api.text.MessageFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextFormatter
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.view.ViewContext
@@ -19,6 +20,7 @@ import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ModelViewerView
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
+import ch.leadrian.samp.kamp.view.composite.TextInputView
 import ch.leadrian.samp.kamp.view.composite.VerticalListView
 import ch.leadrian.samp.kamp.view.composite.VerticalScrollBarView
 
@@ -33,6 +35,8 @@ interface ViewFactory {
     val playerTextDrawService: PlayerTextDrawService
 
     val dialogService: DialogService
+
+    val messageFormatter: MessageFormatter
 
     @JvmDefault
     fun view(player: Player, buildingBlock: View.() -> Unit): View {
@@ -228,6 +232,20 @@ interface ViewFactory {
         val modelViewerView = modelViewerView(player, buildingBlock)
         addChild(modelViewerView)
         return modelViewerView
+    }
+
+    @JvmDefault
+    fun textInputView(player: Player, buildingBlock: TextInputView.() -> Unit): TextInputView {
+        val textInputView = TextInputView(player, viewContext, this, dialogService, messageFormatter)
+        buildingBlock(textInputView)
+        return textInputView
+    }
+
+    @JvmDefault
+    fun View.textInputView(buildingBlock: TextInputView.() -> Unit): TextInputView {
+        val textInputView = textInputView(player, buildingBlock)
+        addChild(textInputView)
+        return textInputView
     }
 
 }

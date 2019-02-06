@@ -44,7 +44,7 @@ interface ButtonStyle : Style {
 
     @JvmDefault
     val buttonTextOutlineSize: Int
-        get() = 1
+        get() = 0
 
     @JvmDefault
     val buttonTextShadowSize: Int
