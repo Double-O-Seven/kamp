@@ -9,6 +9,7 @@ class StreamerTestModule : KampModule() {
         bind(PlayerClassSelector::class.java).asEagerSingleton()
         bind(MapLoader::class.java).asEagerSingleton()
         bind(MapIconLoader::class.java).asEagerSingleton()
+        bind(SanAndreasZoneLoader::class.java).asEagerSingleton()
         newCommandsSetBinder().apply {
             addBinding().to(StreamerCommands::class.java)
         }
