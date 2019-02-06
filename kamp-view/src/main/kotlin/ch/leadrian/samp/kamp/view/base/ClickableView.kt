@@ -14,6 +14,7 @@ abstract class ClickableView(player: Player, viewContext: ViewContext) : View(pl
 
     fun click(): OnPlayerClickPlayerTextDrawListener.Result {
         if (isEnabled) {
+            onClick()
             onClickListeners.forEach { it.onClick(this) }
             return OnPlayerClickPlayerTextDrawListener.Result.Processed
         }
@@ -49,6 +50,8 @@ abstract class ClickableView(player: Player, viewContext: ViewContext) : View(pl
     }
 
     protected open fun onDisable() {}
+
+    protected open fun onClick() {}
 
 }
 

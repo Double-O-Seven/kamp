@@ -48,7 +48,7 @@ internal class ClickableViewTest {
     }
 
     @Test
-    fun shouldCallOnClick() {
+    fun shouldCallInlineOnClick() {
         val view = TestClickableView(mockk(), mockk())
         val clicked = mockk<(View) -> Unit>(relaxed = true)
         view.enable()
@@ -57,6 +57,17 @@ internal class ClickableViewTest {
         view.click()
 
         verify { clicked(view) }
+    }
+
+    @Test
+    fun shouldCallOnClick() {
+        val onClick = mockk<TestClickableView.() -> Unit>(relaxed = true)
+        val view = TestClickableView(mockk(), mockk(), onClick = onClick)
+        view.enable()
+
+        view.click()
+
+        verify { onClick(view) }
     }
 
     @Test
@@ -160,7 +171,8 @@ internal class ClickableViewTest {
             player: Player,
             viewContext: ViewContext,
             private val onEnable: TestClickableView.() -> Unit = {},
-            private val onDisable: TestClickableView.() -> Unit = {}
+            private val onDisable: TestClickableView.() -> Unit = {},
+            private val onClick: TestClickableView.() -> Unit = {}
     ) : ClickableView(player, viewContext) {
 
         override fun onEnable() {
@@ -169,6 +181,10 @@ internal class ClickableViewTest {
 
         override fun onDisable() {
             onDisable.invoke(this)
+        }
+
+        override fun onClick() {
+            onClick.invoke(this)
         }
 
     }
