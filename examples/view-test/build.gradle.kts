@@ -16,9 +16,3 @@ serverStarter {
     jvmOption("-Xmx1G")
     configProperty("kamp.ignore.version.mismatch", "true")
 }
-
-tasks {
-    configureServer {
-        dependsOn(project(":kamp-plugin").tasks.getByName("build"))
-    }
-}

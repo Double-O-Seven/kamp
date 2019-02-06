@@ -18,9 +18,3 @@ serverStarter {
     configProperty("kamp.streamer.rate.ms", "300")
     configProperty("kamp.ignore.version.mismatch", "true")
 }
-
-tasks {
-    configureServer {
-        dependsOn(project(":kamp-plugin").tasks.getByName("build"))
-    }
-}

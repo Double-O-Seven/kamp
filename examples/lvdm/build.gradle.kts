@@ -22,9 +22,3 @@ serverStarter {
     configProperty("kamp.ignore.version.mismatch", "true")
     configProperty("lvdm.respawn.cash.amout", "2500")
 }
-
-tasks {
-    configureServer {
-        dependsOn(project(":kamp-plugin").tasks.getByName("build"))
-    }
-}
