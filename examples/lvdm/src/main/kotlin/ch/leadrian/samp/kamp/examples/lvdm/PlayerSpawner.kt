@@ -20,7 +20,7 @@ constructor(private val callbackListenerManager: CallbackListenerManager) : OnPl
      * This value is defined in config.properties. If it is missing, the default value will be taken.
      * @see build.gradle.kts
      */
-    @Configuration("lvdm.respawn.cash.amout")
+    @Configuration("lvdm.respawn.cash.amount")
     private var respawnMoney: Int = 1000
 
     private val random = Random(System.currentTimeMillis())
