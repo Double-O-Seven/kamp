@@ -13,6 +13,7 @@ import ch.leadrian.samp.kamp.view.base.SpriteView
 import ch.leadrian.samp.kamp.view.base.TextView
 import ch.leadrian.samp.kamp.view.base.View
 import ch.leadrian.samp.kamp.view.composite.ButtonView
+import ch.leadrian.samp.kamp.view.composite.DialogView
 import ch.leadrian.samp.kamp.view.composite.GridView
 import ch.leadrian.samp.kamp.view.composite.GridViewAdapter
 import ch.leadrian.samp.kamp.view.composite.HorizontalListView
@@ -232,6 +233,20 @@ interface ViewFactory {
         val modelViewerView = modelViewerView(player, buildingBlock)
         addChild(modelViewerView)
         return modelViewerView
+    }
+
+    @JvmDefault
+    fun dialogView(player: Player, buildingBlock: DialogView.() -> Unit): DialogView {
+        val dialogView = DialogView(player, viewContext, this)
+        buildingBlock(dialogView)
+        return dialogView
+    }
+
+    @JvmDefault
+    fun View.dialogView(buildingBlock: DialogView.() -> Unit): DialogView {
+        val dialogView = dialogView(player, buildingBlock)
+        addChild(dialogView)
+        return dialogView
     }
 
     @JvmDefault
