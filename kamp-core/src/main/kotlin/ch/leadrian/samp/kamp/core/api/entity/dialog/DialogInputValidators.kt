@@ -66,7 +66,15 @@ object DialogInputValidators {
                     allowedValues = *allowedValues
             )
 
+    @JvmStatic
+    fun emptyOr(other: DialogInputValidator): DialogInputValidator = EmptyOr(other)
+
+    @JvmStatic
+    fun blankOr(other: DialogInputValidator): DialogInputValidator = BlankOr(other)
+
 }
+
+infix fun DialogInputValidator.or(other: DialogInputValidator): DialogInputValidator = EitherOr(this, other)
 
 private class FloatValue(
         private val errorMessage: String? = null,
@@ -162,6 +170,38 @@ private class ContainedIn(
             contains -> null
             else -> errorMessageTextKey ?: errorMessage ?: KampCoreTextKeys.dialog.input.validation.error.generic
         }
+    }
+
+}
+
+private class EmptyOr(private val other: DialogInputValidator) : DialogInputValidator {
+
+    override fun validate(player: Player, inputText: String): Any? {
+        if (inputText.isEmpty()) {
+            return null
+        }
+        return other.validate(player, inputText)
+    }
+
+}
+
+private class BlankOr(private val other: DialogInputValidator) : DialogInputValidator {
+
+    override fun validate(player: Player, inputText: String): Any? {
+        if (inputText.isBlank()) {
+            return null
+        }
+        return other.validate(player, inputText)
+    }
+
+}
+
+private class EitherOr(private val first: DialogInputValidator, private val second: DialogInputValidator) :
+        DialogInputValidator {
+
+    override fun validate(player: Player, inputText: String): Any? {
+        first.validate(player, inputText) ?: return null
+        return second.validate(player, inputText)
     }
 
 }
