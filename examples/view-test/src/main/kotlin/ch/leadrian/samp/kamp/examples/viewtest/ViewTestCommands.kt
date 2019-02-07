@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.examples.viewtest
 
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
+import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.SanAndreasZone
 import ch.leadrian.samp.kamp.core.api.constants.SkinModel
@@ -14,6 +15,7 @@ import ch.leadrian.samp.kamp.core.api.data.colorOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogInputValidators
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import ch.leadrian.samp.kamp.core.api.text.TextArguments
@@ -487,6 +489,69 @@ constructor(
                     height = 64.pixels()
                     enable()
                     onClick { messageSender.sendMessageToPlayer(player, Colors.YELLOW, "Top clicked") }
+                }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
+    fun textInputView(player: Player, @Parameter("Is password") isPasswordInput: String) {
+        with(viewFactory) {
+            val view = dialogView(player) {
+                setPadding(64.pixels())
+                title = "Text input test"
+                isCloseable = true
+                isNavigable = true
+                titleColor = Colors.BLACK
+                titleBarColor = Colors.YELLOW
+                content {
+                    view {
+                        setPadding(8.pixels())
+                        val input = textInputView {
+                            this.isPasswordInput = isPasswordInput.toBoolean()
+                            title = "Type a number"
+                            top = 0.pixels()
+                            left = 0.pixels()
+                            width = 50.percent()
+                            height = 64.pixels()
+                            titleColor = Colors.YELLOW
+                            validators.add(DialogInputValidators.blankOr(DialogInputValidators.intValue()))
+                        }
+
+                        val enableButton = buttonView {
+                            leftToRightOf(input)
+                            setPadding(10.percent())
+                            height = 32.pixels()
+                            text {
+                                if (input.isEnabled) {
+                                    "Disable"
+                                } else {
+                                    "Enable"
+                                }
+                            }
+                            onClick {
+                                if (input.isEnabled) {
+                                    input.disable()
+                                } else {
+                                    input.enable()
+                                }
+                                input.draw()
+                                draw()
+                            }
+                        }
+
+                        buttonView {
+                            leftToRightOf(input)
+                            topToBottomOf(enableButton)
+                            setPadding(10.percent())
+                            height = 32.pixels()
+                            text = "Reset"
+                            onClick {
+                                input.reset()
+                            }
+                        }
+                    }
                 }
             }
             player.viewNavigation.push(view)
