@@ -151,7 +151,7 @@ object Colors {
     val DARK_GOLDENROD = colorOf(0xB8860BFF)
 
     @JvmStatic
-    val DARK_GRAY = colorOf(0xA9A9A9FF)
+    val DARK_GRAY = colorOf(0x777777FF)
 
     @JvmStatic
     val DARK_GREEN = colorOf(0x006400FF)
@@ -316,7 +316,7 @@ object Colors {
     val LIGHT_GOLDENROD_YELLOW = colorOf(0xFAFAD2FF)
 
     @JvmStatic
-    val LIGHT_GRAY = colorOf(0xD3D3D3FF)
+    val LIGHT_GRAY = colorOf(0xAAAAAAFF)
 
     @JvmStatic
     val LIGHT_GREEN = colorOf(0x90EE90FF)
