@@ -74,7 +74,7 @@ internal class InputDialog(
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<InputDialogBuilder>(textProvider), InputDialogBuilder {
 
-        private var messageTextSupplier: DialogTextSupplier = StringDialogTextSupplier("")
+        private var messageTextSupplier: DialogTextSupplier = StringDialogTextSupplier(" ")
 
         private var isPasswordInput: Dialog.(Player) -> Boolean = { false }
 

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.dialog
 
+import ch.leadrian.samp.kamp.core.KampCoreTextKeys
 import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
 import ch.leadrian.samp.kamp.core.api.constants.DialogResponse
 import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
@@ -61,7 +62,8 @@ internal class MessageBoxDialog(
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<MessageBoxDialogBuilder>(textProvider), MessageBoxDialogBuilder {
 
-        private lateinit var messageTextSupplier: DialogTextSupplier
+        private var messageTextSupplier: DialogTextSupplier =
+                TextKeyDialogTextSupplier(KampCoreTextKeys.dialog.message.missing, textProvider)
 
         private var onClickLeftButton: (Dialog.(Player) -> Unit)? = null
 
