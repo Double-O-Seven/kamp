@@ -35,7 +35,7 @@ open class TextInputView(
     companion object {
 
         val DEFAULT_TEXT_TRANSFORMER: TextTransformer = with(TextTransformers) {
-            formatAtSign().andThen(removeTilde())
+            formatAtSign() andThen removeTilde()
         }
 
     }
@@ -47,6 +47,8 @@ open class TextInputView(
     private lateinit var inputTextView: TextView
 
     private val dialog: Dialog by lazy { createDialog() }
+
+    private var validationError: Any? = null
 
     var inputText: String? = null
         private set
@@ -76,13 +78,13 @@ open class TextInputView(
 
     var inputTextColor: Color = Colors.DARK_GRAY
 
-    var disabledInputTextColor: Color = Colors.DARK_GRAY
+    var disabledInputTextColor: Color = Colors.LIGHT_GRAY
 
     var inputTextBackgroundColor: Color = Colors.DARK_GRAY
 
-    var disabledInputTextBackgroundColor: Color = Colors.DARK_GRAY
+    var disabledInputTextBackgroundColor: Color = Colors.LIGHT_GRAY
 
-    var inputBackgroundColor: Color = Colors.LIGHT_GRAY
+    var inputBackgroundColor: Color = Colors.WHITE
 
     var inputTextTransformer: TextTransformer = DEFAULT_TEXT_TRANSFORMER
 
@@ -141,6 +143,7 @@ open class TextInputView(
             titleTextView = textView {
                 topToTopOf(this@TextInputView)
                 height = 40.percent()
+                letterHeight = 100.percent()
                 color {
                     when (state) {
                         State.INVALID -> invalidInputColor
@@ -157,6 +160,7 @@ open class TextInputView(
                 onClick { this@TextInputView.click() }
 
                 inputTextView = textView {
+                    letterHeight = 100.percent()
                     color {
                         when {
                             !this@TextInputView.isEnabled -> disabledInputTextColor
@@ -178,8 +182,9 @@ open class TextInputView(
     }
 
     fun reset() {
-        updateInputText(null)
+        validationError = null
         state = State.NOT_VALIDATED
+        updateInputText(null)
     }
 
     fun validate() {
@@ -197,26 +202,29 @@ open class TextInputView(
             leftButton(KampCoreTextKeys.dialog.button.ok)
             rightButton(KampCoreTextKeys.dialog.button.cancel)
             isPasswordInput { this@TextInputView.isPasswordInput }
+            message { getDialogMessage() }
             onInvalidInput { _, error ->
-                message(getErrorMessage(error))
+                validationError = error
                 show(player)
             }
             onSubmit { _, text ->
-                message("")
-                updateInputText(text)
+                validationError = null
                 state = State.VALID
+                updateInputText(text)
             }
         }
     }
 
-    private fun getErrorMessage(error: Any): String {
-        return messageFormatter.format(
-                player.locale,
-                Colors.DIALOG_TEXT,
-                "{0}{1}",
-                invalidInputColor,
-                error
-        )
+    private fun getDialogMessage(): String {
+        return validationError?.let {
+            messageFormatter.format(
+                    player.locale,
+                    Colors.DIALOG_TEXT,
+                    "{0}{1}",
+                    invalidInputColor,
+                    it
+            )
+        } ?: " "
     }
 
     override fun onClick() {
@@ -266,7 +274,7 @@ open class TextInputView(
             titleColor = style.titleColor
             titleBackgroundColor = style.titleBackgroundColor
         }
-        return true
+        return false
     }
 
     private fun updateInputText(inputText: String?) {

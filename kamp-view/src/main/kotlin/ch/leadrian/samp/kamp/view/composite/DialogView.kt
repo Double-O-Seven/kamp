@@ -131,13 +131,19 @@ open class DialogView(
                     goBackButtonView = spriteView {
                         spriteName = "ld_beat:left"
                         left = 0.pixels()
+                        color { titleColor }
                         enable()
                         onClick { goBack() }
                     }
                     closeButtonView = textView {
                         text = "x"
-                        font = TextDrawFont.BANK_GOTHIC
+                        right = 0.pixels()
+                        color { titleColor }
                         enable()
+                        font = TextDrawFont.BANK_GOTHIC
+                        outlineSize = 0
+                        shadowSize = 0
+                        letterHeight = 100.percent()
                         onClick { close() }
                     }
                     titleTextView = textView {

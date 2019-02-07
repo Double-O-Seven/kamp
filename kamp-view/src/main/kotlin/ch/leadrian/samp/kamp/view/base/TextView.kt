@@ -40,7 +40,7 @@ open class TextView(
 
     var font: TextDrawFont = TextDrawFont.FONT2
 
-    var outlineSize: Int = 1
+    var outlineSize: Int = 0
 
     var shadowSize: Int = 0
 
@@ -71,7 +71,7 @@ open class TextView(
         this.backgroundColorSupplier.value(backgroundColorSupplier)
     }
 
-    private var textSupplier: (Locale) -> String = { TextDrawCodes.EMPTY_TEXT }
+    private var textSupplier: (Locale) -> String = { "" }
 
     var textTransformer: TextTransformer? = null
 

@@ -2,10 +2,17 @@ package ch.leadrian.samp.kamp.view.base
 
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.view.ViewContext
 import kotlin.reflect.full.cast
 
 abstract class ClickableView(player: Player, viewContext: ViewContext) : View(player, viewContext) {
+
+    private companion object {
+
+        val log = loggerFor<ClickableView>()
+
+    }
 
     private val onClickListeners = LinkedHashSet<OnClickViewListener>()
 
@@ -14,6 +21,7 @@ abstract class ClickableView(player: Player, viewContext: ViewContext) : View(pl
 
     fun click(): OnPlayerClickPlayerTextDrawListener.Result {
         if (isEnabled) {
+            log.debug("{} clicked {}", player.name, this)
             onClick()
             onClickListeners.forEach { it.onClick(this) }
             return OnPlayerClickPlayerTextDrawListener.Result.Processed
