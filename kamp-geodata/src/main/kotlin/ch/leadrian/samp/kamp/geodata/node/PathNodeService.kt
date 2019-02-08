@@ -10,20 +10,20 @@ import javax.inject.Singleton
 @Singleton
 class PathNodeService
 @Inject
-internal constructor() {
+internal constructor(private val nodeFileSource: NodeFileSource) {
 
     private companion object {
 
-        const val NODE_FILE_FORMAT = "nodes%d.dat"
+        const val NODE_FILE_FORMAT = "NODES%d.DAT"
 
         val log = loggerFor<PathNodeService>()
     }
 
-    private lateinit var nodeFiles: List<NodeFile>
+    private val nodeFiles: MutableList<NodeFile> = mutableListOf()
     /**
      * Indexed by area ID and node ID
      */
-    private lateinit var pathNodeIndex: Table<Int, Int, PathNode>
+    private val pathNodeIndex: Table<Int, Int, PathNode> = HashBasedTable.create<Int, Int, PathNode>()
 
     @PostConstruct
     internal fun initialize() {
@@ -37,7 +37,7 @@ internal constructor() {
     fun getPathNodes(): List<PathNode> = pathNodeIndex.values().toList()
 
     private fun loadNodeFiles() {
-        nodeFiles = (0 until 64)
+        nodeFiles += (0 until 64)
                 .asSequence()
                 .map { String.format(NODE_FILE_FORMAT, it) }
                 .map { parseNodeFile(it) }
@@ -46,15 +46,14 @@ internal constructor() {
 
     private fun parseNodeFile(fileName: String): NodeFile {
         try {
-            return NodeFile.parse(this@PathNodeService.javaClass.getResourceAsStream(fileName))
+            return NodeFile.parse(nodeFileSource.getNodeFileContent(fileName))
         } catch (e: Exception) {
             log.error("Failed to parse {}: ", fileName, e)
-            throw e
+            throw IllegalStateException("Failed to parsed $fileName", e)
         }
     }
 
     private fun createPathNodeIndex() {
-        pathNodeIndex = HashBasedTable.create<Int, Int, PathNode>()
         nodeFiles
                 .asSequence()
                 .map { it.pathNodes }

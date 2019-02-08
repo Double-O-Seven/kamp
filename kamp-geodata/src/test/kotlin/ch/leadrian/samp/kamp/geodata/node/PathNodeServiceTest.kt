@@ -2,16 +2,20 @@ package ch.leadrian.samp.kamp.geodata.node
 
 import com.google.common.io.Resources
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.awt.image.BufferedImage
+import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
+import java.io.InputStream
 import javax.imageio.ImageIO
 
 internal class PathNodeServiceTest {
 
+    @Disabled
     @Test
     fun shouldLoadPathNodes() {
-        val pathNodeService = PathNodeService()
+        val pathNodeService = PathNodeService(TestNodeFileSource)
 
         pathNodeService.initialize()
 
@@ -64,6 +68,13 @@ internal class PathNodeServiceTest {
                         image.setRGB(x, 5999 - y, color)
                     }
                 }
+    }
+
+    private object TestNodeFileSource : NodeFileSource {
+
+        override fun getNodeFileContent(fileName: String): InputStream =
+                ByteArrayInputStream(Resources.toByteArray(javaClass.getResource(fileName)))
+
     }
 
 }
