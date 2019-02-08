@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Parameter
+import ch.leadrian.samp.kamp.cidl.model.Parameter
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
 

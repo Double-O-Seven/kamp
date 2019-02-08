@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen
 
-import ch.leadrian.samp.cidl.model.Function
+import ch.leadrian.samp.kamp.cidl.model.Function
 
 val Function.isCallback: Boolean
     get() = hasAttribute("callback")

@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Function
+import ch.leadrian.samp.kamp.cidl.model.Function
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.isCallback

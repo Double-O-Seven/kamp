@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Parameter
-import ch.leadrian.samp.cidl.model.Types
+import ch.leadrian.samp.kamp.cidl.model.Parameter
+import ch.leadrian.samp.kamp.cidl.model.Types
 import ch.leadrian.samp.kamp.codegen.isOutParameter
 import com.squareup.javapoet.TypeName
 import javax.inject.Inject

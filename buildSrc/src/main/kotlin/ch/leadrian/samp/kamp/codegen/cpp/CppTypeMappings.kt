@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.cpp
 
-import ch.leadrian.samp.cidl.model.Types
+import ch.leadrian.samp.kamp.cidl.model.Types
 
 private val JNI_TYPE_MAPPING = mapOf(
         Types.BOOL to "jboolean",

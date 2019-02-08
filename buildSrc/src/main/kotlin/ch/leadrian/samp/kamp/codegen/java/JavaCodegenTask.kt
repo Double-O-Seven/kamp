@@ -1,10 +1,10 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Constant
-import ch.leadrian.samp.cidl.model.Function
-import ch.leadrian.samp.cidl.model.InterfaceDefinitionUnit
-import ch.leadrian.samp.cidl.parser.FileInterfaceDefinitionSource
-import ch.leadrian.samp.cidl.parser.InterfaceDefinitionParser
+import ch.leadrian.samp.kamp.cidl.model.Constant
+import ch.leadrian.samp.kamp.cidl.model.Function
+import ch.leadrian.samp.kamp.cidl.model.InterfaceDefinitionUnit
+import ch.leadrian.samp.kamp.cidl.parser.FileInterfaceDefinitionSource
+import ch.leadrian.samp.kamp.cidl.parser.InterfaceDefinitionParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileLookup
 import org.gradle.api.tasks.InputFiles

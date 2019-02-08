@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Types
+import ch.leadrian.samp.kamp.cidl.model.Types
 import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName

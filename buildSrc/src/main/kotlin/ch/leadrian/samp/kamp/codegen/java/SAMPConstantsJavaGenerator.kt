@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.java
 
-import ch.leadrian.samp.cidl.model.Constant
+import ch.leadrian.samp.kamp.cidl.model.Constant
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.FieldSpec

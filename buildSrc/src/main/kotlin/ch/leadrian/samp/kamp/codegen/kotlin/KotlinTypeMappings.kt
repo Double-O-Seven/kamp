@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.kotlin
 
-import ch.leadrian.samp.cidl.model.Types
+import ch.leadrian.samp.kamp.cidl.model.Types
 import com.squareup.kotlinpoet.BOOLEAN
 import com.squareup.kotlinpoet.CHAR
 import com.squareup.kotlinpoet.ClassName
