@@ -26,6 +26,7 @@ import ch.leadrian.samp.kamp.view.composite.GridViewAdapter
 import ch.leadrian.samp.kamp.view.composite.HorizontalListView
 import ch.leadrian.samp.kamp.view.composite.ListItemView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
+import ch.leadrian.samp.kamp.view.composite.ProgressBarView
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
 import ch.leadrian.samp.kamp.view.composite.ScrollBarView
 import ch.leadrian.samp.kamp.view.composite.VerticalListView
@@ -490,6 +491,23 @@ constructor(
                     enable()
                     onClick { messageSender.sendMessageToPlayer(player, Colors.YELLOW, "Top clicked") }
                 }
+            }
+            player.viewNavigation.push(view)
+        }
+    }
+
+    @Command
+    fun progressBarView(player: Player, value: Int, maxValue: Int, direction: ProgressBarView.Direction) {
+        with(viewFactory) {
+            val view = progressBarView(player) {
+                top = 160.pixels()
+                height = 32.pixels()
+                outlineSize = 4.pixels()
+                left = 200.pixels()
+                right = 200.pixels()
+                this.value = value
+                this.maxValue = maxValue
+                this.direction = direction
             }
             player.viewNavigation.push(view)
         }

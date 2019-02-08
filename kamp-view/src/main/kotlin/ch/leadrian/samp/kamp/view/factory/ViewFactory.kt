@@ -20,6 +20,7 @@ import ch.leadrian.samp.kamp.view.composite.HorizontalListView
 import ch.leadrian.samp.kamp.view.composite.HorizontalScrollBarView
 import ch.leadrian.samp.kamp.view.composite.ListViewAdapter
 import ch.leadrian.samp.kamp.view.composite.ModelViewerView
+import ch.leadrian.samp.kamp.view.composite.ProgressBarView
 import ch.leadrian.samp.kamp.view.composite.ScrollBarAdapter
 import ch.leadrian.samp.kamp.view.composite.TextInputView
 import ch.leadrian.samp.kamp.view.composite.VerticalListView
@@ -261,6 +262,20 @@ interface ViewFactory {
         val textInputView = textInputView(player, buildingBlock)
         addChild(textInputView)
         return textInputView
+    }
+
+    @JvmDefault
+    fun progressBarView(player: Player, buildingBlock: ProgressBarView.() -> Unit): ProgressBarView {
+        val progressBarView = ProgressBarView(player, viewContext, this)
+        buildingBlock(progressBarView)
+        return progressBarView
+    }
+
+    @JvmDefault
+    fun View.progressBarView(buildingBlock: ProgressBarView.() -> Unit): ProgressBarView {
+        val progressBarView = progressBarView(player, buildingBlock)
+        addChild(progressBarView)
+        return progressBarView
     }
 
 }
