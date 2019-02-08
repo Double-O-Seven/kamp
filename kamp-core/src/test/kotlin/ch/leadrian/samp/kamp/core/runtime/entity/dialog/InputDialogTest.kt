@@ -230,7 +230,7 @@ internal class InputDialogTest {
         }
 
         @Test
-        fun givenNoMessageItShouldShowWithEmptyMessageAsString() {
+        fun givenNoMessageItShouldShowWithBlankMessageAsString() {
             val inputDialog = builder.apply {
                 caption("Hi there")
                 leftButton("OK")
@@ -247,7 +247,7 @@ internal class InputDialogTest {
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = ""
+                        info = " "
                 )
             }
         }

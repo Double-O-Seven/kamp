@@ -29,7 +29,7 @@ internal class DefaultUnknownCommandHandlerTest {
 
     @Test
     fun shouldSendClientMessage() {
-        every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any(), any()) } just Runs
+        every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any()) } just Runs
 
         defaultUnknownCommandHandler.handle(player, "help")
 
@@ -40,7 +40,7 @@ internal class DefaultUnknownCommandHandlerTest {
 
     @Test
     fun shouldReturnResultProcessed() {
-        every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any(), any()) } just Runs
+        every { messageSender.sendMessageToPlayer(any(), any(), any<TextKey>(), any()) } just Runs
 
         val result = defaultUnknownCommandHandler.handle(player, "help")
 
