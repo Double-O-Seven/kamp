@@ -13,17 +13,17 @@ interface ListDialogItem<V : Any> {
 
     interface Builder<V : Any> {
 
-        infix fun value(value: V): Builder<V>
+        fun value(value: V): Builder<V>
 
-        infix fun content(text: String): Builder<V>
+        fun content(text: String): Builder<V>
 
-        infix fun content(textKey: TextKey): Builder<V>
+        fun content(textKey: TextKey): Builder<V>
 
-        infix fun content(supplier: (Player) -> String): Builder<V>
+        fun content(supplier: (Player) -> String): Builder<V>
 
-        infix fun content(supplier: DialogTextSupplier): Builder<V>
+        fun content(supplier: DialogTextSupplier): Builder<V>
 
-        infix fun onSelect(onSelect: ListDialogItem<V>.(Player, String) -> Unit): Builder<V>
+        fun onSelect(onSelect: ListDialogItem<V>.(Player, String) -> Unit): Builder<V>
 
         fun build(): ListDialogItem<V>
     }

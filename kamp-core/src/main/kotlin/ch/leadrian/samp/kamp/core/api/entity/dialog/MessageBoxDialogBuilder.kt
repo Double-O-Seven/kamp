@@ -6,16 +6,16 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 
 interface MessageBoxDialogBuilder : DialogBuilder<MessageBoxDialogBuilder> {
 
-    infix fun message(text: String): MessageBoxDialogBuilder
+    fun message(text: String): MessageBoxDialogBuilder
 
-    infix fun message(textKey: TextKey): MessageBoxDialogBuilder
+    fun message(textKey: TextKey): MessageBoxDialogBuilder
 
-    infix fun message(supplier: (Player) -> String): MessageBoxDialogBuilder
+    fun message(supplier: (Player) -> String): MessageBoxDialogBuilder
 
-    infix fun message(supplier: DialogTextSupplier): MessageBoxDialogBuilder
+    fun message(supplier: DialogTextSupplier): MessageBoxDialogBuilder
 
-    infix fun onClickLeftButton(onClickLeftButton: Dialog.(Player) -> Unit): MessageBoxDialogBuilder
+    fun onClickLeftButton(onClickLeftButton: Dialog.(Player) -> Unit): MessageBoxDialogBuilder
 
-    infix fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseListener.Result): MessageBoxDialogBuilder
+    fun onClickRightButton(onClickRightButton: Dialog.(Player) -> OnDialogResponseListener.Result): MessageBoxDialogBuilder
 
 }

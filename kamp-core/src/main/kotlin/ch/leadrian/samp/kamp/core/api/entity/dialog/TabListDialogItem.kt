@@ -13,7 +13,7 @@ interface TabListDialogItem<V : Any> {
 
     interface Builder<V : Any> {
 
-        infix fun value(value: V): Builder<V>
+        fun value(value: V): Builder<V>
 
         fun tabbedContent(vararg text: String): Builder<V>
 
@@ -23,7 +23,7 @@ interface TabListDialogItem<V : Any> {
 
         fun tabbedContent(vararg supplier: DialogTextSupplier): Builder<V>
 
-        infix fun onSelect(onSelect: TabListDialogItem<V>.(Player, String) -> Unit): Builder<V>
+        fun onSelect(onSelect: TabListDialogItem<V>.(Player, String) -> Unit): Builder<V>
 
         fun build(): TabListDialogItem<V>
     }

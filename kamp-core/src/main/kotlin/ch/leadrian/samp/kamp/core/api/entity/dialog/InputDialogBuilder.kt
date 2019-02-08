@@ -6,28 +6,28 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 
 interface InputDialogBuilder : DialogBuilder<InputDialogBuilder> {
 
-    infix fun message(text: String): InputDialogBuilder
+    fun message(text: String): InputDialogBuilder
 
-    infix fun message(textKey: TextKey): InputDialogBuilder
+    fun message(textKey: TextKey): InputDialogBuilder
 
-    infix fun message(supplier: (Player) -> String): InputDialogBuilder
+    fun message(supplier: (Player) -> String): InputDialogBuilder
 
-    infix fun message(supplier: DialogTextSupplier): InputDialogBuilder
+    fun message(supplier: DialogTextSupplier): InputDialogBuilder
 
-    infix fun validator(validator: DialogInputValidator): InputDialogBuilder
+    fun validator(validator: DialogInputValidator): InputDialogBuilder
 
     fun validators(vararg validator: DialogInputValidator): InputDialogBuilder
 
-    infix fun validators(validators: Collection<DialogInputValidator>): InputDialogBuilder
+    fun validators(validators: Collection<DialogInputValidator>): InputDialogBuilder
 
-    infix fun isPasswordInput(isPasswordInput: Boolean): InputDialogBuilder
+    fun isPasswordInput(isPasswordInput: Boolean): InputDialogBuilder
 
-    infix fun isPasswordInput(isPasswordInput: Dialog.(Player) -> Boolean): InputDialogBuilder
+    fun isPasswordInput(isPasswordInput: Dialog.(Player) -> Boolean): InputDialogBuilder
 
-    infix fun onSubmit(onSubmit: Dialog.(Player, String) -> Unit): InputDialogBuilder
+    fun onSubmit(onSubmit: Dialog.(Player, String) -> Unit): InputDialogBuilder
 
-    infix fun onInvalidInput(onInvalidInput: Dialog.(Player, Any) -> Unit): InputDialogBuilder
+    fun onInvalidInput(onInvalidInput: Dialog.(Player, Any) -> Unit): InputDialogBuilder
 
-    infix fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): InputDialogBuilder
+    fun onCancel(onCancel: Dialog.(Player) -> OnDialogResponseListener.Result): InputDialogBuilder
 
 }

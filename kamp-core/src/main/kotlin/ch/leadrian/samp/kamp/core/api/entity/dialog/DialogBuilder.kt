@@ -5,29 +5,29 @@ import ch.leadrian.samp.kamp.core.api.text.TextKey
 
 interface DialogBuilder<B : DialogBuilder<B>> {
 
-    infix fun caption(text: String): B
+    fun caption(text: String): B
 
-    infix fun caption(textKey: TextKey): B
+    fun caption(textKey: TextKey): B
 
-    infix fun caption(supplier: (Player) -> String): B
+    fun caption(supplier: (Player) -> String): B
 
-    infix fun caption(supplier: DialogTextSupplier): B
+    fun caption(supplier: DialogTextSupplier): B
 
-    infix fun leftButton(text: String): B
+    fun leftButton(text: String): B
 
-    infix fun leftButton(textKey: TextKey): B
+    fun leftButton(textKey: TextKey): B
 
-    infix fun leftButton(supplier: (Player) -> String): B
+    fun leftButton(supplier: (Player) -> String): B
 
-    infix fun leftButton(supplier: DialogTextSupplier): B
+    fun leftButton(supplier: DialogTextSupplier): B
 
-    infix fun rightButton(text: String): B
+    fun rightButton(text: String): B
 
-    infix fun rightButton(textKey: TextKey): B
+    fun rightButton(textKey: TextKey): B
 
-    infix fun rightButton(supplier: (Player) -> String): B
+    fun rightButton(supplier: (Player) -> String): B
 
-    infix fun rightButton(supplier: DialogTextSupplier): B
+    fun rightButton(supplier: DialogTextSupplier): B
 
     fun build(): Dialog
 
