@@ -7,6 +7,9 @@ import ch.leadrian.samp.kamp.view.base.TextTransformer
 import ch.leadrian.samp.kamp.view.base.TextTransformers
 import ch.leadrian.samp.kamp.view.layout.ViewDimension
 
+/**
+ * Check out [material.io](https://material.io/tools/color/) for inspiration of color combination.
+ */
 @Suppress("MemberVisibilityCanBePrivate", "unused")
 open class MaterialDesignStyle(
         val colorPrimary: Color,
@@ -114,7 +117,7 @@ open class MaterialDesignStyle(
         get() = textColorPrimary
 
     override val textInputFieldColor: Color
-        get() = colorPrimaryLight
+        get() = colorSecondaryLight
 
     override val textInputTitleFont: TextDrawFont = TextDrawFont.FONT2
 

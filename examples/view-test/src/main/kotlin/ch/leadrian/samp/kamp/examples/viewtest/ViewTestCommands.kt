@@ -35,6 +35,7 @@ import ch.leadrian.samp.kamp.view.layout.percent
 import ch.leadrian.samp.kamp.view.layout.pixels
 import ch.leadrian.samp.kamp.view.navigation.viewNavigation
 import ch.leadrian.samp.kamp.view.screenresolution.screenResolution
+import ch.leadrian.samp.kamp.view.style.MaterialDesignStyles
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -572,6 +573,7 @@ constructor(
                     }
                 }
             }
+            view.style(MaterialDesignStyles.BLUE_AND_MAGENTA_LIGHT)
             player.viewNavigation.push(view)
         }
     }
