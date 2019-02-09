@@ -25,7 +25,7 @@ open class VerticalScrollBarView(
         this.colorSupplier.value(colorSupplier)
     }
 
-    private val backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.LIGHT_GRAY)
+    private val backgroundColorSupplier: ValueSupplier<Color> = ValueSupplier(Colors.WHITE)
 
     override var backgroundColor: Color by backgroundColorSupplier
 
