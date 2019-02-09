@@ -8,8 +8,6 @@ buildscript {
                 setUrl("https://plugins.gradle.org/m2/")
             }
         }
-
-        classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.3.11")
     }
 }
 

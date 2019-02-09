@@ -10,14 +10,16 @@ buildscript {
     }
 
     dependencies {
-        classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.3.11")
         classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.0-rc1")
     }
 }
 
 plugins {
-    java
     kotlin("jvm")
+    `java-library`
+    `maven-publish`
+    signing
+    `build-scan`
     jacoco
     id("org.jetbrains.dokka") version "0.9.17"
     id("com.palantir.git-version") version "0.12.0-rc2"
@@ -37,8 +39,8 @@ allprojects {
 }
 
 configure(subprojects - project("kamp-plugin")) {
-    apply(plugin = "java")
     apply(plugin = "kotlin")
+    apply(plugin = "java-library")
     apply(plugin = "jacoco")
     apply(plugin = "org.jetbrains.dokka")
 
@@ -90,4 +92,9 @@ configure(subprojects - project("kamp-plugin")) {
         testRuntimeOnly(group = "org.junit.jupiter", name = "junit-jupiter-engine", version = "5.3.2")
     }
 
+}
+
+buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
 }
