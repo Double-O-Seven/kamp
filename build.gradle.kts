@@ -11,7 +11,7 @@ buildscript {
 
     dependencies {
         classpath(group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version = "1.3.11")
-        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.3-7-g504ba10")
+        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.0-rc1")
     }
 }
 
