@@ -14,6 +14,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.service.DialogService
 import ch.leadrian.samp.kamp.core.api.service.VehicleService
+import ch.leadrian.samp.kamp.core.api.service.WorldService
 import ch.leadrian.samp.kamp.core.api.text.MessageSender
 import javax.inject.Inject
 
@@ -23,6 +24,7 @@ class AdminCommands
 constructor(
         private val dialogService: DialogService,
         private val vehicleService: VehicleService,
+        private val worldService: WorldService,
         private val messageSender: MessageSender
 ) : Commands() {
 
@@ -90,5 +92,10 @@ constructor(
                 )
             }
         }.show(player)
+    }
+
+    @Command
+    fun setTime(player: Player, time: Int) {
+        worldService.setTime(time)
     }
 }

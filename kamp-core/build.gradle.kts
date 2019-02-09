@@ -1,6 +1,5 @@
 plugins {
     `kotlin-kapt`
-    maven
     id("kamp-textkeygen")
     id("kamp-java-codegen")
     id("kamp-kotlin-codegen")

@@ -1,5 +1,6 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
+import ch.leadrian.samp.kamp.common.CommonModule
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
@@ -41,6 +42,10 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
     fun initialize() {
         callbackListenerManager.register(this)
     }
+
+    override fun getModules(): List<Module> = listOf(LvdmModule(), CommonModule())
+
+    override fun getPlugins(): List<Plugin> = emptyList()
 
     override fun onGameModeInit() {
         serverService.setGameModeText("Ventura's DM~MG")
@@ -1465,8 +1470,4 @@ class LvdmGameMode : GameMode(), OnGameModeInitListener {
             )
         }
     }
-
-    override fun getModules(): List<Module> = listOf(LvdmModule())
-
-    override fun getPlugins(): List<Plugin> = emptyList()
 }

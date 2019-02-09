@@ -1,6 +1,9 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
+import ch.leadrian.samp.kamp.common.neon.NeonColor
+import ch.leadrian.samp.kamp.common.neon.neons
 import ch.leadrian.samp.kamp.core.api.command.Commands
+import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Parameter
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
@@ -82,6 +85,16 @@ constructor(private val messageSender: MessageSender) : Commands() {
     @Command
     fun kill(player: Player) {
         player.health = 0f
+    }
+
+    @Command
+    @AccessCheck(
+            accessCheckers = [VehiclesOnlyCommandAccessChecker::class],
+            errorMessageTextKey = LvdmTextKeys.lvdm.command.error.vehicles.only_
+    )
+    fun neons(player: Player, @Parameter(nameTextKey = LvdmTextKeys.lvdm.command.neons.parameter.color_) neonColor: NeonColor) {
+        player.vehicle?.neons?.attach(neonColor)
+        messageSender.sendMessageToPlayer(player, Colors.WHITE, LvdmTextKeys.lvdm.command.neons.message)
     }
 
 }

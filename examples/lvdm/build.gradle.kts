@@ -2,6 +2,7 @@ import org.gradle.internal.os.OperatingSystem
 
 dependencies {
     implementation(project(":kamp-core"))
+    implementation(project(":kamp-common"))
     implementation(group = "org.slf4j", name = "slf4j-log4j12", version = "1.7.25")
 }
 

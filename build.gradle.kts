@@ -16,7 +16,7 @@ buildscript {
 
 plugins {
     kotlin("jvm")
-    `java-library`
+    java
     `maven-publish`
     signing
     `build-scan`
@@ -40,7 +40,7 @@ allprojects {
 
 configure(subprojects - project("kamp-plugin")) {
     apply(plugin = "kotlin")
-    apply(plugin = "java-library")
+    apply(plugin = "java")
     apply(plugin = "jacoco")
     apply(plugin = "org.jetbrains.dokka")
 
