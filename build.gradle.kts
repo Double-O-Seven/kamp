@@ -94,6 +94,73 @@ configure(subprojects - project("kamp-plugin")) {
 
 }
 
+configure(subprojects - project("kamp-plugin") - project("examples").allprojects) {
+    apply(plugin = "maven-publish")
+    apply(plugin = "signing")
+
+    tasks.register<Jar>("sourcesJar") {
+        from(sourceSets.main.get().allSource)
+        archiveClassifier.set("sources")
+    }
+
+    tasks.register<Jar>("javadocJar") {
+        from(tasks.dokka)
+        archiveClassifier.set("javadoc")
+    }
+
+    publishing {
+        publications {
+            create<MavenPublication>("mavenJava") {
+                from(components["java"])
+
+                artifact(tasks["sourcesJar"])
+                artifact(tasks["javadocJar"])
+
+                pom {
+                    name.set("Kamp for San Andreas Multiplayer: Component ${project.name}")
+                    description.set("Kotlin API for creating SA-MP gamemodes")
+                    url.set("https://github.com/Double-O-Seven/kamp")
+                    licenses {
+                        license {
+                            name.set("The Apache License, Version 2.0")
+                            url.set("http://www.apache.org/licenses/LICENSE-2.0.txt")
+                        }
+                    }
+                    developers {
+                        developer {
+                            id.set("Double-O-Seven")
+                            name.set("Adrian-Philipp Leuenberger")
+                            email.set("thewishwithin@gmail.com")
+                        }
+                    }
+                    scm {
+                        connection.set("scm:git:git://github.com/Double-O-Seven/kamp.git")
+                        developerConnection.set("scm:git:ssh://github.com/Double-O-Seven/kamp.git")
+                        url.set("https://github.com/Double-O-Seven/kamp")
+                    }
+                }
+            }
+        }
+        repositories {
+            maven {
+                val snapshotsRepoUrl = uri("https://oss.sonatype.org/content/repositories/snapshots/")
+                val releasesRepoUrl = uri("https://oss.sonatype.org/service/local/staging/deploy/maven2/")
+                url = if (version.toString().contains("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl
+                credentials {
+                    val ossrhUsername: String? by extra
+                    val ossrhPassword: String? by extra
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+    }
+
+    signing {
+        sign(publishing.publications["mavenJava"])
+    }
+}
+
 buildScan {
     termsOfServiceUrl = "https://gradle.com/terms-of-service"
     termsOfServiceAgree = "yes"
