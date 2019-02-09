@@ -110,9 +110,9 @@ open class ProgressBarView(
 
     override fun applyStyle(style: Style): Boolean {
         if (style is ProgressBarStyle) {
-            primaryColor = style.primaryColor
-            secondaryColor = style.secondaryColor
-            outlineColor = style.outlineColor
+            primaryColor = style.progressBarPrimaryColor
+            secondaryColor = style.progressBarSecondaryColor
+            outlineColor = style.progressBarOutlineColor
         }
         return super.applyStyle(style)
     }

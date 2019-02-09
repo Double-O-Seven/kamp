@@ -6,15 +6,15 @@ import ch.leadrian.samp.kamp.core.api.data.Colors
 interface ProgressBarStyle : Style {
 
     @JvmDefault
-    val primaryColor: Color
+    val progressBarPrimaryColor: Color
         get() = Colors.RED
 
     @JvmDefault
-    val secondaryColor: Color
+    val progressBarSecondaryColor: Color
         get() = Colors.DARK_RED
 
     @JvmDefault
-    val outlineColor: Color
+    val progressBarOutlineColor: Color
         get() = Colors.BLACK
 
 }

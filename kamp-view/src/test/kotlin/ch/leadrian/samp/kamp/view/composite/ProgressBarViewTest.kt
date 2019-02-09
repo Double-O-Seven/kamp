@@ -171,11 +171,11 @@ internal class ProgressBarViewTest {
     fun shouldApplyProgressBarStyle() {
         val style = object : ProgressBarStyle {
 
-            override val primaryColor: Color = Colors.PINK
+            override val progressBarPrimaryColor: Color = Colors.PINK
 
-            override val secondaryColor: Color = Colors.LIGHT_BLUE
+            override val progressBarSecondaryColor: Color = Colors.LIGHT_BLUE
 
-            override val outlineColor: Color = Colors.ORANGE
+            override val progressBarOutlineColor: Color = Colors.ORANGE
         }
 
         progressBarView.style(style)
