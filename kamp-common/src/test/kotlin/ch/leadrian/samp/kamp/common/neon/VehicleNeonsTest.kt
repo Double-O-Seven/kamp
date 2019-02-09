@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.core.api.data.mutableVector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.entity.MapObjectBase
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
+import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import io.mockk.Runs
 import io.mockk.clearMocks
 import io.mockk.every
@@ -210,6 +211,21 @@ internal class VehicleNeonsTest {
                     rotation = vector3DOf(0f, 0f, 0f)
             )
         }
+    }
+
+    @Test
+    fun shouldReturnVehicleNeonsAsExtension() {
+        val extensions = mockk<EntityExtensionContainer<Vehicle>> {
+            every { get(VehicleNeons::class) } returns vehicleNeons
+        }
+        val vehicle = mockk<Vehicle> {
+            every { this@mockk.extensions } returns extensions
+        }
+
+        val extension = vehicle.neons
+
+        assertThat(extension)
+                .isEqualTo(vehicleNeons)
     }
 
 }
