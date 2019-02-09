@@ -31,4 +31,24 @@ interface Style {
     val hugeMargin: ViewDimension
         get() = 32.pixels()
 
+    @JvmDefault
+    val tinyPadding: ViewDimension
+        get() = 2.pixels()
+
+    @JvmDefault
+    val smallPadding: ViewDimension
+        get() = 4.pixels()
+
+    @JvmDefault
+    val mediumPadding: ViewDimension
+        get() = 8.pixels()
+
+    @JvmDefault
+    val largePadding: ViewDimension
+        get() = 16.pixels()
+
+    @JvmDefault
+    val hugePadding: ViewDimension
+        get() = 32.pixels()
+
 }
