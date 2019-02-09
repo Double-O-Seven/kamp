@@ -4,6 +4,7 @@ import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerRegistry
 import ch.leadrian.samp.kamp.core.api.command.CommandParameterResolver
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.entity.Player
+import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionHookFactory
@@ -50,6 +51,11 @@ abstract class KampModule : AbstractModule() {
             Multibinder.newSetBinder(
                     binder(),
                     object : TypeLiteral<@JvmSuppressWildcards EntityExtensionFactory<Player, *>>() {})
+
+    protected fun newVehicleExtensionFactorySetBinder(): Multibinder<EntityExtensionFactory<Vehicle, *>> =
+            Multibinder.newSetBinder(
+                    binder(),
+                    object : TypeLiteral<@JvmSuppressWildcards EntityExtensionFactory<Vehicle, *>>() {})
 
     protected fun newSAMPNativeFunctionHookFactorySetBinder(): Multibinder<SAMPNativeFunctionHookFactory> =
             Multibinder.newSetBinder(binder(), SAMPNativeFunctionHookFactory::class.java)

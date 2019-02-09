@@ -6,6 +6,7 @@ internal class EntityExtensionModule : KampModule() {
 
     override fun configure() {
         newPlayerExtensionFactorySetBinder() // required in order to have at least an empty binding
+        newVehicleExtensionFactorySetBinder()
     }
 
 }
