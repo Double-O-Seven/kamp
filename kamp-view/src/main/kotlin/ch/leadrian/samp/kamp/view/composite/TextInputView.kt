@@ -259,20 +259,20 @@ open class TextInputView(
     override fun applyStyle(style: Style): Boolean {
         super.applyStyle(style)
         if (style is TextInputStyle) {
-            invalidInputColor = style.invalidInputColor
-            inputTextFont = style.inputTextFont
-            inputTextOutlineSize = style.inputTextOutlineSize
-            inputTextShadowSize = style.inputTextShadowSize
-            inputTextColor = style.inputTextColor
-            inputTextBackgroundColor = style.inputTextBackgroundColor
-            disabledInputTextColor = style.disabledInputTextColor
-            disabledInputTextBackgroundColor = style.disabledInputTextBackgroundColor
-            inputBackgroundColor = style.inputBackgroundColor
-            titleFont = style.titleFont
-            titleOutlineSize = style.titleOutlineSize
-            titleShadowSize = style.titleShadowSize
-            titleColor = style.titleColor
-            titleBackgroundColor = style.titleBackgroundColor
+            invalidInputColor = style.textInputErrorColor
+            inputTextFont = style.textInputFont
+            inputTextOutlineSize = style.textInputOutlineSize
+            inputTextShadowSize = style.textInputShadowSize
+            inputTextColor = style.textInputColor
+            inputTextBackgroundColor = style.textInputBackgroundColor
+            disabledInputTextColor = style.disabledTextInputColor
+            disabledInputTextBackgroundColor = style.disabledTextInputBackgroundColor
+            inputBackgroundColor = style.textInputFieldColor
+            titleFont = style.textInputTitleFont
+            titleOutlineSize = style.textInputTitleOutlineSize
+            titleShadowSize = style.textInputTitleShadowSize
+            titleColor = style.textInputTitleColor
+            titleBackgroundColor = style.textInputTitleBackgroundColor
         }
         return false
     }

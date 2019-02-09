@@ -209,33 +209,33 @@ internal class TextInputViewTest {
     fun shouldApplyTextInputStyle() {
         val style = object : TextInputStyle {
 
-            override val invalidInputColor: Color = Colors.PINK
+            override val textInputErrorColor: Color = Colors.PINK
 
-            override val inputTextFont: TextDrawFont = TextDrawFont.PRICEDOWN
+            override val textInputFont: TextDrawFont = TextDrawFont.PRICEDOWN
 
-            override val inputTextOutlineSize: Int = 3
+            override val textInputOutlineSize: Int = 3
 
-            override val inputTextShadowSize: Int = 2
+            override val textInputShadowSize: Int = 2
 
-            override val inputTextColor: Color = Colors.YELLOW
+            override val textInputColor: Color = Colors.YELLOW
 
-            override val inputTextBackgroundColor: Color = Colors.GREEN
+            override val textInputBackgroundColor: Color = Colors.GREEN
 
-            override val disabledInputTextColor: Color = Colors.LIGHT_YELLOW
+            override val disabledTextInputColor: Color = Colors.LIGHT_YELLOW
 
-            override val disabledInputTextBackgroundColor: Color = Colors.LIGHT_PINK
+            override val disabledTextInputBackgroundColor: Color = Colors.LIGHT_PINK
 
-            override val inputBackgroundColor: Color = Colors.LIGHT_BLUE
+            override val textInputFieldColor: Color = Colors.LIGHT_BLUE
 
-            override val titleFont: TextDrawFont = TextDrawFont.DIPLOMA
+            override val textInputTitleFont: TextDrawFont = TextDrawFont.DIPLOMA
 
-            override val titleOutlineSize: Int = 1
+            override val textInputTitleOutlineSize: Int = 1
 
-            override val titleShadowSize: Int = 4
+            override val textInputTitleShadowSize: Int = 4
 
-            override val titleColor: Color = Colors.PURPLE
+            override val textInputTitleColor: Color = Colors.PURPLE
 
-            override val titleBackgroundColor: Color = Colors.AQUAMARINE
+            override val textInputTitleBackgroundColor: Color = Colors.AQUAMARINE
         }
 
         textInputView.style(style)

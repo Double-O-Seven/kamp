@@ -7,57 +7,57 @@ import ch.leadrian.samp.kamp.core.api.data.Colors
 interface TextInputStyle : Style {
 
     @JvmDefault
-    val invalidInputColor: Color
+    val textInputErrorColor: Color
         get() = Colors.RED
 
     @JvmDefault
-    val inputTextFont: TextDrawFont
+    val textInputFont: TextDrawFont
         get() = TextDrawFont.FONT2
 
-    val inputTextOutlineSize: Int
+    val textInputOutlineSize: Int
         get() = 1
 
-    val inputTextShadowSize: Int
+    val textInputShadowSize: Int
         get() = 0
 
     @JvmDefault
-    val inputTextColor: Color
+    val textInputColor: Color
         get() = Colors.DARK_GRAY
 
     @JvmDefault
-    val inputTextBackgroundColor: Color
+    val textInputBackgroundColor: Color
         get() = Colors.LIGHT_GRAY
 
     @JvmDefault
-    val disabledInputTextColor: Color
+    val disabledTextInputColor: Color
         get() = Colors.GREY
 
     @JvmDefault
-    val disabledInputTextBackgroundColor: Color
+    val disabledTextInputBackgroundColor: Color
         get() = Colors.GREY
 
     @JvmDefault
-    val inputBackgroundColor: Color
+    val textInputFieldColor: Color
         get() = Colors.LIGHT_GRAY
 
     @JvmDefault
-    val titleFont: TextDrawFont
+    val textInputTitleFont: TextDrawFont
         get() = TextDrawFont.FONT2
 
     @JvmDefault
-    val titleOutlineSize: Int
+    val textInputTitleOutlineSize: Int
         get() = 0
 
     @JvmDefault
-    val titleShadowSize: Int
+    val textInputTitleShadowSize: Int
         get() = 0
 
     @JvmDefault
-    val titleColor: Color
+    val textInputTitleColor: Color
         get() = Colors.BLACK
 
     @JvmDefault
-    val titleBackgroundColor: Color
+    val textInputTitleBackgroundColor: Color
         get() = Colors.BLACK
 
 }
