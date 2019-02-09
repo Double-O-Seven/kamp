@@ -97,4 +97,13 @@ constructor(private val messageSender: MessageSender) : Commands() {
         messageSender.sendMessageToPlayer(player, Colors.WHITE, LvdmTextKeys.lvdm.command.neons.message)
     }
 
+    @Command
+    @AccessCheck(
+            accessCheckers = [VehiclesOnlyCommandAccessChecker::class],
+            errorMessageTextKey = LvdmTextKeys.lvdm.command.error.vehicles.only_
+    )
+    fun removeNeons(player: Player) {
+        player.vehicle?.neons?.remove()
+    }
+
 }
