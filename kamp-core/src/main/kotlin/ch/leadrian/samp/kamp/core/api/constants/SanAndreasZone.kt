@@ -22,7 +22,7 @@ internal constructor(
         override val textKey: TextKey,
         val area3D: Box,
         val isMainZone: Boolean
-) : HasTextKey {
+) : HasTextKey, Box by area3D {
 
     val area2D = rectangleOf(minX = area3D.minX, minY = area3D.minY, maxX = area3D.maxX, maxY = area3D.maxY)
 
