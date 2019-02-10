@@ -10,6 +10,12 @@ import ch.leadrian.samp.kamp.core.api.text.HasTextKey
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import java.util.Collections.unmodifiableList
 
+/**
+ * All default San Andreas locations.
+ *
+ * Each zone has an untranslated name, a text key for translation, a 3-dimensional bounding box
+ * and a flag that defines where the zone is a main zone (e.g. Los Santos or San Fierro).
+ */
 data class SanAndreasZone
 internal constructor(
         val name: String,
