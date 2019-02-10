@@ -7,8 +7,8 @@ import org.apache.commons.collections4.trie.PatriciaTrie
 enum class SkinModel(
         override val value: Int,
         val description: String,
-        val gender: SkinModel.Gender,
-        val race: SkinModel.Race
+        val gender: Gender,
+        val race: Race
 ) : ConstantValue<Int>, HasModelId {
 
     CJ(0, "Carl \"CJ\" Johnson", Gender.MALE, Race.BLACK),
