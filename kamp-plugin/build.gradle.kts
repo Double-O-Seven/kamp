@@ -10,6 +10,8 @@ plugins {
 
 val runtimePackageName = "ch.leadrian.samp.kamp.core.runtime"
 
+val amxRuntimePackageName = "ch.leadrian.samp.kamp.core.runtime.amx"
+
 val srcMainCppDir = "$projectDir/src/main/cpp"
 val srcMainHeadersDir = "$projectDir/src/main/headers"
 val idlFilesDir = "$projectDir/src/main/idl"
@@ -99,11 +101,35 @@ tasks {
         }
     }
 
+    val generateAmxNativeFunctionInvokerHeaderFile: Task by creating {
+        val kampCoreMainOutput = project(":kamp-core").the<JavaPluginConvention>().sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output
+        val amxNativeFunctionInvokerHeaderFile = "$srcMainHeadersDir/AmxNativeFunctionInvoker.h"
+
+        kampCoreMainOutput.classesDirs.files.forEach(inputs::dir)
+        outputs.file(amxNativeFunctionInvokerHeaderFile)
+
+        dependsOn(":kamp-core:classes")
+
+        doLast {
+            file(amxNativeFunctionInvokerHeaderFile).parentFile.mkdirs()
+            exec {
+                executable(Jvm.current().getExecutable("javah"))
+                args(
+                        "-o", amxNativeFunctionInvokerHeaderFile,
+                        "-classpath", kampCoreMainOutput.asPath,
+                        "-jni",
+                        "-verbose",
+                        "$amxRuntimePackageName.AmxNativeFunctionInvokerImpl"
+                )
+            }
+        }
+    }
+
     assemble {
-        dependsOn(generateSAMPNativeFunctionsHeaderFile, generateKampCppFiles)
+        dependsOn(generateSAMPNativeFunctionsHeaderFile, generateAmxNativeFunctionInvokerHeaderFile, generateKampCppFiles)
     }
 
     clean {
-        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile")
+        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile", "cleanGenerateAmxNativeFunctionInvokerImplHeaderFile")
     }
 }
