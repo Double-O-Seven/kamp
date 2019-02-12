@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.codegen.kotlin
 
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
+import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
@@ -16,6 +17,8 @@ import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.asClassName
 import java.io.File
 import java.io.Writer
+import java.time.LocalDateTime
+import javax.annotation.Generated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -68,11 +71,22 @@ internal class AmxNativeFunctionGenerator(
                 .superclass(baseAmxNativeFunctionClassName)
         parameterTypeVariables.forEach { typeSpecBuilder.addTypeVariable(it) }
         typeSpecBuilder
+                .addGeneratedAnnotation()
                 .addConstructor()
                 .addInvokeFunction()
                 .addFactoryType()
                 .addCompanionObject()
         return addType(typeSpecBuilder.build())
+    }
+
+    private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
+        return addAnnotation(
+                AnnotationSpec
+                        .builder(Generated::class)
+                        .addMember("value = [%S]", this@AmxNativeFunctionGenerator::class.java.name)
+                        .addMember("date = %S", LocalDateTime.now().toString())
+                        .build()
+        )
     }
 
     private fun TypeSpec.Builder.addConstructor(): TypeSpec.Builder {
@@ -201,7 +215,9 @@ internal class AmxNativeFunctionGenerator(
         val companionObjectBuilder = TypeSpec.companionObjectBuilder()
         companionObjectBuilder.addNonInlineInvokeFunction()
         if (parameterTypeVariables.isNotEmpty()) {
-            companionObjectBuilder.addInlineInvokeFunction()
+            companionObjectBuilder
+                    .addInlineInvokeFunction()
+                    .addInlineInvokeFunctionWithNameParameter()
         }
         return addType(companionObjectBuilder.build())
     }
@@ -248,6 +264,22 @@ internal class AmxNativeFunctionGenerator(
         nonInlineInvoke
                 .returns(returnType)
                 .addStatement(format, *parameterTypeVariables.toTypedArray())
+        return addFunction(nonInlineInvoke.build())
+    }
+
+    private fun TypeSpec.Builder.addInlineInvokeFunctionWithNameParameter(): TypeSpec.Builder {
+        val nameParameter = ParameterSpec.builder("name", String::class).build()
+        val nonInlineInvoke = FunSpec
+                .builder("invoke")
+                .addModifiers(KModifier.OPERATOR, KModifier.INLINE)
+                .addTypeVariables(parameterTypeVariables.map { it.copy(reified = true) })
+                .addParameter(nameParameter)
+        val arguments = mutableListOf<Any>(amxNativeFunctionClassName, nameParameter)
+        parameterTypeVariables.forEach { arguments.add(amxNativeFunctionParameterType) }
+        val format = "return %T(%N" + ", %T.get()".repeat(parameterTypeVariables.size) + ")"
+        nonInlineInvoke
+                .returns(parameterizedAmxNativeFunctionTypeName)
+                .addStatement(format, *arguments.toTypedArray())
         return addFunction(nonInlineInvoke.build())
     }
 
