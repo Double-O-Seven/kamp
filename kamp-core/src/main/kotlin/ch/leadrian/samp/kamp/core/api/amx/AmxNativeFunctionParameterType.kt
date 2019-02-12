@@ -24,7 +24,7 @@ sealed class AmxNativeFunctionParameterType<T : Any>(val type: KClass<T>) {
                 OutputStringType.type -> OutputStringType as AmxNativeFunctionParameterType<T>
                 ImmutableCellArrayType.type -> ImmutableCellArrayType as AmxNativeFunctionParameterType<T>
                 MutableCellArrayType.type -> MutableCellArrayType as AmxNativeFunctionParameterType<T>
-                else -> throw UnsupportedOperationException("Unsupported type: $type")
+                else -> throw IllegalArgumentException("Unsupported type: $type")
             }
         }
 
