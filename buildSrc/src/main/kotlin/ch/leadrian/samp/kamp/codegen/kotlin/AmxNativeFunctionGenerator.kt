@@ -134,6 +134,7 @@ internal class AmxNativeFunctionGenerator(
                 .parameterizedBy(String::class.asClassName(), parameterizedAmxNativeFunctionTypeName)
         return PropertySpec
                 .builder("createdInstances", hashMapType)
+                .addModifiers(KModifier.PRIVATE)
                 .initializer(CodeBlock.of("%T()", HashMap::class))
                 .build()
     }
