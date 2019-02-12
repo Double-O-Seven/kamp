@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.codegen.kotlin
 
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
 import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.KModifier
@@ -113,16 +114,28 @@ internal class AmxNativeFunctionGenerator(
     }
 
     private fun TypeSpec.Builder.addFactoryType(): TypeSpec.Builder {
+        val createdInstancesProperty = getCreatedInstancesProperty()
         val factoryTypeSpecBuilder = TypeSpec
                 .classBuilder("Factory")
+                .addProperty(createdInstancesProperty)
         parameterTypeVariables.forEach { factoryTypeSpecBuilder.addTypeVariable(it) }
         factoryTypeSpecBuilder
                 .addReadOnlyPropertyInterface()
                 .addFactoryConstructor()
         val parameterTypeProperties = getParameterTypeProperties()
         parameterTypeProperties.forEach { factoryTypeSpecBuilder.addProperty(it) }
-        factoryTypeSpecBuilder.addGetValueFunction(parameterTypeProperties)
+        factoryTypeSpecBuilder.addGetValueFunction(parameterTypeProperties, createdInstancesProperty)
         return addType(factoryTypeSpecBuilder.build())
+    }
+
+    private fun getCreatedInstancesProperty(): PropertySpec {
+        val hashMapType = HashMap::class
+                .asClassName()
+                .parameterizedBy(String::class.asClassName(), parameterizedAmxNativeFunctionTypeName)
+        return PropertySpec
+                .builder("createdInstances", hashMapType)
+                .initializer(CodeBlock.of("%T()", HashMap::class))
+                .build()
     }
 
     private fun getParameterTypeProperties(): List<PropertySpec> {
@@ -155,7 +168,10 @@ internal class AmxNativeFunctionGenerator(
         return primaryConstructor(funSpecBuilder.build())
     }
 
-    private fun TypeSpec.Builder.addGetValueFunction(parameterTypeProperties: List<PropertySpec>): TypeSpec.Builder {
+    private fun TypeSpec.Builder.addGetValueFunction(
+            parameterTypeProperties: List<PropertySpec>,
+            createdInstancesProperty: PropertySpec
+    ): TypeSpec.Builder {
         val thisRefParameter = ParameterSpec
                 .builder("thisRef", nullableAnyClassName)
                 .build()
@@ -164,7 +180,7 @@ internal class AmxNativeFunctionGenerator(
                 .build()
         val arguments = mutableListOf<Any>(amxNativeFunctionClassName)
         arguments.addAll(parameterTypeProperties)
-        val format = "return %T(property.name" + ", %N".repeat(parameterTypeVariables.size) + ")"
+        val format = "%T(property.name" + ", %N".repeat(parameterTypeVariables.size) + ")"
         addFunction(
                 FunSpec
                         .builder("getValue")
@@ -172,7 +188,9 @@ internal class AmxNativeFunctionGenerator(
                         .addParameter(thisRefParameter)
                         .addParameter(propertyParameter)
                         .returns(parameterizedAmxNativeFunctionTypeName)
+                        .beginControlFlow("return %N.computeIfAbsent(property.name)", createdInstancesProperty)
                         .addStatement(format, *arguments.toTypedArray())
+                        .endControlFlow()
                         .build()
         )
         return this
