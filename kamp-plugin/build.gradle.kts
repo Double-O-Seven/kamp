@@ -1,5 +1,4 @@
 import org.gradle.internal.jvm.Jvm
-import org.gradle.internal.os.OperatingSystem
 
 plugins {
     base
@@ -126,10 +125,18 @@ tasks {
     }
 
     assemble {
-        dependsOn(generateSAMPNativeFunctionsHeaderFile, generateAmxNativeFunctionInvokerHeaderFile, generateKampCppFiles)
+        dependsOn(
+                generateSAMPNativeFunctionsHeaderFile,
+                generateAmxNativeFunctionInvokerHeaderFile,
+                generateKampCppFiles
+        )
     }
 
     clean {
-        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile", "cleanGenerateAmxNativeFunctionInvokerHeaderFile")
+        dependsOn(
+                "cleanGenerateKampCppFiles",
+                "cleanGenerateSAMPNativeFunctionsHeaderFile",
+                "cleanGenerateAmxNativeFunctionInvokerHeaderFile"
+        )
     }
 }

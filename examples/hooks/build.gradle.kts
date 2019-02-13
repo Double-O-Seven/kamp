@@ -1,5 +1,3 @@
-import org.gradle.internal.os.OperatingSystem
-
 dependencies {
     implementation(project(":kamp-core"))
     implementation(group = "org.slf4j", name = "slf4j-simple", version = "1.7.25")

@@ -1,5 +1,3 @@
-import org.gradle.internal.os.OperatingSystem
-
 dependencies {
     implementation(project(":kamp-core"))
     implementation(project(":kamp-common"))
