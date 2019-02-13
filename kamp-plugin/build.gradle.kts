@@ -130,6 +130,6 @@ tasks {
     }
 
     clean {
-        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile", "cleanGenerateAmxNativeFunctionInvokerImplHeaderFile")
+        dependsOn("cleanGenerateKampCppFiles", "cleanGenerateSAMPNativeFunctionsHeaderFile", "cleanGenerateAmxNativeFunctionInvokerHeaderFile")
     }
 }
