@@ -9,7 +9,7 @@ data class VehicleColor internal constructor(
 ) : ConstantValue<Int> {
 
     companion object : ConstantValueRegistry<Int, VehicleColor>(
-            *arrayOf(
+            arrayOf(
                     colorOf(0x000000FF),
                     colorOf(0xF5F5F5FF.toInt()),
                     colorOf(0x2A77A1FF),

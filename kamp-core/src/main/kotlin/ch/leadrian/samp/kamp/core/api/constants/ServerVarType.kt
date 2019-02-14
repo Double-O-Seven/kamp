@@ -6,6 +6,6 @@ enum class ServerVarType(override val value: Int) : ConstantValue<Int> {
     STRING(SAMPConstants.SERVER_VARTYPE_STRING),
     FLOAT(SAMPConstants.SERVER_VARTYPE_FLOAT);
 
-    companion object : ConstantValueRegistry<Int, ServerVarType>(*ServerVarType.values())
+    companion object : ConstantValueRegistry<Int, ServerVarType>(ServerVarType.values())
 
 }

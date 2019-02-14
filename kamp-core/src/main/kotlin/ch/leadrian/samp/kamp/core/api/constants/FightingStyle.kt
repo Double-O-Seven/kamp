@@ -10,5 +10,5 @@ enum class FightingStyle(override val value: Int) : ConstantValue<Int> {
     GRABKICK(SAMPConstants.FIGHT_STYLE_GRABKICK),
     ELBOW(SAMPConstants.FIGHT_STYLE_ELBOW);
 
-    companion object : ConstantValueRegistry<Int, FightingStyle>(*FightingStyle.values())
+    companion object : ConstantValueRegistry<Int, FightingStyle>(FightingStyle.values())
 }

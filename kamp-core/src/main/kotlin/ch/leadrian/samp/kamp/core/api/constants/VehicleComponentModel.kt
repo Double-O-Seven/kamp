@@ -769,5 +769,5 @@ enum class VehicleComponentModel(
 
     override val modelId: Int = value
 
-    companion object : ConstantValueRegistry<Int, VehicleComponentModel>(*VehicleComponentModel.values())
+    companion object : ConstantValueRegistry<Int, VehicleComponentModel>(VehicleComponentModel.values())
 }

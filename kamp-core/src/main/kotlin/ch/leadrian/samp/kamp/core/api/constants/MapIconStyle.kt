@@ -6,6 +6,6 @@ enum class MapIconStyle(override val value: Int) : ConstantValue<Int> {
     LOCAL_CHECKPOINT(SAMPConstants.MAPICON_LOCAL_CHECKPOINT),
     GLOBAL_CHECKPOINT(SAMPConstants.MAPICON_GLOBAL_CHECKPOINT);
 
-    companion object : ConstantValueRegistry<Int, MapIconStyle>(*MapIconStyle.values())
+    companion object : ConstantValueRegistry<Int, MapIconStyle>(MapIconStyle.values())
 
 }

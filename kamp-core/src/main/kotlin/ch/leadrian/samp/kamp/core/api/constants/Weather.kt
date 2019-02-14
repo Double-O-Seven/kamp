@@ -27,5 +27,5 @@ enum class Weather(override val value: Int) : ConstantValue<Int> {
     SANDSTORM_DESERT(19),
     UNDERWATER(20);
 
-    companion object : ConstantValueRegistry<Int, Weather>(*Weather.values())
+    companion object : ConstantValueRegistry<Int, Weather>(Weather.values())
 }

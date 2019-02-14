@@ -11,6 +11,6 @@ enum class VehicleModelInfoType(override val value: Int) : ConstantValue<Int> {
     FRONT_BUMPER_Z(SAMPConstants.VEHICLE_MODEL_INFO_FRONT_BUMPER_Z),
     REAR_BUMPER_Z(SAMPConstants.VEHICLE_MODEL_INFO_REAR_BUMPER_Z);
 
-    companion object : ConstantValueRegistry<Int, VehicleModelInfoType>(*VehicleModelInfoType.values())
+    companion object : ConstantValueRegistry<Int, VehicleModelInfoType>(VehicleModelInfoType.values())
 
 }

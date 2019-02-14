@@ -22,5 +22,5 @@ enum class CameraMode(override val value: Int) : ConstantValue<Int> {
     CHASE_CAMERA_HORIZONTAL_FLY_BY_AIRCRAFT(63),
     CHASE_CAMERA_FOCUS_ON_PILOT(64);
 
-    companion object : ConstantValueRegistry<Int, CameraMode>(*CameraMode.values())
+    companion object : ConstantValueRegistry<Int, CameraMode>(CameraMode.values())
 }

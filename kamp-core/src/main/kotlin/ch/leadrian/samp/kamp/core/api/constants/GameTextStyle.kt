@@ -11,5 +11,5 @@ enum class GameTextStyle(override val value: Int) : ConstantValue<Int> {
     BANK_GOTHIC_CENTER_3_SECONDS(5),
     PRICEDOWN_TOP_CENTER(6);
 
-    companion object : ConstantValueRegistry<Int, GameTextStyle>(*GameTextStyle.values())
+    companion object : ConstantValueRegistry<Int, GameTextStyle>(GameTextStyle.values())
 }

@@ -5,6 +5,6 @@ enum class SpectateType(override val value: Int) : ConstantValue<Int> {
     FIXED(SAMPConstants.SPECTATE_MODE_FIXED),
     SIDE(SAMPConstants.SPECTATE_MODE_SIDE);
 
-    companion object : ConstantValueRegistry<Int, SpectateType>(*SpectateType.values())
+    companion object : ConstantValueRegistry<Int, SpectateType>(SpectateType.values())
 
 }

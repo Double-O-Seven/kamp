@@ -13,6 +13,6 @@ enum class WeaponSkill(override val value: Int) : ConstantValue<Int> {
     M4(SAMPConstants.WEAPONSKILL_M4),
     SNIPER_RIFLE(SAMPConstants.WEAPONSKILL_SNIPERRIFLE);
 
-    companion object : ConstantValueRegistry<Int, WeaponSkill>(*WeaponSkill.values())
+    companion object : ConstantValueRegistry<Int, WeaponSkill>(WeaponSkill.values())
 
 }

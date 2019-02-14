@@ -6,6 +6,6 @@ enum class PlayerVarType(override val value: Int) : ConstantValue<Int> {
     STRING(SAMPConstants.PLAYER_VARTYPE_STRING),
     FLOAT(SAMPConstants.PLAYER_VARTYPE_FLOAT);
 
-    companion object : ConstantValueRegistry<Int, PlayerVarType>(*PlayerVarType.values())
+    companion object : ConstantValueRegistry<Int, PlayerVarType>(PlayerVarType.values())
 
 }

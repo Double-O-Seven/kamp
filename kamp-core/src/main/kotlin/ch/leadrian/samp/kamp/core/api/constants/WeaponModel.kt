@@ -462,7 +462,7 @@ enum class WeaponModel(
             baseDamage = 1f
     );
 
-    companion object : ConstantValueRegistry<Int, WeaponModel>(*WeaponModel.values()) {
+    companion object : ConstantValueRegistry<Int, WeaponModel>(WeaponModel.values()) {
 
         private val weaponModelsByName = PatriciaTrie<WeaponModel>()
 

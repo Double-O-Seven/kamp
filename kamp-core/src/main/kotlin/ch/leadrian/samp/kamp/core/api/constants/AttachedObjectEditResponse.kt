@@ -4,6 +4,7 @@ enum class AttachedObjectEditResponse(override val value: Int) : ConstantValue<I
     CANCEL(0),
     SAVE(1);
 
-    companion object : ConstantValueRegistry<Int, AttachedObjectEditResponse>(*AttachedObjectEditResponse.values())
+    companion object :
+            ConstantValueRegistry<Int, AttachedObjectEditResponse>(AttachedObjectEditResponse.values())
 
 }

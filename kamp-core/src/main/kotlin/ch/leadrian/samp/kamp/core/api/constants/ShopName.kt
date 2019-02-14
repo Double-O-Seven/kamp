@@ -22,5 +22,5 @@ enum class ShopName(
 
     override val value: String = name
 
-    companion object : ConstantValueRegistry<String, ShopName>(*ShopName.values())
+    companion object : ConstantValueRegistry<String, ShopName>(ShopName.values())
 }

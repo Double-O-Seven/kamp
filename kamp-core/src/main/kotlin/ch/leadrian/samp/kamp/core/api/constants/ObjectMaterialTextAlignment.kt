@@ -5,5 +5,5 @@ enum class ObjectMaterialTextAlignment(override val value: Int) : ConstantValue<
     RIGHT(SAMPConstants.OBJECT_MATERIAL_TEXT_ALIGN_RIGHT),
     CENTER(SAMPConstants.OBJECT_MATERIAL_TEXT_ALIGN_CENTER);
 
-    companion object : ConstantValueRegistry<Int, ObjectMaterialTextAlignment>(*ObjectMaterialTextAlignment.values())
+    companion object : ConstantValueRegistry<Int, ObjectMaterialTextAlignment>(ObjectMaterialTextAlignment.values())
 }

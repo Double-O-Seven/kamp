@@ -164,5 +164,5 @@ enum class MapIconType(override val value: Int, vararg defaultCoordinates: Vecto
 
     val defaultCoordinates: List<Vector3D> = unmodifiableList(defaultCoordinates.toList())
 
-    companion object : ConstantValueRegistry<Int, MapIconType>(*MapIconType.values())
+    companion object : ConstantValueRegistry<Int, MapIconType>(MapIconType.values())
 }

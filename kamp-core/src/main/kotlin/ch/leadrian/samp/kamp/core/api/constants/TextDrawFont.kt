@@ -10,6 +10,6 @@ enum class TextDrawFont(override val value: Int) : ConstantValue<Int> {
     SPRITE_DRAW(SAMPConstants.TEXT_DRAW_FONT_SPRITE_DRAW),
     MODEL_PREVIEW(SAMPConstants.TEXT_DRAW_FONT_MODEL_PREVIEW);
 
-    companion object : ConstantValueRegistry<Int, TextDrawFont>(*TextDrawFont.values())
+    companion object : ConstantValueRegistry<Int, TextDrawFont>(TextDrawFont.values())
 
 }

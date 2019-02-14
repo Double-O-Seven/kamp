@@ -11,5 +11,5 @@ enum class ConnectionStatus(override val value: Int) : ConstantValue<Int> {
     SET_ENCRYPTION_ON_MULTIPLE_16_BYTE_PACKET(7),
     CONNECTED(8);
 
-    companion object : ConstantValueRegistry<Int, ConnectionStatus>(*ConnectionStatus.values())
+    companion object : ConstantValueRegistry<Int, ConnectionStatus>(ConnectionStatus.values())
 }

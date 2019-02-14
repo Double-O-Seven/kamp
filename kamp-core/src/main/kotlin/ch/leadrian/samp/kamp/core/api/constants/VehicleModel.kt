@@ -1505,7 +1505,7 @@ enum class VehicleModel(
 
     override val modelId: Int = value
 
-    companion object : ConstantValueRegistry<Int, VehicleModel>(*VehicleModel.values()) {
+    companion object : ConstantValueRegistry<Int, VehicleModel>(VehicleModel.values()) {
 
         private val vehicleModelsByName = PatriciaTrie<VehicleModel>()
 

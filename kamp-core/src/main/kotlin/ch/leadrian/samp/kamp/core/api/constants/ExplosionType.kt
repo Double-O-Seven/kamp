@@ -147,5 +147,5 @@ enum class ExplosionType(
         HUGE
     }
 
-    companion object : ConstantValueRegistry<Int, ExplosionType>(*ExplosionType.values())
+    companion object : ConstantValueRegistry<Int, ExplosionType>(ExplosionType.values())
 }

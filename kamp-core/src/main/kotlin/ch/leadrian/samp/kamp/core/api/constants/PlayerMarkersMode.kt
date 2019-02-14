@@ -5,6 +5,6 @@ enum class PlayerMarkersMode(override val value: Int) : ConstantValue<Int> {
     GLOBAL(SAMPConstants.PLAYER_MARKERS_MODE_GLOBAL),
     STREAMED(SAMPConstants.PLAYER_MARKERS_MODE_STREAMED);
 
-    companion object : ConstantValueRegistry<Int, PlayerMarkersMode>(*PlayerMarkersMode.values())
+    companion object : ConstantValueRegistry<Int, PlayerMarkersMode>(PlayerMarkersMode.values())
 
 }

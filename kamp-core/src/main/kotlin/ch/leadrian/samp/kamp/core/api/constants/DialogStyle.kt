@@ -10,6 +10,6 @@ enum class DialogStyle(override val value: Int) : ConstantValue<Int> {
     TABLIST(SAMPConstants.DIALOG_STYLE_TABLIST),
     TABLIST_HEADERS(SAMPConstants.DIALOG_STYLE_TABLIST_HEADERS);
 
-    companion object : ConstantValueRegistry<Int, DialogStyle>(*DialogStyle.values())
+    companion object : ConstantValueRegistry<Int, DialogStyle>(DialogStyle.values())
 
 }

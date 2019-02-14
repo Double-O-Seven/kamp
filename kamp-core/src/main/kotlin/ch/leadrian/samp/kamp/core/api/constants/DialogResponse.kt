@@ -4,5 +4,5 @@ enum class DialogResponse(override val value: Int, val isCancelButton: Boolean) 
     LEFT_BUTTON(1, false),
     RIGHT_BUTTON(0, true);
 
-    companion object : ConstantValueRegistry<Int, DialogResponse>(*DialogResponse.values())
+    companion object : ConstantValueRegistry<Int, DialogResponse>(DialogResponse.values())
 }

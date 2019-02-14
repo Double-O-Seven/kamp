@@ -5,5 +5,5 @@ enum class DisconnectReason(override val value: Int) : ConstantValue<Int> {
     QUIT(1),
     KICK(2);
 
-    companion object : ConstantValueRegistry<Int, DisconnectReason>(*DisconnectReason.values())
+    companion object : ConstantValueRegistry<Int, DisconnectReason>(DisconnectReason.values())
 }

@@ -18,6 +18,6 @@ enum class CarModType(override val value: Int) : ConstantValue<Int> {
     VENT_RIGHT(SAMPConstants.CARMODTYPE_VENT_RIGHT),
     VENT_LEFT(SAMPConstants.CARMODTYPE_VENT_LEFT);
 
-    companion object : ConstantValueRegistry<Int, CarModType>(*CarModType.values())
+    companion object : ConstantValueRegistry<Int, CarModType>(CarModType.values())
 
 }

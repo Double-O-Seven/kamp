@@ -5,5 +5,5 @@ enum class VehicleLightsState(override val value: Int) : ConstantValue<Int> {
     OFF(0),
     UNSET(-1);
 
-    companion object : ConstantValueRegistry<Int, VehicleLightsState>(*VehicleLightsState.values())
+    companion object : ConstantValueRegistry<Int, VehicleLightsState>(VehicleLightsState.values())
 }

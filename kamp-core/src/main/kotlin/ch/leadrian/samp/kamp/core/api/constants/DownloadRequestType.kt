@@ -5,5 +5,5 @@ enum class DownloadRequestType(override val value: Int) : ConstantValue<Int> {
     MODEL_FILE(SAMPConstants.DOWNLOAD_REQUEST_MODEL_FILE),
     TEXTURE_FILE(SAMPConstants.DOWNLOAD_REQUEST_TEXTURE_FILE);
 
-    companion object : ConstantValueRegistry<Int, DownloadRequestType>(*DownloadRequestType.values())
+    companion object : ConstantValueRegistry<Int, DownloadRequestType>(DownloadRequestType.values())
 }

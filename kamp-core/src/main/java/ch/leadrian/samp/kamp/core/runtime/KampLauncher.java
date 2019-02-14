@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.Properties;
 
 import static java.nio.charset.StandardCharsets.ISO_8859_1;
@@ -38,7 +37,7 @@ public class KampLauncher {
         try {
             ClassPathExtender.extendClassPath(JARS_DIRECTORY);
             Properties properties = loadConfigProperties();
-            System.loadLibrary(Objects.requireNonNull(properties.getProperty(PLUGIN_NAME_PROPERTY)));
+            System.loadLibrary(requireNonNull(properties.getProperty(PLUGIN_NAME_PROPERTY)));
             server = Server.start(new SAMPNativeFunctionExecutorImpl(), properties, DATA_DIRECTORY);
         } catch (Exception e) {
             log.error("Failed to launch server", e);

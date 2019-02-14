@@ -5,5 +5,5 @@ enum class TextDrawAlignment(override val value: Int) : ConstantValue<Int> {
     CENTERED(2),
     RIGHT(3);
 
-    companion object : ConstantValueRegistry<Int, TextDrawAlignment>(*TextDrawAlignment.values())
+    companion object : ConstantValueRegistry<Int, TextDrawAlignment>(TextDrawAlignment.values())
 }

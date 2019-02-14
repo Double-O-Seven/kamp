@@ -7,6 +7,6 @@ enum class BulletHitType(override val value: Int) : ConstantValue<Int> {
     OBJECT(SAMPConstants.BULLET_HIT_TYPE_OBJECT),
     PLAYER_OBJECT(SAMPConstants.BULLET_HIT_TYPE_PLAYER_OBJECT);
 
-    companion object : ConstantValueRegistry<Int, BulletHitType>(*BulletHitType.values())
+    companion object : ConstantValueRegistry<Int, BulletHitType>(BulletHitType.values())
 
 }

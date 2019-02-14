@@ -5,6 +5,6 @@ enum class ObjectEditResponse(override val value: Int) : ConstantValue<Int> {
     FINAL(SAMPConstants.EDIT_RESPONSE_FINAL),
     UPDATE(SAMPConstants.EDIT_RESPONSE_UPDATE);
 
-    companion object : ConstantValueRegistry<Int, ObjectEditResponse>(*ObjectEditResponse.values())
+    companion object : ConstantValueRegistry<Int, ObjectEditResponse>(ObjectEditResponse.values())
 
 }

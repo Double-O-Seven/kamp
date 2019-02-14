@@ -9,6 +9,6 @@ enum class BodyPart(override val value: Int) : ConstantValue<Int> {
     RIGHT_LEG(SAMPConstants.BODY_PART_RIGHT_LEG),
     HEAD(SAMPConstants.BODY_PART_HEAD);
 
-    companion object : ConstantValueRegistry<Int, BodyPart>(*BodyPart.values())
+    companion object : ConstantValueRegistry<Int, BodyPart>(BodyPart.values())
 
 }

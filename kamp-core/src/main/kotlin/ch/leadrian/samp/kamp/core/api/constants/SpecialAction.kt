@@ -24,6 +24,6 @@ enum class SpecialAction(override val value: Int) : ConstantValue<Int> {
     CARRY(SAMPConstants.SPECIAL_ACTION_CARRY),
     PISSING(SAMPConstants.SPECIAL_ACTION_PISSING);
 
-    companion object : ConstantValueRegistry<Int, SpecialAction>(*SpecialAction.values())
+    companion object : ConstantValueRegistry<Int, SpecialAction>(SpecialAction.values())
 
 }

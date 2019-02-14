@@ -337,7 +337,7 @@ enum class SkinModel(
         ASIAN
     }
 
-    companion object : ConstantValueRegistry<Int, SkinModel>(*SkinModel.values()) {
+    companion object : ConstantValueRegistry<Int, SkinModel>(SkinModel.values()) {
 
         private val skinModelsByName = PatriciaTrie<SkinModel>()
 

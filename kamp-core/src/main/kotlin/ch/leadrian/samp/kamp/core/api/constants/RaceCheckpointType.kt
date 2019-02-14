@@ -11,5 +11,5 @@ enum class RaceCheckpointType(override val value: Int) : ConstantValue<Int> {
     AIR_SWINGS_DOWN_AND_UP(7),
     AIR_SWINGS_UP_AND_DOWN(8);
 
-    companion object : ConstantValueRegistry<Int, RaceCheckpointType>(*RaceCheckpointType.values())
+    companion object : ConstantValueRegistry<Int, RaceCheckpointType>(RaceCheckpointType.values())
 }

@@ -5,5 +5,5 @@ enum class VehicleDoorLockState(override val value: Int) : ConstantValue<Int> {
     UNLOCKED(0),
     UNSET(-1);
 
-    companion object : ConstantValueRegistry<Int, VehicleDoorLockState>(*VehicleDoorLockState.values())
+    companion object : ConstantValueRegistry<Int, VehicleDoorLockState>(VehicleDoorLockState.values())
 }

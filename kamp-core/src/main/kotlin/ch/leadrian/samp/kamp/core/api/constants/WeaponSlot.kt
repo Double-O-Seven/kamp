@@ -18,5 +18,5 @@ enum class WeaponSlot(override val value: Int) : ConstantValue<Int> {
     WEARABLE(11),
     DETONATOR(12);
 
-    companion object : ConstantValueRegistry<Int, WeaponSlot>(*WeaponSlot.values())
+    companion object : ConstantValueRegistry<Int, WeaponSlot>(WeaponSlot.values())
 }

@@ -5,5 +5,5 @@ enum class VehicleBonnetState(override val value: Int) : ConstantValue<Int> {
     CLOSED(0),
     UNSET(-1);
 
-    companion object : ConstantValueRegistry<Int, VehicleBonnetState>(*VehicleBonnetState.values())
+    companion object : ConstantValueRegistry<Int, VehicleBonnetState>(VehicleBonnetState.values())
 }

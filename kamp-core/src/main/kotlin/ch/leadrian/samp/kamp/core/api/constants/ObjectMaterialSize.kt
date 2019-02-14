@@ -16,5 +16,5 @@ enum class ObjectMaterialSize(override val value: Int) : ConstantValue<Int> {
     SIZE_512X256(SAMPConstants.OBJECT_MATERIAL_SIZE_512x256),
     SIZE_512X512(SAMPConstants.OBJECT_MATERIAL_SIZE_512x512);
 
-    companion object : ConstantValueRegistry<Int, ObjectMaterialSize>(*ObjectMaterialSize.values())
+    companion object : ConstantValueRegistry<Int, ObjectMaterialSize>(ObjectMaterialSize.values())
 }

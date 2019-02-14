@@ -5,6 +5,6 @@ enum class VehicleParamsType(override val value: Int) : ConstantValue<Int> {
     OFF(SAMPConstants.VEHICLE_PARAMS_OFF),
     ON(SAMPConstants.VEHICLE_PARAMS_ON);
 
-    companion object : ConstantValueRegistry<Int, VehicleParamsType>(*VehicleParamsType.values())
+    companion object : ConstantValueRegistry<Int, VehicleParamsType>(VehicleParamsType.values())
 
 }

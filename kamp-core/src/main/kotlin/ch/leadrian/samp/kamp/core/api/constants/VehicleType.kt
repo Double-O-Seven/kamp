@@ -17,5 +17,5 @@ enum class VehicleType(override val value: Int) : ConstantValue<Int> {
     HELICOPTER(8),
     TANK(9);
 
-    companion object : ConstantValueRegistry<Int, VehicleType>(*VehicleType.values())
+    companion object : ConstantValueRegistry<Int, VehicleType>(VehicleType.values())
 }

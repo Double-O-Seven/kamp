@@ -25,6 +25,6 @@ enum class CrimeReport(
     CODE_10_91_A(12, "Pick up prisoner/subject"),
     CODE_10_91_B(16, "Pick up prisoner/subject");
 
-    companion object : ConstantValueRegistry<Int, CrimeReport>(*CrimeReport.values())
+    companion object : ConstantValueRegistry<Int, CrimeReport>(CrimeReport.values())
 
 }

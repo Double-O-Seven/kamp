@@ -21,6 +21,6 @@ enum class Bone(override val value: Int) : ConstantValue<Int> {
     NECK(17),
     JAW(18);
 
-    companion object : ConstantValueRegistry<Int, Bone>(*Bone.values())
+    companion object : ConstantValueRegistry<Int, Bone>(Bone.values())
 
 }

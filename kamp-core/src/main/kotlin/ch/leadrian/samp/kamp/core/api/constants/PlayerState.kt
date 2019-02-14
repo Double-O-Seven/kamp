@@ -12,6 +12,6 @@ enum class PlayerState(override val value: Int) : ConstantValue<Int> {
     SPAWNED(SAMPConstants.PLAYER_STATE_SPAWNED),
     SPECTATING(SAMPConstants.PLAYER_STATE_SPECTATING);
 
-    companion object : ConstantValueRegistry<Int, PlayerState>(*PlayerState.values())
+    companion object : ConstantValueRegistry<Int, PlayerState>(PlayerState.values())
 
 }
