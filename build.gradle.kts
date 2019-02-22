@@ -25,6 +25,12 @@ plugins {
     id("com.palantir.git-version") version "0.12.0-rc2"
 }
 
+val codacyCoverageReport: Configuration = configurations.create("codacyCoverageReport")
+
+dependencies {
+    codacyCoverageReport(group = "com.codacy", name = "codacy-coverage-reporter", version = "5.0.310")
+}
+
 val gitVersion: Closure<String> by extra
 
 jacoco {
@@ -57,6 +63,19 @@ tasks {
         reports {
             xml.isEnabled = true
         }
+    }
+
+    "codacyCoverageReport"(JavaExec::class) {
+        dependsOn(jacocoTestReport)
+        main = "com.codacy.CodacyCoverageReporter"
+        classpath = codacyCoverageReport
+        args(
+                "report",
+                "-l",
+                "Java",
+                "-r",
+                "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+        )
     }
 }
 
