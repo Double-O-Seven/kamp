@@ -58,9 +58,6 @@ tasks {
             xml.isEnabled = true
         }
     }
-    test {
-        finalizedBy(jacocoTestReport)
-    }
 }
 
 configure(subprojects - project("kamp-plugin")) {
@@ -88,8 +85,6 @@ configure(subprojects - project("kamp-plugin")) {
 
         test {
             useJUnitPlatform()
-
-            finalizedBy(jacocoTestReport)
         }
 
         dokka {
