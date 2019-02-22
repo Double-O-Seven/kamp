@@ -83,6 +83,7 @@ class CallbackReceiverGenerator {
         val functionName = listenerDefinition.method.getAnnotation(InlineCallback::class.java).name
         val funSpec = FunSpec
                 .builder(functionName)
+                .addGeneratedAnnotation(this@CallbackReceiverGenerator::class)
                 .addModifiers(KModifier.INLINE)
                 .receiver(className)
                 .addParameter(parameterSpec)
@@ -101,11 +102,12 @@ class CallbackReceiverGenerator {
     ): ParameterSpec {
         return ParameterSpec
                 .builder(
-                        "action", LambdaTypeName.get(
-                        receiver = actionReceiver.asType().toKotlinTypeName(),
-                        parameters = *actionParameterTypes,
-                        returnType = listenerDefinition.method.returnType.asTypeName()
-                )
+                        "action",
+                        LambdaTypeName.get(
+                                receiver = actionReceiver.asType().toKotlinTypeName(),
+                                parameters = *actionParameterTypes,
+                                returnType = listenerDefinition.method.returnType.asTypeName()
+                        )
                 )
                 .addModifiers(KModifier.CROSSINLINE)
                 .build()
@@ -118,6 +120,7 @@ class CallbackReceiverGenerator {
     ): TypeSpec {
         return TypeSpec
                 .anonymousClassBuilder()
+                .addGeneratedAnnotation(this@CallbackReceiverGenerator::class)
                 .addSuperinterface(listenerDefinition.type)
                 .addAnonymousListenerCallbackFunction(listenerDefinition, actionReceiver, actionParameters)
                 .build()

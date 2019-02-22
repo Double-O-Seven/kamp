@@ -7,7 +7,6 @@ import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
 import ch.leadrian.samp.kamp.codegen.isOutParameter
-import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
@@ -19,8 +18,6 @@ import com.squareup.kotlinpoet.TypeSpec
 import com.squareup.kotlinpoet.TypeVariableName
 import java.io.File
 import java.io.Writer
-import java.time.LocalDateTime
-import javax.annotation.Generated
 
 internal class SAMPNativeFunctionExecutorImplKtGenerator(
         private val functions: List<Function>,
@@ -83,21 +80,11 @@ internal class SAMPNativeFunctionExecutorImplKtGenerator(
                 .classBuilder("SAMPNativeFunctionExecutorImpl")
                 .addSuperinterface(ClassName(javaPackageName, "SAMPNativeFunctionExecutor"))
                 .addModifiers(KModifier.PUBLIC)
-                .addGeneratedAnnotation()
+                .addGeneratedAnnotation(this@SAMPNativeFunctionExecutorImplKtGenerator::class)
                 .addProperty(mainThreadPropertySpec)
                 .addProperty(isInitializedPropertySpec)
                 .addNativeFunctions()
         return addType(typeSpecBuilder.build())
-    }
-
-    private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class)
-                        .addMember("value = [%S]", this@SAMPNativeFunctionExecutorImplKtGenerator::class.java.name)
-                        .addMember("date = %S", LocalDateTime.now().toString())
-                        .build()
-        )
     }
 
     private fun TypeSpec.Builder.addNativeFunctions(): TypeSpec.Builder {

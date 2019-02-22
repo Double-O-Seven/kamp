@@ -1,7 +1,6 @@
 package ch.leadrian.samp.kamp.codegen.kotlin
 
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
-import com.squareup.kotlinpoet.AnnotationSpec
 import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.CodeBlock
 import com.squareup.kotlinpoet.FileSpec
@@ -17,8 +16,6 @@ import com.squareup.kotlinpoet.TypeVariableName
 import com.squareup.kotlinpoet.asClassName
 import java.io.File
 import java.io.Writer
-import java.time.LocalDateTime
-import javax.annotation.Generated
 import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
@@ -71,22 +68,12 @@ internal class AmxNativeFunctionGenerator(
                 .superclass(baseAmxNativeFunctionClassName)
         parameterTypeVariables.forEach { typeSpecBuilder.addTypeVariable(it) }
         typeSpecBuilder
-                .addGeneratedAnnotation()
+                .addGeneratedAnnotation(this@AmxNativeFunctionGenerator::class)
                 .addConstructor()
                 .addInvokeFunction()
                 .addFactoryType()
                 .addCompanionObject()
         return addType(typeSpecBuilder.build())
-    }
-
-    private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class)
-                        .addMember("value = [%S]", this@AmxNativeFunctionGenerator::class.java.name)
-                        .addMember("date = %S", LocalDateTime.now().toString())
-                        .build()
-        )
     }
 
     private fun TypeSpec.Builder.addConstructor(): TypeSpec.Builder {
@@ -131,6 +118,7 @@ internal class AmxNativeFunctionGenerator(
         val createdInstancesProperty = getCreatedInstancesProperty()
         val factoryTypeSpecBuilder = TypeSpec
                 .classBuilder("Factory")
+                .addGeneratedAnnotation(this@AmxNativeFunctionGenerator::class)
                 .addProperty(createdInstancesProperty)
         parameterTypeVariables.forEach { factoryTypeSpecBuilder.addTypeVariable(it) }
         factoryTypeSpecBuilder
@@ -212,8 +200,10 @@ internal class AmxNativeFunctionGenerator(
     }
 
     private fun TypeSpec.Builder.addCompanionObject(): TypeSpec.Builder {
-        val companionObjectBuilder = TypeSpec.companionObjectBuilder()
-        companionObjectBuilder.addNonInlineInvokeFunction()
+        val companionObjectBuilder = TypeSpec
+                .companionObjectBuilder()
+                .addGeneratedAnnotation(this@AmxNativeFunctionGenerator::class)
+                .addNonInlineInvokeFunction()
         if (parameterTypeVariables.isNotEmpty()) {
             companionObjectBuilder
                     .addInlineInvokeFunction()

@@ -27,6 +27,15 @@ plugins {
 
 val gitVersion: Closure<String> by extra
 
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+buildScan {
+    termsOfServiceUrl = "https://gradle.com/terms-of-service"
+    termsOfServiceAgree = "yes"
+}
+
 allprojects {
     version = gitVersion()
 
@@ -35,6 +44,22 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+    }
+}
+
+tasks {
+    jacocoTestReport {
+        val projects = subprojects - project("kamp-plugin") - project("examples").allprojects
+        projects.map { dependsOn(it.tasks.test) }
+        executionData.setFrom(*projects.map { file("${it.buildDir}/jacoco/test.exec") }.filter { it.exists() }.toTypedArray())
+        sourceDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
+        classDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output  }.toTypedArray())
+        reports {
+            xml.isEnabled = true
+        }
+    }
+    test {
+        finalizedBy(jacocoTestReport)
     }
 }
 
@@ -65,15 +90,15 @@ configure(subprojects - project("kamp-plugin")) {
             useJUnitPlatform()
 
             finalizedBy(jacocoTestReport)
-
-            jacoco {
-                toolVersion = "0.8.2"
-            }
         }
 
         dokka {
             reportUndocumented = false
         }
+    }
+
+    jacoco {
+        toolVersion = "0.8.3"
     }
 
     dependencies {
@@ -159,9 +184,4 @@ configure(subprojects - project("kamp-plugin") - project("examples").allprojects
     signing {
         sign(publishing.publications["mavenJava"])
     }
-}
-
-buildScan {
-    termsOfServiceUrl = "https://gradle.com/terms-of-service"
-    termsOfServiceAgree = "yes"
 }

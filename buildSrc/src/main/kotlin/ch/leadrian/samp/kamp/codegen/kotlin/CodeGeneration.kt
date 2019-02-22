@@ -1,15 +1,17 @@
-package ch.leadrian.samp.kamp.annotationprocessor.codegen
+package ch.leadrian.samp.kamp.codegen.kotlin
 
 import com.squareup.kotlinpoet.AnnotationSpec
+import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.TypeSpec
 import java.time.LocalDateTime
-import javax.annotation.Generated
 import kotlin.reflect.KClass
+
+val generatedAnnotation = ClassName("ch.leadrian.samp.kamp.annotations", "Generated")
 
 fun TypeSpec.Builder.addGeneratedAnnotation(generatedBy: KClass<*>): TypeSpec.Builder {
     return addAnnotation(
             AnnotationSpec
-                    .builder(Generated::class)
+                    .builder(generatedAnnotation)
                     .addMember("value = [%S]", generatedBy.java.name)
                     .addMember("date = %S", LocalDateTime.now().toString())
                     .build()

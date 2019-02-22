@@ -2,15 +2,12 @@ package ch.leadrian.samp.kamp.codegen.java
 
 import ch.leadrian.samp.kamp.cidl.model.Constant
 import ch.leadrian.samp.kamp.codegen.SingleFileCodeGenerator
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeSpec
 import java.io.File
 import java.io.Writer
-import java.time.LocalDateTime
-import javax.annotation.Generated
 import javax.lang.model.element.Modifier
 
 internal class SAMPConstantsJavaGenerator(
@@ -26,20 +23,10 @@ internal class SAMPConstantsJavaGenerator(
         val sampConstantsTypeSpecBuilder = TypeSpec
                 .classBuilder("SAMPConstants")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addGeneratedAnnotation()
+                .addGeneratedAnnotation(this@SAMPConstantsJavaGenerator::class)
                 .addPrivateConstructor()
                 .addFields()
         writer.writeJavaFile(sampConstantsTypeSpecBuilder.build())
-    }
-
-    private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class.java)
-                        .addMember("value", "\$S", this@SAMPConstantsJavaGenerator::class.java.name)
-                        .addMember("date", "\$S", LocalDateTime.now().toString())
-                        .build()
-        )
     }
 
     private fun TypeSpec.Builder.addPrivateConstructor(): TypeSpec.Builder {

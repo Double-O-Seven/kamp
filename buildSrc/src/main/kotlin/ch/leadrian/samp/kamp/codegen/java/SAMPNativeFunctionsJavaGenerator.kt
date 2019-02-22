@@ -7,7 +7,6 @@ import ch.leadrian.samp.kamp.codegen.camelCaseName
 import ch.leadrian.samp.kamp.codegen.hasNoImplementation
 import ch.leadrian.samp.kamp.codegen.isNative
 import ch.leadrian.samp.kamp.codegen.isOutParameter
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
@@ -16,8 +15,6 @@ import com.squareup.javapoet.TypeSpec
 import org.jetbrains.annotations.NotNull
 import java.io.File
 import java.io.Writer
-import java.time.LocalDateTime
-import javax.annotation.Generated
 import javax.lang.model.element.Modifier
 
 internal class SAMPNativeFunctionsJavaGenerator(
@@ -34,20 +31,10 @@ internal class SAMPNativeFunctionsJavaGenerator(
         val sampNativeFunctionsTypeSpecBuilder = TypeSpec
                 .classBuilder("SAMPNativeFunctions")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                .addGeneratedAnnotation()
+                .addGeneratedAnnotation(this@SAMPNativeFunctionsJavaGenerator::class)
                 .addPrivateConstructor()
                 .addMethods()
         writer.writeJavaFile(sampNativeFunctionsTypeSpecBuilder.build())
-    }
-
-    private fun TypeSpec.Builder.addGeneratedAnnotation(): TypeSpec.Builder {
-        return addAnnotation(
-                AnnotationSpec
-                        .builder(Generated::class.java)
-                        .addMember("value", "\$S", this@SAMPNativeFunctionsJavaGenerator::class.java.name)
-                        .addMember("date", "\$S", LocalDateTime.now().toString())
-                        .build()
-        )
     }
 
     private fun TypeSpec.Builder.addPrivateConstructor(): TypeSpec.Builder {
