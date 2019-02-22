@@ -56,7 +56,11 @@ allprojects {
 
 tasks {
     jacocoTestReport {
-        val projects = subprojects - project("kamp-plugin") - project("examples").allprojects
+        val projects = subprojects
+                .minus(project("kamp-plugin"))
+                .minus(project("kamp-annotations"))
+                .minus(project("kamp-annotation-processor"))
+                .minus(project("examples").allprojects)
         projects.forEach { dependsOn(it.tasks.test) }
         executionData.setFrom(projects.map { file("${it.buildDir}/jacoco/test.exec") })
         additionalSourceDirs.setFrom(projects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
