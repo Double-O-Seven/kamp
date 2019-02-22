@@ -66,6 +66,7 @@ tasks {
     }
 
     create("codacyCoverageReport", JavaExec::class) {
+        dependsOn(jacocoTestReport)
         main = "com.codacy.CodacyCoverageReporter"
         classpath = codacyCoverageReport
         args(
