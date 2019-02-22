@@ -5,7 +5,7 @@ jdk:
   - oraclejdk8
 
 script:
-  - ./gradlew build -x kamp-plugin:build codacyCoverageReport --scan -s
+  - ./gradlew clean build codacyCoverageReport -x kamp-plugin:build --scan -s
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock

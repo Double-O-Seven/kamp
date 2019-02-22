@@ -58,25 +58,28 @@ tasks {
         val projects = subprojects - project("kamp-plugin") - project("examples").allprojects
         projects.forEach { dependsOn(it.tasks.test) }
         executionData.setFrom(*projects.map { file("${it.buildDir}/jacoco/test.exec") }.filter { it.exists() }.toTypedArray())
+        additionalSourceDirs.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
         sourceDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
         classDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output  }.toTypedArray())
         reports {
             xml.isEnabled = true
         }
     }
+}
 
-    create("codacyCoverageReport", JavaExec::class) {
-        dependsOn(jacocoTestReport)
-        main = "com.codacy.CodacyCoverageReporter"
-        classpath = codacyCoverageReport
-        args(
-                "report",
-                "-l",
-                "Java",
-                "-r",
-                "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-        )
-    }
+task<JavaExec>("codacyCoverageReport") {
+    dependsOn(tasks.jacocoTestReport)
+    main = "com.codacy.CodacyCoverageReporter"
+    classpath = codacyCoverageReport
+    args(
+            "report",
+            "-l",
+            "Java",
+            "-l",
+            "Kotlin",
+            "-r",
+            "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
+    )
 }
 
 configure(subprojects - project("kamp-plugin")) {
