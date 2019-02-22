@@ -1,4 +1,5 @@
 import groovy.lang.Closure
+import org.gradle.api.tasks.SourceSet.*
 
 buildscript {
     repositories {
@@ -57,10 +58,10 @@ tasks {
     jacocoTestReport {
         val projects = subprojects - project("kamp-plugin") - project("examples").allprojects
         projects.forEach { dependsOn(it.tasks.test) }
-        executionData.setFrom(*projects.map { file("${it.buildDir}/jacoco/test.exec") }.filter { it.exists() }.toTypedArray())
-        additionalSourceDirs.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
-        sourceDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
-        classDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output  }.toTypedArray())
+        executionData.setFrom(projects.map { file("${it.buildDir}/jacoco/test.exec") })
+        additionalSourceDirs.setFrom(projects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
+        sourceDirectories.setFrom(projects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
+        classDirectories.setFrom(projects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].output  })
         reports {
             xml.isEnabled = true
         }
