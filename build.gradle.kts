@@ -56,7 +56,7 @@ allprojects {
 tasks {
     jacocoTestReport {
         val projects = subprojects - project("kamp-plugin") - project("examples").allprojects
-        projects.map { dependsOn(it.tasks.test) }
+        projects.forEach { dependsOn(it.tasks.test) }
         executionData.setFrom(*projects.map { file("${it.buildDir}/jacoco/test.exec") }.filter { it.exists() }.toTypedArray())
         sourceDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].allSource.sourceDirectories }.toTypedArray())
         classDirectories.setFrom(*projects.map { it.sourceSets[SourceSet.MAIN_SOURCE_SET_NAME].output  }.toTypedArray())
