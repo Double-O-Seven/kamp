@@ -22,8 +22,9 @@ internal class OutputStringTest {
         val outputString = OutputString("Test")
 
         assertAll(
-                { assertThat(outputString.bytes).isEqualTo("Test".toByteArray(StringEncoding.getCharset())) },
-                { assertThat(outputString.size).isEqualTo(4) }
+                { assertThat(outputString.bytes).isEqualTo("Test".toByteArray(StringEncoding.getCharset()).copyOf(5)) },
+                { assertThat(outputString.size).isEqualTo(5) },
+                { assertThat(outputString.value).isEqualTo("Test") }
         )
     }
 

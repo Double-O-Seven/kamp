@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import org.junit.jupiter.params.provider.ValueSource
 
 internal class AmxNativeFunctionParameterTypeTest {
 
@@ -47,11 +46,11 @@ internal class AmxNativeFunctionParameterTypeTest {
         }
 
         @Test
-        fun transformToPrimitiveShouldReturnInputParameterValue() {
+        fun transformToPrimitiveShouldReturnSingleElementIntArray() {
             val primitiveValue = IntType.transformToPrimitive(1234)
 
             assertThat(primitiveValue)
-                    .isEqualTo(1234)
+                    .isEqualTo(intArrayOf(1234))
         }
 
         @Test
@@ -215,12 +214,12 @@ internal class AmxNativeFunctionParameterTypeTest {
         }
 
         @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun transformToPrimitiveShouldReturnInputParameterValue(expectedPrimitiveValue: Boolean) {
-            val primitiveValue = BooleanType.transformToPrimitive(expectedPrimitiveValue)
+        @CsvSource("true, 1", "false, 0")
+        fun transformToPrimitiveShouldReturnSingleElementIntArray(booleanValue: Boolean, expectedIntValue: Int) {
+            val primitiveValue = BooleanType.transformToPrimitive(booleanValue)
 
             assertThat(primitiveValue)
-                    .isEqualTo(expectedPrimitiveValue)
+                    .isEqualTo(intArrayOf(expectedIntValue))
         }
 
         @Test
@@ -277,11 +276,11 @@ internal class AmxNativeFunctionParameterTypeTest {
         }
 
         @Test
-        fun transformToPrimitiveShouldReturnInputParameterValue() {
+        fun transformToPrimitiveShouldReturnSingleElementIntArray() {
             val primitiveValue = FloatType.transformToPrimitive(1234f)
 
             assertThat(primitiveValue)
-                    .isEqualTo(1234f)
+                    .isEqualTo(intArrayOf(1234f.toRawBits()))
         }
 
         @Test
@@ -432,7 +431,7 @@ internal class AmxNativeFunctionParameterTypeTest {
             val primitiveValue = StringType.transformToPrimitive("Test")
 
             assertThat(primitiveValue)
-                    .isEqualTo("Test".toByteArray(StringEncoding.getCharset()))
+                    .isEqualTo("Test".toByteArray(StringEncoding.getCharset()).copyOf(5))
         }
 
         @Test
@@ -468,7 +467,7 @@ internal class AmxNativeFunctionParameterTypeTest {
             val specifier = OutputStringType.getSpecifier(OutputString("Test"))
 
             assertThat(specifier)
-                    .isEqualTo("S[4]")
+                    .isEqualTo("S[5]")
         }
 
         @Test
@@ -484,7 +483,7 @@ internal class AmxNativeFunctionParameterTypeTest {
             val primitiveValue = OutputStringType.transformToPrimitive(OutputString("Test"))
 
             assertThat(primitiveValue)
-                    .isEqualTo("Test".toByteArray(StringEncoding.getCharset()))
+                    .isEqualTo("Test".toByteArray(StringEncoding.getCharset()).copyOf(5))
         }
 
         @Test

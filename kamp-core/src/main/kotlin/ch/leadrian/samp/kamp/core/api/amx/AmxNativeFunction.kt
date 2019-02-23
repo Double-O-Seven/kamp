@@ -31,7 +31,7 @@ abstract class AmxNativeFunction internal constructor(
 
     private abstract class Invocation(functionName: String, val amxNativeFunctionInvoker: AmxNativeFunctionInvoker) {
 
-        protected val address: Int by lazy {
+        protected val nativeAddress: Int by lazy {
             amxNativeFunctionInvoker
                     .findNative(functionName)
                     .takeIf { it != 0 }
@@ -53,7 +53,7 @@ abstract class AmxNativeFunction internal constructor(
             args.forEachIndexed { i, arg ->
                 intArgs[i] = parameterTypes[i].tryToConvertToInt(arg)
             }
-            return amxNativeFunctionInvoker.callNative(address, intArgs)
+            return amxNativeFunctionInvoker.callNative(nativeAddress, intArgs)
         }
 
     }
@@ -71,7 +71,7 @@ abstract class AmxNativeFunction internal constructor(
             }
             val format = getFormat(*args)
             @Suppress("UNCHECKED_CAST")
-            return amxNativeFunctionInvoker.invokeNative(address, format, transformedArgs as Array<Any>)
+            return amxNativeFunctionInvoker.invokeNative(nativeAddress, format, transformedArgs as Array<Any>)
         }
 
         private fun getFormat(vararg args: Any): String {

@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.amx
 
 import ch.leadrian.samp.kamp.core.runtime.StringEncoding
+import ch.leadrian.samp.kamp.core.runtime.amx.nullTerminated
 import kotlin.reflect.KClass
 import kotlin.reflect.full.cast
 
@@ -36,7 +37,7 @@ sealed class AmxNativeFunctionParameterType<T : Any>(val type: KClass<T>) {
 
     fun tryToTransformToPrimitive(value: Any): Any = transformToPrimitive(type.cast(value))
 
-    open fun transformToPrimitive(value: T): Any = value
+    abstract fun transformToPrimitive(value: T): Any
 
 }
 
@@ -48,6 +49,8 @@ sealed class SimpleAmxNativeFunctionParameterType<T : Any>(type: KClass<T>, priv
     fun tryToConvertToInt(value: Any): Int = convertToInt(type.cast(value))
 
     abstract fun convertToInt(value: T): Int
+
+    override fun transformToPrimitive(value: T): Any = intArrayOf(convertToInt(value))
 
 }
 
@@ -111,7 +114,7 @@ object StringType : AmxNativeFunctionParameterType<String>(String::class) {
 
     override fun getSpecifier(value: String): String = "s"
 
-    override fun transformToPrimitive(value: String): Any = value.toByteArray(StringEncoding.getCharset())
+    override fun transformToPrimitive(value: String): Any = value.toByteArray(StringEncoding.getCharset()).nullTerminated()
 
 }
 

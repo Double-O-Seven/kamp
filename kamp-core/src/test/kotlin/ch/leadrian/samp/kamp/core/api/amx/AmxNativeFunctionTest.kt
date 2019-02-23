@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.api.amx
 
 import ch.leadrian.samp.kamp.core.runtime.StringEncoding
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxNativeFunctionInvoker
+import ch.leadrian.samp.kamp.core.runtime.amx.nullTerminated
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -38,11 +39,11 @@ internal class AmxNativeFunctionTest {
         every {
             amxNativeFunctionInvoker.invokeNative(
                     address,
-                    "isS[3]a[4]A[1]",
+                    "isS[4]a[4]A[1]",
                     arrayOf(
-                            1337,
-                            "Hahaha".toByteArray(StringEncoding.getCharset()),
-                            "Abc".toByteArray(StringEncoding.getCharset()),
+                            intArrayOf(1337),
+                            "Hahaha".toByteArray(StringEncoding.getCharset()).nullTerminated(),
+                            "Abc".toByteArray(StringEncoding.getCharset()).nullTerminated(),
                             intArrayOf(1, 2, 3, 4),
                             intArrayOf(5)
                     )
