@@ -10,5 +10,6 @@ include(":examples:lvdm")
 include(":examples:streamer-test")
 include(":examples:view-test")
 include(":examples:hooks")
+include(":examples:amx-interop-test")
 
 rootProject.name = "kamp"

@@ -1,18 +1,12 @@
 package ch.leadrian.samp.kamp.examples.lvdm
 
 import ch.leadrian.samp.kamp.core.KampCoreTextKeys
-import ch.leadrian.samp.kamp.core.api.amx.AmxNativeFunction2
-import ch.leadrian.samp.kamp.core.api.amx.AmxNativeFunction3
-import ch.leadrian.samp.kamp.core.api.amx.AmxNativeFunction4
-import ch.leadrian.samp.kamp.core.api.amx.MutableFloatCell
-import ch.leadrian.samp.kamp.core.api.amx.OutputString
 import ch.leadrian.samp.kamp.core.api.command.AdminCommandAccessChecker
 import ch.leadrian.samp.kamp.core.api.command.Commands
 import ch.leadrian.samp.kamp.core.api.command.annotation.AccessCheck
 import ch.leadrian.samp.kamp.core.api.command.annotation.Command
 import ch.leadrian.samp.kamp.core.api.command.annotation.Unlisted
 import ch.leadrian.samp.kamp.core.api.constants.Interior
-import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.SanAndreasZone
 import ch.leadrian.samp.kamp.core.api.data.Colors
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -50,38 +44,6 @@ constructor(
         player.setCoordinatesFindZ(coordinates)
         val zone = SanAndreasZone.getZone(coordinates) ?: "San Andreas"
         messageSender.sendMessageToPlayer(player, Colors.LIGHT_BLUE, LvdmTextKeys.lvdm.command.setpos.message, zone)
-    }
-
-    private val SetPlayerPosFindZ by AmxNativeFunction4<Int, Float, Float, Float>()
-
-    @Command
-    fun setPos2(player: Player, x: Float, y: Float, z: Float) {
-        val coordinates = vector3DOf(x, y, z)
-        SetPlayerPosFindZ(player.id.value, x, y, z)
-        val zone = SanAndreasZone.getZone(coordinates) ?: "San Andreas"
-        messageSender.sendMessageToPlayer(player, Colors.PINK, LvdmTextKeys.lvdm.command.setpos.message, zone)
-    }
-
-    private val GetPlayerName by AmxNativeFunction3<Int, OutputString, Int>()
-
-    private val SendClientMessageToAll by AmxNativeFunction2<Int, String>()
-
-    @Command
-    fun say(player: Player, text: String) {
-        val name = OutputString(SAMPConstants.MAX_PLAYER_NAME)
-        GetPlayerName(player.id.value, name, SAMPConstants.MAX_PLAYER_NAME)
-        SendClientMessageToAll(player.color.value, "* ${name.value} says: ${Colors.WHITE.toEmbeddedString()}$text")
-    }
-
-    private val GetPlayerPos by AmxNativeFunction4<Int, MutableFloatCell, MutableFloatCell, MutableFloatCell>()
-
-    @Command
-    fun jump(player: Player) {
-        val x = MutableFloatCell()
-        val y = MutableFloatCell()
-        val z = MutableFloatCell()
-        GetPlayerPos(player.id.value, x, y, z)
-        player.coordinates = vector3DOf(x.value, y.value, z.value + 2f)
     }
 
     @Command(aliases = ["v", "veh"])
