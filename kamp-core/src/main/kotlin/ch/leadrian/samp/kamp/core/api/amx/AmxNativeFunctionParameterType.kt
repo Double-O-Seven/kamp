@@ -49,13 +49,13 @@ sealed class AmxNativeFunctionParameterType<T : Any>(val type: KClass<T>) {
 
     }
 
-    fun tryToGetSpecifier(value: Any): String = getSpecifier(type.cast(value))
+    internal fun tryToGetSpecifier(value: Any): String = getSpecifier(type.cast(value))
 
-    abstract fun getSpecifier(value: T): String
+    internal abstract fun getSpecifier(value: T): String
 
-    fun tryToTransformToPrimitive(value: Any): Any = transformToPrimitive(type.cast(value))
+    internal fun tryToTransformToPrimitive(value: Any): Any = transformToPrimitive(type.cast(value))
 
-    abstract fun transformToPrimitive(value: T): Any
+    internal abstract fun transformToPrimitive(value: T): Any
 
 }
 
@@ -71,9 +71,9 @@ sealed class SimpleAmxNativeFunctionParameterType<T : Any>(type: KClass<T>, priv
 
     final override fun getSpecifier(value: T): String = specifier
 
-    fun tryToConvertToInt(value: Any): Int = convertToInt(type.cast(value))
+    internal fun tryToConvertToInt(value: Any): Int = convertToInt(type.cast(value))
 
-    abstract fun convertToInt(value: T): Int
+    internal abstract fun convertToInt(value: T): Int
 
     override fun transformToPrimitive(value: T): Any = intArrayOf(convertToInt(value))
 
