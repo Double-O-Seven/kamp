@@ -35,16 +35,16 @@ private val JVM_TYPE_SIGNATURES = mapOf(
         Types.VOID to "V"
 )
 
-fun getJniType(typeName: String): String =
+internal fun getJniType(typeName: String): String =
         JNI_TYPE_MAPPING[typeName] ?: throwException(typeName)
 
-fun getJniOutType(typeName: String): String =
+internal fun getJniOutType(typeName: String): String =
         JNI_OUT_TYPE_MAPPING[typeName] ?: throwException(typeName)
 
-fun getCppType(typeName: String): String =
+internal fun getCppType(typeName: String): String =
         CPP_TYPE_MAPPING[typeName] ?: throwException(typeName)
 
-fun getJvmTypeSignature(typeName: String): String =
+internal fun getJvmTypeSignature(typeName: String): String =
         JVM_TYPE_SIGNATURES[typeName] ?: throwException(typeName)
 
 private fun throwException(typeName: String): Nothing {
