@@ -1,5 +1,8 @@
 package ch.leadrian.samp.kamp.core.api.amx
 
+/**
+ * Base class for cell arrays used when calling sampgdk_InvokeNative.
+ */
 sealed class CellArray(internal val values: IntArray) {
 
     val size: Int = values.size
@@ -10,6 +13,12 @@ sealed class CellArray(internal val values: IntArray) {
 
 }
 
+/**
+ * Class for immutable [IntArray]s.
+ *
+ * @see [CellArray]
+ * @see [ImmutableCellArrayType]
+ */
 class ImmutableCellArray(values: IntArray) : CellArray(values) {
 
     companion object {
@@ -20,6 +29,12 @@ class ImmutableCellArray(values: IntArray) : CellArray(values) {
 
 }
 
+/**
+ * Class for mutable [IntArray]s.
+ *
+ * @see [CellArray]
+ * @see [MutableCellArrayType]
+ */
 class MutableCellArray(values: IntArray) : CellArray(values) {
 
     companion object {
