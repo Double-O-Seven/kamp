@@ -16,6 +16,11 @@ internal constructor(
         private val textProvider: TextProvider
 ) {
 
+    /**
+     * May only be used if no [CommandAccessDeniedHandler] processed the command access denial.
+     *
+     * @return the error message that should be displayed to the player in case command access was denied
+     */
     fun getErrorMessage(locale: Locale): String? = when {
         errorMessageTextKey != null -> textProvider.getText(locale, errorMessageTextKey, errorMessage)
         else -> errorMessage

@@ -8,6 +8,9 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
  */
 interface UnknownCommandHandler {
 
+    /**
+     * @return [OnPlayerCommandTextListener.Result.Processed] if no further command processing should be done, else [OnPlayerCommandTextListener.Result.UnknownCommand].
+     */
     fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result
 
 }

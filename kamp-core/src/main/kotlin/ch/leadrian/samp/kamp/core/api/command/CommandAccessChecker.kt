@@ -13,6 +13,9 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
  */
 interface CommandAccessChecker {
 
+    /**
+     * @return true if the player has access to the command, else false
+     */
     fun hasAccess(player: Player, commandDefinition: CommandDefinition, parameters: List<String>): Boolean
 
 }
