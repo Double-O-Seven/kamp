@@ -16,7 +16,7 @@ internal class AmxNativeFunctionTest {
     fun givenAllParameterTypeAreSimpleItShouldUseCallNative() {
         val address = 69
         every { amxNativeFunctionInvoker.findNative("test") } returns address
-        every { amxNativeFunctionInvoker.callNative(address, 1337, 0.815f.toRawBits(), 1) } returns 999
+        every { amxNativeFunctionInvoker.callNative(address, intArrayOf(1337, 0.815f.toRawBits(), 1)) } returns 999
         val amxNativeFunction = object : AmxNativeFunction(
                 "test",
                 amxNativeFunctionInvoker,
@@ -39,11 +39,13 @@ internal class AmxNativeFunctionTest {
             amxNativeFunctionInvoker.invokeNative(
                     address,
                     "isS[3]a[4]A[1]",
-                    1337,
-                    "Hahaha".toByteArray(StringEncoding.getCharset()),
-                    "Abc".toByteArray(StringEncoding.getCharset()),
-                    intArrayOf(1, 2, 3, 4),
-                    intArrayOf(5)
+                    arrayOf(
+                            1337,
+                            "Hahaha".toByteArray(StringEncoding.getCharset()),
+                            "Abc".toByteArray(StringEncoding.getCharset()),
+                            intArrayOf(1, 2, 3, 4),
+                            intArrayOf(5)
+                    )
             )
         } returns 999
         val amxNativeFunction = object : AmxNativeFunction(

@@ -4,8 +4,8 @@ interface AmxNativeFunctionInvoker {
 
     fun findNative(name: String): Int
 
-    fun callNative(address: Int, vararg args: Int): Int
+    fun callNative(address: Int, args: IntArray): Int
 
-    fun invokeNative(address: Int, format: String, vararg args: Any): Int
+    fun invokeNative(address: Int, format: String, args: Array<Any>): Int
 
 }
