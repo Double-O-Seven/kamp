@@ -120,7 +120,7 @@ internal class MenuTest {
     }
 
     @Nested
-    inner class PostConstructionsTests {
+    inner class PostConstructionTests {
 
         private val menuId = MenuId.valueOf(69)
         private val locale = Locale.GERMANY
