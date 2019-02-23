@@ -20,9 +20,15 @@ class OutputString(internal val bytes: ByteArray) {
 
     constructor(size: Int) : this(ByteArray(size))
 
+    /**
+     * @returns the [String] value represented by the wrapped [ByteArray]. Any trailing zeroes are removed.
+     */
     val value: String
         get() = String(bytes.removeTrailingZeroes(), StringEncoding.getCharset())
 
+    /**
+     * @returns the maximum number of available bytes to represent an output [String].
+     */
     val size: Int = bytes.size
 
 }

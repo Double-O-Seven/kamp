@@ -22,6 +22,9 @@ sealed class Cell(intValue: Int) {
  */
 sealed class IntCell(value: Int) : Cell(value) {
 
+    /**
+     * Represents the [Int] value stored in the cell.
+     */
     abstract val value: Int
 
 }
@@ -51,6 +54,9 @@ class MutableIntCell
 @JvmOverloads
 constructor(value: Int = 0) : IntCell(value) {
 
+    /**
+     * Propagates the getter and setter to an internal [Int] property.
+     */
     override var value: Int
         get() = intValue
         set(value) {
@@ -66,6 +72,10 @@ constructor(value: Int = 0) : IntCell(value) {
  */
 sealed class FloatCell(value: Float) : Cell(value.toRawBits()) {
 
+    /**
+     * Represents the [Float] value stored in the cell.
+     * Internally, the [Float] value is stored in an [Int] field.
+     */
     abstract val value: Float
 
 }
