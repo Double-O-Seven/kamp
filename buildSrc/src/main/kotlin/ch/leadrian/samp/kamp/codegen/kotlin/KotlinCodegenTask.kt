@@ -64,11 +64,16 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         (0..32).map { AmxNativeFunctionGenerator(it, extension.amxApiJavaPackageName, amxApiOutputDirectory) }
     }
 
+    private val amxCallbackGenerators: List<AmxCallbackGenerator> by lazy {
+        (0..32).map { AmxCallbackGenerator(it, extension.amxApiJavaPackageName, amxApiOutputDirectory) }
+    }
+
     @TaskAction
     fun generate() {
         sampNativeFunctionExecutorKtGenerator.generate()
         sampNativeFunctionExecutorImplKtGenerator.generate()
         amxNativeFunctionGenerators.forEach { it.generate() }
+        amxCallbackGenerators.forEach { it.generate() }
     }
 
     @InputFiles

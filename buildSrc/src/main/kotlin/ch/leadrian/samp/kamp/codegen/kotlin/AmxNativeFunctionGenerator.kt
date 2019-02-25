@@ -22,7 +22,7 @@ import kotlin.reflect.KProperty
 
 internal class AmxNativeFunctionGenerator(
         numberOfParameters: Int,
-        private val javaPackageName: String,
+        javaPackageName: String,
         outputDirectory: File
 ) : SingleFileCodeGenerator(outputDirectory) {
 
