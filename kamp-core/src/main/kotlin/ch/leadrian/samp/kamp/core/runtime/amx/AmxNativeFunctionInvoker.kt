@@ -1,6 +1,6 @@
 package ch.leadrian.samp.kamp.core.runtime.amx
 
-interface AmxNativeFunctionInvoker {
+internal interface AmxNativeFunctionInvoker {
 
     fun findNative(name: String): Int
 

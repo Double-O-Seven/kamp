@@ -4,14 +4,7 @@ import sun.misc.Unsafe
 
 internal object AmxNativeFunctionInvokerImpl : AmxNativeFunctionInvoker {
 
-    private val unsafe: Unsafe by lazy {
-        with(Unsafe::class.java.getDeclaredField("theUnsafe")) {
-            isAccessible = true
-            val theUnsafe = get(null) as Unsafe
-            isAccessible = false
-            theUnsafe
-        }
-    }
+    private val unsafe: Unsafe = UnsafeProvider.instance
 
     external override fun findNative(name: String): Int
 
