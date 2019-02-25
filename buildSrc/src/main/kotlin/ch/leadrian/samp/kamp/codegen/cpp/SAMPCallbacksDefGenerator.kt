@@ -34,6 +34,7 @@ internal class SAMPCallbacksDefGenerator(
             |    AmxLoad
             |    AmxUnload
             |    ProcessTick
+            |    OnPublicCall
             |
         """.trimMargin()
         )

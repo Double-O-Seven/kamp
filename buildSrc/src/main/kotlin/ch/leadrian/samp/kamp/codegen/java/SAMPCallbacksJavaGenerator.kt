@@ -7,6 +7,7 @@ import ch.leadrian.samp.kamp.codegen.isCallback
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import org.jetbrains.annotations.NotNull
@@ -35,6 +36,7 @@ internal class SAMPCallbacksJavaGenerator(
 
     private fun TypeSpec.Builder.addMethods(): TypeSpec.Builder {
         addOnProcessTickMethod()
+        addOnPublicCallMethod()
         functions.filter { it.isCallback }.forEach { function -> addMethod(function) }
         return this
     }
@@ -44,6 +46,21 @@ internal class SAMPCallbacksJavaGenerator(
                 .methodBuilder("onProcessTick")
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .returns(TypeName.VOID)
+                .build()
+        addMethod(methodSpec)
+    }
+
+    private fun TypeSpec.Builder.addOnPublicCallMethod() {
+        val nameParameterSpec = ParameterSpec
+                .builder(String::class.java, "name")
+                .addAnnotation(NotNull::class.java)
+                .build()
+        val methodSpec = MethodSpec
+                .methodBuilder("onPublicCall")
+                .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                .addParameter(nameParameterSpec)
+                .addParameter(Int::class.javaPrimitiveType, "paramsAddress")
+                .returns(TypeName.INT)
                 .build()
         addMethod(methodSpec)
     }

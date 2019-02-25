@@ -44,6 +44,10 @@ internal class SAMPCallbacksMethodCacheHppGenerator(
             |        return onProcessTickMethodID;
             |    }
             |
+            |    jmethodID GetOnPublicCallMethodID() {
+            |        return onPublicCallMethodID;
+            |    }
+            |
             |
         """.trimMargin("|")
         )
@@ -71,6 +75,8 @@ internal class SAMPCallbacksMethodCacheHppGenerator(
             |private:
             |
             |    jmethodID onProcessTickMethodID;
+            |
+            |    jmethodID onPublicCallMethodID;
             |
         """.trimMargin()
         )

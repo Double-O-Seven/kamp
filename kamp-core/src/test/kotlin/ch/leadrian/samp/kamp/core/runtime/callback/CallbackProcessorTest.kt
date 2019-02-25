@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.callback
 
 import ch.leadrian.samp.kamp.core.api.GameMode
 import ch.leadrian.samp.kamp.core.api.Plugin
+import ch.leadrian.samp.kamp.core.api.amx.AmxCallback
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
 import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
@@ -110,6 +111,7 @@ import ch.leadrian.samp.kamp.core.api.inject.KampModule
 import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
+import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
@@ -202,6 +204,47 @@ internal class CallbackProcessorTest {
                     .isNull()
             verify { uncaughtExceptionNotifier.notify(exception) }
             verify { onProcessTickListener.onProcessTick() }
+        }
+
+    }
+
+    @Nested
+    inner class OnPublicCallTests {
+
+        @Test
+        fun shouldCallOnPublicCall() {
+            val amxCallbackExecutor: AmxCallbackExecutor = server.injector.getInstance()
+            val expectedResult = 1234
+            val callbackName = "onTest"
+            val amxCallback = mockk<AmxCallback> {
+                every { onPublicCall(any<Int>()) } returns expectedResult
+                every { name } returns callbackName
+            }
+            amxCallbackExecutor.register(amxCallback)
+
+            val result = callbackProcessor.onPublicCall(callbackName, 1337)
+
+            verify { uncaughtExceptionNotifier wasNot Called }
+            assertThat(result)
+                    .isEqualTo(expectedResult)
+        }
+
+        @Test
+        fun shouldCatchException() {
+            val exception = RuntimeException("test")
+            val amxCallbackExecutor: AmxCallbackExecutor = server.injector.getInstance()
+            val callbackName = "onTest"
+            val amxCallback = mockk<AmxCallback> {
+                every { onPublicCall(any<Int>()) } throws exception
+                every { name } returns callbackName
+            }
+            amxCallbackExecutor.register(amxCallback)
+
+            val result = callbackProcessor.onPublicCall(callbackName, 1337)
+
+            verify { uncaughtExceptionNotifier.notify(exception) }
+            assertThat(result)
+                    .isZero()
         }
 
     }

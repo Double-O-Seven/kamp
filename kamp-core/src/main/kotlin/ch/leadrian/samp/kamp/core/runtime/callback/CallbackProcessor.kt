@@ -48,6 +48,7 @@ import ch.leadrian.samp.kamp.core.api.exception.UncaughtExceptionNotifier
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.SAMPCallbacks
 import ch.leadrian.samp.kamp.core.runtime.Server
+import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
@@ -132,7 +133,8 @@ constructor(
         private val onVehicleSpawnHandler: OnVehicleSpawnHandler,
         private val onVehicleStreamInHandler: OnVehicleStreamInHandler,
         private val onVehicleStreamOutHandler: OnVehicleStreamOutHandler,
-        private val onPlayerRequestDownloadHandler: OnPlayerRequestDownloadHandler
+        private val onPlayerRequestDownloadHandler: OnPlayerRequestDownloadHandler,
+        private val amxCallbackExecutor: AmxCallbackExecutor
 ) : SAMPCallbacks {
 
     private companion object {
@@ -195,6 +197,12 @@ constructor(
         tryAndCatch {
             onProcessTickHandler.onProcessTick()
         }
+    }
+
+    override fun onPublicCall(name: String, paramsAddress: Int): Int {
+        return tryAndCatch {
+            amxCallbackExecutor.onPublicCall(name, paramsAddress)
+        } ?: 0
     }
 
     override fun onGameModeInit(): Boolean {

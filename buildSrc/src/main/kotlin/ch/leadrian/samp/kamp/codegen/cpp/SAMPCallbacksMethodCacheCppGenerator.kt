@@ -35,6 +35,10 @@ internal class SAMPCallbacksMethodCacheCppGenerator(
             |        return -1;
             |    }
             |
+            |    this->onPublicCallMethodID = jniEnv->GetMethodID(clazz, "onPublicCall", "(Ljava/lang/String;I)I");
+            |    if (this->onPublicCallMethodID == nullptr) {
+            |        return -1;
+            |    }
             |
         """.trimMargin("|")
         )
@@ -44,7 +48,7 @@ internal class SAMPCallbacksMethodCacheCppGenerator(
         functions
                 .filter { it.hasAttribute("callback") }
                 .forEachIndexed { index, function ->
-                    val errorValue = -(index + 2)
+                    val errorValue = -(index + 3)
                     writeMethodIDInitialization(function, errorValue)
                 }
     }

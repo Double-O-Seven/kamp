@@ -74,6 +74,22 @@ internal class SAMPCallbacksCppGenerator(
             |    HandleException(jniEnv);
             |}
             |
+            |PLUGIN_EXPORT bool PLUGIN_CALL OnPublicCall(AMX *amx, const char *name, cell *params, cell *retval) {
+            |    Kamp& kampInstance = Kamp::GetInstance();
+            |    if (!kampInstance.IsLaunched()) {
+            |        return true;
+            |    }
+            |    jobject sampCallbacksInstance = kampInstance.GetSAMPCallbacksInstance();
+            |    jmethodID onPublicCallMethodID = kampInstance.GetSAMPCallbacksMethodCache().GetOnPublicCallMethodID();
+            |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
+            |    jstring nameString = jniEnv->NewStringUTF(name);
+            |    jint result = jniEnv->CallIntMethod(sampCallbacksInstance, onPublicCallMethodID, nameString, reinterpret_cast<jint>(params));
+            |    HandleException(jniEnv);
+            |    *retval = static_cast<cell>(result);
+            |    jniEnv->DeleteLocalRef(nameString);
+            |    return true;
+            |}
+            |
         """.trimMargin("|")
         )
     }
