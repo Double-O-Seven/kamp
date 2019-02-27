@@ -199,10 +199,10 @@ constructor(
         }
     }
 
-    override fun onPublicCall(name: String, paramsAddress: Int): Int {
+    override fun onPublicCall(name: String, paramsAddress: Int): Int? {
         return tryAndCatch {
             amxCallbackExecutor.onPublicCall(name, paramsAddress)
-        } ?: 0
+        }
     }
 
     override fun onGameModeInit(): Boolean {

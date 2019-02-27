@@ -19,6 +19,11 @@ int FieldCache::Initialize(JNIEnv *jniEnv) {
 		return result;
 	}
 
+	result = this->InitializeIntegerValueField(jniEnv);
+	if (result) {
+		return result;
+	}
+
 	return 0;
 }
 
@@ -57,6 +62,19 @@ int FieldCache::InitializeReferenceStringValueField(JNIEnv *jniEnv) {
 	this->referenceStringValueFieldID = jniEnv->GetFieldID(referenceStringClass, "value", "[B");
 
 	jniEnv->DeleteLocalRef(referenceStringClass);
+
+	return 0;
+}
+
+int FieldCache::InitializeIntegerValueField(JNIEnv *jniEnv) {
+	jclass integerClass = jniEnv->FindClass(INTEGER_CLASS.c_str());
+	if (integerClass == nullptr) {
+		return -1;
+	}
+
+	this->integerValueFieldID = jniEnv->GetFieldID(integerClass, "value", "I");
+
+	jniEnv->DeleteLocalRef(integerClass);
 
 	return 0;
 }

@@ -15,7 +15,7 @@ internal class AmxCallbackExecutorTest {
     @Test
     fun shouldCallCallback() {
         val paramsAddress = 1234
-        val callbackName = "onTest"
+        val callbackName = "onFoo"
         val expectedResult = 1337
         val amxCallback = mockk<AmxCallback> {
             every { onPublicCall(paramsAddress) } returns expectedResult
@@ -30,22 +30,31 @@ internal class AmxCallbackExecutorTest {
     }
 
     @Test
+    fun givenNoRegisteredCallbackItShouldReturnNull() {
+        val result = amxCallbackExecutor.onPublicCall("onBar", 1337)
+
+        assertThat(result)
+                .isNull()
+    }
+
+    @Test
     fun shouldNotCallUnregisteredCallback() {
+        val callbackName = "onBaz"
         val amxCallback = mockk<AmxCallback> {
             every { onPublicCall(any<Int>()) } returns 0
-            every { name } returns "onTest"
+            every { name } returns callbackName
         }
         amxCallbackExecutor.register(amxCallback)
         amxCallbackExecutor.unregister(amxCallback)
 
-        amxCallbackExecutor.onPublicCall("onTest", 1337)
+        amxCallbackExecutor.onPublicCall(callbackName, 1337)
 
         verify(exactly = 0) { amxCallback.onPublicCall(any<Int>()) }
     }
 
     @Test
     fun givenAnotherCallbackIsAlreadyRegisteredWithNameRegisterShouldThrowAnException() {
-        val callbackName = "onTest"
+        val callbackName = "onQux"
         val amxCallback1 = mockk<AmxCallback> {
             every { name } returns callbackName
         }
@@ -63,7 +72,7 @@ internal class AmxCallbackExecutorTest {
 
     @Test
     fun givenAnotherCallbackIsAlreadyRegisteredWithNameUnregisterShouldThrowAnException() {
-        val callbackName = "onTest"
+        val callbackName = "onFoobar"
         val amxCallback1 = mockk<AmxCallback> {
             every { name } returns callbackName
         }

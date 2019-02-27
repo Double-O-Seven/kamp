@@ -244,7 +244,7 @@ internal class CallbackProcessorTest {
 
             verify { uncaughtExceptionNotifier.notify(exception) }
             assertThat(result)
-                    .isZero()
+                    .isNull()
         }
 
     }

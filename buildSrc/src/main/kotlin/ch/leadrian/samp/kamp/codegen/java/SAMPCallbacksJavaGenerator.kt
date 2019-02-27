@@ -11,6 +11,7 @@ import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import org.jetbrains.annotations.NotNull
+import org.jetbrains.annotations.Nullable
 import java.io.File
 import java.io.Writer
 import javax.lang.model.element.Modifier
@@ -60,7 +61,8 @@ internal class SAMPCallbacksJavaGenerator(
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addParameter(nameParameterSpec)
                 .addParameter(Int::class.javaPrimitiveType, "paramsAddress")
-                .returns(TypeName.INT)
+                .returns(Integer::class.javaObjectType)
+                .addAnnotation(Nullable::class.java)
                 .build()
         addMethod(methodSpec)
     }

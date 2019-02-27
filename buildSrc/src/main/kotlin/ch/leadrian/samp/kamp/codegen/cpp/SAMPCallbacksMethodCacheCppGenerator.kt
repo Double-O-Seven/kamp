@@ -35,7 +35,7 @@ internal class SAMPCallbacksMethodCacheCppGenerator(
             |        return -1;
             |    }
             |
-            |    this->onPublicCallMethodID = jniEnv->GetMethodID(clazz, "onPublicCall", "(Ljava/lang/String;I)I");
+            |    this->onPublicCallMethodID = jniEnv->GetMethodID(clazz, "onPublicCall", "(Ljava/lang/String;I)Ljava/lang/Integer;");
             |    if (this->onPublicCallMethodID == nullptr) {
             |        return -1;
             |    }
