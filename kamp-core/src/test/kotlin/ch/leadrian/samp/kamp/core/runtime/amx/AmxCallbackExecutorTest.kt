@@ -67,7 +67,7 @@ internal class AmxCallbackExecutorTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalStateException::class.java)
-                .hasMessage("Callback with name 'onTest' is already registered")
+                .hasMessage("Callback with name 'onQux' is already registered")
     }
 
     @Test
@@ -85,7 +85,7 @@ internal class AmxCallbackExecutorTest {
 
         assertThat(caughtThrowable)
                 .isInstanceOf(IllegalArgumentException::class.java)
-                .hasMessage("Callback with name 'onTest' is not registered")
+                .hasMessage("Callback with name 'onFoobar' is not registered")
     }
 
 }
