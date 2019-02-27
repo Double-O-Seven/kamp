@@ -116,7 +116,7 @@ internal class AmxCallbackGenerator(
                 .addModifiers(KModifier.ABSTRACT, KModifier.OPERATOR)
                 .returns(Int::class)
         parameterTypeVariables.forEachIndexed { index, typeVariable ->
-            invokeBuilder.addParameter("parameter$index", typeVariable)
+            invokeBuilder.addParameter("parameter${index + 1}", typeVariable)
         }
         return addFunction(invokeBuilder.build())
     }
