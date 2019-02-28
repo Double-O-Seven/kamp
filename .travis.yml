@@ -15,7 +15,7 @@ before_install:
 
 install:
   - sudo apt-get update
-  - sudo apt-get install -y gcc-multilib g++multilib cmake python-pip
+  - sudo apt-get install -y gcc-multilib g++-multilib cmake python-pip
   - sudo pip install ply
   - git clone --depth 1 https://github.com/Zeex/samp-plugin-sdk.git samp-plugin-sdk
   - git clone --depth 1 https://github.com/Zeex/sampgdk.git sampgdk
