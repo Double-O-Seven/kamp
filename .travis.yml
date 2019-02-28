@@ -1,11 +1,34 @@
 language: java
-install: true
+
+compiler:
+  - gcc
 
 jdk:
   - oraclejdk8
 
+env:
+  global:
+    - SAMP_SDK_ROOT=$TRAVIS_BUILD_DIR/samp-plugin-sdk
+
+before_install:
+  - dpkg --add-architecture i386
+
+install:
+  - apt-get update
+  - apt-get install -y gcc-multilib g++multilib cmake python-pip
+  - pip install ply
+  - git clone --depth 1 https://github.com/Zeex/samp-plugin-sdk.git samp-plugin-sdk
+  - git clone --depth 1 https://github.com/Zeex/sampgdk.git sampgdk
+
+before_script:
+  - cd sampgdk && mkdir build && cd build
+  - cmake .. -DSAMPGDK_STATIC=OFF -DSAMPGDK_BUILD_PLUGINS=OFF -DSAMPGDK_BUILD_DOCS=OFF
+  - cmake --build . --config Release
+  - cmake --build . --config Release --target install
+  - cd ../../
+
 script:
-  - ./gradlew clean build codacyCoverageReport -x kamp-plugin:build --scan -s
+  - ./gradlew clean build codacyCoverageReport --scan -s
 
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
