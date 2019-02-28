@@ -11,12 +11,12 @@ env:
     - SAMP_SDK_ROOT=$TRAVIS_BUILD_DIR/samp-plugin-sdk
 
 before_install:
-  - dpkg --add-architecture i386
+  - sudo dpkg --add-architecture i386
 
 install:
-  - apt-get update
-  - apt-get install -y gcc-multilib g++multilib cmake python-pip
-  - pip install ply
+  - sudo apt-get update
+  - sudo apt-get install -y gcc-multilib g++multilib cmake python-pip
+  - sudo pip install ply
   - git clone --depth 1 https://github.com/Zeex/samp-plugin-sdk.git samp-plugin-sdk
   - git clone --depth 1 https://github.com/Zeex/sampgdk.git sampgdk
 
