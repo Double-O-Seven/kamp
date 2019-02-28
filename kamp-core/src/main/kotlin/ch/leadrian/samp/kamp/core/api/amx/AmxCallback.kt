@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.amx
 
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameterResolver
+import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameters
 import kotlin.reflect.KClass
 
 /**
@@ -49,10 +50,11 @@ internal constructor(
 
     private val parameterTypes: List<KClass<*>> = parameterTypes.toList()
 
-    fun onPublicCall(paramsAddress: Int): Int {
-        val parameterValues = amxCallbackParameterResolver.resolve(parameterTypes, paramsAddress)
+    internal fun onPublicCall(parameters: AmxCallbackParameters): Int {
+        val parameterValues = amxCallbackParameterResolver.resolve(parameterTypes, parameters)
         return onPublicCall(parameterValues)
     }
 
     internal abstract fun onPublicCall(parameterValues: Array<Any>): Int
+
 }

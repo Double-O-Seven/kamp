@@ -199,9 +199,9 @@ constructor(
         }
     }
 
-    override fun onPublicCall(name: String, paramsAddress: Int): Int? {
+    override fun onPublicCall(name: String, paramsAddress: Int, heapPointer: Int): Int? {
         return tryAndCatch {
-            amxCallbackExecutor.onPublicCall(name, paramsAddress)
+            amxCallbackExecutor.onPublicCall(name, paramsAddress, heapPointer)
         }
     }
 

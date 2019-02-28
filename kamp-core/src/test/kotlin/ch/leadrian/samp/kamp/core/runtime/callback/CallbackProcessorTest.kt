@@ -112,6 +112,7 @@ import ch.leadrian.samp.kamp.core.api.util.getInstance
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackExecutor
+import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameters
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
@@ -217,12 +218,12 @@ internal class CallbackProcessorTest {
             val expectedResult = 1234
             val callbackName = "onTest"
             val amxCallback = mockk<AmxCallback> {
-                every { onPublicCall(any<Int>()) } returns expectedResult
+                every { onPublicCall(any<AmxCallbackParameters>()) } returns expectedResult
                 every { name } returns callbackName
             }
             amxCallbackExecutor.register(amxCallback)
 
-            val result = callbackProcessor.onPublicCall(callbackName, 1337)
+            val result = callbackProcessor.onPublicCall(callbackName, 1337, 1234)
 
             verify { uncaughtExceptionNotifier wasNot Called }
             assertThat(result)
@@ -235,12 +236,12 @@ internal class CallbackProcessorTest {
             val amxCallbackExecutor: AmxCallbackExecutor = server.injector.getInstance()
             val callbackName = "onTest"
             val amxCallback = mockk<AmxCallback> {
-                every { onPublicCall(any<Int>()) } throws exception
+                every { onPublicCall(any<AmxCallbackParameters>()) } throws exception
                 every { name } returns callbackName
             }
             amxCallbackExecutor.register(amxCallback)
 
-            val result = callbackProcessor.onPublicCall(callbackName, 1337)
+            val result = callbackProcessor.onPublicCall(callbackName, 1337, 1234)
 
             verify { uncaughtExceptionNotifier.notify(exception) }
             assertThat(result)

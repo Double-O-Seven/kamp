@@ -11,8 +11,12 @@ constructor() {
 
     private val callbacksByName: MutableMap<String, AmxCallback> = mutableMapOf()
 
-    fun onPublicCall(name: String, paramsAddress: Int): Int? {
-        return callbacksByName[name]?.onPublicCall(paramsAddress)
+    fun onPublicCall(name: String, paramsAddress: Int, heapPointer: Int): Int? {
+        val parameters = AmxCallbackParameters(
+                address = paramsAddress,
+                heapPointer = heapPointer
+        )
+        return callbacksByName[name]?.onPublicCall(parameters)
     }
 
     fun register(callback: AmxCallback) {

@@ -7,7 +7,8 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
 
     private val unsafe: Unsafe = UnsafeProvider.instance
 
-    override fun resolve(parameterTypes: List<KClass<*>>, paramsAddress: Int): Array<Any> {
+    override fun resolve(parameterTypes: List<KClass<*>>, parameters: AmxCallbackParameters): Array<Any> {
+        val paramsAddress = parameters.address
         checkNumberOfParameters(paramsAddress, parameterTypes)
         val result: Array<Any?> = arrayOfNulls(parameterTypes.size)
         parameterTypes.forEachIndexed { index, type ->
@@ -15,7 +16,7 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
             result[index] = when (type) {
                 Int::class -> resolveInt(parameterAddress)
                 Float::class -> resolveFloat(parameterAddress)
-                String::class -> resolveString(parameterAddress)
+                String::class -> resolveString(parameterAddress, parameters.heapPointer)
                 else -> throw IllegalArgumentException("Unsupported parameter type: ${type.qualifiedName}")
             }
         }
@@ -30,13 +31,16 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
         }
     }
 
-    private fun resolveInt(parameterAddress: Long): Int = unsafe.getInt(parameterAddress)
+    private fun resolveInt(parameterAddress: Long): Int {
+        val result = unsafe.getInt(parameterAddress)
+        return result
+    }
 
     private fun resolveFloat(parameterAddress: Long): Float = unsafe.getFloat(parameterAddress)
 
-    private fun resolveString(parameterAddress: Long): String {
+    private fun resolveString(parameterAddress: Long, heapPointer: Int): String {
         val stringBuilder = StringBuilder()
-        val stringAddress = unsafe.getInt(parameterAddress)
+        val stringAddress = heapPointer + unsafe.getInt(parameterAddress)
         var index = 0
         while (true) {
             val character = unsafe.getInt((stringAddress + index * Int.SIZE_BYTES).toLong())

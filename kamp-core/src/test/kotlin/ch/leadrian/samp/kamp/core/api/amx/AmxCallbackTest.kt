@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.api.amx
 
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameterResolver
+import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameters
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat
@@ -11,10 +12,10 @@ internal class AmxCallbackTest {
 
     @Test
     fun shouldCallOnPublicCall() {
-        val paramsAddress = 1337
+        val parameters = AmxCallbackParameters(1337, 1234)
         val parameterValues = arrayOf(999, "haha")
         val amxCallbackParameterResolver = mockk<AmxCallbackParameterResolver> {
-            every { resolve(listOf(Int::class, String::class), paramsAddress) } returns parameterValues
+            every { resolve(listOf(Int::class, String::class), parameters) } returns parameterValues
         }
         val expectedResult = 1234
         val onPublicCall = mockk<(Array<Any>) -> Int> {
@@ -28,7 +29,7 @@ internal class AmxCallbackTest {
                 onPublicCall = onPublicCall
         )
 
-        val result = amxCallback.onPublicCall(paramsAddress)
+        val result = amxCallback.onPublicCall(parameters)
 
         assertThat(result)
                 .isEqualTo(expectedResult)

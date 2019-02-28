@@ -4,6 +4,6 @@ import kotlin.reflect.KClass
 
 internal interface AmxCallbackParameterResolver {
 
-    fun resolve(parameterTypes: List<KClass<*>>, paramsAddress: Int): Array<Any>
+    fun resolve(parameterTypes: List<KClass<*>>, parameters: AmxCallbackParameters): Array<Any>
 
 }

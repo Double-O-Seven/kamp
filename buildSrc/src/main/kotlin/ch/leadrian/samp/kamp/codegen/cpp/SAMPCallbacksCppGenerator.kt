@@ -83,7 +83,9 @@ internal class SAMPCallbacksCppGenerator(
             |    jmethodID onPublicCallMethodID = kampInstance.GetSAMPCallbacksMethodCache().GetOnPublicCallMethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
             |    jstring nameString = jniEnv->NewStringUTF(name);
-            |    jobject result = jniEnv->CallObjectMethod(sampCallbacksInstance, onPublicCallMethodID, nameString, reinterpret_cast<jint>(params));
+            |    cell *heapPointer = nullptr;
+            |    // amx_GetAddr(amx, 0, &heapPointer);
+            |    jobject result = jniEnv->CallObjectMethod(sampCallbacksInstance, onPublicCallMethodID, nameString, reinterpret_cast<jint>(params), reinterpret_cast<jint>(heapPointer));
             |    if (result != nullptr) {
             |        jfieldID integerValueFieldID = kampInstance.GetFieldCache().GetIntegerValueFieldID();
             |        jint resultValue = jniEnv->GetIntField(result, integerValueFieldID);

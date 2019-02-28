@@ -61,6 +61,7 @@ internal class SAMPCallbacksJavaGenerator(
                 .addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 .addParameter(nameParameterSpec)
                 .addParameter(Int::class.javaPrimitiveType, "paramsAddress")
+                .addParameter(Int::class.javaPrimitiveType, "heapPointer")
                 .returns(Integer::class.javaObjectType)
                 .addAnnotation(Nullable::class.java)
                 .build()

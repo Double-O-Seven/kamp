@@ -15,15 +15,23 @@ internal class AmxCallbackExecutorTest {
     @Test
     fun shouldCallCallback() {
         val paramsAddress = 1234
+        val heapPointer = 69
         val callbackName = "onFoo"
         val expectedResult = 1337
         val amxCallback = mockk<AmxCallback> {
-            every { onPublicCall(paramsAddress) } returns expectedResult
+            every {
+                onPublicCall(
+                        AmxCallbackParameters(
+                                paramsAddress,
+                                heapPointer
+                        )
+                )
+            } returns expectedResult
             every { name } returns callbackName
         }
         amxCallbackExecutor.register(amxCallback)
 
-        val result = amxCallbackExecutor.onPublicCall(callbackName, paramsAddress)
+        val result = amxCallbackExecutor.onPublicCall(callbackName, paramsAddress, heapPointer)
 
         assertThat(result)
                 .isEqualTo(expectedResult)
@@ -31,7 +39,7 @@ internal class AmxCallbackExecutorTest {
 
     @Test
     fun givenNoRegisteredCallbackItShouldReturnNull() {
-        val result = amxCallbackExecutor.onPublicCall("onBar", 1337)
+        val result = amxCallbackExecutor.onPublicCall("onBar", 1337, 69)
 
         assertThat(result)
                 .isNull()
@@ -41,15 +49,15 @@ internal class AmxCallbackExecutorTest {
     fun shouldNotCallUnregisteredCallback() {
         val callbackName = "onBaz"
         val amxCallback = mockk<AmxCallback> {
-            every { onPublicCall(any<Int>()) } returns 0
+            every { onPublicCall(any<AmxCallbackParameters>()) } returns 0
             every { name } returns callbackName
         }
         amxCallbackExecutor.register(amxCallback)
         amxCallbackExecutor.unregister(amxCallback)
 
-        amxCallbackExecutor.onPublicCall(callbackName, 1337)
+        amxCallbackExecutor.onPublicCall(callbackName, 1337, 69)
 
-        verify(exactly = 0) { amxCallback.onPublicCall(any<Int>()) }
+        verify(exactly = 0) { amxCallback.onPublicCall(any<AmxCallbackParameters>()) }
     }
 
     @Test
