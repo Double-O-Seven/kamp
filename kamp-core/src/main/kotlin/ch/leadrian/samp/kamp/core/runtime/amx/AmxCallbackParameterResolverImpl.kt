@@ -31,10 +31,7 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
         }
     }
 
-    private fun resolveInt(parameterAddress: Long): Int {
-        val result = unsafe.getInt(parameterAddress)
-        return result
-    }
+    private fun resolveInt(parameterAddress: Long): Int = unsafe.getInt(parameterAddress)
 
     private fun resolveFloat(parameterAddress: Long): Float = unsafe.getFloat(parameterAddress)
 
