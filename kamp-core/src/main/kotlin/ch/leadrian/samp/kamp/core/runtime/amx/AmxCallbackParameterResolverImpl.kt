@@ -15,6 +15,7 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
             val parameterAddress = (paramsAddress + (index + 1) * Int.SIZE_BYTES).toLong()
             result[index] = when (type) {
                 Int::class -> resolveInt(parameterAddress)
+                Boolean::class -> resolveBoolean(parameterAddress)
                 Float::class -> resolveFloat(parameterAddress)
                 String::class -> resolveString(parameterAddress, parameters.heapPointer)
                 else -> throw IllegalArgumentException("Unsupported parameter type: ${type.qualifiedName}")
@@ -32,6 +33,8 @@ internal object AmxCallbackParameterResolverImpl : AmxCallbackParameterResolver 
     }
 
     private fun resolveInt(parameterAddress: Long): Int = unsafe.getInt(parameterAddress)
+
+    private fun resolveBoolean(parameterAddress: Long): Boolean = unsafe.getInt(parameterAddress) != 0
 
     private fun resolveFloat(parameterAddress: Long): Float = unsafe.getFloat(parameterAddress)
 

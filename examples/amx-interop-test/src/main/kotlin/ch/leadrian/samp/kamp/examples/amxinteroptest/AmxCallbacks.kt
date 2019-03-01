@@ -31,17 +31,21 @@ constructor(
             messageSender.sendMessageToPlayer(player, Colors.WHITE, "You said: {0}", text)
             1
         }
-        amxCallbackFactory.create3<Int, Int, Int>("OnPlayerEnterVehicle") { playerId, vehicleId, _ ->
+        amxCallbackFactory.create3<Int, Int, Boolean>("OnPlayerEnterVehicle") { playerId, vehicleId, isPassenger ->
             val player = playerService.getPlayer(PlayerId.valueOf(playerId))
             val vehicle = vehicleService.getVehicle(VehicleId.valueOf(vehicleId))
-            messageSender.sendMessageToPlayer(player, Colors.WHITE, "Entering {0}...", vehicle.model)
+            if (isPassenger) {
+                messageSender.sendMessageToPlayer(player, Colors.WHITE, "Entering {0} as passenger...", vehicle.model)
+            } else {
+                messageSender.sendMessageToPlayer(player, Colors.WHITE, "Entering {0} as driver...", vehicle.model)
+            }
             1
         }
-        amxCallbackFactory.create3<String, String, Int>("OnRconLoginAttempt") { ip, password, success ->
-            if (success == 0) {
-                log.warn("Failed RCON login attempt from {}: {}", ip, password)
-            } else {
+        amxCallbackFactory.create3<String, String, Boolean>("OnRconLoginAttempt") { ip, password, success ->
+            if (success) {
                 log.info("Successful RCON login from {}", ip)
+            } else {
+                log.warn("Failed RCON login attempt from {}: {}", ip, password)
             }
             1
         }
