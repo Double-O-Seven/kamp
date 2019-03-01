@@ -34,11 +34,14 @@ internal class SAMPCallbacksCppGenerator(
             |#include "Kamp.hpp"
             |#include "SAMPCallbacksMethodCache.hpp"
             |
+            |extern void *pAMXFunctions;
+            |
             |PLUGIN_EXPORT unsigned int PLUGIN_CALL Supports() {
             |    return sampgdk::Supports() | SUPPORTS_PROCESS_TICK;
             |}
             |
             |PLUGIN_EXPORT bool PLUGIN_CALL Load(void **ppData) {
+            |    pAMXFunctions = ppData[PLUGIN_DATA_AMX_EXPORTS];
             |    return sampgdk::Load(ppData);
             |}
             |
@@ -83,7 +86,8 @@ internal class SAMPCallbacksCppGenerator(
             |    jmethodID onPublicCallMethodID = kampInstance.GetSAMPCallbacksMethodCache().GetOnPublicCallMethodID();
             |    JNIEnv *jniEnv = kampInstance.GetJNIEnv();
             |    jstring nameString = jniEnv->NewStringUTF(name);
-            |    unsigned char *heapPointer = amx->base + ((AMX_HEADER *)amx->base)->dat + amx->hlw;
+            |    cell *heapPointer = nullptr;
+            |    amx_GetAddr(amx, 0, &heapPointer);
             |    jobject result = jniEnv->CallObjectMethod(sampCallbacksInstance, onPublicCallMethodID, nameString, reinterpret_cast<jint>(params), reinterpret_cast<jint>(heapPointer));
             |    if (result != nullptr) {
             |        jfieldID integerValueFieldID = kampInstance.GetFieldCache().GetIntegerValueFieldID();
