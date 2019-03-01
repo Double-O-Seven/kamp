@@ -5,6 +5,7 @@ import ch.leadrian.samp.kamp.cidl.parser.FileInterfaceDefinitionSource
 import ch.leadrian.samp.kamp.cidl.parser.InterfaceDefinitionParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileLookup
+import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFiles
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
@@ -62,7 +63,7 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         SAMPNativeFunctionsCppGenerator(
                 functions = functions,
                 javaPackageName = extension.runtimeJavaPackageName,
-                kampPluginVersion = project.version.toString(),
+                kampPluginVersion = getKampPluginVersion(),
                 outputDirectory = cppOutputDirectory
         )
     }
@@ -75,6 +76,9 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         sampCallbacksMethodCacheHppGenerator.generate()
         sampNativeFunctionsCppGenerator.generate()
     }
+
+    @Input
+    fun getKampPluginVersion(): String = project.version.toString()
 
     @InputFiles
     fun getInputFiles(): List<File> = interfaceDefinitionFiles
