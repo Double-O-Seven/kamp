@@ -18,6 +18,13 @@ serverStarter {
     gameModeClassName = "ch.leadrian.samp.kamp.examples.lvdm.LvdmGameMode"
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
-    configProperty("kamp.ignore.version.mismatch", "true")
     configProperty("lvdm.respawn.cash.amount", "2500")
+    windowsKampPluginFile = project(":kamp-plugin").buildDir.resolve("lib/main/release/windows/kamp.dll")
+    linuxKampPluginFile = project(":kamp-plugin").buildDir.resolve("lib/main/release/linux/libkamp.so")
+}
+
+tasks {
+    configureServer {
+        dependsOn(project(":kamp-plugin").tasks.assemble)
+    }
 }

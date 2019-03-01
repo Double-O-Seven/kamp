@@ -14,5 +14,12 @@ serverStarter {
     rconPassword = "test1234"
     jvmOption("-Xmx1G")
     configProperty("kamp.streamer.rate.ms", "300")
-    configProperty("kamp.ignore.version.mismatch", "true")
+    windowsKampPluginFile = project(":kamp-plugin").buildDir.resolve("lib/main/release/windows/kamp.dll")
+    linuxKampPluginFile = project(":kamp-plugin").buildDir.resolve("lib/main/release/linux/libkamp.so")
+}
+
+tasks {
+    configureServer {
+        dependsOn(project(":kamp-plugin").tasks.assemble)
+    }
 }
