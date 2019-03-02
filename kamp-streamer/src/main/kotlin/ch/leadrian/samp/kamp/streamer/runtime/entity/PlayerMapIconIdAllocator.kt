@@ -27,7 +27,9 @@ constructor(
 
     override fun onPlayerConnect(player: Player) {
         playerMapIconIds[player] = LinkedList<PlayerMapIconId>().apply {
-            (0..99).forEach { add(PlayerMapIconId.valueOf(it)) }
+            for (i in 0..99) {
+                add(PlayerMapIconId.valueOf(i))
+            }
         }
     }
 

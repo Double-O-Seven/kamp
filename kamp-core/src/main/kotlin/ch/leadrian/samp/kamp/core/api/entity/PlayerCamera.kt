@@ -3,7 +3,6 @@ package ch.leadrian.samp.kamp.core.api.entity
 import ch.leadrian.samp.kamp.core.api.constants.CameraMode
 import ch.leadrian.samp.kamp.core.api.constants.CameraType
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
-import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerCameraCoordinatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerCameraFrontVectorProperty
@@ -11,7 +10,6 @@ import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceFloat
 
 class PlayerCamera
 internal constructor(

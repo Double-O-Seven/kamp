@@ -10,13 +10,13 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-internal class VehicleDSLTest {
+internal class VehicleSeatTest {
 
     @Nested
-    inner class VehicleSeatTests {
+    inner class ContainsTests {
 
         @Test
-        fun givenPlayerIsInVehicleSeatContainsShouldReturnTrue() {
+        fun givenPlayerIsInVehicleSeatItShouldReturnTrue() {
             val player: Player = mockk {
                 every { vehicleSeat } returns 1
             }
@@ -31,7 +31,7 @@ internal class VehicleDSLTest {
         }
 
         @Test
-        fun givenPlayerIsNotInVehicleSeatContainsShouldReturnTrue() {
+        fun givenPlayerIsNotInVehicleSeatItShouldReturnTrue() {
             val player: Player = mockk {
                 every { vehicleSeat } returns 2
             }
@@ -46,7 +46,7 @@ internal class VehicleDSLTest {
         }
 
         @Test
-        fun givenPlayerIsNotInVehicleContainsShouldReturnFalse() {
+        fun givenPlayerIsNotInVehicleItShouldReturnFalse() {
             val player: Player = mockk {
                 every { vehicleSeat } returns 1
             }
@@ -160,7 +160,5 @@ internal class VehicleDSLTest {
             assertThat(isDriver)
                     .isTrue()
         }
-
     }
-
 }

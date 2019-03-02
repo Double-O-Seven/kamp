@@ -26,7 +26,7 @@ import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
 import java.util.Locale
 
-internal class TabTabListDialogTest {
+internal class TabListDialogTest {
 
     private lateinit var builder: TabListDialog.Builder<Int>
 
