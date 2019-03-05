@@ -6,10 +6,5 @@ include(":kamp-view")
 include(":kamp-annotations")
 include(":kamp-annotation-processor")
 include(":kamp-common")
-include(":examples:lvdm")
-include(":examples:streamer-test")
-include(":examples:view-test")
-include(":examples:hooks")
-include(":examples:amx-interop-test")
 
 rootProject.name = "kamp"

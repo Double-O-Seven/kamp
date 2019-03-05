@@ -60,7 +60,6 @@ tasks {
                 .minus(project("kamp-plugin"))
                 .minus(project("kamp-annotations"))
                 .minus(project("kamp-annotation-processor"))
-                .minus(project("examples").allprojects)
         projects.forEach { dependsOn(it.tasks.test) }
         executionData.setFrom(projects.map { file("${it.buildDir}/jacoco/test.exec") })
         additionalSourceDirs.setFrom(projects.map { it.sourceSets[MAIN_SOURCE_SET_NAME].allSource.sourceDirectories })
@@ -141,7 +140,7 @@ configure(subprojects - project("kamp-plugin")) {
 
 }
 
-configure(subprojects - project("kamp-plugin") - project("examples").allprojects) {
+configure(subprojects - project("kamp-plugin")) {
     apply(plugin = "maven-publish")
     apply(plugin = "signing")
 
