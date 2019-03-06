@@ -100,7 +100,7 @@ constructor(
                 var t = System.currentTimeMillis()
                 streamer.stream(streamLocations)
                 t = System.currentTimeMillis() - t
-                log.debug("Streaming with {} took {} ms", streamer::class.java, t)
+                log.trace("Streaming with {} took {} ms", streamer::class.java, t)
             } catch (e: Exception) {
                 log.error("Exception while streaming with {}", streamer, e)
             }
