@@ -303,3 +303,19 @@ open class View(
     protected fun screenHeightToLetterSizeY(height: Float): Float = (height - 2f * verticalTextDrawBoxOffset) / olgasNumber
 
 }
+
+/**
+ * Invoke function for `apply`-like modification of a view, similar to building views using [ch.leadrian.samp.kamp.view.factory.ViewFactory].
+ *
+ * Example:
+ * ```kotlin
+ * val myView: View = createMyView(player)
+ *
+ * myView {
+ *     marginLeft = 4.pixels()
+ * }
+ * ```
+ */
+inline operator fun <T : View> T.invoke(action: T.() -> Unit) {
+    action()
+}
