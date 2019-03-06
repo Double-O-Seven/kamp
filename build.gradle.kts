@@ -11,7 +11,7 @@ buildscript {
     }
 
     dependencies {
-        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-gradle-plugins", version = "1.0.0-rc2")
+        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-textkey-generator", version = "1.0.0-rc1")
     }
 }
 

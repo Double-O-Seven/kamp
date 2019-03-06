@@ -1,6 +1,6 @@
 plugins {
     `kotlin-kapt`
-    id("kamp-textkeygen")
+    id("kamp-textkey-generator")
     id("kamp-java-codegen")
     id("kamp-kotlin-codegen")
 }
@@ -46,5 +46,4 @@ kampKotlinCodegen {
 
 textKeyGenerator {
     className = "KampCoreTextKeys"
-    packageName(corePackageName)
 }

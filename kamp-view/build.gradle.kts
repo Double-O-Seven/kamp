@@ -1,5 +1,5 @@
 plugins {
-    id("kamp-textkeygen")
+    id("kamp-textkey-generator")
 }
 
 dependencies {
@@ -8,5 +8,4 @@ dependencies {
 
 textKeyGenerator {
     className = "KampViewTextKeys"
-    packageName("ch.leadrian.samp.kamp.view")
 }
