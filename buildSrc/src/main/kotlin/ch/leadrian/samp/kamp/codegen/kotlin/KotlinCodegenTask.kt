@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.cidl.parser.FileInterfaceDefinitionSource
 import ch.leadrian.samp.kamp.cidl.parser.InterfaceDefinitionParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileLookup
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -16,8 +16,10 @@ open class KotlinCodegenTask
 @Inject
 constructor(private val fileLookup: FileLookup) : DefaultTask() {
 
-    private val extension: KotlinCodegenExtension
-        get() = project.extensions.getByType(KotlinCodegenExtension::class.java)
+    @get:Nested
+    internal val extension: KotlinCodegenExtension by lazy {
+        project.extensions.getByType(KotlinCodegenExtension::class.java)
+    }
 
     private val interfaceDefinitionFiles: List<File> by lazy {
         extension
@@ -80,9 +82,6 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
         amxCallbackGenerators.forEach { it.generate() }
         amxCallbackFactoryGenerator.generate()
     }
-
-    @InputFiles
-    fun getInputFiles(): List<File> = interfaceDefinitionFiles
 
     @OutputFiles
     fun getOutputFiles(): List<File> = mutableListOf<File>().apply {

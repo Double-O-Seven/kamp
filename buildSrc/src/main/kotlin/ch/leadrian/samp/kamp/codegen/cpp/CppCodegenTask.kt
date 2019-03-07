@@ -6,7 +6,7 @@ import ch.leadrian.samp.kamp.cidl.parser.InterfaceDefinitionParser
 import org.gradle.api.DefaultTask
 import org.gradle.api.internal.file.FileLookup
 import org.gradle.api.tasks.Input
-import org.gradle.api.tasks.InputFiles
+import org.gradle.api.tasks.Nested
 import org.gradle.api.tasks.OutputFiles
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -16,8 +16,10 @@ open class CppCodegenTask
 @Inject
 constructor(private val fileLookup: FileLookup) : DefaultTask() {
 
-    private val extension: CppCodegenExtension
-        get() = project.extensions.getByType(CppCodegenExtension::class.java)
+    @get:Nested
+    internal val extension: CppCodegenExtension by lazy {
+        project.extensions.getByType(CppCodegenExtension::class.java)
+    }
 
     private val interfaceDefinitionFiles: List<File> by lazy {
         extension
@@ -79,9 +81,6 @@ constructor(private val fileLookup: FileLookup) : DefaultTask() {
 
     @Input
     fun getKampPluginVersion(): String = project.version.toString()
-
-    @InputFiles
-    fun getInputFiles(): List<File> = interfaceDefinitionFiles
 
     @OutputFiles
     fun getOutputFiles(): List<File> = mutableListOf<File>().apply {
