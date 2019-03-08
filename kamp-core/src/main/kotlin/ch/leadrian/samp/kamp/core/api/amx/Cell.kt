@@ -105,7 +105,7 @@ class MutableBooleanCell
 constructor(value: Boolean = false) : BooleanCell(value) {
 
     /**
-     * Propagates the getter and setter to an booleanernal [Boolean] property.
+     * Propagates the getter and setter to an internal [Int] property.
      */
     override var value: Boolean
         get() = intValue != 0
