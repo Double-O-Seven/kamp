@@ -66,6 +66,56 @@ constructor(value: Int = 0) : IntCell(value) {
 }
 
 /**
+ * Base class for [Boolean] references.
+ *
+ * @see [Cell]
+ */
+sealed class BooleanCell(value: Boolean) : Cell(if (value) 1 else 0) {
+
+    /**
+     * Represents the [Boolean] value stored in the cell.
+     */
+    abstract val value: Boolean
+
+}
+
+/**
+ * Class for immutable [Boolean] references.
+ *
+ * @see [BooleanCell]
+ * @see [ImmutableBooleanCellType]
+ */
+class ImmutableBooleanCell
+@JvmOverloads
+constructor(value: Boolean = false) : BooleanCell(value) {
+
+    override val value: Boolean
+        get() = intValue != 0
+
+}
+
+/**
+ * Class for mutable [Boolean] references.
+ *
+ * @see [BooleanCell]
+ * @see [MutableBooleanCellType]
+ */
+class MutableBooleanCell
+@JvmOverloads
+constructor(value: Boolean = false) : BooleanCell(value) {
+
+    /**
+     * Propagates the getter and setter to an booleanernal [Boolean] property.
+     */
+    override var value: Boolean
+        get() = intValue != 0
+        set(value) {
+            intValue = if (value) 1 else 0
+        }
+
+}
+
+/**
  * Base class for [Float] references.
  *
  * @see [Cell]

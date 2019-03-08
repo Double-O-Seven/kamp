@@ -18,6 +18,8 @@ import kotlin.reflect.full.cast
  * * [ImmutableFloatCell]: sampgdk_InvokeNative format type 'r'
  * * [MutableFloatCell]: sampgdk_InvokeNative format type 'R'
  * * [Boolean]: sampgdk_InvokeNative format type 'b'
+ * * [ImmutableBooleanCell]: sampgdk_InvokeNative format type 'r'
+ * * [MutableBooleanCell]: sampgdk_InvokeNative format type 'R'
  * * [String]: sampgdk_InvokeNative format type 's'
  * * [OutputString]: sampgdk_InvokeNative format type 'S'
  * * [ImmutableCellArray]: sampgdk_InvokeNative format type 'a'
@@ -39,6 +41,8 @@ sealed class AmxNativeFunctionParameterType<T : Any>(val type: KClass<T>) {
                 ImmutableFloatCellType.type -> ImmutableFloatCellType as AmxNativeFunctionParameterType<T>
                 MutableFloatCellType.type -> MutableFloatCellType as AmxNativeFunctionParameterType<T>
                 BooleanType.type -> BooleanType as AmxNativeFunctionParameterType<T>
+                ImmutableBooleanCellType.type -> ImmutableBooleanCellType as AmxNativeFunctionParameterType<T>
+                MutableBooleanCellType.type -> MutableBooleanCellType as AmxNativeFunctionParameterType<T>
                 StringType.type -> StringType as AmxNativeFunctionParameterType<T>
                 OutputStringType.type -> OutputStringType as AmxNativeFunctionParameterType<T>
                 ImmutableCellArrayType.type -> ImmutableCellArrayType as AmxNativeFunctionParameterType<T>
@@ -130,6 +134,32 @@ object BooleanType : SimpleAmxNativeFunctionParameterType<Boolean>(Boolean::clas
             0
         }
     }
+
+}
+
+/**
+ * AMX type definition for [ImmutableBooleanCell] values.
+ *
+ * Uses sampgdk_InvokeNative format specifier 'r'.
+ */
+object ImmutableBooleanCellType : AmxNativeFunctionParameterType<ImmutableBooleanCell>(ImmutableBooleanCell::class) {
+
+    override fun getSpecifier(value: ImmutableBooleanCell): String = "r"
+
+    override fun transformToPrimitive(value: ImmutableBooleanCell): Any = value.singleElementIntArray
+
+}
+
+/**
+ * AMX type definition for [MutableBooleanCell] values.
+ *
+ * Uses sampgdk_InvokeNative format specifier 'R'.
+ */
+object MutableBooleanCellType : AmxNativeFunctionParameterType<MutableBooleanCell>(MutableBooleanCell::class) {
+
+    override fun getSpecifier(value: MutableBooleanCell): String = "R"
+
+    override fun transformToPrimitive(value: MutableBooleanCell): Any = value.singleElementIntArray
 
 }
 

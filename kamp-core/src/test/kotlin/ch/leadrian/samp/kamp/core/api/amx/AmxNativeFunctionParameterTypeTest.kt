@@ -241,6 +241,114 @@ internal class AmxNativeFunctionParameterTypeTest {
     }
 
     @Nested
+    inner class ImmutableBooleanCellTypeTests {
+
+        @Test
+        fun shouldHaveFormatSpecifierUpperCaseR() {
+            val specifier = ImmutableBooleanCellType.getSpecifier(ImmutableBooleanCell())
+
+            assertThat(specifier)
+                    .isEqualTo("r")
+        }
+
+        @Test
+        fun givenNonByteArrayValueTryToGetSpecifierShouldThrowException() {
+            val caughtThrowable = catchThrowable { ImmutableBooleanCellType.tryToGetSpecifier(1337f) }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @ParameterizedTest
+        @CsvSource("true, 1", "false, 0")
+        fun transformToPrimitiveShouldReturnSingleElementIntArray(booleanValue: Boolean, intValue: Int) {
+            val value = ImmutableBooleanCell(booleanValue)
+            val primitiveValue = ImmutableBooleanCellType.transformToPrimitive(value)
+
+            assertThat(primitiveValue)
+                    .isEqualTo(intArrayOf(intValue))
+        }
+
+        @Test
+        fun givenNonBooleanValueTryToConvertToIntShouldThrowException() {
+            val caughtThrowable = catchThrowable { BooleanType.tryToConvertToInt("Hi there") }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @Test
+        fun givenNonBooleanValueTryToTransformToPrimitiveShouldThrowException() {
+            val caughtThrowable = catchThrowable { BooleanType.tryToTransformToPrimitive("Hi there") }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @Test
+        fun shouldGetImmutableBooleanCellTypeByForImmutableBooleanCellClass() {
+            val parameterType: AmxNativeFunctionParameterType<ImmutableBooleanCell> = AmxNativeFunctionParameterType.get()
+
+            assertThat(parameterType)
+                    .isEqualTo(ImmutableBooleanCellType)
+        }
+    }
+
+    @Nested
+    inner class MutableBooleanCellTypeTests {
+
+        @Test
+        fun shouldHaveFormatSpecifierUpperCaseR() {
+            val specifier = MutableBooleanCellType.getSpecifier(MutableBooleanCell())
+
+            assertThat(specifier)
+                    .isEqualTo("R")
+        }
+
+        @Test
+        fun givenNonByteArrayValueTryToGetSpecifierShouldThrowException() {
+            val caughtThrowable = catchThrowable { MutableBooleanCellType.tryToGetSpecifier(1337f) }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @ParameterizedTest
+        @CsvSource("true, 1", "false, 0")
+        fun transformToPrimitiveShouldReturnSingleElementIntArray(booleanValue: Boolean, intValue: Int) {
+            val value = MutableBooleanCell(booleanValue)
+            val primitiveValue = MutableBooleanCellType.transformToPrimitive(value)
+
+            assertThat(primitiveValue)
+                    .isEqualTo(intArrayOf(intValue))
+        }
+
+        @Test
+        fun givenNonBooleanValueTryToConvertToIntShouldThrowException() {
+            val caughtThrowable = catchThrowable { BooleanType.tryToConvertToInt("Hi there") }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @Test
+        fun givenNonBooleanValueTryToTransformToPrimitiveShouldThrowException() {
+            val caughtThrowable = catchThrowable { BooleanType.tryToTransformToPrimitive("Hi there") }
+
+            assertThat(caughtThrowable)
+                    .isInstanceOf(ClassCastException::class.java)
+        }
+
+        @Test
+        fun shouldGetMutableBooleanCellTypeByForMutableBooleanCellClass() {
+            val parameterType: AmxNativeFunctionParameterType<MutableBooleanCell> = AmxNativeFunctionParameterType.get()
+
+            assertThat(parameterType)
+                    .isEqualTo(MutableBooleanCellType)
+        }
+    }
+
+    @Nested
     inner class FloatTypeTests {
 
         @Test
