@@ -23,8 +23,18 @@ class OutputString(internal val bytes: ByteArray) {
     /**
      * @returns the [String] value represented by the wrapped [ByteArray]. Any trailing zeroes are removed.
      */
-    val value: String
+    var value: String
         get() = String(bytes.removeTrailingZeroes(), StringEncoding.getCharset())
+        set(value) {
+            bytes.fill(0)
+            val stringBytes = value.toByteArray(StringEncoding.getCharset())
+            stringBytes.copyInto(
+                    destination = bytes,
+                    destinationOffset = 0,
+                    startIndex = 0,
+                    endIndex = stringBytes.size.coerceIn(0, bytes.size - 1)
+            )
+        }
 
     /**
      * @returns the maximum number of available bytes to represent an output [String].
