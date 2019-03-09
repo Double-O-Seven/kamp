@@ -16,6 +16,7 @@ import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.data.AngledLocation
 import ch.leadrian.samp.kamp.core.api.data.Location
 import ch.leadrian.samp.kamp.core.api.data.Position
+import ch.leadrian.samp.kamp.core.api.data.Quaternion
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
 import ch.leadrian.samp.kamp.core.api.data.VehicleColors
 import ch.leadrian.samp.kamp.core.api.data.VehicleDamageStatus
@@ -44,6 +45,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleHealthProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleLocationProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleParametersProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehiclePositionProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleRotationQuaternionProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleVelocityProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.VehicleWindowStatesProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
@@ -111,6 +113,8 @@ internal constructor(
     var coordinates: Vector3D by VehicleCoordinatesProperty(nativeFunctionExecutor)
 
     var angle: Float by VehicleAngleProperty(nativeFunctionExecutor)
+
+    val rotationQuaternion: Quaternion by VehicleRotationQuaternionProperty(nativeFunctionExecutor)
 
     var interiorId: Int = 0
         set(value) {
