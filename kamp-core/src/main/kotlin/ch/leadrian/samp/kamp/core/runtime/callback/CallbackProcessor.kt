@@ -30,7 +30,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
-import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
+import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
@@ -485,12 +485,12 @@ constructor(
         tryAndCatch {
             onPlayerKeyStateChangeHandler.onPlayerKeyStateChange(
                     player = playerid.toPlayer(),
-                    oldKeys = PlayerKeys(
+                    oldKeys = playerKeysOf(
                             keys = oldkeys,
                             upDown = 0,
                             leftRight = 0
                     ),
-                    newKeys = PlayerKeys(
+                    newKeys = playerKeysOf(
                             keys = newkeys,
                             upDown = 0,
                             leftRight = 0

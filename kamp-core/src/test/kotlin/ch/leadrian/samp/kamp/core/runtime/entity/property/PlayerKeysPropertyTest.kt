@@ -1,7 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.property
 
-import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
@@ -40,7 +40,7 @@ internal class PlayerKeysPropertyTest {
         val playerKeys = playerKeysProperty.getValue(player, property)
 
         assertThat(playerKeys)
-                .isEqualTo(PlayerKeys(keys = 50, upDown = 75, leftRight = 100))
+                .isEqualTo(playerKeysOf(keys = 50, upDown = 75, leftRight = 100))
     }
 
 }

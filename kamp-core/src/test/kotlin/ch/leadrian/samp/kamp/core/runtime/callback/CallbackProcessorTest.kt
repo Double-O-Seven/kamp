@@ -80,7 +80,7 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
-import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
+import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -2666,8 +2666,8 @@ internal class CallbackProcessorTest {
             verify {
                 onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
                         player = player,
-                        oldKeys = PlayerKeys(256, 0, 0),
-                        newKeys = PlayerKeys(64, 0, 0)
+                        oldKeys = playerKeysOf(256, 0, 0),
+                        newKeys = playerKeysOf(64, 0, 0)
                 )
             }
         }
@@ -2709,8 +2709,8 @@ internal class CallbackProcessorTest {
             verify {
                 onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
                         player = player,
-                        oldKeys = PlayerKeys(256, 0, 0),
-                        newKeys = PlayerKeys(64, 0, 0)
+                        oldKeys = playerKeysOf(256, 0, 0),
+                        newKeys = playerKeysOf(64, 0, 0)
                 )
             }
         }

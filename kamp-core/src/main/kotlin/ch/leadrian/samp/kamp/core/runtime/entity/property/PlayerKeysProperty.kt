@@ -1,6 +1,7 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.property
 
 import ch.leadrian.samp.kamp.core.api.data.PlayerKeys
+import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.types.ReferenceInt
@@ -22,7 +23,7 @@ internal class PlayerKeysProperty(
                 leftright = leftRight,
                 updown = upDown
         )
-        return PlayerKeys(
+        return playerKeysOf(
                 keys = keys.value,
                 leftRight = leftRight.value,
                 upDown = upDown.value
