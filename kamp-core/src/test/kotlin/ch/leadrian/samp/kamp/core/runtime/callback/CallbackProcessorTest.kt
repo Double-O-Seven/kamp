@@ -80,6 +80,11 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.MapObjectHitTarget
+import ch.leadrian.samp.kamp.core.api.data.NoHitTarget
+import ch.leadrian.samp.kamp.core.api.data.PlayerHitTarget
+import ch.leadrian.samp.kamp.core.api.data.PlayerMapObjectHitTarget
+import ch.leadrian.samp.kamp.core.api.data.VehicleHitTarget
 import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
@@ -5189,7 +5194,7 @@ internal class CallbackProcessorTest {
         }
 
         @Nested
-        inner class PlayerTargetTests {
+        inner class PlayerHitTargetTests {
 
             private lateinit var targetPlayer: Player
             private val targetPlayerId = 187
@@ -5230,7 +5235,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerTarget(targetPlayer),
+                            hitTarget = PlayerHitTarget(targetPlayer),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5267,7 +5272,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerTarget(targetPlayer),
+                            hitTarget = PlayerHitTarget(targetPlayer),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5348,7 +5353,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerTarget(targetPlayer),
+                            hitTarget = PlayerHitTarget(targetPlayer),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5356,7 +5361,7 @@ internal class CallbackProcessorTest {
         }
 
         @Nested
-        inner class VehicleTargetTests {
+        inner class VehicleHitTargetTests {
 
             private val targetVehicle = mockk<Vehicle>()
             private val targetVehicleId = 187
@@ -5398,7 +5403,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.VehicleTarget(targetVehicle),
+                            hitTarget = VehicleHitTarget(targetVehicle),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5435,7 +5440,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.VehicleTarget(targetVehicle),
+                            hitTarget = VehicleHitTarget(targetVehicle),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5516,7 +5521,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.VehicleTarget(targetVehicle),
+                            hitTarget = VehicleHitTarget(targetVehicle),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5524,7 +5529,7 @@ internal class CallbackProcessorTest {
         }
 
         @Nested
-        inner class MapObjectTargetTests {
+        inner class MapObjectHitTargetTests {
 
             private val targetMapObject = mockk<MapObject>()
             private val targetMapObjectId = 187
@@ -5566,7 +5571,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.MapObjectTarget(targetMapObject),
+                            hitTarget = MapObjectHitTarget(targetMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5603,7 +5608,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.MapObjectTarget(targetMapObject),
+                            hitTarget = MapObjectHitTarget(targetMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5684,7 +5689,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.MapObjectTarget(targetMapObject),
+                            hitTarget = MapObjectHitTarget(targetMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5692,7 +5697,7 @@ internal class CallbackProcessorTest {
         }
 
         @Nested
-        inner class PlayerMapObjectTargetTests {
+        inner class PlayerMapObjectHitTargetTests {
 
             private val targetPlayerMapObject = mockk<PlayerMapObject>()
             private val targetPlayerMapObjectId = 187
@@ -5734,7 +5739,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(targetPlayerMapObject),
+                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5771,7 +5776,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(targetPlayerMapObject),
+                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5852,7 +5857,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(targetPlayerMapObject),
+                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5860,7 +5865,7 @@ internal class CallbackProcessorTest {
         }
 
         @Nested
-        inner class NoTargetTests {
+        inner class NoHitTargetTests {
 
             @Test
             fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
@@ -5893,7 +5898,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.NoTarget,
+                            hitTarget = NoHitTarget,
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5930,7 +5935,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.NoTarget,
+                            hitTarget = NoHitTarget,
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }
@@ -5986,7 +5991,7 @@ internal class CallbackProcessorTest {
                     onPlayerWeaponShotListener.onPlayerShotWeapon(
                             player = player,
                             weaponModel = WeaponModel.AK47,
-                            hitTarget = OnPlayerWeaponShotListener.Target.NoTarget,
+                            hitTarget = NoHitTarget,
                             coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
                     )
                 }

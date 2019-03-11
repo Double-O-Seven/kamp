@@ -30,6 +30,11 @@ import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.constants.VehicleComponentModel
 import ch.leadrian.samp.kamp.core.api.constants.VehicleSirenState
 import ch.leadrian.samp.kamp.core.api.constants.WeaponModel
+import ch.leadrian.samp.kamp.core.api.data.MapObjectHitTarget
+import ch.leadrian.samp.kamp.core.api.data.NoHitTarget
+import ch.leadrian.samp.kamp.core.api.data.PlayerHitTarget
+import ch.leadrian.samp.kamp.core.api.data.PlayerMapObjectHitTarget
+import ch.leadrian.samp.kamp.core.api.data.VehicleHitTarget
 import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
@@ -803,11 +808,11 @@ constructor(
         val result = tryAndCatch {
             val player = playerid.toPlayer()
             val target = when (BulletHitType[hittype]) {
-                BulletHitType.NONE -> OnPlayerWeaponShotListener.Target.NoTarget
-                BulletHitType.PLAYER -> OnPlayerWeaponShotListener.Target.PlayerTarget(hitid.toPlayer())
-                BulletHitType.VEHICLE -> OnPlayerWeaponShotListener.Target.VehicleTarget(hitid.toVehicle())
-                BulletHitType.OBJECT -> OnPlayerWeaponShotListener.Target.MapObjectTarget(hitid.toMapObject())
-                BulletHitType.PLAYER_OBJECT -> OnPlayerWeaponShotListener.Target.PlayerMapObjectTarget(
+                BulletHitType.NONE -> NoHitTarget
+                BulletHitType.PLAYER -> PlayerHitTarget(hitid.toPlayer())
+                BulletHitType.VEHICLE -> VehicleHitTarget(hitid.toVehicle())
+                BulletHitType.OBJECT -> MapObjectHitTarget(hitid.toMapObject())
+                BulletHitType.PLAYER_OBJECT -> PlayerMapObjectHitTarget(
                         hitid.toPlayerMapObject(player)
                 )
             }
