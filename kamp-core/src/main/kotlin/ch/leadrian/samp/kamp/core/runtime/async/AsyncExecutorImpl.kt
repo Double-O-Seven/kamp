@@ -3,7 +3,9 @@ package ch.leadrian.samp.kamp.core.runtime.async
 import ch.leadrian.samp.kamp.core.api.async.AsyncExecutor
 import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
 import ch.leadrian.samp.kamp.core.api.callback.OnProcessTickListener
+import ch.leadrian.samp.kamp.core.api.exception.SafeCaller
 import ch.leadrian.samp.kamp.core.api.exception.UncaughtExceptionNotifier
+import ch.leadrian.samp.kamp.core.api.exception.tryAndCatch
 import ch.leadrian.samp.kamp.core.api.service.ServerService
 import ch.leadrian.samp.kamp.core.api.util.ExecutorServiceFactory
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
@@ -23,13 +25,8 @@ constructor(
         private val callbackListenerManager: CallbackListenerManager,
         private val serverService: ServerService,
         executorServiceFactory: ExecutorServiceFactory
-) : AsyncExecutor, OnProcessTickListener {
+) : AsyncExecutor, OnProcessTickListener, SafeCaller {
 
-    private companion object {
-
-        val log = loggerFor<AsyncExecutorImpl>()
-
-    }
 
     private var started: Boolean = false
 
@@ -41,8 +38,10 @@ constructor(
 
     private val mainThreadTasks = ConcurrentLinkedQueue<() -> Unit>()
 
+    override val log = loggerFor<AsyncExecutorImpl>()
+
     @com.google.inject.Inject(optional = true)
-    internal var uncaughtExceptionNotifier: UncaughtExceptionNotifier? = null
+    override var uncaughtExceptionNotifier: UncaughtExceptionNotifier? = null
 
     @PostConstruct
     fun initialize() {
@@ -68,12 +67,9 @@ constructor(
 
     override fun onProcessTick() {
         do {
-            try {
-                val task = mainThreadTasks.poll() ?: break
+            tryAndCatch {
+                val task = mainThreadTasks.poll() ?: return
                 task.invoke()
-            } catch (e: Exception) {
-                log.error("Exception while processing main thread tasks", e)
-                notifyAboutException(e)
             }
         } while (true)
     }
@@ -109,15 +105,7 @@ constructor(
     private fun handleFailure(e: Exception, onFailure: ((Exception) -> Unit)?) {
         when {
             onFailure != null -> executeOnMainThread { onFailure(e) }
-            uncaughtExceptionNotifier != null -> executeOnMainThread { notifyAboutException(e) }
-        }
-    }
-
-    private fun notifyAboutException(exception: Exception) {
-        try {
-            uncaughtExceptionNotifier?.notify(exception)
-        } catch (e: Exception) {
-            log.error("Exception while notifying {} about exception", uncaughtExceptionNotifier, e)
+            uncaughtExceptionNotifier != null -> executeOnMainThread { handleException(e) }
         }
     }
 
@@ -135,6 +123,7 @@ constructor(
             try {
                 result.complete(action())
             } catch (e: Exception) {
+                log.error("Exception in main thread execution", e)
                 result.completeExceptionally(e)
             }
         }
