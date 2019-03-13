@@ -2,7 +2,7 @@ package ch.leadrian.samp.kamp.core.runtime.command
 
 import ch.leadrian.samp.kamp.core.api.entity.Entity
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
-import ch.leadrian.samp.kamp.core.api.entity.registry.EntityRegistry
+import ch.leadrian.samp.kamp.core.runtime.entity.registry.EntityRegistry
 import io.mockk.every
 import io.mockk.mockk
 import org.assertj.core.api.Assertions.assertThat

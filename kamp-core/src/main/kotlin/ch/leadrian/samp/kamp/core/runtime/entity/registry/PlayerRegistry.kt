@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.callback.Priority
 import ch.leadrian.samp.kamp.core.api.constants.DisconnectReason
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
-import ch.leadrian.samp.kamp.core.api.entity.registry.EntityRegistry
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import javax.annotation.PostConstruct
 import javax.inject.Inject
