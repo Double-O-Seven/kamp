@@ -18,6 +18,7 @@ buildscript {
 plugins {
     kotlin("jvm")
     java
+    maven
     `maven-publish`
     signing
     `build-scan`
