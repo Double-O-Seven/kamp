@@ -90,26 +90,6 @@ internal constructor(
     override val id: VehicleId
         get() = requireNotDestroyed { field }
 
-    init {
-        val vehicleId: Int = nativeFunctionExecutor.createVehicle(
-                vehicletype = model.value,
-                color1 = colors.color1.value,
-                color2 = colors.color2.value,
-                x = coordinates.x,
-                y = coordinates.y,
-                z = coordinates.z,
-                rotation = rotation,
-                addsiren = addSiren,
-                respawn_delay = respawnDelay ?: -1
-        )
-
-        if (vehicleId == SAMPConstants.INVALID_VEHICLE_ID) {
-            throw CreationFailedException("Could not create vehicle")
-        }
-
-        id = VehicleId.valueOf(vehicleId)
-    }
-
     var coordinates: Vector3D by VehicleCoordinatesProperty(nativeFunctionExecutor)
 
     var angle: Float by VehicleAngleProperty(nativeFunctionExecutor)
@@ -182,6 +162,26 @@ internal constructor(
     var velocity: Vector3D by VehicleVelocityProperty(nativeFunctionExecutor)
 
     var damageStatus: VehicleDamageStatus by VehicleDamageStatusProperty(nativeFunctionExecutor)
+
+    init {
+        val vehicleId: Int = nativeFunctionExecutor.createVehicle(
+                vehicletype = model.value,
+                color1 = colors.color1.value,
+                color2 = colors.color2.value,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z,
+                rotation = rotation,
+                addsiren = addSiren,
+                respawn_delay = respawnDelay ?: -1
+        )
+
+        if (vehicleId == SAMPConstants.INVALID_VEHICLE_ID) {
+            throw CreationFailedException("Could not create vehicle")
+        }
+
+        id = VehicleId.valueOf(vehicleId)
+    }
 
     fun isStreamedIn(forPlayer: Player): Boolean =
             nativeFunctionExecutor.isVehicleStreamedIn(vehicleid = id.value, forplayerid = forPlayer.id.value)

@@ -9,6 +9,9 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : HasPlayer {
 
+    val index: Int
+        get() = nativeFunctionExecutor.getPlayerAnimationIndex(player.id.value)
+
     @JvmOverloads
     fun apply(
             animation: Animation,
@@ -38,8 +41,5 @@ internal constructor(
     fun clear(forceSync: Boolean = false) {
         nativeFunctionExecutor.clearAnimations(playerid = player.id.value, forcesync = forceSync)
     }
-
-    val index: Int
-        get() = nativeFunctionExecutor.getPlayerAnimationIndex(player.id.value)
 
 }

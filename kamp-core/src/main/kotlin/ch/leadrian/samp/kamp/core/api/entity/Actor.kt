@@ -46,6 +46,26 @@ internal constructor(
     override val id: ActorId
         get() = requireNotDestroyed { field }
 
+    var coordinates: Vector3D by ActorCoordinatesProperty(nativeFunctionExecutor)
+
+    var angle: Float by ActorAngleProperty(nativeFunctionExecutor)
+
+    var virtualWorldId: Int
+        get() = nativeFunctionExecutor.getActorVirtualWorld(id.value)
+        set(value) {
+            nativeFunctionExecutor.setActorVirtualWorld(actorid = id.value, vworld = value)
+        }
+
+    var position: Position by ActorPositionProperty(nativeFunctionExecutor)
+
+    var health: Float by ActorHealthProperty(nativeFunctionExecutor)
+
+    var isInvulnerable: Boolean
+        get() = nativeFunctionExecutor.isActorInvulnerable(id.value)
+        set(value) {
+            nativeFunctionExecutor.setActorInvulnerable(id.value, value)
+        }
+
     init {
         val actorId = nativeFunctionExecutor.createActor(
                 modelid = model.value,
@@ -90,26 +110,6 @@ internal constructor(
     fun clearAnimation() {
         nativeFunctionExecutor.clearActorAnimations(id.value)
     }
-
-    var coordinates: Vector3D by ActorCoordinatesProperty(nativeFunctionExecutor)
-
-    var angle: Float by ActorAngleProperty(nativeFunctionExecutor)
-
-    var virtualWorldId: Int
-        get() = nativeFunctionExecutor.getActorVirtualWorld(id.value)
-        set(value) {
-            nativeFunctionExecutor.setActorVirtualWorld(actorid = id.value, vworld = value)
-        }
-
-    var position: Position by ActorPositionProperty(nativeFunctionExecutor)
-
-    var health: Float by ActorHealthProperty(nativeFunctionExecutor)
-
-    var isInvulnerable: Boolean
-        get() = nativeFunctionExecutor.isActorInvulnerable(id.value)
-        set(value) {
-            nativeFunctionExecutor.setActorInvulnerable(id.value, value)
-        }
 
     internal fun onStreamIn(player: Player) {
         onActorStreamInReceiver.onActorStreamIn(this, player)

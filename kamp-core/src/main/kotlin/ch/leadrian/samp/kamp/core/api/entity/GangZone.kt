@@ -16,6 +16,8 @@ internal constructor(
     override val id: GangZoneId
         get() = requireNotDestroyed { field }
 
+    val area: Rectangle = area.toRectangle()
+
     init {
         val gangZoneId = nativeFunctionExecutor.gangZoneCreate(
                 minx = area.minX,
@@ -30,8 +32,6 @@ internal constructor(
 
         id = GangZoneId.valueOf(gangZoneId)
     }
-
-    val area: Rectangle = area.toRectangle()
 
     fun show(forPlayer: Player, color: Color) {
         nativeFunctionExecutor.gangZoneShowForPlayer(

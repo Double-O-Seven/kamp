@@ -10,6 +10,9 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : HasPlayer {
 
+    val upperIndex: Int
+        get() = nativeFunctionExecutor.getPVarsUpperIndex(player.id.value)
+
     fun setInt(varName: String, value: Int): Boolean =
             nativeFunctionExecutor.setPVarInt(playerid = player.id.value, varname = varName, value = value)
 
@@ -38,9 +41,6 @@ internal constructor(
 
     fun delete(varName: String): Boolean =
             nativeFunctionExecutor.deletePVar(playerid = player.id.value, varname = varName)
-
-    val upperIndex: Int
-        get() = nativeFunctionExecutor.getPVarsUpperIndex(player.id.value)
 
     fun getNameAtIndex(index: Int, resultLength: Int = 256): String? {
         val result = ReferenceString()

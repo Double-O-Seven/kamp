@@ -21,6 +21,24 @@ internal constructor(
     override val id: TextLabelId
         get() = requireNotDestroyed { field }
 
+    private var _text: String = text
+
+    override var text: String
+        get() = _text
+        set(value) {
+            update(value, _color)
+        }
+
+    private var _color: Color = color.toColor()
+
+    override var color: Color
+        get() = _color
+        set(value) {
+            update(_text, value)
+        }
+
+    override val coordinates: Vector3D = coordinates.toVector3D()
+
     init {
         val textLabelId = nativeFunctionExecutor.create3DTextLabel(
                 DrawDistance = drawDistance,
@@ -39,24 +57,6 @@ internal constructor(
 
         id = TextLabelId.valueOf(textLabelId)
     }
-
-    private var _text: String = text
-
-    override var text: String
-        get() = _text
-        set(value) {
-            update(value, _color)
-        }
-
-    private var _color: Color = color.toColor()
-
-    override var color: Color
-        get() = _color
-        set(value) {
-            update(_text, value)
-        }
-
-    override val coordinates: Vector3D = coordinates.toVector3D()
 
     override fun update(text: String, color: Color) {
         nativeFunctionExecutor.update3DTextLabelText(

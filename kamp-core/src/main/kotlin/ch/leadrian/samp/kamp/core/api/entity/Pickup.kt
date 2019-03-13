@@ -29,6 +29,8 @@ internal constructor(
     override val id: PickupId
         get() = requireNotDestroyed { field }
 
+    val coordinates: Vector3D = coordinates.toVector3D()
+
     init {
         val pickupId = nativeFunctionExecutor.createPickup(
                 model = modelId,
@@ -45,8 +47,6 @@ internal constructor(
 
         id = PickupId.valueOf(pickupId)
     }
-
-    val coordinates: Vector3D = coordinates.toVector3D()
 
     internal fun onPickUp(player: Player) {
         onPlayerPickUpPickupReceiver.onPlayerPickUpPickup(player, this)

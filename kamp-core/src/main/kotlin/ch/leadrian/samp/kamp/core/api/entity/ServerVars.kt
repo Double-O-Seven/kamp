@@ -7,6 +7,9 @@ import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 class ServerVars
 internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecutor) {
 
+    val upperIndex: Int
+        get() = nativeFunctionExecutor.getSVarsUpperIndex()
+
     fun setInt(varName: String, value: Int): Boolean = nativeFunctionExecutor.setSVarInt(varName, value)
 
     fun getInt(varName: String): Int = nativeFunctionExecutor.getSVarInt(varName)
@@ -25,9 +28,6 @@ internal constructor(private val nativeFunctionExecutor: SAMPNativeFunctionExecu
     fun getFloat(varName: String): Float = nativeFunctionExecutor.getSVarFloat(varName)
 
     fun delete(varName: String): Boolean = nativeFunctionExecutor.deleteSVar(varName)
-
-    val upperIndex: Int
-        get() = nativeFunctionExecutor.getSVarsUpperIndex()
 
     fun getNameAtIndex(index: Int, resultLength: Int = 256): String? {
         val value = ReferenceString()

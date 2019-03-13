@@ -40,6 +40,16 @@ internal constructor(
     override val id: PlayerMapObjectId
         get() = requireNotDestroyed { field }
 
+    override var coordinates: Vector3D by PlayerMapObjectCoordinatesProperty(nativeFunctionExecutor)
+
+    override var rotation: Vector3D by PlayerMapObjectRotationProperty(nativeFunctionExecutor)
+
+    override val isMoving: Boolean
+        get() = nativeFunctionExecutor.isPlayerObjectMoving(playerid = player.id.value, objectid = id.value)
+
+    override var isDestroyed: Boolean = false
+        get() = field || !player.isConnected
+
     init {
         val playerMapObjectId = nativeFunctionExecutor.createPlayerObject(
                 playerid = player.id.value,
@@ -92,10 +102,6 @@ internal constructor(
         )
     }
 
-    override var coordinates: Vector3D by PlayerMapObjectCoordinatesProperty(nativeFunctionExecutor)
-
-    override var rotation: Vector3D by PlayerMapObjectRotationProperty(nativeFunctionExecutor)
-
     override fun disableCameraCollision() {
         nativeFunctionExecutor.setPlayerObjectNoCameraCol(playerid = player.id.value, objectid = id.value)
     }
@@ -117,9 +123,6 @@ internal constructor(
     override fun stop() {
         nativeFunctionExecutor.stopPlayerObject(playerid = player.id.value, objectid = id.value)
     }
-
-    override val isMoving: Boolean
-        get() = nativeFunctionExecutor.isPlayerObjectMoving(playerid = player.id.value, objectid = id.value)
 
     override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
         nativeFunctionExecutor.setPlayerObjectMaterial(
@@ -175,9 +178,6 @@ internal constructor(
     internal fun onSelect(modelId: Int, coordinates: Vector3D) {
         onPlayerSelectPlayerMapObjectReceiver.onPlayerSelectPlayerMapObject(this, modelId, coordinates)
     }
-
-    override var isDestroyed: Boolean = false
-        get() = field || !player.isConnected
 
     override fun onDestroy() {
         nativeFunctionExecutor.destroyPlayerObject(playerid = player.id.value, objectid = id.value)

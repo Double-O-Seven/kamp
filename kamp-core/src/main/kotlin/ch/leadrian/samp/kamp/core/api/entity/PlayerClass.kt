@@ -12,6 +12,8 @@ internal constructor(
 
     override val id: PlayerClassId
 
+    val spawnInfo: SpawnInfo = spawnInfo.toSpawnInfo()
+
     init {
         val playerClassId = with(spawnInfo) {
             val teamId = this.teamId
@@ -47,6 +49,4 @@ internal constructor(
         }
         id = PlayerClassId.valueOf(playerClassId)
     }
-
-    val spawnInfo: SpawnInfo = spawnInfo.toSpawnInfo()
 }

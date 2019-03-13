@@ -23,6 +23,27 @@ internal constructor(
     override val id: PlayerTextLabelId
         get() = requireNotDestroyed { field }
 
+    private var _text: String = text
+
+    override var text: String
+        get() = _text
+        set(value) {
+            update(value, _color)
+        }
+
+    private var _color: Color = color.toColor()
+
+    override var color: Color
+        get() = _color
+        set(value) {
+            update(_text, value)
+        }
+
+    override val coordinates: Vector3D = coordinates.toVector3D()
+
+    override var isDestroyed: Boolean = false
+        get() = field || !player.isConnected
+
     init {
         val playerTextLabelId = nativeFunctionExecutor.createPlayer3DTextLabel(
                 playerid = player.id.value,
@@ -44,24 +65,6 @@ internal constructor(
         id = PlayerTextLabelId.valueOf(playerTextLabelId)
     }
 
-    private var _text: String = text
-
-    override var text: String
-        get() = _text
-        set(value) {
-            update(value, _color)
-        }
-
-    private var _color: Color = color.toColor()
-
-    override var color: Color
-        get() = _color
-        set(value) {
-            update(_text, value)
-        }
-
-    override val coordinates: Vector3D = coordinates.toVector3D()
-
     override fun update(text: String, color: Color) {
         nativeFunctionExecutor.updatePlayer3DTextLabelText(
                 playerid = player.id.value,
@@ -72,9 +75,6 @@ internal constructor(
         _color = color
         _text = text
     }
-
-    override var isDestroyed: Boolean = false
-        get() = field || !player.isConnected
 
     override fun onDestroy() {
         nativeFunctionExecutor.deletePlayer3DTextLabel(playerid = player.id.value, id = id.value)

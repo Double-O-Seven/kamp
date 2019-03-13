@@ -109,28 +109,6 @@ internal constructor(
 
     val animation: PlayerAnimation = PlayerAnimation(this, nativeFunctionExecutor)
 
-    fun spawn() {
-        nativeFunctionExecutor.spawnPlayer(id.value)
-    }
-
-    fun setSpawnInfo(spawnInfo: SpawnInfo) {
-        nativeFunctionExecutor.setSpawnInfo(
-                playerid = id.value,
-                team = spawnInfo.teamId?.value ?: SAMPConstants.NO_TEAM,
-                skin = spawnInfo.skinModel.value,
-                x = spawnInfo.position.x,
-                y = spawnInfo.position.y,
-                z = spawnInfo.position.z,
-                rotation = spawnInfo.position.angle,
-                weapon1 = spawnInfo.weapon1.model.value,
-                weapon1_ammo = spawnInfo.weapon1.ammo,
-                weapon2 = spawnInfo.weapon2.model.value,
-                weapon2_ammo = spawnInfo.weapon2.ammo,
-                weapon3 = spawnInfo.weapon3.model.value,
-                weapon3_ammo = spawnInfo.weapon3.ammo
-        )
-    }
-
     var coordinates: Vector3D by PlayerCoordinatesProperty(nativeFunctionExecutor)
 
     var angle: Float by PlayerAngleProperty(nativeFunctionExecutor)
@@ -154,18 +132,6 @@ internal constructor(
     var angledLocation: AngledLocation by PlayerAngledLocationProperty(nativeFunctionExecutor)
 
     var velocity: Vector3D by PlayerVelocityProperty(nativeFunctionExecutor)
-
-    fun setCoordinatesFindZ(coordinates: Vector3D) {
-        nativeFunctionExecutor.setPlayerPosFindZ(
-                playerid = id.value,
-                x = coordinates.x,
-                y = coordinates.y,
-                z = coordinates.z
-        )
-    }
-
-    fun isStreamedIn(forPlayer: Player): Boolean =
-            nativeFunctionExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
 
     var health: Float by PlayerHealthProperty(nativeFunctionExecutor)
 
@@ -214,14 +180,6 @@ internal constructor(
             giveMoney(moneyToGive)
         }
 
-    fun giveMoney(amount: Int) {
-        nativeFunctionExecutor.givePlayerMoney(playerid = id.value, money = amount)
-    }
-
-    fun resetMoney() {
-        nativeFunctionExecutor.resetPlayerMoney(id.value)
-    }
-
     val ipAddress: String by lazy {
         val ipAddress = ReferenceString()
         nativeFunctionExecutor.getPlayerIp(playerid = id.value, ip = ipAddress, size = 16)
@@ -246,22 +204,6 @@ internal constructor(
 
     var time: Time by PlayerTimeProperty(nativeFunctionExecutor)
 
-    fun toggleClock(toggle: Boolean) {
-        nativeFunctionExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
-    }
-
-    fun setWeather(weatherId: Int) {
-        nativeFunctionExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
-    }
-
-    fun setWeather(weather: Weather) {
-        setWeather(weather.value)
-    }
-
-    fun forceClassSelection() {
-        nativeFunctionExecutor.forceClassSelection(id.value)
-    }
-
     var wantedLevel: Int
         get() = nativeFunctionExecutor.getPlayerWantedLevel(id.value)
         set(value) {
@@ -273,35 +215,6 @@ internal constructor(
         set(value) {
             nativeFunctionExecutor.setPlayerFightingStyle(playerid = id.value, style = value.value)
         }
-
-    fun playCrimeReport(suspect: Player, crimeReport: CrimeReport) {
-        nativeFunctionExecutor.playCrimeReportForPlayer(
-                playerid = id.value,
-                crime = crimeReport.value,
-                suspectid = suspect.id.value
-        )
-    }
-
-    fun setShopName(shopName: ShopName) {
-        nativeFunctionExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
-    }
-
-    val surfingVehicle: Vehicle?
-        get() = nativeFunctionExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry[it] }
-
-    val surfingObject: MapObject?
-        get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry[it] }
-
-    fun removeBuilding(modelId: Int, position: Sphere) {
-        nativeFunctionExecutor.removeBuildingForPlayer(
-                playerid = id.value,
-                modelid = modelId,
-                fX = position.x,
-                fY = position.y,
-                fZ = position.z,
-                fRadius = position.radius
-        )
-    }
 
     val lastShotVectors: LastShotVectors by PlayerLastShotVectorsProperty(nativeFunctionExecutor)
 
@@ -316,58 +229,20 @@ internal constructor(
 
     val playerVars: PlayerVars = PlayerVars(this, nativeFunctionExecutor)
 
-    fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int) {
-        nativeFunctionExecutor.setPlayerChatBubble(
-                playerid = id.value,
-                text = text,
-                color = color.value,
-                drawdistance = drawDistance,
-                expiretime = expireTime
-        )
-    }
-
     val vehicle: Vehicle?
         get() = nativeFunctionExecutor.getPlayerVehicleID(id.value).let { vehicleRegistry[it] }
 
     val vehicleSeat: Int?
         get() = nativeFunctionExecutor.getPlayerVehicleSeat(id.value).takeIf { it != -1 }
 
-    fun putInVehicle(vehicle: Vehicle, seat: Int) {
-        nativeFunctionExecutor.putPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value, seatid = seat)
-    }
-
-    fun removeFromVehicle(): Boolean =
-            nativeFunctionExecutor.removePlayerFromVehicle(id.value)
-
-    fun isInVehicle(vehicle: Vehicle): Boolean =
-            nativeFunctionExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
-
     val isInAnyVehicle: Boolean
         get() = nativeFunctionExecutor.isPlayerInAnyVehicle(id.value)
-
-    fun toggleControllable(toggle: Boolean) {
-        nativeFunctionExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
-    }
-
-    fun playSound(soundId: Int, coordinates: Vector3D) {
-        nativeFunctionExecutor.playerPlaySound(
-                playerid = id.value,
-                soundid = soundId,
-                x = coordinates.x,
-                y = coordinates.y,
-                z = coordinates.z
-        )
-    }
 
     var specialAction: SpecialAction
         get() = nativeFunctionExecutor.getPlayerSpecialAction(id.value).let { SpecialAction[it] }
         set(value) {
             nativeFunctionExecutor.setPlayerSpecialAction(playerid = id.value, actionid = value.value)
         }
-
-    fun disableRemoteVehicleCollisions(disable: Boolean) {
-        nativeFunctionExecutor.disableRemoteVehicleCollisions(playerid = id.value, disable = disable)
-    }
 
     var checkpoint: Checkpoint? = null
         set(value) {
@@ -384,10 +259,6 @@ internal constructor(
             }
             field = value
         }
-
-    fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
-        return this.checkpoint === checkpoint && isInAnyCheckpoint
-    }
 
     val isInAnyCheckpoint: Boolean
         get() = nativeFunctionExecutor.isPlayerInCheckpoint(id.value)
@@ -412,10 +283,6 @@ internal constructor(
             field = value
         }
 
-    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
-        return this.raceCheckpoint === raceCheckpoint && isInAnyRaceCheckpoint
-    }
-
     val isInAnyRaceCheckpoint: Boolean
         get() = nativeFunctionExecutor.isPlayerInRaceCheckpoint(id.value)
 
@@ -430,6 +297,175 @@ internal constructor(
             )
             field = value
         }
+
+    val mapIcons: List<PlayerMapIcon>
+        get() = mapIconsById.values.toList()
+
+    var isSpectating: Boolean = false
+        private set
+
+    var isAdmin: Boolean = false
+        private set
+        get() {
+            if (!field) {
+                field = nativeFunctionExecutor.isPlayerAdmin(id.value)
+            }
+            return field
+        }
+
+    val isNPC: Boolean by lazy {
+        nativeFunctionExecutor.isPlayerNPC(id.value)
+    }
+
+    val isHuman: Boolean
+        get() = !isNPC
+
+    val version: String by lazy {
+        val version = ReferenceString()
+        nativeFunctionExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
+        version.value ?: ""
+    }
+
+    val networkStatistics: PlayerNetworkStatistics = PlayerNetworkStatistics(
+            player = this,
+            nativeFunctionExecutor = nativeFunctionExecutor
+    )
+
+    val menu: Menu?
+        get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry[it] }
+
+    val surfingVehicle: Vehicle?
+        get() = nativeFunctionExecutor.getPlayerSurfingVehicleID(id.value).let { vehicleRegistry[it] }
+
+    val surfingObject: MapObject?
+        get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry[it] }
+
+    fun spawn() {
+        nativeFunctionExecutor.spawnPlayer(id.value)
+    }
+
+    fun setSpawnInfo(spawnInfo: SpawnInfo) {
+        nativeFunctionExecutor.setSpawnInfo(
+                playerid = id.value,
+                team = spawnInfo.teamId?.value ?: SAMPConstants.NO_TEAM,
+                skin = spawnInfo.skinModel.value,
+                x = spawnInfo.position.x,
+                y = spawnInfo.position.y,
+                z = spawnInfo.position.z,
+                rotation = spawnInfo.position.angle,
+                weapon1 = spawnInfo.weapon1.model.value,
+                weapon1_ammo = spawnInfo.weapon1.ammo,
+                weapon2 = spawnInfo.weapon2.model.value,
+                weapon2_ammo = spawnInfo.weapon2.ammo,
+                weapon3 = spawnInfo.weapon3.model.value,
+                weapon3_ammo = spawnInfo.weapon3.ammo
+        )
+    }
+
+    fun setCoordinatesFindZ(coordinates: Vector3D) {
+        nativeFunctionExecutor.setPlayerPosFindZ(
+                playerid = id.value,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z
+        )
+    }
+
+    fun isStreamedIn(forPlayer: Player): Boolean =
+            nativeFunctionExecutor.isPlayerStreamedIn(playerid = id.value, forplayerid = forPlayer.id.value)
+
+    fun giveMoney(amount: Int) {
+        nativeFunctionExecutor.givePlayerMoney(playerid = id.value, money = amount)
+    }
+
+    fun resetMoney() {
+        nativeFunctionExecutor.resetPlayerMoney(id.value)
+    }
+
+    fun toggleClock(toggle: Boolean) {
+        nativeFunctionExecutor.togglePlayerClock(playerid = id.value, toggle = toggle)
+    }
+
+    fun setWeather(weatherId: Int) {
+        nativeFunctionExecutor.setPlayerWeather(playerid = id.value, weather = weatherId)
+    }
+
+    fun setWeather(weather: Weather) {
+        setWeather(weather.value)
+    }
+
+    fun forceClassSelection() {
+        nativeFunctionExecutor.forceClassSelection(id.value)
+    }
+
+    fun playCrimeReport(suspect: Player, crimeReport: CrimeReport) {
+        nativeFunctionExecutor.playCrimeReportForPlayer(
+                playerid = id.value,
+                crime = crimeReport.value,
+                suspectid = suspect.id.value
+        )
+    }
+
+    fun setShopName(shopName: ShopName) {
+        nativeFunctionExecutor.setPlayerShopName(playerid = id.value, shopname = shopName.value)
+    }
+
+    fun removeBuilding(modelId: Int, position: Sphere) {
+        nativeFunctionExecutor.removeBuildingForPlayer(
+                playerid = id.value,
+                modelid = modelId,
+                fX = position.x,
+                fY = position.y,
+                fZ = position.z,
+                fRadius = position.radius
+        )
+    }
+
+    fun setChatBubble(text: String, color: Color, drawDistance: Float, expireTime: Int) {
+        nativeFunctionExecutor.setPlayerChatBubble(
+                playerid = id.value,
+                text = text,
+                color = color.value,
+                drawdistance = drawDistance,
+                expiretime = expireTime
+        )
+    }
+
+    fun putInVehicle(vehicle: Vehicle, seat: Int) {
+        nativeFunctionExecutor.putPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value, seatid = seat)
+    }
+
+    fun removeFromVehicle(): Boolean =
+            nativeFunctionExecutor.removePlayerFromVehicle(id.value)
+
+    fun isInVehicle(vehicle: Vehicle): Boolean =
+            nativeFunctionExecutor.isPlayerInVehicle(playerid = id.value, vehicleid = vehicle.id.value)
+
+    fun toggleControllable(toggle: Boolean) {
+        nativeFunctionExecutor.togglePlayerControllable(playerid = id.value, toggle = toggle)
+    }
+
+    fun playSound(soundId: Int, coordinates: Vector3D) {
+        nativeFunctionExecutor.playerPlaySound(
+                playerid = id.value,
+                soundid = soundId,
+                x = coordinates.x,
+                y = coordinates.y,
+                z = coordinates.z
+        )
+    }
+
+    fun disableRemoteVehicleCollisions(disable: Boolean) {
+        nativeFunctionExecutor.disableRemoteVehicleCollisions(playerid = id.value, disable = disable)
+    }
+
+    fun isInCheckpoint(checkpoint: Checkpoint): Boolean {
+        return this.checkpoint === checkpoint && isInAnyCheckpoint
+    }
+
+    fun isInRaceCheckpoint(raceCheckpoint: RaceCheckpoint): Boolean {
+        return this.raceCheckpoint === raceCheckpoint && isInAnyRaceCheckpoint
+    }
 
     fun showPlayerMarker(player: Player, color: Color) {
         nativeFunctionExecutor.setPlayerMarkerForPlayer(
@@ -446,9 +482,6 @@ internal constructor(
                 show = show
         )
     }
-
-    val mapIcons: List<PlayerMapIcon>
-        get() = mapIconsById.values.toList()
 
     fun createMapIcon(
             playerMapIconId: PlayerMapIconId,
@@ -520,9 +553,6 @@ internal constructor(
         isSpectating = toggle
     }
 
-    var isSpectating: Boolean = false
-        private set
-
     fun startRecording(type: PlayerRecordingType, recordName: String) {
         nativeFunctionExecutor.startRecordingPlayerData(
                 playerid = id.value,
@@ -557,22 +587,6 @@ internal constructor(
         )
     }
 
-    var isAdmin: Boolean = false
-        private set
-        get() {
-            if (!field) {
-                field = nativeFunctionExecutor.isPlayerAdmin(id.value)
-            }
-            return field
-        }
-
-    val isNPC: Boolean by lazy {
-        nativeFunctionExecutor.isPlayerNPC(id.value)
-    }
-
-    val isHuman: Boolean
-        get() = !isNPC
-
     fun kick() {
         nativeFunctionExecutor.kick(id.value)
     }
@@ -584,17 +598,6 @@ internal constructor(
             else -> nativeFunctionExecutor.ban(id.value)
         }
     }
-
-    val version: String by lazy {
-        val version = ReferenceString()
-        nativeFunctionExecutor.getPlayerVersion(playerid = id.value, version = version, len = 24)
-        version.value ?: ""
-    }
-
-    val networkStatistics: PlayerNetworkStatistics = PlayerNetworkStatistics(
-            player = this,
-            nativeFunctionExecutor = nativeFunctionExecutor
-    )
 
     fun selectTextDraw(hoverColor: Color) {
         nativeFunctionExecutor.selectTextDraw(playerid = id.value, hovercolor = hoverColor.value)
@@ -611,9 +614,6 @@ internal constructor(
     fun cancelEditMapObject() {
         nativeFunctionExecutor.cancelEdit(id.value)
     }
-
-    val menu: Menu?
-        get() = nativeFunctionExecutor.getPlayerMenu(id.value).let { menuRegistry[it] }
 
     fun sendDeathMessage(victim: Player, weapon: WeaponModel, killer: Player? = null) {
         nativeFunctionExecutor.sendDeathMessageToPlayer(

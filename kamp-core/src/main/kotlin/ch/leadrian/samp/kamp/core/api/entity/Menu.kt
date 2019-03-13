@@ -32,6 +32,12 @@ internal constructor(
     override val id: MenuId
         get() = requireNotDestroyed { field }
 
+    val position: Vector2D = position.toVector2D()
+
+    private val _rows: MutableList<MenuRow> = mutableListOf()
+
+    val rows: List<MenuRow> = Collections.unmodifiableList(_rows)
+
     init {
         if (numberOfColumns != 1 && numberOfColumns != 2) throw IllegalArgumentException("Only 1 or 2 columns are supported")
         val menuId = nativeFunctionExecutor.createMenu(
@@ -49,12 +55,6 @@ internal constructor(
 
         id = MenuId.valueOf(menuId)
     }
-
-    val position: Vector2D = position.toVector2D()
-
-    private val _rows: MutableList<MenuRow> = mutableListOf()
-
-    val rows: List<MenuRow> = Collections.unmodifiableList(_rows)
 
     fun addItem(column: Int, text: String): MenuRow {
         checkColumn(column)

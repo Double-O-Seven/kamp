@@ -38,21 +38,6 @@ internal constructor(
     override val id: PlayerTextDrawId
         get() = requireNotDestroyed { field }
 
-    init {
-        val playerTextDrawId = nativeFunctionExecutor.createPlayerTextDraw(
-                playerid = player.id.value,
-                x = position.x,
-                y = position.y,
-                text = text
-        )
-
-        if (playerTextDrawId == SAMPConstants.INVALID_TEXT_DRAW) {
-            throw CreationFailedException("Could not create player text draw")
-        }
-
-        id = PlayerTextDrawId.valueOf(playerTextDrawId)
-    }
-
     override val position: Vector2D = position.toVector2D()
 
     override var letterSize: Vector2D = vector2DOf(1f, 1f)
@@ -177,14 +162,6 @@ internal constructor(
             field = value
         }
 
-    fun show() {
-        nativeFunctionExecutor.playerTextDrawShow(playerid = player.id.value, text = id.value)
-    }
-
-    fun hide() {
-        nativeFunctionExecutor.playerTextDrawHide(playerid = player.id.value, text = id.value)
-    }
-
     override var text: String = text
         set(value) {
             nativeFunctionExecutor.playerTextDrawSetString(
@@ -194,19 +171,6 @@ internal constructor(
             )
             field = value
         }
-
-    override fun setText(text: String, vararg args: Any) {
-        this.text = textFormatter.format(player.locale, text, *args)
-    }
-
-    override fun setText(textKey: TextKey) {
-        text = textProvider.getText(player.locale, textKey)
-    }
-
-    override fun setText(textKey: TextKey, vararg args: Any) {
-        val unformattedText = textProvider.getText(player.locale, textKey)
-        text = textFormatter.format(player.locale, unformattedText, *args)
-    }
 
     override var previewModelId: Int? = null
         set(value) {
@@ -218,10 +182,6 @@ internal constructor(
             field = value
         }
 
-    override fun setPreviewModelId(hasModelId: HasModelId) {
-        previewModelId = hasModelId.modelId
-    }
-
     override var previewModelRotation: Vector3D? = null
         private set(value) {
             field = value?.toVector3D()
@@ -229,19 +189,6 @@ internal constructor(
 
     override var previewModelZoom: Float? = null
         private set
-
-    override fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
-        nativeFunctionExecutor.playerTextDrawSetPreviewRot(
-                playerid = player.id.value,
-                text = id.value,
-                fRotX = rotation.x,
-                fRotY = rotation.y,
-                fRotZ = rotation.z,
-                fZoom = zoom
-        )
-        previewModelRotation = rotation
-        previewModelZoom = zoom
-    }
 
     override var previewModelVehicleColors: VehicleColors? = null
         set(value) {
@@ -257,11 +204,64 @@ internal constructor(
             field = value.toVehicleColors()
         }
 
-    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result =
-            onPlayerClickPlayerTextDrawReceiver.onPlayerClickPlayerTextDraw(this)
-
     override var isDestroyed: Boolean = false
         get() = field || !player.isConnected
+
+    init {
+        val playerTextDrawId = nativeFunctionExecutor.createPlayerTextDraw(
+                playerid = player.id.value,
+                x = position.x,
+                y = position.y,
+                text = text
+        )
+
+        if (playerTextDrawId == SAMPConstants.INVALID_TEXT_DRAW) {
+            throw CreationFailedException("Could not create player text draw")
+        }
+
+        id = PlayerTextDrawId.valueOf(playerTextDrawId)
+    }
+
+    fun show() {
+        nativeFunctionExecutor.playerTextDrawShow(playerid = player.id.value, text = id.value)
+    }
+
+    fun hide() {
+        nativeFunctionExecutor.playerTextDrawHide(playerid = player.id.value, text = id.value)
+    }
+
+    override fun setText(text: String, vararg args: Any) {
+        this.text = textFormatter.format(player.locale, text, *args)
+    }
+
+    override fun setText(textKey: TextKey) {
+        text = textProvider.getText(player.locale, textKey)
+    }
+
+    override fun setText(textKey: TextKey, vararg args: Any) {
+        val unformattedText = textProvider.getText(player.locale, textKey)
+        text = textFormatter.format(player.locale, unformattedText, *args)
+    }
+
+    override fun setPreviewModelId(hasModelId: HasModelId) {
+        previewModelId = hasModelId.modelId
+    }
+
+    override fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
+        nativeFunctionExecutor.playerTextDrawSetPreviewRot(
+                playerid = player.id.value,
+                text = id.value,
+                fRotX = rotation.x,
+                fRotY = rotation.y,
+                fRotZ = rotation.z,
+                fZoom = zoom
+        )
+        previewModelRotation = rotation
+        previewModelZoom = zoom
+    }
+
+    internal fun onClick(): OnPlayerClickPlayerTextDrawListener.Result =
+            onPlayerClickPlayerTextDrawReceiver.onPlayerClickPlayerTextDraw(this)
 
     override fun onDestroy() {
         nativeFunctionExecutor.playerTextDrawDestroy(playerid = player.id.value, text = id.value)

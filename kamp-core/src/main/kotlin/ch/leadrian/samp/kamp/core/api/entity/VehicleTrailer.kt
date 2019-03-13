@@ -10,6 +10,12 @@ internal constructor(
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
 ) : HasVehicle {
 
+    val isAttached: Boolean
+        get() = nativeFunctionExecutor.isTrailerAttachedToVehicle(vehicle.id.value)
+
+    val trailer: Vehicle?
+        get() = nativeFunctionExecutor.getVehicleTrailer(vehicle.id.value).let { vehicleRegistry[it] }
+
     fun attach(trailer: Vehicle) {
         nativeFunctionExecutor.attachTrailerToVehicle(trailerid = trailer.id.value, vehicleid = vehicle.id.value)
     }
@@ -17,10 +23,4 @@ internal constructor(
     fun detach() {
         nativeFunctionExecutor.detachTrailerFromVehicle(vehicle.id.value)
     }
-
-    val isAttached: Boolean
-        get() = nativeFunctionExecutor.isTrailerAttachedToVehicle(vehicle.id.value)
-
-    val trailer: Vehicle?
-        get() = nativeFunctionExecutor.getVehicleTrailer(vehicle.id.value).let { vehicleRegistry[it] }
 }

@@ -38,6 +38,13 @@ internal constructor(
     override val id: MapObjectId
         get() = requireNotDestroyed { field }
 
+    override var coordinates: Vector3D by MapObjectCoordinatesProperty(nativeFunctionExecutor)
+
+    override var rotation: Vector3D by MapObjectRotationProperty(nativeFunctionExecutor)
+
+    override val isMoving: Boolean
+        get() = nativeFunctionExecutor.isObjectMoving(id.value)
+
     init {
         val mapObjectId = nativeFunctionExecutor.createObject(
                 modelid = modelId,
@@ -102,10 +109,6 @@ internal constructor(
         )
     }
 
-    override var coordinates: Vector3D by MapObjectCoordinatesProperty(nativeFunctionExecutor)
-
-    override var rotation: Vector3D by MapObjectRotationProperty(nativeFunctionExecutor)
-
     override fun disableCameraCollision() {
         nativeFunctionExecutor.setObjectNoCameraCol(id.value)
     }
@@ -128,9 +131,6 @@ internal constructor(
     override fun stop() {
         nativeFunctionExecutor.stopObject(id.value)
     }
-
-    override val isMoving: Boolean
-        get() = nativeFunctionExecutor.isObjectMoving(id.value)
 
     override fun setMaterial(index: Int, modelId: Int, txdName: String, textureName: String, color: Color) {
         nativeFunctionExecutor.setObjectMaterial(

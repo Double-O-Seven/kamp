@@ -38,20 +38,6 @@ internal constructor(
     override val id: TextDrawId
         get() = requireNotDestroyed { field }
 
-    init {
-        val textDrawId = nativeFunctionExecutor.textDrawCreate(
-                x = position.x,
-                y = position.y,
-                text = text
-        )
-
-        if (textDrawId == SAMPConstants.INVALID_TEXT_DRAW) {
-            throw CreationFailedException("Could not create player text draw")
-        }
-
-        id = TextDrawId.valueOf(textDrawId)
-    }
-
     override val position: Vector2D = position.toVector2D()
 
     override var letterSize: Vector2D = vector2DOf(1f, 1f)
@@ -149,6 +135,53 @@ internal constructor(
             field = value
         }
 
+    override var text: String = text
+        set(value) {
+            nativeFunctionExecutor.textDrawSetString(text = id.value, string = value)
+            field = value
+        }
+
+    override var previewModelId: Int? = null
+        set(value) {
+            nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
+            field = value
+        }
+
+    override var previewModelRotation: Vector3D? = null
+        private set(value) {
+            field = value?.toVector3D()
+        }
+
+    override var previewModelZoom: Float? = null
+        private set
+
+    override var previewModelVehicleColors: VehicleColors? = null
+        set(value) {
+            if (value == null) {
+                return
+            }
+            nativeFunctionExecutor.textDrawSetPreviewVehCol(
+                    text = id.value,
+                    color1 = value.color1.value,
+                    color2 = value.color2.value
+            )
+            field = value.toVehicleColors()
+        }
+
+    init {
+        val textDrawId = nativeFunctionExecutor.textDrawCreate(
+                x = position.x,
+                y = position.y,
+                text = text
+        )
+
+        if (textDrawId == SAMPConstants.INVALID_TEXT_DRAW) {
+            throw CreationFailedException("Could not create player text draw")
+        }
+
+        id = TextDrawId.valueOf(textDrawId)
+    }
+
     fun show(forPlayer: Player) {
         nativeFunctionExecutor.textDrawShowForPlayer(playerid = forPlayer.id.value, text = id.value)
     }
@@ -165,12 +198,6 @@ internal constructor(
         nativeFunctionExecutor.textDrawHideForAll(id.value)
     }
 
-    override var text: String = text
-        set(value) {
-            nativeFunctionExecutor.textDrawSetString(text = id.value, string = value)
-            field = value
-        }
-
     override fun setText(text: String, vararg args: Any) {
         this.text = textFormatter.format(locale, text, *args)
     }
@@ -184,23 +211,9 @@ internal constructor(
         text = textFormatter.format(locale, unformattedText, *args)
     }
 
-    override var previewModelId: Int? = null
-        set(value) {
-            nativeFunctionExecutor.textDrawSetPreviewModel(text = id.value, modelindex = value ?: -1)
-            field = value
-        }
-
     override fun setPreviewModelId(hasModelId: HasModelId) {
         previewModelId = hasModelId.modelId
     }
-
-    override var previewModelRotation: Vector3D? = null
-        private set(value) {
-            field = value?.toVector3D()
-        }
-
-    override var previewModelZoom: Float? = null
-        private set
 
     override fun setPreviewModelRotation(rotation: Vector3D, zoom: Float) {
         nativeFunctionExecutor.textDrawSetPreviewRot(
@@ -213,19 +226,6 @@ internal constructor(
         previewModelRotation = rotation
         previewModelZoom = zoom
     }
-
-    override var previewModelVehicleColors: VehicleColors? = null
-        set(value) {
-            if (value == null) {
-                return
-            }
-            nativeFunctionExecutor.textDrawSetPreviewVehCol(
-                    text = id.value,
-                    color1 = value.color1.value,
-                    color2 = value.color2.value
-            )
-            field = value.toVehicleColors()
-        }
 
     internal fun onClick(player: Player): OnPlayerClickTextDrawListener.Result =
             onPlayerClickTextDrawReceiver.onPlayerClickTextDraw(player, this)
