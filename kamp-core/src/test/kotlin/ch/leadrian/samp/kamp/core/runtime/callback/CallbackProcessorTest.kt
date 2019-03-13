@@ -1,71 +1,22 @@
 package ch.leadrian.samp.kamp.core.runtime.callback
 
-import ch.leadrian.samp.kamp.core.api.GameMode
-import ch.leadrian.samp.kamp.core.api.Plugin
-import ch.leadrian.samp.kamp.core.api.amx.AmxCallback
-import ch.leadrian.samp.kamp.core.api.callback.CallbackListenerManager
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamInListener
-import ch.leadrian.samp.kamp.core.api.callback.OnActorStreamOutListener
 import ch.leadrian.samp.kamp.core.api.callback.OnDialogResponseListener
-import ch.leadrian.samp.kamp.core.api.callback.OnEnterExitModShopListener
-import ch.leadrian.samp.kamp.core.api.callback.OnGameModeExitListener
-import ch.leadrian.samp.kamp.core.api.callback.OnGameModeInitListener
-import ch.leadrian.samp.kamp.core.api.callback.OnIncomingConnectionListener
-import ch.leadrian.samp.kamp.core.api.callback.OnMapObjectMovedListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCancelTextDrawSelectionListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickMapListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickPlayerTextDrawListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerClickTextDrawListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerCommandTextListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerConnectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDeathListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerDisconnectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditAttachedObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEditPlayerMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterCheckpointListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterRaceCheckpointListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerEnterVehicleListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitVehicleListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerExitedMenuListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageActorListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerGiveDamageListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerInteriorChangeListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerKeyStateChangeListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveCheckpointListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerLeaveRaceCheckpointListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerMapObjectMovedListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerPickUpPickupListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestClassListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestDownloadListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerRequestSpawnListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectPlayerMapObjectListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSelectedMenuRowListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerSpawnListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStateChangeListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStreamInListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerStreamOutListener
-import ch.leadrian.samp.kamp.core.api.callback.OnPlayerTakeDamageListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerTextListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerUpdateListener
 import ch.leadrian.samp.kamp.core.api.callback.OnPlayerWeaponShotListener
-import ch.leadrian.samp.kamp.core.api.callback.OnProcessTickListener
 import ch.leadrian.samp.kamp.core.api.callback.OnRconCommandListener
-import ch.leadrian.samp.kamp.core.api.callback.OnRconLoginAttemptListener
 import ch.leadrian.samp.kamp.core.api.callback.OnTrailerUpdateListener
 import ch.leadrian.samp.kamp.core.api.callback.OnUnoccupiedVehicleUpdateListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDamageStatusUpdateListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleDeathListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleModListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehiclePaintjobListener
 import ch.leadrian.samp.kamp.core.api.callback.OnVehicleResprayListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSirenStateChangeListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleSpawnListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamInListener
-import ch.leadrian.samp.kamp.core.api.callback.OnVehicleStreamOutListener
-import ch.leadrian.samp.kamp.core.api.command.UnknownCommandHandler
 import ch.leadrian.samp.kamp.core.api.constants.AttachedObjectEditResponse
 import ch.leadrian.samp.kamp.core.api.constants.BodyPart
 import ch.leadrian.samp.kamp.core.api.constants.Bone
@@ -86,10 +37,10 @@ import ch.leadrian.samp.kamp.core.api.data.PlayerHitTarget
 import ch.leadrian.samp.kamp.core.api.data.PlayerMapObjectHitTarget
 import ch.leadrian.samp.kamp.core.api.data.VehicleHitTarget
 import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
-import ch.leadrian.samp.kamp.core.api.data.vector2DOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
 import ch.leadrian.samp.kamp.core.api.entity.Actor
+import ch.leadrian.samp.kamp.core.api.entity.AttachedObjectSlot
 import ch.leadrian.samp.kamp.core.api.entity.MapObject
 import ch.leadrian.samp.kamp.core.api.entity.Menu
 import ch.leadrian.samp.kamp.core.api.entity.MenuRow
@@ -100,2293 +51,851 @@ import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
 import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
 import ch.leadrian.samp.kamp.core.api.entity.TextDraw
 import ch.leadrian.samp.kamp.core.api.entity.Vehicle
-import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
-import ch.leadrian.samp.kamp.core.api.entity.id.MapObjectId
-import ch.leadrian.samp.kamp.core.api.entity.id.MenuId
-import ch.leadrian.samp.kamp.core.api.entity.id.PickupId
-import ch.leadrian.samp.kamp.core.api.entity.id.PlayerClassId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
-import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapObjectId
-import ch.leadrian.samp.kamp.core.api.entity.id.PlayerTextDrawId
-import ch.leadrian.samp.kamp.core.api.entity.id.TextDrawId
 import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
-import ch.leadrian.samp.kamp.core.api.exception.UncaughtExceptionNotifier
-import ch.leadrian.samp.kamp.core.api.inject.KampModule
-import ch.leadrian.samp.kamp.core.api.util.getInstance
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackExecutor
-import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackParameters
-import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
-import ch.leadrian.samp.kamp.core.runtime.entity.factory.MenuFactory
+import ch.leadrian.samp.kamp.core.runtime.entity.EntityResolver
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.PickupRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerClassRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
-import com.google.inject.Module
-import com.google.inject.Stage
 import io.mockk.Called
 import io.mockk.Runs
 import io.mockk.every
 import io.mockk.just
 import io.mockk.mockk
-import io.mockk.slot
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
-import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
 import org.junit.jupiter.params.provider.ValueSource
-import java.nio.file.Paths
-import java.util.Locale
-import java.util.Properties
-import javax.annotation.PreDestroy
-import javax.inject.Singleton
 
 internal class CallbackProcessorTest {
 
     private lateinit var callbackProcessor: CallbackProcessor
 
-    private lateinit var callbackListenerManager: CallbackListenerManager
-    private lateinit var server: Server
-    private lateinit var uncaughtExceptionNotifier: UncaughtExceptionNotifier
-    private lateinit var nativeFunctionExecutor: SAMPNativeFunctionExecutor
-
-    private val configProperties = Properties()
-    private val dataDirectory = Paths.get(".", "Kamp", "layout")
+    private val server: Server = mockk()
+    private val playerFactory: PlayerFactory = mockk()
+    private val onActorStreamInHandler: OnActorStreamInHandler = mockk()
+    private val onActorStreamOutHandler: OnActorStreamOutHandler = mockk()
+    private val onDialogResponseHandler: OnDialogResponseHandler = mockk()
+    private val onEnterExitModShopHandler: OnEnterExitModShopHandler = mockk()
+    private val onGameModeExitHandler: OnGameModeExitHandler = mockk()
+    private val onGameModeInitHandler: OnGameModeInitHandler = mockk()
+    private val onIncomingConnectionHandler: OnIncomingConnectionHandler = mockk()
+    private val onMapObjectMovedHandler: OnMapObjectMovedHandler = mockk()
+    private val onPlayerClickMapHandler: OnPlayerClickMapHandler = mockk()
+    private val onPlayerClickPlayerHandler: OnPlayerClickPlayerHandler = mockk()
+    private val onPlayerClickPlayerTextDrawHandler: OnPlayerClickPlayerTextDrawHandler = mockk()
+    private val onPlayerClickTextDrawHandler: OnPlayerClickTextDrawHandler = mockk()
+    private val onPlayerCancelTextDrawSelectionHandler: OnPlayerCancelTextDrawSelectionHandler = mockk()
+    private val onPlayerCommandTextHandler: OnPlayerCommandTextHandler = mockk()
+    private val onPlayerConnectHandler: OnPlayerConnectHandler = mockk()
+    private val onPlayerDeathHandler: OnPlayerDeathHandler = mockk()
+    private val onPlayerDisconnectHandler: OnPlayerDisconnectHandler = mockk()
+    private val onPlayerEditAttachedObjectHandler: OnPlayerEditAttachedObjectHandler = mockk()
+    private val onPlayerEditMapObjectHandler: OnPlayerEditMapObjectHandler = mockk()
+    private val onPlayerEditPlayerMapObjectHandler: OnPlayerEditPlayerMapObjectHandler = mockk()
+    private val onPlayerEnterCheckpointHandler: OnPlayerEnterCheckpointHandler = mockk()
+    private val onPlayerEnterRaceCheckpointHandler: OnPlayerEnterRaceCheckpointHandler = mockk()
+    private val onPlayerEnterVehicleHandler: OnPlayerEnterVehicleHandler = mockk()
+    private val onPlayerExitedMenuHandler: OnPlayerExitedMenuHandler = mockk()
+    private val onPlayerExitVehicleHandler: OnPlayerExitVehicleHandler = mockk()
+    private val onPlayerGiveDamageActorHandler: OnPlayerGiveDamageActorHandler = mockk()
+    private val onPlayerGiveDamageHandler: OnPlayerGiveDamageHandler = mockk()
+    private val onPlayerInteriorChangeHandler: OnPlayerInteriorChangeHandler = mockk()
+    private val onPlayerKeyStateChangeHandler: OnPlayerKeyStateChangeHandler = mockk()
+    private val onPlayerLeaveCheckpointHandler: OnPlayerLeaveCheckpointHandler = mockk()
+    private val onPlayerLeaveRaceCheckpointHandler: OnPlayerLeaveRaceCheckpointHandler = mockk()
+    private val onPlayerMapObjectMovedHandler: OnPlayerMapObjectMovedHandler = mockk()
+    private val onPlayerPickUpPickupHandler: OnPlayerPickUpPickupHandler = mockk()
+    private val onPlayerRequestClassHandler: OnPlayerRequestClassHandler = mockk()
+    private val onPlayerRequestSpawnHandler: OnPlayerRequestSpawnHandler = mockk()
+    private val onPlayerSelectedMenuRowHandler: OnPlayerSelectedMenuRowHandler = mockk()
+    private val onPlayerSelectMapObjectHandler: OnPlayerSelectMapObjectHandler = mockk()
+    private val onPlayerSelectPlayerMapObjectHandler: OnPlayerSelectPlayerMapObjectHandler = mockk()
+    private val onPlayerSpawnHandler: OnPlayerSpawnHandler = mockk()
+    private val onPlayerStateChangeHandler: OnPlayerStateChangeHandler = mockk()
+    private val onPlayerStreamInHandler: OnPlayerStreamInHandler = mockk()
+    private val onPlayerStreamOutHandler: OnPlayerStreamOutHandler = mockk()
+    private val onPlayerTakeDamageHandler: OnPlayerTakeDamageHandler = mockk()
+    private val onPlayerTextHandler: OnPlayerTextHandler = mockk()
+    private val onPlayerUpdateHandler: OnPlayerUpdateHandler = mockk()
+    private val onPlayerWeaponShotHandler: OnPlayerWeaponShotHandler = mockk()
+    private val onProcessTickHandler: OnProcessTickHandler = mockk()
+    private val onRconCommandHandler: OnRconCommandHandler = mockk()
+    private val onRconLoginAttemptHandler: OnRconLoginAttemptHandler = mockk()
+    private val onTrailerUpdateHandler: OnTrailerUpdateHandler = mockk()
+    private val onUnoccupiedVehicleUpdateHandler: OnUnoccupiedVehicleUpdateHandler = mockk()
+    private val onVehicleDamageStatusUpdateHandler: OnVehicleDamageStatusUpdateHandler = mockk()
+    private val onVehicleDeathHandler: OnVehicleDeathHandler = mockk()
+    private val onVehicleModHandler: OnVehicleModHandler = mockk()
+    private val onVehiclePaintjobHandler: OnVehiclePaintjobHandler = mockk()
+    private val onVehicleResprayHandler: OnVehicleResprayHandler = mockk()
+    private val onVehicleSirenStateChangeHandler: OnVehicleSirenStateChangeHandler = mockk()
+    private val onVehicleSpawnHandler: OnVehicleSpawnHandler = mockk()
+    private val onVehicleStreamInHandler: OnVehicleStreamInHandler = mockk()
+    private val onVehicleStreamOutHandler: OnVehicleStreamOutHandler = mockk()
+    private val onPlayerRequestDownloadHandler: OnPlayerRequestDownloadHandler = mockk()
+    private val amxCallbackExecutor: AmxCallbackExecutor = mockk()
+    private val entityResolver: EntityResolver = mockk()
 
     @BeforeEach
     fun setUp() {
-        configProperties["kamp.gamemode.class.name"] = "ch.leadrian.samp.kamp.core.runtime.callback.CallbackProcessorTest\$TestGameMode"
-        configProperties["test.value.foo"] = "Foobar"
-        configProperties["test.value.bar"] = "1337"
-        nativeFunctionExecutor = mockk(relaxed = true) {
-            every { getMaxPlayers() } returns 1000
-            every { getKampPluginVersion(any(), any()) } answers {
-                firstArg<ReferenceString>().value = SAMPConstants.KAMP_CORE_VERSION
-            }
-        }
-        server = Server.start(nativeFunctionExecutor, configProperties, dataDirectory, Stage.DEVELOPMENT)
-        callbackProcessor = server.injector.getInstance()
-        callbackListenerManager = server.injector.getInstance()
-        uncaughtExceptionNotifier = server.injector.getInstance()
+        callbackProcessor = CallbackProcessor(
+                server,
+                playerFactory,
+                onActorStreamInHandler,
+                onActorStreamOutHandler,
+                onDialogResponseHandler,
+                onEnterExitModShopHandler,
+                onGameModeExitHandler,
+                onGameModeInitHandler,
+                onIncomingConnectionHandler,
+                onMapObjectMovedHandler,
+                onPlayerClickMapHandler,
+                onPlayerClickPlayerHandler,
+                onPlayerClickPlayerTextDrawHandler,
+                onPlayerClickTextDrawHandler,
+                onPlayerCancelTextDrawSelectionHandler,
+                onPlayerCommandTextHandler,
+                onPlayerConnectHandler,
+                onPlayerDeathHandler,
+                onPlayerDisconnectHandler,
+                onPlayerEditAttachedObjectHandler,
+                onPlayerEditMapObjectHandler,
+                onPlayerEditPlayerMapObjectHandler,
+                onPlayerEnterCheckpointHandler,
+                onPlayerEnterRaceCheckpointHandler,
+                onPlayerEnterVehicleHandler,
+                onPlayerExitedMenuHandler,
+                onPlayerExitVehicleHandler,
+                onPlayerGiveDamageActorHandler,
+                onPlayerGiveDamageHandler,
+                onPlayerInteriorChangeHandler,
+                onPlayerKeyStateChangeHandler,
+                onPlayerLeaveCheckpointHandler,
+                onPlayerLeaveRaceCheckpointHandler,
+                onPlayerMapObjectMovedHandler,
+                onPlayerPickUpPickupHandler,
+                onPlayerRequestClassHandler,
+                onPlayerRequestSpawnHandler,
+                onPlayerSelectedMenuRowHandler,
+                onPlayerSelectMapObjectHandler,
+                onPlayerSelectPlayerMapObjectHandler,
+                onPlayerSpawnHandler,
+                onPlayerStateChangeHandler,
+                onPlayerStreamInHandler,
+                onPlayerStreamOutHandler,
+                onPlayerTakeDamageHandler,
+                onPlayerTextHandler,
+                onPlayerUpdateHandler,
+                onPlayerWeaponShotHandler,
+                onProcessTickHandler,
+                onRconCommandHandler,
+                onRconLoginAttemptHandler,
+                onTrailerUpdateHandler,
+                onUnoccupiedVehicleUpdateHandler,
+                onVehicleDamageStatusUpdateHandler,
+                onVehicleDeathHandler,
+                onVehicleModHandler,
+                onVehiclePaintjobHandler,
+                onVehicleResprayHandler,
+                onVehicleSirenStateChangeHandler,
+                onVehicleSpawnHandler,
+                onVehicleStreamInHandler,
+                onVehicleStreamOutHandler,
+                onPlayerRequestDownloadHandler,
+                amxCallbackExecutor,
+                entityResolver
+        )
     }
 
-    @Nested
-    inner class OnProcessTickTests {
+    @Test
+    fun shouldCallOnProcessTick() {
+        every { onProcessTickHandler.onProcessTick() } just Runs
 
-        @Test
-        fun shouldCallOnProcessTick() {
-            val onProcessTickListener = mockk<OnProcessTickListener>(relaxed = true)
-            callbackListenerManager.register(onProcessTickListener)
+        callbackProcessor.onProcessTick()
 
-            callbackProcessor.onProcessTick()
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onProcessTickListener.onProcessTick() }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onProcessTickListener = mockk<OnProcessTickListener> {
-                every { onProcessTick() } throws exception
-            }
-            callbackListenerManager.register(onProcessTickListener)
-
-            val caughtThrowable = catchThrowable { callbackProcessor.onProcessTick() }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onProcessTickListener.onProcessTick() }
-        }
-
+        verify { onProcessTickHandler.onProcessTick() }
     }
 
-    @Nested
-    inner class OnPublicCallTests {
+    @Test
+    fun shouldCallOnPublicCall() {
+        val heapPointer = 1234
+        val expectedResult = 69
+        val paramsAddress = 1337
+        val callbackName = "onTest"
+        every {
+            amxCallbackExecutor.onPublicCall(
+                    name = callbackName,
+                    paramsAddress = paramsAddress,
+                    heapPointer = heapPointer
+            )
+        } returns expectedResult
 
-        @Test
-        fun shouldCallOnPublicCall() {
-            val amxCallbackExecutor: AmxCallbackExecutor = server.injector.getInstance()
-            val expectedResult = 1234
-            val callbackName = "onTest"
-            val amxCallback = mockk<AmxCallback> {
-                every { onPublicCall(any<AmxCallbackParameters>()) } returns expectedResult
-                every { name } returns callbackName
-            }
-            amxCallbackExecutor.register(amxCallback)
+        val result = callbackProcessor.onPublicCall(
+                name = callbackName,
+                paramsAddress = paramsAddress,
+                heapPointer = heapPointer
+        )
 
-            val result = callbackProcessor.onPublicCall(callbackName, 1337, 1234)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            assertThat(result)
-                    .isEqualTo(expectedResult)
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val amxCallbackExecutor: AmxCallbackExecutor = server.injector.getInstance()
-            val callbackName = "onTest"
-            val amxCallback = mockk<AmxCallback> {
-                every { onPublicCall(any<AmxCallbackParameters>()) } throws exception
-                every { name } returns callbackName
-            }
-            amxCallbackExecutor.register(amxCallback)
-
-            val result = callbackProcessor.onPublicCall(callbackName, 1337, 1234)
-
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            assertThat(result)
-                    .isNull()
-        }
-
+        assertThat(result)
+                .isEqualTo(expectedResult)
     }
 
-    @Nested
-    inner class OnGameModeInitTests {
+    @Test
+    fun shouldCallOnGameModeInit() {
+        every { onGameModeInitHandler.onGameModeInit() } just Runs
 
-        @Test
-        fun shouldCallOnGameModeInit() {
-            val onGameModeInitListener = mockk<OnGameModeInitListener>(relaxed = true)
-            callbackListenerManager.register(onGameModeInitListener)
+        callbackProcessor.onGameModeInit()
 
-            callbackProcessor.onGameModeInit()
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onGameModeInitListener.onGameModeInit() }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onGameModeInitListener = mockk<OnGameModeInitListener> {
-                every { onGameModeInit() } throws exception
-            }
-            callbackListenerManager.register(onGameModeInitListener)
-
-            val caughtThrowable = catchThrowable { callbackProcessor.onGameModeInit() }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onGameModeInitListener.onGameModeInit() }
-        }
-
+        verify { onGameModeInitHandler.onGameModeInit() }
     }
 
     @Nested
     inner class OnGameModeExitTests {
 
-        @Test
-        fun shouldCallOnGameModeExit() {
-            val onGameModeExitListener = mockk<OnGameModeExitListener>(relaxed = true)
-            callbackListenerManager.register(onGameModeExitListener)
-
-            callbackProcessor.onGameModeExit()
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onGameModeExitListener.onGameModeExit() }
+        @BeforeEach
+        fun setUp() {
+            every { onGameModeExitHandler.onGameModeExit() } just Runs
+            every { server.stop() } just Runs
         }
 
         @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onGameModeExitListener = mockk<OnGameModeExitListener> {
-                every { onGameModeExit() } throws exception
-            }
-            callbackListenerManager.register(onGameModeExitListener)
+        fun shouldCallOnGameModeExit() {
+            callbackProcessor.onGameModeExit()
 
-            val caughtThrowable = catchThrowable { callbackProcessor.onGameModeExit() }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { onGameModeExitListener.onGameModeExit() }
-            verify { uncaughtExceptionNotifier.notify(exception) }
+            verify { onGameModeExitHandler.onGameModeExit() }
         }
 
         @Test
         fun shouldStopServer() {
-            val lifecycleAwareService = server.injector.getInstance<LifecycleAwareService>()
-
             callbackProcessor.onGameModeExit()
 
-            assertThat(lifecycleAwareService.isShutdown)
-                    .isTrue()
+            verify { server.stop() }
         }
 
     }
 
-    @Nested
-    inner class OnPlayerConnectTests {
+    @Test
+    fun shouldCallOnPlayerConnect() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { onPlayerConnectHandler.onPlayerConnect(any()) } just Runs
+        every { playerFactory.create(PlayerId.valueOf(playerId)) } returns player
 
-        @Test
-        fun shouldCallOnPlayerConnect() {
-            val onPlayerConnectListener = mockk<OnPlayerConnectListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerConnectListener)
+        callbackProcessor.onPlayerConnect(playerId)
 
-            callbackProcessor.onPlayerConnect(69)
-
-            val slot = slot<Player>()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerConnectListener.onPlayerConnect(capture(slot)) }
-            assertThat(slot.captured)
-                    .satisfies {
-                        assertThat(it.id)
-                                .isEqualTo(PlayerId.valueOf(69))
-                    }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerConnectListener = mockk<OnPlayerConnectListener> {
-                every { onPlayerConnect(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerConnectListener)
-
-            val caughtThrowable = catchThrowable { callbackProcessor.onPlayerConnect(69) }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerConnectListener.onPlayerConnect(any()) }
-        }
+        verify { onPlayerConnectHandler.onPlayerConnect(player) }
     }
 
     @Nested
     inner class OnPlayerDisconnectTests {
 
-        private lateinit var player: Player
+        private val player: Player = mockk()
         private val playerId = 69
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { player.id } returns PlayerId.valueOf(playerId)
+            every { player.onDisconnect() } just Runs
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { onPlayerDisconnectHandler.onPlayerDisconnect(any(), any()) } just Runs
         }
 
         @ParameterizedTest
         @EnumSource(DisconnectReason::class)
         fun shouldCallOnPlayerDisconnect(reason: DisconnectReason) {
-            val onPlayerDisconnectListener = mockk<OnPlayerDisconnectListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerDisconnectListener)
-
             callbackProcessor.onPlayerDisconnect(playerId, reason.value)
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerDisconnectListener.onPlayerDisconnect(player, reason) }
+            verify { onPlayerDisconnectHandler.onPlayerDisconnect(player, reason) }
         }
 
         @Test
         fun shouldDisconnectThePlayer() {
             callbackProcessor.onPlayerDisconnect(playerId, DisconnectReason.QUIT.value)
 
-            val isConnected = player.isConnected
-
-            assertThat(isConnected)
-                    .isFalse()
+            verify { player.onDisconnect() }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerDisconnectListener = mockk<OnPlayerDisconnectListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerDisconnectListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerDisconnect(500, DisconnectReason.QUIT.value)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerDisconnectListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerDisconnectListener = mockk<OnPlayerDisconnectListener> {
-                every { onPlayerDisconnect(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerDisconnectListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerDisconnect(playerId, DisconnectReason.QUIT.value)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerDisconnectListener.onPlayerDisconnect(player, DisconnectReason.QUIT) }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerSpawnTests {
+    @Test
+    fun shouldCallOnPlayerSpawn() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerSpawnHandler.onPlayerSpawn(any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerSpawn(playerId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerSpawn() {
-            val onPlayerSpawnListener = mockk<OnPlayerSpawnListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSpawnListener)
-
-            callbackProcessor.onPlayerSpawn(playerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerSpawnListener.onPlayerSpawn(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerSpawnListener = mockk<OnPlayerSpawnListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSpawnListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerSpawn(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerSpawnListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerSpawnListener = mockk<OnPlayerSpawnListener> {
-                every { onPlayerSpawn(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerSpawnListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerSpawn(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerSpawnListener.onPlayerSpawn(player) }
-        }
-
+        verify { onPlayerSpawnHandler.onPlayerSpawn(player) }
     }
 
     @Nested
     inner class OnPlayerDeathTests {
 
-        private lateinit var player: Player
+        private val player: Player = mockk()
         private val playerId = 69
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { player.id } returns PlayerId.valueOf(playerId)
+            every { onPlayerDeathHandler.onPlayerDeath(any(), any(), any()) } just Runs
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
         fun shouldCallOnPlayerDeath() {
-            val onPlayerDeathListener = mockk<OnPlayerDeathListener>(relaxed = true)
             val killerId = 100
-            val killer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(killerId))
-            callbackListenerManager.register(onPlayerDeathListener)
+            val killer = mockk<Player>()
+            every { entityResolver.run { killerId.toPlayerOrNull() } } returns killer
 
             callbackProcessor.onPlayerDeath(playerId, killerId, WeaponModel.FLAMETHROWER.value)
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerDeathListener.onPlayerDeath(player, killer, WeaponModel.FLAMETHROWER) }
+            verify { onPlayerDeathHandler.onPlayerDeath(player, killer, WeaponModel.FLAMETHROWER) }
         }
 
         @Test
         fun givenNoKillerItShouldCallOnPlayerDeath() {
-            val onPlayerDeathListener = mockk<OnPlayerDeathListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerDeathListener)
-
-            callbackProcessor.onPlayerDeath(playerId, SAMPConstants.INVALID_PLAYER_ID, WeaponModel.FLAMETHROWER.value)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerDeathListener.onPlayerDeath(player, null, WeaponModel.FLAMETHROWER) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerDeathListener = mockk<OnPlayerDeathListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerDeathListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerDeath(500, 100, WeaponModel.FLAMETHROWER.value)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerDeathListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerDeathListener = mockk<OnPlayerDeathListener> {
-                every { onPlayerDeath(any(), any(), any()) } throws exception
-            }
             val killerId = 100
-            val killer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(killerId))
-            callbackListenerManager.register(onPlayerDeathListener)
+            every { entityResolver.run { killerId.toPlayerOrNull() } } returns null
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerDeath(playerId, killerId, WeaponModel.FLAMETHROWER.value)
-            }
+            callbackProcessor.onPlayerDeath(playerId, killerId, WeaponModel.FLAMETHROWER.value)
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerDeathListener.onPlayerDeath(player, killer, WeaponModel.FLAMETHROWER) }
+            verify { onPlayerDeathHandler.onPlayerDeath(player, null, WeaponModel.FLAMETHROWER) }
         }
-
     }
 
-    @Nested
-    inner class OnVehicleSpawnTests {
+    @Test
+    fun shouldCallOnVehicleSpawn() {
+        val vehicleId = 69
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onVehicleSpawnHandler.onVehicleSpawn(any()) } just Runs
 
-        private lateinit var vehicle: Vehicle
-        private val vehicleId = 69
+        callbackProcessor.onVehicleSpawn(vehicleId)
 
-        @BeforeEach
-        fun setUp() {
-            vehicle = mockk {
-                every { id } returns VehicleId.valueOf(vehicleId)
-                every { onSpawn() } just Runs
-            }
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-        }
-
-        @Test
-        fun shouldCallOnVehicleSpawn() {
-            val onVehicleSpawnListener = mockk<OnVehicleSpawnListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleSpawnListener)
-
-            callbackProcessor.onVehicleSpawn(vehicleId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleSpawnListener.onVehicleSpawn(vehicle) }
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val onVehicleSpawnListener = mockk<OnVehicleSpawnListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleSpawnListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleSpawn(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleSpawnListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleSpawnListener = mockk<OnVehicleSpawnListener> {
-                every { onVehicleSpawn(any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleSpawnListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleSpawn(vehicleId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleSpawnListener.onVehicleSpawn(vehicle) }
-        }
-
+        verify { onVehicleSpawnHandler.onVehicleSpawn(vehicle) }
     }
 
     @Nested
     inner class OnVehicleDeathTests {
 
-        private lateinit var vehicle: Vehicle
+        private val vehicle: Vehicle = mockk()
         private val vehicleId = 69
 
         @BeforeEach
         fun setUp() {
-            vehicle = mockk {
-                every { id } returns VehicleId.valueOf(vehicleId)
-                every { onDeath(any()) } just Runs
-            }
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
+            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
+            every { onVehicleDeathHandler.onVehicleDeath(any(), any()) } just Runs
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
         }
 
         @Test
         fun shouldCallOnVehicleDeath() {
-            val onVehicleDeathListener = mockk<OnVehicleDeathListener>(relaxed = true)
             val killerId = 100
-            val killer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(killerId))
-            callbackListenerManager.register(onVehicleDeathListener)
+            val killer = mockk<Player>()
+            every { entityResolver.run { killerId.toPlayerOrNull() } } returns killer
 
             callbackProcessor.onVehicleDeath(vehicleId, killerId)
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleDeathListener.onVehicleDeath(vehicle, killer) }
+            verify { onVehicleDeathHandler.onVehicleDeath(vehicle, killer) }
         }
 
         @Test
         fun givenNoKillerItShouldCallOnVehicleDeath() {
-            val onVehicleDeathListener = mockk<OnVehicleDeathListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleDeathListener)
-
-            callbackProcessor.onVehicleDeath(vehicleId, SAMPConstants.INVALID_VEHICLE_ID)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleDeathListener.onVehicleDeath(vehicle, null) }
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val onVehicleDeathListener = mockk<OnVehicleDeathListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleDeathListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleDeath(500, 100)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleDeathListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleDeathListener = mockk<OnVehicleDeathListener> {
-                every { onVehicleDeath(any(), any()) } throws exception
-            }
             val killerId = 100
-            val killer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(killerId))
-            callbackListenerManager.register(onVehicleDeathListener)
+            every { entityResolver.run { killerId.toPlayerOrNull() } } returns null
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleDeath(vehicleId, killerId)
-            }
+            callbackProcessor.onVehicleDeath(vehicleId, killerId)
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleDeathListener.onVehicleDeath(vehicle, killer) }
+            verify { onVehicleDeathHandler.onVehicleDeath(vehicle, null) }
         }
-
     }
 
     @Nested
     inner class OnPlayerTextTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerTextAndReturnTrue() {
-            val onPlayerTextListener = mockk<OnPlayerTextListener> {
-                every { onPlayerText(player, "hi there!") } returns OnPlayerTextListener.Result.Allowed
-            }
-            callbackListenerManager.register(onPlayerTextListener)
+        fun shouldCallOnPlayerText() {
+            every {
+                onPlayerTextHandler.onPlayerText(any(), any())
+            } returns OnPlayerTextListener.Result.Allowed
 
-            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
+            val result = callbackProcessor.onPlayerText(playerId, "Hello")
+
+            assertAll(
+                    { verify { onPlayerTextHandler.onPlayerText(player, "Hello") } },
+                    { assertThat(result).isEqualTo(true) }
+            )
+        }
+
+        @Test
+        fun givenHandlerThrowsExceptionItShouldReturnTrue() {
+            every {
+                onPlayerTextHandler.onPlayerText(any(), any())
+            } throws Exception()
+
+            val result = callbackProcessor.onPlayerText(playerId, "Hello")
 
             assertThat(result)
                     .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
         }
-
-        @Test
-        fun shouldCallOnPlayerTextAndReturnFalse() {
-            val onPlayerTextListener = mockk<OnPlayerTextListener> {
-                every { onPlayerText(player, "hi there!") } returns OnPlayerTextListener.Result.Blocked
-            }
-            callbackListenerManager.register(onPlayerTextListener)
-
-            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerTextListener = mockk<OnPlayerTextListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerTextListener)
-
-            val result = callbackProcessor.onPlayerText(500, "hi there!")
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerTextListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerTextListener = mockk<OnPlayerTextListener> {
-                every { onPlayerText(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerTextListener)
-
-            val result = callbackProcessor.onPlayerText(playerId, "hi there!")
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerTextListener.onPlayerText(player, "hi there!") }
-        }
-
     }
 
     @Nested
     inner class OnPlayerCommandTextTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerCommandTextAndReturnTrue() {
-            val onPlayerCommandTextListener = mockk<OnPlayerCommandTextListener> {
-                every { onPlayerCommandText(player, "/hi there") } returns OnPlayerCommandTextListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerCommandTextListener)
+        fun shouldCallOnPlayerCommandText() {
+            every {
+                onPlayerCommandTextHandler.onPlayerCommandText(any(), any())
+            } returns OnPlayerCommandTextListener.Result.Processed
 
-            val result = callbackProcessor.onPlayerCommandText(playerId, "/hi there")
+            val result = callbackProcessor.onPlayerCommandText(playerId, "/hello")
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerCommandTextListener.onPlayerCommandText(player, "/hi there") }
+            assertAll(
+                    { verify { onPlayerCommandTextHandler.onPlayerCommandText(player, "/hello") } },
+                    { assertThat(result).isEqualTo(true) }
+            )
         }
 
         @Test
-        fun shouldCallOnPlayerCommandTextAndReturnFalse() {
-            val onPlayerCommandTextListener = mockk<OnPlayerCommandTextListener> {
-                every {
-                    onPlayerCommandText(
-                            player,
-                            "/hi there"
-                    )
-                } returns OnPlayerCommandTextListener.Result.UnknownCommand
-            }
-            callbackListenerManager.register(onPlayerCommandTextListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onPlayerCommandTextHandler.onPlayerCommandText(any(), any())
+            } throws Exception()
 
-            val result = callbackProcessor.onPlayerCommandText(playerId, "/hi there")
+            val result = callbackProcessor.onPlayerCommandText(playerId, "/hello")
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerCommandTextListener.onPlayerCommandText(player, "/hi there") }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerCommandTextListener = mockk<OnPlayerCommandTextListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerCommandTextListener)
-
-            val result = callbackProcessor.onPlayerCommandText(500, "/hi there")
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerCommandTextListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerCommandTextListener = mockk<OnPlayerCommandTextListener> {
-                every { onPlayerCommandText(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerCommandTextListener)
-
-            val result = callbackProcessor.onPlayerCommandText(playerId, "/hi there")
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerCommandTextListener.onPlayerCommandText(player, "/hi there") }
-        }
-
     }
 
     @Nested
     inner class OnPlayerRequestClassTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val playerClassId = 127
-        private val playerClass: PlayerClass = mockk()
+        private val player = mockk<Player>()
+        private val playerClassId = 1234
+        private val playerClass = mockk<PlayerClass>()
 
         @BeforeEach
         fun setUp() {
-            every { playerClass.id } returns PlayerClassId.valueOf(playerClassId)
-            server.injector.getInstance<PlayerClassRegistry>().register(playerClass)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { playerClassId.toPlayerClass() } } returns playerClass
         }
 
         @Test
-        fun shouldCallOnPlayerRequestClassAndReturnTrue() {
-            val onPlayerRequestClassListener = mockk<OnPlayerRequestClassListener> {
-                every { onPlayerRequestClass(player, playerClass) } returns OnPlayerRequestClassListener.Result.Allow
-            }
-            callbackListenerManager.register(onPlayerRequestClassListener)
+        fun shouldCallOnPlayerRequestClass() {
+            every {
+                onPlayerRequestClassHandler.onPlayerRequestClass(any(), any())
+            } returns OnPlayerRequestClassListener.Result.Allow
 
             val result = callbackProcessor.onPlayerRequestClass(playerId, playerClassId)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerRequestClassListener.onPlayerRequestClass(player, playerClass) }
-        }
-
-        @Test
-        fun shouldCallOnPlayerRequestClassAndReturnFalse() {
-            val onPlayerRequestClassListener = mockk<OnPlayerRequestClassListener> {
-                every {
-                    onPlayerRequestClass(
-                            player,
-                            playerClass
-                    )
-                } returns OnPlayerRequestClassListener.Result.PreventSpawn
-            }
-            callbackListenerManager.register(onPlayerRequestClassListener)
-
-            val result = callbackProcessor.onPlayerRequestClass(playerId, playerClassId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerRequestClassListener.onPlayerRequestClass(player, playerClass) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerRequestClassListener = mockk<OnPlayerRequestClassListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerRequestClassListener)
-
-            val result = callbackProcessor.onPlayerRequestClass(500, playerClassId)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerRequestClassListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerRequestClassListener = mockk<OnPlayerRequestClassListener> {
-                every { onPlayerRequestClass(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerRequestClassListener)
-
-            val result = callbackProcessor.onPlayerRequestClass(playerId, playerClassId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerRequestClassListener.onPlayerRequestClass(player, playerClass) }
-        }
-
-    }
-
-    @Nested
-    inner class OnPlayerEnterVehicleTests {
-
-        private lateinit var player: Player
-        private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
-
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.onEnter(any(), any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun shouldCallOnPlayerEnterVehicle(isPassenger: Boolean) {
-            val onPlayerEnterVehicleListener = mockk<OnPlayerEnterVehicleListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterVehicleListener)
-
-            val result = callbackProcessor.onPlayerEnterVehicle(playerId, vehicleId, isPassenger)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerEnterVehicleListener.onPlayerEnterVehicle(player, vehicle, isPassenger) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerEnterVehicleListener = mockk<OnPlayerEnterVehicleListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterVehicleListener)
-
-            val result = callbackProcessor.onPlayerEnterVehicle(500, vehicleId, true)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerEnterVehicleListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerEnterVehicleListener = mockk<OnPlayerEnterVehicleListener> {
-                every { onPlayerEnterVehicle(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerEnterVehicleListener)
-
-            val result = callbackProcessor.onPlayerEnterVehicle(playerId, 500, true)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerEnterVehicleListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerEnterVehicleListener = mockk<OnPlayerEnterVehicleListener> {
-                every { onPlayerEnterVehicle(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerEnterVehicleListener)
-
-            val result = callbackProcessor.onPlayerEnterVehicle(playerId, vehicleId, true)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerEnterVehicleListener.onPlayerEnterVehicle(player, vehicle, true) }
-        }
-
-    }
-
-    @Nested
-    inner class OnPlayerExitVehicleTests {
-
-        private lateinit var player: Player
-        private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
-
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.onExit(any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerExitVehicle() {
-            val onPlayerExitVehicleListener = mockk<OnPlayerExitVehicleListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerExitVehicleListener)
-
-            val result = callbackProcessor.onPlayerExitVehicle(playerId, vehicleId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerExitVehicleListener.onPlayerExitVehicle(player, vehicle) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerExitVehicleListener = mockk<OnPlayerExitVehicleListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerExitVehicleListener)
-
-            val result = callbackProcessor.onPlayerExitVehicle(500, vehicleId)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerExitVehicleListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerExitVehicleListener = mockk<OnPlayerExitVehicleListener> {
-                every { onPlayerExitVehicle(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerExitVehicleListener)
-
-            val result = callbackProcessor.onPlayerExitVehicle(playerId, 500)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerExitVehicleListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerExitVehicleListener = mockk<OnPlayerExitVehicleListener> {
-                every { onPlayerExitVehicle(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerExitVehicleListener)
-
-            val result = callbackProcessor.onPlayerExitVehicle(playerId, vehicleId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerExitVehicleListener.onPlayerExitVehicle(player, vehicle) }
-        }
-
-    }
-
-    @Nested
-    inner class OnPlayerStateChangeTests {
-
-        private lateinit var player: Player
-        private val playerId = 69
-
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerStateChange() {
-            val onPlayerStateChangeListener = mockk<OnPlayerStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStateChangeListener)
-
-            callbackProcessor.onPlayerStateChange(
-                    playerid = playerId,
-                    newstate = PlayerState.ON_FOOT.value,
-                    oldstate = PlayerState.DRIVER.value
+            assertAll(
+                    { verify { onPlayerRequestClassHandler.onPlayerRequestClass(player, playerClass) } },
+                    { assertThat(result).isTrue() }
             )
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerStateChangeListener.onPlayerStateChange(
-                        player = player,
-                        newState = PlayerState.ON_FOOT,
-                        oldState = PlayerState.DRIVER
-                )
-            }
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerStateChangeListener = mockk<OnPlayerStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStateChangeListener)
+        fun givenHandlerThrowsExceptionItShouldReturnTrue() {
+            every {
+                onPlayerRequestClassHandler.onPlayerRequestClass(any(), any())
+            } throws Exception()
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStateChange(
-                        playerid = 500,
-                        newstate = PlayerState.ON_FOOT.value,
-                        oldstate = PlayerState.DRIVER.value
-                )
-            }
+            val result = callbackProcessor.onPlayerRequestClass(playerId, playerClassId)
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerStateChangeListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
+            assertThat(result)
+                    .isTrue()
         }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerStateChangeListener = mockk<OnPlayerStateChangeListener> {
-                every { onPlayerStateChange(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerStateChangeListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStateChange(
-                        playerid = playerId,
-                        newstate = PlayerState.ON_FOOT.value,
-                        oldstate = PlayerState.DRIVER.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerStateChangeListener.onPlayerStateChange(
-                        player = player,
-                        newState = PlayerState.ON_FOOT,
-                        oldState = PlayerState.DRIVER
-                )
-            }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerEnterCheckpointTests {
+    @Test
+    fun shouldCallOnPlayerExitVehicle() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onPlayerExitVehicleHandler.onPlayerExitVehicle(any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerExitVehicle(playerId, vehicleId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerEnterCheckpoint() {
-            val onPlayerEnterCheckpointListener = mockk<OnPlayerEnterCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterCheckpointListener)
-
-            callbackProcessor.onPlayerEnterCheckpoint(playerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerEnterCheckpointListener.onPlayerEnterCheckpoint(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerEnterCheckpointListener = mockk<OnPlayerEnterCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEnterCheckpoint(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerEnterCheckpointListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerEnterCheckpointListener = mockk<OnPlayerEnterCheckpointListener> {
-                every { onPlayerEnterCheckpoint(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerEnterCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEnterCheckpoint(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerEnterCheckpointListener.onPlayerEnterCheckpoint(player) }
-        }
-
+        verify { onPlayerExitVehicleHandler.onPlayerExitVehicle(player, vehicle) }
     }
 
-    @Nested
-    inner class OnPlayerLeaveCheckpointTests {
+    @Test
+    fun shouldCallOnPlayerStateChange() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerStateChangeHandler.onPlayerStateChange(any(), any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerStateChange(playerId, PlayerState.ON_FOOT.value, PlayerState.DRIVER.value)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerLeaveCheckpoint() {
-            val onPlayerLeaveCheckpointListener = mockk<OnPlayerLeaveCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerLeaveCheckpointListener)
-
-            callbackProcessor.onPlayerLeaveCheckpoint(playerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerLeaveCheckpointListener.onPlayerLeaveCheckpoint(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerLeaveCheckpointListener = mockk<OnPlayerLeaveCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerLeaveCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerLeaveCheckpoint(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerLeaveCheckpointListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerLeaveCheckpointListener = mockk<OnPlayerLeaveCheckpointListener> {
-                every { onPlayerLeaveCheckpoint(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerLeaveCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerLeaveCheckpoint(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerLeaveCheckpointListener.onPlayerLeaveCheckpoint(player) }
-        }
-
+        verify { onPlayerStateChangeHandler.onPlayerStateChange(player, PlayerState.ON_FOOT, PlayerState.DRIVER) }
     }
 
-    @Nested
-    inner class OnPlayerEnterRaceCheckpointTests {
+    @Test
+    fun shouldCallOnPlayerEnterCheckpoint() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerEnterCheckpointHandler.onPlayerEnterCheckpoint(any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerEnterCheckpoint(playerId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerEnterRaceCheckpoint() {
-            val onPlayerEnterRaceCheckpointListener = mockk<OnPlayerEnterRaceCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterRaceCheckpointListener)
-
-            callbackProcessor.onPlayerEnterRaceCheckpoint(playerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerEnterRaceCheckpointListener.onPlayerEnterRaceCheckpoint(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerEnterRaceCheckpointListener = mockk<OnPlayerEnterRaceCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEnterRaceCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEnterRaceCheckpoint(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerEnterRaceCheckpointListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerEnterRaceCheckpointListener = mockk<OnPlayerEnterRaceCheckpointListener> {
-                every { onPlayerEnterRaceCheckpoint(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerEnterRaceCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEnterRaceCheckpoint(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerEnterRaceCheckpointListener.onPlayerEnterRaceCheckpoint(player) }
-        }
-
+        verify { onPlayerEnterCheckpointHandler.onPlayerEnterCheckpoint(player) }
     }
 
-    @Nested
-    inner class OnPlayerLeaveRaceCheckpointTests {
+    @Test
+    fun shouldCallOnPlayerLeaveCheckpoint() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerLeaveCheckpointHandler.onPlayerLeaveCheckpoint(any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerLeaveCheckpoint(playerId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
+        verify { onPlayerLeaveCheckpointHandler.onPlayerLeaveCheckpoint(player) }
+    }
 
-        @Test
-        fun shouldCallOnPlayerLeaveRaceCheckpoint() {
-            val onPlayerLeaveRaceCheckpointListener = mockk<OnPlayerLeaveRaceCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerLeaveRaceCheckpointListener)
+    @Test
+    fun shouldCallOnPlayerEnterRaceCheckpoint() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerEnterRaceCheckpointHandler.onPlayerEnterRaceCheckpoint(any()) } just Runs
 
-            callbackProcessor.onPlayerLeaveRaceCheckpoint(playerId)
+        callbackProcessor.onPlayerEnterRaceCheckpoint(playerId)
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerLeaveRaceCheckpointListener.onPlayerLeaveRaceCheckpoint(player) }
-        }
+        verify { onPlayerEnterRaceCheckpointHandler.onPlayerEnterRaceCheckpoint(player) }
+    }
 
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerLeaveRaceCheckpointListener = mockk<OnPlayerLeaveRaceCheckpointListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerLeaveRaceCheckpointListener)
+    @Test
+    fun shouldCallOnPlayerLeaveRaceCheckpoint() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerLeaveRaceCheckpointHandler.onPlayerLeaveRaceCheckpoint(any()) } just Runs
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerLeaveRaceCheckpoint(500)
-            }
+        callbackProcessor.onPlayerLeaveRaceCheckpoint(playerId)
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerLeaveRaceCheckpointListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerLeaveRaceCheckpointListener = mockk<OnPlayerLeaveRaceCheckpointListener> {
-                every { onPlayerLeaveRaceCheckpoint(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerLeaveRaceCheckpointListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerLeaveRaceCheckpoint(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerLeaveRaceCheckpointListener.onPlayerLeaveRaceCheckpoint(player) }
-        }
-
+        verify { onPlayerLeaveRaceCheckpointHandler.onPlayerLeaveRaceCheckpoint(player) }
     }
 
     @Nested
     inner class OnRconCommandTests {
 
         @Test
-        fun shouldCallOnRconCommandAndReturnTrue() {
-            val onRconCommandListener = mockk<OnRconCommandListener> {
-                every { onRconCommand("/hi there") } returns OnRconCommandListener.Result.Processed
-            }
-            callbackListenerManager.register(onRconCommandListener)
+        fun shouldCallOnRconCommand() {
+            every {
+                onRconCommandHandler.onRconCommand(any())
+            } returns OnRconCommandListener.Result.Processed
 
-            val result = callbackProcessor.onRconCommand("/hi there")
+            val result = callbackProcessor.onRconCommand("/hello")
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onRconCommandListener.onRconCommand("/hi there") }
+            assertAll(
+                    { verify { onRconCommandHandler.onRconCommand("/hello") } },
+                    { assertThat(result).isEqualTo(true) }
+            )
         }
 
         @Test
-        fun shouldCallOnRconCommandAndReturnFalse() {
-            val onRconCommandListener = mockk<OnRconCommandListener> {
-                every { onRconCommand("/hi there") } returns OnRconCommandListener.Result.UnknownCommand
-            }
-            callbackListenerManager.register(onRconCommandListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onRconCommandHandler.onRconCommand(any())
+            } throws Exception()
 
-            val result = callbackProcessor.onRconCommand("/hi there")
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onRconCommandListener.onRconCommand("/hi there") }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onRconCommandListener = mockk<OnRconCommandListener> {
-                every { onRconCommand(any()) } throws exception
-            }
-            callbackListenerManager.register(onRconCommandListener)
-
-            val result = callbackProcessor.onRconCommand("/hi there")
+            val result = callbackProcessor.onRconCommand("/hello")
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onRconCommandListener.onRconCommand("/hi there") }
         }
-
     }
 
     @Nested
     inner class OnPlayerRequestSpawnTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerRequestSpawnAndReturnTrue() {
-            val onPlayerRequestSpawnListener = mockk<OnPlayerRequestSpawnListener> {
-                every { onPlayerRequestSpawn(player) } returns OnPlayerRequestSpawnListener.Result.Granted
-            }
-            callbackListenerManager.register(onPlayerRequestSpawnListener)
+        fun shouldCallOnPlayerRequestSpawn() {
+            every {
+                onPlayerRequestSpawnHandler.onPlayerRequestSpawn(any())
+            } returns OnPlayerRequestSpawnListener.Result.Granted
 
             val result = callbackProcessor.onPlayerRequestSpawn(playerId)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerRequestSpawnListener.onPlayerRequestSpawn(player) }
+            assertAll(
+                    { verify { onPlayerRequestSpawnHandler.onPlayerRequestSpawn(player) } },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun shouldCallOnPlayerRequestSpawnAndReturnFalse() {
-            val onPlayerRequestSpawnListener = mockk<OnPlayerRequestSpawnListener> {
-                every { onPlayerRequestSpawn(player) } returns OnPlayerRequestSpawnListener.Result.Denied
-            }
-            callbackListenerManager.register(onPlayerRequestSpawnListener)
-
-            val result = callbackProcessor.onPlayerRequestSpawn(playerId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerRequestSpawnListener.onPlayerRequestSpawn(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerRequestSpawnListener = mockk<OnPlayerRequestSpawnListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerRequestSpawnListener)
-
-            val result = callbackProcessor.onPlayerRequestSpawn(500)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerRequestSpawnListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerRequestSpawnListener = mockk<OnPlayerRequestSpawnListener> {
-                every { onPlayerRequestSpawn(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerRequestSpawnListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onPlayerRequestSpawnHandler.onPlayerRequestSpawn(any())
+            } throws Exception()
 
             val result = callbackProcessor.onPlayerRequestSpawn(playerId)
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerRequestSpawnListener.onPlayerRequestSpawn(player) }
         }
-
     }
 
-    @Nested
-    inner class OnMapObjectMovedTests {
+    @Test
+    fun shouldCallOnMapObjectMoved() {
+        val mapObjectId = 69
+        val mapObject = mockk<MapObject>()
+        every { entityResolver.run { mapObjectId.toMapObject() } } returns mapObject
+        every { onMapObjectMovedHandler.onMapObjectMoved(any()) } just Runs
 
-        private lateinit var mapObject: MapObject
-        private val mapObjectId = 69
+        callbackProcessor.onObjectMoved(mapObjectId)
 
-        @BeforeEach
-        fun setUp() {
-            mapObject = mockk {
-                every { id } returns MapObjectId.valueOf(mapObjectId)
-                every { onMoved() } just Runs
-            }
-            server.injector.getInstance<MapObjectRegistry>().register(mapObject)
-        }
-
-        @Test
-        fun shouldCallOnMapObjectMoved() {
-            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener>(relaxed = true)
-            callbackListenerManager.register(onMapObjectMovedListener)
-
-            callbackProcessor.onObjectMoved(mapObjectId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onMapObjectMovedListener.onMapObjectMoved(mapObject) }
-        }
-
-        @Test
-        fun givenInvalidMapObjectIdItShouldThrowAndCatchException() {
-            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener>(relaxed = true)
-            callbackListenerManager.register(onMapObjectMovedListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onObjectMoved(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onMapObjectMovedListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid map object ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onMapObjectMovedListener = mockk<OnMapObjectMovedListener> {
-                every { onMapObjectMoved(any()) } throws exception
-            }
-            callbackListenerManager.register(onMapObjectMovedListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onObjectMoved(mapObjectId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onMapObjectMovedListener.onMapObjectMoved(mapObject) }
-        }
-
+        verify { onMapObjectMovedHandler.onMapObjectMoved(mapObject) }
     }
 
-    @Nested
-    inner class OnPlayerMapPlayerObjectMovedTests {
+    @Test
+    fun shouldCallOnPlayerMapObjectMoved() {
+        val playerId = 187
+        val player = mockk<Player>()
+        val playerMapObjectId = 69
+        val playerMapObject = mockk<PlayerMapObject>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { playerMapObjectId.toPlayerMapObject(player) } } returns playerMapObject
+        every { onPlayerMapObjectMovedHandler.onPlayerMapObjectMoved(any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 50
-        private lateinit var playerMapObject: PlayerMapObject
-        private val playerMapObjectId = 69
+        callbackProcessor.onPlayerObjectMoved(playerid = playerId, objectid = playerMapObjectId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            playerMapObject = mockk {
-                every { id } returns PlayerMapObjectId.valueOf(playerMapObjectId)
-                every { onMoved() } just Runs
-            }
-            player.playerMapObjectRegistry.register(playerMapObject)
-        }
-
-        @Test
-        fun shouldCallOnPlayerMapPlayerObjectMoved() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
-
-            callbackProcessor.onPlayerObjectMoved(playerId, playerMapObjectId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerMapPlayerObjectMovedListener.onPlayerMapObjectMoved(playerMapObject) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerObjectMoved(500, playerMapObjectId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerMapPlayerObjectMovedListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidPlayerMapObjectIdItShouldThrowAndCatchException() {
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerObjectMoved(playerId, 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerMapPlayerObjectMovedListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player map object ID 500 for player ID 50")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerMapPlayerObjectMovedListener = mockk<OnPlayerMapObjectMovedListener> {
-                every { onPlayerMapObjectMoved(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerMapPlayerObjectMovedListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerObjectMoved(playerId, playerMapObjectId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerMapPlayerObjectMovedListener.onPlayerMapObjectMoved(playerMapObject) }
-        }
-
+        verify { onPlayerMapObjectMovedHandler.onPlayerMapObjectMoved(playerMapObject) }
     }
 
-    @Nested
-    inner class OnPlayerPickUpPickupTests {
+    @Test
+    fun shouldCallOnPlayerPickUpPickup() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val pickupId = 1234
+        val pickup = mockk<Pickup>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { pickupId.toPickup() } } returns pickup
+        every { onPlayerPickUpPickupHandler.onPlayerPickUpPickup(any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private val pickupId = 127
-        private val pickup: Pickup = mockk()
+        callbackProcessor.onPlayerPickUpPickup(playerId, pickupId)
 
-        @BeforeEach
-        fun setUp() {
-            every { pickup.onPickUp(any()) } just Runs
-            every { pickup.id } returns PickupId.valueOf(pickupId)
-            server.injector.getInstance<PickupRegistry>().register(pickup)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerPickUpPickup() {
-            val onPlayerPickUpPickupListener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerPickUpPickupListener)
-
-            val result = callbackProcessor.onPlayerPickUpPickup(playerId, pickupId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerPickUpPickupListener.onPlayerPickUpPickup(player, pickup) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerPickUpPickupListener = mockk<OnPlayerPickUpPickupListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerPickUpPickupListener)
-
-            val result = callbackProcessor.onPlayerPickUpPickup(500, pickupId)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerPickUpPickupListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidPickupIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerPickUpPickupListener = mockk<OnPlayerPickUpPickupListener> {
-                every { onPlayerPickUpPickup(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerPickUpPickupListener)
-
-            val result = callbackProcessor.onPlayerPickUpPickup(playerId, 500)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerPickUpPickupListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid pickup ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerPickUpPickupListener = mockk<OnPlayerPickUpPickupListener> {
-                every { onPlayerPickUpPickup(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerPickUpPickupListener)
-
-            val result = callbackProcessor.onPlayerPickUpPickup(playerId, pickupId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerPickUpPickupListener.onPlayerPickUpPickup(player, pickup) }
-        }
-
+        verify { onPlayerPickUpPickupHandler.onPlayerPickUpPickup(player, pickup) }
     }
 
     @Nested
     inner class OnVehicleModTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        private val player = mockk<Player>()
+        private val vehicleId = 1234
+        private val vehicle = mockk<Vehicle>()
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
         }
 
         @Test
-        fun shouldCallOnVehicleModAndReturnTrue() {
-            val onVehicleModListener = mockk<OnVehicleModListener> {
-                every { onVehicleMod(any(), any(), any()) } returns OnVehicleModListener.Result.Sync
-            }
-            callbackListenerManager.register(onVehicleModListener)
+        fun shouldCallOnVehicleMod() {
+            every {
+                onVehicleModHandler.onVehicleMod(any(), any(), any())
+            } returns OnVehicleModListener.Result.Sync
 
-            val result = callbackProcessor.onVehicleMod(
-                    playerId,
-                    vehicleId,
-                    VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value
+            val result = callbackProcessor.onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_LARGE.value)
+
+            assertAll(
+                    {
+                        verify {
+                            onVehicleModHandler.onVehicleMod(
+                                    player,
+                                    vehicle,
+                                    VehicleComponentModel.EXHAUST_LARGE
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
             )
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleModListener.onVehicleMod(player, vehicle, VehicleComponentModel.EXHAUST_ALIEN_ELEGY) }
         }
 
         @Test
-        fun shouldCallOnVehicleModAndReturnFalse() {
-            val onVehicleModListener = mockk<OnVehicleModListener> {
-                every { onVehicleMod(any(), any(), any()) } returns OnVehicleModListener.Result.Desync
-            }
-            callbackListenerManager.register(onVehicleModListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onVehicleModHandler.onVehicleMod(any(), any(), any())
+            } throws Exception()
 
-            val result = callbackProcessor.onVehicleMod(
-                    playerId,
-                    vehicleId,
-                    VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value
-            )
+            val result = callbackProcessor.onVehicleMod(playerId, vehicleId, VehicleComponentModel.EXHAUST_LARGE.value)
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleModListener.onVehicleMod(player, vehicle, VehicleComponentModel.EXHAUST_ALIEN_ELEGY) }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleModListener = mockk<OnVehicleModListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleModListener)
-
-            val result = callbackProcessor.onVehicleMod(500, vehicleId, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onVehicleModListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleModListener = mockk<OnVehicleModListener> {
-                every { onVehicleMod(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleModListener)
-
-            val result = callbackProcessor.onVehicleMod(playerId, 500, VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onVehicleModListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleModListener = mockk<OnVehicleModListener> {
-                every { onVehicleMod(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleModListener)
-
-            val result = callbackProcessor.onVehicleMod(
-                    playerId,
-                    vehicleId,
-                    VehicleComponentModel.EXHAUST_ALIEN_ELEGY.value
-            )
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleModListener.onVehicleMod(player, vehicle, VehicleComponentModel.EXHAUST_ALIEN_ELEGY) }
-        }
-
     }
 
-    @Nested
-    inner class OnEnterExitModShopTests {
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldCallOnEnterExitModShop(entered: Boolean) {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onEnterExitModShopHandler.onEnterExitModShop(any(), any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onEnterExitModShop(playerId, entered, 69)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun shouldCallOnEnterExitModShop(entered: Boolean) {
-            val onEnterExitModShopListener = mockk<OnEnterExitModShopListener>(relaxed = true)
-            callbackListenerManager.register(onEnterExitModShopListener)
-
-            callbackProcessor.onEnterExitModShop(playerId, entered, 13)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onEnterExitModShopListener.onEnterExitModShop(player, entered, 13) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onEnterExitModShopListener = mockk<OnEnterExitModShopListener>(relaxed = true)
-            callbackListenerManager.register(onEnterExitModShopListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onEnterExitModShop(500, true, 13)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onEnterExitModShopListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onEnterExitModShopListener = mockk<OnEnterExitModShopListener> {
-                every { onEnterExitModShop(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onEnterExitModShopListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onEnterExitModShop(playerId, true, 13)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onEnterExitModShopListener.onEnterExitModShop(player, true, 13) }
-        }
-
+        verify { onEnterExitModShopHandler.onEnterExitModShop(player, entered, 69) }
     }
 
-    @Nested
-    inner class OnVehiclePaintjobTests {
+    @Test
+    fun shouldCallOnVehiclePaintjob() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onVehiclePaintjobHandler.onVehiclePaintjob(any(), any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        callbackProcessor.onVehiclePaintjob(playerId, vehicleId, 3)
 
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.onEnter(any(), any()) } just Runs
-            every { vehicle.onPaintjobChange(any(), any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnVehiclePaintjob() {
-            val onVehiclePaintjobListener = mockk<OnVehiclePaintjobListener>(relaxed = true)
-            callbackListenerManager.register(onVehiclePaintjobListener)
-
-            val result = callbackProcessor.onVehiclePaintjob(playerId, vehicleId, 3)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehiclePaintjobListener.onVehiclePaintjob(player, vehicle, 3) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onVehiclePaintjobListener = mockk<OnVehiclePaintjobListener>(relaxed = true)
-            callbackListenerManager.register(onVehiclePaintjobListener)
-
-            val result = callbackProcessor.onVehiclePaintjob(500, vehicleId, 3)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehiclePaintjobListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onVehiclePaintjobListener = mockk<OnVehiclePaintjobListener> {
-                every { onVehiclePaintjob(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehiclePaintjobListener)
-
-            val result = callbackProcessor.onVehiclePaintjob(playerId, 500, 3)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehiclePaintjobListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehiclePaintjobListener = mockk<OnVehiclePaintjobListener> {
-                every { onVehiclePaintjob(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehiclePaintjobListener)
-
-            val result = callbackProcessor.onVehiclePaintjob(playerId, vehicleId, 3)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehiclePaintjobListener.onVehiclePaintjob(player, vehicle, 3) }
-        }
-
+        verify { onVehiclePaintjobHandler.onVehiclePaintjob(player, vehicle, 3) }
     }
 
     @Nested
     inner class OnVehicleResprayTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        private val player = mockk<Player>()
+        private val vehicleId = 1234
+        private val vehicle = mockk<Vehicle>()
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            every { vehicle.onRespray(any(), any()) } returns OnVehicleResprayListener.Result.Sync
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
         }
 
         @Test
-        fun shouldCallOnVehicleResprayAndReturnTrue() {
-            val onVehicleResprayListener = mockk<OnVehicleResprayListener> {
-                every { onVehicleRespray(any(), any(), any()) } returns OnVehicleResprayListener.Result.Sync
-            }
-            callbackListenerManager.register(onVehicleResprayListener)
+        fun shouldCallOnVehicleRespray() {
+            every {
+                onVehicleResprayHandler.onVehicleRespray(any(), any(), any())
+            } returns OnVehicleResprayListener.Result.Sync
 
             val result = callbackProcessor.onVehicleRespray(playerId, vehicleId, 3, 6)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleResprayListener.onVehicleRespray(player, vehicle, vehicleColorsOf(3, 6)) }
+            assertAll(
+                    {
+                        verify {
+                            onVehicleResprayHandler.onVehicleRespray(
+                                    player,
+                                    vehicle,
+                                    vehicleColorsOf(3, 6)
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun shouldCallOnVehicleResprayAndReturnFalse() {
-            val onVehicleResprayListener = mockk<OnVehicleResprayListener> {
-                every { onVehicleRespray(any(), any(), any()) } returns OnVehicleResprayListener.Result.Desync
-            }
-            callbackListenerManager.register(onVehicleResprayListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onVehicleResprayHandler.onVehicleRespray(any(), any(), any())
+            } throws Exception()
 
-            val result = callbackProcessor.onVehicleRespray(playerId, vehicleId, 3, 6)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleResprayListener.onVehicleRespray(player, vehicle, vehicleColorsOf(3, 6)) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleResprayListener = mockk<OnVehicleResprayListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleResprayListener)
-
-            val result = callbackProcessor.onVehicleRespray(500, vehicleId, 3, 6)
+            val result = callbackProcessor.onVehicleRespray(
+                    playerid = playerId,
+                    vehicleid = vehicleId,
+                    color1 = 3,
+                    color2 = 6
+            )
 
             assertThat(result)
                     .isFalse()
-            val slot = slot<Exception>()
-            verify { onVehicleResprayListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
         }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleResprayListener = mockk<OnVehicleResprayListener> {
-                every { onVehicleRespray(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleResprayListener)
-
-            val result = callbackProcessor.onVehicleRespray(playerId, 500, 3, 6)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onVehicleResprayListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleResprayListener = mockk<OnVehicleResprayListener> {
-                every { onVehicleRespray(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleResprayListener)
-
-            val result = callbackProcessor.onVehicleRespray(playerId, vehicleId, 3, 6)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleResprayListener.onVehicleRespray(player, vehicle, vehicleColorsOf(3, 6)) }
-        }
-
     }
 
-    @Nested
-    inner class OnVehicleDamageStatusUpdateTests {
+    @Test
+    fun shouldCallOnVehicleDamageStatusUpdate() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onVehicleDamageStatusUpdateHandler.onVehicleDamageStatusUpdate(any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        callbackProcessor.onVehicleDamageStatusUpdate(vehicleid = vehicleId, playerid = playerId)
 
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.onExit(any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnVehicleDamageStatusUpdate() {
-            val onVehicleDamageStatusUpdateListener = mockk<OnVehicleDamageStatusUpdateListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleDamageStatusUpdateListener)
-
-            val result = callbackProcessor.onVehicleDamageStatusUpdate(vehicleId, playerId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleDamageStatusUpdateListener.onVehicleDamageStatusUpdate(vehicle, player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleDamageStatusUpdateListener = mockk<OnVehicleDamageStatusUpdateListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleDamageStatusUpdateListener)
-
-            val result = callbackProcessor.onVehicleDamageStatusUpdate(vehicleId, 500)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehicleDamageStatusUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleDamageStatusUpdateListener = mockk<OnVehicleDamageStatusUpdateListener> {
-                every { onVehicleDamageStatusUpdate(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleDamageStatusUpdateListener)
-
-            val result = callbackProcessor.onVehicleDamageStatusUpdate(500, playerId)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehicleDamageStatusUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleDamageStatusUpdateListener = mockk<OnVehicleDamageStatusUpdateListener> {
-                every { onVehicleDamageStatusUpdate(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleDamageStatusUpdateListener)
-
-            val result = callbackProcessor.onVehicleDamageStatusUpdate(vehicleId, playerId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleDamageStatusUpdateListener.onVehicleDamageStatusUpdate(vehicle, player) }
-        }
-
+        verify { onVehicleDamageStatusUpdateHandler.onVehicleDamageStatusUpdate(vehicle, player) }
     }
 
     @Nested
     inner class OnUnoccupiedVehicleUpdateTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        private val player = mockk<Player>()
+        private val vehicleId = 1234
+        private val vehicle = mockk<Vehicle>()
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
         }
 
-        @Test
-        fun shouldCallOnUnoccupiedVehicleUpdate() {
-            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener> {
-                every {
-                    onUnoccupiedVehicleUpdate(any(), any(), any(), any(), any())
-                } returns OnUnoccupiedVehicleUpdateListener.Result.Sync
-            }
-            callbackListenerManager.register(onUnoccupiedVehicleUpdateListener)
-
-            val result = callbackProcessor.onUnoccupiedVehicleUpdate(
-                    vehicleid = vehicleId,
-                    playerid = playerId,
-                    passenger_seat = 1,
-                    new_x = 1f,
-                    new_y = 2f,
-                    new_z = 3f,
-                    vel_x = 4f,
-                    vel_y = 5f,
-                    vel_z = 6f
-            )
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onUnoccupiedVehicleUpdateListener.onUnoccupiedVehicleUpdate(
-                        vehicle = vehicle,
-                        player = player,
-                        passengerSeat = 1,
-                        coordinates = vector3DOf(1f, 2f, 3f),
-                        velocity = vector3DOf(4f, 5f, 6f)
+        @ParameterizedTest
+        @ValueSource(ints = [1, 2, 3])
+        fun shouldCallOnUnoccupiedVehicleUpdate(passengerSeat: Int) {
+            every {
+                onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
                 )
-            }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener>(relaxed = true)
-            callbackListenerManager.register(onUnoccupiedVehicleUpdateListener)
-
-            val result = callbackProcessor.onUnoccupiedVehicleUpdate(
-                    vehicleid = vehicleId,
-                    playerid = 500,
-                    passenger_seat = 1,
-                    new_x = 1f,
-                    new_y = 2f,
-                    new_z = 3f,
-                    vel_x = 4f,
-                    vel_y = 5f,
-                    vel_z = 6f
-            )
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onUnoccupiedVehicleUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener> {
-                every { onUnoccupiedVehicleUpdate(any(), any(), any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onUnoccupiedVehicleUpdateListener)
-
-            val result = callbackProcessor.onUnoccupiedVehicleUpdate(
-                    vehicleid = 500,
-                    playerid = playerId,
-                    passenger_seat = 1,
-                    new_x = 1f,
-                    new_y = 2f,
-                    new_z = 3f,
-                    vel_x = 4f,
-                    vel_y = 5f,
-                    vel_z = 6f
-            )
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onUnoccupiedVehicleUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onUnoccupiedVehicleUpdateListener = mockk<OnUnoccupiedVehicleUpdateListener> {
-                every { onUnoccupiedVehicleUpdate(any(), any(), any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onUnoccupiedVehicleUpdateListener)
+            } returns OnUnoccupiedVehicleUpdateListener.Result.Sync
 
             val result = callbackProcessor.onUnoccupiedVehicleUpdate(
                     vehicleid = vehicleId,
                     playerid = playerId,
-                    passenger_seat = 1,
+                    passenger_seat = passengerSeat,
                     new_x = 1f,
                     new_y = 2f,
                     new_z = 3f,
@@ -2395,117 +904,138 @@ internal class CallbackProcessorTest {
                     vel_z = 6f
             )
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onUnoccupiedVehicleUpdateListener.onUnoccupiedVehicleUpdate(
-                        vehicle = vehicle,
-                        player = player,
-                        passengerSeat = 1,
-                        coordinates = vector3DOf(1f, 2f, 3f),
-                        velocity = vector3DOf(4f, 5f, 6f)
+            assertAll(
+                    {
+                        verify {
+                            onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
+                                    vehicle = vehicle,
+                                    player = player,
+                                    passengerSeat = passengerSeat,
+                                    coordinates = vector3DOf(1f, 2f, 3f),
+                                    velocity = vector3DOf(4f, 5f, 6f)
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
+            )
+        }
+
+        @Test
+        fun givenPassengerSeatItZeroItShouldCallHandlerWithSeatNull() {
+            every {
+                onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
                 )
-            }
+            } returns OnUnoccupiedVehicleUpdateListener.Result.Sync
+
+            val result = callbackProcessor.onUnoccupiedVehicleUpdate(
+                    vehicleid = vehicleId,
+                    playerid = playerId,
+                    passenger_seat = 0,
+                    new_x = 1f,
+                    new_y = 2f,
+                    new_z = 3f,
+                    vel_x = 4f,
+                    vel_y = 5f,
+                    vel_z = 6f
+            )
+
+            assertAll(
+                    {
+                        verify {
+                            onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
+                                    vehicle = vehicle,
+                                    player = player,
+                                    passengerSeat = null,
+                                    coordinates = vector3DOf(1f, 2f, 3f),
+                                    velocity = vector3DOf(4f, 5f, 6f)
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
+            )
         }
 
+        @Test
+        fun givenHandlerThrowsExceptionItShouldReturnTrue() {
+            every {
+                onUnoccupiedVehicleUpdateHandler.onUnoccupiedVehicleUpdate(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } throws Exception()
+
+            val result = callbackProcessor.onUnoccupiedVehicleUpdate(
+                    vehicleid = vehicleId,
+                    playerid = playerId,
+                    passenger_seat = 0,
+                    new_x = 1f,
+                    new_y = 2f,
+                    new_z = 3f,
+                    vel_x = 4f,
+                    vel_y = 5f,
+                    vel_z = 6f
+            )
+
+            assertThat(result)
+                    .isTrue()
+        }
     }
 
     @Nested
     inner class OnPlayerSelectedMenuRowTests {
 
-        private lateinit var player: Player
-        private val menu = mockk<Menu>()
         private val playerId = 69
-        private val menuId = 13
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            every { menu.id } returns MenuId.valueOf(menuId)
-            server.injector.getInstance<MenuRegistry>().register(menu)
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { onPlayerSelectedMenuRowHandler.onPlayerSelectedMenuRow(any(), any()) } just Runs
         }
 
-        @Test
-        fun shouldCallOnPlayerSelectedMenuRow() {
-            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
-            every { menu.numberOfColumns } returns 4
-            val menuRow = MenuRow(menu, 2, nativeFunctionExecutor)
-            every { menu.rows } returns mutableListOf(mockk(), mockk(), menuRow, mockk())
-            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
+        @Nested
+        inner class MenuExistsTests {
 
-            callbackProcessor.onPlayerSelectedMenuRow(playerId, 2)
+            private val menu: Menu = mockk()
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, menuRow) }
-        }
-
-        @Test
-        fun givenNoMenuItShouldNotCallOnPlayerSelectedMenuRow() {
-            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns SAMPConstants.INVALID_MENU
-            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
-
-            callbackProcessor.onPlayerSelectedMenuRow(playerId, 5)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerSelectedMenuRowListener wasNot Called }
-        }
-
-        @Test
-        fun givenNoMenuRowForIndexItShouldNotCallOnPlayerSelectedMenuRow() {
-            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
-            every { menu.rows } returns mutableListOf(mockk())
-            every { menu.numberOfColumns } returns 1
-            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
-
-            callbackProcessor.onPlayerSelectedMenuRow(playerId, 5)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerSelectedMenuRowListener wasNot Called }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerSelectedMenuRow(500, 5)
+            @BeforeEach
+            fun setUp() {
+                every { player.menu } returns menu
             }
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerSelectedMenuRowListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
+            @Test
+            fun givenMenuRowExistsItShouldCallHandler() {
+                val menuRow = mockk<MenuRow>()
+                every { menu.rows } returns listOf(mockk(), menuRow, mockk())
+
+                callbackProcessor.onPlayerSelectedMenuRow(playerId, 1)
+
+                verify { onPlayerSelectedMenuRowHandler.onPlayerSelectedMenuRow(player, menuRow) }
+            }
+
+            @Test
+            fun givenMenuRowDoesNotExistItShouldNotCallHandler() {
+                every { menu.rows } returns emptyList()
+
+                callbackProcessor.onPlayerSelectedMenuRow(playerId, 3)
+
+                verify { onPlayerSelectedMenuRowHandler wasNot Called }
+            }
         }
 
         @Test
-        fun shouldCatchException() {
-            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
-            every { menu.numberOfColumns } returns 4
-            val menuRow = MenuRow(menu, 2, nativeFunctionExecutor)
-            every { menu.rows } returns mutableListOf(mockk(), mockk(), menuRow, mockk())
-            val exception = RuntimeException("test")
-            val onPlayerSelectedMenuRowListener = mockk<OnPlayerSelectedMenuRowListener> {
-                every { onPlayerSelectedMenuRow(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerSelectedMenuRowListener)
+        fun givenNoMenuItShouldDoNothing() {
+            callbackProcessor.onPlayerSelectedMenuRow(playerId, 3)
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerSelectedMenuRow(playerId, 2)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerSelectedMenuRowListener.onPlayerSelectedMenuRow(player, menuRow) }
+            verify { onPlayerSelectedMenuRowHandler wasNot Called }
         }
 
     }
@@ -2513,1861 +1043,658 @@ internal class CallbackProcessorTest {
     @Nested
     inner class OnPlayerExitedMenuTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private lateinit var menu: Menu
-        private val menuId = 50
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            every { nativeFunctionExecutor.createMenu(any(), any(), any(), any(), any(), any()) } returns menuId
-            every { nativeFunctionExecutor.getPlayerMenu(playerId) } returns menuId
-            menu = server.injector.getInstance<MenuFactory>().create(vector2DOf(0f, 0f), 0f, "Test", Locale.GERMANY)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { onPlayerExitedMenuHandler.onPlayerExitedMenu(any(), any()) } just Runs
         }
 
         @Test
-        fun shouldCallOnPlayerExitedMenu() {
-            val onPlayerExitedMenuListener = mockk<OnPlayerExitedMenuListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerExitedMenuListener)
+        fun givenMenuRowExistsItShouldCallHandler() {
+            val menu: Menu = mockk()
+            every { player.menu } returns menu
 
             callbackProcessor.onPlayerExitedMenu(playerId)
 
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player, menu) }
+            verify { onPlayerExitedMenuHandler.onPlayerExitedMenu(player, menu) }
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerExitedMenuListener = mockk<OnPlayerExitedMenuListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerExitedMenuListener)
+        fun givenNoMenuItShouldDoNothing() {
+            callbackProcessor.onPlayerExitedMenu(playerId)
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerExitedMenu(500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerExitedMenuListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerExitedMenuListener = mockk<OnPlayerExitedMenuListener> {
-                every { onPlayerExitedMenu(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerExitedMenuListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerExitedMenu(playerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerExitedMenuListener.onPlayerExitedMenu(player, menu) }
+            verify { onPlayerExitedMenuHandler wasNot Called }
         }
 
     }
 
-    @Nested
-    inner class OnPlayerInteriorChangeTests {
+    @Test
+    fun shouldCallOnPlayerInteriorChange() {
+        val newInteriorId = 123
+        val oldInteriorId = 456
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerInteriorChangeHandler.onPlayerInteriorChange(any(), any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerInteriorChange(
+                playerid = playerId,
+                newinteriorid = newInteriorId,
+                oldinteriorid = oldInteriorId
+        )
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+        verify {
+            onPlayerInteriorChangeHandler.onPlayerInteriorChange(
+                    player = player,
+                    newInteriorId = newInteriorId,
+                    oldInteriorId = oldInteriorId
+            )
         }
-
-        @Test
-        fun shouldCallOnPlayerInteriorChange() {
-            val onPlayerInteriorChangeListener = mockk<OnPlayerInteriorChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerInteriorChangeListener)
-
-            callbackProcessor.onPlayerInteriorChange(playerid = playerId, newinteriorid = 0, oldinteriorid = 15)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerInteriorChangeListener.onPlayerInteriorChange(
-                        player = player,
-                        newInteriorId = 0,
-                        oldInteriorId = 15
-                )
-            }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerInteriorChangeListener = mockk<OnPlayerInteriorChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerInteriorChangeListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerInteriorChange(playerid = 500, newinteriorid = 0, oldinteriorid = 15)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerInteriorChangeListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerInteriorChangeListener = mockk<OnPlayerInteriorChangeListener> {
-                every { onPlayerInteriorChange(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerInteriorChangeListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerInteriorChange(playerid = playerId, newinteriorid = 0, oldinteriorid = 15)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerInteriorChangeListener.onPlayerInteriorChange(
-                        player = player,
-                        newInteriorId = 0,
-                        oldInteriorId = 15
-                )
-            }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerKeyStateChangeTests {
+    @Test
+    fun shouldCallOnPlayerKeyStateChange() {
+        val newKeys = 123
+        val oldKeys = 456
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerKeyStateChangeHandler.onPlayerKeyStateChange(any(), any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
+        callbackProcessor.onPlayerKeyStateChange(
+                playerid = playerId,
+                newkeys = newKeys,
+                oldkeys = oldKeys
+        )
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+        verify {
+            onPlayerKeyStateChangeHandler.onPlayerKeyStateChange(
+                    player = player,
+                    oldKeys = playerKeysOf(keys = oldKeys),
+                    newKeys = playerKeysOf(keys = newKeys)
+            )
         }
-
-        @Test
-        fun shouldCallOnPlayerKeyStateChange() {
-            val onPlayerKeyStateChangeListener = mockk<OnPlayerKeyStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerKeyStateChangeListener)
-
-            callbackProcessor.onPlayerKeyStateChange(playerid = playerId, newkeys = 64, oldkeys = 256)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
-                        player = player,
-                        oldKeys = playerKeysOf(256, 0, 0),
-                        newKeys = playerKeysOf(64, 0, 0)
-                )
-            }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerKeyStateChangeListener = mockk<OnPlayerKeyStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerKeyStateChangeListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerKeyStateChange(playerid = 500, newkeys = 64, oldkeys = 256)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerKeyStateChangeListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerKeyStateChangeListener = mockk<OnPlayerKeyStateChangeListener> {
-                every { onPlayerKeyStateChange(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerKeyStateChangeListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerKeyStateChange(playerid = playerId, newkeys = 64, oldkeys = 256)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerKeyStateChangeListener.onPlayerKeyStateChange(
-                        player = player,
-                        oldKeys = playerKeysOf(256, 0, 0),
-                        newKeys = playerKeysOf(64, 0, 0)
-                )
-            }
-        }
-
     }
 
-    @Nested
-    inner class OnRconLoginAttemptTests {
+    @ParameterizedTest
+    @ValueSource(strings = ["true", "false"])
+    fun shouldOnRconLoginAttempt(success: Boolean) {
+        every { onRconLoginAttemptHandler.onRconLoginAttempt(any(), any(), any()) } just Runs
 
-        @ParameterizedTest
-        @ValueSource(strings = ["true", "false"])
-        fun shouldCallOnRconLoginAttemptAndReturnTrue(success: Boolean) {
-            val onRconLoginAttemptListener = mockk<OnRconLoginAttemptListener>(relaxed = true)
-            callbackListenerManager.register(onRconLoginAttemptListener)
+        callbackProcessor.onRconLoginAttempt(ip = "127.0.0.1", password = "blablabla", success = success)
 
-            val result = callbackProcessor.onRconLoginAttempt("127.0.0.1", "hahaha", success)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onRconLoginAttemptListener.onRconLoginAttempt("127.0.0.1", "hahaha", success) }
+        verify {
+            onRconLoginAttemptHandler.onRconLoginAttempt(
+                    ipAddress = "127.0.0.1",
+                    password = "blablabla",
+                    success = success
+            )
         }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onRconLoginAttemptListener = mockk<OnRconLoginAttemptListener> {
-                every { onRconLoginAttempt(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onRconLoginAttemptListener)
-
-            val result = callbackProcessor.onRconLoginAttempt("127.0.0.1", "hahaha", true)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onRconLoginAttemptListener.onRconLoginAttempt("127.0.0.1", "hahaha", true) }
-        }
-
     }
 
     @Nested
     inner class OnPlayerUpdateTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerUpdateAndReturnTrue() {
-            val onPlayerUpdateListener = mockk<OnPlayerUpdateListener> {
-                every { onPlayerUpdate(any()) } returns OnPlayerUpdateListener.Result.Sync
-            }
-            callbackListenerManager.register(onPlayerUpdateListener)
+        fun shouldCallOnPlayerUpdate() {
+            every {
+                onPlayerUpdateHandler.onPlayerUpdate(any())
+            } returns OnPlayerUpdateListener.Result.Sync
+
+            val result = callbackProcessor.onPlayerUpdate(playerId)
+
+            assertAll(
+                    { verify { onPlayerUpdateHandler.onPlayerUpdate(player) } },
+                    { assertThat(result).isTrue() }
+            )
+        }
+
+        @Test
+        fun givenHandlerThrowsExceptionItShouldReturnTrue() {
+            every {
+                onPlayerUpdateHandler.onPlayerUpdate(any())
+            } throws Exception()
 
             val result = callbackProcessor.onPlayerUpdate(playerId)
 
             assertThat(result)
                     .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerUpdateListener.onPlayerUpdate(player) }
         }
-
-        @Test
-        fun shouldCallOnPlayerUpdateAndReturnFalse() {
-            val onPlayerUpdateListener = mockk<OnPlayerUpdateListener> {
-                every { onPlayerUpdate(any()) } returns OnPlayerUpdateListener.Result.Desync
-            }
-            callbackListenerManager.register(onPlayerUpdateListener)
-
-            val result = callbackProcessor.onPlayerUpdate(playerId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerUpdateListener.onPlayerUpdate(player) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerUpdateListener = mockk<OnPlayerUpdateListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerUpdateListener)
-
-            val result = callbackProcessor.onPlayerUpdate(500)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onPlayerUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerUpdateListener = mockk<OnPlayerUpdateListener> {
-                every { onPlayerUpdate(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerUpdateListener)
-
-            val result = callbackProcessor.onPlayerUpdate(playerId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerUpdateListener.onPlayerUpdate(player) }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerStreamInTests {
+    @Test
+    fun shouldCallOnPlayerStreamIn() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val forPlayerId = 1234
+        val forPlayer = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { forPlayerId.toPlayer() } } returns forPlayer
+        every { onPlayerStreamInHandler.onPlayerStreamIn(any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onPlayerStreamIn(playerid = playerId, forplayerid = forPlayerId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerStreamIn() {
-            val onPlayerStreamInListener = mockk<OnPlayerStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamInListener)
-
-            callbackProcessor.onPlayerStreamIn(playerid = playerId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerStreamInListener.onPlayerStreamIn(player = player, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerStreamInListener = mockk<OnPlayerStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamIn(playerid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerStreamInListener = mockk<OnPlayerStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamIn(playerid = playerId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerStreamInListener = mockk<OnPlayerStreamInListener> {
-                every { onPlayerStreamIn(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamIn(playerid = playerId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerStreamInListener.onPlayerStreamIn(player = player, forPlayer = forPlayer) }
-        }
-
+        verify { onPlayerStreamInHandler.onPlayerStreamIn(player = player, forPlayer = forPlayer) }
     }
 
-    @Nested
-    inner class OnPlayerStreamOutTests {
+    @Test
+    fun shouldCallOnPlayerStreamOut() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val forPlayerId = 1234
+        val forPlayer = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { forPlayerId.toPlayer() } } returns forPlayer
+        every { onPlayerStreamOutHandler.onPlayerStreamOut(any(), any()) } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onPlayerStreamOut(playerid = playerId, forplayerid = forPlayerId)
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerStreamOut() {
-            val onPlayerStreamOutListener = mockk<OnPlayerStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamOutListener)
-
-            callbackProcessor.onPlayerStreamOut(playerid = playerId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerStreamOutListener.onPlayerStreamOut(player = player, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerStreamOutListener = mockk<OnPlayerStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamOut(playerid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerStreamOutListener = mockk<OnPlayerStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamOut(playerid = playerId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerStreamOutListener = mockk<OnPlayerStreamOutListener> {
-                every { onPlayerStreamOut(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerStreamOut(playerid = playerId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerStreamOutListener.onPlayerStreamOut(player = player, forPlayer = forPlayer) }
-        }
-
+        verify { onPlayerStreamOutHandler.onPlayerStreamOut(player = player, forPlayer = forPlayer) }
     }
 
-    @Nested
-    inner class OnVehicleStreamInTests {
+    @Test
+    fun shouldCallOnVehicleStreamIn() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onVehicleStreamInHandler.onVehicleStreamIn(any(), any()) } just Runs
 
-        private val vehicle = mockk<Vehicle>()
-        private val vehicleId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onVehicleStreamIn(vehicleid = vehicleId, forplayerid = playerId)
 
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            every { vehicle.onStreamIn(any()) } just Runs
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnVehicleStreamIn() {
-            val onVehicleStreamInListener = mockk<OnVehicleStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamInListener)
-
-            callbackProcessor.onVehicleStreamIn(vehicleid = vehicleId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleStreamInListener.onVehicleStreamIn(vehicle = vehicle, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val onVehicleStreamInListener = mockk<OnVehicleStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamIn(vehicleid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleStreamInListener = mockk<OnVehicleStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamIn(vehicleid = vehicleId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleStreamInListener = mockk<OnVehicleStreamInListener> {
-                every { onVehicleStreamIn(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamIn(vehicleid = vehicleId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleStreamInListener.onVehicleStreamIn(vehicle = vehicle, forPlayer = forPlayer) }
-        }
-
+        verify { onVehicleStreamInHandler.onVehicleStreamIn(vehicle, player) }
     }
 
-    @Nested
-    inner class OnVehicleStreamOutTests {
+    @Test
+    fun shouldCallOnVehicleStreamOut() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every { onVehicleStreamOutHandler.onVehicleStreamOut(any(), any()) } just Runs
 
-        private val vehicle = mockk<Vehicle>()
-        private val vehicleId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onVehicleStreamOut(vehicleid = vehicleId, forplayerid = playerId)
 
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            every { vehicle.onStreamOut(any()) } just Runs
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnVehicleStreamOut() {
-            val onVehicleStreamOutListener = mockk<OnVehicleStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamOutListener)
-
-            callbackProcessor.onVehicleStreamOut(vehicleid = vehicleId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleStreamOutListener.onVehicleStreamOut(vehicle = vehicle, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val onVehicleStreamOutListener = mockk<OnVehicleStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamOut(vehicleid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleStreamOutListener = mockk<OnVehicleStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamOut(vehicleid = vehicleId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onVehicleStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleStreamOutListener = mockk<OnVehicleStreamOutListener> {
-                every { onVehicleStreamOut(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onVehicleStreamOut(vehicleid = vehicleId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onVehicleStreamOutListener.onVehicleStreamOut(vehicle = vehicle, forPlayer = forPlayer) }
-        }
-
+        verify { onVehicleStreamOutHandler.onVehicleStreamOut(vehicle, player) }
     }
 
-    @Nested
-    inner class OnActorStreamInTests {
+    @Test
+    fun shouldCallOnActorStreamIn() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val actorId = 1234
+        val actor = mockk<Actor>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { actorId.toActor() } } returns actor
+        every { onActorStreamInHandler.onActorStreamIn(any(), any()) } just Runs
 
-        private val actor = mockk<Actor>()
-        private val actorId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onActorStreamIn(actorid = actorId, forplayerid = playerId)
 
-        @BeforeEach
-        fun setUp() {
-            every { actor.id } returns ActorId.valueOf(actorId)
-            every { actor.onStreamIn(any()) } just Runs
-            server.injector.getInstance<ActorRegistry>().register(actor)
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnActorStreamIn() {
-            val onActorStreamInListener = mockk<OnActorStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamInListener)
-
-            callbackProcessor.onActorStreamIn(actorid = actorId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onActorStreamInListener.onActorStreamIn(actor = actor, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidActorIdItShouldThrowAndCatchException() {
-            val onActorStreamInListener = mockk<OnActorStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamIn(actorid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onActorStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid actor ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onActorStreamInListener = mockk<OnActorStreamInListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamIn(actorid = actorId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onActorStreamInListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onActorStreamInListener = mockk<OnActorStreamInListener> {
-                every { onActorStreamIn(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onActorStreamInListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamIn(actorid = actorId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onActorStreamInListener.onActorStreamIn(actor = actor, forPlayer = forPlayer) }
-        }
-
+        verify { onActorStreamInHandler.onActorStreamIn(actor, player) }
     }
 
-    @Nested
-    inner class OnActorStreamOutTests {
+    @Test
+    fun shouldCallOnActorStreamOut() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val actorId = 1234
+        val actor = mockk<Actor>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { actorId.toActor() } } returns actor
+        every { onActorStreamOutHandler.onActorStreamOut(any(), any()) } just Runs
 
-        private val actor = mockk<Actor>()
-        private val actorId = 69
-        private lateinit var forPlayer: Player
-        private val forPlayerId = 150
+        callbackProcessor.onActorStreamOut(actorid = actorId, forplayerid = playerId)
 
-        @BeforeEach
-        fun setUp() {
-            every { actor.id } returns ActorId.valueOf(actorId)
-            every { actor.onStreamOut(any()) } just Runs
-            server.injector.getInstance<ActorRegistry>().register(actor)
-            forPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(forPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnActorStreamOut() {
-            val onActorStreamOutListener = mockk<OnActorStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamOutListener)
-
-            callbackProcessor.onActorStreamOut(actorid = actorId, forplayerid = forPlayerId)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onActorStreamOutListener.onActorStreamOut(actor = actor, forPlayer = forPlayer) }
-        }
-
-        @Test
-        fun givenInvalidActorIdItShouldThrowAndCatchException() {
-            val onActorStreamOutListener = mockk<OnActorStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamOut(actorid = 500, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onActorStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid actor ID 500")
-        }
-
-        @Test
-        fun givenInvalidForPlayerIdItShouldThrowAndCatchException() {
-            val onActorStreamOutListener = mockk<OnActorStreamOutListener>(relaxed = true)
-            callbackListenerManager.register(onActorStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamOut(actorid = actorId, forplayerid = 500)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onActorStreamOutListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onActorStreamOutListener = mockk<OnActorStreamOutListener> {
-                every { onActorStreamOut(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onActorStreamOutListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onActorStreamOut(actorid = actorId, forplayerid = forPlayerId)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onActorStreamOutListener.onActorStreamOut(actor = actor, forPlayer = forPlayer) }
-        }
-
+        verify { onActorStreamOutHandler.onActorStreamOut(actor, player) }
     }
 
     @Nested
     inner class OnDialogResponseTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private lateinit var dialog: AbstractDialog
-        private var dialogId: Int = 1337
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            dialog = server.injector.getInstance<DialogRegistry>().register { dialogId ->
-                this.dialogId = dialogId.value
-                mockk(relaxed = true)
-            }
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
-        @ParameterizedTest
-        @EnumSource(DialogResponse::class)
-        fun shouldCallOnDialogResponseAndReturnTrue(response: DialogResponse) {
-            val onDialogResponseListener = mockk<OnDialogResponseListener> {
-                every {
-                    onDialogResponse(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } returns OnDialogResponseListener.Result.Processed
-            }
-            // Priority required due to DialogCallbackListener and the mocked dialog
-            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
+        @Test
+        fun shouldCallOnDialogResponse() {
+            val dialogId = 1337
+            val response = DialogResponse.LEFT_BUTTON
+            val listItem = 87
+            every {
+                onDialogResponseHandler.onDialogResponse(any(), any(), any(), any(), any())
+            } returns OnDialogResponseListener.Result.Processed
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = playerId,
                     dialogid = dialogId,
                     response = response.value,
-                    listitem = 69,
-                    inputtext = "Hi there"
+                    listitem = listItem,
+                    inputtext = "Hello"
             )
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onDialogResponseListener.onDialogResponse(
-                        player = player,
-                        dialogId = DialogId.valueOf(dialogId),
-                        response = response,
-                        listItem = 69,
-                        inputText = "Hi there"
-                )
-            }
+            assertAll(
+                    {
+                        verify {
+                            onDialogResponseHandler.onDialogResponse(
+                                    player = player,
+                                    dialogId = DialogId.valueOf(dialogId),
+                                    response = response,
+                                    listItem = listItem,
+                                    inputText = "Hello"
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun shouldCallOnDialogResponseAndReturnFalse() {
-            val onDialogResponseListener = mockk<OnDialogResponseListener> {
-                every {
-                    onDialogResponse(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } returns OnDialogResponseListener.Result.Ignored
-            }
-            // Priority required due to DialogCallbackListener and the mocked dialog
-            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onDialogResponseHandler.onDialogResponse(any(), any(), any(), any(), any())
+            } throws Exception()
 
             val result = callbackProcessor.onDialogResponse(
                     playerid = playerId,
-                    dialogid = dialogId,
+                    dialogid = 1234,
                     response = DialogResponse.LEFT_BUTTON.value,
-                    listitem = 69,
-                    inputtext = "Hi there"
+                    listitem = 13,
+                    inputtext = "Hello"
             )
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onDialogResponseListener.onDialogResponse(
-                        player = player,
-                        dialogId = DialogId.valueOf(dialogId),
-                        response = DialogResponse.LEFT_BUTTON,
-                        listItem = 69,
-                        inputText = "Hi there"
-                )
-            }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onDialogResponseListener = mockk<OnDialogResponseListener>(relaxed = true)
-            // Priority required due to DialogCallbackListener and the mocked dialog
-            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
-
-            val result = callbackProcessor.onDialogResponse(
-                    playerid = 500,
-                    dialogid = dialogId,
-                    response = DialogResponse.LEFT_BUTTON.value,
-                    listitem = 69,
-                    inputtext = "Hi there"
-            )
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onDialogResponseListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onDialogResponseListener = mockk<OnDialogResponseListener> {
-                every { onDialogResponse(any(), any(), any(), any(), any()) } throws exception
-            }
-            // Priority required due to DialogCallbackListener and the mocked dialog
-            callbackListenerManager.register(onDialogResponseListener, priority = Int.MAX_VALUE)
-
-            val result = callbackProcessor.onDialogResponse(
-                    playerid = playerId,
-                    dialogid = dialogId,
-                    response = DialogResponse.LEFT_BUTTON.value,
-                    listitem = 69,
-                    inputtext = "Hi there"
-            )
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onDialogResponseListener.onDialogResponse(
-                        player = player,
-                        dialogId = DialogId.valueOf(dialogId),
-                        response = DialogResponse.LEFT_BUTTON,
-                        listItem = 69,
-                        inputText = "Hi there"
-                )
-            }
-        }
-
     }
 
     @Nested
     inner class OnPlayerTakeDamageTests {
 
-        private lateinit var player: Player
+        private val player: Player = mockk()
         private val playerId = 69
-        private lateinit var issuer: Player
-        private val issuerId = 150
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            issuer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(issuerId))
+            every { player.id } returns PlayerId.valueOf(playerId)
+            every { onPlayerTakeDamageHandler.onPlayerTakeDamage(any(), any(), any(), any(), any()) } just Runs
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
         fun shouldCallOnPlayerTakeDamage() {
-            val onPlayerTakeDamageListener = mockk<OnPlayerTakeDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerTakeDamageListener)
+            val issuerId = 100
+            val issuer = mockk<Player>()
+            every { entityResolver.run { issuerId.toPlayerOrNull() } } returns issuer
 
             callbackProcessor.onPlayerTakeDamage(
                     playerid = playerId,
                     issuerid = issuerId,
                     amount = 13.37f,
-                    weaponid = WeaponModel.TEC9.value,
+                    weaponid = WeaponModel.FLAMETHROWER.value,
                     bodypart = BodyPart.GROIN.value
             )
 
-            verify { uncaughtExceptionNotifier wasNot Called }
             verify {
-                onPlayerTakeDamageListener.onPlayerTakeDamage(
+                onPlayerTakeDamageHandler.onPlayerTakeDamage(
                         player = player,
                         issuer = issuer,
                         amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
+                        weaponModel = WeaponModel.FLAMETHROWER,
                         bodyPart = BodyPart.GROIN
                 )
             }
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerTakeDamageListener = mockk<OnPlayerTakeDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerTakeDamageListener)
+        fun givenNoIssuerItShouldCallOnPlayerTakeDamage() {
+            val issuerId = 100
+            every { entityResolver.run { issuerId.toPlayerOrNull() } } returns null
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerTakeDamage(
-                        playerid = 500,
-                        issuerid = issuerId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
+            callbackProcessor.onPlayerTakeDamage(
+                    playerid = playerId,
+                    issuerid = issuerId,
+                    amount = 13.37f,
+                    weaponid = WeaponModel.FLAMETHROWER.value,
+                    bodypart = BodyPart.GROIN.value
+            )
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerTakeDamageListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidIssuerIdItShouldCallOnPlayerTakeDamage() {
-            val onPlayerTakeDamageListener = mockk<OnPlayerTakeDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerTakeDamageListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerTakeDamage(
-                        playerid = playerId,
-                        issuerid = SAMPConstants.INVALID_PLAYER_ID,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier wasNot Called }
             verify {
-                onPlayerTakeDamageListener.onPlayerTakeDamage(
+                onPlayerTakeDamageHandler.onPlayerTakeDamage(
                         player = player,
                         issuer = null,
                         amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
+                        weaponModel = WeaponModel.FLAMETHROWER,
                         bodyPart = BodyPart.GROIN
                 )
             }
         }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerTakeDamageListener = mockk<OnPlayerTakeDamageListener> {
-                every { onPlayerTakeDamage(any(), any(), any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerTakeDamageListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerTakeDamage(
-                        playerid = playerId,
-                        issuerid = issuerId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerTakeDamageListener.onPlayerTakeDamage(
-                        player = player,
-                        issuer = issuer,
-                        amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
-                        bodyPart = BodyPart.GROIN
-                )
-            }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerGiveDamageTests {
+    @Test
+    fun shouldCallOnPlayerGiveDamage() {
+        val player: Player = mockk()
+        val playerId = 69
+        val issuerId = 100
+        val issuer = mockk<Player>()
+        every { onPlayerGiveDamageHandler.onPlayerGiveDamage(any(), any(), any(), any(), any()) } just Runs
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { issuerId.toPlayer() } } returns issuer
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private lateinit var damagedPlayer: Player
-        private val damagedPlayerId = 150
+        callbackProcessor.onPlayerGiveDamage(
+                playerid = playerId,
+                damagedid = issuerId,
+                amount = 13.37f,
+                weaponid = WeaponModel.FLAMETHROWER.value,
+                bodypart = BodyPart.GROIN.value
+        )
 
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            damagedPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(damagedPlayerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerGiveDamage() {
-            val onPlayerGiveDamageListener = mockk<OnPlayerGiveDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageListener)
-
-            callbackProcessor.onPlayerGiveDamage(
-                    playerid = playerId,
-                    damagedid = damagedPlayerId,
+        verify {
+            onPlayerGiveDamageHandler.onPlayerGiveDamage(
+                    player = player,
+                    damagedPlayer = issuer,
                     amount = 13.37f,
-                    weaponid = WeaponModel.TEC9.value,
-                    bodypart = BodyPart.GROIN.value
+                    weaponModel = WeaponModel.FLAMETHROWER,
+                    bodyPart = BodyPart.GROIN
             )
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerGiveDamageListener.onPlayerGiveDamage(
-                        player = player,
-                        damagedPlayer = damagedPlayer,
-                        amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
-                        bodyPart = BodyPart.GROIN
-                )
-            }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerGiveDamageListener = mockk<OnPlayerGiveDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamage(
-                        playerid = 500,
-                        damagedid = damagedPlayerId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerGiveDamageListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidDamagedIdItShouldCallOnPlayerGiveDamage() {
-            val onPlayerGiveDamageListener = mockk<OnPlayerGiveDamageListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamage(
-                        playerid = playerId,
-                        damagedid = 500,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerGiveDamageListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerGiveDamageListener = mockk<OnPlayerGiveDamageListener> {
-                every { onPlayerGiveDamage(any(), any(), any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerGiveDamageListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamage(
-                        playerid = playerId,
-                        damagedid = damagedPlayerId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerGiveDamageListener.onPlayerGiveDamage(
-                        player = player,
-                        damagedPlayer = damagedPlayer,
-                        amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
-                        bodyPart = BodyPart.GROIN
-                )
-            }
-        }
-
     }
 
-    @Nested
-    inner class OnPlayerGiveDamageActorTests {
+    @Test
+    fun shouldCallOnPlayerGiveDamageActor() {
+        val player: Player = mockk()
+        val playerId = 69
+        val actorId = 100
+        val actor = mockk<Actor>()
+        every { onPlayerGiveDamageActorHandler.onPlayerGiveDamageActor(any(), any(), any(), any(), any()) } just Runs
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { actorId.toActor() } } returns actor
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private val actor = mockk<Actor>()
-        private val actorId = 150
+        callbackProcessor.onPlayerGiveDamageActor(
+                playerid = playerId,
+                damaged_actorid = actorId,
+                amount = 13.37f,
+                weaponid = WeaponModel.FLAMETHROWER.value,
+                bodypart = BodyPart.GROIN.value
+        )
 
-        @BeforeEach
-        fun setUp() {
-            every { actor.id } returns ActorId.valueOf(actorId)
-            every { actor.onDamage(any(), any(), any(), any()) } just Runs
-            server.injector.getInstance<ActorRegistry>().register(actor)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Test
-        fun shouldCallOnPlayerGiveDamageActor() {
-            val onPlayerGiveDamageActorListener = mockk<OnPlayerGiveDamageActorListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageActorListener)
-
-            callbackProcessor.onPlayerGiveDamageActor(
-                    playerid = playerId,
-                    damaged_actorid = actorId,
+        verify {
+            onPlayerGiveDamageActorHandler.onPlayerGiveDamageActor(
+                    player = player,
+                    actor = actor,
                     amount = 13.37f,
-                    weaponid = WeaponModel.TEC9.value,
-                    bodypart = BodyPart.GROIN.value
+                    weaponModel = WeaponModel.FLAMETHROWER,
+                    bodyPart = BodyPart.GROIN
             )
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerGiveDamageActorListener.onPlayerGiveDamageActor(
-                        player = player,
-                        actor = actor,
-                        amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
-                        bodyPart = BodyPart.GROIN
-                )
-            }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerGiveDamageActorListener = mockk<OnPlayerGiveDamageActorListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageActorListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamageActor(
-                        playerid = 500,
-                        damaged_actorid = actorId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerGiveDamageActorListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidActorIdItShouldCallOnPlayerGiveDamageActor() {
-            val onPlayerGiveDamageActorListener = mockk<OnPlayerGiveDamageActorListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerGiveDamageActorListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamageActor(
-                        playerid = playerId,
-                        damaged_actorid = 500,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerGiveDamageActorListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid actor ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerGiveDamageActorListener = mockk<OnPlayerGiveDamageActorListener> {
-                every { onPlayerGiveDamageActor(any(), any(), any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerGiveDamageActorListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerGiveDamageActor(
-                        playerid = playerId,
-                        damaged_actorid = actorId,
-                        amount = 13.37f,
-                        weaponid = WeaponModel.TEC9.value,
-                        bodypart = BodyPart.GROIN.value
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerGiveDamageActorListener.onPlayerGiveDamageActor(
-                        player = player,
-                        actor = actor,
-                        amount = 13.37f,
-                        weaponModel = WeaponModel.TEC9,
-                        bodyPart = BodyPart.GROIN
-                )
-            }
-        }
-
     }
 
     @Nested
     inner class OnPlayerClickMapTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerClickMapAndReturnTrue() {
-            val onPlayerClickMapListener = mockk<OnPlayerClickMapListener> {
-                every { onPlayerClickMap(any(), any()) } returns OnPlayerClickMapListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerClickMapListener)
+        fun shouldCallOnPlayerClickMap() {
+            every {
+                onPlayerClickMapHandler.onPlayerClickMap(any(), any())
+            } returns OnPlayerClickMapListener.Result.Processed
 
             val result = callbackProcessor.onPlayerClickMap(playerId, 1f, 2f, 3f)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickMapListener.onPlayerClickMap(player, vector3DOf(x = 1f, y = 2f, z = 3f)) }
+            assertAll(
+                    { verify { onPlayerClickMapHandler.onPlayerClickMap(player, vector3DOf(1f, 2f, 3f)) } },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun shouldCallOnPlayerClickMapAndReturnFalse() {
-            val onPlayerClickMapListener = mockk<OnPlayerClickMapListener> {
-                every { onPlayerClickMap(any(), any()) } returns OnPlayerClickMapListener.Result.Continue
-            }
-            callbackListenerManager.register(onPlayerClickMapListener)
-
-            val result = callbackProcessor.onPlayerClickMap(playerId, 1f, 2f, 3f)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickMapListener.onPlayerClickMap(player, vector3DOf(x = 1f, y = 2f, z = 3f)) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerClickMapListener = mockk<OnPlayerClickMapListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickMapListener)
-
-            val result = callbackProcessor.onPlayerClickMap(500, 1f, 2f, 3f)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickMapListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerClickMapListener = mockk<OnPlayerClickMapListener> {
-                every { onPlayerClickMap(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerClickMapListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onPlayerClickMapHandler.onPlayerClickMap(any(), any())
+            } throws Exception()
 
             val result = callbackProcessor.onPlayerClickMap(playerId, 1f, 2f, 3f)
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerClickMapListener.onPlayerClickMap(player, vector3DOf(x = 1f, y = 2f, z = 3f)) }
         }
-
     }
 
     @Nested
     inner class OnPlayerClickTextDrawTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val textDraw = mockk<TextDraw>()
-        private val textDrawId = 150
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            every { textDraw.id } returns TextDrawId.valueOf(textDrawId)
-            every { textDraw.onClick(any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-            server.injector.getInstance<TextDrawRegistry>().register(textDraw)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerClickTextDrawAndReturnTrue() {
-            val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener> {
-                every { onPlayerClickTextDraw(any(), any()) } returns OnPlayerClickTextDrawListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerClickTextDrawListener)
+        fun givenValidTextDrawIdItShouldCallOnPlayerClickTextDrawHandler() {
+            val textDrawId = 100
+            val textDraw = mockk<TextDraw>()
+            every {
+                onPlayerClickTextDrawHandler.onPlayerClickTextDraw(any(), any())
+            } returns OnPlayerClickTextDrawListener.Result.Processed
+            every { entityResolver.run { textDrawId.toTextDrawOrNull() } } returns textDraw
 
-            val result = callbackProcessor.onPlayerClickTextDraw(playerId, textDrawId)
+            callbackProcessor.onPlayerClickTextDraw(playerid = playerId, clickedid = textDrawId)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickTextDrawListener.onPlayerClickTextDraw(player, textDraw) }
+            verify { onPlayerClickTextDrawHandler.onPlayerClickTextDraw(player, textDraw) }
         }
 
         @Test
-        fun shouldCallOnPlayerClickTextDrawAndReturnFalse() {
-            val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener> {
-                every { onPlayerClickTextDraw(any(), any()) } returns OnPlayerClickTextDrawListener.Result.NotFound
-            }
-            callbackListenerManager.register(onPlayerClickTextDrawListener)
+        fun givenOnPlayerClickTextDrawHandlerThrowsExceptionItShouldReturnFalse() {
+            val textDrawId = 100
+            val textDraw = mockk<TextDraw>()
+            every {
+                onPlayerClickTextDrawHandler.onPlayerClickTextDraw(any(), any())
+            } throws Exception()
+            every { entityResolver.run { textDrawId.toTextDrawOrNull() } } returns textDraw
 
-            val result = callbackProcessor.onPlayerClickTextDraw(playerId, textDrawId)
+            val result = callbackProcessor.onPlayerClickTextDraw(playerid = playerId, clickedid = textDrawId)
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickTextDrawListener.onPlayerClickTextDraw(player, textDraw) }
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickTextDrawListener)
+        fun givenInvalidTextDrawIdItShouldCallOnPlayerCancelTextDrawSelectionHandler() {
+            val textDrawId = 100
+            every {
+                onPlayerCancelTextDrawSelectionHandler.onPlayerCancelTextDrawSelection(any())
+            } returns OnPlayerCancelTextDrawSelectionListener.Result.Processed
+            every { entityResolver.run { textDrawId.toTextDrawOrNull() } } returns null
 
-            val result = callbackProcessor.onPlayerClickTextDraw(500, textDrawId)
+            callbackProcessor.onPlayerClickTextDraw(playerid = playerId, clickedid = textDrawId)
+
+            verify { onPlayerCancelTextDrawSelectionHandler.onPlayerCancelTextDrawSelection(player) }
+        }
+
+        @Test
+        fun givenOnPlayerCancelTextDrawSelectionThrowsExceptionItShouldReturnFalse() {
+            val textDrawId = 100
+            every {
+                onPlayerCancelTextDrawSelectionHandler.onPlayerCancelTextDrawSelection(any())
+            } throws Exception()
+            every { entityResolver.run { textDrawId.toTextDrawOrNull() } } returns null
+
+            val result = callbackProcessor.onPlayerClickTextDraw(playerid = playerId, clickedid = textDrawId)
 
             assertThat(result)
                     .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickTextDrawListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
         }
-
-        @Test
-        fun givenInvalidPlayerTextDrawIdItShouldCallOnPlayerCancelTextDrawSelection() {
-            val onPlayerCancelTextDrawSelectionListener = mockk<OnPlayerCancelTextDrawSelectionListener> {
-                every { onPlayerCancelTextDrawSelection(any()) } returns OnPlayerCancelTextDrawSelectionListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerCancelTextDrawSelectionListener)
-
-            val result = callbackProcessor.onPlayerClickTextDraw(playerId, 500)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerCancelTextDrawSelectionListener.onPlayerCancelTextDrawSelection(player) }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerClickTextDrawListener = mockk<OnPlayerClickTextDrawListener> {
-                every { onPlayerClickTextDraw(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerClickTextDrawListener)
-
-            val result = callbackProcessor.onPlayerClickTextDraw(playerId, textDrawId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerClickTextDrawListener.onPlayerClickTextDraw(player, textDraw) }
-        }
-
     }
 
     @Nested
     inner class OnPlayerClickPlayerTextDrawTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val playerTextDraw = mockk<PlayerTextDraw>()
-        private val playerTextDrawId = 150
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            every { playerTextDraw.id } returns PlayerTextDrawId.valueOf(playerTextDrawId)
-            every { playerTextDraw.onClick() } returns OnPlayerClickPlayerTextDrawListener.Result.NotFound
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            player.playerTextDrawRegistry.register(playerTextDraw)
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerClickPlayerTextDrawAndReturnTrue() {
-            val onPlayerClickPlayerTextDrawListener = mockk<OnPlayerClickPlayerTextDrawListener> {
-                every { onPlayerClickPlayerTextDraw(any()) } returns OnPlayerClickPlayerTextDrawListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerClickPlayerTextDrawListener)
+        fun givenValidPlayerTextDrawIdItShouldCallOnPlayerClickPlayerTextDrawHandler() {
+            val playerTextDrawId = 100
+            val playerTextDraw = mockk<PlayerTextDraw>()
+            every {
+                onPlayerClickPlayerTextDrawHandler.onPlayerClickPlayerTextDraw(any())
+            } returns OnPlayerClickPlayerTextDrawListener.Result.Processed
+            every { entityResolver.run { playerTextDrawId.toPlayerTextDraw(player) } } returns playerTextDraw
 
-            val result = callbackProcessor.onPlayerClickPlayerTextDraw(playerId, playerTextDrawId)
+            callbackProcessor.onPlayerClickPlayerTextDraw(playerid = playerId, playertextid = playerTextDrawId)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickPlayerTextDrawListener.onPlayerClickPlayerTextDraw(playerTextDraw) }
+            verify { onPlayerClickPlayerTextDrawHandler.onPlayerClickPlayerTextDraw(playerTextDraw) }
         }
 
         @Test
-        fun shouldCallOnPlayerClickPlayerTextDrawAndReturnFalse() {
-            val onPlayerClickPlayerTextDrawListener = mockk<OnPlayerClickPlayerTextDrawListener> {
-                every { onPlayerClickPlayerTextDraw(any()) } returns OnPlayerClickPlayerTextDrawListener.Result.NotFound
-            }
-            callbackListenerManager.register(onPlayerClickPlayerTextDrawListener)
+        fun givenOnPlayerClickPlayerTextDrawHandlerThrowsExceptionItShouldReturnFalse() {
+            val playerTextDrawId = 100
+            val playerTextDraw = mockk<PlayerTextDraw>()
+            every {
+                onPlayerClickPlayerTextDrawHandler.onPlayerClickPlayerTextDraw(any())
+            } throws Exception()
+            every { entityResolver.run { playerTextDrawId.toPlayerTextDraw(player) } } returns playerTextDraw
 
-            val result = callbackProcessor.onPlayerClickPlayerTextDraw(playerId, playerTextDrawId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onPlayerClickPlayerTextDrawListener.onPlayerClickPlayerTextDraw(playerTextDraw) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerClickPlayerTextDrawListener = mockk<OnPlayerClickPlayerTextDrawListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickPlayerTextDrawListener)
-
-            val result = callbackProcessor.onPlayerClickPlayerTextDraw(500, playerTextDrawId)
+            val result = callbackProcessor.onPlayerClickPlayerTextDraw(
+                    playerid = playerId,
+                    playertextid = playerTextDrawId
+            )
 
             assertThat(result)
                     .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickPlayerTextDrawListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
         }
-
-        @Test
-        fun givenInvalidPlayerTextDrawIdItShouldThrowAndCatchException() {
-            val onPlayerClickPlayerTextDrawListener = mockk<OnPlayerClickPlayerTextDrawListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickPlayerTextDrawListener)
-
-            val result = callbackProcessor.onPlayerClickPlayerTextDraw(playerId, 500)
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickPlayerTextDrawListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player text draw ID 500 for player ID 69")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerClickPlayerTextDrawListener = mockk<OnPlayerClickPlayerTextDrawListener> {
-                every { onPlayerClickPlayerTextDraw(any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerClickPlayerTextDrawListener)
-
-            val result = callbackProcessor.onPlayerClickPlayerTextDraw(playerId, playerTextDrawId)
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerClickPlayerTextDrawListener.onPlayerClickPlayerTextDraw(playerTextDraw) }
-        }
-
     }
 
-    @Nested
-    inner class OnIncomingConnectionTests {
+    @Test
+    fun shouldCallOnIncomingConnectionHandler() {
+        val playerId = 69
+        val port = 7777
+        every { onIncomingConnectionHandler.onIncomingConnection(any(), any(), any()) } just Runs
 
-        private val playerId = 69
+        callbackProcessor.onIncomingConnection(playerid = playerId, ip_address = "127.0.0.1", port = port)
 
-        @Test
-        fun shouldCallOnIncomingConnection() {
-            val onIncomingConnectionListener = mockk<OnIncomingConnectionListener>(relaxed = true)
-            callbackListenerManager.register(onIncomingConnectionListener)
-
-            callbackProcessor.onIncomingConnection(playerId, "127.0.0.1", 7777)
-
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onIncomingConnectionListener.onIncomingConnection(PlayerId.valueOf(playerId), "127.0.0.1", 7777) }
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onIncomingConnectionListener = mockk<OnIncomingConnectionListener> {
-                every { onIncomingConnection(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onIncomingConnectionListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onIncomingConnection(playerId, "127.0.0.1", 7777)
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onIncomingConnectionListener.onIncomingConnection(PlayerId.valueOf(playerId), "127.0.0.1", 7777) }
-        }
-
+        verify { onIncomingConnectionHandler.onIncomingConnection(PlayerId.valueOf(playerId), "127.0.0.1", port) }
     }
 
     @Nested
     inner class OnTrailerUpdateTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        private val player = mockk<Player>()
+        private val vehicleId = 1234
+        private val vehicle = mockk<Vehicle>()
 
         @BeforeEach
         fun setUp() {
-            every { vehicle.onExit(any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
         }
 
         @Test
         fun shouldCallOnTrailerUpdate() {
-            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener> {
-                every { onTrailerUpdate(any(), any()) } returns OnTrailerUpdateListener.Result.Sync
-            }
-            callbackListenerManager.register(onTrailerUpdateListener)
+            every {
+                onTrailerUpdateHandler.onTrailerUpdate(any(), any())
+            } returns OnTrailerUpdateListener.Result.Sync
 
             val result = callbackProcessor.onTrailerUpdate(playerId, vehicleId)
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onTrailerUpdateListener.onTrailerUpdate(player, vehicle) }
+            assertAll(
+                    { verify { onTrailerUpdateHandler.onTrailerUpdate(player, vehicle) } },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener>(relaxed = true)
-            callbackListenerManager.register(onTrailerUpdateListener)
+        fun givenHandlerThrowsExceptionItShouldReturnTrue() {
+            every {
+                onTrailerUpdateHandler.onTrailerUpdate(any(), any())
+            } throws Exception()
 
-            val result = callbackProcessor.onTrailerUpdate(500, vehicleId)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onTrailerUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener> {
-                every { onTrailerUpdate(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onTrailerUpdateListener)
-
-            val result = callbackProcessor.onTrailerUpdate(playerId, 500)
+            val result = callbackProcessor.onTrailerUpdate(playerid = playerId, vehicleid = vehicleId)
 
             assertThat(result)
                     .isTrue()
-            val slot = slot<Exception>()
-            verify { onTrailerUpdateListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
         }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onTrailerUpdateListener = mockk<OnTrailerUpdateListener> {
-                every { onTrailerUpdate(any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onTrailerUpdateListener)
-
-            val result = callbackProcessor.onTrailerUpdate(playerId, vehicleId)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onTrailerUpdateListener.onTrailerUpdate(player, vehicle) }
-        }
-
     }
 
-    @Nested
-    inner class OnVehicleSirenStateChangeTests {
+    @Test
+    fun shouldCallOnVehicleSirenStateChange() {
+        val playerId = 69
+        val player = mockk<Player>()
+        val vehicleId = 1234
+        val vehicle = mockk<Vehicle>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+        every {
+            onVehicleSirenStateChangeHandler.onVehicleSirenStateChange(any(), any(), any())
+        } just Runs
 
-        private lateinit var player: Player
-        private val playerId = 69
-        private val vehicleId = 127
-        private val vehicle: Vehicle = mockk()
+        callbackProcessor.onVehicleSirenStateChange(
+                vehicleid = vehicleId,
+                playerid = playerId,
+                newstate = 1
+        )
 
-        @BeforeEach
-        fun setUp() {
-            every { vehicle.onExit(any()) } just Runs
-            every { vehicle.id } returns VehicleId.valueOf(vehicleId)
-            server.injector.getInstance<VehicleRegistry>().register(vehicle)
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+        verify {
+            onVehicleSirenStateChangeHandler.onVehicleSirenStateChange(
+                    vehicle = vehicle,
+                    player = player,
+                    newState = VehicleSirenState[1]
+            )
         }
-
-        @ParameterizedTest
-        @EnumSource(VehicleSirenState::class)
-        fun shouldCallOnVehicleSirenStateChange(sirenState: VehicleSirenState) {
-            val onVehicleSirenStateChangeListener = mockk<OnVehicleSirenStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleSirenStateChangeListener)
-
-            val result = callbackProcessor.onVehicleSirenStateChange(playerId, vehicleId, sirenState.value)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify { onVehicleSirenStateChangeListener.onVehicleSirenStateChange(player, vehicle, sirenState) }
-        }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onVehicleSirenStateChangeListener = mockk<OnVehicleSirenStateChangeListener>(relaxed = true)
-            callbackListenerManager.register(onVehicleSirenStateChangeListener)
-
-            val result = callbackProcessor.onVehicleSirenStateChange(500, vehicleId, VehicleSirenState.ON.value)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehicleSirenStateChangeListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidVehicleIdItShouldThrowAndCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleSirenStateChangeListener = mockk<OnVehicleSirenStateChangeListener> {
-                every { onVehicleSirenStateChange(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleSirenStateChangeListener)
-
-            val result = callbackProcessor.onVehicleSirenStateChange(playerId, 500, VehicleSirenState.ON.value)
-
-            assertThat(result)
-                    .isTrue()
-            val slot = slot<Exception>()
-            verify { onVehicleSirenStateChangeListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid vehicle ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onVehicleSirenStateChangeListener = mockk<OnVehicleSirenStateChangeListener> {
-                every { onVehicleSirenStateChange(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onVehicleSirenStateChangeListener)
-
-            val result = callbackProcessor.onVehicleSirenStateChange(playerId, vehicleId, VehicleSirenState.ON.value)
-
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onVehicleSirenStateChangeListener.onVehicleSirenStateChange(
-                        player,
-                        vehicle,
-                        VehicleSirenState.ON
-                )
-            }
-        }
-
     }
 
     @Nested
     inner class OnPlayerClickPlayerTests {
 
-        private lateinit var player: Player
         private val playerId = 69
-        private lateinit var clickedPlayer: Player
-        private val clickedPlayerId = 187
+        private val player = mockk<Player>()
+        private val clickedPlayerId = 1234
+        private val clickedPlayer = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-            clickedPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(clickedPlayerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
+            every { entityResolver.run { clickedPlayerId.toPlayer() } } returns clickedPlayer
         }
 
         @Test
-        fun shouldCallOnPlayerClickPlayerAndReturnTrue() {
-            val onPlayerClickPlayerListener = mockk<OnPlayerClickPlayerListener> {
-                every { onPlayerClickPlayer(any(), any(), any()) } returns OnPlayerClickPlayerListener.Result.Processed
-            }
-            callbackListenerManager.register(onPlayerClickPlayerListener)
+        fun shouldCallOnPlayerClickPlayer() {
+            every {
+                onPlayerClickPlayerHandler.onPlayerClickPlayer(any(), any(), any())
+            } returns OnPlayerClickPlayerListener.Result.Processed
 
             val result = callbackProcessor.onPlayerClickPlayer(
                     playerid = playerId,
@@ -4375,808 +1702,225 @@ internal class CallbackProcessorTest {
                     source = ClickPlayerSource.SCOREBOARD.value
             )
 
-            assertThat(result)
-                    .isTrue()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerClickPlayerListener.onPlayerClickPlayer(
-                        player = player,
-                        clickedPlayer = clickedPlayer,
-                        source = ClickPlayerSource.SCOREBOARD
-                )
-            }
+            assertAll(
+                    {
+                        verify {
+                            onPlayerClickPlayerHandler.onPlayerClickPlayer(
+                                    player = player,
+                                    clickedPlayer = clickedPlayer,
+                                    source = ClickPlayerSource.SCOREBOARD
+                            )
+                        }
+                    },
+                    { assertThat(result).isTrue() }
+            )
         }
 
         @Test
-        fun shouldCallOnPlayerClickPlayerAndReturnFalse() {
-            val onPlayerClickPlayerListener = mockk<OnPlayerClickPlayerListener> {
-                every { onPlayerClickPlayer(any(), any(), any()) } returns OnPlayerClickPlayerListener.Result.Continue
-            }
-            callbackListenerManager.register(onPlayerClickPlayerListener)
+        fun givenHandlerThrowsExceptionItShouldReturnFalse() {
+            every {
+                onPlayerClickPlayerHandler.onPlayerClickPlayer(any(), any(), any())
+            } throws Exception()
 
             val result = callbackProcessor.onPlayerClickPlayer(
                     playerid = playerId,
-                    clickedplayerid = clickedPlayerId,
+                    clickedplayerid = playerId,
                     source = ClickPlayerSource.SCOREBOARD.value
             )
 
             assertThat(result)
                     .isFalse()
-            verify { uncaughtExceptionNotifier wasNot Called }
-            verify {
-                onPlayerClickPlayerListener.onPlayerClickPlayer(
-                        player = player,
-                        clickedPlayer = clickedPlayer,
-                        source = ClickPlayerSource.SCOREBOARD
-                )
-            }
         }
-
-        @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerClickPlayerListener = mockk<OnPlayerClickPlayerListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickPlayerListener)
-
-            val result = callbackProcessor.onPlayerClickPlayer(
-                    playerid = 500,
-                    clickedplayerid = clickedPlayerId,
-                    source = ClickPlayerSource.SCOREBOARD.value
-            )
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickPlayerListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun givenInvalidClickedPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerClickPlayerListener = mockk<OnPlayerClickPlayerListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerClickPlayerListener)
-
-            val result = callbackProcessor.onPlayerClickPlayer(
-                    playerid = playerId,
-                    clickedplayerid = 500,
-                    source = ClickPlayerSource.SCOREBOARD.value
-            )
-
-            assertThat(result)
-                    .isFalse()
-            val slot = slot<Exception>()
-            verify { onPlayerClickPlayerListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
-
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerClickPlayerListener = mockk<OnPlayerClickPlayerListener> {
-                every { onPlayerClickPlayer(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerClickPlayerListener)
-
-            val result = callbackProcessor.onPlayerClickPlayer(
-                    playerid = playerId,
-                    clickedplayerid = clickedPlayerId,
-                    source = ClickPlayerSource.SCOREBOARD.value
-            )
-
-            assertThat(result)
-                    .isFalse()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify {
-                onPlayerClickPlayerListener.onPlayerClickPlayer(
-                        player = player,
-                        clickedPlayer = clickedPlayer,
-                        source = ClickPlayerSource.SCOREBOARD
-                )
-            }
-        }
-
     }
 
     @Nested
     inner class OnPlayerEditObjectTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
-        @Nested
-        inner class MapObjectTests {
+        @Test
+        fun givenGlobalObjectItShouldCallOnPlayerEditMapObjectHandler() {
+            val mapObjectId = 123
+            val mapObject = mockk<MapObject>()
+            every { entityResolver.run { mapObjectId.toMapObject() } } returns mapObject
+            every { onPlayerEditMapObjectHandler.onPlayerEditMapObject(any(), any(), any(), any(), any()) } just Runs
 
-            private val mapObject = mockk<MapObject>()
-            private val mapObjectId = 187
-
-            @BeforeEach
-            fun setUp() {
-                every { mapObject.id } returns MapObjectId.valueOf(mapObjectId)
-                every { mapObject.onEdit(any(), any(), any(), any()) } just Runs
-                server.injector.getInstance<MapObjectRegistry>().register(mapObject)
-            }
-
-            @ParameterizedTest
-            @EnumSource(ObjectEditResponse::class)
-            fun shouldCallOnPlayerEditMapObject(response: ObjectEditResponse) {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                callbackProcessor.onPlayerEditObject(
-                        playerid = playerId,
-                        playerobject = false,
-                        objectid = mapObjectId,
-                        response = response.value,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f,
-                        fRotX = 4f,
-                        fRotY = 5f,
-                        fRotZ = 6f
-                )
-
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerEditObjectListener.onPlayerEditMapObject(
-                            player = player,
-                            mapObject = mapObject,
-                            response = response,
-                            offset = vector3DOf(1f, 2f, 3f),
-                            rotation = vector3DOf(4f, 5f, 6f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = 500,
-                            playerobject = false,
-                            objectid = mapObjectId,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerEditObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = playerId,
-                            playerobject = false,
-                            objectid = 500,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerEditObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid map object ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerEditObjectListener = mockk<OnPlayerEditMapObjectListener> {
-                    every { onPlayerEditMapObject(any(), any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = playerId,
-                            playerobject = false,
-                            objectid = mapObjectId,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerEditObjectListener.onPlayerEditMapObject(
-                            player = player,
-                            mapObject = mapObject,
-                            response = ObjectEditResponse.FINAL,
-                            offset = vector3DOf(1f, 2f, 3f),
-                            rotation = vector3DOf(4f, 5f, 6f)
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class PlayerMapObjectTests {
-
-            private val playerMapObject = mockk<PlayerMapObject>()
-            private val playerMapObjectId = 187
-
-            @BeforeEach
-            fun setUp() {
-                every { playerMapObject.id } returns PlayerMapObjectId.valueOf(playerMapObjectId)
-                every { playerMapObject.onEdit(any(), any(), any()) } just Runs
-                player.playerMapObjectRegistry.register(playerMapObject)
-            }
-
-            @ParameterizedTest
-            @EnumSource(ObjectEditResponse::class)
-            fun shouldCallOnPlayerEditPlayerMapObject(response: ObjectEditResponse) {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                callbackProcessor.onPlayerEditObject(
-                        playerid = playerId,
-                        playerobject = true,
-                        objectid = playerMapObjectId,
-                        response = response.value,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f,
-                        fRotX = 4f,
-                        fRotY = 5f,
-                        fRotZ = 6f
-                )
-
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerEditObjectListener.onPlayerEditPlayerMapObject(
-                            playerMapObject = playerMapObject,
-                            response = response,
-                            offset = vector3DOf(1f, 2f, 3f),
-                            rotation = vector3DOf(4f, 5f, 6f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = 500,
-                            playerobject = true,
-                            objectid = playerMapObjectId,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerEditObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidPlayerMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerEditObjectListener = mockk<OnPlayerEditPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = playerId,
-                            playerobject = true,
-                            objectid = 500,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerEditObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player map object ID 500 for player ID 69")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerEditObjectListener = mockk<OnPlayerEditPlayerMapObjectListener> {
-                    every { onPlayerEditPlayerMapObject(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerEditObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerEditObject(
-                            playerid = playerId,
-                            playerobject = true,
-                            objectid = playerMapObjectId,
-                            response = ObjectEditResponse.FINAL.value,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f,
-                            fRotX = 4f,
-                            fRotY = 5f,
-                            fRotZ = 6f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerEditObjectListener.onPlayerEditPlayerMapObject(
-                            playerMapObject = playerMapObject,
-                            response = ObjectEditResponse.FINAL,
-                            offset = vector3DOf(1f, 2f, 3f),
-                            rotation = vector3DOf(4f, 5f, 6f)
-                    )
-                }
-            }
-        }
-
-    }
-
-    @Nested
-    inner class OnPlayerEditAttachedObjectTests {
-
-        private lateinit var player: Player
-        private val playerId = 69
-
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @ParameterizedTest
-        @EnumSource(AttachedObjectEditResponse::class)
-        fun shouldCallOnPlayerEditAttachedObject(response: AttachedObjectEditResponse) {
-            val onPlayerEditAttachedObjectListener = mockk<OnPlayerEditAttachedObjectListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEditAttachedObjectListener)
-
-            callbackProcessor.onPlayerEditAttachedObject(
+            callbackProcessor.onPlayerEditObject(
                     playerid = playerId,
-                    response = response.value,
-                    index = 3,
-                    modelid = 1337,
-                    boneid = Bone.CALF_LEFT.value,
-                    fOffsetX = 1f,
-                    fOffsetY = 2f,
-                    fOffsetZ = 3f,
+                    playerobject = false,
+                    objectid = mapObjectId,
+                    response = ObjectEditResponse.FINAL.value,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f,
                     fRotX = 4f,
                     fRotY = 5f,
-                    fRotZ = 6f,
-                    fScaleX = 7f,
-                    fScaleY = 8f,
-                    fScaleZ = 9f
+                    fRotZ = 6f
             )
 
-            verify { uncaughtExceptionNotifier wasNot Called }
             verify {
-                onPlayerEditAttachedObjectListener.onPlayerEditAttachedObject(
+                onPlayerEditMapObjectHandler.onPlayerEditMapObject(
                         player = player,
-                        response = response,
-                        slot = player.attachedObjectSlots[3],
-                        modelId = 1337,
-                        bone = Bone.CALF_LEFT,
+                        mapObject = mapObject,
+                        response = ObjectEditResponse.FINAL,
                         offset = vector3DOf(1f, 2f, 3f),
-                        rotation = vector3DOf(4f, 5f, 6f),
-                        scale = vector3DOf(7f, 8f, 9f)
+                        rotation = vector3DOf(4f, 5f, 6f)
                 )
             }
         }
 
         @Test
-        fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-            val onPlayerEditAttachedObjectListener = mockk<OnPlayerEditAttachedObjectListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerEditAttachedObjectListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEditAttachedObject(
-                        playerid = 500,
-                        response = AttachedObjectEditResponse.SAVE.value,
-                        index = 3,
-                        modelid = 1337,
-                        boneid = Bone.CALF_LEFT.value,
-                        fOffsetX = 1f,
-                        fOffsetY = 2f,
-                        fOffsetZ = 3f,
-                        fRotX = 4f,
-                        fRotY = 5f,
-                        fRotZ = 6f,
-                        fScaleX = 7f,
-                        fScaleY = 8f,
-                        fScaleZ = 9f
+        fun givenGlobalObjectItShouldCallOnPlayerEditPlayerMapObjectHandler() {
+            val playerMapObjectId = 123
+            val playerMapObject = mockk<PlayerMapObject>()
+            every { entityResolver.run { playerMapObjectId.toPlayerMapObject(player) } } returns playerMapObject
+            every {
+                onPlayerEditPlayerMapObjectHandler.onPlayerEditPlayerMapObject(
+                        any(),
+                        any(),
+                        any(),
+                        any()
                 )
-            }
+            } just Runs
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            val slot = slot<Exception>()
-            verify { onPlayerEditAttachedObjectListener wasNot Called }
-            verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-            assertThat(slot.captured)
-                    .isInstanceOf(IllegalArgumentException::class.java)
-                    .hasMessage("Invalid player ID 500")
-        }
+            callbackProcessor.onPlayerEditObject(
+                    playerid = playerId,
+                    playerobject = true,
+                    objectid = playerMapObjectId,
+                    response = ObjectEditResponse.FINAL.value,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f,
+                    fRotX = 4f,
+                    fRotY = 5f,
+                    fRotZ = 6f
+            )
 
-        @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerEditAttachedObjectListener = mockk<OnPlayerEditAttachedObjectListener> {
-                every {
-                    onPlayerEditAttachedObject(
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any(),
-                            any()
-                    )
-                } throws exception
-            }
-            callbackListenerManager.register(onPlayerEditAttachedObjectListener)
-
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerEditAttachedObject(
-                        playerid = playerId,
-                        response = AttachedObjectEditResponse.SAVE.value,
-                        index = 3,
-                        modelid = 1337,
-                        boneid = Bone.CALF_LEFT.value,
-                        fOffsetX = 1f,
-                        fOffsetY = 2f,
-                        fOffsetZ = 3f,
-                        fRotX = 4f,
-                        fRotY = 5f,
-                        fRotZ = 6f,
-                        fScaleX = 7f,
-                        fScaleY = 8f,
-                        fScaleZ = 9f
-                )
-            }
-
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
             verify {
-                onPlayerEditAttachedObjectListener.onPlayerEditAttachedObject(
-                        player = player,
-                        response = AttachedObjectEditResponse.SAVE,
-                        slot = player.attachedObjectSlots[3],
-                        modelId = 1337,
-                        bone = Bone.CALF_LEFT,
+                onPlayerEditPlayerMapObjectHandler.onPlayerEditPlayerMapObject(
+                        playerMapObject = playerMapObject,
+                        response = ObjectEditResponse.FINAL,
                         offset = vector3DOf(1f, 2f, 3f),
-                        rotation = vector3DOf(4f, 5f, 6f),
-                        scale = vector3DOf(7f, 8f, 9f)
+                        rotation = vector3DOf(4f, 5f, 6f)
                 )
             }
         }
+    }
 
+    @Test
+    fun shouldCallOnPlayerEditAttachedObjectHandler() {
+        val playerId = 69
+        val attachedObjectSlot = mockk<AttachedObjectSlot>()
+        val player = mockk<Player> {
+            every { attachedObjectSlots[2] } returns attachedObjectSlot
+        }
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every {
+            onPlayerEditAttachedObjectHandler.onPlayerEditAttachedObject(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } just Runs
+
+        callbackProcessor.onPlayerEditAttachedObject(
+                playerid = playerId,
+                response = AttachedObjectEditResponse.SAVE.value,
+                index = 2,
+                modelid = 34000,
+                boneid = Bone.HEAD.value,
+                fOffsetX = 1f,
+                fOffsetY = 2f,
+                fOffsetZ = 3f,
+                fRotX = 4f,
+                fRotY = 5f,
+                fRotZ = 6f,
+                fScaleX = 7f,
+                fScaleY = 8f,
+                fScaleZ = 9f
+        )
+
+        verify {
+            onPlayerEditAttachedObjectHandler.onPlayerEditAttachedObject(
+                    player = player,
+                    slot = attachedObjectSlot,
+                    response = AttachedObjectEditResponse.SAVE,
+                    modelId = 34000,
+                    bone = Bone.HEAD,
+                    offset = vector3DOf(1f, 2f, 3f),
+                    rotation = vector3DOf(4f, 5f, 6f),
+                    scale = vector3DOf(7f, 8f, 9f)
+            )
+        }
     }
 
     @Nested
     inner class OnPlayerSelectObjectTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
-        @Nested
-        inner class MapObjectTests {
+        @Test
+        fun givenMapObjectItShouldCallOnPlayerSelectMapObjectHandler() {
+            val mapObjectId = 1337
+            val mapObject = mockk<MapObject>()
+            every { entityResolver.run { mapObjectId.toMapObject() } } returns mapObject
+            every { onPlayerSelectMapObjectHandler.onPlayerSelectMapObject(any(), any(), any(), any()) } just Runs
 
-            private val mapObject = mockk<MapObject>()
-            private val mapObjectId = 187
+            callbackProcessor.onPlayerSelectObject(
+                    playerid = playerId,
+                    type = SAMPConstants.SELECT_OBJECT_GLOBAL_OBJECT,
+                    objectid = mapObjectId,
+                    modelid = 12345,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
 
-            @BeforeEach
-            fun setUp() {
-                every { mapObject.id } returns MapObjectId.valueOf(mapObjectId)
-                every { mapObject.onSelect(any(), any(), any()) } just Runs
-                server.injector.getInstance<MapObjectRegistry>().register(mapObject)
-            }
-
-            @Test
-            fun shouldCallOnPlayerSelectMapObject() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                callbackProcessor.onPlayerSelectObject(
-                        playerid = playerId,
-                        type = SAMPConstants.SELECT_OBJECT_GLOBAL_OBJECT,
-                        objectid = mapObjectId,
-                        modelid = 1337,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerSelectObjectListener.onPlayerSelectMapObject(
-                            player = player,
-                            mapObject = mapObject,
-                            modelId = 1337,
-                            coordinates = vector3DOf(1f, 2f, 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = 500,
-                            type = SAMPConstants.SELECT_OBJECT_GLOBAL_OBJECT,
-                            objectid = mapObjectId,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerSelectObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = playerId,
-                            type = SAMPConstants.SELECT_OBJECT_GLOBAL_OBJECT,
-                            objectid = 500,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerSelectObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid map object ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectMapObjectListener> {
-                    every { onPlayerSelectMapObject(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = playerId,
-                            type = SAMPConstants.SELECT_OBJECT_GLOBAL_OBJECT,
-                            objectid = mapObjectId,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerSelectObjectListener.onPlayerSelectMapObject(
-                            player = player,
-                            mapObject = mapObject,
-                            modelId = 1337,
-                            coordinates = vector3DOf(1f, 2f, 3f)
-                    )
-                }
+            verify {
+                onPlayerSelectMapObjectHandler.onPlayerSelectMapObject(player, mapObject, 12345, vector3DOf(1f, 2f, 3f))
             }
         }
 
-        @Nested
-        inner class PlayerMapObjectTests {
+        @Test
+        fun givenPlayerMapObjectItShouldCallOnPlayerSelectPlayerMapObjectHandler() {
+            val playerMapObjectId = 1337
+            val playerMapObject = mockk<PlayerMapObject>()
+            every { entityResolver.run { playerMapObjectId.toPlayerMapObject(player) } } returns playerMapObject
+            every { onPlayerSelectPlayerMapObjectHandler.onPlayerSelectPlayerMapObject(any(), any(), any()) } just Runs
 
-            private val playerMapObject = mockk<PlayerMapObject>()
-            private val playerMapObjectId = 187
+            callbackProcessor.onPlayerSelectObject(
+                    playerid = playerId,
+                    type = SAMPConstants.SELECT_OBJECT_PLAYER_OBJECT,
+                    objectid = playerMapObjectId,
+                    modelid = 12345,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
 
-            @BeforeEach
-            fun setUp() {
-                every { playerMapObject.id } returns PlayerMapObjectId.valueOf(playerMapObjectId)
-                every { playerMapObject.onSelect(any(), any()) } just Runs
-                player.playerMapObjectRegistry.register(playerMapObject)
-            }
-
-            @Test
-            fun shouldCallOnPlayerSelectPlayerMapObject() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                callbackProcessor.onPlayerSelectObject(
-                        playerid = playerId,
-                        type = SAMPConstants.SELECT_OBJECT_PLAYER_OBJECT,
-                        objectid = playerMapObjectId,
-                        modelid = 1337,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
+            verify {
+                onPlayerSelectPlayerMapObjectHandler.onPlayerSelectPlayerMapObject(
+                        playerMapObject,
+                        12345,
+                        vector3DOf(1f, 2f, 3f)
                 )
-
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerSelectObjectListener.onPlayerSelectPlayerMapObject(
-                            playerMapObject = playerMapObject,
-                            modelId = 1337,
-                            coordinates = vector3DOf(1f, 2f, 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = 500,
-                            type = SAMPConstants.SELECT_OBJECT_PLAYER_OBJECT,
-                            objectid = playerMapObjectId,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerSelectObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidPlayerMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectPlayerMapObjectListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = playerId,
-                            type = SAMPConstants.SELECT_OBJECT_PLAYER_OBJECT,
-                            objectid = 500,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                val slot = slot<Exception>()
-                verify { onPlayerSelectObjectListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player map object ID 500 for player ID 69")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerSelectObjectListener = mockk<OnPlayerSelectPlayerMapObjectListener> {
-                    every { onPlayerSelectPlayerMapObject(any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerSelectObjectListener)
-
-                val caughtThrowable = catchThrowable {
-                    callbackProcessor.onPlayerSelectObject(
-                            playerid = playerId,
-                            type = SAMPConstants.SELECT_OBJECT_PLAYER_OBJECT,
-                            objectid = playerMapObjectId,
-                            modelid = 1337,
-                            fX = 1f,
-                            fY = 2f,
-                            fZ = 3f
-                    )
-                }
-
-                assertThat(caughtThrowable)
-                        .isNull()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerSelectObjectListener.onPlayerSelectPlayerMapObject(
-                            playerMapObject = playerMapObject,
-                            modelId = 1337,
-                            coordinates = vector3DOf(1f, 2f, 3f)
-                    )
-                }
             }
         }
 
@@ -5185,914 +1929,189 @@ internal class CallbackProcessorTest {
     @Nested
     inner class OnPlayerWeaponShotTests {
 
-        private lateinit var player: Player
         private val playerId = 69
+        private val player = mockk<Player>()
 
         @BeforeEach
         fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
-        }
-
-        @Nested
-        inner class PlayerHitTargetTests {
-
-            private lateinit var targetPlayer: Player
-            private val targetPlayerId = 187
-
-            @BeforeEach
-            fun setUp() {
-                targetPlayer = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(targetPlayerId))
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER.value,
-                        hitid = targetPlayerId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerHitTarget(targetPlayer),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER.value,
-                        hitid = targetPlayerId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isFalse()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerHitTarget(targetPlayer),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = 500,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER.value,
-                        hitid = targetPlayerId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidTargetPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER.value,
-                        hitid = 500,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every { onPlayerShotWeapon(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER.value,
-                        hitid = targetPlayerId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerHitTarget(targetPlayer),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class VehicleHitTargetTests {
-
-            private val targetVehicle = mockk<Vehicle>()
-            private val targetVehicleId = 187
-
-            @BeforeEach
-            fun setUp() {
-                every { targetVehicle.id } returns VehicleId.valueOf(targetVehicleId)
-                server.injector.getInstance<VehicleRegistry>().register(targetVehicle)
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.VEHICLE.value,
-                        hitid = targetVehicleId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = VehicleHitTarget(targetVehicle),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.VEHICLE.value,
-                        hitid = targetVehicleId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isFalse()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = VehicleHitTarget(targetVehicle),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = 500,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.VEHICLE.value,
-                        hitid = targetVehicleId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidTargetVehicleIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.VEHICLE.value,
-                        hitid = 500,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid vehicle ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every { onPlayerShotWeapon(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.VEHICLE.value,
-                        hitid = targetVehicleId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = VehicleHitTarget(targetVehicle),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class MapObjectHitTargetTests {
-
-            private val targetMapObject = mockk<MapObject>()
-            private val targetMapObjectId = 187
-
-            @BeforeEach
-            fun setUp() {
-                every { targetMapObject.id } returns MapObjectId.valueOf(targetMapObjectId)
-                server.injector.getInstance<MapObjectRegistry>().register(targetMapObject)
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.OBJECT.value,
-                        hitid = targetMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = MapObjectHitTarget(targetMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.OBJECT.value,
-                        hitid = targetMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isFalse()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = MapObjectHitTarget(targetMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = 500,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.OBJECT.value,
-                        hitid = targetMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidTargetMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.OBJECT.value,
-                        hitid = 500,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid map object ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every { onPlayerShotWeapon(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.OBJECT.value,
-                        hitid = targetMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = MapObjectHitTarget(targetMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class PlayerMapObjectHitTargetTests {
-
-            private val targetPlayerMapObject = mockk<PlayerMapObject>()
-            private val targetPlayerMapObjectId = 187
-
-            @BeforeEach
-            fun setUp() {
-                every { targetPlayerMapObject.id } returns PlayerMapObjectId.valueOf(targetPlayerMapObjectId)
-                player.playerMapObjectRegistry.register(targetPlayerMapObject)
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER_OBJECT.value,
-                        hitid = targetPlayerMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER_OBJECT.value,
-                        hitid = targetPlayerMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isFalse()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = 500,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER_OBJECT.value,
-                        hitid = targetPlayerMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun givenInvalidTargetPlayerMapObjectIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER_OBJECT.value,
-                        hitid = 500,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player map object ID 500 for player ID 69")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every { onPlayerShotWeapon(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.PLAYER_OBJECT.value,
-                        hitid = targetPlayerMapObjectId,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = PlayerMapObjectHitTarget(targetPlayerMapObject),
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-        }
-
-        @Nested
-        inner class NoHitTargetTests {
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnTrue() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.AllowDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.NONE.value,
-                        hitid = 0,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = NoHitTarget,
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun shouldCallOnPlayerWeaponShotAndReturnFalse() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every {
-                        onPlayerShotWeapon(
-                                any(),
-                                any(),
-                                any(),
-                                any()
-                        )
-                    } returns OnPlayerWeaponShotListener.Result.PreventDamage
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.NONE.value,
-                        hitid = 0,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isFalse()
-                verify { uncaughtExceptionNotifier wasNot Called }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = NoHitTarget,
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-
-            @Test
-            fun givenInvalidPlayerIdItShouldThrowAndCatchException() {
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener>(relaxed = true)
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = 500,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.NONE.value,
-                        hitid = 0,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                val slot = slot<Exception>()
-                verify { onPlayerWeaponShotListener wasNot Called }
-                verify { uncaughtExceptionNotifier.notify(capture(slot)) }
-                assertThat(slot.captured)
-                        .isInstanceOf(IllegalArgumentException::class.java)
-                        .hasMessage("Invalid player ID 500")
-            }
-
-            @Test
-            fun shouldCatchException() {
-                val exception = RuntimeException("test")
-                val onPlayerWeaponShotListener = mockk<OnPlayerWeaponShotListener> {
-                    every { onPlayerShotWeapon(any(), any(), any(), any()) } throws exception
-                }
-                callbackListenerManager.register(onPlayerWeaponShotListener)
-
-                val result = callbackProcessor.onPlayerWeaponShot(
-                        playerid = playerId,
-                        weaponid = WeaponModel.AK47.value,
-                        hittype = BulletHitType.NONE.value,
-                        hitid = 0,
-                        fX = 1f,
-                        fY = 2f,
-                        fZ = 3f
-                )
-
-                assertThat(result)
-                        .isTrue()
-                verify { uncaughtExceptionNotifier.notify(exception) }
-                verify {
-                    onPlayerWeaponShotListener.onPlayerShotWeapon(
-                            player = player,
-                            weaponModel = WeaponModel.AK47,
-                            hitTarget = NoHitTarget,
-                            coordinates = vector3DOf(x = 1f, y = 2f, z = 3f)
-                    )
-                }
-            }
-        }
-
-    }
-
-    @Nested
-    inner class OnPlayerRequestDownloadTests {
-
-        private lateinit var player: Player
-        private val playerId = 69
-
-        @BeforeEach
-        fun setUp() {
-            player = server.injector.getInstance<PlayerFactory>().create(PlayerId.valueOf(playerId))
+            every { entityResolver.run { playerId.toPlayer() } } returns player
         }
 
         @Test
-        fun shouldCallOnPlayerRequestDownload() {
-            val onPlayerRequestDownloadListener = mockk<OnPlayerRequestDownloadListener>(relaxed = true)
-            callbackListenerManager.register(onPlayerRequestDownloadListener)
+        fun givenBulletHitTypeNoneItShouldCallHandlerWithNoHitTarget() {
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } returns OnPlayerWeaponShotListener.Result.AllowDamage
 
-            callbackProcessor.onPlayerRequestDownload(playerId, SAMPConstants.DOWNLOAD_REQUEST_MODEL_FILE, 1337)
+            callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.NONE.value,
+                    hitid = 0,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
 
-            val slot = slot<Player>()
-            verify { uncaughtExceptionNotifier wasNot Called }
             verify {
-                onPlayerRequestDownloadListener.onPlayerRequestDownload(
-                        capture(slot),
-                        DownloadRequestType.MODEL_FILE,
-                        1337
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(
+                        player,
+                        WeaponModel.AK47,
+                        NoHitTarget,
+                        vector3DOf(1f, 2f, 3f)
                 )
             }
-            assertThat(slot.captured)
-                    .satisfies {
-                        assertThat(it.id)
-                                .isEqualTo(PlayerId.valueOf(playerId))
-                    }
         }
 
         @Test
-        fun shouldCatchException() {
-            val exception = RuntimeException("test")
-            val onPlayerRequestDownloadListener = mockk<OnPlayerRequestDownloadListener> {
-                every { onPlayerRequestDownload(any(), any(), any()) } throws exception
-            }
-            callbackListenerManager.register(onPlayerRequestDownloadListener)
+        fun givenBulletHitTypePlayerItShouldCallHandlerWithPlayerHitTarget() {
+            val hitPlayerId = 1234
+            val hitPlayer = mockk<Player>()
+            every { entityResolver.run { hitPlayerId.toPlayer() } } returns hitPlayer
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } returns OnPlayerWeaponShotListener.Result.AllowDamage
 
-            val caughtThrowable = catchThrowable {
-                callbackProcessor.onPlayerRequestDownload(
-                        playerId,
-                        SAMPConstants.DOWNLOAD_REQUEST_MODEL_FILE,
-                        1337
+            callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.PLAYER.value,
+                    hitid = hitPlayerId,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
+
+            verify {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(
+                        player,
+                        WeaponModel.AK47,
+                        PlayerHitTarget(hitPlayer),
+                        vector3DOf(1f, 2f, 3f)
                 )
             }
+        }
 
-            assertThat(caughtThrowable)
-                    .isNull()
-            verify { uncaughtExceptionNotifier.notify(exception) }
-            verify { onPlayerRequestDownloadListener.onPlayerRequestDownload(any(), any(), any()) }
+        @Test
+        fun givenBulletHitTypeVehicleItShouldCallHandlerWithVehicleHitTarget() {
+            val vehicleId = 1234
+            val vehicle = mockk<Vehicle>()
+            every { entityResolver.run { vehicleId.toVehicle() } } returns vehicle
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } returns OnPlayerWeaponShotListener.Result.AllowDamage
+
+            callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.VEHICLE.value,
+                    hitid = vehicleId,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
+
+            verify {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(
+                        player,
+                        WeaponModel.AK47,
+                        VehicleHitTarget(vehicle),
+                        vector3DOf(1f, 2f, 3f)
+                )
+            }
+        }
+
+        @Test
+        fun givenBulletHitTypeMapObjectItShouldCallHandlerWithMapObjectHitTarget() {
+            val mapObjectId = 1234
+            val mapObject = mockk<MapObject>()
+            every { entityResolver.run { mapObjectId.toMapObject() } } returns mapObject
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } returns OnPlayerWeaponShotListener.Result.AllowDamage
+
+            callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.OBJECT.value,
+                    hitid = mapObjectId,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
+
+            verify {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(
+                        player,
+                        WeaponModel.AK47,
+                        MapObjectHitTarget(mapObject),
+                        vector3DOf(1f, 2f, 3f)
+                )
+            }
+        }
+
+        @Test
+        fun givenBulletHitTypePlayerMapObjectItShouldCallHandlerWithPlayerMapObjectHitTarget() {
+            val playerMapObjectId = 1234
+            val playerMapObject = mockk<PlayerMapObject>()
+            every { entityResolver.run { playerMapObjectId.toPlayerMapObject(player) } } returns playerMapObject
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } returns OnPlayerWeaponShotListener.Result.AllowDamage
+
+            callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.PLAYER_OBJECT.value,
+                    hitid = playerMapObjectId,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
+
+            verify {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(
+                        player,
+                        WeaponModel.AK47,
+                        PlayerMapObjectHitTarget(playerMapObject),
+                        vector3DOf(1f, 2f, 3f)
+                )
+            }
+        }
+
+        @Test
+        fun givenHandlerThrowsAnExceptionReturnsTrue() {
+            every {
+                onPlayerWeaponShotHandler.onPlayerShotWeapon(any(), any(), any(), any())
+            } throws Exception()
+
+            val result = callbackProcessor.onPlayerWeaponShot(
+                    playerid = playerId,
+                    weaponid = WeaponModel.AK47.value,
+                    hittype = BulletHitType.NONE.value,
+                    hitid = 0,
+                    fX = 1f,
+                    fY = 2f,
+                    fZ = 3f
+            )
+
+            assertThat(result)
+                    .isTrue()
         }
     }
 
-    @Suppress("unused")
-    @Singleton
-    private class LifecycleAwareService {
+    @Test
+    fun shouldCallOnPlayerRequestDownload() {
+        val playerId = 69
+        val player = mockk<Player>()
+        every { entityResolver.run { playerId.toPlayer() } } returns player
+        every { onPlayerRequestDownloadHandler.onPlayerRequestDownload(any(), any(), any()) } just Runs
 
-        var isShutdown: Boolean = false
-            private set
+        callbackProcessor.onPlayerRequestDownload(playerId, DownloadRequestType.TEXTURE_FILE.value, 12345)
 
-        @PreDestroy
-        fun shutdown() {
-            isShutdown = true
+        verify {
+            onPlayerRequestDownloadHandler.onPlayerRequestDownload(player, DownloadRequestType.TEXTURE_FILE, 12345)
         }
-
-    }
-
-    @Suppress("unused")
-    class TestGameMode : GameMode() {
-
-        override fun getPlugins(): List<Plugin> = emptyList()
-
-        override fun getModules(): List<Module> = listOf(TestModule())
-
-    }
-
-    private class TestModule : KampModule() {
-
-        override fun configure() {
-            bind(UncaughtExceptionNotifier::class.java).toInstance(mockk())
-            bind(UnknownCommandHandler::class.java).toInstance(TestUnknownCommandHandler())
-        }
-
-    }
-
-    private class TestUnknownCommandHandler : UnknownCommandHandler {
-
-        override fun handle(player: Player, commandLine: String): OnPlayerCommandTextListener.Result =
-                OnPlayerCommandTextListener.Result.UnknownCommand
     }
 
 }

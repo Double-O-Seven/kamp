@@ -38,15 +38,6 @@ import ch.leadrian.samp.kamp.core.api.data.VehicleHitTarget
 import ch.leadrian.samp.kamp.core.api.data.playerKeysOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.vehicleColorsOf
-import ch.leadrian.samp.kamp.core.api.entity.Actor
-import ch.leadrian.samp.kamp.core.api.entity.MapObject
-import ch.leadrian.samp.kamp.core.api.entity.Pickup
-import ch.leadrian.samp.kamp.core.api.entity.Player
-import ch.leadrian.samp.kamp.core.api.entity.PlayerClass
-import ch.leadrian.samp.kamp.core.api.entity.PlayerMapObject
-import ch.leadrian.samp.kamp.core.api.entity.PlayerTextDraw
-import ch.leadrian.samp.kamp.core.api.entity.TextDraw
-import ch.leadrian.samp.kamp.core.api.entity.Vehicle
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.exception.SafeCaller
@@ -56,14 +47,8 @@ import ch.leadrian.samp.kamp.core.api.util.loggerFor
 import ch.leadrian.samp.kamp.core.runtime.SAMPCallbacks
 import ch.leadrian.samp.kamp.core.runtime.Server
 import ch.leadrian.samp.kamp.core.runtime.amx.AmxCallbackExecutor
+import ch.leadrian.samp.kamp.core.runtime.entity.EntityResolver
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerFactory
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.PickupRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerClassRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.PlayerRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.TextDrawRegistry
-import ch.leadrian.samp.kamp.core.runtime.entity.registry.VehicleRegistry
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -73,13 +58,6 @@ internal class CallbackProcessor
 constructor(
         private val server: Server,
         private val playerFactory: PlayerFactory,
-        private val playerRegistry: PlayerRegistry,
-        private val vehicleRegistry: VehicleRegistry,
-        private val actorRegistry: ActorRegistry,
-        private val playerClassRegistry: PlayerClassRegistry,
-        private val mapObjectRegistry: MapObjectRegistry,
-        private val pickupRegistry: PickupRegistry,
-        private val textDrawRegistry: TextDrawRegistry,
         private val onActorStreamInHandler: OnActorStreamInHandler,
         private val onActorStreamOutHandler: OnActorStreamOutHandler,
         private val onDialogResponseHandler: OnDialogResponseHandler,
@@ -141,43 +119,14 @@ constructor(
         private val onVehicleStreamInHandler: OnVehicleStreamInHandler,
         private val onVehicleStreamOutHandler: OnVehicleStreamOutHandler,
         private val onPlayerRequestDownloadHandler: OnPlayerRequestDownloadHandler,
-        private val amxCallbackExecutor: AmxCallbackExecutor
-) : SAMPCallbacks, SafeCaller {
+        private val amxCallbackExecutor: AmxCallbackExecutor,
+        entityResolver: EntityResolver
+) : SAMPCallbacks, SafeCaller, EntityResolver by entityResolver {
 
     override val log = loggerFor<CallbackProcessor>()
 
     @com.google.inject.Inject(optional = true)
     override var uncaughtExceptionNotifier: UncaughtExceptionNotifier? = null
-
-    private fun Int.toPlayer(): Player =
-            playerRegistry[this] ?: throw IllegalArgumentException("Invalid player ID $this")
-
-    private fun Int.toPlayerOrNull(): Player? = playerRegistry[this]
-
-    private fun Int.toPlayerClass(): PlayerClass =
-            playerClassRegistry[this] ?: throw IllegalArgumentException("Invalid player class ID $this")
-
-    private fun Int.toVehicle(): Vehicle =
-            vehicleRegistry[this] ?: throw IllegalArgumentException("Invalid vehicle ID $this")
-
-    private fun Int.toMapObject(): MapObject =
-            mapObjectRegistry[this] ?: throw IllegalArgumentException("Invalid map object ID $this")
-
-    private fun Int.toPlayerMapObject(player: Player): PlayerMapObject =
-            player.playerMapObjectRegistry[this]
-                    ?: throw IllegalArgumentException("Invalid player map object ID $this for player ID ${player.id.value}")
-
-    private fun Int.toPickup(): Pickup =
-            pickupRegistry[this] ?: throw IllegalArgumentException("Invalid pickup ID $this")
-
-    private fun Int.toActor(): Actor =
-            actorRegistry[this] ?: throw IllegalArgumentException("Invalid actor ID $this")
-
-    private fun Int.toTextDrawOrNull(): TextDraw? = textDrawRegistry[this]
-
-    private fun Int.toPlayerTextDraw(player: Player): PlayerTextDraw =
-            player.playerTextDrawRegistry[this]
-                    ?: throw IllegalArgumentException("Invalid player text draw ID $this for player ID ${player.id.value}")
 
     override fun onProcessTick() {
         tryAndCatch {
@@ -793,9 +742,8 @@ constructor(
                 BulletHitType.PLAYER -> PlayerHitTarget(hitid.toPlayer())
                 BulletHitType.VEHICLE -> VehicleHitTarget(hitid.toVehicle())
                 BulletHitType.OBJECT -> MapObjectHitTarget(hitid.toMapObject())
-                BulletHitType.PLAYER_OBJECT -> PlayerMapObjectHitTarget(
-                        hitid.toPlayerMapObject(player)
-                )
+                BulletHitType.PLAYER_OBJECT ->
+                    PlayerMapObjectHitTarget(hitid.toPlayerMapObject(player))
             }
             onPlayerWeaponShotHandler.onPlayerShotWeapon(
                     player,
