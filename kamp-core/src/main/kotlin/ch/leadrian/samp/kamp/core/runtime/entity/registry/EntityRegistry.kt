@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Entity
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
 import java.util.LinkedList
 
-internal abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val entities: Array<T?>) {
+abstract class EntityRegistry<T : Entity<U>, U : EntityId>(private val entities: Array<T?>) {
 
     private val entityList: LinkedList<T> = LinkedList()
 
