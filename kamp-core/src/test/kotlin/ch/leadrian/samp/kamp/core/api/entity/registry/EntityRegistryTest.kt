@@ -1,4 +1,4 @@
-package ch.leadrian.samp.kamp.core.runtime.entity.registry
+package ch.leadrian.samp.kamp.core.api.entity.registry
 
 import ch.leadrian.samp.kamp.core.api.entity.Entity
 import ch.leadrian.samp.kamp.core.api.entity.id.EntityId
