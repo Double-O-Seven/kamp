@@ -41,6 +41,10 @@ internal data class MutableColorImpl(override var value: Int) : MutableColor {
             this.value = ((value and 0xFFFFFF) shl 8) or ((value shr 24) and 0xFF)
         }
 
+    override fun toHexString(): String = String.format("%08x", value)
+
+    override fun toEmbeddedString(): String = String.format("{%06x}", rgb)
+
     override fun toColor(): Color = ColorImpl(
             value
     )

@@ -16,9 +16,9 @@ interface Color {
 
     val argb: Int
 
-    fun toHexString(): String = String.format("%08x", value)
+    fun toHexString(): String
 
-    fun toEmbeddedString(): String = String.format("{%06x}", rgb)
+    fun toEmbeddedString(): String
 
     fun toColor(): Color
 
