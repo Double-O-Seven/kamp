@@ -86,6 +86,7 @@ class CallbackHandlerGenerator {
         val funSpec = FunSpec
                 .overriding(listenerDefinition.method)
                 .kotlinizeParameterTypes(listenerDefinition)
+                .addComment("Avoid expression return that causes faulty line wraps")
                 .beginControlFlow("return listeners.map")
                 .addListenerFunctionCall(listenerDefinition)
                 .endControlFlow()
