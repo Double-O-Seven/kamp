@@ -5,4 +5,7 @@ import org.slf4j.LoggerFactory
 
 inline fun <reified T : Any> loggerFor(): Logger = LoggerFactory.getLogger(T::class.java)
 
-fun Any.logger(): Logger = LoggerFactory.getLogger(this::class.java)
+inline fun <reified T : Any> T.logger(): Logger {
+    val targetClass = T::class.takeIf { it.isCompanion }?.java?.declaringClass ?: T::class.java
+    return LoggerFactory.getLogger(targetClass)
+}
