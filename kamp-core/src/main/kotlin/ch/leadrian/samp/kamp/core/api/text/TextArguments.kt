@@ -19,7 +19,9 @@ object TextArguments {
 
     private class PlayerNameAndId(private val player: Player) : TextArgument {
 
-        override fun getText(locale: Locale): String = "${player.name} (${player.id.value})"
+        private val nameAndId by lazy { "${player.name} (${player.id.value})" }
+
+        override fun getText(locale: Locale): String = nameAndId
 
     }
 

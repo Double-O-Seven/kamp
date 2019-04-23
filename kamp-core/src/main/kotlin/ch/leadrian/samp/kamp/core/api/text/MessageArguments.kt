@@ -36,7 +36,9 @@ object MessageArguments {
 
     private class PlayerNameAndId(private val player: Player) : MessageArgument {
 
-        override fun getText(locale: Locale, color: Color): String = "${player.name} (${player.id.value})"
+        private val nameAndId by lazy { "${player.name} (${player.id.value})" }
+
+        override fun getText(locale: Locale, color: Color): String = nameAndId
 
     }
 
