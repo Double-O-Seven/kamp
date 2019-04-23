@@ -1,5 +1,5 @@
 plugins {
-    id("kamp-textkey-generator")
+    id("ch.leadrian.samp.kamp.kamp-textkey-generator") version "1.0.0-rc2"
 }
 
 dependencies {

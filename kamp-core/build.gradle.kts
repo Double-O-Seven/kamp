@@ -1,8 +1,8 @@
 plugins {
     `kotlin-kapt`
-    id("kamp-textkey-generator")
     id("kamp-java-codegen")
     id("kamp-kotlin-codegen")
+    id("ch.leadrian.samp.kamp.kamp-textkey-generator") version "1.0.0-rc2"
 }
 
 dependencies {

@@ -1,20 +1,6 @@
 import groovy.lang.Closure
 import org.gradle.api.tasks.SourceSet.*
 
-buildscript {
-    repositories {
-        mavenCentral()
-        mavenLocal()
-        maven {
-            setUrl("https://plugins.gradle.org/m2/")
-        }
-    }
-
-    dependencies {
-        classpath(group = "ch.leadrian.samp.kamp", name = "kamp-textkey-generator", version = "1.0.0-rc2")
-    }
-}
-
 plugins {
     kotlin("jvm")
     java
