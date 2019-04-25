@@ -23,7 +23,9 @@ import ch.leadrian.samp.kamp.core.runtime.inject.InjectorFactory
 import ch.leadrian.samp.kamp.core.runtime.text.TextModule
 import com.netflix.governator.guice.BootstrapModule
 import com.netflix.governator.lifecycle.LifecycleManager
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import io.mockk.verifyOrder
@@ -76,26 +78,23 @@ internal class CommandListDialogFactoryTest {
 
         @Test
         fun shouldShowDialog() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
-            } returns true
             val player = mockk<Player> {
                 every { locale } returns Locale.GERMANY
                 every { id } returns PlayerId.valueOf(69)
+                every { showDialog(any(), any(), any(), any(), any(), any()) } just Runs
             }
             val dialog = commandListDialogFactory.create(commands, 10)
 
             dialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 1,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = dialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Schliessen",
                         button2 = "",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "bar\t[int] [String] [List] \n" +
                                 "batman\t[WeaponModel] \n" +
                                 "baz\t[Bla] [Blub] \n" +
@@ -107,26 +106,23 @@ internal class CommandListDialogFactoryTest {
 
         @Test
         fun givenCommandGroupItShouldShowDialog() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
-            } returns true
             val player = mockk<Player> {
                 every { locale } returns Locale.GERMANY
                 every { id } returns PlayerId.valueOf(69)
+                every { showDialog(any(), any(), any(), any(), any(), any()) } just Runs
             }
             val dialog = commandListDialogFactory.create(groupedCommands, 10)
 
             dialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 1,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = dialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Schliessen",
                         button2 = "",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "funny haha\t[int] [String] [List] \n" +
                                 "funny lol\t\n"
                 )
@@ -147,26 +143,23 @@ internal class CommandListDialogFactoryTest {
 
         @Test
         fun shouldShowDialog() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
-            } returns true
             val player = mockk<Player> {
                 every { locale } returns Locale.GERMANY
                 every { id } returns PlayerId.valueOf(69)
+                every { showDialog(any(), any(), any(), any(), any(), any()) } just Runs
             }
             val dialog = commandListDialogFactory.create(commands, 2)
 
             dialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 1,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = dialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Weiter",
                         button2 = "Schliessen",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle (1/3)",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "bar\t[int] [String] [List] \n" +
                                 "batman\t[WeaponModel] \n"
                 )
@@ -176,12 +169,10 @@ internal class CommandListDialogFactoryTest {
         @Suppress("UNCHECKED_CAST")
         @Test
         fun shouldNavigateForward() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(any(), any(), any(), any(), any(), any(), any())
-            } returns true
             val player = mockk<Player> {
                 every { locale } returns Locale.GERMANY
                 every { id } returns PlayerId.valueOf(69)
+                every { showDialog(any(), any(), any(), any(), any(), any()) } just Runs
             }
             val dialogNavigation = DialogNavigation(player)
             every { player.dialogNavigation } returns dialogNavigation
@@ -193,36 +184,33 @@ internal class CommandListDialogFactoryTest {
             (dialogNavigation.top as TabListDialog<String>).onResponse(player, DialogResponse.LEFT_BUTTON, 0, "")
 
             verifyOrder {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 1,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = match { it.id.value == 1 },
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Weiter",
                         button2 = "Schliessen",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle (1/3)",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "bar\t[int] [String] [List] \n" +
                                 "batman\t[WeaponModel] \n"
                 )
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 2,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = match { it.id.value == 2 },
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Weiter",
                         button2 = "Zurück",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle (2/3)",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "baz\t[Bla] [Blub] \n" +
                                 "foo\t\n"
                 )
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = 3,
-                        playerid = 69,
+                player.showDialog(
+                        dialog = match { it.id.value == 3 },
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "Schliessen",
                         button2 = "Zurück",
-                        style = DialogStyle.TABLIST_HEADERS.value,
                         caption = "Befehle (3/3)",
-                        info = "Befehl\tParameter\n" +
+                        message = "Befehl\tParameter\n" +
                                 "qux\t[String] [Param 2] \n"
                 )
             }
