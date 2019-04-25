@@ -32,6 +32,7 @@ constructor(
             inputText: String
     ): OnDialogResponseListener.Result {
         val dialog = dialogRegistry[dialogId]
+        player.resetCurrentDialog()
         if (dialog != null) {
             return propagateDialogResponse(dialog, player, response, listItem, inputText)
         }

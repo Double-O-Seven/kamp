@@ -14,7 +14,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.TextKeyDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 
 internal class MessageBoxDialog(
@@ -24,19 +23,17 @@ internal class MessageBoxDialog(
         private val rightButtonTextSupplier: DialogTextSupplier,
         private val messageTextSupplier: DialogTextSupplier,
         private val onClickLeftButton: (Dialog.(Player) -> Unit)?,
-        private val onClickRightButton: (Dialog.(Player) -> OnDialogResponseListener.Result)?,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val onClickRightButton: (Dialog.(Player) -> OnDialogResponseListener.Result)?
 ) : AbstractDialog(id) {
 
     override fun show(forPlayer: Player) {
-        nativeFunctionExecutor.showPlayerDialog(
-                dialogid = id.value,
-                playerid = forPlayer.id.value,
-                style = DialogStyle.MSGBOX.value,
+        forPlayer.showDialog(
+                dialog = this,
+                style = DialogStyle.MSGBOX,
                 button1 = leftButtonTextSupplier.getText(forPlayer),
                 button2 = rightButtonTextSupplier.getText(forPlayer),
                 caption = captionTextSupplier.getText(forPlayer),
-                info = messageTextSupplier.getText(forPlayer)
+                message = messageTextSupplier.getText(forPlayer)
         )
     }
 
@@ -58,7 +55,6 @@ internal class MessageBoxDialog(
 
     internal class Builder(
             textProvider: TextProvider,
-            private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<MessageBoxDialogBuilder>(textProvider), MessageBoxDialogBuilder {
 
@@ -107,8 +103,7 @@ internal class MessageBoxDialog(
                     rightButtonTextSupplier = rightButtonTextSupplier,
                     messageTextSupplier = messageTextSupplier,
                     onClickLeftButton = onClickLeftButton,
-                    onClickRightButton = onClickRightButton,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    onClickRightButton = onClickRightButton
             )
         }
 

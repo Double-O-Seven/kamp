@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.MessageBoxDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.TabListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.InputDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.ListDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.MessageBoxDialog
@@ -18,7 +17,6 @@ class DialogService
 @Inject
 internal constructor(
         private val textProvider: TextProvider,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val dialogRegistry: DialogRegistry
 ) {
 
@@ -35,15 +33,15 @@ internal constructor(
             newTabListDialogBuilder<V>().apply(builderBlock).build()
 
     fun newMessageBoxDialogBuilder(): MessageBoxDialogBuilder =
-            MessageBoxDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+            MessageBoxDialog.Builder(textProvider, dialogRegistry)
 
     fun newInputDialogBuilder(): InputDialogBuilder =
-            InputDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+            InputDialog.Builder(textProvider, dialogRegistry)
 
     fun <V : Any> newListDialogBuilder(): ListDialogBuilder<V> =
-            ListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+            ListDialog.Builder(textProvider, dialogRegistry)
 
     fun <V : Any> newTabListDialogBuilder(): TabListDialogBuilder<V> =
-            TabListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+            TabListDialog.Builder(textProvider, dialogRegistry)
 
 }

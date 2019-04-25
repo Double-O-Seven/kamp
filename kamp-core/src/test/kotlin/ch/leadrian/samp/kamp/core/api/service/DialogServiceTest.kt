@@ -6,7 +6,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.MessageBoxDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.dialog.TabListDialogBuilder
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.AbstractDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.InputDialog
 import ch.leadrian.samp.kamp.core.runtime.entity.dialog.ListDialog
@@ -27,12 +26,11 @@ internal class DialogServiceTest {
     private lateinit var dialogService: DialogService
 
     private val textProvider = mockk<TextProvider>()
-    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private val dialogRegistry = mockk<DialogRegistry>()
 
     @BeforeEach
     fun setUp() {
-        dialogService = DialogService(textProvider, nativeFunctionExecutor, dialogRegistry)
+        dialogService = DialogService(textProvider, dialogRegistry)
     }
 
     @Nested

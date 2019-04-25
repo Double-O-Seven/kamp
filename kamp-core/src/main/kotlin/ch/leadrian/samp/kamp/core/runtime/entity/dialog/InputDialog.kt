@@ -14,7 +14,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.TextKeyDialogTextSupplier
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 
 internal class InputDialog(
@@ -27,23 +26,21 @@ internal class InputDialog(
         private val validators: List<DialogInputValidator>,
         private val onSubmit: (Dialog.(Player, String) -> Unit)?,
         private val onInvalidInput: (Dialog.(Player, Any) -> Unit)?,
-        private val onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)?,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)?
 ) : AbstractDialog(id) {
 
     override fun show(forPlayer: Player) {
         val style = when {
-            isPasswordInput(this, forPlayer) -> DialogStyle.PASSWORD.value
-            else -> DialogStyle.INPUT.value
+            isPasswordInput(this, forPlayer) -> DialogStyle.PASSWORD
+            else -> DialogStyle.INPUT
         }
-        nativeFunctionExecutor.showPlayerDialog(
-                dialogid = id.value,
-                playerid = forPlayer.id.value,
+        forPlayer.showDialog(
+                dialog = this,
                 style = style,
                 button1 = leftButtonTextSupplier.getText(forPlayer),
                 button2 = rightButtonTextSupplier.getText(forPlayer),
                 caption = captionTextSupplier.getText(forPlayer),
-                info = messageTextSupplier.getText(forPlayer)
+                message = messageTextSupplier.getText(forPlayer)
         )
     }
 
@@ -70,7 +67,6 @@ internal class InputDialog(
 
     internal class Builder(
             textProvider: TextProvider,
-            private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<InputDialogBuilder>(textProvider), InputDialogBuilder {
 
@@ -157,8 +153,7 @@ internal class InputDialog(
                     validators = validators,
                     onSubmit = onSubmit,
                     onInvalidInput = onInvalidInput,
-                    onCancel = onCancel,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    onCancel = onCancel
             )
         }
 

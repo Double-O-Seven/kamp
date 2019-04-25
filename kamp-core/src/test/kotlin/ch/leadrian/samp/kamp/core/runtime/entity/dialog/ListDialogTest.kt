@@ -11,7 +11,6 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 import io.mockk.Called
 import io.mockk.Runs
@@ -31,7 +30,6 @@ internal class ListDialogTest {
     private lateinit var builder: ListDialog.Builder<Int>
 
     private val textProvider = mockk<TextProvider>()
-    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private val dialogRegistry = mockk<DialogRegistry>()
     private val playerId = PlayerId.valueOf(50)
     private val player = mockk<Player>()
@@ -45,7 +43,7 @@ internal class ListDialogTest {
         }
         every { player.locale } returns locale
         every { player.id } returns playerId
-        builder = ListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+        builder = ListDialog.Builder(textProvider, dialogRegistry)
     }
 
     @Nested
@@ -53,17 +51,7 @@ internal class ListDialogTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any()
-                )
-            } returns true
+            every { player.showDialog(any(), any(), any(), any(), any(), any()) } just Runs
         }
 
         @Test
@@ -81,14 +69,13 @@ internal class ListDialogTest {
             listDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.LIST.value,
+                player.showDialog(
+                        dialog = listDialog,
+                        style = DialogStyle.LIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -116,14 +103,13 @@ internal class ListDialogTest {
             listDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.LIST.value,
+                player.showDialog(
+                        dialog = listDialog,
+                        style = DialogStyle.LIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -143,14 +129,13 @@ internal class ListDialogTest {
             listDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.LIST.value,
+                player.showDialog(
+                        dialog = listDialog,
+                        style = DialogStyle.LIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -170,14 +155,13 @@ internal class ListDialogTest {
             listDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.LIST.value,
+                player.showDialog(
+                        dialog = listDialog,
+                        style = DialogStyle.LIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -252,14 +236,13 @@ internal class ListDialogTest {
             listDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.LIST.value,
+                player.showDialog(
+                        dialog = listDialog,
+                        style = DialogStyle.LIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "What a surprise!\n" +
+                        message = "What a surprise!\n" +
                                 "How are you?\n" +
                                 "I'm good, what about you?\n" +
                                 "To be honest, I wish I hadn't seen you so I wouldn't have to talk to your nasty face.\n" +

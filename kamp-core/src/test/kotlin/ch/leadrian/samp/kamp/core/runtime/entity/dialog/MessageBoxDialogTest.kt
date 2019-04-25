@@ -10,10 +10,11 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 import io.mockk.Called
+import io.mockk.Runs
 import io.mockk.every
+import io.mockk.just
 import io.mockk.mockk
 import io.mockk.verify
 import org.assertj.core.api.Assertions.assertThat
@@ -27,7 +28,6 @@ internal class MessageBoxDialogTest {
     private lateinit var builder: MessageBoxDialog.Builder
 
     private val textProvider = mockk<TextProvider>()
-    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private val dialogRegistry = mockk<DialogRegistry>()
     private val playerId = PlayerId.valueOf(50)
     private val player = mockk<Player>()
@@ -41,7 +41,7 @@ internal class MessageBoxDialogTest {
         }
         every { player.locale } returns locale
         every { player.id } returns playerId
-        builder = MessageBoxDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+        builder = MessageBoxDialog.Builder(textProvider, dialogRegistry)
     }
 
     @Nested
@@ -49,17 +49,7 @@ internal class MessageBoxDialogTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any()
-                )
-            } returns true
+            every { player.showDialog(any(), any(), any(), any(), any(), any()) } just Runs
         }
 
         @Test
@@ -74,14 +64,13 @@ internal class MessageBoxDialogTest {
             messageBoxDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.MSGBOX.value,
+                player.showDialog(
+                        dialog = messageBoxDialog,
+                        style = DialogStyle.MSGBOX,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -108,14 +97,13 @@ internal class MessageBoxDialogTest {
             messageBoxDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.MSGBOX.value,
+                player.showDialog(
+                        dialog = messageBoxDialog,
+                        style = DialogStyle.MSGBOX,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -132,14 +120,13 @@ internal class MessageBoxDialogTest {
             messageBoxDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.MSGBOX.value,
+                player.showDialog(
+                        dialog = messageBoxDialog,
+                        style = DialogStyle.MSGBOX,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }
@@ -156,14 +143,13 @@ internal class MessageBoxDialogTest {
             messageBoxDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.MSGBOX.value,
+                player.showDialog(
+                        dialog = messageBoxDialog,
+                        style = DialogStyle.MSGBOX,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?"
+                        message = "How are you?"
                 )
             }
         }

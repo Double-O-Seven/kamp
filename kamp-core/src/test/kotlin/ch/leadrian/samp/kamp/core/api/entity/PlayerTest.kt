@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
+import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
 import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
 import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
@@ -25,7 +26,9 @@ import ch.leadrian.samp.kamp.core.api.data.spawnInfoOf
 import ch.leadrian.samp.kamp.core.api.data.sphereOf
 import ch.leadrian.samp.kamp.core.api.data.vector3DOf
 import ch.leadrian.samp.kamp.core.api.data.weaponDataOf
+import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.id.ActorId
+import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
@@ -2314,5 +2317,102 @@ internal class PlayerTest {
             verify { nativeFunctionExecutor.redirectDownload(playerId.value, "http://www.google.com") }
         }
 
+    }
+
+    @Nested
+    inner class ShowDialogTests {
+
+        private val dialogId = 1337
+        lateinit var dialog: Dialog
+
+        @BeforeEach
+        fun setUp() {
+            dialog = mockk {
+                every { id } returns DialogId.valueOf(dialogId)
+            }
+            every {
+                nativeFunctionExecutor.showPlayerDialog(
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any(),
+                        any()
+                )
+            } returns true
+        }
+
+        @Test
+        fun shouldCallNativeFunctionExecutor() {
+            player.showDialog(
+                    dialog = dialog,
+                    style = DialogStyle.LIST,
+                    button1 = "OK",
+                    button2 = "Cancel",
+                    caption = "Hi there",
+                    message = "How are you?"
+            )
+
+            verify {
+                nativeFunctionExecutor.showPlayerDialog(
+                        playerid = playerId.value,
+                        dialogid = dialogId,
+                        style = DialogStyle.LIST.value,
+                        button1 = "OK",
+                        button2 = "Cancel",
+                        caption = "Hi there",
+                        info = "How are you?"
+                )
+            }
+        }
+
+        @Test
+        fun shouldSetCurrentDialog() {
+            player.showDialog(
+                    dialog = dialog,
+                    style = DialogStyle.LIST,
+                    button1 = "OK",
+                    button2 = "Cancel",
+                    caption = "Hi there",
+                    message = "How are you?"
+            )
+
+            assertThat(player.currentDialog)
+                    .isEqualTo(dialog)
+        }
+
+    }
+
+    @Test
+    fun resetCurrentDialogShouldSetCurrentDialogToNull() {
+        val dialogId = 1337
+        val dialog: Dialog = mockk {
+            every { id } returns DialogId.valueOf(dialogId)
+        }
+        every {
+            nativeFunctionExecutor.showPlayerDialog(
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any(),
+                    any()
+            )
+        } returns true
+        player.showDialog(
+                dialog = dialog,
+                style = DialogStyle.LIST,
+                button1 = "OK",
+                button2 = "Cancel",
+                caption = "Hi there",
+                message = "How are you?"
+        )
+
+        player.resetCurrentDialog()
+
+        assertThat(player.currentDialog)
+                .isNull()
     }
 }

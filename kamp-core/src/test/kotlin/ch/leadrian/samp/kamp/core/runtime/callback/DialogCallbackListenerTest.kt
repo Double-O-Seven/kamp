@@ -22,6 +22,7 @@ import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
 import org.junit.jupiter.params.provider.ArgumentsSource
+import org.junit.jupiter.params.provider.EnumSource
 import java.util.stream.Stream
 
 internal class DialogCallbackListenerTest {
@@ -49,6 +50,31 @@ internal class DialogCallbackListenerTest {
     inner class OnDialogResponseTests {
 
         private val player = mockk<Player>()
+
+        @BeforeEach
+        fun setUp() {
+            every { player.resetCurrentDialog() } just Runs
+        }
+
+        @ParameterizedTest
+        @EnumSource(DialogResponse::class)
+        fun shouldResetPlayersCurrentDialog(response: DialogResponse) {
+            val dialog = mockk<AbstractDialog> {
+                every { onResponse(any(), any(), any(), any()) } returns OnDialogResponseListener.Result.Processed
+            }
+            val dialogId = DialogId.valueOf(1337)
+            every { dialogRegistry[dialogId] } returns dialog
+
+            dialogCallbackListener.onDialogResponse(
+                    player,
+                    dialogId,
+                    response,
+                    1337,
+                    "Hi there"
+            )
+
+            verify { player.resetCurrentDialog() }
+        }
 
         @Nested
         inner class LeftButtonResponseTests {

@@ -15,7 +15,6 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 
 internal class TabListDialog<V : Any>(
@@ -26,8 +25,7 @@ internal class TabListDialog<V : Any>(
         private val onSelectItem: (Dialog.(Player, TabListDialogItem<V>, String) -> Unit)?,
         private val onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)?,
         private val headerTextSuppliers: List<DialogTextSupplier>?,
-        private val items: List<TabListDialogItem<V>>,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val items: List<TabListDialogItem<V>>
 ) : AbstractDialog(id) {
 
     private companion object {
@@ -43,14 +41,13 @@ internal class TabListDialog<V : Any>(
             null -> DialogStyle.TABLIST
             else -> DialogStyle.TABLIST_HEADERS
         }
-        nativeFunctionExecutor.showPlayerDialog(
-                dialogid = id.value,
-                playerid = forPlayer.id.value,
+        forPlayer.showDialog(
+                dialog = this,
                 caption = captionTextSupplier.getText(forPlayer),
                 button1 = leftButtonTextSupplier.getText(forPlayer),
                 button2 = rightButtonTextSupplier.getText(forPlayer),
-                style = style.value,
-                info = itemsString
+                style = style,
+                message = itemsString
         )
     }
 
@@ -115,7 +112,6 @@ internal class TabListDialog<V : Any>(
 
     internal class Builder<V : Any>(
             textProvider: TextProvider,
-            private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<TabListDialogBuilder<V>>(textProvider), TabListDialogBuilder<V> {
 
@@ -187,8 +183,7 @@ internal class TabListDialog<V : Any>(
                     headerTextSuppliers = headerTextSuppliers,
                     items = items,
                     onCancel = onCancel,
-                    onSelectItem = onSelectItem,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    onSelectItem = onSelectItem
             )
         }
 

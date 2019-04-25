@@ -11,7 +11,6 @@ import ch.leadrian.samp.kamp.core.api.entity.dialog.ListDialogItem
 import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
 import ch.leadrian.samp.kamp.core.api.util.loggerFor
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 
 internal class ListDialog<V : Any>(
@@ -21,8 +20,7 @@ internal class ListDialog<V : Any>(
         private val rightButtonTextSupplier: DialogTextSupplier,
         private val onSelectItem: (Dialog.(Player, ListDialogItem<V>, String) -> Unit)?,
         private val onCancel: (Dialog.(Player) -> OnDialogResponseListener.Result)?,
-        private val items: List<ListDialogItem<V>>,
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor
+        private val items: List<ListDialogItem<V>>
 ) : AbstractDialog(id) {
 
     private companion object {
@@ -34,14 +32,13 @@ internal class ListDialog<V : Any>(
     override fun show(forPlayer: Player) {
         val itemsString = items.joinToString("\n") { it.getContent(forPlayer) }
         log.debug("Dialog {}: Showing for player {}: {}", id.value, forPlayer.id.value, itemsString)
-        nativeFunctionExecutor.showPlayerDialog(
-                dialogid = id.value,
-                playerid = forPlayer.id.value,
+        forPlayer.showDialog(
+                dialog = this,
                 caption = captionTextSupplier.getText(forPlayer),
                 button1 = leftButtonTextSupplier.getText(forPlayer),
                 button2 = rightButtonTextSupplier.getText(forPlayer),
-                style = DialogStyle.LIST.value,
-                info = itemsString
+                style = DialogStyle.LIST,
+                message = itemsString
         )
     }
 
@@ -84,7 +81,6 @@ internal class ListDialog<V : Any>(
 
     internal class Builder<V : Any>(
             textProvider: TextProvider,
-            private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
             private val dialogRegistry: DialogRegistry
     ) : AbstractDialogBuilder<ListDialogBuilder<V>>(textProvider), ListDialogBuilder<V> {
 
@@ -133,8 +129,7 @@ internal class ListDialog<V : Any>(
                     rightButtonTextSupplier = rightButtonTextSupplier,
                     items = items,
                     onCancel = onCancel,
-                    onSelectItem = onSelectItem,
-                    nativeFunctionExecutor = nativeFunctionExecutor
+                    onSelectItem = onSelectItem
             )
         }
 

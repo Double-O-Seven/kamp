@@ -11,7 +11,6 @@ import ch.leadrian.samp.kamp.core.api.entity.id.DialogId
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.api.text.TextKey
 import ch.leadrian.samp.kamp.core.api.text.TextProvider
-import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.DialogRegistry
 import io.mockk.Called
 import io.mockk.Runs
@@ -31,7 +30,6 @@ internal class TabListDialogTest {
     private lateinit var builder: TabListDialog.Builder<Int>
 
     private val textProvider = mockk<TextProvider>()
-    private val nativeFunctionExecutor = mockk<SAMPNativeFunctionExecutor>()
     private val dialogRegistry = mockk<DialogRegistry>()
     private val playerId = PlayerId.valueOf(50)
     private val player = mockk<Player>()
@@ -45,7 +43,7 @@ internal class TabListDialogTest {
         }
         every { player.locale } returns locale
         every { player.id } returns playerId
-        builder = TabListDialog.Builder(textProvider, nativeFunctionExecutor, dialogRegistry)
+        builder = TabListDialog.Builder(textProvider, dialogRegistry)
     }
 
     @Nested
@@ -53,17 +51,7 @@ internal class TabListDialogTest {
 
         @BeforeEach
         fun setUp() {
-            every {
-                nativeFunctionExecutor.showPlayerDialog(
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any(),
-                        any()
-                )
-            } returns true
+            every { player.showDialog(any(), any(), any(), any(), any(), any()) } just Runs
         }
 
         @Test
@@ -81,14 +69,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?\n"
+                        message = "How are you?\n"
                 )
             }
         }
@@ -116,14 +103,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?\n"
+                        message = "How are you?\n"
                 )
             }
         }
@@ -143,14 +129,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?\n"
+                        message = "How are you?\n"
                 )
             }
         }
@@ -170,14 +155,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "How are you?\n"
+                        message = "How are you?\n"
                 )
             }
         }
@@ -198,14 +182,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST_HEADERS.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "Question\tAnswer\nHi there\tHow are you?\n"
+                        message = "Question\tAnswer\nHi there\tHow are you?\n"
                 )
             }
         }
@@ -230,14 +213,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST_HEADERS.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "Question\tAnswer\nHi there\tHow are you?\n"
+                        message = "Question\tAnswer\nHi there\tHow are you?\n"
                 )
             }
         }
@@ -258,14 +240,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST_HEADERS.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "Question\tAnswer\nHi there\tHow are you?\n"
+                        message = "Question\tAnswer\nHi there\tHow are you?\n"
                 )
             }
         }
@@ -286,14 +267,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST_HEADERS.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST_HEADERS,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "Question\tAnswer\nHi there\tHow are you?\n"
+                        message = "Question\tAnswer\nHi there\tHow are you?\n"
                 )
             }
         }
@@ -374,14 +354,13 @@ internal class TabListDialogTest {
             tabListDialog.show(player)
 
             verify {
-                nativeFunctionExecutor.showPlayerDialog(
-                        dialogid = dialogId.value,
-                        playerid = playerId.value,
-                        style = DialogStyle.TABLIST.value,
+                player.showDialog(
+                        dialog = tabListDialog,
+                        style = DialogStyle.TABLIST,
                         button1 = "OK",
                         button2 = "Cancel",
                         caption = "Hi there",
-                        info = "0:\tWhat a surprise!\n" +
+                        message = "0:\tWhat a surprise!\n" +
                                 "1:\tHow are you?\n" +
                                 "2:\tI'm good, what about you?\n" +
                                 "3:\tTo be honest, I wish I hadn't seen you so I wouldn't have to talk to your nasty face.\n" +

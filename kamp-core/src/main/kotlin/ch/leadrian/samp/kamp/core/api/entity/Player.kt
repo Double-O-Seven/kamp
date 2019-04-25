@@ -2,6 +2,7 @@ package ch.leadrian.samp.kamp.core.api.entity
 
 import ch.leadrian.samp.kamp.core.api.constants.CrimeReport
 import ch.leadrian.samp.kamp.core.api.constants.DefaultPlayerColors
+import ch.leadrian.samp.kamp.core.api.constants.DialogStyle
 import ch.leadrian.samp.kamp.core.api.constants.ExplosionType
 import ch.leadrian.samp.kamp.core.api.constants.FightingStyle
 import ch.leadrian.samp.kamp.core.api.constants.MapIconStyle
@@ -26,6 +27,7 @@ import ch.leadrian.samp.kamp.core.api.data.SpawnInfo
 import ch.leadrian.samp.kamp.core.api.data.Sphere
 import ch.leadrian.samp.kamp.core.api.data.Time
 import ch.leadrian.samp.kamp.core.api.data.Vector3D
+import ch.leadrian.samp.kamp.core.api.entity.dialog.Dialog
 import ch.leadrian.samp.kamp.core.api.entity.dialog.DialogNavigation
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionContainer
 import ch.leadrian.samp.kamp.core.api.entity.extension.Extendable
@@ -339,6 +341,33 @@ internal constructor(
 
     val surfingObject: MapObject?
         get() = nativeFunctionExecutor.getPlayerSurfingObjectID(id.value).let { mapObjectRegistry[it] }
+
+    internal var currentDialog: Dialog? = null
+        private set
+
+    internal fun showDialog(
+            dialog: Dialog,
+            style: DialogStyle,
+            button1: String,
+            button2: String,
+            caption: String,
+            message: String
+    ) {
+        nativeFunctionExecutor.showPlayerDialog(
+                playerid = id.value,
+                dialogid = dialog.id.value,
+                style = style.value,
+                button1 = button1,
+                button2 = button2,
+                caption = caption,
+                info = message
+        )
+        currentDialog = dialog
+    }
+
+    internal fun resetCurrentDialog() {
+        currentDialog = null
+    }
 
     fun spawn() {
         nativeFunctionExecutor.spawnPlayer(id.value)
