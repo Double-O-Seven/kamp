@@ -1,0 +1,1 @@
+docker run --rm -v "%cd%":/home/kamp/project -w /home/kamp/project kamp ./gradlew kamp-plugin:clean kamp-plugin:build
