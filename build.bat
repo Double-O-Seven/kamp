@@ -1,2 +1,2 @@
-./gradlew.bat clean build
-./build-linux-plugin.bat
+call ./gradlew.bat clean build
+call ./build-linux-plugin.bat
