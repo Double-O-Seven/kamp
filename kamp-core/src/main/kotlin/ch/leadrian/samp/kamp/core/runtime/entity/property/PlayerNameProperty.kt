@@ -1,26 +1,22 @@
 package ch.leadrian.samp.kamp.core.runtime.entity.property
 
-import ch.leadrian.samp.kamp.core.api.constants.SAMPConstants
 import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.exception.InvalidPlayerNameException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
 import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
-import ch.leadrian.samp.kamp.core.runtime.types.ReferenceString
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-internal class PlayerNameProperty(
-        private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
+internal abstract class PlayerNameProperty(
+        protected val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
         private val onPlayerNameChangeHandler: OnPlayerNameChangeHandler
 ) : ReadWriteProperty<Player, String> {
 
-    private var name: String? = null
+    final override fun getValue(thisRef: Player, property: KProperty<*>): String = getName(thisRef)
 
-    override fun getValue(thisRef: Player, property: KProperty<*>): String = getName(thisRef)
-
-    override fun setValue(thisRef: Player, property: KProperty<*>, value: String) {
+    final override fun setValue(thisRef: Player, property: KProperty<*>, value: String) {
         if (value.isEmpty()) {
-            throw InvalidPlayerNameException("", "Name cannot be empty")
+            throw InvalidPlayerNameException(name = "", message = "Name cannot be empty")
         }
         val oldName = getName(thisRef)
         val result = nativeFunctionExecutor.setPlayerName(playerid = thisRef.id.value, name = value)
@@ -29,22 +25,13 @@ internal class PlayerNameProperty(
                     name = value,
                     message = "Name is already in use, too long or invalid"
             )
-            else -> name = value
+            else -> afterNameChange(value)
         }
         onPlayerNameChangeHandler.onPlayerNameChange(thisRef, oldName, value)
     }
 
-    private fun getName(thisRef: Player): String {
-        if (name == null) {
-            val name = ReferenceString()
-            nativeFunctionExecutor.getPlayerName(
-                    playerid = thisRef.id.value,
-                    name = name,
-                    size = SAMPConstants.MAX_PLAYER_NAME
-            )
-            name.value?.let { this.name = it }
-        }
-        return name ?: "<Player ${thisRef.id.value}>"
-    }
+    protected abstract fun afterNameChange(newName: String)
+
+    protected abstract fun getName(player: Player): String
 
 }

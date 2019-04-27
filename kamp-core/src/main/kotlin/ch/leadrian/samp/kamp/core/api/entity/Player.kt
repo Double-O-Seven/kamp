@@ -36,7 +36,6 @@ import ch.leadrian.samp.kamp.core.api.entity.id.PlayerMapIconId
 import ch.leadrian.samp.kamp.core.api.entity.id.TeamId
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngleProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerAngledLocationProperty
@@ -46,7 +45,7 @@ import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerHealthProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerKeysProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerLastShotVectorsProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerLocationProperty
-import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNameProperty
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNamePropertyFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerPositionProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerTimeProperty
 import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerVelocityProperty
@@ -73,7 +72,7 @@ internal constructor(
         private val menuRegistry: MenuRegistry,
         private val playerMapIconFactory: PlayerMapIconFactory,
         private val nativeFunctionExecutor: SAMPNativeFunctionExecutor,
-        onPlayerNameChangeHandler: OnPlayerNameChangeHandler
+        playerNamePropertyFactory: PlayerNamePropertyFactory
 ) : Entity<PlayerId>, Extendable<Player> {
 
     private val mapIconsById: MutableMap<PlayerMapIconId, PlayerMapIcon> = mutableMapOf()
@@ -194,7 +193,7 @@ internal constructor(
         gpci.value ?: ""
     }
 
-    var name: String by PlayerNameProperty(nativeFunctionExecutor, onPlayerNameChangeHandler)
+    var name: String by playerNamePropertyFactory.create()
 
     val state: PlayerState
         get() = nativeFunctionExecutor.getPlayerState(id.value).let { PlayerState[it] }

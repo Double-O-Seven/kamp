@@ -36,8 +36,8 @@ import ch.leadrian.samp.kamp.core.api.entity.id.VehicleId
 import ch.leadrian.samp.kamp.core.api.exception.AlreadyDestroyedException
 import ch.leadrian.samp.kamp.core.api.exception.PlayerOfflineException
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
 import ch.leadrian.samp.kamp.core.runtime.entity.factory.PlayerMapIconFactory
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNamePropertyFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
@@ -80,10 +80,11 @@ internal class PlayerTest {
     private val menuRegistry = mockk<MenuRegistry>()
     private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
-    private val onPlayerNameChangeHandler = mockk<OnPlayerNameChangeHandler>()
+    private val playerNamePropertyFactory = mockk<PlayerNamePropertyFactory>()
 
     @BeforeEach
     fun setUp() {
+        every { playerNamePropertyFactory.create() } returns mockk()
         player = Player(
                 id = playerId,
                 nativeFunctionExecutor = nativeFunctionExecutor,
@@ -93,7 +94,7 @@ internal class PlayerTest {
                 menuRegistry = menuRegistry,
                 playerMapIconFactory = playerMapIconFactory,
                 vehicleRegistry = vehicleRegistry,
-                onPlayerNameChangeHandler = onPlayerNameChangeHandler
+                playerNamePropertyFactory = playerNamePropertyFactory
         )
     }
 

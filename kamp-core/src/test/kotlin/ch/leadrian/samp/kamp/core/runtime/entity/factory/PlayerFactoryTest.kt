@@ -4,7 +4,7 @@ import ch.leadrian.samp.kamp.core.api.entity.Player
 import ch.leadrian.samp.kamp.core.api.entity.extension.EntityExtensionFactory
 import ch.leadrian.samp.kamp.core.api.entity.id.PlayerId
 import ch.leadrian.samp.kamp.core.runtime.SAMPNativeFunctionExecutor
-import ch.leadrian.samp.kamp.core.runtime.callback.OnPlayerNameChangeHandler
+import ch.leadrian.samp.kamp.core.runtime.entity.property.PlayerNamePropertyFactory
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.ActorRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MapObjectRegistry
 import ch.leadrian.samp.kamp.core.runtime.entity.registry.MenuRegistry
@@ -31,7 +31,7 @@ internal class PlayerFactoryTest {
     private val menuRegistry = mockk<MenuRegistry>()
     private val playerMapIconFactory = mockk<PlayerMapIconFactory>()
     private val vehicleRegistry = mockk<VehicleRegistry>()
-    private val onPlayerNameChangeHandler = mockk<OnPlayerNameChangeHandler>()
+    private val playerNamePropertyFactory = mockk<PlayerNamePropertyFactory>()
     private val playerExtensionFactory = mockk<EntityExtensionFactory<Player, FooExtension>>()
     private val fooExtension = FooExtension()
 
@@ -40,6 +40,7 @@ internal class PlayerFactoryTest {
         every { playerRegistry.register(any()) } just Runs
         every { playerExtensionFactory.create(any()) } returns fooExtension
         every { playerExtensionFactory.extensionClass } returns FooExtension::class
+        every { playerNamePropertyFactory.create() } returns mockk()
         playerFactory = PlayerFactory(
                 actorRegistry = actorRegistry,
                 playerRegistry = playerRegistry,
@@ -49,7 +50,7 @@ internal class PlayerFactoryTest {
                 vehicleRegistry = vehicleRegistry,
                 nativeFunctionExecutor = nativeFunctionExecutor,
                 playerExtensionFactories = setOf(playerExtensionFactory),
-                onPlayerNameChangeHandler = onPlayerNameChangeHandler
+                playerNamePropertyFactory = playerNamePropertyFactory
         )
     }
 

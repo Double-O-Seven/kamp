@@ -18,9 +18,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.catchThrowable
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertAll
 import kotlin.reflect.KProperty
 
-internal class PlayerNamePropertyTest {
+internal class NonCachingPlayerNamePropertyTest {
 
     private val playerId: PlayerId = PlayerId.valueOf(50)
     private val player: Player = mockk()
@@ -28,12 +29,12 @@ internal class PlayerNamePropertyTest {
     private val property: KProperty<Vector3D> = mockk()
     private val onPlayerNameChangeHandler: OnPlayerNameChangeHandler = mockk()
 
-    private lateinit var playerNameProperty: PlayerNameProperty
+    private lateinit var nonCachingPlayerNameProperty: PlayerNameProperty
 
     @BeforeEach
     fun setUp() {
         every { player.id } returns playerId
-        playerNameProperty = PlayerNameProperty(nativeFunctionExecutor, onPlayerNameChangeHandler)
+        nonCachingPlayerNameProperty = NonCachingPlayerNameProperty(nativeFunctionExecutor, onPlayerNameChangeHandler)
         every { onPlayerNameChangeHandler.onPlayerNameChange(any(), any(), any()) } just Runs
     }
 
@@ -50,7 +51,7 @@ internal class PlayerNamePropertyTest {
             0
         }
 
-        val name = playerNameProperty.getValue(player, property)
+        val name = nonCachingPlayerNameProperty.getValue(player, property)
 
         assertThat(name)
                 .isEqualTo("hans.wurst")
@@ -66,7 +67,7 @@ internal class PlayerNamePropertyTest {
             )
         } returns 0
 
-        val name = playerNameProperty.getValue(player, property)
+        val name = nonCachingPlayerNameProperty.getValue(player, property)
 
         assertThat(name)
                 .isEqualTo("<Player ${playerId.value}>")
@@ -85,17 +86,21 @@ internal class PlayerNamePropertyTest {
             0
         }
         every { nativeFunctionExecutor.setPlayerName(playerId.value, any()) } returns 0
-        playerNameProperty.setValue(player, property, "hans.wurst")
+        nonCachingPlayerNameProperty.setValue(player, property, "hans.wurst")
 
-        val name = playerNameProperty.getValue(player, property)
+        val name = nonCachingPlayerNameProperty.getValue(player, property)
 
-        assertThat(name)
-                .isEqualTo("hans.wurst")
-        verify(exactly = 1) { nativeFunctionExecutor.getPlayerName(any(), any(), any()) }
-        verifyOrder {
-            nativeFunctionExecutor.getPlayerName(any(), any(), any())
-            nativeFunctionExecutor.setPlayerName(any(), any())
-        }
+        assertAll(
+                { assertThat(name).isEqualTo("John.Sausage") },
+                { verify(exactly = 2) { nativeFunctionExecutor.getPlayerName(any(), any(), any()) } },
+                {
+                    verifyOrder {
+                        nativeFunctionExecutor.getPlayerName(any(), any(), any())
+                        nativeFunctionExecutor.setPlayerName(any(), any())
+                        nativeFunctionExecutor.getPlayerName(any(), any(), any())
+                    }
+                }
+        )
     }
 
     @Test
@@ -112,7 +117,7 @@ internal class PlayerNamePropertyTest {
         }
         every { nativeFunctionExecutor.setPlayerName(any(), any()) } returns 0
 
-        playerNameProperty.setValue(player, property, "hans.wurst")
+        nonCachingPlayerNameProperty.setValue(player, property, "hans.wurst")
 
         verify { nativeFunctionExecutor.setPlayerName(playerid = playerId.value, name = "hans.wurst") }
     }
@@ -131,14 +136,14 @@ internal class PlayerNamePropertyTest {
             0
         }
 
-        playerNameProperty.setValue(player, property, "John.Sausage")
+        nonCachingPlayerNameProperty.setValue(player, property, "John.Sausage")
 
         verify { onPlayerNameChangeHandler.onPlayerNameChange(player, "hans.wurst", "John.Sausage") }
     }
 
     @Test
     fun givenEmptyNameIsSetItShouldThrowAnException() {
-        val caughtThrowable = catchThrowable { playerNameProperty.setValue(player, property, "") }
+        val caughtThrowable = catchThrowable { nonCachingPlayerNameProperty.setValue(player, property, "") }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(InvalidPlayerNameException::class.java)
@@ -157,7 +162,7 @@ internal class PlayerNamePropertyTest {
             0
         }
         every { nativeFunctionExecutor.setPlayerName(playerId.value, "???") } returns -1
-        val caughtThrowable = catchThrowable { playerNameProperty.setValue(player, property, "???") }
+        val caughtThrowable = catchThrowable { nonCachingPlayerNameProperty.setValue(player, property, "???") }
 
         assertThat(caughtThrowable)
                 .isInstanceOf(InvalidPlayerNameException::class.java)
