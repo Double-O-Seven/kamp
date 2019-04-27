@@ -3,7 +3,7 @@ import org.gradle.api.tasks.SourceSet.*
 
 plugins {
     kotlin("jvm")
-    java
+    `java-library`
     `maven-publish`
     signing
     `build-scan`
@@ -74,7 +74,7 @@ task<JavaExec>("codacyCoverageReport") {
 
 configure(subprojects - project("kamp-plugin")) {
     apply(plugin = "kotlin")
-    apply(plugin = "java")
+    apply(plugin = "java-library")
     apply(plugin = "maven")
     apply(plugin = "jacoco")
     apply(plugin = "org.jetbrains.dokka")
