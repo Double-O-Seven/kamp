@@ -14,7 +14,7 @@ import static java.nio.file.Files.newBufferedReader;
 import static java.util.Objects.requireNonNull;
 
 @SuppressWarnings("unused")
-public class KampLauncher {
+public final class KampLauncher {
 
     private static final Path KAMP_DIRECTORY = Paths.get(".", "Kamp");
 
@@ -29,6 +29,9 @@ public class KampLauncher {
     private static final Logger log = LoggerFactory.getLogger(KampLauncher.class);
 
     private static Server server = null;
+
+    private KampLauncher() {
+    }
 
     public static synchronized void launch() {
         if (server != null) {
